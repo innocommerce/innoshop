@@ -1,6 +1,8 @@
-<div class="form-row d-md-flex mb-3">
-  <div class="col-form-label wp-200 text-end pe-3 {{ isset($required) && $required ? 'required' : '' }}">{{ $title ?? '' }}</div>
-  <div class="flex-fill w-max-{{ $width ?? '500' }}">
+<div class="form-row mb-3">
+  @if ($title ?? false)
+  <div class="col-form-label pe-3 {{ isset($required) && $required ? 'required' : '' }}">{{ $title }}</div>
+  @endif
+  <div class="flex-fill">
     {{ $slot }}
   </div>
 </div>

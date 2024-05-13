@@ -1,5 +1,12 @@
 Copyright (c) Since 2024 InnoShop.
 
+This system is open source and free for commercial use. The open-source license is based on the Open Software License version 3.0 (OSL-3.0) available at https://opensource.org/license/osl-3-0. Users of this system must adhere to the following conditions:
+
+1) The open-source license file LICENSE.txt in the root directory must be preserved and shall not be altered.
+2) The original copyright notices in the code comments must be retained and shall not be modified.
+3) The built-in official plugin marketplace of the system must be preserved and shall not be removed, concealed, or altered.
+4) In the event of a legitimate need to alter any of the aforementioned three provisions, it is mandatory to obtain individual and explicit authorization from the official body.
+
 Open Software License v. 3.0 (OSL-3.0)
 
 This Open Software License (the "License") applies to any original work of authorship (the "Original Work") whose owner (the "Licensor") has placed the following licensing notice adjacent to the copyright notice for the Original Work:

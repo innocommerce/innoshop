@@ -1,0 +1,18 @@
+{
+    "code": "fixed_shipping",
+    "name": {
+        "zh_cn": "固定运费",
+        "en": "Fixed Shipping"
+    },
+    "description": {
+        "zh_cn": "固定运费",
+        "en": "Fixed Shipping"
+    },
+    "type": "shipping",
+    "version": "v1.0.0",
+    "icon": "/image/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

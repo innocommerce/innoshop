@@ -11,7 +11,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Catalog;
-use InnoShop\Common\Models\CatalogTranslation;
 
 class CatalogSeeder extends Seeder
 {
@@ -27,9 +26,9 @@ class CatalogSeeder extends Seeder
 
         $items = $this->getCatalogTranslations();
         if ($items) {
-            CatalogTranslation::query()->truncate();
+            Catalog\Translation::query()->truncate();
             foreach ($items as $item) {
-                CatalogTranslation::query()->create($item);
+                Catalog\Translation::query()->create($item);
             }
         }
     }
@@ -42,14 +41,14 @@ class CatalogSeeder extends Seeder
         return [
             [
                 'id'        => 1,
-                'parent_id' => 1,
+                'parent_id' => 0,
                 'slug'      => 'product',
                 'position'  => 0,
                 'active'    => 1,
             ],
             [
                 'id'        => 2,
-                'parent_id' => 1,
+                'parent_id' => 0,
                 'slug'      => 'industry',
                 'position'  => 0,
                 'active'    => 1,
@@ -64,7 +63,24 @@ class CatalogSeeder extends Seeder
     {
         return [
             [
-                'id'               => 1,
+                'catalog_id'       => 1,
+                'locale'           => 'zh_cn',
+                'title'            => '产品动态',
+                'summary'          => '这里是产品动态',
+                'meta_title'       => '产品动态',
+                'meta_description' => '产品动态',
+                'meta_keywords'    => '产品动态',
+            ],
+            [
+                'catalog_id'       => 1,
+                'locale'           => 'en',
+                'title'            => 'Product Updates',
+                'summary'          => 'Here are the product updates',
+                'meta_title'       => 'Product Updates',
+                'meta_description' => 'Latest information and updates on products',
+                'meta_keywords'    => 'Product, Updates, News',
+            ],
+            [
                 'catalog_id'       => 2,
                 'locale'           => 'zh_cn',
                 'title'            => '行业资讯',
@@ -74,14 +90,13 @@ class CatalogSeeder extends Seeder
                 'meta_keywords'    => '行业资讯',
             ],
             [
-                'id'               => 2,
-                'catalog_id'       => 1,
-                'locale'           => 'zh_cn',
-                'title'            => '产品动态',
-                'summary'          => '这里是产品动态',
-                'meta_title'       => '产品动态',
-                'meta_description' => '产品动态',
-                'meta_keywords'    => '产品动态',
+                'catalog_id'       => 2,
+                'locale'           => 'en',
+                'title'            => 'Industry News',
+                'summary'          => 'Here is the industry information',
+                'meta_title'       => 'Industry News',
+                'meta_description' => 'Industry information',
+                'meta_keywords'    => 'Industry News',
             ],
         ];
     }

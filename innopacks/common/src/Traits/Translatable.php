@@ -19,7 +19,7 @@ trait Translatable
      */
     public function getDescriptionModelClass(): string
     {
-        return self::class.'Translation';
+        return self::class.'\Translation';
     }
 
     /**
@@ -45,7 +45,7 @@ trait Translatable
         $class = $this->getDescriptionModelClass();
 
         return $this->hasOne($class, $this->getForeignKey(), $this->getKeyName())
-            ->where('locale', locale());
+            ->where('locale', locale_code());
     }
 
     /**

@@ -8,13 +8,50 @@
  */
 
 return [
-    'home'    => 'Home',
-    'catalog' => 'Catalog',
-    'article' => 'Article',
-    'tag'     => 'Tag',
-    'design'  => 'Design',
-    'page'    => 'Page',
-    'setting' => 'Setting',
-    'account' => 'Account',
-    'locale'  => 'Locale',
+    'dashboard' => 'Dashboard',
+
+    'top_content' => 'Content',
+    'articles'    => 'Articles',
+    'catalogs'    => 'Catalogs',
+    'tags'        => 'Tags',
+    'pages'       => 'Pages',
+
+    'top_order' => 'Orders',
+    'orders'    => 'Orders',
+
+    'order_returns' => 'RMA',
+
+    'top_product'      => 'Product',
+    'products'         => 'Products',
+    'categories'       => 'Categories',
+    'brands'           => 'Brands',
+    'attributes'       => 'Attributes',
+    'attribute_groups' => 'Attr Groups',
+
+    'top_analytic' => 'Analytics',
+    'analytics'    => 'Reports',
+
+    'top_plugin' => 'Plugins',
+    'plugins'    => 'Plugins',
+
+    'top_customer'    => 'Customers',
+    'customers'       => 'Customers',
+    'customer_groups' => 'Groups',
+
+    'top_design'      => 'Design',
+    'themes'          => 'Themes',
+    'themes_settings' => 'Settings',
+
+    'top_setting' => 'Setting',
+    'settings'    => 'Settings',
+    'account'     => 'Account',
+    'admins'      => 'Users',
+    'roles'       => 'Roles',
+    'countries'   => 'Countries',
+    'states'      => 'States',
+    'regions'     => 'Regions',
+    'locales'     => 'Locales',
+    'currencies'  => 'Currencies',
+    'tax_classes' => 'Tax Classes',
+    'tax_rates'   => 'Tax Rates',
 ];

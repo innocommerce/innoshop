@@ -11,7 +11,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Page;
-use InnoShop\Common\Models\PageTranslation;
 
 class PageSeeder extends Seeder
 {
@@ -27,9 +26,9 @@ class PageSeeder extends Seeder
 
         $items = $this->getPageTranslations();
         if ($items) {
-            PageTranslation::query()->truncate();
+            Page\Translation::query()->truncate();
             foreach ($items as $item) {
-                PageTranslation::query()->create($item);
+                Page\Translation::query()->create($item);
             }
         }
     }
@@ -42,7 +41,7 @@ class PageSeeder extends Seeder
         return [
             [
                 'id'     => 1,
-                'slug'   => 'products',
+                'slug'   => 'creations',
                 'viewed' => 666,
                 'active' => 1,
             ],
@@ -68,7 +67,6 @@ class PageSeeder extends Seeder
     {
         return [
             [
-                'id'       => 1,
                 'page_id'  => 1,
                 'locale'   => 'zh_cn',
                 'title'    => '产品',
@@ -77,7 +75,7 @@ class PageSeeder extends Seeder
     <div class="container">
       <div class="title-box">
         <div class="title">我们的产品</div>
-        <div class="sub-title">Our Product Range</div>
+        <div class="sub-title">Our Creations</div>
       </div>
       <div class="row">
         <div class="col-12 col-md-6">
@@ -130,11 +128,8 @@ class PageSeeder extends Seeder
                 'meta_title'       => '产品',
                 'meta_description' => '产品',
                 'meta_keywords'    => '产品',
-                'created_at'       => '2024-05-07 02:21:26',
-                'updated_at'       => '2024-05-07 02:21:26',
             ],
             [
-                'id'       => 2,
                 'page_id'  => 2,
                 'locale'   => 'zh_cn',
                 'title'    => '服务',
@@ -203,11 +198,8 @@ class PageSeeder extends Seeder
                 'meta_title'       => '服务',
                 'meta_description' => '服务',
                 'meta_keywords'    => '服务',
-                'created_at'       => '2024-05-07 02:21:26',
-                'updated_at'       => '2024-05-07 02:21:26',
             ],
             [
-                'id'       => 3,
                 'page_id'  => 3,
                 'locale'   => 'zh_cn',
                 'title'    => '关于',
@@ -254,57 +246,38 @@ class PageSeeder extends Seeder
       </div>
     </div>
   </div>
-  <div class=\"home-contact\">
-    <div class=\"container\">
-      <div class=\"title\">如果您需要与我们取得联系, 以下是我们的联系方式</div>
-      <div class=\"contact-icon\">
-        <img src=\"{{ asset('images/front/home/home-3.png') }}\" class=\"img-fluid\" data-aos=\"fade-up\"
-             data-aos-duration=\"2000\">
-      </div>
-      <div class=\"row\">
-        <div class=\"col-12 col-lg-4\">
-          <div class=\"contact-item\" data-aos=\"fade-up\" data-aos-duration=\"2000\">
-            <div class=\"icon\"><i class=\"bi bi-telephone-fill\"></i></div>
-            <div class=\"right\">
-              <div class=\"text-1\">联系电话</div>
-              <div class=\"text-2\">
-                <a href=\"tel:17828469818\"><i class=\"bi bi-telephone-fill text-primary\"></i> 17828469818</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class=\"col-12 col-lg-4\">
-          <div class=\"contact-item\" data-aos=\"fade-up\" data-aos-duration=\"2000\">
-            <div class=\"icon\"><i class=\"bi bi-envelope-fill\"></i></div>
-            <div class=\"right\">
-              <div class=\"text-1\">联系邮箱</div>
-              <div class=\"text-2\">
-                <a href=\"mailto:team@innoshop.com\"><i class=\"bi bi-envelope-fill text-primary\"></i> team@innoshop.com</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class=\"col-12 col-lg-4\">
-          <div class=\"contact-item wechat-box\" data-aos=\"fade-up\" data-aos-duration=\"2000\">
-            <div class=\"icon\"><i class=\"bi bi-wechat\"></i></div>
-            <div class=\"right\">
-              <div class=\"text-1\">微信联系</div>
-              <div class=\"text-2\"><i class=\"bi bi-wechat text-primary\"></i> innoshop666</div>
-              <div class=\"w-code\">
-                <img src=\"{{ asset('images/front/home/w-code.png') }}\" class=\"img-fluid\">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>",
                 'meta_title'       => '关于',
                 'meta_description' => '关于',
                 'meta_keywords'    => '关于',
-                'created_at'       => '2024-05-11 08:23:05',
-                'updated_at'       => '2024-05-11 08:23:05',
+            ],
+
+            [
+                'page_id'          => 1,
+                'locale'           => 'en',
+                'title'            => 'Creations',
+                'content'          => 'This is Creations page for English',
+                'meta_title'       => 'Creations',
+                'meta_description' => 'Creations',
+                'meta_keywords'    => 'Creations',
+            ],
+            [
+                'page_id'          => 2,
+                'locale'           => 'en',
+                'title'            => 'Services',
+                'content'          => 'This is Services page for English',
+                'meta_title'       => 'Services',
+                'meta_description' => 'Services',
+                'meta_keywords'    => 'Services',
+            ],
+            [
+                'page_id'          => 3,
+                'locale'           => 'en',
+                'title'            => 'About',
+                'content'          => 'This is About page for English',
+                'meta_title'       => 'About Us',
+                'meta_description' => 'About Us',
+                'meta_keywords'    => 'About Us',
             ],
         ];
     }

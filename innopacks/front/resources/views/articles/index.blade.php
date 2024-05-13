@@ -1,10 +1,15 @@
-@extends('front::layouts.app')
+@extends('layouts.app')
 
 @section('body-class', 'page-news')
 
 @section('content')
 
-@include('front::shared.page-head', ['title' => '新闻资讯'])
-@include('front::shared.articles')
+<x-front-breadcrumb type="route" value="articles.index" title="{{ __('front::article.articles') }}" />
+
+@hookinsert('article.index.top')
+
+@include('shared.articles')
+
+@hookinsert('article.index.bottom')
 
 @endsection

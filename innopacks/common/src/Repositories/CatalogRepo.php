@@ -27,6 +27,18 @@ class CatalogRepo extends BaseRepo
     }
 
     /**
+     * @return Collection
+     */
+    public function getTopCatalogs(): Collection
+    {
+        $filters = [
+            'parent_id' => 0,
+        ];
+
+        return $this->withActive()->builder($filters)->get();
+    }
+
+    /**
      * @param  $title
      * @return Builder[]|Collection
      */
@@ -45,14 +57,32 @@ class CatalogRepo extends BaseRepo
      */
     public function builder(array $filters = []): Builder
     {
+        $filters = array_merge($this->filters, $filters);
         $builder = Catalog::query()->with([
             'translation',
             'parent.translation',
+            'children.translation',
         ]);
 
         $slug = $filters['slug'] ?? '';
         if ($slug) {
             $builder->where('slug', 'like', "%$slug%");
+        }
+
+        $catalogIds = $filters['catalog_ids'] ?? [];
+        if ($catalogIds) {
+            $builder->whereIn('id', $catalogIds);
+        }
+
+        if (isset($filters['parent_id'])) {
+            $parentID = (int) $filters['parent_id'];
+            if ($parentID == 0) {
+                $builder->where(function (Builder $query) {
+                    $query->where('parent_id', 0)->orWhereNull('parent_id');
+                });
+            } else {
+                $builder->where('parent_id', $parentID);
+            }
         }
 
         if (isset($filters['active'])) {

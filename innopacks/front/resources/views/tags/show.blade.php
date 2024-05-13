@@ -1,11 +1,16 @@
-@extends('front::layouts.app')
+@extends('layouts.app')
 
 @section('body-class', 'page-news')
 
 @section('content')
 
-@include('front::shared.page-head', ['title' => $tag->translation->name])
-@include('front::shared.articles')
+  <x-front-breadcrumb type="tag" :value="$tag" />
+
+  @hookinsert('tag.show.top')
+
+  @include('shared.articles')
+
+  @hookinsert('tag.show.top')
 
 @endsection
 

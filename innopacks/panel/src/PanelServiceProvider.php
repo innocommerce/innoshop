@@ -12,8 +12,13 @@ namespace InnoShop\Panel;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use InnoShop\Common\Middleware\ContentFilterHook;
+use InnoShop\Common\Middleware\EventActionHook;
 use InnoShop\Common\Models\Admin;
+use InnoShop\Panel\Console\Commands\ChangeRootPassword;
 use InnoShop\Panel\Middleware\AdminAuthenticate;
+use InnoShop\Panel\Middleware\GlobalPanelData;
+use InnoShop\Panel\Middleware\SetPanelLocale;
 
 class PanelServiceProvider extends ServiceProvider
 {
@@ -26,6 +31,7 @@ class PanelServiceProvider extends ServiceProvider
     {
         load_settings();
         $this->registerGuard();
+        $this->registerCommands();
         $this->registerWebRoutes();
         $this->registerApiRoutes();
         $this->loadTranslations();
@@ -58,15 +64,28 @@ class PanelServiceProvider extends ServiceProvider
     }
 
     /**
+     * @return void
+     */
+    private function registerCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ChangeRootPassword::class,
+            ]);
+        }
+    }
+
+    /**
      * Register admin panel routes.
      *
      * @return void
      */
     private function registerWebRoutes(): void
     {
-        $adminName = panel_name();
+        $middlewares = ['web', EventActionHook::class, ContentFilterHook::class, GlobalPanelData::class, SetPanelLocale::class];
+        $adminName   = panel_name();
         Route::prefix($adminName)
-            ->middleware('web')
+            ->middleware($middlewares)
             ->name("$adminName.")
             ->group(function () {
                 $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
@@ -81,9 +100,10 @@ class PanelServiceProvider extends ServiceProvider
      */
     private function registerApiRoutes(): void
     {
-        $adminName = panel_name();
+        $middlewares = ['api', 'web', 'admin_auth:admin', EventActionHook::class, ContentFilterHook::class];
+        $adminName   = panel_name();
         Route::prefix("api/$adminName")
-            ->middleware(['api', 'web', 'admin_auth:admin'])
+            ->middleware($middlewares)
             ->name("api.$adminName.")
             ->group(function () {
                 $this->loadRoutesFrom(realpath(__DIR__.'/../routes/api.php'));
@@ -97,6 +117,9 @@ class PanelServiceProvider extends ServiceProvider
     private function loadTranslations(): void
     {
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'panel');
+        $this->publishes([
+            __DIR__.'/../lang' => $this->app->langPath('vendor/panel'),
+        ], 'lang');
     }
 
     /**
@@ -107,18 +130,9 @@ class PanelServiceProvider extends ServiceProvider
     private function loadViewComponents(): void
     {
         $this->loadViewComponentsAs('panel', [
-            'form-input'             => Components\Forms\Input::class,
             'sidebar'                => Components\Sidebar::class,
-            'alert'                  => Components\Alert::class,
-            'form-image'             => Components\Forms\Image::class,
-            'form-select'            => Components\Forms\Select::class,
-            'form-rich-text'         => Components\Forms\RichText::class,
-            'form-lang-tab'          => Components\Forms\LangTab::class,
-            'form-textarea'          => Components\Forms\Textarea::class,
             'form-codemirror'        => Components\Forms\Codemirror::class,
             'form-autocomplete-list' => Components\Forms\AutocompleteList::class,
-            'form-switch-radio'      => Components\Forms\SwitchRadio::class,
-            'no-data'                => Components\NoData::class,
         ]);
     }
 
@@ -130,13 +144,12 @@ class PanelServiceProvider extends ServiceProvider
     private function loadViewTemplates(): void
     {
         $originViewPath = inno_path('panel/resources/views');
-        $customViewPath = resource_path('views/vendor/innoshop-panel');
+        $customViewPath = resource_path('views/vendor/panel');
 
         $this->publishes([
             $originViewPath => $customViewPath,
         ], 'views');
 
-        $this->loadViewsFrom($customViewPath, 'panel');
         $this->loadViewsFrom($originViewPath, 'panel');
     }
 }

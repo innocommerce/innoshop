@@ -11,6 +11,7 @@ namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use InnoShop\Common\Models\Article;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\TagRepo;
@@ -29,7 +30,23 @@ class ArticleController extends Controller
             'tags'     => TagRepo::getInstance()->list(['active' => true]),
         ];
 
-        return view('front::articles.index', $data);
+        return view('articles.index', $data);
+    }
+
+    /**
+     * @param  Article  $article
+     * @return mixed
+     * @throws \Exception
+     */
+    public function show(Article $article): mixed
+    {
+        $article->increment('viewed');
+        $data = [
+            'article'  => $article,
+            'catalogs' => CatalogRepo::getInstance()->list(['active' => true]),
+        ];
+
+        return view('articles.show', $data);
     }
 
     /**
@@ -37,7 +54,7 @@ class ArticleController extends Controller
      * @return mixed
      * @throws \Exception
      */
-    public function show(Request $request): mixed
+    public function slugShow(Request $request): mixed
     {
         $slug    = $request->slug;
         $article = ArticleRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
@@ -48,6 +65,6 @@ class ArticleController extends Controller
             'catalogs' => CatalogRepo::getInstance()->list(['active' => true]),
         ];
 
-        return view('front::articles.show', $data);
+        return view('articles.show', $data);
     }
 }

@@ -56,22 +56,214 @@
   }
 }
 
+// body {
+//   -webkit-font-smoothing: antialiased; /* For better font smoothing in Safari */
+//   -moz-osx-font-smoothing: grayscale; /* For better font smoothing on MacOS */
+// }
+
 a {
   text-decoration: none;
 }
 
-img {
-  max-height: 100%;
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .btn-primary {
   color: #fff !important;
 }
 
-.container {
-  @media (max-width: 768px) {
-    padding-right: 15px;
-    padding-left: 15px;
+[v-cloak] {
+  display: none;
+}
+
+// .container {
+//   @media (max-width: 768px) {
+//     padding-right: 15px;
+//     padding-left: 15px;
+//   }
+// }
+
+// table 响应试
+.table-response {
+  thead {
+    display: none;
+    @media (min-width: 768px) {
+      display: table-header-group;
+    }
+  }
+
+  &:not(&.table-bordered) {
+    tr {
+      td, th {
+        &:first-child {
+          padding-left: 0;
+        }
+        &:last-child {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+
+  td {
+    display: block;
+    text-align: right;
+    clear: both;
+    &::before {
+      content: attr(data-title) ": ";
+      float: left;
+
+      @media (min-width: 768px) {
+        display: none;
+      }
+    }
+
+    @media (min-width: 768px) {
+      display: table-cell;
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      border-bottom: none;
+
+      &:last-child {
+        border-bottom: 1px solid #e6e6e6;
+        padding-bottom: 24px;
+        margin-bottom: 14px;
+      }
+    }
+  }
+}
+
+.quantity-wrap {
+  border: 1px solid #e6e6e6;
+  display: flex;
+  align-items: center;
+  width: 140px;
+  height: inherit;
+  overflow: hidden;
+  position: relative;
+  &.disabled {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.5);
+      z-index: 1;
+    }
+  }
+
+  input {
+    border: none;
+    text-align: center;
+    padding: 0;
+    font-size: 18px;
+    height: inherit;
+    box-shadow: none !important;
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  div {
+    font-size: 18px;
+    height: inherit;
+    width: 38px;
+    flex: 0 0 38px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+.tabs-plus {
+  border-bottom: 1px solid #e4e4e4;
+  margin-bottom: 24px;
+  padding-bottom: 6px;
+
+  .nav-item {
+    margin-right: 10px;
+
+    @media (min-width: 768px) {
+      margin-right: 40px;
+    }
+  }
+
+  .nav-link {
+    padding-left: 2px;
+    padding-right: 2px;
+    border: none !important;
+    color: #888;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+
+    @media (min-width: 768px) {
+      font-size: 18px;
+    }
+
+    &::after {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: 2px;
+      background-color: #222;
+      bottom: -6px;
+      left: 0;
+      transform: scaleX(0);
+      transition: transform 0.3s;
+      display: none;
+    }
+
+    &.active {
+      color: #222;
+      font-weight: bold;
+
+      &::after {
+        transform: scaleX(1);
+        display: block;
+      }
+    }
+  }
+}
+
+.is-up-file {
+  .img-upload-item {
+    border-style: dashed !important;
+
+    &:hover {
+      background-color: #f4f4f4 !important;
+      border-color: $primary !important;
+    }
+
+    &:active {
+      background-color: #e4e4e4 !important;
+    }
+
+    .tool-wrap > div:first-of-type {
+        border-right: 1px solid #fff;
+    }
+
+    .tool-wrap > div:hover {
+        background-color: #1d4ff3
+    }
+  }
+}
+
+.swiper {
+  .swiper-pagination-bullet-active {
+    background-color: $primary;
   }
 }
 
@@ -317,4 +509,13 @@ img {
     background: linear-gradient(180deg, #F9F9FC 0%, #fff 100%);
     padding: 60px 0;
   }
+}
+
+.layui-layer-btn .layui-layer-btn0 {
+  background-color: $primary;
+  border-color: $primary;
+}
+
+input[type="password"] {
+  font-family: 'Arial';
 }

@@ -1,0 +1,18 @@
+{
+    "code": "bank_transfer",
+    "name": {
+        "zh_cn": "银行转账",
+        "en": "Bank Transfer"
+    },
+    "description": {
+        "zh_cn": "银行转账",
+        "en": "Bank Transfer"
+    },
+    "type": "billing",
+    "version": "v1.0.0",
+    "icon": "/image/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

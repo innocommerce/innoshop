@@ -10,16 +10,31 @@
 namespace InnoShop\Panel\Controllers;
 
 use Illuminate\Http\Request;
+use InnoShop\Common\Repositories\CatalogRepo;
+use InnoShop\Common\Repositories\CategoryRepo;
+use InnoShop\Common\Repositories\CurrencyRepo;
+use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Repositories\SettingRepo;
+use InnoShop\Panel\Repositories\ThemeRepo;
 
 class SettingController
 {
     /**
      * @return mixed
+     * @throws \Exception
      */
     public function index(): mixed
     {
-        return view('panel::settings.index');
+        $data = [
+            'locales'    => locales()->toArray(),
+            'currencies' => CurrencyRepo::getInstance()->enabledList()->toArray(),
+            'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'catalogs'   => CatalogRepo::getInstance()->getTopCatalogs(),
+            'pages'      => PageRepo::getInstance()->withActive()->builder()->get(),
+            'themes'     => ThemeRepo::getInstance()->getListFromPath(),
+        ];
+
+        return view('panel::settings.index', $data);
     }
 
     /**

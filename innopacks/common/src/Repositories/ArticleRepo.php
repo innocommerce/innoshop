@@ -16,13 +16,22 @@ use InnoShop\Common\Models\Article;
 class ArticleRepo extends BaseRepo
 {
     /**
-     * @param  $filters
+     * @param  array  $filters
      * @return LengthAwarePaginator
      * @throws \Exception
      */
-    public function list($filters = []): LengthAwarePaginator
+    public function list(array $filters = []): LengthAwarePaginator
     {
-        return $this->builder($filters)->paginate();
+        return $this->builder($filters)->orderByDesc('id')->paginate();
+    }
+
+    /**
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function getLatestArticles(int $limit = 4): mixed
+    {
+        return $this->withActive()->builder()->orderByDesc('id')->limit(4)->get();
     }
 
     /**

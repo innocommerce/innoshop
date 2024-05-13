@@ -11,7 +11,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Tag;
-use InnoShop\Common\Models\TagTranslation;
 
 class TagSeeder extends Seeder
 {
@@ -27,9 +26,9 @@ class TagSeeder extends Seeder
 
         $items = $this->getTagTranslations();
         if ($items) {
-            TagTranslation::query()->truncate();
+            Tag\Translation::query()->truncate();
             foreach ($items as $item) {
-                TagTranslation::query()->create($item);
+                Tag\Translation::query()->create($item);
             }
         }
     }
@@ -68,24 +67,35 @@ class TagSeeder extends Seeder
     {
         return
             [
-
                 [
-                    'id'     => 1,
                     'tag_id' => 1,
                     'locale' => 'zh_cn',
                     'name'   => '电商',
                 ],
                 [
-                    'id'     => 2,
+                    'tag_id' => 1,
+                    'locale' => 'en',
+                    'name'   => 'Ecommerce',
+                ],
+                [
                     'tag_id' => 2,
                     'locale' => 'zh_cn',
                     'name'   => '开源',
                 ],
                 [
-                    'id'     => 3,
+                    'tag_id' => 2,
+                    'locale' => 'en',
+                    'name'   => 'Open Source',
+                ],
+                [
                     'tag_id' => 3,
                     'locale' => 'zh_cn',
                     'name'   => '外贸',
+                ],
+                [
+                    'tag_id' => 3,
+                    'locale' => 'en',
+                    'name'   => 'Export',
                 ],
             ];
     }

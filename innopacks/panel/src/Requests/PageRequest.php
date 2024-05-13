@@ -41,9 +41,9 @@ class PageRequest extends FormRequest
             'viewed' => 'integer',
             'active' => 'bool',
 
-            'descriptions.*.locale'  => 'required',
-            'descriptions.*.title'   => 'required',
-            'descriptions.*.content' => 'required',
+            'translations.*.locale'  => 'required',
+            'translations.*.title'   => 'required',
+            'translations.*.content' => 'required',
         ];
     }
 }

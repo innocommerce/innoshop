@@ -93,14 +93,14 @@
       formData.append('image', file);
       formData.append('type', _self.parents('.is-up-file').data('type'));
       _self.find('.img-loading').removeClass('d-none');
-      axios.post('{{ config('app.url') }}/upload/images', formData, {}).then(function (res) {
-          let val = res.data.data.value;
-          let url = res.data.data.url;
+      axios.post('{{ front_route('upload.images') }}', formData, {}).then(function (res) {
+          let val = res.data.value;
+          let url = res.data.url;
           _self.find('input').val(val);
           _self.find('.tool-wrap').removeClass('d-none');
           _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
       }).catch(function (err) {
-          layer.msg(err.response.data.message, {icon: 2});
+          inno.msg(err.response.data.message);
       }).finally(function () {
           _self.find('.img-loading').addClass('d-none');
       });
