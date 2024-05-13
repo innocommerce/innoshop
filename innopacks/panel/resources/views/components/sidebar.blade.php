@@ -1,4 +1,4 @@
-<div class="accordion accordion-flush" id="sidebar-parent">
+<div class="accordion accordion-flush">
   @foreach($menuLinks as $index => $menuLink)
     <div class="accordion-item">
       @if(!$menuLink['has_children'])
@@ -7,7 +7,7 @@
         </a>
       @else
         <h2 class="accordion-header">
-          <button class="accordion-button {{ $menuLink['active'] ? '' : 'collapsed' }}" type="button"
+          <button class="accordion-button {{ $menuLink['active'] ? '' : (system_setting('expand') ? '' : 'collapsed') }}" type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#flush-collapseOne-{{ $index }}"
                   aria-expanded="{{ $menuLink['active'] ? 'true' : 'false' }}"
@@ -16,7 +16,7 @@
           </button>
         </h2>
         <div id="flush-collapseOne-{{ $index }}"
-             class="accordion-collapse collapse {{ $menuLink['active'] ? 'show' : '' }}"
+             class="accordion-collapse collapse {{ $menuLink['active'] ? 'show' : (system_setting('expand') ? 'show' : '') }}"
              data-bs-parent="#sidebar-parent">
           <div class="accordion-body p-0">
             <ul class="nav flex-column">

@@ -1,0 +1,43 @@
+.blog-item {
+  margin-bottom: 10px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 30px;
+  }
+
+  .image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+
+  .blog-item-info {
+    .blog-catalog {
+      font-weight: bold;
+      color: $primary;
+      margin-bottom: 4px;
+    }
+
+    .blog-title {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+
+      @media (min-width: 768px) {
+        font-size: 18px;
+      }
+    }
+
+    .author-wrap {
+      display: flex;
+      align-items: center;
+      color: #777;
+
+      .blog-author {
+        margin-right: 20px;
+      }
+    }
+  }
+}

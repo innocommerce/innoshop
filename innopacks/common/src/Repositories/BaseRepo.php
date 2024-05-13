@@ -21,6 +21,10 @@ class BaseRepo implements RepoInterface
 
     protected string $table;
 
+    protected array $filters = [];
+
+    protected array $relations = [];
+
     /**
      * @throws Exception
      */
@@ -46,7 +50,8 @@ class BaseRepo implements RepoInterface
     }
 
     /**
-     * @throws Exception
+     * @param  array  $filters
+     * @return LengthAwarePaginator
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
@@ -54,7 +59,8 @@ class BaseRepo implements RepoInterface
     }
 
     /**
-     * @throws Exception
+     * @param  array  $filters
+     * @return Collection
      */
     public function all(array $filters = []): Collection
     {
@@ -64,7 +70,6 @@ class BaseRepo implements RepoInterface
     /**
      * @param  int  $id
      * @return mixed
-     * @throws Exception
      */
     public function detail(int $id): mixed
     {
@@ -74,7 +79,6 @@ class BaseRepo implements RepoInterface
     /**
      * @param  $data
      * @return mixed
-     * @throws Exception
      */
     public function create($data): mixed
     {
@@ -85,7 +89,6 @@ class BaseRepo implements RepoInterface
      * @param  mixed  $item
      * @param  $data
      * @return mixed
-     * @throws Exception
      */
     public function update(mixed $item, $data): mixed
     {
@@ -101,7 +104,6 @@ class BaseRepo implements RepoInterface
 
     /**
      * @param  mixed  $item
-     * @throws Exception
      */
     public function destroy(mixed $item): void
     {
@@ -116,11 +118,31 @@ class BaseRepo implements RepoInterface
     /**
      * @param  array  $filters
      * @return Builder
-     * @throws Exception
      */
     public function builder(array $filters = []): Builder
     {
         return $this->modelQuery();
+    }
+
+    /**
+     * @return $this
+     */
+    public function withActive(): static
+    {
+        $this->filters['active'] = true;
+
+        return $this;
+    }
+
+    /**
+     * @param  array  $relations
+     * @return $this
+     */
+    public function withRelations(array $relations): static
+    {
+        $this->relations = array_merge($this->relations, $relations);
+
+        return $this;
     }
 
     /**
@@ -135,7 +157,6 @@ class BaseRepo implements RepoInterface
 
     /**
      * @return Builder
-     * @throws Exception
      */
     private function modelQuery(): Builder
     {

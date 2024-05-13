@@ -1,0 +1,58 @@
+body.page-category {
+  #categories-top {
+    .accordion-button.no-children {
+      &:after {
+        display: none;
+      }
+    }
+
+    .accordion-header {
+      padding-right: 10px;
+      &:hover {
+        background-color: #eee;
+      }
+    }
+
+    .accordion-button {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-right: 0;
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      padding-left: 30px;
+      background-color: transparent;
+      box-shadow: none;
+      &:after {
+        position: absolute;
+        left: 10px;
+        --bs-accordion-btn-icon-width: .7rem;
+        transform: rotate(-90deg);
+      }
+      &[aria-expanded="true"] {
+        &:after {
+          transform: rotate(0);
+        }
+      }
+    }
+
+    .accordion-body {
+      padding: 0;
+      // padding-bottom: 6px;
+      // padding-left: 18px;
+      .accordion-header {
+        padding-left: 18px;
+      }
+
+      .accordion-item {
+        border: none;
+
+        .accordion-button {
+          padding-right: 0;
+          // padding-top: 8px;
+          // padding-bottom: 8px;
+        }
+      }
+    }
+  }
+}

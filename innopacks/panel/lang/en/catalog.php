@@ -8,6 +8,6 @@
  */
 
 return [
-    'list'   => 'Catalog List',
-    'create' => 'New Catalog',
+    'title'  => 'Title',
+    'parent' => 'Parent',
 ];

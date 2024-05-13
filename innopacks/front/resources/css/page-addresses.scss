@@ -1,0 +1,36 @@
+body.page-addresses {
+  .address-card {
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    margin-bottom: 20px;
+
+    .address-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      border-bottom: 1px solid #e9ecef;
+
+      .address-card-title {
+        margin: 0;
+      }
+
+      .address-card-actions {
+        display: flex;
+        align-items: center;
+
+        a {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    .address-card-body {
+      padding: 15px;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+}

@@ -1,11 +1,16 @@
-@extends('front::layouts.app')
+@extends('layouts.app')
 
 @section('body-class', 'page-news')
 
 @section('content')
 
-@include('front::shared.page-head', ['title' => $catalog->translation->title])
-@include('front::shared.articles')
+  <x-front-breadcrumb type="catalog" :value="$catalog"/>
+
+  @hookinsert('catalog.show.top')
+
+  @include('shared.articles')
+
+  @hookinsert('catalog.show.bottom')
 
 @endsection
 

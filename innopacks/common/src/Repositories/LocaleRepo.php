@@ -10,20 +10,32 @@
 namespace InnoShop\Common\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use InnoShop\Common\Models\Locale;
 
 class LocaleRepo extends BaseRepo
 {
+    public static ?Collection $enabledLocales = null;
+
+    /**
+     * @param  $data
+     * @return mixed
+     */
+    public function create($data): mixed
+    {
+        return Locale::query()->create($data);
+    }
+
     /**
      * @throws \Exception
      */
-    public function getListWithPath(): array
+    public function getFrontListWithPath(): array
     {
         $languages = Locale::all()->keyBy('code')->toArray();
 
         $result = [];
-        foreach (panel_languages() as $localeCode) {
-            $langFile = inno_path("panel/lang/$localeCode/base.php");
+        foreach (front_lang_path_codes() as $localeCode) {
+            $langFile = front_lang_dir()."/$localeCode/base.php";
             if (! is_file($langFile)) {
                 throw new \Exception("File ($langFile) not exist!");
             }
@@ -45,7 +57,6 @@ class LocaleRepo extends BaseRepo
     /**
      * @param  array  $filters
      * @return Builder
-     * @throws \Exception
      */
     public function builder(array $filters = []): Builder
     {
@@ -71,6 +82,10 @@ class LocaleRepo extends BaseRepo
      */
     public function getActiveList(): mixed
     {
-        return $this->builder(['active' => true])->get();
+        if (self::$enabledLocales !== null) {
+            return self::$enabledLocales;
+        }
+
+        return self::$enabledLocales = $this->builder(['active' => true])->get();
     }
 }

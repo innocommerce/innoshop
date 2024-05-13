@@ -23,8 +23,10 @@ class CatalogSimple extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'   => $this->id,
-            'name' => $this->translation->title ?? '',
+            'id'       => $this->id,
+            'name'     => $this->translation->title ?? '',
+            'url'      => $this->url,
+            'children' => self::collection($this->children)->jsonSerialize(),
         ];
     }
 }

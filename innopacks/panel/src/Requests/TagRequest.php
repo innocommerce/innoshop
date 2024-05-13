@@ -41,8 +41,8 @@ class TagRequest extends FormRequest
             'position' => 'integer',
             'active'   => 'bool',
 
-            'descriptions.*.locale' => 'required',
-            'descriptions.*.name'   => 'required',
+            'translations.*.locale' => 'required',
+            'translations.*.name'   => 'required',
         ];
     }
 }

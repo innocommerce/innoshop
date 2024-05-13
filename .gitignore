@@ -1,9 +1,12 @@
 /.phpunit.cache
 /node_modules
-/public/build
 /public/hot
+/public/images
 /public/storage
+/public/themes
+/public/mix-manifest.json
 /storage/*.key
+/storage/installed
 /package-lock.json
 /vendor
 .env

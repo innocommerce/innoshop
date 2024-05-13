@@ -31,16 +31,19 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => ['required', 'email'],
+            'email'    => 'required|email',
             'password' => 'required',
         ];
     }
 
-    public function attributes()
+    /**
+     * @return array
+     */
+    public function attributes(): array
     {
         return [
-            'email'    => trans('panel/login.email'),
-            'password' => trans('panel/login.password'),
+            'email'    => trans('panel::login.email'),
+            'password' => trans('panel::login.password'),
         ];
     }
 }

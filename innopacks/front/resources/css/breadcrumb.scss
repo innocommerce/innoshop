@@ -1,0 +1,46 @@
+.breadcrumb-wrap {
+  // 背景图
+  background-image: url('/icon/breadcrumb-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px 0;
+  margin-bottom: 14px;
+
+  @media (min-width: 768px) {
+    padding: 40px 0;
+    margin-bottom: 30px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+
+    li {
+      font-size: 14px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+
+      .home-icon {
+        margin-right: 4px;
+      }
+
+      &:not(:last-child) {
+        margin-right: 10px;
+        &::after {
+          content: '>';
+          margin: 0 10px;
+        }
+      }
+    }
+  }
+}

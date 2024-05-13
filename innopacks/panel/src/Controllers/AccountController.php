@@ -9,6 +9,10 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use InnoShop\Common\Repositories\AdminRepo;
+
 class AccountController extends BaseController
 {
     /**
@@ -23,8 +27,23 @@ class AccountController extends BaseController
         return view('panel::account.index', $data);
     }
 
-    public function update()
+    /**
+     * @param  Request  $request
+     * @return RedirectResponse
+     */
+    public function update(Request $request): RedirectResponse
     {
+        try {
+            $admin = current_admin();
+            AdminRepo::getInstance()->update($admin, $request->only('name', 'email', 'password'));
 
+            return redirect(panel_route('account.index'))
+                ->with('success', trans('panel::common.updated_success'));
+
+        } catch (\Exception $e) {
+            return redirect(panel_route('account.index'))
+                ->withErrors(['error' => $e->getMessage()])
+                ->withInput();
+        }
     }
 }

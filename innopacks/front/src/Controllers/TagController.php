@@ -12,6 +12,7 @@ namespace InnoShop\Front\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Models\Tag;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\TagRepo;
 
@@ -22,7 +23,27 @@ class TagController extends Controller
      */
     public function index(): RedirectResponse
     {
-        return redirect()->to(route('articles.index'));
+        return redirect()->to(front_route('articles.index'));
+    }
+
+    /**
+     * @param  Tag  $tag
+     * @return mixed
+     * @throws \Exception
+     */
+    public function show(Tag $tag): mixed
+    {
+        $tags     = TagRepo::getInstance()->list(['active' => true]);
+        $articles = ArticleRepo::getInstance()->list(['active' => true, 'tag_id' => $tag->id]);
+
+        $data = [
+            'slug'     => $tag->slug,
+            'tag'      => $tag,
+            'tags'     => $tags,
+            'articles' => $articles,
+        ];
+
+        return view('tags.show', $data);
     }
 
     /**
@@ -30,7 +51,7 @@ class TagController extends Controller
      * @return mixed
      * @throws \Exception
      */
-    public function show(Request $request): mixed
+    public function slugShow(Request $request): mixed
     {
         $slug     = $request->slug;
         $tag      = TagRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
@@ -44,6 +65,6 @@ class TagController extends Controller
             'articles' => $articles,
         ];
 
-        return view('front::tags.show', $data);
+        return view('tags.show', $data);
     }
 }

@@ -1,5 +1,6 @@
 // $primary: #3d7bfa;
-$primary: #1165ff;
+// $primary: #1165ff;
+$primary: #409eff;
 
 $font-size-base: 0.84rem;
 
@@ -11,8 +12,12 @@ $btn-border-radius-lg: 0.2rem;
 $input-btn-focus-box-shadow: 0 0 11px 0 rgba($color: $primary, $alpha: .1);
 $input-bg: #fff;
 
+$modal-content-bg: #fff;
+
 // 开启负边距
 $enable-negative-margins: true;
+$input-padding-y: 0.485rem;
+$input-font-size: 0.9rem;
 $body-bg: #f3f8fc;
 
 $table-border-color: #e9ecef;
@@ -47,6 +52,29 @@ $dropdown-border-color:  rgba(0, 0, 0, 0.064);
 // $dropdown-border-color: transparent;
 $dropdown-border-radius: 0.4rem;
 $dropdown-bg :#fff;
+
+$pagination-border-width: 0;
+$pagination-bg: #f4f4f5;
+$pagination-color: #606266;
+$pagination-border-radius: 2px;
+$pagination-disabled-bg: $pagination-bg;
+$pagination-disabled-color: #c0c4cc;
+$pagination-hover-color: $primary;
+$pagination-padding-x: 4px;
+$pagination-padding-y: .3rem;
+$pagination-focus-color: #606266;
+
+.pagination {
+  > li {
+    margin: 0 5px;
+    font-weight: bold;
+    a, span {
+      text-align: center;
+      border-radius: 2px !important;
+      min-width: 30px;
+    }
+  }
+}
 
 $form-validation-states: (
   "invalid": (

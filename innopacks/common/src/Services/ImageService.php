@@ -16,9 +16,13 @@ use Intervention\Image\ImageManager;
 
 class ImageService
 {
+    private string $originImage;
+
     private string $image;
 
     private string $imagePath;
+
+    private string $placeholderImage;
 
     const PLACEHOLDER_IMAGE = 'images/placeholder.png';
 
@@ -27,16 +31,55 @@ class ImageService
      */
     public function __construct($image)
     {
-        $this->image     = $image ?: self::PLACEHOLDER_IMAGE;
+        $this->originImage      = $image;
+        $this->placeholderImage = system_setting('placeholder', self::PLACEHOLDER_IMAGE);
+        if (! is_file(public_path($this->placeholderImage))) {
+            $this->placeholderImage = self::PLACEHOLDER_IMAGE;
+        }
+        $this->image     = $image ?: $this->placeholderImage;
         $this->imagePath = public_path($this->image);
         if (! is_file($this->imagePath)) {
-            $this->image     = self::PLACEHOLDER_IMAGE;
-            $this->imagePath = public_path(self::PLACEHOLDER_IMAGE);
+            $this->image     = $this->placeholderImage;
+            $this->imagePath = public_path($this->placeholderImage);
         }
     }
 
     /**
-     * 生成并获取缩略图
+     * @param  $image
+     * @return static
+     * @throws Exception
+     */
+    public static function getInstance($image): self
+    {
+        return new self($image);
+    }
+
+    /**
+     * Set plugin directory name
+     *
+     * @param  $dirName
+     * @return $this
+     */
+    public function setPluginDirName($dirName): static
+    {
+        $originImage     = $this->originImage;
+        $this->imagePath = plugin_path("{$dirName}/Static").$originImage;
+        if (file_exists($this->imagePath)) {
+            $this->image = strtolower('plugin/'.$dirName.$originImage);
+        } else {
+            $this->image     = $this->placeholderImage;
+            $this->imagePath = public_path($this->image);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Generate thumbnail image
+     *
+     * @param  int  $width
+     * @param  int  $height
+     * @return string
      */
     public function resize(int $width = 100, int $height = 100): string
     {
@@ -46,7 +89,7 @@ class ImageService
 
             $newImagePath = public_path($newImage);
             if (! is_file($newImagePath) || (filemtime($this->imagePath) > filemtime($newImagePath))) {
-                create_directories(dirname($newImage));
+                create_directories(dirname($newImagePath));
 
                 $manager = new ImageManager(new Driver());
                 $image   = $manager->read($this->imagePath);
@@ -63,7 +106,9 @@ class ImageService
     }
 
     /**
-     * 获取原图地址
+     * Get original image url.
+     *
+     * @return string
      */
     public function originUrl(): string
     {

@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-<div class="d-flex align-items-center mb-3 mt-4">
+<div class="d-flex align-items-center mb-3 mt-4 pagination-wrap">
   <nav class="me-2">
       <ul class="pagination mb-0">
           {{-- Previous Page Link --}}

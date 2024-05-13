@@ -12,6 +12,7 @@ namespace InnoShop\Front\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Models\Catalog;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
 
@@ -26,11 +27,30 @@ class CatalogController extends Controller
     }
 
     /**
+     * @param  Catalog  $catalog
+     * @return mixed
+     * @throws \Exception
+     */
+    public function show(Catalog $catalog): mixed
+    {
+        $catalogs = CatalogRepo::getInstance()->list(['active' => true]);
+        $articles = ArticleRepo::getInstance()->list(['active' => true, 'catalog_id' => $catalog->id]);
+
+        $data = [
+            'catalog'  => $catalog,
+            'catalogs' => $catalogs,
+            'articles' => $articles,
+        ];
+
+        return view('catalogs.show', $data);
+    }
+
+    /**
      * @param  Request  $request
      * @return mixed
      * @throws \Exception
      */
-    public function show(Request $request): mixed
+    public function slugShow(Request $request): mixed
     {
         $slug     = $request->slug;
         $catalog  = CatalogRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
@@ -44,6 +64,6 @@ class CatalogController extends Controller
             'articles' => $articles,
         ];
 
-        return view('front::catalogs.show', $data);
+        return view('catalogs.show', $data);
     }
 }

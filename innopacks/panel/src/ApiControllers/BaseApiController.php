@@ -11,6 +11,4 @@ namespace InnoShop\Panel\ApiControllers;
 
 use App\Http\Controllers\Controller;
 
-class BaseApiController extends Controller
-{
-}
+class BaseApiController extends Controller {}

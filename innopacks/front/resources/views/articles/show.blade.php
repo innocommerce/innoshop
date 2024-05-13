@@ -1,9 +1,12 @@
-@extends('front::layouts.app')
+@extends('layouts.app')
 
 @section('body-class', 'page-news-details')
 
 @section('content')
-  @include('front::shared.page-head', ['title' => '新闻详情'])
+
+  <x-front-breadcrumb type="article" :value="$article" />
+
+  @hookinsert('article.show.top')
 
   <div class="container mt-3 mt-md-5">
     <div class="row">
@@ -15,7 +18,7 @@
             <i class="bi bi-tags me-1"></i>
             <div class="d-flex">
               @foreach($article->tags as $tag)
-                <a href="{{ route('tags.show', $tag->slug) }}">{{ $tag->translation->name }}</a>
+                <a href="{{ $tag->url }}">{{ $tag->translation->name }}</a>
               @endforeach
             </div>
           </div>
@@ -43,7 +46,7 @@
           <div class="sidebar-list">
             <ul>
               @foreach($catalogs as $catalog)
-                <li><a href="{{ route('catalogs.show', $catalog->slug ?? '') }}">{{ $catalog->translation->title ?? '' }}</a></li>
+                <li><a href="{{ $catalog->url }}">{{ $catalog->translation->title ?? '' }}</a></li>
               @endforeach
             </ul>
           </div>
@@ -51,4 +54,7 @@
       </div>
     </div>
   </div>
+
+  @hookinsert('article.show.bottom')
+
 @endsection

@@ -1,0 +1,109 @@
+body.page-categories {
+  .top-order-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 26px;
+
+    .right {
+      display: flex;
+      align-items: center;
+
+      @media (max-width: 768px) {
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .order-item {
+        display: flex;
+        align-items: center;
+        border-right: 1px solid #eee;
+        padding-right: 10px;
+        margin-right: 10px;
+
+        span {
+          color: #777;
+        }
+
+        &:last-child {
+          border-right: none;
+          padding-right: 0;
+          margin-right: 0;
+        }
+
+        .form-select {
+          border: none;
+          padding-top: 0;
+          padding-bottom: 0;
+        }
+
+        .order-icon {
+          color: #333;
+          font-size: 20px;
+          margin-left: 10px;
+          padding: 0 6px;
+          &.active {
+            background-color: #eee;
+          }
+        }
+      }
+    }
+  }
+}
+
+.filter-sidebar {
+  .filter-sidebar-item {
+    margin-bottom: 20px;
+
+    @media (min-width: 768px) {
+      margin-bottom: 40px;
+    }
+
+    .title {
+      font-weight: bold;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    #filter-category {
+      > .accordion-item {
+        > .accordion-title {
+          padding: 4px 0;
+        }
+      }
+
+      .accordion-item {
+        border: none;
+
+        .accordion-title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          min-height: 30px;
+          > a {
+            color: #222;
+          }
+
+          .accordion-button {
+            width: 30px;
+            height: 30px;
+            box-shadow: none;
+            background-color: transparent !important;
+
+            &::after {
+              --bs-accordion-btn-icon-width: .8rem;
+              opacity: .7;
+            }
+          }
+        }
+
+        .accordion-body {
+          padding: 0;
+          padding-left: 14px;
+        }
+      }
+    }
+  }
+}

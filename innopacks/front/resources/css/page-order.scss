@@ -1,0 +1,56 @@
+body.page-order {
+  .account-card-title {
+    margin-bottom: 16px;
+  }
+
+  .tabs-plus {
+    margin-bottom: 16px;
+  }
+
+  .order-box {
+
+  }
+}
+
+
+body.page-order-info {
+  .products-table {
+    td,th {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .product-item {
+      display: flex;
+      align-items: center;
+
+      .product-image {
+        width: 50px;
+        height: 50px;
+        margin-right: 14px;
+        border: 1px solid #e3e3e3;
+        border-radius: 4px;
+        position: relative;
+
+        .icon-quantity {
+          position: absolute;
+          top: -5px;
+          right: -10px;
+          background-color: $primary;
+          color: #fff;
+          font-size: 11px;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        img {
+          max-height: 100%;
+        }
+      }
+    }
+  }
+}

@@ -16,7 +16,7 @@ use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Panel\Requests\CatalogRequest;
 
-class CatalogController
+class CatalogController extends BaseController
 {
     /**
      * @param  Request  $request
@@ -55,9 +55,12 @@ class CatalogController
             $data = $request->all();
             CatalogRepo::getInstance()->create($data);
 
-            return redirect(panel_route('catalogs.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('catalogs.index'))
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            return redirect(panel_route('catalogs.index'))
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -98,9 +101,12 @@ class CatalogController
             $data = $request->all();
             CatalogRepo::getInstance()->update($catalog, $data);
 
-            return redirect(panel_route('catalogs.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('catalogs.index'))
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            return redirect(panel_route('catalogs.index'))
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -113,9 +119,11 @@ class CatalogController
         try {
             CatalogRepo::getInstance()->destroy($catalog);
 
-            return back()->with('success', trans('panel::common.deleted_success'));
+            return redirect(panel_route('catalogs.index'))
+                ->with('success', trans('panel::common.deleted_success'));
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => $e->getMessage()]);
+            return redirect(panel_route('catalogs.index'))
+                ->withErrors(['error' => $e->getMessage()]);
         }
     }
 }
