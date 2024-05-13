@@ -1,0 +1,26 @@
+.page-login {
+  // background-color: #1B202F;
+  background-color: #c3d8ff;
+  background-image: url('/images/panel/login-bg.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  .login-content {
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 4px 7px 20px rgba(3, 49, 133, .17);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px 20px;
+
+    .card-header {
+      border: none;
+      padding-bottom: 0;
+    }
+
+    .card-body {
+      padding: 30px 30px 0;
+    }
+  }
+}

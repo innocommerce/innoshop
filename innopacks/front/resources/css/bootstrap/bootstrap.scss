@@ -1,0 +1,26 @@
+$primary: #1272f5;
+
+$font-size-base: 0.84rem;
+$border-radius: 0.275rem;
+
+// 开启负边距
+$enable-negative-margins: true;
+// $body-bg: #f7f8f4;
+
+$border-radius: 0.275rem;
+$btn-border-radius-sm: 0.175rem;
+$btn-border-radius-lg: 0.275rem;
+$border-radius-lg: 0.275rem;
+
+$bootstrap-icons-font: "bootstrap-icons" !default;
+$bootstrap-icons-font-src: url("/vendor/bootstrap-icons/bootstrap-icons.woff2?08efbba7c53d8c5413793eecb19b20bb") format("woff2"),
+url("/vendor/bootstrap-icons/bootstrap-icons.woff?08efbba7c53d8c5413793eecb19b20bb") format("woff") !default;
+
+@font-face {
+  font-display: block;
+  font-family: $bootstrap-icons-font;
+  src: $bootstrap-icons-font-src;
+}
+
+@import 'bootstrap-icons';
+@import 'node_modules/bootstrap/scss/bootstrap';

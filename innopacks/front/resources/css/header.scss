@@ -1,0 +1,128 @@
+.header-box {
+  padding: 16px 0;
+  transition: all 0.3s;
+  position: relative;
+  // box-shadow: -2px 3px 90px -20px rgba(0, 0, 0, .25);
+  box-shadow: -2px 3px 90px -20px rgba(0, 0, 0, .25);
+
+  @media (max-width: 992px) {
+    padding: 10px 0;
+  }
+
+  &.active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: -2px 3px 90px -20px rgba(0, 0, 0, .25) !important;
+  }
+
+  .logo {
+    width: 160px;
+    @media (max-width: 992px) {
+      width: 120px;
+    }
+  }
+
+  .header-menu {
+    @media (max-width: 992px) {
+      .navbar {
+        display: none;
+      }
+    }
+
+    .mb-icon {
+      @media (min-width: 992px) {
+        display: none;
+      }
+
+      i {
+        font-size: 28px;
+      }
+    }
+
+    #mobile-menu-offcanvas {
+      width: 76%;
+
+      .offcanvas-header {
+        border-bottom: 1px solid #f1f1f1;
+        background-color: #f7f7f7;
+        .mb-logo {
+          max-width: 60%;
+        }
+      }
+
+      .close-offcanvas {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -26px;
+        width: 26px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        background-color: #fff;
+        border-radius: 0 5px 5px 0;
+        &:active {
+          background-color: #f1f1f1;
+        }
+      }
+
+      .navbar-nav {
+        padding: 0;
+
+        .nav-item {
+          border-bottom: 1px solid #f1f1f1;
+
+          .nav-link {
+            padding: 14px 20px;
+            font-size: .9rem;
+            &.active {
+              color: $primary;
+            }
+
+            &:active, &.active {
+              background-color: #f1f1f1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .navbar {
+    padding: 0;
+
+    .nav-link {
+      font-size: 1.1rem;
+      margin: 0 1.4rem;
+      position: relative;
+      padding: .4rem .1rem;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: $primary;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.3s;
+      }
+
+      &.active {
+        &::after {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+      }
+    }
+  }
+}
