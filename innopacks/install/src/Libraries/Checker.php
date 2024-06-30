@@ -25,6 +25,8 @@ class Checker
     }
 
     /**
+     * Please see https://laravel.com/docs/11.x/deployment#server-requirements
+     *
      * @return array
      */
     public function getEnvironment(): array
@@ -36,6 +38,9 @@ class Checker
             'php_env'     => version_compare($phpVersion, '8.2.0') >= 0,
             'extensions'  => [
                 'ctype'     => extension_loaded('ctype'),
+                'curl'      => extension_loaded('curl'),
+                'dom'       => extension_loaded('dom'),
+                'fileinfo'  => extension_loaded('fileinfo'),
                 'filter'    => extension_loaded('filter'),
                 'hash'      => extension_loaded('hash'),
                 'mbstring'  => extension_loaded('mbstring'),

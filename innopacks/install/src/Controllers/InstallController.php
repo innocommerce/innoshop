@@ -24,6 +24,7 @@ class InstallController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
