@@ -50,7 +50,9 @@
           <h1 class="product-title">{{ $product->translation->name }}</h1>
           <div class="product-price">
             <span class="price">{{ $sku['price_format'] }}</span>
-            <span class="old-price ms-2">{{ $sku['origin_price_format'] }}</span>
+            @if($sku['origin_price'])
+              <span class="old-price ms-2">{{ $sku['origin_price_format'] }}</span>
+            @endif
           </div>
 
           <div class="stock-wrap">
