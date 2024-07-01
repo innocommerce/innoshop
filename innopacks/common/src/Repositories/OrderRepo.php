@@ -178,6 +178,15 @@ class OrderRepo extends BaseRepo
     }
 
     /**
+     * @param  $orderNumber
+     * @return mixed
+     */
+    public function getOrderByNumber($orderNumber): mixed
+    {
+        return $this->builder(['number' => $orderNumber])->first();
+    }
+
+    /**
      * Generate order number.
      *
      * @return string
