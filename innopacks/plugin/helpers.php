@@ -103,6 +103,31 @@ if (! function_exists('plugin_origin')) {
     }
 }
 
+if (! function_exists('plugin_asset')) {
+    /**
+     * Generate asset path for the plugin, demo code like below:
+     * <link rel="stylesheet" href="{{ plugin_asset('stripe','swiper-bundle.min.css') }}">,
+     * swiper-bundle.min.css is in /plugins/Stripe/Public
+     *
+     * @param  string  $pluginCode
+     * @param  string  $path
+     * @param  bool|null  $secure
+     * @return string
+     */
+    function plugin_asset(string $pluginCode, string $path, ?bool $secure = null): string
+    {
+        $pluginDirectory  = Str::studly($pluginCode);
+        $originPluginPath = "$pluginDirectory/public/$path";
+        $destPluginPath   = "plugins/$pluginCode/$path";
+        if (! file_exists(public_path($destPluginPath))) {
+            create_directories(dirname(public_path($destPluginPath)));
+            copy(plugin_path($originPluginPath), public_path($destPluginPath));
+        }
+
+        return app('url')->asset($destPluginPath, $secure);
+    }
+}
+
 if (! function_exists('fire_hook_action')) {
     /**
      * Fire(Trigger) hook action, used in system.

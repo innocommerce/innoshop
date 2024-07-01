@@ -63,7 +63,7 @@ class ImageService
     public function setPluginDirName($dirName): static
     {
         $originImage     = $this->originImage;
-        $this->imagePath = plugin_path("{$dirName}/Static").$originImage;
+        $this->imagePath = plugin_path("{$dirName}/Public").$originImage;
         if (file_exists($this->imagePath)) {
             $this->image = strtolower('plugin/'.$dirName.$originImage);
         } else {

@@ -33,24 +33,13 @@ class PaymentRepo extends BaseRepo
         }
 
         $paymentData = [
-            'order_id' => $orderId,
+            'order_id'     => $orderId,
+            'charge_id'    => $data['charge_id'] ?? '',
+            'amount'       => (float) ($data['amount'] ?? 0),
+            'handling_fee' => (float) ($data['handling_fee'] ?? 0),
+            'paid'         => $data['paid'] ?? false,
+            'reference'    => json_encode($data['reference'] ?? ''),
         ];
-
-        if (isset($data['transaction_id'])) {
-            $paymentData['transaction_id'] = $data['transaction_id'];
-        }
-        if (isset($data['request'])) {
-            $paymentData['request'] = json_encode($data['request']);
-        }
-        if (isset($data['response'])) {
-            $paymentData['response'] = json_encode($data['response']);
-        }
-        if (isset($data['callback'])) {
-            $paymentData['callback'] = json_encode($data['callback']);
-        }
-        if (isset($data['receipt'])) {
-            $paymentData['receipt'] = $data['receipt'];
-        }
 
         $orderPayment->fill($paymentData);
         $orderPayment->saveOrFail();
