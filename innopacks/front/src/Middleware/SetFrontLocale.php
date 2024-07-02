@@ -25,11 +25,7 @@ class SetFrontLocale
     {
         $currentLocale = $request->segment(1);
         if (empty($currentLocale)) {
-            $localeCode = front_locale_code();
-            app()->setLocale($localeCode);
-            session(['locale' => $localeCode]);
-
-            return $next($request);
+            $currentLocale = front_locale_code();
         }
 
         $availableLocales = locales()->pluck('code')->toArray();
