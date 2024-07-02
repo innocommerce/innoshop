@@ -44,8 +44,7 @@ class CategoryRequest extends FormRequest
             'active'     => 'bool',
 
             'translations.*.locale'  => 'required',
-            'translations.*.title'   => 'required',
-            'translations.*.content' => 'required',
+            'translations.*.name'   => 'required',
         ];
     }
 }
