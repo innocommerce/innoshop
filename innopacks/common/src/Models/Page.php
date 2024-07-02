@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models;
 
+use Exception;
 use InnoShop\Common\Traits\Translatable;
 
 class Page extends BaseModel
@@ -27,6 +28,7 @@ class Page extends BaseModel
      * Get slug url link.
      *
      * @return string
+     * @throws Exception
      */
     public function getUrlAttribute(): string
     {
