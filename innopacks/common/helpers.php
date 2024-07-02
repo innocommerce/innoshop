@@ -440,9 +440,14 @@ if (! function_exists('account_route')) {
      * @param  mixed  $parameters
      * @param  bool  $absolute
      * @return string
+     * @throws Exception
      */
     function account_route($name, mixed $parameters = [], bool $absolute = true): string
     {
+        if (count(locales()) == 1) {
+            return route('front.account.'.$name, $parameters, $absolute);
+        }
+
         return route(front_locale_code().'.front.account.'.$name, $parameters, $absolute);
     }
 }
