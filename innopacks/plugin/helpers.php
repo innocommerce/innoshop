@@ -117,8 +117,8 @@ if (! function_exists('plugin_asset')) {
     function plugin_asset(string $pluginCode, string $path, ?bool $secure = null): string
     {
         $pluginDirectory  = Str::studly($pluginCode);
-        $originPluginPath = "$pluginDirectory/public/$path";
-        $destPluginPath   = "plugins/$pluginCode/$path";
+        $originPluginPath = "$pluginDirectory/Public/$path";
+        $destPluginPath   = strtolower("plugins/$pluginCode/$path");
         if (! file_exists(public_path($destPluginPath))) {
             create_directories(dirname(public_path($destPluginPath)));
             copy(plugin_path($originPluginPath), public_path($destPluginPath));

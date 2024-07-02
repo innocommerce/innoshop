@@ -43,7 +43,7 @@ class CategoryRequest extends FormRequest
             'viewed'     => 'integer',
             'active'     => 'bool',
 
-            'translations.*.locale'  => 'required',
+            'translations.*.locale' => 'required',
             'translations.*.name'   => 'required',
         ];
     }

@@ -9,6 +9,7 @@
         "ext-pdo": "*",
         "intervention/image": "^3.5",
         "laravel/framework": "^11.0",
+        "laravel/octane": "^2.5",
         "laravel/tinker": "^2.9",
         "spatie/laravel-permission": "^6.7",
         "tormjens/eventy": "^0.9.3",
