@@ -605,6 +605,7 @@ if (! function_exists('theme_asset')) {
      * @param  string  $path
      * @param  bool|null  $secure
      * @return string
+     * @throws Exception
      */
     function theme_asset(string $theme, string $path, ?bool $secure = null): string
     {
@@ -612,10 +613,40 @@ if (! function_exists('theme_asset')) {
         $destThemePath   = "themes/$theme/$path";
         if (! file_exists(public_path($destThemePath))) {
             create_directories(dirname(public_path($destThemePath)));
-            copy(theme_path($originThemePath), public_path($destThemePath));
+            @copy(theme_path($originThemePath), public_path($destThemePath));
         }
 
         return app('url')->asset($destThemePath, $secure);
+    }
+}
+
+if (! function_exists('theme_image')) {
+    /**
+     * Generate asset path for the theme, demo code like below:
+     * <link rel="stylesheet" href="{{ theme_image('default','preview.jpg') }}">,
+     * preview.jpg is in /themes/default/public
+     *
+     * @param  string  $theme
+     * @param  string  $path
+     * @param  int  $width
+     * @param  int  $height
+     * @return string
+     * @throws Exception
+     */
+    function theme_image(string $theme, string $path, int $width = 100, int $height = 100): string
+    {
+        $originThemePath = "$theme/public/$path";
+        $destThemePath   = "themes/$theme/$path";
+        if (! file_exists(public_path($destThemePath))) {
+            create_directories(dirname(public_path($destThemePath)));
+            @copy(theme_path($originThemePath), public_path($destThemePath));
+        }
+
+        if (! file_exists(public_path($destThemePath))) {
+            return image_resize('', $width, $height);
+        }
+
+        return image_resize($destThemePath, $width, $height);
     }
 }
 
