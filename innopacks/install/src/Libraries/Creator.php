@@ -69,7 +69,7 @@ class Creator
         $appUrl = $scheme.'://'.$_SERVER['HTTP_HOST'];
         $dbType = strtolower($data['type']);
 
-        $envFileData = 'APP_NAME='.($data['app_name'] ?? 'InnoCMS')."\n".
+        $envFileData = 'APP_NAME='.($data['app_name'] ?? 'InnoShop')."\n".
             'APP_ENV='.($data['environment'] ?? 'local')."\n".
             'APP_KEY='.'base64:'.base64_encode(Str::random(32))."\n".
             'APP_DEBUG=false'."\n".
