@@ -120,7 +120,10 @@ class PluginServiceProvider extends ServiceProvider
             $this->loadPluginMigrations($pluginCode);
             $this->loadPluginViews($pluginCode);
             $this->loadPluginTranslations($pluginCode);
+            fire_hook_action($pluginCode.'.loaded', $pluginCode);
+            fire_hook_action('plugin.loaded', $pluginCode);
         }
+        fire_hook_action('plugin.loaded',null);
     }
 
     /**
