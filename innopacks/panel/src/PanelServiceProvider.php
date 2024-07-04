@@ -110,7 +110,7 @@ class PanelServiceProvider extends ServiceProvider
             $router->pushMiddlewareToGroup('panel_api', $middleware);
         }
 
-        $adminName   = panel_name();
+        $adminName = panel_name();
         Route::prefix("api/$adminName")
             ->middleware('panel_api')
             ->name("api.$adminName.")
