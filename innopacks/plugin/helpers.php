@@ -251,6 +251,6 @@ if (! function_exists('plugin_caller_priority')) {
         $pluginCode = str_replace(['Plugin\\', '\Boot'], '', $trace[2]['class']);
         $plugin     = app('plugin')->getPlugin($pluginCode);
 
-        return (int) $plugin->getPriority();
+        return (int) ($plugin ? $plugin->getPriority() : 0);
     }
 }
