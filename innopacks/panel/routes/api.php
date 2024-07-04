@@ -10,6 +10,10 @@
 use Illuminate\Support\Facades\Route;
 use InnoShop\Panel\ApiControllers;
 
+Route::get('/user', function (\Illuminate\Http\Request $request) {
+    return $request->user();
+});
+
 // Article
 Route::get('/articles', [ApiControllers\ArticleController::class, 'index'])->name('articles.index');
 Route::post('/articles', [ApiControllers\ArticleController::class, 'store'])->name('articles.store');

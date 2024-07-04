@@ -43,14 +43,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('admin_tokens', function (Blueprint $table) {
-            $table->comment('Admin User Token');
-            $table->bigIncrements('id');
-            $table->integer('admin_id')->index('at_admin_id')->comment('Admin User ID');
-            $table->string('token', 64)->comment('API token');
-            $table->timestamps();
-        });
-
         Schema::create('admins', function (Blueprint $table) {
             $table->comment('Admin User');
             $table->bigIncrements('id')->comment('ID');
@@ -1040,8 +1032,6 @@ return new class extends Migration
         Schema::dropIfExists('article_products');
 
         Schema::dropIfExists('admins');
-
-        Schema::dropIfExists('admin_tokens');
 
         Schema::dropIfExists('addresses');
     }

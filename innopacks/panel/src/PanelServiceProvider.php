@@ -52,14 +52,14 @@ class PanelServiceProvider extends ServiceProvider
      */
     private function registerGuard(): void
     {
-        Config::set('auth.providers.admins', [
+        Config::set('auth.providers.admin', [
             'driver' => 'eloquent',
             'model'  => Admin::class,
         ]);
 
         Config::set('auth.guards.admin', [
             'driver'   => 'session',
-            'provider' => 'admins',
+            'provider' => 'admin',
         ]);
     }
 
@@ -82,10 +82,15 @@ class PanelServiceProvider extends ServiceProvider
      */
     private function registerWebRoutes(): void
     {
-        $middlewares = ['web', EventActionHook::class, ContentFilterHook::class, GlobalPanelData::class, SetPanelLocale::class];
-        $adminName   = panel_name();
+        $router      = $this->app['router'];
+        $middlewares = [EventActionHook::class, ContentFilterHook::class, GlobalPanelData::class, SetPanelLocale::class];
+        foreach ($middlewares as $middleware) {
+            $router->pushMiddlewareToGroup('panel', $middleware);
+        }
+
+        $adminName = panel_name();
         Route::prefix($adminName)
-            ->middleware($middlewares)
+            ->middleware('panel')
             ->name("$adminName.")
             ->group(function () {
                 $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
@@ -94,16 +99,20 @@ class PanelServiceProvider extends ServiceProvider
 
     /**
      * Register admin api routes.
-     * @todo This middleware should be instead of token-based authentication, not admin_auth
      *
      * @return void
      */
     private function registerApiRoutes(): void
     {
-        $middlewares = ['api', 'web', 'admin_auth:admin', EventActionHook::class, ContentFilterHook::class];
+        $router      = $this->app['router'];
+        $middlewares = ['auth:sanctum', EventActionHook::class, ContentFilterHook::class];
+        foreach ($middlewares as $middleware) {
+            $router->pushMiddlewareToGroup('panel_api', $middleware);
+        }
+
         $adminName   = panel_name();
         Route::prefix("api/$adminName")
-            ->middleware($middlewares)
+            ->middleware('panel_api')
             ->name("api.$adminName.")
             ->group(function () {
                 $this->loadRoutesFrom(realpath(__DIR__.'/../routes/api.php'));

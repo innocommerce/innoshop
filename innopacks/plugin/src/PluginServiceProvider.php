@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use InnoShop\Common\Middleware\ContentFilterHook;
+use InnoShop\Common\Middleware\EventActionHook;
+use InnoShop\Panel\Middleware\GlobalPanelData;
 use InnoShop\Panel\Middleware\SetPanelLocale;
 use InnoShop\Plugin\Core\PluginManager;
 
@@ -115,12 +118,15 @@ class PluginServiceProvider extends ServiceProvider
     protected function bootAllPlugins(): void
     {
         $allPlugins = app('plugin')->getPlugins();
+        $commands   = [];
         foreach ($allPlugins as $plugin) {
             $pluginCode = $plugin->getDirname();
             $this->loadPluginMigrations($pluginCode);
             $this->loadPluginViews($pluginCode);
             $this->loadPluginTranslations($pluginCode);
+            $commands = array_merge($commands, $this->loadPluginCommands($pluginCode));
         }
+        $this->runPluginCommands($commands);
     }
 
     /**
@@ -158,6 +164,37 @@ class PluginServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register common commands.
+     *
+     * @param  $pluginCode
+     * @return array
+     */
+    private function loadPluginCommands($pluginCode): array
+    {
+        $commandsPath = "$this->pluginBasePath/$pluginCode/Commands";
+        if (! is_dir($commandsPath)) {
+            return [];
+        }
+
+        return $this->getClassesFromPath($commandsPath);
+    }
+
+    /**
+     * @param  $commands
+     * @return void
+     */
+    private function runPluginCommands($commands): void
+    {
+        if (empty($commands)) {
+            return;
+        }
+
+        if ($this->app->runningInConsole()) {
+            $this->commands($commands);
+        }
+    }
+
+    /**
      * Load plugin migrations
      *
      * @param  $pluginCode
@@ -178,8 +215,8 @@ class PluginServiceProvider extends ServiceProvider
      */
     private function loadPluginRoutes($pluginCode): void
     {
-        $this->loadPanelRoutes($pluginCode);
-        $this->loadFrontRoutes($pluginCode);
+        $this->loadPluginPanelRoutes($pluginCode);
+        $this->loadPluginFrontRoutes($pluginCode);
     }
 
     /**
@@ -187,7 +224,7 @@ class PluginServiceProvider extends ServiceProvider
      *
      * @param  $pluginCode
      */
-    private function loadPanelRoutes($pluginCode): void
+    private function loadPluginPanelRoutes($pluginCode): void
     {
         $pluginBasePath = $this->pluginBasePath;
         $adminRoutePath = "$pluginBasePath/$pluginCode/Routes/panel.php";
@@ -195,7 +232,7 @@ class PluginServiceProvider extends ServiceProvider
             $adminName = panel_name();
             Route::prefix($adminName)
                 ->name("$adminName.")
-                ->middleware(['web', 'admin_auth:admin', SetPanelLocale::class])
+                ->middleware(['panel', 'admin_auth:admin'])
                 ->group(function () use ($adminRoutePath) {
                     $this->loadRoutesFrom($adminRoutePath);
                 });
@@ -208,25 +245,25 @@ class PluginServiceProvider extends ServiceProvider
      * @param  $pluginCode
      * @throws Exception
      */
-    private function loadFrontRoutes($pluginCode): void
+    private function loadPluginFrontRoutes($pluginCode): void
     {
         $pluginBasePath = $this->pluginBasePath;
-        $shopRoutePath  = "$pluginBasePath/$pluginCode/Routes/front.php";
-        if (file_exists($shopRoutePath)) {
+        $frontRoutePath = "$pluginBasePath/$pluginCode/Routes/front.php";
+        if (file_exists($frontRoutePath)) {
             $locales = locales();
             if (count($locales) == 1) {
-                Route::middleware('web')
+                Route::middleware('front')
                     ->name('front.')
-                    ->group(function () use ($shopRoutePath) {
-                        $this->loadRoutesFrom($shopRoutePath);
+                    ->group(function () use ($frontRoutePath) {
+                        $this->loadRoutesFrom($frontRoutePath);
                     });
             } else {
                 foreach ($locales as $locale) {
-                    Route::middleware('web')
+                    Route::middleware('front')
                         ->prefix($locale->code)
                         ->name($locale->code.'.front.')
-                        ->group(function () use ($shopRoutePath) {
-                            $this->loadRoutesFrom($shopRoutePath);
+                        ->group(function () use ($frontRoutePath) {
+                            $this->loadRoutesFrom($frontRoutePath);
                         });
                 }
             }
@@ -267,17 +304,17 @@ class PluginServiceProvider extends ServiceProvider
         $middlewarePath = "$pluginBasePath/$pluginCode/Middleware";
 
         $router           = $this->app['router'];
-        $shopMiddlewares  = $this->getMiddlewares("$middlewarePath/Shop");
-        $adminMiddlewares = $this->getMiddlewares("$middlewarePath/Admin");
+        $frontMiddlewares = $this->getClassesFromPath("$middlewarePath/Front");
+        $panelMiddlewares = $this->getClassesFromPath("$middlewarePath/Panel");
 
-        if ($shopMiddlewares) {
-            foreach ($shopMiddlewares as $shopMiddleware) {
-                $router->pushMiddlewareToGroup('shop', $shopMiddleware);
+        if ($frontMiddlewares) {
+            foreach ($frontMiddlewares as $shopMiddleware) {
+                $router->pushMiddlewareToGroup('front', $shopMiddleware);
             }
         }
 
-        if ($adminMiddlewares) {
-            foreach ($adminMiddlewares as $adminMiddleware) {
+        if ($panelMiddlewares) {
+            foreach ($panelMiddlewares as $adminMiddleware) {
                 $router->pushMiddlewareToGroup('panel', $adminMiddleware);
             }
         }
@@ -289,7 +326,7 @@ class PluginServiceProvider extends ServiceProvider
      * @param  $path
      * @return array
      */
-    private function getMiddlewares($path): array
+    private function getClassesFromPath($path): array
     {
         if (! file_exists($path)) {
             return [];

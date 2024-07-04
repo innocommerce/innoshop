@@ -58,14 +58,14 @@ class FrontServiceProvider extends ServiceProvider
      */
     protected function registerGuard(): void
     {
-        Config::set('auth.guards.customer', [
-            'driver'   => 'session',
-            'provider' => 'customer',
-        ]);
-
         Config::set('auth.providers.customer', [
             'driver' => 'eloquent',
             'model'  => Customer::class,
+        ]);
+
+        Config::set('auth.guards.customer', [
+            'driver'   => 'session',
+            'provider' => 'customer',
         ]);
     }
 
@@ -77,22 +77,26 @@ class FrontServiceProvider extends ServiceProvider
      */
     protected function registerWebRoutes(): void
     {
-        $middlewares = ['web', SetFrontLocale::class, EventActionHook::class, ContentFilterHook::class, GlobalFrontData::class];
+        $router      = $this->app['router'];
+        $middlewares = [SetFrontLocale::class, EventActionHook::class, ContentFilterHook::class, GlobalFrontData::class];
+        foreach ($middlewares as $middleware) {
+            $router->pushMiddlewareToGroup('front', $middleware);
+        }
 
-        Route::middleware($middlewares)
+        Route::middleware('front')
             ->get('/', [Controllers\HomeController::class, 'index'])
             ->name('front.home.index');
 
         $locales = locales();
         if (count($locales) == 1) {
-            Route::middleware($middlewares)
+            Route::middleware('front')
                 ->name('front.')
                 ->group(function () {
                     $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
                 });
         } else {
             foreach ($locales as $locale) {
-                Route::middleware($middlewares)
+                Route::middleware('front')
                     ->prefix($locale->code)
                     ->name($locale->code.'.front.')
                     ->group(function () {
@@ -109,9 +113,14 @@ class FrontServiceProvider extends ServiceProvider
      */
     protected function registerApiRoutes(): void
     {
-        $middlewares = ['api', EventActionHook::class, ContentFilterHook::class];
+        $router      = $this->app['router'];
+        $middlewares = [EventActionHook::class, ContentFilterHook::class];
+        foreach ($middlewares as $middleware) {
+            $router->pushMiddlewareToGroup('api', $middleware);
+        }
+
         Route::prefix('api')
-            ->middleware($middlewares)
+            ->middleware('api')
             ->name('api.')
             ->group(function () {
                 $this->loadRoutesFrom(realpath(__DIR__.'/../routes/api.php'));
