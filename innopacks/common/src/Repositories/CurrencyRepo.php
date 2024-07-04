@@ -97,7 +97,6 @@ class CurrencyRepo extends BaseRepo
      */
     public function destroy($item): void
     {
-        $item->translations()->delete();
         $item->delete();
     }
 

@@ -120,6 +120,9 @@ class CurrencyController extends BaseController
     public function destroy(Currency $currency): RedirectResponse
     {
         try {
+            if ($currency->code == system_setting('currency')) {
+                throw new \Exception('Cannot delete default currency');
+            }
             CurrencyRepo::getInstance()->destroy($currency);
 
             return redirect(panel_route('currencies.index'))
