@@ -123,7 +123,7 @@ class PluginServiceProvider extends ServiceProvider
             fire_hook_action($pluginCode.'.loaded', $pluginCode);
             fire_hook_action('plugin.loaded', $pluginCode);
         }
-        fire_hook_action('plugins.loaded', $pluginCode);
+        fire_hook_action('plugins.loaded', null);
     }
 
     /**
