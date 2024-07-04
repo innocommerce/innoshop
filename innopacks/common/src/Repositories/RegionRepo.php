@@ -23,7 +23,7 @@ class RegionRepo extends BaseRepo
         $builder = Region::query();
         $builder->orderBy('position')->orderBy('name');
 
-        return $builder;
+        return fire_hook_filter('repo.region.builder', $builder);
     }
 
     /**

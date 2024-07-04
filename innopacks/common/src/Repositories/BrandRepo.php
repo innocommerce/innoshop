@@ -44,9 +44,7 @@ class BrandRepo extends BaseRepo
             $builder->where('active', (bool) $filters['active']);
         }
 
-        fire_hook_filter('repo.brand.builder', $builder);
-
-        return $builder;
+        return fire_hook_filter('repo.brand.builder', $builder);
     }
 
     /**

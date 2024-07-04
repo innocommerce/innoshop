@@ -61,7 +61,7 @@ class PluginRepo
             $builder->where('code', $code);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.plugin.builder', $builder);
     }
 
     /**

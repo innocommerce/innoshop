@@ -96,7 +96,7 @@ class CatalogRepo extends BaseRepo
             });
         }
 
-        return $builder;
+        return fire_hook_filter('repo.catalog.builder', $builder);
     }
 
     /**

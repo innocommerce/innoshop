@@ -23,7 +23,7 @@ class CountryRepo extends BaseRepo
         $builder = Country::query();
         $builder->orderBy('position')->orderBy('name');
 
-        return $builder;
+        return fire_hook_filter('repo.country.builder', $builder);
     }
 
     /**

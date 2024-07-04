@@ -89,7 +89,7 @@ class OrderRepo extends BaseRepo
             $builder->where('created_at', '<', $end);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.order.builder', $builder);
     }
 
     /**

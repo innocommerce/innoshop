@@ -39,7 +39,7 @@ class StateRepo extends BaseRepo
             $builder->where('code', $code);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.state.builder', $builder);
     }
 
     /**

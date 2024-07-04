@@ -52,6 +52,6 @@ class FavoriteRepo extends BaseRepo
             $builder->where('product_id', $productID);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.customer.favorite.builder', $builder);
     }
 }

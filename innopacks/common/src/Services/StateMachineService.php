@@ -261,7 +261,7 @@ class StateMachineService
                 }
             }
             $data = ['order' => $order, 'status' => $status, 'comment' => $comment, 'notify' => $notify];
-            fire_hook_filter('service.state_machine.change_status.after', $data);
+            fire_hook_action('service.state_machine.change_status.after', $data);
 
             if (! $order->shipping_method_code && $status == self::PAID) {
                 $this->changeStatus(self::COMPLETED, $comment, $notify);

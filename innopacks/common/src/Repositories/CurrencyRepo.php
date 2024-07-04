@@ -59,7 +59,7 @@ class CurrencyRepo extends BaseRepo
             });
         }
 
-        return $builder;
+        return fire_hook_filter('repo.currency.builder', $builder);
     }
 
     /**

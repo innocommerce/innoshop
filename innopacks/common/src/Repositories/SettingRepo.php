@@ -31,7 +31,7 @@ class SettingRepo extends BaseRepo
             $builder->where('name', $name);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.setting.builder', $builder);
     }
 
     /**

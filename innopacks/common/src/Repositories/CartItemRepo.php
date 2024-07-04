@@ -43,7 +43,7 @@ class CartItemRepo extends BaseRepo
             $builder->where('guest_id', $guestID);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.cart_item.builder', $builder);
     }
 
     /**

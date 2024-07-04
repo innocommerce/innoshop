@@ -50,7 +50,7 @@ class CustomerRepo extends BaseRepo
             });
         }
 
-        return $builder;
+        return fire_hook_filter('repo.customer.builder', $builder);
     }
 
     /**

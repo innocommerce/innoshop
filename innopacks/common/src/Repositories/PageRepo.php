@@ -53,7 +53,7 @@ class PageRepo extends BaseRepo
             $builder->where('active', (bool) $filters['active']);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.page.builder', $builder);
     }
 
     /**

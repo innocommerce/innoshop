@@ -72,7 +72,7 @@ class CategoryRepo extends BaseRepo
             $builder->where('active', (bool) $filters['active']);
         }
 
-        return $builder;
+        return fire_hook_filter('repo.category.builder', $builder);
     }
 
     /**
