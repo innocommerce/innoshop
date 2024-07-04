@@ -8,7 +8,6 @@
  */
 
 use Barryvdh\Debugbar\Facades\Debugbar;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use InnoShop\Common\Services\ImageService;
 use InnoShop\Plugin\Core\Blade\Hook;
@@ -133,15 +132,15 @@ if (! function_exists('fire_hook_action')) {
      * Fire(Trigger) hook action, used in system.
      *
      * @param  $hookName
-     * @param  Request  $request
+     * @param  null  $data
      * @return void
      */
-    function fire_hook_action($hookName, Request $request): void
+    function fire_hook_action($hookName, $data = null): void
     {
         if (config('app.debug') && has_debugbar()) {
             Debugbar::log('HOOK === fire_hook_action: '.$hookName);
         }
-        app('eventy')->action($hookName, $request);
+        app('eventy')->action($hookName, $data);
     }
 }
 
@@ -169,16 +168,16 @@ if (! function_exists('fire_hook_filter')) {
      * Fire(Trigger) hook filter, used in system.
      *
      * @param  $hookName
-     * @param  mixed  $response
+     * @param  mixed  $data
      * @return mixed
      */
-    function fire_hook_filter($hookName, mixed $response): mixed
+    function fire_hook_filter($hookName, mixed $data): mixed
     {
         if (config('app.debug') && has_debugbar()) {
             Debugbar::log('HOOK === fire_hook_filter: '.$hookName);
         }
 
-        return app('eventy')->filter($hookName, $response);
+        return app('eventy')->filter($hookName, $data);
     }
 }
 
