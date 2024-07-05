@@ -44,6 +44,7 @@ class EventActionHook
         $controllerAction = $route->getActionName();
         $controllerAction = str_replace(['InnoShop\\', 'Controllers\\'], '', $controllerAction);
         $controllerAction = str_replace('Controller@', '\\', $controllerAction);
+        $controllerAction = trim($controllerAction,'\\');
 
         return strtolower(str_replace('\\', '.', $controllerAction));
     }
