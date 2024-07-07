@@ -11,7 +11,7 @@
         <div class="row">
           @foreach($themes as $theme)
           <div class="col-6 col-lg-4 mb-3">
-            <div class="themes-item border rounded-3 overflow-hidden">
+            <div class="card rounded-3 themes-item overflow-hidden shadow-sm h-100">
               <div class="image border-bottom"><img src="{{ theme_image($theme['code'], 'images/preview.jpg', 700, 500) }}" class="img-fluid"></div>
               <div class="d-flex justify-content-between align-items-center p-3">
                 <span class="fw-bold">{{ $theme['name'] }}</span>
