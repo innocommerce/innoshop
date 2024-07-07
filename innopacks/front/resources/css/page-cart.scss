@@ -65,22 +65,7 @@ body.page-cart {
 
       .td-product-info {
         width: 100%;
-        padding-top: 20px;
-        padding-bottom: 50px;
-
-        .name {
-          // white-space: nowrap;
-          // overflow: hidden;
-          // text-overflow: ellipsis;
-        }
-      }
-
-      .td-quantity {
-        position: absolute;
-        bottom: 10px;
-        left: 120px;
-        padding-left: 0;
-        border-bottom: none;
+        padding: 20px 0 20px 10px;
       }
 
       .td-delete {

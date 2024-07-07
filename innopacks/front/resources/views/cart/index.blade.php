@@ -49,11 +49,16 @@
                       </div>
                     </div>
                     <div class="mb-price mt-1">{{ $product['price_format'] }}</div>
+                    <div class="quantity-wrap mt-1 d-lg-none">
+                      <div class="minus"><i class="bi bi-dash-lg"></i></div>
+                      <input type="number" class="form-control" value="{{ $product['quantity'] ?? 1 }}">
+                      <div class="plus"><i class="bi bi-plus-lg"></i></div>
+                    </div>
                   </div>
                 </div>
               </td>
               <td class="td-price">{{ $product['price_format'] }}</td>
-              <td class="td-quantity">
+              <td class="td-quantity d-none d-lg-table-cell">
                 <div class="quantity-wrap">
                   <div class="minus"><i class="bi bi-dash-lg"></i></div>
                   <input type="number" class="form-control" value="{{ $product['quantity'] ?? 1 }}">
