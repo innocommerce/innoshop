@@ -91,6 +91,7 @@ class CommonServiceProvider extends ServiceProvider
             'form-input'        => Components\Forms\Input::class,
             'form-date'         => Components\Forms\Date::class,
             'form-image'        => Components\Forms\Image::class,
+            'form-file'         => Components\Forms\File::class,
             'form-images'       => Components\Forms\Images::class,
             'form-rich-text'    => Components\Forms\RichText::class,
             'form-select'       => Components\Forms\Select::class,
