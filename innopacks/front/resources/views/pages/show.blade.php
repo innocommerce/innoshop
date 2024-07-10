@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-  <x-front-breadcrumb type="page" :value="$page" />
+  @if($page->show_breadcrumb)
+      <x-front-breadcrumb type="page" :value="$page" />
+  @endif
 
   @hookinsert('page.show.top')
 
