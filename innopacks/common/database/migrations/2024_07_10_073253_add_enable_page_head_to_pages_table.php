@@ -16,7 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pages', function (Blueprint $table) {
-            $table->boolean('show_breadcrumb')->default(true)->after('active')->comment('show breadcrumb');
+            $table->boolean('show_breadcrumb')->default(true)->after('viewed')->comment('show breadcrumb');
         });
     }
 
