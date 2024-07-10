@@ -97,8 +97,8 @@
         <div class="card-body">
           <x-common-form-switch-radio title="{{ __('panel::common.whether_enable') }}" name="active" :value="old('active', $page->active ?? true)"
             placeholder="{{ __('panel::common.whether_enable') }}" />
-          <x-common-form-switch-radio title="{{ __('panel::common.page_head_enable') }}" name="enable_page_head" :value="old('enable_page_head', $page->enable_page_head ?? true)"
-            placeholder="{{ __('panel::common.page_head_enable') }}" />
+          <x-common-form-switch-radio title="{{ __('panel::common.show_breadcrumb') }}" name="show_breadcrumb" :value="old('show_breadcrumb', $page->show_breadcrumb ?? true)"
+            placeholder="{{ __('panel::common.show_breadcrumb') }}" />
           <x-common-form-input title="{{ __('panel::common.slug') }}" name="slug" :value="old('slug', $page->slug ?? '')" placeholder="{{ __('panel::common.slug') }}" />
           <x-common-form-input title="{{ __('panel::article.viewed') }}" name="viewed" :value="old('viewed', $page->viewed ?? 0)"
             />

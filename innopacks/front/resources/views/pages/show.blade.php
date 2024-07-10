@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  @if($page->enable_page_head)
+  @if($page->show_breadcrumb)
       <x-front-breadcrumb type="page" :value="$page" />
   @endif
 
