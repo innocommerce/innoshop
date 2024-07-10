@@ -38,7 +38,7 @@ return [
     'uninstall'       => 'Uninstall',
     'basic_info'      => 'Basic Information',
     'whether_enable'  => 'Whether to enable',
-    'show_breadcrumb' => 'Show_breadcrumb',
+    'show_breadcrumb' => 'Show breadcrumb',
     'logo'            => 'Logo',
 
     'viewed'           => 'Viewed',
