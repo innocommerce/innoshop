@@ -88,6 +88,7 @@ class ProductRepo extends BaseRepo
             $product->product_image_id = $product->images()->first()->id ?? 0;
             $product->saveOrFail();
 
+            $product->images()->delete();
             $this->syncImages($product, $data['images'] ?? []);
 
             DB::commit();

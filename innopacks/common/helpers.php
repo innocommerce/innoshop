@@ -331,7 +331,7 @@ if (! function_exists('image_resize')) {
             return $image;
         }
 
-        return (new ImageService($image))->resize($width, $height);
+        return (new ImageService((string) $image))->resize($width, $height);
     }
 }
 

@@ -33,6 +33,10 @@ class SetFrontLocale
             $currentLocale = system_setting('front_locale', config('app.locale'));
         }
 
+        if (env('APP_LOCALE_FORCE')) {
+            $currentLocale = env('APP_LOCALE_FORCE');
+        }
+
         app()->setLocale($currentLocale);
         session(['locale' => $currentLocale]);
 
