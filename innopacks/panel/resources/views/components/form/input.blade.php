@@ -27,14 +27,13 @@
     <div class="tab-content" id="">
       @foreach (locales() as $locale)
       <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-pane" role="tabpanel" aria-labelledby="{{ $locale['code'] }}">
-        {{-- 普通非对象数据 name[locale] --}}
-        @if(is_array($value) && (is_string($value[$locale['code']]) || $value[$locale['code']] == null))
+        @if(is_array($value) && !isset($value[$locale['code']]))
+          <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
+        @elseif(is_array($value) && (is_string($value[$locale['code']]) || $value[$locale['code']] == null))
           <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value[$locale['code']] ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
-        {{-- 对象数据的old报错返回数据捕获 回显 --}}
         @elseif(is_array($value) && is_array($value[$locale['code']]))
           <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
           <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value[$locale['code']]['name'] ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
-        {{-- 对象数据 --}}
         @elseif(is_object($value))
           @php ($o_value = $value ? $value->where('locale', $locale['code'])->first() : null)
           <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
