@@ -31,7 +31,7 @@ class ArticleRepo extends BaseRepo
      */
     public function getLatestArticles(int $limit = 4): mixed
     {
-        return $this->withActive()->builder()->orderByDesc('id')->limit(4)->get();
+        return $this->withActive()->builder()->orderByDesc('id')->limit($limit)->get();
     }
 
     /**
