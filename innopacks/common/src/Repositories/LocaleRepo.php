@@ -86,6 +86,6 @@ class LocaleRepo extends BaseRepo
             return self::$enabledLocales;
         }
 
-        return self::$enabledLocales = $this->builder(['active' => true])->get();
+        return self::$enabledLocales = $this->builder(['active' => true])->orderBy('position')->get();
     }
 }
