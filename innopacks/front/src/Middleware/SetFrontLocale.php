@@ -30,7 +30,7 @@ class SetFrontLocale
 
         $availableLocales = locales()->pluck('code')->toArray();
         if (! in_array($currentLocale, $availableLocales)) {
-            $currentLocale = system_setting('front_locale', config('app.locale'));
+            $currentLocale = setting_locale_code();
         }
 
         if (env('APP_LOCALE_FORCE')) {

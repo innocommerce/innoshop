@@ -192,6 +192,18 @@ if (! function_exists('locales')) {
     }
 }
 
+if (! function_exists('setting_locale_code')) {
+    /**
+     * Get setting locale code.
+     *
+     * @return string
+     */
+    function setting_locale_code(): string
+    {
+        return system_setting('front_locale', config('app.locale', 'en'));
+    }
+}
+
 if (! function_exists('front_locale_code')) {
     /**
      * Get current locale code.
@@ -200,7 +212,7 @@ if (! function_exists('front_locale_code')) {
      */
     function front_locale_code(): string
     {
-        return session('locale') ?? system_setting('front_locale', config('app.locale'));
+        return session('locale') ?? setting_locale_code();
     }
 }
 
@@ -221,7 +233,7 @@ if (! function_exists('locale_code')) {
             }
         }
 
-        return session('locale', system_setting('front_locale', $configLocale));
+        return session('locale', setting_locale_code());
     }
 }
 

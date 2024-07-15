@@ -58,7 +58,7 @@ if (! function_exists('panel_session_locale')) {
      */
     function panel_session_locale(): string
     {
-        return session('panel_locale', system_setting('front_locale', config('app.locale')));
+        return session('panel_locale', setting_locale_code());
     }
 }
 
