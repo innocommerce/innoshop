@@ -31,7 +31,9 @@ class ContentFilterHook
 
         $filteredResponse = fire_hook_filter($hookName.'.response', $response->getContent());
 
-        $response->setContent($filteredResponse);
+        if (is_string($filteredResponse)) {
+            $response->setContent($filteredResponse);
+        }
 
         return $response;
     }
