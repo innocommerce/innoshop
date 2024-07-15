@@ -41,7 +41,7 @@
             </div>
           </div>
           <div class="main-product-img">
-            <img src="{{ image_resize($product->image->path, 600, 600) }}" class="img-fluid">
+            <img src="{{ $product->image_url }}" class="img-fluid">
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 <div class="product-grid-item">
   <div class="image">
     <a href="{{ $product->url }}">
-      <img src="{{ image_resize($product->image->path ?? '', 600, 600) }}" class="img-fluid">
+      <img src="{{ $product->image_url }}" class="img-fluid">
     </a>
   </div>
   <div class="product-item-info">

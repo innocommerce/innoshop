@@ -1,7 +1,6 @@
 /.phpunit.cache
 /node_modules
 /public/hot
-/public/images
 /public/storage
 /public/themes
 /public/mix-manifest.json

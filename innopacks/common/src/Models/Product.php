@@ -155,4 +155,26 @@ class Product extends BaseModel
 
         return front_route('products.show', $this);
     }
+
+    /**
+     * Get URL
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return $this->getImageUrl();
+    }
+
+    /**
+     * @param  int  $with
+     * @param  int  $height
+     * @return string
+     * @throws \Exception
+     */
+    public function getImageUrl(int $with = 600, int $height = 600): string
+    {
+        return image_resize($product->image->path ?? '', 600, 600);
+    }
 }
