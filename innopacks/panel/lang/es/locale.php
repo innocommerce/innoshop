@@ -8,5 +8,5 @@
  */
 
 return [
-    'cannot_disable_default_locale' => 'No se puede deshabilitar la localización predeterminada',
+    'cannot_disable_default_locale' => 'No se puede deshabilitar el idioma predeterminado',
 ];
