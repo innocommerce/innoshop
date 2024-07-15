@@ -88,8 +88,10 @@ class ProductRepo extends BaseRepo
             $product->product_image_id = $product->images()->first()->id ?? 0;
             $product->saveOrFail();
 
-            $product->images()->delete();
-            $this->syncImages($product, $data['images'] ?? []);
+            if (isset($data['images'])) {
+                $product->images()->delete();
+                $this->syncImages($product, $data['images'] ?? []);
+            }
 
             DB::commit();
 
@@ -113,17 +115,17 @@ class ProductRepo extends BaseRepo
 
         return [
             'slug'             => $data['slug'],
-            'brand_id'         => $data['brand_id']         ?? 0,
+            'brand_id'         => $data['brand_id']                 ?? 0,
             'product_image_id' => $data['product_image_id'] ?? 0,
             'product_video_id' => $data['product_video_id'] ?? 0,
-            'product_sku_id'   => $data['product_sku_id']   ?? 0,
-            'tax_class_id'     => $data['tax_class_id']     ?? 0,
+            'product_sku_id'   => $data['product_sku_id']     ?? 0,
+            'tax_class_id'     => $data['tax_class_id']         ?? 0,
             'variables'        => $variables,
-            'position'         => $data['position']     ?? 0,
-            'weight'           => $data['weight']       ?? 0,
+            'position'         => $data['position']         ?? 0,
+            'weight'           => $data['weight']             ?? 0,
             'weight_class'     => $data['weight_class'] ?? '',
-            'sales'            => $data['sales']        ?? 0,
-            'viewed'           => $data['viewed']       ?? 0,
+            'sales'            => $data['sales']               ?? 0,
+            'viewed'           => $data['viewed']             ?? 0,
             'published_at'     => $data['published_at'] ?? now(),
             'active'           => true,
         ];
@@ -141,11 +143,11 @@ class ProductRepo extends BaseRepo
             $items[] = [
                 'locale'           => $translation['locale'],
                 'name'             => $name,
-                'summary'          => $translation['summary']          ?? $name,
-                'content'          => $translation['content']          ?? $name,
-                'meta_title'       => $translation['meta_title']       ?? $name,
+                'summary'          => $translation['summary']                   ?? $name,
+                'content'          => $translation['content']                   ?? $name,
+                'meta_title'       => $translation['meta_title']             ?? $name,
                 'meta_description' => $translation['meta_description'] ?? $name,
-                'meta_keywords'    => $translation['meta_keywords']    ?? $name,
+                'meta_keywords'    => $translation['meta_keywords']       ?? $name,
             ];
         }
 
@@ -191,10 +193,10 @@ class ProductRepo extends BaseRepo
                 'product_image_id' => $imageID,
                 'variants'         => $variants,
                 'code'             => $code,
-                'model'            => $sku['model']        ?? $code,
-                'price'            => $sku['price']        ?? 0,
+                'model'            => $sku['model']               ?? $code,
+                'price'            => $sku['price']               ?? 0,
                 'origin_price'     => $sku['origin_price'] ?? 0,
-                'quantity'         => $sku['quantity']     ?? 0,
+                'quantity'         => $sku['quantity']         ?? 0,
                 'is_default'       => $isDefault,
                 'position'         => $sku['position'] ?? 0,
             ];

@@ -63,20 +63,24 @@
                 @if($menu['children'] ?? [])
                   <li class="nav-item">
                     <div class="dropdown">
-                      <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}"
-                         href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
+                      @if($menu['name'])
+                        <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}" href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
+                      @endif
                       <ul class="dropdown-menu">
                         @foreach($menu['children'] as $child)
-                          <li><a class="dropdown-item" href="{{ $child['url'] }}">{{ $child['name'] }}</a></li>
+                          @if($child['name'])
+                            <li><a class="dropdown-item" href="{{ $child['url'] }}">{{ $child['name'] }}</a></li>
+                          @endif
                         @endforeach
                       </ul>
                     </div>
                   </li>
                 @else
-                  <li class="nav-item">
-                    <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}"
-                       href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
-                  </li>
+                  @if($menu['name'])
+                    <li class="nav-item">
+                      <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}" href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
+                    </li>
+                  @endif
                 @endif
               @endforeach
             </ul>
@@ -166,11 +170,11 @@
                   <div class="children-group">
                     <ul class="nav flex-column ul-children">
                       @foreach($menu['children'] as $c_key => $child)
-                      <li class="nav-item">
-                        <a class="nav-link" href="{{ $child['url'] }}">
-                          {{$child['name']}}
-                        </a>
-                      </li>
+                        @if($child['name'])
+                          <li class="nav-item">
+                            <a class="nav-link" href="{{ $child['url'] }}">{{$child['name']}}</a>
+                          </li>
+                        @endif
                       @endforeach
                     </ul>
                   </div>

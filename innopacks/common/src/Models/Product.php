@@ -175,6 +175,6 @@ class Product extends BaseModel
      */
     public function getImageUrl(int $with = 600, int $height = 600): string
     {
-        return image_resize($product->image->path ?? '', 600, 600);
+        return image_resize($this->image->path ?? '', $with, $height);
     }
 }
