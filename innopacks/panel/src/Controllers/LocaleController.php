@@ -113,6 +113,7 @@ class LocaleController extends BaseController
                 throw new Exception('默认语言不能卸载');
             }
             TranslationService::getInstance()->deleteLocale($locale);
+            session('locale', system_setting('front_locale', config('app.locale')));
 
             return redirect(panel_route('locales.index'))->with('success', trans('panel::common.uninstall_success'));
         } catch (Exception $e) {

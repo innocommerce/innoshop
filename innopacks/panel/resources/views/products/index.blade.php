@@ -30,10 +30,10 @@
               <td>
                 <div class="d-flex align-items-center justify-content-center wh-50 border">
                   <img src="{{ image_resize($product->images->first()->path ?? '') }}" class="img-fluid"
-                       alt="{{ $product->translation->name }}">
+                       alt="{{ $product->translation->name ?? '' }}">
                 </div>
               </td>
-              <td>{{ $product->translation->name }}</td>
+              <td>{{ $product->translation->name ?? '' }}</td>
               <td>{{ currency_format($product->masterSku->price) }}</td>
               <td>{{ $product->masterSku->quantity }}</td>
               <td>
