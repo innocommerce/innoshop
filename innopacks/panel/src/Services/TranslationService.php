@@ -26,7 +26,7 @@ class TranslationService extends BaseService
     public function createLocale($data): mixed
     {
         $language      = LocaleRepo::getInstance()->create($data);
-        $defaultLocale = system_setting('front_locale', 'en');
+        $defaultLocale = setting_locale_code();
         foreach ($this->getDescriptionModels() as $className) {
             $items = $className::query()->where('locale', $defaultLocale)->get()->toArray();
             foreach ($items as &$item) {

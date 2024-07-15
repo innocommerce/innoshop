@@ -44,8 +44,14 @@ trait Translatable
     {
         $class = $this->getDescriptionModelClass();
 
-        return $this->hasOne($class, $this->getForeignKey(), $this->getKeyName())
+        $translation = $this->hasOne($class, $this->getForeignKey(), $this->getKeyName())
             ->where('locale', locale_code());
+        if ($translation->count()) {
+            return $translation;
+        }
+
+        return $this->hasOne($class, $this->getForeignKey(), $this->getKeyName())
+            ->where('locale', setting_locale_code());
     }
 
     /**
