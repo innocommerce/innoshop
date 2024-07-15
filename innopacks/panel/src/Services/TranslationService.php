@@ -9,7 +9,6 @@
 
 namespace InnoShop\Panel\Services;
 
-use InnoShop\Common\Models\Locale;
 use InnoShop\Common\Repositories\LocaleRepo;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
@@ -47,10 +46,10 @@ class TranslationService extends BaseService
     }
 
     /**
-     * @param  Locale  $locale
+     * @param  $locale
      * @return void
      */
-    public function deleteLocale(Locale $locale): void
+    public function deleteLocale($locale): void
     {
         if ($locale->code == system_setting('front_locale')) {
             throw new NotAcceptableHttpException(trans('panel::language.default_locale_cannot_delete'));
