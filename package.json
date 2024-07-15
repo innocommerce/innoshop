@@ -16,12 +16,12 @@
     "laravel-vite-plugin": "^1.0",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.75.0",
-    "sass-loader": "^12.6.0",
+    "sass-loader": "^14.2.1",
     "vite": "^5.0"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
-    "codemirror": "^5.65.16"
+    "codemirror": "^6.0.1"
   }
 }

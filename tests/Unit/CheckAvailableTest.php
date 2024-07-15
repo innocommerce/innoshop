@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-class ExampleTest extends TestCase
+class CheckAvailableTest extends TestCase
 {
     /**
      * A basic test example.
