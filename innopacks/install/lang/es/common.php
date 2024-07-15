@@ -11,6 +11,7 @@ return [
     'install_wizard' => 'Asistente de instalación',
     'zh_cn'          => 'Chino',
     'en'             => 'Inglés',
+    'es'             => 'Español',
     'license'        => 'Licencia',
     'check_env'      => 'Entorno',
     'configuration'  => 'Configuración',

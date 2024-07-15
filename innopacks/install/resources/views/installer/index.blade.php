@@ -29,6 +29,7 @@
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="{{ route('install.install.index', ['locale' => 'zh_cn']) }}">中文</a></li>
         <li><a class="dropdown-item" href="{{ route('install.install.index', ['locale' => 'en']) }}">English</a></li>
+        <li><a class="dropdown-item" href="{{ route('install.install.index', ['locale' => 'es']) }}">Español</a></li>
       </ul>
     </div>
   </div>
