@@ -263,7 +263,7 @@ if (! function_exists('front_lang_dir')) {
         if (is_dir(lang_path('vendor/front'))) {
             $languageDir = lang_path('vendor/front');
         } else {
-            $languageDir = inno_path('panel/lang');
+            $languageDir = inno_path('front/lang');
         }
 
         return $languageDir;
