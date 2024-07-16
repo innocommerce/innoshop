@@ -90,6 +90,21 @@ class CheckoutService extends BaseService
     }
 
     /**
+     * @return bool
+     */
+    public function checkIsVirtual(): bool
+    {
+        $cartList = $this->getCartList();
+        foreach ($cartList as $product) {
+            if (! $product['is_virtual']) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Get current address list.
      *
      * @return array
@@ -234,6 +249,7 @@ class CheckoutService extends BaseService
             'checkout'         => $this->getCheckoutData(),
             'fee_list'         => $this->getFeeList(),
             'total'            => $this->getTotal(),
+            'is_virtual'       => $this->checkIsVirtual(),
         ];
     }
 
