@@ -91,23 +91,23 @@ class ProductRepo extends BaseRepo
             if ($isUpdating) {
                 $product->skus()->delete();
                 $product->translations()->delete();
-                //$product->attributes()->delete();
+                $product->attributes()->delete();
             }
 
             $product->translations()->createMany($this->handleTranslations($data['translations']));
             $product->skus()->createMany($this->handleSkus($product, $data['skus']));
             $product->categories()->sync($data['categories'] ?? []);
 
+            if (isset($data['images'])) {
+                $product->images()->delete();
+                $this->syncImages($product, $data['images'] ?: []);
+            }
+
             $masterSku = $product->skus()->where('is_default', true)->first();
 
             $product->product_sku_id   = $masterSku->id;
             $product->product_image_id = $product->images()->first()->id ?? 0;
             $product->saveOrFail();
-
-            if (isset($data['images'])) {
-                $product->images()->delete();
-                $this->syncImages($product, $data['images'] ?? []);
-            }
 
             DB::commit();
 

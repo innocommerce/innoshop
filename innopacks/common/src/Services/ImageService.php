@@ -75,7 +75,7 @@ class ImageService
     }
 
     /**
-     * Generate thumbnail image
+     * Generate thumbnail image, three methods: resize, cover, contain
      *
      * @param  int  $width
      * @param  int  $height
@@ -95,7 +95,7 @@ class ImageService
                 $manager = new ImageManager(new Driver());
                 $image   = $manager->read($this->imagePath);
 
-                $image->contain($width, $height);
+                $image->cover($width, $height);
                 $image->save($newImagePath);
             }
 
