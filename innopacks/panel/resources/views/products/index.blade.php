@@ -39,7 +39,11 @@
               <td>
                 <a href="{{ panel_route('products.edit', [$product->id]) }}"
                    class="btn btn-outline-primary btn-sm">{{ __('panel::common.edit')}}</a>
-                <button class="btn btn-outline-danger btn-sm" type="button">{{ __('panel::common.delete')}}</button>
+                <form action="{{ panel_route('products.destroy', [$product->id]) }}" method="POST" class="d-inline">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel::common.delete')}}</button>
+                </form>
               </td>
             </tr>
           @endforeach

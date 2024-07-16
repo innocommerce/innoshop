@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product\Image;
+use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Models\Product\Video;
 use InnoShop\Common\Traits\HasPackageFactory;
@@ -60,9 +61,25 @@ class Product extends BaseModel
     /**
      * @return HasMany
      */
+    public function attributes(): HasMany
+    {
+        return $this->hasMany(\InnoShop\Common\Models\Product\Attribute::class, 'product_id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function images(): HasMany
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Image::class, 'product_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function relations(): HasMany
+    {
+        return $this->hasMany(Relation::class, 'product_id');
     }
 
     /**
@@ -70,7 +87,7 @@ class Product extends BaseModel
      */
     public function videos(): HasMany
     {
-        return $this->hasMany(Video::class);
+        return $this->hasMany(Video::class, 'product_id');
     }
 
     /**
