@@ -43,6 +43,10 @@ return [
     'whether_enable'  => '是否启用',
     'show_breadcrumb' => '是否启用面包屑',
     'logo'            => '标识',
+    'hint'            => '提示',
+    'delete_confirm'  => '确定要删除吗？',
+    'confirm'         => '确定',
+    'cancel'          => '取消',
 
     'viewed'           => '查看次数',
     'slug'             => 'SEO 别名',

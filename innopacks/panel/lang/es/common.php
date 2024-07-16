@@ -39,6 +39,10 @@ return [
     'basic_info'     => 'Información básica',
     'whether_enable' => '¿Habilitar?',
     'logo'           => 'Logo',
+    'hint'           => 'Pista',
+    'delete_confirm' => '¿Seguro que quieres eliminarlo?',
+    'confirm'        => 'Confirmar',
+    'cancel'         => 'Cancelar',
 
     'viewed'           => 'Visto',
     'image'            => 'Imagen',
