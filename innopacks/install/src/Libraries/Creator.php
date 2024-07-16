@@ -101,7 +101,7 @@ class Creator
         $this->sqlite();
 
         try {
-            Artisan::call('migrate', ['--force' => true], $this->outputLog);
+            Artisan::call('migrate:fresh', ['--force' => true], $this->outputLog);
         } catch (Exception $e) {
             $this->outputLog->write($e);
             throw $e;

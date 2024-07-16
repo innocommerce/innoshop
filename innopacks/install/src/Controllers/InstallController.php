@@ -32,7 +32,7 @@ class InstallController extends Controller
             return redirect(front_route('home.index'));
         }
 
-        $defaultLocale = substr(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'en', 0, 2);
+        $defaultLocale = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'en', 0, 2);
         $defaultLocale = ($defaultLocale == 'zh' ? 'zh_cn' : $defaultLocale);
         $locale        = $request->get('locale', $defaultLocale);
         App::setLocale($locale);
