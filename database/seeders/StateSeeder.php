@@ -20,7 +20,11 @@ class StateSeeder extends Seeder
         $items = $this->getStates();
         if ($items) {
             State::query()->truncate();
-            StateRepo::getInstance()->createMany($items);
+
+            $chunks = array_chunk($items, ceil(count($items) / 6));
+            foreach ($chunks as $states) {
+                StateRepo::getInstance()->createMany($states);
+            }
         }
     }
 
