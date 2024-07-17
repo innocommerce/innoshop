@@ -29,7 +29,7 @@ class PageController extends BaseController
             'pages' => PageRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::pages.index', $data);
+        return inno_view('panel::pages.index', $data);
     }
 
     /**
@@ -43,7 +43,7 @@ class PageController extends BaseController
             'page' => new Page(),
         ];
 
-        return view('panel::pages.form', $data);
+        return inno_view('panel::pages.form', $data);
     }
 
     /**
@@ -73,7 +73,7 @@ class PageController extends BaseController
             'page' => $page,
         ];
 
-        return view('panel::pages.form', $data);
+        return inno_view('panel::pages.form', $data);
     }
 
     /**

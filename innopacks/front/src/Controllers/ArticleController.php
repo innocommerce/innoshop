@@ -30,7 +30,7 @@ class ArticleController extends Controller
             'tags'     => TagRepo::getInstance()->list(['active' => true]),
         ];
 
-        return view('articles.index', $data);
+        return inno_view('articles.index', $data);
     }
 
     /**
@@ -46,7 +46,7 @@ class ArticleController extends Controller
             'catalogs' => CatalogRepo::getInstance()->list(['active' => true]),
         ];
 
-        return view('articles.show', $data);
+        return inno_view('articles.show', $data);
     }
 
     /**
@@ -65,6 +65,6 @@ class ArticleController extends Controller
             'catalogs' => CatalogRepo::getInstance()->list(['active' => true]),
         ];
 
-        return view('articles.show', $data);
+        return inno_view('articles.show', $data);
     }
 }

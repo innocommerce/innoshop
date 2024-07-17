@@ -33,7 +33,7 @@ class PluginController
             'plugins' => array_values(PluginResource::collection($plugins)->jsonSerialize()),
         ];
 
-        return view('plugin::plugins.index', $data);
+        return inno_view('plugin::plugins.index', $data);
     }
 
     /**
@@ -86,7 +86,7 @@ class PluginController
                 'fields' => $plugin->getFields(),
             ];
 
-            return view($view, $data);
+            return inno_view($view, $data);
         } catch (\Exception $e) {
             $plugin = app('plugin')->getPlugin($code);
             $data   = [
@@ -95,7 +95,7 @@ class PluginController
                 'plugin'      => $plugin,
             ];
 
-            return view('plugin::plugins.error', $data);
+            return inno_view('plugin::plugins.error', $data);
         }
     }
 

@@ -20,6 +20,6 @@ class PasswordController extends Controller
     {
         $data = [];
 
-        return view('account/password', $data);
+        return inno_view('account/password', $data);
     }
 }

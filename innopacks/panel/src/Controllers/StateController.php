@@ -31,7 +31,7 @@ class StateController extends BaseController
             'states' => StateRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::states.index', $data);
+        return inno_view('panel::states.index', $data);
     }
 
     /**
@@ -94,7 +94,7 @@ class StateController extends BaseController
             'state' => $state,
         ];
 
-        return view('panel::states.form', $data);
+        return inno_view('panel::states.form', $data);
     }
 
     /**

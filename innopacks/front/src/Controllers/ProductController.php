@@ -32,7 +32,7 @@ class ProductController extends Controller
             'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
         ];
 
-        return view('products.index', $data);
+        return inno_view('products.index', $data);
     }
 
     /**
@@ -87,6 +87,6 @@ class ProductController extends Controller
             'variants' => $product->variables,
         ];
 
-        return view('products.show', $data);
+        return inno_view('products.show', $data);
     }
 }

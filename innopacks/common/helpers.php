@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use InnoShop\Common\Libraries\Currency;
+use InnoShop\Common\Libraries\ViewHook;
 use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\LocaleRepo;
 use InnoShop\Common\Repositories\SettingRepo;
@@ -105,6 +106,22 @@ if (! function_exists('is_secure')) {
         }
 
         return false;
+    }
+}
+
+if (! function_exists('is_mobile')) {
+    /**
+     * Check if current is mobile by user agent.
+     *
+     * @return bool
+     */
+    function is_mobile(): bool
+    {
+        try {
+            return (new \Detection\MobileDetect())->isMobile();
+        } catch (\Detection\Exception\MobileDetectException $e) {
+            return false;
+        }
     }
 }
 
@@ -279,6 +296,25 @@ if (! function_exists('front_lang_dir')) {
         }
 
         return $languageDir;
+    }
+}
+
+if (! function_exists('inno_view')) {
+    /**
+     * @param  null  $view
+     * @param  array  $data
+     * @param  array  $mergeData
+     * @return mixed
+     */
+    function inno_view($view = null, array $data = [], array $mergeData = []): mixed
+    {
+        $hook = ViewHook::getInstance()->getHookName(debug_backtrace());
+
+        if ($hook) {
+            $data = fire_hook_filter($hook, $data);
+        }
+
+        return view($view, $data, $mergeData);
     }
 }
 

@@ -26,7 +26,7 @@ class RegisterController extends Controller
             return redirect(front_route('account.index'));
         }
 
-        return view('account.register');
+        return inno_view('account.register');
     }
 
     /**

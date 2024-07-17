@@ -30,7 +30,7 @@ class CatalogController extends BaseController
             'catalogs' => CatalogRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::catalogs.index', $data);
+        return inno_view('panel::catalogs.index', $data);
     }
 
     /**
@@ -87,7 +87,7 @@ class CatalogController extends BaseController
             'catalogs' => $catalogs,
         ];
 
-        return view('panel::catalogs.form', $data);
+        return inno_view('panel::catalogs.form', $data);
     }
 
     /**

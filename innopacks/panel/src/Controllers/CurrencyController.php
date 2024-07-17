@@ -32,7 +32,7 @@ class CurrencyController extends BaseController
             'currencies' => CurrencyRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::currencies.index', $data);
+        return inno_view('panel::currencies.index', $data);
     }
 
     /**
@@ -93,7 +93,7 @@ class CurrencyController extends BaseController
             'currency' => $currency,
         ];
 
-        return view('panel::currencies.form', $data);
+        return inno_view('panel::currencies.form', $data);
     }
 
     /**

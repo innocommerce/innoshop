@@ -24,7 +24,7 @@ class CartController extends Controller
     {
         $cartList = CartService::getInstance()->handleResponse();
 
-        return view('cart.index', $cartList);
+        return inno_view('cart.index', $cartList);
     }
 
     /**

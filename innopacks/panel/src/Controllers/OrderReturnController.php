@@ -31,7 +31,7 @@ class OrderReturnController extends BaseController
             'order_returns' => OrderReturnRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::order_returns.index', $data);
+        return inno_view('panel::order_returns.index', $data);
     }
 
     /**
@@ -84,7 +84,7 @@ class OrderReturnController extends BaseController
             'catalogs'     => $catalogs,
         ];
 
-        return view('panel::order_returns.form', $data);
+        return inno_view('panel::order_returns.form', $data);
     }
 
     /**

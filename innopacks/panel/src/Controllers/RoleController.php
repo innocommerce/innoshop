@@ -27,7 +27,7 @@ class RoleController extends BaseController
             'roles' => Role::query()->paginate(),
         ];
 
-        return view('panel::roles.index', $data);
+        return inno_view('panel::roles.index', $data);
     }
 
     /**
@@ -90,7 +90,7 @@ class RoleController extends BaseController
             'permissions' => RouteRepo::getInstance($role)->getPanelPermissions(),
         ];
 
-        return view('panel::roles.form', $data);
+        return inno_view('panel::roles.form', $data);
     }
 
     /**

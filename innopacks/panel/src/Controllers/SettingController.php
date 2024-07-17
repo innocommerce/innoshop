@@ -34,7 +34,7 @@ class SettingController
             'themes'     => ThemeRepo::getInstance()->getListFromPath(),
         ];
 
-        return view('panel::settings.index', $data);
+        return inno_view('panel::settings.index', $data);
     }
 
     /**

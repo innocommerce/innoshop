@@ -31,7 +31,7 @@ class LoginController extends BaseController
             return redirect(panel_route('login.index'));
         }
 
-        return view('panel::login');
+        return inno_view('panel::login');
     }
 
     /**

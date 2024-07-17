@@ -24,7 +24,7 @@ class AccountController extends BaseController
             'admin' => current_admin(),
         ];
 
-        return view('panel::account.index', $data);
+        return inno_view('panel::account.index', $data);
     }
 
     /**

@@ -27,7 +27,7 @@ class BrandController extends Controller
             'brands' => BrandRepo::getInstance()->withActive()->all()->groupBy('first'),
         ];
 
-        return view('brands.index', $data);
+        return inno_view('brands.index', $data);
     }
 
     /**
@@ -66,6 +66,6 @@ class BrandController extends Controller
             'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
         ];
 
-        return view('brands.show', $data);
+        return inno_view('brands.show', $data);
     }
 }

@@ -33,7 +33,7 @@ class CountryController extends BaseController
             'countries' => CountryRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::countries.index', $data);
+        return inno_view('panel::countries.index', $data);
     }
 
     /**
@@ -97,7 +97,7 @@ class CountryController extends BaseController
             'country' => $country,
         ];
 
-        return view('panel::countries.form', $data);
+        return inno_view('panel::countries.form', $data);
     }
 
     /**

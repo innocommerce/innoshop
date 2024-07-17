@@ -23,7 +23,7 @@ class OrderReturnController extends BaseController
             'order_returns' => OrderReturnRepo::getInstance()->list(),
         ];
 
-        return view('account.order_return_index', $data);
+        return inno_view('account.order_return_index', $data);
     }
 
     /**
@@ -42,7 +42,7 @@ class OrderReturnController extends BaseController
             'order'  => OrderRepo::getInstance()->builder($filters)->firstOrFail(),
         ];
 
-        return view('account.order_return_create', $data);
+        return inno_view('account.order_return_create', $data);
     }
 
     /**

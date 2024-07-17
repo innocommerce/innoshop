@@ -33,7 +33,7 @@ class OrderController extends Controller
             'filter_statuses' => OrderRepo::getInstance()->getFilterStatuses(),
         ];
 
-        return view('account.order_index', $data);
+        return inno_view('account.order_index', $data);
     }
 
     /**
@@ -49,6 +49,6 @@ class OrderController extends Controller
             'order' => $order,
         ];
 
-        return view('account.order_info', $data);
+        return inno_view('account.order_info', $data);
     }
 }

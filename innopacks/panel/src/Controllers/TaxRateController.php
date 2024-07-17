@@ -34,7 +34,7 @@ class TaxRateController extends BaseController
             'tax_rates' => TaxRateRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::tax_rates.index', $data);
+        return inno_view('panel::tax_rates.index', $data);
     }
 
     /**
@@ -98,7 +98,7 @@ class TaxRateController extends BaseController
             'regions'  => RegionRepo::getInstance()->all()->toArray(),
         ];
 
-        return view('panel::tax_rates.form', $data);
+        return inno_view('panel::tax_rates.form', $data);
     }
 
     /**

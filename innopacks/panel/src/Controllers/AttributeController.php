@@ -33,7 +33,7 @@ class AttributeController extends BaseController
             ])->paginate(),
         ];
 
-        return view('panel::attributes.index', $data);
+        return inno_view('panel::attributes.index', $data);
     }
 
     /**
@@ -90,7 +90,7 @@ class AttributeController extends BaseController
             'attribute_groups' => GroupRepo::getInstance()->getOptions(),
         ];
 
-        return view('panel::attributes.form', $data);
+        return inno_view('panel::attributes.form', $data);
     }
 
     /**

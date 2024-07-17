@@ -29,7 +29,7 @@ class BrandController extends BaseController
             'brands' => BrandRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::brands.index', $data);
+        return inno_view('panel::brands.index', $data);
     }
 
     /**
@@ -84,7 +84,7 @@ class BrandController extends BaseController
             'brand' => $brand,
         ];
 
-        return view('panel::brands.form', $data);
+        return inno_view('panel::brands.form', $data);
     }
 
     /**

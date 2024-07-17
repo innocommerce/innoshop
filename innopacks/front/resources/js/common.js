@@ -192,6 +192,10 @@ export default {
   },
 
   getBase() {
-    return document.querySelector('base').href;
+    let url = document.querySelector('base').href;
+    if (url.endsWith('/')) {
+      url = url.slice(0, -1);
+    }
+    return url;
   }
 };

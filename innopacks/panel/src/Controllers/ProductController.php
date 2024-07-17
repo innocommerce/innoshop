@@ -32,7 +32,7 @@ class ProductController extends BaseController
             'products' => ProductRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::products.index', $data);
+        return inno_view('panel::products.index', $data);
     }
 
     /**
@@ -100,7 +100,7 @@ class ProductController extends BaseController
             'tax_classes' => TaxClassRepo::getInstance()->all()->toArray(),
         ];
 
-        return view('panel::products.form', $data);
+        return inno_view('panel::products.form', $data);
     }
 
     /**

@@ -33,7 +33,7 @@ class CategoryController extends Controller
             'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
         ];
 
-        return view('products.index', $data);
+        return inno_view('products.index', $data);
     }
 
     /**
@@ -91,7 +91,7 @@ class CategoryController extends Controller
                 'products'   => $products,
             ];
 
-            return view('categories.show', $data)->render();
+            return inno_view('categories.show', $data)->render();
         });
     }
 }

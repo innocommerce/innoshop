@@ -20,7 +20,7 @@ class EditController extends Controller
      */
     public function index(): mixed
     {
-        return view('account.edit');
+        return inno_view('account.edit');
     }
 
     public function update(Request $request)

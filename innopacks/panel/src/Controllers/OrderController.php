@@ -30,7 +30,7 @@ class OrderController extends BaseController
             'orders' => OrderRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::orders.index', $data);
+        return inno_view('panel::orders.index', $data);
     }
 
     /**
@@ -69,7 +69,7 @@ class OrderController extends BaseController
             'next_statuses' => StateMachineService::getInstance($order)->nextBackendStatuses(),
         ];
 
-        return view('panel::orders.info', $data);
+        return inno_view('panel::orders.info', $data);
     }
 
     /**

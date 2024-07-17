@@ -28,9 +28,9 @@ class AccountController extends Controller
             'order_total'   => Order::query()->where('customer_id', $customerID)->count(),
             'fav_total'     => Favorite::query()->where('customer_id', $customerID)->count(),
             'address_total' => Address::query()->where('customer_id', $customerID)->count(),
-            'latest_orders' => Order::query()->where('customer_id', $customerID)->limit(3)->get(),
+            'latest_orders' => Order::query()->where('customer_id', $customerID)->orderByDesc('id')->limit(3)->get(),
         ];
 
-        return view('account.home', $data);
+        return inno_view('account.home', $data);
     }
 }

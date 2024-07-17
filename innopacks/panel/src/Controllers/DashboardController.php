@@ -31,6 +31,6 @@ class DashboardController extends BaseController
             'top_sale_products' => ProductRepo::getInstance()->getTopSaleProducts(),
         ];
 
-        return view('panel::dashboard', $data);
+        return inno_view('panel::dashboard', $data);
     }
 }

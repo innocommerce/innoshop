@@ -31,7 +31,7 @@ class ArticleController extends BaseController
             'articles' => ArticleRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::articles.index', $data);
+        return inno_view('panel::articles.index', $data);
     }
 
     /**
@@ -85,7 +85,7 @@ class ArticleController extends BaseController
             'catalogs' => $catalogs,
         ];
 
-        return view('panel::articles.form', $data);
+        return inno_view('panel::articles.form', $data);
     }
 
     /**

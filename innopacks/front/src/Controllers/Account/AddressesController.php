@@ -32,7 +32,7 @@ class AddressesController extends Controller
             'addresses' => $addresses,
         ];
 
-        return view('account.addresses', $data);
+        return inno_view('account.addresses', $data);
     }
 
     /**

@@ -14,6 +14,12 @@
     </div>
     <span class="file-name d-none mt-n2 text-dark"></span>
   </div>
+
+
+  <span class="text-muted" style="font-size: 12px">
+      <i class="bi bi-info-circle"></i> {{ __('panel::common.up_image_text') }}
+    </span>
+
   @if ($description)
   <div class="help-text font-size-12 lh-base">{!! $description !!}</div>
   @endif

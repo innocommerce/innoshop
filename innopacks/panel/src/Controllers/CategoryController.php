@@ -9,9 +9,9 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Resources\CategorySimple;
@@ -36,7 +36,7 @@ class CategoryController extends BaseController
             'categories' => CategorySimple::collection($categories)->jsonSerialize(),
         ];
 
-        return view('panel::categories.index', $data);
+        return inno_view('panel::categories.index', $data);
     }
 
     /**
@@ -89,7 +89,7 @@ class CategoryController extends BaseController
             'categories' => $categories,
         ];
 
-        return view('panel::categories.form', $data);
+        return inno_view('panel::categories.form', $data);
     }
 
     /**
@@ -111,7 +111,7 @@ class CategoryController extends BaseController
     }
 
     /**
-     * @param  Category  $product
+     * @param  Category  $category
      * @return JsonResponse
      */
     public function destroy(Category $category): JsonResponse

@@ -29,7 +29,7 @@ class TagController extends BaseController
             'tags' => TagRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::tags.index', $data);
+        return inno_view('panel::tags.index', $data);
     }
 
     /**
@@ -43,7 +43,7 @@ class TagController extends BaseController
             'tag' => new Tag(),
         ];
 
-        return view('panel::tags.form', $data);
+        return inno_view('panel::tags.form', $data);
     }
 
     /**
@@ -73,7 +73,7 @@ class TagController extends BaseController
             'tag' => $tag,
         ];
 
-        return view('panel::tags.form', $data);
+        return inno_view('panel::tags.form', $data);
     }
 
     /**

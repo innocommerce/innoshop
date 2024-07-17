@@ -42,7 +42,7 @@ class CatalogController extends Controller
             'articles' => $articles,
         ];
 
-        return view('catalogs.show', $data);
+        return inno_view('catalogs.show', $data);
     }
 
     /**
@@ -64,6 +64,6 @@ class CatalogController extends Controller
             'articles' => $articles,
         ];
 
-        return view('catalogs.show', $data);
+        return inno_view('catalogs.show', $data);
     }
 }

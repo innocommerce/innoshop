@@ -13,6 +13,7 @@ return [
     'order_number'  => '订单号',
     'order_items'   => '订单商品',
     'order_date'    => '日期',
+    'order_billing' => '支付方式',
     'order_status'  => '状态',
     'order_total'   => '总额',
     'all'           => '全部',

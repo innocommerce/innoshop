@@ -31,7 +31,7 @@ class AdminController extends BaseController
             'admins' => AdminRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::admins.index', $data);
+        return inno_view('panel::admins.index', $data);
     }
 
     /**
@@ -95,7 +95,7 @@ class AdminController extends BaseController
             'roles' => RoleRepo::getInstance()->list(),
         ];
 
-        return view('panel::admins.form', $data);
+        return inno_view('panel::admins.form', $data);
     }
 
     /**

@@ -30,7 +30,7 @@ class AttributeGroupController extends BaseController
             ])->paginate(),
         ];
 
-        return view('panel::attribute_groups.index', $data);
+        return inno_view('panel::attribute_groups.index', $data);
     }
 
     /**

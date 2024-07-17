@@ -284,7 +284,8 @@ class CheckoutService extends BaseService
         DB::beginTransaction();
 
         try {
-            $checkoutData          = (new CheckoutSimple($this->checkout))->jsonSerialize();
+            $checkoutData = (new CheckoutSimple($this->checkout))->jsonSerialize();
+
             $checkoutData['total'] = $this->getTotal();
 
             $order = OrderRepo::getInstance()->create($checkoutData);

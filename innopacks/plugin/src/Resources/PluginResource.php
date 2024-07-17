@@ -21,7 +21,7 @@ class PluginResource extends JsonResource
      * @return array
      * @throws \Exception
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'code'        => $this->getCode(),

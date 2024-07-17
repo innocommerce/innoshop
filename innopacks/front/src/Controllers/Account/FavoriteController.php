@@ -29,7 +29,7 @@ class FavoriteController extends Controller
             'favorites' => $favorites,
         ];
 
-        return view('account.favorites', $data);
+        return inno_view('account.favorites', $data);
     }
 
     /**

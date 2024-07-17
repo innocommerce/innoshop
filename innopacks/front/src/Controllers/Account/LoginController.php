@@ -27,7 +27,7 @@ class LoginController extends Controller
             return redirect(front_route('account.index'));
         }
 
-        return view('account.login');
+        return inno_view('account.login');
     }
 
     /**

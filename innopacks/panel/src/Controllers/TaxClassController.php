@@ -37,7 +37,7 @@ class TaxClassController extends BaseController
             'address_types' => AddressRepo::getAddressTypes(),
         ];
 
-        return view('panel::tax_classes.index', $data);
+        return inno_view('panel::tax_classes.index', $data);
     }
 
     /**
@@ -108,7 +108,7 @@ class TaxClassController extends BaseController
             'address_types' => AddressRepo::getAddressTypes(),
         ];
 
-        return view('panel::tax_classes.form', $data);
+        return inno_view('panel::tax_classes.form', $data);
     }
 
     /**

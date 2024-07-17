@@ -33,7 +33,7 @@ class CustomerController extends BaseController
             'customers' => CustomerRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::customers.index', $data);
+        return inno_view('panel::customers.index', $data);
     }
 
     /**
@@ -92,7 +92,7 @@ class CustomerController extends BaseController
             'locales'   => locales()->toArray(),
         ];
 
-        return view('panel::customers.form', $data);
+        return inno_view('panel::customers.form', $data);
     }
 
     /**

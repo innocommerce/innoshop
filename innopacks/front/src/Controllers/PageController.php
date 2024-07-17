@@ -46,6 +46,6 @@ class PageController extends Controller
             $data['result'] = $result;
         }
 
-        return view('pages.show', $data);
+        return inno_view('pages.show', $data);
     }
 }

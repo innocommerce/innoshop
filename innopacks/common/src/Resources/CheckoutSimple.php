@@ -19,17 +19,23 @@ class CheckoutSimple extends JsonResource
      *
      * @param  Request  $request
      * @return array
+     * @throws \Exception
      */
     public function toArray(Request $request): array
     {
+        $shippingPlugin = plugin($this->shipping_method_code);
+        $billingPlugin  = plugin($this->billing_method_code);
+
         return [
             'id'                   => $this->id,
             'customer_id'          => $this->customer_id,
             'guest_id'             => $this->guest_id,
             'shipping_address_id'  => $this->shipping_address_id,
             'shipping_method_code' => $this->shipping_method_code,
+            'shipping_method_name' => $shippingPlugin ? $shippingPlugin->getLocaleName() : '',
             'billing_address_id'   => $this->billing_address_id,
             'billing_method_code'  => $this->billing_method_code,
+            'billing_method_name'  => $billingPlugin ? $billingPlugin->getLocaleName() : '',
             'reference'            => $this->reference,
         ];
     }

@@ -9,6 +9,7 @@
 
 namespace InnoShop\Front\Services;
 
+use Exception;
 use Illuminate\Support\Str;
 use InnoShop\Common\Models\Order;
 
@@ -39,25 +40,30 @@ class PaymentService
 
     /**
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function pay(): mixed
     {
-        $paymentCode = Str::studly($this->billingMethodCode);
-        $viewPath    = "$paymentCode::payment";
+        try {
+            $originCode  = $this->billingMethodCode;
+            $paymentCode = Str::studly($originCode);
+            $viewPath    = fire_hook_filter("service.payment.pay.$originCode.view", "$paymentCode::payment");
 
-        if (! view()->exists($viewPath)) {
-            throw new \Exception("找不到支付方式 {$paymentCode} 模板 {$viewPath}");
+            if (! view()->exists($viewPath)) {
+                throw new Exception("Cannot find {$paymentCode} view {$viewPath}");
+            }
+
+            $paymentData = [
+                'order'           => $this->order,
+                'payment_setting' => plugin_setting($paymentCode),
+            ];
+
+            $paymentData = fire_hook_filter("service.payment.pay.$originCode.data", $paymentData);
+            $viewContent = view($viewPath, $paymentData)->render();
+
+            return view('orders.pay', ['order' => $this->order, 'payment_view' => $viewContent]);
+        } catch (Exception $e) {
+            return view('orders.pay', ['order' => $this->order, 'error' => $e->getMessage()]);
         }
-
-        $paymentData = [
-            'order'           => $this->order,
-            'payment_setting' => plugin_setting($paymentCode),
-        ];
-
-        $paymentData = fire_hook_filter('service.payment.pay.data', $paymentData);
-        $paymentView = view($viewPath, $paymentData)->render();
-
-        return view('orders.pay', ['order' => $this->order, 'payment_view' => $paymentView]);
     }
 }

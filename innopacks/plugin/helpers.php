@@ -35,11 +35,12 @@ if (! function_exists('plugin_setting')) {
      */
     function plugin_setting($code, string $key = '', $default = null): mixed
     {
+        $code = Str::snake($code);
         if ($key) {
-            return setting("{$code}.{$key}", $default);
+            return setting("$code.$key", $default);
         }
 
-        return setting("{$code}", $default);
+        return setting("$code", $default);
     }
 }
 

@@ -13,6 +13,7 @@ return [
     'order_number'  => 'Order number',
     'order_items'   => 'Order Items',
     'order_date'    => 'Date',
+    'order_billing' => 'Billing Method',
     'order_status'  => 'Status',
     'order_total'   => 'Total',
     'all'           => 'All',

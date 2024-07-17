@@ -34,7 +34,7 @@ class CheckoutController extends Controller
             return redirect(front_route('carts.index'))->withErrors(['error' => 'Empty Cart']);
         }
 
-        return view('checkout.index', $result);
+        return inno_view('checkout.index', $result);
     }
 
     /**
@@ -88,6 +88,6 @@ class CheckoutController extends Controller
             'order' => OrderRepo::getInstance()->builder(['number' => $orderNumber])->firstOrFail(),
         ];
 
-        return view('checkout.success', $data);
+        return inno_view('checkout.success', $data);
     }
 }

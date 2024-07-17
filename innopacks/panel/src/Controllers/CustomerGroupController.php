@@ -31,7 +31,7 @@ class CustomerGroupController
             'groups' => Customer\GroupRepo::getInstance()->list($filters),
         ];
 
-        return view('panel::customer_groups.index', $data);
+        return inno_view('panel::customer_groups.index', $data);
     }
 
     /**
@@ -86,7 +86,7 @@ class CustomerGroupController
             'group' => $customerGroup,
         ];
 
-        return view('panel::customer_groups.form', $data);
+        return inno_view('panel::customer_groups.form', $data);
     }
 
     /**

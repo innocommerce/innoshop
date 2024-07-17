@@ -28,7 +28,7 @@ class ThemeController extends BaseController
             'themes' => ThemeRepo::getInstance()->getListFromPath(),
         ];
 
-        return view('panel::themes.index', $data);
+        return inno_view('panel::themes.index', $data);
     }
 
     /**
@@ -43,7 +43,7 @@ class ThemeController extends BaseController
             'themes'     => ThemeRepo::getInstance()->getListFromPath(),
         ];
 
-        return view('panel::themes.settings', $data);
+        return inno_view('panel::themes.settings', $data);
     }
 
     /**

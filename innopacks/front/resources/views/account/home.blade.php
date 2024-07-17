@@ -54,6 +54,7 @@
               <tr>
                 <th>{{ __('front::order.order_number') }}</th>
                 <th>{{ __('front::order.order_date') }}</th>
+                <th>{{ __('front::order.order_billing') }}</th>
                 <th>{{ __('front::order.order_status') }}</th>
                 <th>{{ __('front::order.order_total') }}</th>
                 <th>{{ __('front::common.action') }}</th>
@@ -64,6 +65,7 @@
                 <tr>
                   <td data-title="Order ID">{{ $order->number }}</td>
                   <td data-title="Date">{{ $order->created_at->format('Y-m-d') }}</td>
+                  <td data-title="Billing">{{ $order->billing_method_name }}</td>
                   <td data-title="Status">
                     <span class="badge {{ $order->status == 'completed' || $order->status == 'paid' ? 'bg-success' : 'bg-warning' }} ">{{ $order->status_format }}</span>
                   </td>

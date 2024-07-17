@@ -32,7 +32,7 @@ class LocaleController extends BaseController
             'locales' => LocaleRepo::getInstance()->getFrontListWithPath(),
         ];
 
-        return view('panel::locales.index', $data);
+        return inno_view('panel::locales.index', $data);
     }
 
     /**
@@ -80,7 +80,7 @@ class LocaleController extends BaseController
             'locale' => $locale,
         ];
 
-        return view('panel::locales.form', $data);
+        return inno_view('panel::locales.form', $data);
     }
 
     /**
