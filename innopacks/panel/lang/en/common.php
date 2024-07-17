@@ -40,6 +40,10 @@ return [
     'whether_enable'  => 'Whether to enable',
     'show_breadcrumb' => 'Show breadcrumb',
     'logo'            => 'Logo',
+    'hint'            => 'Hint',
+    'delete_confirm'  => 'You sure you want to delete it?',
+    'confirm'         => 'Confirm',
+    'cancel'          => 'Cancel',
 
     'viewed'           => 'Viewed',
     'image'            => 'Image',

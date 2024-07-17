@@ -11,6 +11,7 @@ namespace InnoShop\Panel\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Resources\CategorySimple;
@@ -111,16 +112,16 @@ class CategoryController extends BaseController
 
     /**
      * @param  Category  $product
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function destroy(Category $product): RedirectResponse
+    public function destroy(Category $category): JsonResponse
     {
         try {
-            CategoryRepo::getInstance()->destroy($product);
+            CategoryRepo::getInstance()->destroy($category);
 
-            return back()->with('success', trans('panel::common.deleted_success'));
+            return json_success(trans('panel::common.deleted_success'));
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 }

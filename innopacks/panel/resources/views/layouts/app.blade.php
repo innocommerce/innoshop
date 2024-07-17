@@ -23,6 +23,13 @@
     let urls = {
       upload_images: '{{ front_route('upload.images') }}',
     }
+
+    const lang = {
+      hint: '{{ __('panel::common.hint') }}',
+      delete_confirm: '{{ __('panel::common.delete_confirm') }}',
+      confirm: '{{ __('panel::common.confirm') }}',
+      cancel: '{{ __('panel::common.cancel') }}',
+    }
   </script>
   @stack('header')
 </head>

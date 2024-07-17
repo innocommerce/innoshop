@@ -38,12 +38,12 @@
             <button class="accordion-button collapsed ${!hasChildren ? 'no-children' : ''}" type="button" ${hasChildren ? `data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}"` : ''}>
               <span>${item.name}</span>
             </button>
-            <div class="d-flex align-items-center" data-id="${item.id}">
+            <div class="d-flex align-items-center tool-btn" data-id="${item.id}">
               <div class="form-check form-switch list-switch ms-2">
                 <input class="form-check-input" type="checkbox" role="switch" ${item.active ? 'checked' : ''}>
               </div>
               <a href="${categoryIndexUrl}/${item.id}/edit" class="btn btn-sm text-nowrap edit-category btn-outline-primary ms-3">{{ __('panel::common.edit')}}</a>
-              <span class="btn btn-sm ms-2 text-nowrap btn-outline-danger">{{ __('panel::common.delete')}}</span>
+              <span class="btn btn-sm ms-2 text-nowrap btn-outline-danger btn-delete">{{ __('panel::common.delete')}}</span>
             </div>
           </div>
         </h2>`;
@@ -90,6 +90,12 @@
     }).finally(() => {
       layer.closeAll('loading');
     });
+  });
+
+
+  $(document).on('click', '.btn-delete', function() {
+    const id = $(this).closest('.tool-btn').data('id');
+    inno.confirmDelete(`${api}/${id}`)
   });
 </script>
 @endpush

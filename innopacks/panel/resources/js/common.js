@@ -86,4 +86,32 @@ export default {
       }
     })
   },
+
+  /**
+   * 删除确认 弹出框
+   * @param {string} api 删除接口
+   * @param {boolean} handleResponseInternally 是否内部处理响应
+   * @returns {Promise}
+   * @example
+   */
+  confirmDelete(api, handleResponseInternally = true) {
+    return new Promise((resolve, reject) => {
+      layer.confirm(lang.delete_confirm, {icon: 3, title: lang.hint, btn: [lang.confirm, lang.cancel]}, function(index) {
+        layer.close(index);
+        layer.load(2, {shade: [0.3,'#fff'] })
+        axios.delete(api).then((res) => {
+          if (handleResponseInternally) {
+            inno.msg(res.message)
+            location.reload();
+          }
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+          inno.msg(err.response.data.message)
+        }).finally(() => {
+          layer.closeAll('loading');
+        });
+      });
+    });
+  },
 };
