@@ -10,7 +10,7 @@
     },
     "type": "shipping",
     "version": "v1.0.0",
-    "icon": "/image/logo.png",
+    "icon": "/images/logo.png",
     "author": {
         "name": "InnoShop",
         "email": "edward@innoshop.com"

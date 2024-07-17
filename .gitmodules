@@ -1,0 +1,3 @@
+[submodule "plugins/PartnerLink"]
+	path = plugins/PartnerLink
+	url = git@innoshop.work:splugins/PartnerLink.git
