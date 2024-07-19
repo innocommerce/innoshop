@@ -19,7 +19,6 @@ final class Plugin
     public const TYPES = [
         'billing',
         'shipping',
-        'theme',
         'feature',
         'fee',
         'social',
@@ -197,7 +196,11 @@ final class Plugin
         if (! file_exists($fieldsPath)) {
             return $this;
         }
-        $this->fields = require_once $fieldsPath;
+
+        $fieldsData = require_once $fieldsPath;
+        if (is_array($fieldsData) && $fieldsData) {
+            $this->fields = $fieldsData;
+        }
 
         return $this;
     }

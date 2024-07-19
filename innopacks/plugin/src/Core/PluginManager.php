@@ -14,16 +14,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use ZanySoft\Zip\Zip;
+use PhpZip\ZipFile;
 
 class PluginManager
 {
-    protected Collection $plugins;
-
-    public function __construct()
-    {
-        $this->plugins = new Collection();
-    }
+    protected static ?Collection $plugins = null;
 
     /**
      * Get all plugins.
@@ -33,8 +28,8 @@ class PluginManager
      */
     public function getPlugins(): Collection
     {
-        if ($this->plugins->isNotEmpty()) {
-            return $this->plugins;
+        if (self::$plugins !== null) {
+            return self::$plugins;
         }
 
         $existed = $this->getPluginsConfig();
@@ -70,11 +65,11 @@ class PluginManager
             $plugins->put($code, $plugin);
         }
 
-        $this->plugins = $plugins->sortBy(function ($plugin) {
+        self::$plugins = $plugins->sortBy(function ($plugin) {
             return $plugin->getPriority();
         });
 
-        return $this->plugins;
+        return self::$plugins;
     }
 
     /**
@@ -186,7 +181,7 @@ class PluginManager
         $newFilePath  = $destPath.'/'.$originalName;
         $file->move($destPath, $originalName);
 
-        $zipFile = Zip::open($newFilePath);
-        $zipFile->extract(base_path('plugins'));
+        $zipFile = new ZipFile();
+        $zipFile->openFile($newFilePath)->extractTo(base_path('plugins'));
     }
 }
