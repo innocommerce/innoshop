@@ -56,7 +56,7 @@ class BrandRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $item = new Brand();
+        $item = new Brand;
         $this->createOrUpdate($item, $data);
 
         return $item;

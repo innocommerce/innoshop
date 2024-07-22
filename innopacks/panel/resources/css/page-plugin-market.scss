@@ -1,0 +1,10 @@
+.plugin-market-nav-item {
+    & :hover{
+        color: $primary !important;
+    }
+
+}
+
+.product-grid-item .product-item-info .product-price {
+    justify-content: left !important;
+}

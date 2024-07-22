@@ -33,7 +33,7 @@ class PluginManager
         }
 
         $existed = $this->getPluginsConfig();
-        $plugins = new Collection();
+        $plugins = new Collection;
         foreach ($existed as $dirname => $package) {
             $pluginPath = $this->getPluginsDir().DIRECTORY_SEPARATOR.$dirname;
 
@@ -181,7 +181,7 @@ class PluginManager
         $newFilePath  = $destPath.'/'.$originalName;
         $file->move($destPath, $originalName);
 
-        $zipFile = new ZipFile();
+        $zipFile = new ZipFile;
         $zipFile->openFile($newFilePath)->extractTo(base_path('plugins'));
     }
 }

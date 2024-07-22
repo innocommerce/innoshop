@@ -25,7 +25,7 @@ class AdminRepo extends BaseRepo
         $data  = $this->handleData($data);
         $user  = Admin::query()->where('email', $email)->first();
         if (empty($user)) {
-            $user = new Admin();
+            $user = new Admin;
         }
 
         $user->fill($data);

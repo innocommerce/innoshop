@@ -94,7 +94,7 @@ class Order extends BaseModel
      */
     public function notifyNewOrder(): void
     {
-        $useQueue = system_setting('base.use_queue', true);
+        $useQueue = system_setting('use_queue', true);
         if ($useQueue) {
             $this->notify(new OrderNewNotification($this));
         } else {
@@ -110,7 +110,7 @@ class Order extends BaseModel
      */
     public function notifyUpdateOrder($fromCode): void
     {
-        $useQueue = system_setting('base.use_queue', true);
+        $useQueue = system_setting('use_queue', true);
         if ($useQueue) {
             $this->notify(new OrderUpdateNotification($this, $fromCode));
         } else {

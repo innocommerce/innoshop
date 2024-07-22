@@ -35,7 +35,7 @@ class ProductRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $product = new Product();
+        $product = new Product;
 
         return $this->createOrUpdate($product, $data);
     }

@@ -7,9 +7,23 @@ import "./autocomplete";
 
 import common from "./common";
 window.inno = common;
+import dominateColor from "./dominate_color";
+window.dominateColor = dominateColor;
 
 $(function () {
   tinymceInit();
+
+  $('.product-item-card').mouseenter(function (){
+    $(this).css('transform', 'translateY(-2%)').removeClass('shadow-sm').addClass('shadow-lg');
+  }).mouseleave(function (){
+    $(this).css('transform', 'translateY(0)').removeClass('shadow-lg').addClass('shadow-sm');
+  });
+
+  $('.plugin-market-nav-item').mouseenter(function (){
+    $(this).addClass('panel-item-hover');
+  }).mouseleave(function (){
+    $(this).removeClass('panel-item-hover');
+  });
 
   $(document).on('click', '.is-alert .btn-close', function () {
     let top = 70;

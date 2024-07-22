@@ -12,6 +12,7 @@ return [
     'out_stock'    => 'Agotado',
     'add_to_cart'  => 'Añadir al carrito',
     'buy_now'      => 'Comprar ahora',
+    'view_details' => 'Ver Detalles',
     'add_wishlist' => 'Añadir a la lista de deseos',
     'model'        => 'Modelo',
     'sku_code'     => 'Código SKU',

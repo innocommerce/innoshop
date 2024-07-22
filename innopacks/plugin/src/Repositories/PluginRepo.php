@@ -19,7 +19,7 @@ class PluginRepo
 
     public function __construct()
     {
-        self::$installedPlugins = new Collection();
+        self::$installedPlugins = new Collection;
     }
 
     /**

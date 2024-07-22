@@ -31,8 +31,10 @@ return [
     'top_analytic' => 'Analytics',
     'analytics'    => 'Reports',
 
-    'top_plugin' => 'Plugins',
-    'plugins'    => 'Plugins',
+    'top_plugin'     => 'Plugins',
+    'plugins'        => 'Plugins',
+    'plugins_market' => 'Plugin Market',
+    'themes_market'  => 'Theme Market',
 
     'top_customer'    => 'Customers',
     'customers'       => 'Customers',

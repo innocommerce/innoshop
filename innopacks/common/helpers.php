@@ -118,7 +118,7 @@ if (! function_exists('is_mobile')) {
     function is_mobile(): bool
     {
         try {
-            return (new \Detection\MobileDetect())->isMobile();
+            return (new \Detection\MobileDetect)->isMobile();
         } catch (\Detection\Exception\MobileDetectException $e) {
             return false;
         }

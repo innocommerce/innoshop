@@ -50,7 +50,7 @@ class InstallController extends Controller
      */
     public function checkConnected(Request $request): array
     {
-        return (new Checker())->checkConnection($request->all());
+        return (new Checker)->checkConnection($request->all());
     }
 
     /**

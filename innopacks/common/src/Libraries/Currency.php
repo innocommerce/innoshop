@@ -26,7 +26,7 @@ class Currency
     public static function getInstance(): Currency
     {
         if (! self::$instance) {
-            self::$instance = new self();
+            self::$instance = new self;
         }
 
         return self::$instance;

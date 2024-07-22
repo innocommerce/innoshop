@@ -13,6 +13,6 @@ class BaseService
 {
     public static function getInstance(): static
     {
-        return new static();
+        return new static;
     }
 }

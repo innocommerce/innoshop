@@ -29,7 +29,7 @@ class PaymentRepo extends BaseRepo
 
         $orderPayment = Payment::query()->where('order_id', $orderId)->first();
         if (empty($orderPayment)) {
-            $orderPayment = new Payment();
+            $orderPayment = new Payment;
         }
 
         $paymentData = [

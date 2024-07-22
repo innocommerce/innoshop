@@ -31,8 +31,9 @@ return [
     'top_analytic' => 'Análisis',
     'analytics'    => 'Informes',
 
-    'top_plugin' => 'Complementos',
-    'plugins'    => 'Complementos',
+    'top_plugin'     => 'Complementos',
+    'plugins'        => 'Complementos',
+    'plugins_market' => 'Mercado de complementos',
 
     'top_customer'    => 'Clientes',
     'customers'       => 'Clientes',

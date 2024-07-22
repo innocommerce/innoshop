@@ -84,7 +84,7 @@ class CategoryRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $item = new Category();
+        $item = new Category;
         $this->createOrUpdate($item, $data);
 
         $children = $data['children'] ?? [];

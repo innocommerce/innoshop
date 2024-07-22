@@ -31,16 +31,18 @@ return [
     'top_analytic' => '分析',
     'analytics'    => '数据报表',
 
-    'top_plugin' => '插件',
-    'plugins'    => '插件扩展',
+    'top_plugin'     => '插件',
+    'plugins'        => '插件设置',
+    'plugins_market' => '插件市场',
+    'themes_market'  => '主题市场',
 
     'top_customer'    => '客户',
     'customers'       => '客户管理',
     'customer_groups' => '客户分组',
 
     'top_design'      => '界面',
-    'themes'          => '主题管理',
-    'themes_settings' => '主题设置',
+    'themes'          => '主题切换',
+    'themes_settings' => '界面设置',
 
     'top_setting' => '设置',
     'settings'    => '系统设置',

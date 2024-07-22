@@ -92,7 +92,7 @@ class ImageService
 
                 create_directories(dirname($newImagePath));
 
-                $manager = new ImageManager(new Driver());
+                $manager = new ImageManager(new Driver);
                 $image   = $manager->read($this->imagePath);
 
                 $image->cover($width, $height);

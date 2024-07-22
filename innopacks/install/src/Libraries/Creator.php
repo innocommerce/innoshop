@@ -24,7 +24,7 @@ class Creator
 
     public function __construct()
     {
-        $this->outputLog = new BufferedOutput();
+        $this->outputLog = new BufferedOutput;
     }
 
     /**
@@ -135,7 +135,7 @@ class Creator
         $password = $data['admin_password'];
         $admin    = Admin::query()->first();
         if (empty($admin)) {
-            $admin = new Admin();
+            $admin = new Admin;
         }
 
         $admin->fill([
