@@ -21,6 +21,8 @@ return [
     'paid'          => 'Paid',
     'unshipped'     => 'Unshipped',
     'shipped'       => 'Shipped',
+    'to_be_used'    => 'To be used',
+    'to_be_bound'   => 'To be bound',
     'completed'     => 'Completed',
     'cancelled'     => 'Cancelled',
     'continue_pay'  => 'Pay Now',

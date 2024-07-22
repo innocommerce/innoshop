@@ -20,6 +20,8 @@ return [
     'paid'          => 'Pagado',
     'unshipped'     => 'Sin enviar',
     'shipped'       => 'Enviado',
+    'to_be_used'    => 'Por usar',
+    'to_be_bound'   => 'Por vincular',
     'completed'     => 'Completado',
     'cancelled'     => 'Cancelado',
     'continue_pay'  => 'Pagar ahora',

@@ -1,6 +1,6 @@
-<x-panel::form.row :title="$title" :required="$required">
+<x-panel::form.row :title="$title" :required="$required" :disabled="$disabled" :readonly="$readonly">
   @if (!$multiple)
-    <input type="{{ $type }}" name="{{ $name }}" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
+    <input type="{{ $type }}" name="{{ $name }}" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
     @if ($description)
     <div class="help-text font-size-12 lh-base">{!! $description !!}</div>
     @endif
@@ -28,16 +28,16 @@
       @foreach (locales() as $locale)
       <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-pane" role="tabpanel" aria-labelledby="{{ $locale['code'] }}">
         @if(is_array($value) && !isset($value[$locale['code']]))
-          <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
+          <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
         @elseif(is_array($value) && (is_string($value[$locale['code']]) || $value[$locale['code']] == null))
-          <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value[$locale['code']] ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
+          <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value[$locale['code']] ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
         @elseif(is_array($value) && is_array($value[$locale['code']]))
           <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
-          <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value[$locale['code']]['name'] ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
+          <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value[$locale['code']]['name'] ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
         @elseif(is_object($value))
           @php ($o_value = $value ? $value->where('locale', $locale['code'])->first() : null)
           <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
-          <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $o_value->name ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif />
+          <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $o_value->name ?? '' }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
         @endif
         @if ($description)
         <div class="help-text font-size-12 lh-base">{!! $description !!}</div>

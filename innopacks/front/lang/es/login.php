@@ -20,4 +20,5 @@ return [
     'account_or_password_error' => 'Error de cuenta o contraseña',
     'empty_customer'            => 'Cuenta vacía',
     'inactive_customer'         => 'Su cuenta está inactiva.',
+    'login_success'             => 'Inicio de sesión exitoso.',
 ];

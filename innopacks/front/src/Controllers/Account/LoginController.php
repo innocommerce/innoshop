@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers\Account;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use InnoShop\Common\Services\CartService;
 use InnoShop\Front\Requests\LoginRequest;
@@ -20,6 +21,7 @@ class LoginController extends Controller
 {
     /**
      * @return mixed
+     * @throws Exception
      */
     public function index(): mixed
     {
@@ -53,7 +55,7 @@ class LoginController extends Controller
 
             if (! $customer->active) {
                 auth('customer')->logout();
-                throw new \Exception(trans('front::login.inactive_customer'));
+                throw new Exception(trans('front::login.inactive_customer'));
             }
 
             CartService::getInstance(current_customer_id())->mergeCart($oldGuestId);
@@ -61,7 +63,7 @@ class LoginController extends Controller
             $data = ['redirect_uri' => $redirectUri];
 
             return json_success(trans('front::login.login_success'), $data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

@@ -51,4 +51,21 @@ class OrderController extends Controller
 
         return inno_view('account.order_info', $data);
     }
+
+    /**
+     * Order detail
+     *
+     * @param  int  $number
+     * @return mixed
+     */
+    public function numberShow(int $number): mixed
+    {
+        $order = OrderRepo::getInstance()->getOrderByNumber($number);
+        $order->load(['items', 'fees']);
+        $data = [
+            'order' => $order,
+        ];
+
+        return inno_view('account.order_info', $data);
+    }
 }

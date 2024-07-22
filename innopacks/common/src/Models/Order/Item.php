@@ -12,6 +12,7 @@ namespace InnoShop\Common\Models\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Order;
+use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Sku;
 
 class Item extends BaseModel
@@ -34,6 +35,14 @@ class Item extends BaseModel
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     /**

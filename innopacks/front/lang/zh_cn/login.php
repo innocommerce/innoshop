@@ -20,4 +20,5 @@ return [
     'account_or_password_error' => '账号或密码错误',
     'empty_customer'            => '该账号不存在',
     'inactive_customer'         => '抱歉,您的账户已被禁用',
+    'login_success'             => '登录成功',
 ];

@@ -20,4 +20,5 @@ return [
     'account_or_password_error' => 'Account or password error',
     'empty_customer'            => 'Empty account',
     'inactive_customer'         => 'Your account is inactive.',
+    'login_success'             => 'Login successfully.',
 ];

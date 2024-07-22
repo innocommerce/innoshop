@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use InnoShop\Common\Services\CheckoutService;
 
 class CheckoutConfirmRequest extends FormRequest
 {
@@ -27,14 +28,21 @@ class CheckoutConfirmRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     * @throws \Throwable
      */
     public function rules(): array
     {
-        return [
-            'shipping_address_id'  => 'required|integer',
-            'billing_address_id'   => 'required|integer',
-            'shipping_method_code' => 'required|string',
-            'billing_method_code'  => 'required|string',
+        $rules = [
+            'billing_method_code' => 'required|string',
         ];
+
+        $isVirtual = CheckoutService::getInstance()->checkIsVirtual();
+        if (! $isVirtual) {
+            $rules['shipping_address_id']  = 'required|integer';
+            $rules['billing_address_id']   = 'required|integer';
+            $rules['shipping_method_code'] = 'required|integer';
+        }
+
+        return $rules;
     }
 }

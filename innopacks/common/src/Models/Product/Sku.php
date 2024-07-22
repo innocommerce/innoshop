@@ -27,11 +27,6 @@ class Sku extends BaseModel
         'variants' => 'array',
     ];
 
-    protected $appends = [
-        'variant_label',
-        'image_path',
-    ];
-
     /**
      * @return BelongsTo
      */

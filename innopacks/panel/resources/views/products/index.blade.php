@@ -17,7 +17,7 @@
           <tr>
             <th>{{ __('panel::common.id') }}</th>
             <th class="wp-100">{{ __('panel::common.image') }}</th>
-            <th>{{ __('panel::product.name') }}</th>
+            <th>{{ __('panel::common.name') }}</th>
             <th>{{ __('panel::product.price') }}</th>
             <th>{{ __('panel::product.quantity') }}</th>
             <th>{{ __('panel::common.actions') }}</th>

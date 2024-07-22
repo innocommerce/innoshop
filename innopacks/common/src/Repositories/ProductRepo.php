@@ -287,7 +287,7 @@ class ProductRepo extends BaseRepo
         }
 
         if (isset($filters['active'])) {
-            $builder->where('active', (bool) $filters['active']);
+            $builder->where('products.active', (bool) $filters['active']);
         }
 
         return fire_hook_filter('repo.product.builder', $builder);

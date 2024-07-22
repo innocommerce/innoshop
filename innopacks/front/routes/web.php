@@ -100,6 +100,7 @@ Route::prefix('account')
         // Orders
         Route::get('/orders', [Account\OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [Account\OrderController::class, 'show'])->name('orders.show');
+        Route::get('/order-{number}', [Account\OrderController::class, 'numberShow'])->name('orders.number_show');
 
         // Return Orders
         Route::get('/order_returns', [Account\OrderReturnController::class, 'index'])->name('order_returns.index');
