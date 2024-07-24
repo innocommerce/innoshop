@@ -300,6 +300,7 @@ class ProductRepo extends BaseRepo
     public function getBestSellerProducts(int $limit = 8): mixed
     {
         return $this->withActive()->builder()
+            ->whereHas('translation')
             ->withCount('orderItems')
             ->orderByDesc('order_items_count')
             ->limit($limit)

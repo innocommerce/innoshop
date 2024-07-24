@@ -27,7 +27,7 @@ class ProductRepo extends BaseRepo
                 continue;
             }
 
-            $name    = $product->translation->name;
+            $name    = $product->translation->name ?? '';
             $items[] = [
                 'product_id'  => $product->id,
                 'image'       => image_resize($product->image->path ?? ''),
