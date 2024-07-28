@@ -40,7 +40,7 @@ class CheckoutConfirmRequest extends FormRequest
         if (! $isVirtual) {
             $rules['shipping_address_id']  = 'required|integer';
             $rules['billing_address_id']   = 'required|integer';
-            $rules['shipping_method_code'] = 'required|integer';
+            $rules['shipping_method_code'] = 'required|string';
         }
 
         return $rules;
