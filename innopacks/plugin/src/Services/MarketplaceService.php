@@ -201,7 +201,16 @@ class MarketplaceService
         }
 
         $result = $response->json();
+        if (is_null($result)) {
+            $error = 'empty response';
+        } elseif (is_array($result)) {
+            $error = $result['message'] ?? 'unknown error';
+        } else {
+            $error = 'something wrong';
+        }
 
-        return json_fail($result['message'] ?? 'unknown error');
+        return [
+            'error' => $error,
+        ];
     }
 }

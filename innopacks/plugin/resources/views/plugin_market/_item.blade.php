@@ -1,4 +1,4 @@
-@if($product)
+@if(is_array($product) && $product)
   <a href="{{ panel_route('plugin_market.show',$product['product_id']) }}" tabindex="2">
     <div class="card product-item-card border-0 rounded-4 shadow-sm p-3  pb-4 product-grid-item h-100 position-relative">
       <div class="mx-0 px-0 position-absolute w-100 start-0 top-0 rounded-top-4"
@@ -50,39 +50,10 @@
             </div>
           </div>
         </div>
-<div class="output">
-    <img src="" alt="">
-</div>
       </div>
     </div>
   </a>
 @endif
+
 @push('footer')
-  <script>
-    $(function () {
-        // function convertImgToBase64URL(url, callback, outputFormat){
-        //     var img = new Image();
-        //     img.crossOrigin = 'Anonymous';
-        //     img.onload = function(){
-        //         var canvas = document.createElement('CANVAS'),
-        //             ctx = canvas.getContext('2d'), dataURL;
-        //         canvas.height = img.height;
-        //         canvas.width = img.width;
-        //         ctx.drawImage(img, 0, 0);
-        //         dataURL = canvas.toDataURL(outputFormat);
-        //         callback(dataURL);
-        //         canvas = null;
-        //     };
-        //     img.src = url;
-        // }
-        // convertImgToBase64URL('http://developer.innoshop.com/cache/storage/common/T8T3MgD16j3P4XINVj4rk69iVfqaDpj1eXD1oILY-100x100.png', function(base64Img){
-        //     alert('it works');
-        //     $('.output').find('img').attr('src', base64Img);
-        //
-        // });
-      {{--const img{{$product['product_id']}} = new Image();--}}
-      {{--img{{$product['product_id']}}.onload = () => dominateColor.getDominantColor(img{{$product['product_id']}}, color => document.getElementById("{{'productHeader'.$product['product_id']}}").style.background = color);--}}
-      {{--img{{$product['product_id']}}.src = '{{$product['image']}}';--}}
-    });
-  </script>
 @endpush

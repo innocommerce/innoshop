@@ -1,4 +1,4 @@
-@if($product)
+@if(is_array($product) && $product)
   <a href="{{ panel_route('theme_market.show',$product['product_id']) }}">
     <div class="card product-item-card border-0 rounded-4 shadow-sm px-0  pb-4 product-grid-item h-100 position-relative">
       <div class="mx-0 px-0 position-absolute w-100 start-0 top-0 rounded-top-4"
@@ -22,7 +22,7 @@
           </p>
         @endif
 
-        <p class="card-text text-secondary text-start mx-3 mb-0">
+        <p class="card-text text-secondary text-start mx-3 mb-0 d-none">
           <i class="bi-star-fill text-warning pe-1"></i>
           <i class="bi-star-fill text-warning pe-1"></i>
           <i class="bi-star-fill text-warning pe-1"></i>

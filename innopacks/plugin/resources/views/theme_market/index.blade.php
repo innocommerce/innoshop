@@ -4,7 +4,7 @@
 @section('title', __('panel::menu.themes_market'))
 
 @section('content')
-    @include('plugin::shared._token_info')
+  @include('plugin::shared._token_info')
   <div class="card h-min-600">
     <div class="card-body px-0 px-md-2">
       @include('plugin::theme_market._menu_top')
@@ -15,12 +15,11 @@
 
         <div class="col-11 col-sm-12 col-md-8 col-lg-9 col-xl-10 mx-auto px-0">
           <div class="row gx-3 gx-lg-4 my-2" id="marketItemsContent">
-            @foreach ($products as $product)
+            @foreach ($products['data']??[] as $product)
               <div class="col-6 col-md-4 col-lg-3 gy-4 my-3">
                 @include('plugin::theme_market._item')
               </div>
             @endforeach
-            {{ $products->links('panel::vendor/pagination/bootstrap-4') }}
           </div>
         </div>
       </div>

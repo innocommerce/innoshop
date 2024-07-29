@@ -12,7 +12,6 @@ namespace InnoShop\Plugin\Controllers;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use InnoShop\Plugin\Services\MarketplaceService;
-use InnoShop\Plugin\Services\PaginatorService;
 
 class ThemeMarketController
 {
@@ -20,11 +19,10 @@ class ThemeMarketController
      * Get plugins market categories and items.
      *
      * @param  Request  $request
-     * @param  PaginatorService  $paginatorService
      * @return mixed
      * @throws ConnectionException
      */
-    public function index(Request $request, PaginatorService $paginatorService): mixed
+    public function index(Request $request): mixed
     {
         $categorySlug  = $request->get('category');
         $marketService = MarketplaceService::getInstance();
@@ -34,11 +32,10 @@ class ThemeMarketController
         } else {
             $products = $marketService->getThemeProducts();
         }
-        $paginator = $paginatorService->makePaginator($products['data']);
 
         $data = [
             'categories' => $marketService->getThemeCategories(),
-            'products'   => $paginator,
+            'products'   => $products,
         ];
 
         return inno_view('plugin::theme_market.index', $data);
