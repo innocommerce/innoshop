@@ -433,7 +433,7 @@ if (! function_exists('create_directories')) {
         $path = '';
 
         $directoryPath = str_replace(['/', '\\'], $ds, $directoryPath);
-        if (strlen($directoryPath) > 0 && ($directoryPath[0] === $ds || $directoryPath[1] === ':')) {
+        if (substr($directoryPath, 0, 1) === $ds) {
             $path = $ds;
         }
 
