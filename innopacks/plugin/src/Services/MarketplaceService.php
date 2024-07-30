@@ -31,9 +31,9 @@ class MarketplaceService
     {
         $this->baseUrl = config('innoshop.api_url').'/api/seller';
 
-        $this->client = Http::baseUrl($this->baseUrl)->withHeaders([
-            'domain-token' => system_setting('domain_token'),
-        ]);
+        $this->client = Http::baseUrl($this->baseUrl)
+            ->withOptions(['verify' => false])
+            ->withHeaders(['domain-token' => system_setting('domain_token')]);
     }
 
     /**
@@ -186,7 +186,7 @@ class MarketplaceService
         Storage::disk('local')->put($pluginPath, $content);
 
         $pluginZip = storage_path('app/'.$pluginPath);
-        $zipFile   = new ZipFile();
+        $zipFile   = new ZipFile;
         $zipFile->openFile($pluginZip)->extractTo(base_path('plugins'));
     }
 
