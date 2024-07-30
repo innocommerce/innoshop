@@ -65,7 +65,7 @@ class ImageService
         $originImage     = $this->originImage;
         $this->imagePath = plugin_path("{$dirName}/Public").$originImage;
         if (file_exists($this->imagePath)) {
-            $this->image = strtolower('plugin/'.$dirName.$originImage);
+            $this->image = strtolower('plugins/'.$dirName.$originImage);
         } else {
             $this->image     = $this->placeholderImage;
             $this->imagePath = public_path($this->image);

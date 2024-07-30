@@ -429,12 +429,30 @@ if (! function_exists('create_directories')) {
      */
     function create_directories($directoryPath): void
     {
-        $path        = '';
-        $directories = explode('/', $directoryPath);
+        $ds   = DIRECTORY_SEPARATOR;
+        $path = '';
+
+        $directoryPath = str_replace(['/', '\\'], $ds, $directoryPath);
+        if (strlen($directoryPath) > 0 && ($directoryPath[0] === $ds || $directoryPath[1] === ':')) {
+            $path = $ds;
+        }
+
+        $directories = explode($ds, $directoryPath);
         foreach ($directories as $directory) {
-            $path = $path.'/'.$directory;
+            if ($directory === '') {
+                continue;
+            }
+
+            if ($path === '' || $path === $ds) {
+                $path .= $directory;
+            } else {
+                $path .= $ds.$directory;
+            }
+
             if (! is_dir($path)) {
-                @mkdir($path, 0755);
+                if (! @mkdir($path, 0755, true) && ! is_dir($path)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+                }
             }
         }
     }
