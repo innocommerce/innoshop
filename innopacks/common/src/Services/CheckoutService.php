@@ -245,7 +245,7 @@ class CheckoutService extends BaseService
             'cart_list'        => $this->getCartList(),
             'address_list'     => $this->getAddressList(),
             'shipping_methods' => ShippingService::getInstance($this)->getMethods(),
-            'billing_methods'  => BillingService::getInstance($this)->getMethods(),
+            'billing_methods'  => BillingService::getInstance()->getMethods(),
             'checkout'         => $this->getCheckoutData(),
             'fee_list'         => $this->getFeeList(),
             'total'            => $this->getTotal(),

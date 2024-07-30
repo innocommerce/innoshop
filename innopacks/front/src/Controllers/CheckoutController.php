@@ -12,11 +12,11 @@ namespace InnoShop\Front\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use InnoShop\Common\Models\Address;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\CheckoutService;
 use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Front\Requests\CheckoutConfirmRequest;
+use Throwable;
 
 class CheckoutController extends Controller
 {
@@ -24,7 +24,7 @@ class CheckoutController extends Controller
      * Get checkout data and render page.
      *
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function index(): mixed
     {
@@ -42,7 +42,7 @@ class CheckoutController extends Controller
      *
      * @param  Request  $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(Request $request): JsonResponse
     {
@@ -59,20 +59,24 @@ class CheckoutController extends Controller
      *
      * @param  CheckoutConfirmRequest  $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function confirm(CheckoutConfirmRequest $request): JsonResponse
     {
-        $checkout = CheckoutService::getInstance();
-        $data     = $request->all();
-        if ($data) {
-            $checkout->updateValues($data);
+        try {
+            $checkout = CheckoutService::getInstance();
+            $data     = $request->all();
+            if ($data) {
+                $checkout->updateValues($data);
+            }
+
+            $order = $checkout->confirm();
+            StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID);
+
+            return json_success(trans('front::common.submitted_success'), $order);
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
         }
-
-        $order = $checkout->confirm();
-        StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID);
-
-        return json_success('提交成功', $order);
     }
 
     /**

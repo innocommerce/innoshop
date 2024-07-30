@@ -9,6 +9,7 @@
 
 namespace InnoShop\Front\Components;
 
+use Exception;
 use Illuminate\View\Component;
 use InnoShop\Common\Libraries\Breadcrumb as BreadcrumbLib;
 
@@ -20,6 +21,7 @@ class Breadcrumb extends Component
      * @param  $type
      * @param  $value
      * @param  string  $title
+     * @throws Exception
      */
     public function __construct($type, $value, string $title = '')
     {

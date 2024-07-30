@@ -49,6 +49,7 @@ Route::get('/checkout/success', [Controllers\CheckoutController::class, 'success
 
 // Orders
 Route::get('/orders/{number}/pay', [Controllers\OrderController::class, 'pay'])->name('orders.pay');
+Route::get('/orders/{number}', [Controllers\OrderController::class, 'numberShow'])->name('orders.number_show');
 
 // Guest Address
 Route::post('/addresses', [Controllers\AddressesController::class, 'store'])->name('addresses.store');

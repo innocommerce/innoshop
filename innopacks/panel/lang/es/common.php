@@ -54,9 +54,10 @@ return [
     'meta_title'       => 'Meta Título',
     'up_image_text'    => 'Haga clic para subir, o arrastre el archivo aquí',
     'no_data'          => 'Sin datos',
+    'verify_required'  => 'Por favor, complete',
 
-    'saved_success'   => 'Guardado correctamente',
-    'updated_success' => 'Actualizado correctamente',
-    'deleted_success' => 'Eliminado correctamente',
-    'verify_required' => 'Por favor, complete',
+    'saved_success'     => 'Guardado correctamente',
+    'updated_success'   => 'Actualizado correctamente',
+    'deleted_success'   => 'Eliminado correctamente',
+    'submitted_success' => 'Submitted successfully',
 ];

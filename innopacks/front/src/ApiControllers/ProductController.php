@@ -10,17 +10,36 @@
 namespace InnoShop\Front\ApiControllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Resources\ProductSimple;
 
 class ProductController extends BaseApiController
 {
     /**
+     * @param  Request  $request
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $categories = ProductRepo::getInstance()->withActive()->builder()->paginate();
+        $filters = $request->all();
 
-        return json_success('获取成功', $categories);
+        $products = ProductRepo::getInstance()->withActive()->builder($filters)->paginate();
+
+        $collection = ProductSimple::collection($products);
+
+        return json_success(trans('front::common.get_success'), $collection);
+    }
+
+    /**
+     * @param  Product  $product
+     * @return JsonResponse
+     */
+    public function show(Product $product): JsonResponse
+    {
+        $single = new ProductSimple($product);
+
+        return json_success(trans('front::common.get_success'), $single);
     }
 }

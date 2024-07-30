@@ -52,6 +52,14 @@ class CategoryRepo extends BaseRepo
             $builder->where('slug', $slug);
         }
 
+        $parentSlug = $filters['parent_slug'] ?? '';
+        if ($parentSlug) {
+            $category = Category::query()->where('slug', $parentSlug)->first();
+            if ($category) {
+                $filters['parent_id'] = $category->id;
+            }
+        }
+
         if (isset($filters['parent_id'])) {
             $parentID = (int) $filters['parent_id'];
             if ($parentID == 0) {

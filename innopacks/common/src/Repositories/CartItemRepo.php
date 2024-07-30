@@ -77,7 +77,7 @@ class CartItemRepo extends BaseRepo
      */
     private function handleData($requestData): array
     {
-        $skuId = $requestData['skuId'] ?? 0;
+        $skuId = $requestData['skuId'] ?? ($requestData['sku_id'] ?? 0);
         $sku   = Sku::query()->findOrFail($skuId);
 
         $customerID = $requestData['customer_id'] ?? 0;
@@ -89,7 +89,7 @@ class CartItemRepo extends BaseRepo
             'customer_id' => $customerID,
             'guest_id'    => $customerID ? '' : $guestID,
             'selected'    => true,
-            'quantity'    => (int) ($requestData['quantity'] ?? 0),
+            'quantity'    => (int) ($requestData['quantity'] ?? 1),
         ];
     }
 }

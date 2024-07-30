@@ -11,7 +11,9 @@ namespace InnoShop\Common\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\Product\ImageRepo;
 
@@ -239,6 +241,14 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * @return Builder
+     */
+    public function baseBuilder(): Builder
+    {
+        return Product::query();
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */
@@ -251,7 +261,10 @@ class ProductRepo extends BaseRepo
             'translation',
             'categories.translation',
         ];
-        $builder = Product::query()->with($relations);
+
+        $relations = array_merge($this->relations, $relations);
+
+        $builder = $this->baseBuilder()->with($relations);
 
         $filters = array_merge($this->filters, $filters);
 
@@ -262,7 +275,22 @@ class ProductRepo extends BaseRepo
             });
         }
 
+        $categorySlug = $filters['category_slug'] ?? '';
+        if ($categorySlug) {
+            $category = Category::query()->where('slug', $categorySlug)->first();
+            if ($category) {
+                $categories = CategoryRepo::getInstance()->builder(['parent_id' => $category->id])->get();
+
+                $filters['category_ids']   = $categories->pluck('id');
+                $filters['category_ids'][] = $category->id;
+            }
+        }
+
         $categoryIds = $filters['category_ids'] ?? [];
+        if ($categoryIds instanceof Collection) {
+            $categoryIds = $categoryIds->toArray();
+        }
+        $categoryIds = array_unique($categoryIds);
         if ($categoryIds) {
             $builder->whereHas('categories', function (Builder $query) use ($categoryIds) {
                 $query->whereIn('category_id', $categoryIds);

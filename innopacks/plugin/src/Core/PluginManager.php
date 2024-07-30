@@ -35,6 +35,10 @@ class PluginManager
         $existed = $this->getPluginsConfig();
         $plugins = new Collection;
         foreach ($existed as $dirname => $package) {
+            if ($package['hide'] ?? false) {
+                continue;
+            }
+
             $pluginPath = $this->getPluginsDir().DIRECTORY_SEPARATOR.$dirname;
 
             try {

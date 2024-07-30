@@ -24,13 +24,15 @@ class OrderRepo extends BaseRepo
      */
     public function getFilterStatuses(): array
     {
-        return [
+        $statuses = [
             StateMachineService::UNPAID,
             StateMachineService::PAID,
             StateMachineService::SHIPPED,
             StateMachineService::COMPLETED,
             StateMachineService::CANCELLED,
         ];
+
+        return fire_hook_filter('common.repo.order.statuses', $statuses);
     }
 
     /**
@@ -45,12 +47,26 @@ class OrderRepo extends BaseRepo
     }
 
     /**
+     * @return Builder
+     */
+    public function baseBuilder(): Builder
+    {
+        return Order::query();
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */
     public function builder(array $filters = []): Builder
     {
-        $builder = Order::query();
+        $relations = [
+            'customer',
+            'items',
+        ];
+
+        $relations = array_merge($this->relations, $relations);
+        $builder   = $this->baseBuilder()->with($relations);
 
         $filters = array_merge($this->filters, $filters);
 
@@ -77,6 +93,11 @@ class OrderRepo extends BaseRepo
         $status = $filters['status'] ?? '';
         if ($status && in_array($status, StateMachineService::ORDER_STATUS)) {
             $builder->where('status', $status);
+        }
+
+        $statuses = $filters['statuses'] ?? [];
+        if ($statuses) {
+            $builder->whereIn('status', $statuses);
         }
 
         $start = $filters['start'] ?? '';

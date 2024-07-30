@@ -55,9 +55,10 @@ return [
     'meta_title'       => 'Meta Title',
     'up_image_text'    => 'Click to upload, or drag the file in',
     'no_data'          => 'No data',
+    'verify_required'  => 'Please fill out',
 
-    'saved_success'   => 'Saved successfully',
-    'updated_success' => 'Updated successfully',
-    'deleted_success' => 'Deleted successfully',
-    'verify_required' => 'Please fill out',
+    'saved_success'     => 'Saved successfully',
+    'updated_success'   => 'Updated successfully',
+    'deleted_success'   => 'Deleted successfully',
+    'submitted_success' => 'Submitted successfully',
 ];

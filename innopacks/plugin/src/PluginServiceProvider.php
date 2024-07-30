@@ -214,6 +214,7 @@ class PluginServiceProvider extends ServiceProvider
     {
         $this->loadPluginPanelRoutes($pluginCode);
         $this->loadPluginFrontRoutes($pluginCode);
+        $this->loadPluginFrontApiRoutes($pluginCode);
     }
 
     /**
@@ -264,6 +265,26 @@ class PluginServiceProvider extends ServiceProvider
                         });
                 }
             }
+        }
+    }
+
+    /**
+     * Register frontend api routes.
+     *
+     * @param  $pluginCode
+     * @return void
+     */
+    protected function loadPluginFrontApiRoutes($pluginCode): void
+    {
+        $pluginBasePath    = $this->pluginBasePath;
+        $frontApiRoutePath = "$pluginBasePath/$pluginCode/Routes/api.php";
+        if (file_exists($frontApiRoutePath)) {
+            Route::prefix('api')
+                ->middleware('api')
+                ->name('api.')
+                ->group(function () use ($frontApiRoutePath) {
+                    $this->loadRoutesFrom($frontApiRoutePath);
+                });
         }
     }
 

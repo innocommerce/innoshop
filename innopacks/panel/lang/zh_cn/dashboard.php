@@ -12,7 +12,6 @@ return [
     'product_quantity'  => '产品总数',
     'customer_quantity' => '客户总数',
     'order_amount'      => '订单总额',
-    'order_quantity'    => '订单数量',
     'ranking'           => '排名',
     'product'           => '商品',
     'sales'             => '销量',

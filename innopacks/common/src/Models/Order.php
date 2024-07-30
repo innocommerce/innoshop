@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use InnoShop\Common\Models\Order\Fee;
@@ -38,6 +39,14 @@ class Order extends BaseModel
         'total_format',
         'status_format',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 
     /**
      * Order items.

@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories\Order;
 
+use Exception;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Repositories\BaseRepo;
@@ -19,9 +20,14 @@ class ItemRepo extends BaseRepo
      * @param  Order  $order
      * @param  $items
      * @return void
+     * @throws Exception
      */
     public function createItems(Order $order, $items): void
     {
+        if (empty($items)) {
+            throw new Exception('Empty cart list when create order items.');
+        }
+
         $orderItems = [];
         foreach ($items as $item) {
             $orderItems[] = $this->handleItem($order, $item);

@@ -45,6 +45,9 @@ class PaymentService
     public function pay(): mixed
     {
         try {
+            if ($this->order->status != 'unpaid') {
+                throw new Exception("Order status must be unpaid, now is {$this->order->status}!");
+            }
             $originCode  = $this->billingMethodCode;
             $paymentCode = Str::studly($originCode);
             $viewPath    = fire_hook_filter("service.payment.pay.$originCode.view", "$paymentCode::payment");

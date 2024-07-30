@@ -50,6 +50,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return front_route('login.index');
             }
         });
+
+        $middleware->validateCsrfTokens(except: [
+            'callback*'
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

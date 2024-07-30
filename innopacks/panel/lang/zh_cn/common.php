@@ -55,9 +55,10 @@ return [
     'meta_keywords'    => 'Meta 关键词',
     'up_image_text'    => '点击上传，或将文件拖入进来',
     'no_data'          => '没有数据',
+    'verify_required'  => '请填写',
 
-    'saved_success'   => '保存成功',
-    'updated_success' => '更新成功',
-    'deleted_success' => '删除成功',
-    'verify_required' => '请填写',
+    'saved_success'     => '保存成功',
+    'updated_success'   => '更新成功',
+    'deleted_success'   => '删除成功',
+    'submitted_success' => '提交成功',
 ];

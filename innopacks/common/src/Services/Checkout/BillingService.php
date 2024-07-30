@@ -12,8 +12,16 @@ namespace InnoShop\Common\Services\Checkout;
 use InnoShop\Plugin\Repositories\PluginRepo;
 use InnoShop\Plugin\Resources\Checkout\PaymentMethodItem;
 
-class BillingService extends BaseService
+class BillingService
 {
+    /**
+     * @return static
+     */
+    public static function getInstance(): static
+    {
+        return new static();
+    }
+
     /**
      * @throws \Exception
      */

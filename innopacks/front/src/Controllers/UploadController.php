@@ -45,7 +45,7 @@ class UploadController
     public function files(UploadFileRequest $request): JsonResponse
     {
         $file     = $request->file('file');
-        $type     = $request->file('type', 'common');
+        $type     = $request->file('type', 'files');
         $filePath = $file->store("/{$type}", 'public');
         $realPath = "storage/$filePath";
 

@@ -716,7 +716,7 @@ if (! function_exists('to_sql')) {
      * @param  mixed  $builder
      * @return string
      */
-    function to_sql(Builder $builder): string
+    function to_sql(mixed $builder): string
     {
         $sql    = $builder->toSql();
         $driver = DB::getDriverName();
