@@ -54,6 +54,10 @@
                         layer.msg( res.message ,{ icon:2 })
                         return
                     }
+                    if (res.error){
+                        layer.msg( res.error, { icon:2 })
+                        return
+                    }
                     window.open('{{config('innoshop.api_url')}}' + '/orders/' + res.data.number + '/pay', '_blank')
                 })
             })
