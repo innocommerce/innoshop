@@ -12,6 +12,7 @@ return [
     'zh_cn'                => 'Chino',
     'en'                   => 'Inglés',
     'es'                   => 'Español',
+    'jp'                   => 'Japonés',
     'license'              => 'Licencia',
     'check_env'            => 'Entorno',
     'configuration'        => 'Configuración',
