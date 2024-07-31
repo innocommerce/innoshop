@@ -12,6 +12,7 @@
         "laravel/octane": "^2.5",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "mobiledetect/mobiledetectlib": "^4.8",
         "nelexa/zip": "^4.0",
         "spatie/laravel-permission": "^6.7",
         "tormjens/eventy": "^0.9.3",
