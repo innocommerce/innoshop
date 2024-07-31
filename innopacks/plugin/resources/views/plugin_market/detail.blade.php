@@ -95,6 +95,9 @@
                 axios({
                     method: "get",
                     url: '{{ panel_route('marketplaces.download', ['id' => $product['product_id']]) }}',
+                    onDownloadProgress : function (progressEvent) {
+
+                    }
                 })
                     .then(function (res) {
                         if (res.success){
