@@ -9,12 +9,14 @@
 
 namespace InnoShop\Panel\Repositories;
 
+use Exception;
+
 class LocaleRepo extends BaseRepo
 {
     /**
      * Get panel languages by path.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPanelLanguages(): array
     {
@@ -22,7 +24,7 @@ class LocaleRepo extends BaseRepo
         foreach (panel_lang_path_codes() as $localeCode) {
             $langFile = panel_lang_dir()."/$localeCode/base.php";
             if (! is_file($langFile)) {
-                throw new \Exception("File ($langFile) not exist!");
+                throw new Exception("File ($langFile) not exist!");
             }
             $baseData = require $langFile;
             $name     = $baseData['name'] ?? $localeCode;
@@ -39,7 +41,7 @@ class LocaleRepo extends BaseRepo
     /**
      * @param  $code
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getLocaleByCode($code): array
     {

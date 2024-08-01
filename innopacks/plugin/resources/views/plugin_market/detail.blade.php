@@ -27,9 +27,12 @@
                       <div class="card-body px-0">
                         <h4 class="card-title">{{ $product['name'] }}</h4>
                         <div class="my-4">
-                          <span class="me-2"><small
-                                class="text-muted">{{ __('panel::plugin.views') }}:999+</small></span>
-                          <span class="me-2e"><small class="text-muted">{{ __('panel::plugin.last_updated') }}:2024年7月24日</small></span>
+                          @if($product['viewed'] ?? 0)
+                           <span class="me-2"><small class="text-muted">{{ __('panel::plugin.views') }}: {{ $product['viewed'] }}</small></span>
+                          @endif
+                          @if($product['updated_at'] ?? '')
+                            <span class="me-2e"><small class="text-muted">{{ __('panel::plugin.last_updated') }}: {{ $product['updated_at'] }}</small></span>
+                          @endif
                         </div>
 
                         <p class="card-text mb-2">{{ $product['summary'] }}</p>
