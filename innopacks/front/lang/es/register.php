@@ -8,8 +8,9 @@
  */
 
 return [
-    'register'        => 'Registrarse',
-    'register_text'   => 'Por favor, complete la información de registro en el formulario a continuación',
-    'register_submit' => 'Regístrate ahora',
-    'have_account'    => '¿Ya tienes una cuenta? Inicia sesión',
+    'register'         => 'Registrarse',
+    'register_text'    => 'Por favor, complete la información de registro en el formulario a continuación',
+    'register_submit'  => 'Regístrate ahora',
+    'have_account'     => '¿Ya tienes una cuenta? Inicia sesión',
+    'register_success' => 'Register successfully.',
 ];
