@@ -61,7 +61,9 @@ class LoginController extends Controller
             CartService::getInstance(current_customer_id())->mergeCart($oldGuestId);
             session()->forget('front_redirect_uri');
             $data = ['redirect_uri' => $redirectUri];
-
+            
+            fire_hook_action('front.account.login.after', $customer);
+            
             return json_success(trans('front::login.login_success'), $data);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
