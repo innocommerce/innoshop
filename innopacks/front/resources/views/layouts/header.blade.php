@@ -59,30 +59,32 @@
                 <a class="nav-link" aria-current="page" href="{{ front_route('home.index') }}">{{ __('front::common.home') }}</a>
               </li>
 
-              @foreach($header_menus as $menu)
-                @if($menu['children'] ?? [])
-                  <li class="nav-item">
-                    <div class="dropdown">
-                      @if($menu['name'])
-                        <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}" href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
-                      @endif
-                      <ul class="dropdown-menu">
-                        @foreach($menu['children'] as $child)
-                          @if($child['name'])
-                            <li><a class="dropdown-item" href="{{ $child['url'] }}">{{ $child['name'] }}</a></li>
-                          @endif
-                        @endforeach
-                      </ul>
-                    </div>
-                  </li>
-                @else
-                  @if($menu['name'])
+              @hookupdate('layouts.header.menu.pc')
+                @foreach($header_menus as $menu)
+                  @if($menu['children'] ?? [])
                     <li class="nav-item">
-                      <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}" href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
+                      <div class="dropdown">
+                        @if($menu['name'])
+                          <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}" href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
+                        @endif
+                        <ul class="dropdown-menu">
+                          @foreach($menu['children'] as $child)
+                            @if($child['name'])
+                              <li><a class="dropdown-item" href="{{ $child['url'] }}">{{ $child['name'] }}</a></li>
+                            @endif
+                          @endforeach
+                        </ul>
+                      </div>
                     </li>
+                  @else
+                    @if($menu['name'])
+                      <li class="nav-item">
+                        <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}" href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
+                      </li>
+                    @endif
                   @endif
-                @endif
-              @endforeach
+                @endforeach
+              @endhookupdate
             </ul>
           </nav>
         </div>
@@ -153,36 +155,40 @@
               <a class="nav-link {{ equal_route_name('home.index') ? 'active' : '' }}" aria-current="page" href="{{ front_route('home.index') }}">首页</a>
             </div>
           </div>
-          @foreach ($header_menus as $key => $menu)
-            @if ($menu['name'])
-              <div class="accordion-item">
-                <div class="nav-item-text">
-                  <a class="nav-link" href="{{ $menu['url'] }}" data-bs-toggle="{{ !$menu['url'] ? 'collapse' : ''}}">
-                    {{ $menu['name'] }}
-                  </a>
+
+          @hookupdate('layouts.header.menu.mobile')
+            @foreach ($header_menus as $key => $menu)
+              @if ($menu['name'])
+                <div class="accordion-item">
+                  <div class="nav-item-text">
+                    <a class="nav-link" href="{{ $menu['url'] }}" data-bs-toggle="{{ !$menu['url'] ? 'collapse' : ''}}">
+                      {{ $menu['name'] }}
+                    </a>
+                    @if (isset($menu['children']) && $menu['children'])
+                    <span class="collapsed" data-bs-toggle="collapse" data-bs-target="#flush-menu-{{ $key }}"><i class="bi bi-chevron-down"></i></span>
+                    @endif
+                  </div>
+
                   @if (isset($menu['children']) && $menu['children'])
-                  <span class="collapsed" data-bs-toggle="collapse" data-bs-target="#flush-menu-{{ $key }}"><i class="bi bi-chevron-down"></i></span>
+                  <div class="accordion-collapse collapse" id="flush-menu-{{ $key }}" data-bs-parent="#menu-accordion">
+                    <div class="children-group">
+                      <ul class="nav flex-column ul-children">
+                        @foreach($menu['children'] as $c_key => $child)
+                          @if($child['name'])
+                            <li class="nav-item">
+                              <a class="nav-link" href="{{ $child['url'] }}">{{$child['name']}}</a>
+                            </li>
+                          @endif
+                        @endforeach
+                      </ul>
+                    </div>
+                  </div>
                   @endif
                 </div>
+              @endif
+            @endforeach
+          @endhookupdate
 
-                @if (isset($menu['children']) && $menu['children'])
-                <div class="accordion-collapse collapse" id="flush-menu-{{ $key }}" data-bs-parent="#menu-accordion">
-                  <div class="children-group">
-                    <ul class="nav flex-column ul-children">
-                      @foreach($menu['children'] as $c_key => $child)
-                        @if($child['name'])
-                          <li class="nav-item">
-                            <a class="nav-link" href="{{ $child['url'] }}">{{$child['name']}}</a>
-                          </li>
-                        @endif
-                      @endforeach
-                    </ul>
-                  </div>
-                </div>
-                @endif
-              </div>
-            @endif
-          @endforeach
         </div>
       </div>
     </div>
