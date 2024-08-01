@@ -31,7 +31,7 @@ return new class extends Migration
             $table->unsignedInteger('customer_id')->index('customer_id')->comment('Customer ID');
             $table->string('guest_id')->default('')->comment('Guest ID, like session id');
             $table->string('name')->comment('Customer Name');
-            $table->string('phone')->comment('Telephone');
+            $table->string('phone')->default('')->comment('Telephone');
             $table->unsignedInteger('country_id')->index('country_id')->comment('Country ID');
             $table->unsignedInteger('state_id')->index('state_id')->comment('state ID');
             $table->string('state')->comment('state Name');
