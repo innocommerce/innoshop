@@ -38,5 +38,6 @@ return [
     'front_default_language'   => 'Default Language',
     'default_currency'         => 'Default Currency',
     'enable_tax'               => 'Enable Tax',
+    'login_checkout'           => 'Login Required for Checkout',
     'backstage_menu_expansion' => 'Backstage menu expanded by default',
 ];

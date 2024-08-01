@@ -37,12 +37,11 @@ class BrandRequest extends FormRequest
         }
 
         return [
-            'name'     => 'string|required|max:32',
-            'slug'     => $slugRule,
-            'first'    => 'string|required',
-            'logo'     => 'string',
-            'position' => 'integer',
-            'active'   => 'bool',
+            'name'   => 'string|required|max:32',
+            'slug'   => $slugRule,
+            'first'  => 'string|required',
+            'logo'   => 'string',
+            'active' => 'bool',
         ];
     }
 }

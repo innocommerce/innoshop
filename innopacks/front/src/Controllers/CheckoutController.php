@@ -10,8 +10,10 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Exceptions\Unauthorized;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\CheckoutService;
 use InnoShop\Common\Services\StateMachineService;
@@ -28,13 +30,19 @@ class CheckoutController extends Controller
      */
     public function index(): mixed
     {
-        $checkout = CheckoutService::getInstance();
-        $result   = $checkout->getCheckoutResult();
-        if (empty($result['cart_list'])) {
-            return redirect(front_route('carts.index'))->withErrors(['error' => 'Empty Cart']);
-        }
+        try {
+            $checkout = CheckoutService::getInstance();
+            $result   = $checkout->getCheckoutResult();
+            if (empty($result['cart_list'])) {
+                return redirect(front_route('carts.index'))->withErrors(['error' => 'Empty Cart']);
+            }
 
-        return inno_view('checkout.index', $result);
+            return inno_view('checkout.index', $result);
+        } catch (Unauthorized $e) {
+            return redirect(front_route('login.index'))->withErrors(['error' => $e->getMessage()]);
+        } catch (Exception $e) {
+            return redirect(front_route('carts.index'))->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -74,7 +82,7 @@ class CheckoutController extends Controller
             StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID);
 
             return json_success(trans('front::common.submitted_success'), $order);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

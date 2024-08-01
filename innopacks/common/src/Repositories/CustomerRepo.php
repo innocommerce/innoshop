@@ -22,7 +22,7 @@ class CustomerRepo extends BaseRepo
      */
     public function list($filters = []): LengthAwarePaginator
     {
-        return $this->builder($filters)->paginate();
+        return $this->builder($filters)->orderByDesc('id')->paginate();
     }
 
     /**

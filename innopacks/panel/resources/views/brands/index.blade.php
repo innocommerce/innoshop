@@ -28,8 +28,12 @@
           @foreach($brands as $item)
             <tr>
               <td>{{ $item->id }}</td>
-              <td><img src="{{ image_resize($item->logo) }}" class="img-fluid wh-40"></td>
-              <td>{{ $item->name ?? '' }}</td>
+              <td>
+                <a href="{{ $item->url }}" target="_blank">
+                  <img src="{{ image_resize($item->logo) }}" class="img-fluid wh-40">
+                </a>
+              </td>
+              <td><a href="{{ $item->url }}" class="text-decoration-none" target="_blank">{{ $item->name ?? '' }}</a></td>
               <td>{{ $item->first }}</td>
               <td>{{ $item->slug }}</td>
               <td>{{ $item->position }}</td>

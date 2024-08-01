@@ -91,8 +91,11 @@
               <x-common-form-select title="{{ __('panel::setting.default_currency') }}" name="currency" :options="$currencies" key="code" label="name"
                                    value="{{ old('currency', system_setting('currency')) }}" required placeholder="{{ __('panel::setting.default_currency') }}" />
 
+              <x-common-form-switch-radio title="{{ __('panel::setting.login_checkout') }}" name="login_checkout" required
+                                          value="{{ old('login_checkout', system_setting('login_checkout')) }}"/>
+
               <x-common-form-switch-radio title="{{ __('panel::setting.backstage_menu_expansion') }}" name="expand" required
-                                  value="{{ old('expand', system_setting('expand')) }}"/>
+                                          value="{{ old('expand', system_setting('expand')) }}"/>
             </div>
 
           </div>

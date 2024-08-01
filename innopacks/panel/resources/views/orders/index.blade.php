@@ -37,10 +37,10 @@
                   @endforeach
                 </div>
               </td>
-              <td>{{ $item->shipping_customer_name }}</td>
+              <td>{{ $item->customer_name }}</td>
               <td>{{ $item->shipping_method_code }}</td>
               <td>{{ $item->billing_method_code }}</td>
-              <td>{{ $item->status }}</td>
+              <td>{{ $item->status_format }}</td>
               <td>{{ $item->total_format }}</td>
               <td>{{ $item->created_at }}</td>
               <td>

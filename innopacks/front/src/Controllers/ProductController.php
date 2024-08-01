@@ -66,11 +66,11 @@ class ProductController extends Controller
     }
 
     /**
-     * @param  $product
+     * @param  Product  $product
      * @param  $skuId
      * @return mixed
      */
-    private function renderShow($product, $skuId): mixed
+    private function renderShow(Product $product, $skuId): mixed
     {
         if ($skuId) {
             $sku = Product\Sku::query()->find($skuId);
@@ -79,6 +79,8 @@ class ProductController extends Controller
         if (empty($sku)) {
             $sku = $product->masterSku;
         }
+
+        $product->increment('viewed');
 
         $data = [
             'product'  => $product,

@@ -11,6 +11,7 @@ namespace InnoShop\Common\Services;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Exceptions\Unauthorized;
 use InnoShop\Common\Models\Checkout;
 use InnoShop\Common\Repositories\AddressRepo;
 use InnoShop\Common\Repositories\CheckoutRepo;
@@ -53,6 +54,10 @@ class CheckoutService extends BaseService
             $this->customerID = $customerID;
         } else {
             $this->customerID = current_customer_id();
+        }
+
+        if (empty($this->customerID) && system_setting('login_checkout')) {
+            throw new Unauthorized('Please login first');
         }
 
         if ($guestID) {

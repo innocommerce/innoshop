@@ -35,5 +35,6 @@ return [
     'front_default_language'   => '前台默认语言',
     'default_currency'         => '默认货币',
     'enable_tax'               => '开启税费计算',
+    'login_checkout'           => '登录后结账',
     'backstage_menu_expansion' => '后台菜单默认展开',
 ];
