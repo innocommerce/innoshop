@@ -289,7 +289,7 @@ class Sidebar extends Component
         $routes = [
             ['route' => 'themes_settings.index', 'title' => __('panel::menu.themes_settings')],
             ['route' => 'themes.index', 'title' => __('panel::menu.themes')],
-            ['route' => 'theme_market.index', 'title' => __('panel::menu.themes_market')],
+            ['route' => 'theme_market.index', 'title' => __('panel::menu.theme_market')],
         ];
 
         return fire_hook_filter('component.sidebar.design.routes', $routes);
@@ -302,7 +302,7 @@ class Sidebar extends Component
     {
         $routes = [
             ['route' => 'plugins.index', 'title' => __('panel::menu.plugins')],
-            ['route' => 'plugin_market.index', 'title' => __('panel::menu.plugins_market')],
+            ['route' => 'plugin_market.index', 'title' => __('panel::menu.plugin_market')],
         ];
 
         return fire_hook_filter('component.sidebar.plugin.routes', $routes);

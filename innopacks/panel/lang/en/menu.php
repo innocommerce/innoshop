@@ -31,10 +31,11 @@ return [
     'top_analytic' => 'Analytics',
     'analytics'    => 'Reports',
 
-    'top_plugin'     => 'Plugins',
-    'plugins'        => 'Plugins',
-    'plugins_market' => 'Plugin Market',
-    'themes_market'  => 'Theme Market',
+    'marketplaces'  => 'Marketplaces',
+    'top_plugin'    => 'Plugins',
+    'plugins'       => 'Plugins',
+    'plugin_market' => 'Plugin Market',
+    'theme_market'  => 'Theme Market',
 
     'top_customer'    => 'Customers',
     'customers'       => 'Customers',

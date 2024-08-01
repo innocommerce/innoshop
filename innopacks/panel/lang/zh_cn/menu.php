@@ -31,10 +31,10 @@ return [
     'top_analytic' => '分析',
     'analytics'    => '数据报表',
 
-    'top_plugin'     => '插件',
-    'plugins'        => '插件设置',
-    'plugins_market' => '插件市场',
-    'themes_market'  => '主题市场',
+    'marketplaces'  => '应用市场',
+    'top_plugin'    => '插件',
+    'plugins'       => '插件设置',
+    'plugin_market' => '插件市场',
 
     'top_customer'    => '客户',
     'customers'       => '客户管理',
@@ -43,6 +43,7 @@ return [
     'top_design'      => '界面',
     'themes'          => '主题切换',
     'themes_settings' => '界面设置',
+    'theme_market'    => '主题市场',
 
     'top_setting' => '设置',
     'settings'    => '系统设置',
