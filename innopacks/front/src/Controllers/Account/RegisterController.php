@@ -43,6 +43,8 @@ class RegisterController extends Controller
 
             CartService::getInstance(current_customer_id())->mergeCart($oldGuestId);
 
+            fire_hook_action('front.account.register.after', current_customer());
+            
             return json_success('注册成功');
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
