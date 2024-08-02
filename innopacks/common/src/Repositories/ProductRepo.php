@@ -39,7 +39,9 @@ class ProductRepo extends BaseRepo
     {
         $product = new Product;
 
-        return $this->createOrUpdate($product, $data);
+        $product = $this->createOrUpdate($product, $data);
+
+        return fire_hook_filter('common.repo.product.create.after', $product);
     }
 
     /**
@@ -53,7 +55,9 @@ class ProductRepo extends BaseRepo
      */
     public function update($item, $data): mixed
     {
-        return $this->createOrUpdate($item, $data);
+        $product = $this->createOrUpdate($item, $data);
+
+        return fire_hook_filter('common.repo.product.update.after', $product);
     }
 
     /**

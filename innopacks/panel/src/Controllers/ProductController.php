@@ -54,10 +54,11 @@ class ProductController extends BaseController
     public function store(ProductRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            ProductRepo::getInstance()->create($data);
+            $data    = $request->all();
+            $product = ProductRepo::getInstance()->create($data);
 
             return redirect(panel_route('products.index'))
+                ->with('product', $product)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('products.index'))
@@ -116,6 +117,7 @@ class ProductController extends BaseController
             ProductRepo::getInstance()->update($product, $data);
 
             return redirect(panel_route('products.index'))
+                ->with('product', $product)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             dump($e->getMessage());
