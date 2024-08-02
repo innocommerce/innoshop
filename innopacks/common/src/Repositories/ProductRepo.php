@@ -126,9 +126,9 @@ class ProductRepo extends BaseRepo
      */
     private function handleProductData($data): array
     {
-        $variables = $data['variables'] ?? [];
+        $variables = $data['variables'] ?? ($data['variants'] ?? []);
         if (is_string($variables)) {
-            $variables = json_decode($variables);
+            $variables = json_decode($variables, true);
         }
 
         return [
