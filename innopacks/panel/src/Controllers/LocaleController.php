@@ -59,12 +59,14 @@ class LocaleController extends BaseController
     public function install(Request $request): RedirectResponse
     {
         try {
-            $code = $request->get('code');
-            $list = LocaleRepo::getInstance()->getFrontListWithPath();
-            $data = collect($list)->where('code', $code)->first();
-            TranslationService::getInstance()->createLocale($data);
+            $code   = $request->get('code');
+            $list   = LocaleRepo::getInstance()->getFrontListWithPath();
+            $data   = collect($list)->where('code', $code)->first();
+            $locale = TranslationService::getInstance()->createLocale($data);
 
-            return redirect(panel_route('locales.index'))->with('success', trans('panel::common.install_success'));
+            return redirect(panel_route('locales.index'))
+                ->with('instance', $locale)
+                ->with('success', trans('panel::common.install_success'));
         } catch (Exception $e) {
             return redirect(panel_route('locales.index'))->withErrors(['error' => $e->getMessage()]);
         }
@@ -115,7 +117,9 @@ class LocaleController extends BaseController
             TranslationService::getInstance()->deleteLocale($locale);
             session('locale', setting_locale_code());
 
-            return redirect(panel_route('locales.index'))->with('success', trans('panel::common.uninstall_success'));
+            return redirect(panel_route('locales.index'))
+                ->with('instance', $locale)
+                ->with('success', trans('panel::common.uninstall_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

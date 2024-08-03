@@ -9,6 +9,7 @@
 
 namespace InnoShop\Front\Controllers\Account;
 
+use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\OrderReturn;
 use InnoShop\Common\Repositories\OrderRepo;
@@ -48,17 +49,26 @@ class OrderReturnController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
+     * @throws Exception
      */
     public function store(Request $request): mixed
     {
-        OrderReturnRepo::getInstance()->create($request->all());
+        try {
+            $orderReturn = OrderReturnRepo::getInstance()->create($request->all());
 
-        return redirect(account_route('order_returns.index'));
+            return redirect(account_route('order_returns.index'))
+                ->with('instance', $orderReturn);
+        } catch (Exception $e) {
+            return redirect(account_route('order_returns.index'))
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**
      * @param  OrderReturn  $order_return
      * @return mixed
+     * @throws Exception
      */
     public function show(OrderReturn $order_return): mixed
     {

@@ -54,6 +54,8 @@ class LoginController extends BaseController
             return redirect(panel_route('home.index'));
         }
 
-        return redirect()->back()->with(['error' => trans('auth.failed')])->withInput();
+        return redirect()->back()
+            ->with('instance', auth('admin')->user())
+            ->with(['error' => trans('auth.failed')])->withInput();
     }
 }

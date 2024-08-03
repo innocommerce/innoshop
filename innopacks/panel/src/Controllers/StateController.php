@@ -62,10 +62,11 @@ class StateController extends BaseController
     public function store(StateRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            StateRepo::getInstance()->create($data);
+            $data  = $request->all();
+            $state = StateRepo::getInstance()->create($data);
 
             return redirect(panel_route('states.index'))
+                ->with('instance', $state)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('states.index'))
@@ -109,6 +110,7 @@ class StateController extends BaseController
             StateRepo::getInstance()->update($state, $data);
 
             return redirect(panel_route('states.index'))
+                ->with('instance', $state)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('states.index'))

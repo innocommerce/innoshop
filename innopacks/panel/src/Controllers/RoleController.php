@@ -58,9 +58,10 @@ class RoleController extends BaseController
     {
         try {
             $data = $request->all();
-            RoleRepo::getInstance()->create($data);
+            $role = RoleRepo::getInstance()->create($data);
 
             return redirect(panel_route('roles.index'))
+                ->with('instance', $role)
                 ->with('success', trans('panel::common.created_success'));
         } catch (Exception $e) {
             return redirect(panel_route('roles.index'))
@@ -105,6 +106,7 @@ class RoleController extends BaseController
             RoleRepo::getInstance()->update($role, $data);
 
             return redirect(panel_route('roles.index'))
+                ->with('instance', $role)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('roles.index'))

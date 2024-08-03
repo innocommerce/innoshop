@@ -46,6 +46,7 @@ class AttributeGroupController extends BaseController
      * @param  Request  $request
      * @param  Group  $attributeGroup
      * @return JsonResponse
+     * @throws \Exception
      */
     public function update(Request $request, Attribute\Group $attributeGroup): JsonResponse
     {

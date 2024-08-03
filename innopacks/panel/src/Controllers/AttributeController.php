@@ -55,10 +55,11 @@ class AttributeController extends BaseController
     public function store(AttributeRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            AttributeRepo::getInstance()->create($data);
+            $data      = $request->all();
+            $attribute = AttributeRepo::getInstance()->create($data);
 
             return redirect(panel_route('attributes.index'))
+                ->with('instance', $attribute)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('attributes.index'))
@@ -106,9 +107,10 @@ class AttributeController extends BaseController
             AttributeRepo::getInstance()->update($attribute, $data);
 
             return redirect(panel_route('attributes.index'))
+                ->with('instance', $attribute)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
-            return redirect()->back()
+            return redirect(panel_route('attributes.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
         }

@@ -71,10 +71,11 @@ class TaxClassController extends BaseController
     public function store(TaxClassRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            TaxClassRepo::getInstance()->create($data);
+            $data     = $request->all();
+            $taxClass = TaxClassRepo::getInstance()->create($data);
 
             return redirect(panel_route('tax_classes.index'))
+                ->with('instance', $taxClass)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('tax_classes.index'))
@@ -123,6 +124,7 @@ class TaxClassController extends BaseController
             TaxClassRepo::getInstance()->update($taxClass, $data);
 
             return redirect(panel_route('tax_classes.index'))
+                ->with('instance', $taxClass)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('tax_classes.index'))

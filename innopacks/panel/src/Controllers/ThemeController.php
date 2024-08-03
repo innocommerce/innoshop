@@ -59,7 +59,9 @@ class ThemeController extends BaseController
         try {
             SettingRepo::getInstance()->updateValues($settings);
 
-            return redirect($settingUrl)->with('success', trans('panel::common.updated_success'));
+            return redirect($settingUrl)
+                ->with('instance', $settings)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect($settingUrl)->withInput()->withErrors(['error' => $e->getMessage()]);
         }

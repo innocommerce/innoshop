@@ -58,7 +58,7 @@ class ProductController extends BaseController
             $product = ProductRepo::getInstance()->create($data);
 
             return redirect(panel_route('products.index'))
-                ->with('product', $product)
+                ->with('instance', $product)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('products.index'))
@@ -117,12 +117,10 @@ class ProductController extends BaseController
             ProductRepo::getInstance()->update($product, $data);
 
             return redirect(panel_route('products.index'))
-                ->with('product', $product)
+                ->with('instance', $product)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
-            dump($e->getMessage());
-
-            return redirect()->back()
+            return redirect(panel_route('products.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
         }

@@ -64,10 +64,11 @@ class CountryController extends BaseController
     public function store(CountryRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            CountryRepo::getInstance()->create($data);
+            $data    = $request->all();
+            $country = CountryRepo::getInstance()->create($data);
 
             return redirect(panel_route('countries.index'))
+                ->with('instance', $country)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('countries.index'))
@@ -112,6 +113,7 @@ class CountryController extends BaseController
             CountryRepo::getInstance()->update($country, $data);
 
             return redirect(panel_route('countries.index'))
+                ->with('instance', $country)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('countries.index'))

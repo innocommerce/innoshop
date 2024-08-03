@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Tag;
@@ -20,6 +21,7 @@ class TagController extends Controller
 {
     /**
      * @return RedirectResponse
+     * @throws Exception
      */
     public function index(): RedirectResponse
     {
@@ -29,7 +31,7 @@ class TagController extends Controller
     /**
      * @param  Tag  $tag
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function show(Tag $tag): mixed
     {
@@ -49,7 +51,7 @@ class TagController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function slugShow(Request $request): mixed
     {

@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Middleware;
 
 use Closure;
+use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class CustomerAuthentication extends Middleware
      * @return mixed
      *
      * @throws AuthenticationException
+     * @throws Exception
      */
     public function handle($request, Closure $next, ...$guards): mixed
     {
@@ -45,6 +47,7 @@ class CustomerAuthentication extends Middleware
      *
      * @param  Request  $request
      * @return string|void
+     * @throws Exception
      */
     protected function redirectTo(Request $request)
     {

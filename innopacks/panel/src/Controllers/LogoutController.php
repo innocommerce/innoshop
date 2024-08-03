@@ -18,8 +18,10 @@ class LogoutController extends BaseController
      */
     public function index(): mixed
     {
+        $admin = Auth::guard('admin')->user();
         Auth::guard('admin')->logout();
 
-        return redirect(panel_route('login.index'));
+        return redirect(panel_route('login.index'))
+            ->with('instance', $admin);
     }
 }

@@ -85,9 +85,11 @@ class PageController extends BaseController
     {
         try {
             $data = $request->all();
-            PageRepo::getInstance()->update($page, $data);
+            $page = PageRepo::getInstance()->update($page, $data);
 
-            return redirect(panel_route('pages.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('pages.index'))
+                ->with('instance', $page)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }

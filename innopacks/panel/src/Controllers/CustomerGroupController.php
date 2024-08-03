@@ -54,9 +54,11 @@ class CustomerGroupController
     {
         try {
             $data = $request->all();
-            Customer\GroupRepo::getInstance()->create($data);
+
+            $customerGroup = Customer\GroupRepo::getInstance()->create($data);
 
             return redirect(panel_route('groups.index'))
+                ->with('instance', $customerGroup)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('groups.index'))
@@ -101,6 +103,7 @@ class CustomerGroupController
             Customer\GroupRepo::getInstance()->update($customerGroup, $data);
 
             return redirect(panel_route('groups.index'))
+                ->with('instance', $customerGroup)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('groups.index'))

@@ -53,10 +53,12 @@ class ArticleController extends BaseController
     public function store(ArticleRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            ArticleRepo::getInstance()->create($data);
+            $data    = $request->all();
+            $article = ArticleRepo::getInstance()->create($data);
 
-            return redirect(panel_route('articles.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('articles.index'))
+                ->with('instance', $article)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -99,7 +101,9 @@ class ArticleController extends BaseController
             $data = $request->all();
             ArticleRepo::getInstance()->update($article, $data);
 
-            return redirect(panel_route('articles.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('articles.index'))
+                ->with('instance', $article)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }

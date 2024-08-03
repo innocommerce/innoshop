@@ -118,7 +118,9 @@ class PluginController
         SettingRepo::getInstance()->updateValues($fields, $code);
         $currentUrl = panel_route('plugins.edit', [$code]);
 
-        return redirect($currentUrl)->with('success', trans('panel::common.updated_success'));
+        return redirect($currentUrl)
+            ->with('instance', $plugin)
+            ->with('success', trans('panel::common.updated_success'));
     }
 
     /**

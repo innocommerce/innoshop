@@ -55,10 +55,11 @@ class CustomerController extends BaseController
     public function store(CustomerRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            CustomerRepo::getInstance()->create($data);
+            $data     = $request->all();
+            $customer = CustomerRepo::getInstance()->create($data);
 
             return redirect(panel_route('customers.index'))
+                ->with('instance', $customer)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
@@ -107,6 +108,7 @@ class CustomerController extends BaseController
             CustomerRepo::getInstance()->update($customer, $data);
 
             return redirect(panel_route('customers.index'))
+                ->with('instance', $customer)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))

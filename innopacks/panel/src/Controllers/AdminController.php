@@ -62,10 +62,11 @@ class AdminController extends BaseController
     public function store(Request $request): mixed
     {
         try {
-            $data = $request->all();
-            AdminRepo::getInstance()->create($data);
+            $data  = $request->all();
+            $admin = AdminRepo::getInstance()->create($data);
 
             return redirect(panel_route('admins.index'))
+                ->with('instance', $admin)
                 ->with('success', trans('panel::common.created_success'));
         } catch (Exception $e) {
             return redirect(panel_route('admins.index'))
@@ -110,6 +111,7 @@ class AdminController extends BaseController
             AdminRepo::getInstance()->update($admin, $data);
 
             return redirect(panel_route('admins.index'))
+                ->with('instance', $admin)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('admins.index'))

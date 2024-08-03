@@ -38,6 +38,7 @@ class AccountController extends BaseController
             AdminRepo::getInstance()->update($admin, $request->only('name', 'email', 'password'));
 
             return redirect(panel_route('account.index'))
+                ->with('instance', $admin)
                 ->with('success', trans('panel::common.updated_success'));
 
         } catch (\Exception $e) {

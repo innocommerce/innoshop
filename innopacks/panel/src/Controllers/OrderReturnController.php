@@ -52,10 +52,12 @@ class OrderReturnController extends BaseController
     public function store(Request $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            ReturnRepo::getInstance()->create($data);
+            $data        = $request->all();
+            $orderReturn = OrderReturnRepo::getInstance()->create($data);
 
-            return redirect(panel_route('order_returns.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('order_returns.index'))
+                ->with('instance', $orderReturn)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -95,10 +97,12 @@ class OrderReturnController extends BaseController
     public function update(Request $request, OrderReturn $order_return): RedirectResponse
     {
         try {
-            $data = $request->all();
-            ReturnRepo::getInstance()->update($order_return, $data);
+            $data        = $request->all();
+            $orderReturn = OrderReturnRepo::getInstance()->update($order_return, $data);
 
-            return redirect(panel_route('order_returns.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('order_returns.index'))
+                ->with('instance', $orderReturn)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -111,7 +115,7 @@ class OrderReturnController extends BaseController
     public function destroy(OrderReturn $order_return): RedirectResponse
     {
         try {
-            ReturnRepo::getInstance()->destroy($order_return);
+            OrderReturnRepo::getInstance()->destroy($order_return);
 
             return back()->with('success', trans('panel::common.deleted_success'));
         } catch (Exception $e) {

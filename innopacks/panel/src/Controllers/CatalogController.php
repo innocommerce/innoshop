@@ -52,10 +52,11 @@ class CatalogController extends BaseController
     public function store(CatalogRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            CatalogRepo::getInstance()->create($data);
+            $data    = $request->all();
+            $catalog = CatalogRepo::getInstance()->create($data);
 
             return redirect(panel_route('catalogs.index'))
+                ->with('instance', $catalog)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('catalogs.index'))
@@ -102,6 +103,7 @@ class CatalogController extends BaseController
             CatalogRepo::getInstance()->update($catalog, $data);
 
             return redirect(panel_route('catalogs.index'))
+                ->with('instance', $catalog)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('catalogs.index'))

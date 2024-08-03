@@ -51,10 +51,11 @@ class BrandController extends BaseController
     public function store(BrandRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            BrandRepo::getInstance()->create($data);
+            $data  = $request->all();
+            $brand = BrandRepo::getInstance()->create($data);
 
             return redirect(panel_route('brands.index'))
+                ->with('instance', $brand)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('brands.index'))
@@ -100,6 +101,7 @@ class BrandController extends BaseController
             BrandRepo::getInstance()->update($brand, $data);
 
             return redirect(panel_route('brands.index'))
+                ->with('instance', $brand)
                 ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('brands.index'))

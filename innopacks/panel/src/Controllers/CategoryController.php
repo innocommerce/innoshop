@@ -58,10 +58,12 @@ class CategoryController extends BaseController
     public function store(CategoryRequest $request): RedirectResponse
     {
         try {
-            $data = $request->all();
-            CategoryRepo::getInstance()->create($data);
+            $data     = $request->all();
+            $category = CategoryRepo::getInstance()->create($data);
 
-            return redirect(panel_route('categories.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('categories.index'))
+                ->with('instance', $category)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -104,7 +106,9 @@ class CategoryController extends BaseController
             $data = $request->all();
             CategoryRepo::getInstance()->update($category, $data);
 
-            return redirect(panel_route('categories.index'))->with('success', trans('panel::common.updated_success'));
+            return redirect(panel_route('categories.index'))
+                ->with('instance', $category)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }

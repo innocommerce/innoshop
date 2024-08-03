@@ -52,7 +52,9 @@ class SettingController
             $newAdminName = $settings['panel_name'] ?? 'panel';
             $settingUrl   = str_replace($oldAdminName, $newAdminName, panel_route('settings.index'));
 
-            return redirect($settingUrl)->with('success', trans('panel::common.updated_success'));
+            return redirect($settingUrl)
+                ->with('instance', $settings)
+                ->with('success', trans('panel::common.updated_success'));
         } catch (\Exception $e) {
             return redirect(panel_route('settings.index'))->withInput()->withErrors(['error' => $e->getMessage()]);
         }
