@@ -54,4 +54,3 @@ return [
     'visit_backend'    => 'バックエンドにアクセス',
     'check_system'     => 'システム環境を確認してください',
 ];
-

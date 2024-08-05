@@ -59,4 +59,3 @@ return [
     'tax_classes' => '税クラス設定',
     'tax_rates'   => '税率設定',
 ];
-

@@ -24,7 +24,7 @@
           @foreach($locales as $item)
             <tr>
               <td>{{ $item['id'] }}</td>
-              <td><img src="{{ image_resize($item['image']) }}" style="width: 30px;"></td>
+              <td><img src="{{ image_resize($item['image'], 90, 60) }}" class="border" style="width: 30px;"></td>
               <td>{{ $item['name'] }}</td>
               <td>{{ $item['code'] }}</td>
               <td>{{ $item['position'] }}</td>

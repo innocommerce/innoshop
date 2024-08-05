@@ -12,4 +12,3 @@ return [
     'please_choose'  => '選択してください',
     'error_required' => 'name を入力してください',
 ];
-

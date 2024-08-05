@@ -15,4 +15,3 @@ return [
     'select_all'   => 'すべて選択',
     'unselect_all' => '選択解除',
 ];
-

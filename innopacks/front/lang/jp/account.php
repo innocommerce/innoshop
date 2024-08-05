@@ -22,4 +22,3 @@ return [
     'view_all'      => 'すべて表示',
     'no_order'      => '<span class="text-decoration-underline">最初の注文をしてください</span><span>まだ注文がありません。</span>',
 ];
-

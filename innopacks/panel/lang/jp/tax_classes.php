@@ -16,4 +16,3 @@ return [
     'type'        => 'タイプ',
     'tax_rate'    => '税率',
 ];
-

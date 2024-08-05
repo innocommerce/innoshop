@@ -32,4 +32,3 @@ return [
     'payment_method'         => '支払い方法を選択',
     'payment_method_confirm' => '支払い方法を選択してください',
 ];
-

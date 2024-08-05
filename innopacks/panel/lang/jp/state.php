@@ -15,4 +15,3 @@ return [
     'position'     => '位置',
     'active'       => 'アクティブ状態',
 ];
-

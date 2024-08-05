@@ -10,4 +10,3 @@
 return [
     'attribute_value' => '属性値',
 ];
-

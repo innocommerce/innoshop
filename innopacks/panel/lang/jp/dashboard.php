@@ -21,4 +21,3 @@ return [
     'profile'           => 'プロフィール',
     'sign_out'          => 'ログアウト',
 ];
-

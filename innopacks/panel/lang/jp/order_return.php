@@ -14,4 +14,3 @@ return [
     'email'        => 'メールアドレス',
     'telephone'    => '電話',
 ];
-

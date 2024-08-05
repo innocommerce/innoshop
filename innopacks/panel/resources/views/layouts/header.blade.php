@@ -13,7 +13,7 @@
         @foreach (panel_locales() as $locale)
         <li>
           <a class="dropdown-item d-flex" href="{{ panel_route('locale.switch', ['code'=> $locale['code']]) }}">
-            <div class="wh-20 me-2"><img src="{{ image_origin($locale['image']) }}" class="img-fluid"></div>
+            <div class="wh-20 me-2"><img src="{{ image_origin($locale['image']) }}" class="img-fluid border"></div>
             {{ $locale['name'] }}
           </a>
         </li>
