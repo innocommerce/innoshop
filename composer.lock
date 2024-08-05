@@ -1273,16 +1273,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v11.18.1",
+            "version": "v11.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "b19ba518c56852567e99fbae9321bc436c2cc5a8"
+                "reference": "5e103d499e9ee5bcfc184412d034c4e516b87085"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/b19ba518c56852567e99fbae9321bc436c2cc5a8",
-                "reference": "b19ba518c56852567e99fbae9321bc436c2cc5a8",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/5e103d499e9ee5bcfc184412d034c4e516b87085",
+                "reference": "5e103d499e9ee5bcfc184412d034c4e516b87085",
                 "shasum": ""
             },
             "require": {
@@ -1475,7 +1475,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-07-26T10:39:29+00:00"
+            "time": "2024-07-30T15:22:41+00:00"
         },
         {
             "name": "laravel/octane",
@@ -3637,65 +3637,6 @@
                 }
             ],
             "time": "2024-06-22T23:04:52+00:00"
-        },
-        {
-            "name": "stripe/stripe-php",
-            "version": "v15.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "13581553ea8725b9d0cfff93d24462c4149abec9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/13581553ea8725b9d0cfff93d24462c4149abec9",
-                "reference": "13581553ea8725b9d0cfff93d24462c4149abec9",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.5.0",
-                "phpstan/phpstan": "^1.2",
-                "phpunit/phpunit": "^5.7 || ^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Stripe\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stripe and contributors",
-                    "homepage": "https://github.com/stripe/stripe-php/contributors"
-                }
-            ],
-            "description": "Stripe PHP Library",
-            "homepage": "https://stripe.com/",
-            "keywords": [
-                "api",
-                "payment processing",
-                "stripe"
-            ],
-            "support": {
-                "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v15.4.0"
-            },
-            "time": "2024-07-25T21:00:20+00:00"
         },
         {
             "name": "symfony/clock",
@@ -6751,16 +6692,16 @@
         },
         {
             "name": "kitloong/laravel-migrations-generator",
-            "version": "v7.0.3",
+            "version": "v7.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kitloong/laravel-migrations-generator.git",
-                "reference": "ca7d318e4922f276d2f862d22a2089bee8eb6921"
+                "reference": "f6900e8de33c88e8acca07bdc7b2cf7759a5269c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kitloong/laravel-migrations-generator/zipball/ca7d318e4922f276d2f862d22a2089bee8eb6921",
-                "reference": "ca7d318e4922f276d2f862d22a2089bee8eb6921",
+                "url": "https://api.github.com/repos/kitloong/laravel-migrations-generator/zipball/f6900e8de33c88e8acca07bdc7b2cf7759a5269c",
+                "reference": "f6900e8de33c88e8acca07bdc7b2cf7759a5269c",
                 "shasum": ""
             },
             "require": {
@@ -6812,7 +6753,7 @@
             ],
             "support": {
                 "issues": "https://github.com/kitloong/laravel-migrations-generator/issues",
-                "source": "https://github.com/kitloong/laravel-migrations-generator/tree/v7.0.3"
+                "source": "https://github.com/kitloong/laravel-migrations-generator/tree/v7.0.4"
             },
             "funding": [
                 {
@@ -6824,7 +6765,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-01T17:17:59+00:00"
+            "time": "2024-08-04T12:18:10+00:00"
         },
         {
             "name": "laravel/pint",
