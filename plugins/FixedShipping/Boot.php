@@ -26,13 +26,15 @@ class Boot extends BaseBoot
     {
         $code     = $this->plugin->getCode();
         $resource = $this->pluginResource->jsonSerialize();
+        $cost     = $this->getShippingFee($checkoutService);
         $quotes[] = [
             'type'        => 'shipping',
             'code'        => "{$code}.0",
             'name'        => $resource['name'],
             'description' => $resource['description'],
             'icon'        => $resource['icon'],
-            'cost'        => $this->getShippingFee($checkoutService),
+            'cost'        => $cost,
+            'cost_format' => currency_format($cost),
         ];
 
         return $quotes;

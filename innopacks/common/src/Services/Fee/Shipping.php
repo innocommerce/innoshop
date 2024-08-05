@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Services\Fee;
 
 use InnoShop\Common\Services\Checkout\ShippingService;
+use Throwable;
 
 class Shipping extends BaseService
 {
@@ -17,7 +18,7 @@ class Shipping extends BaseService
      * Get shipping fee.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function addFee(): void
     {
@@ -37,7 +38,7 @@ class Shipping extends BaseService
      * Calculate the shipping cost based on the current delivery method from the corresponding plugin.
      *
      * @return float
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getShippingFee(): float
     {

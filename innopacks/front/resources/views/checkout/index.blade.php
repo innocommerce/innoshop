@@ -118,9 +118,12 @@
                      :class="['select-item', current.shipping_method_code  == quote.code ? 'active' : '']">
                   <div class="left">
                     <i class="bi bi-circle"></i>
-                    <div class="select-title">@{{ quote.name }}</div>
+                    <div class="select-title">
+                      <span class="name"> @{{ quote.name }}</span> &nbsp;&nbsp;
+                      <span class="cost"> @{{ quote.cost_format }}</span>
+                    </div>
                   </div>
-                  <div class="icon"><img :src="item.icon" class="img-fluid"></div>
+                  <div class="icon"><img :src="quote.icon" class="img-fluid"></div>
                 </div>
               </div>
               <div v-if="!source.shippingMethods.length" class="alert alert-warning">
