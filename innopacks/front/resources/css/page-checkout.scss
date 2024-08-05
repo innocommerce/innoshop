@@ -94,7 +94,7 @@ body.page-checkout {
           position: absolute;
           z-index: 1;
           pointer-events: none;
-          border: 1px solid $primary;
+          border: 1px solid $default;
           inset-block-start: -1px;
           bottom: -1px;
           left: -1px;
@@ -105,14 +105,14 @@ body.page-checkout {
         }
 
         &.active {
-          background-color: #ffeff4;
+          background-color: #fbefff;
           &:before {
             display: block;
           }
 
           .left {
             i {
-              color: $primary;
+              color: $default;
               &::before {
                 content: '\F517';
               }
