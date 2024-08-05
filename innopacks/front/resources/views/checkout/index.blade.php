@@ -113,16 +113,18 @@
               <div class="title">{{ __('front::checkout.shipping_methods') }}</div>
             </div>
             <div class="checkout-select-wrap">
-              <div :class="['select-item', current.shipping_method_code  == item.code ? 'active' : '']"
-                   v-for="item in source.shippingMethods" :key="item.code"
-                   @click="updateCheckout('shipping_method_code', item.code)">
-                <div class="left">
-                  <i class="bi bi-circle"></i>
-                  <div class="select-title">@{{ item.name }}</div>
+              <div v-for="item in source.shippingMethods" :key="item.code">
+                <div v-for="quote in item.quotes" :key="quote.code" @click="updateCheckout('shipping_method_code', quote.code)"
+                     :class="['select-item', current.shipping_method_code  == quote.code ? 'active' : '']">
+                  <div class="left">
+                    <i class="bi bi-circle"></i>
+                    <div class="select-title">@{{ quote.name }}</div>
+                  </div>
+                  <div class="icon"><img :src="item.icon" class="img-fluid"></div>
                 </div>
-                <div class="icon"><img :src="item.icon" class="img-fluid"></div>
               </div>
-              <div v-if="!source.shippingMethods.length" class="alert alert-warning"><i class="bi bi-exclamation-circle-fill"></i> {{ __('front::checkout.no_shipping_methods') }}</div>
+              <div v-if="!source.shippingMethods.length" class="alert alert-warning">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ __('front::checkout.no_shipping_methods') }}</div>
             </div>
           </div>
 
@@ -283,7 +285,7 @@
 
           axios.put(api.checkout, current).then(function (res) {
             if (res.success) {
-              // window.location.href = res.data
+              //window.location.href = '{{ front_route('checkout.index') }}'
             }
           })
         }

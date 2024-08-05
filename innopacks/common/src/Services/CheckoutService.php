@@ -228,7 +228,7 @@ class CheckoutService extends BaseService
         $defaultAddress = $addressList[0] ?? null;
 
         $shippingMethods = ShippingService::getInstance($this)->getMethods();
-        $billingMethods  = BillingService::getInstance($this)->getMethods();
+        $billingMethods  = BillingService::getInstance()->getMethods();
 
         $data['shipping_address_id']  = $defaultAddress['id']       ?? 0;
         $data['shipping_method_code'] = $shippingMethods[0]['code'] ?? '';

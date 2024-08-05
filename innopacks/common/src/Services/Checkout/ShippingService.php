@@ -9,17 +9,24 @@
 
 namespace InnoShop\Common\Services\Checkout;
 
+use Exception;
 use Illuminate\Support\Str;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\PluginRepo;
 
 class ShippingService extends BaseService
 {
+    public static ?array $shippingMethods = null;
+
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMethods(): array
     {
+        if (! is_null(self::$shippingMethods)) {
+            return self::$shippingMethods;
+        }
+
         $shippingPlugins = PluginRepo::getInstance()->getShippingMethods();
 
         $shippingMethods = [];
@@ -28,7 +35,7 @@ class ShippingService extends BaseService
 
             $bootClass = $this->getBootClass($plugin);
             if (! method_exists($bootClass, 'getQuotes')) {
-                throw new \Exception(trans('front::checkout.shipping_quote_error', ['classname' => $bootClass]));
+                throw new Exception(trans('front::checkout.shipping_quote_error', ['classname' => $bootClass]));
             }
 
             $quotes = (new $bootClass)->getQuotes($this->checkoutService);
@@ -42,7 +49,9 @@ class ShippingService extends BaseService
             }
         }
 
-        return $shippingMethods;
+        fire_hook_filter('common.service.checkout.shipping.methods', $shippingMethods);
+
+        return self::$shippingMethods = $shippingMethods;
     }
 
     /**

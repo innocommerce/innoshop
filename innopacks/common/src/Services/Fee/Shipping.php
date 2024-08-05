@@ -44,8 +44,15 @@ class Shipping extends BaseService
         $checkoutData       = $this->checkoutService->getCheckoutData();
         $shippingMethodCode = $checkoutData['shipping_method_code'];
         $shippingMethods    = ShippingService::getInstance($this->checkoutService)->getMethods();
-        $shippingMethod     = collect($shippingMethods)->where('code', $shippingMethodCode)->first();
 
-        return (float) ($shippingMethod['quotes'][0]['cost'] ?? 0);
+        foreach ($shippingMethods as $shippingMethod) {
+            foreach ($shippingMethod['quotes'] as $quote) {
+                if ($quote['code'] == $shippingMethodCode) {
+                    return (float) ($quote['cost'] ?? 0);
+                }
+            }
+        }
+
+        return 0;
     }
 }
