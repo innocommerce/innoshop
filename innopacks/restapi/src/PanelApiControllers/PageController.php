@@ -7,20 +7,22 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Panel\ApiControllers;
+namespace InnoShop\RestAPI\PanelApiControllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Page;
 use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Panel\Requests\PageRequest;
+use Throwable;
 
-class PageController extends BaseApiController
+class PageController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -32,7 +34,7 @@ class PageController extends BaseApiController
     /**
      * @param  PageRequest  $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(PageRequest $request): JsonResponse
     {
@@ -41,7 +43,7 @@ class PageController extends BaseApiController
             $page = PageRepo::getInstance()->create($data);
 
             return json_success(trans('panel::common.updated_success'), $page);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -58,7 +60,7 @@ class PageController extends BaseApiController
             PageRepo::getInstance()->update($page, $data);
 
             return json_success(trans('panel::common.updated_success'), $page);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -73,7 +75,7 @@ class PageController extends BaseApiController
             PageRepo::getInstance()->destroy($page);
 
             return json_success(trans('panel::common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

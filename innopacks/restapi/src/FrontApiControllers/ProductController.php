@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Front\ApiControllers;
+namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Resources\ProductSimple;
 
-class ProductController extends BaseApiController
+class ProductController extends BaseController
 {
     /**
      * @param  Request  $request
@@ -29,7 +29,7 @@ class ProductController extends BaseApiController
 
         $collection = ProductSimple::collection($products);
 
-        return json_success(trans('front::common.get_success'), $collection);
+        return read_json_success($collection);
     }
 
     /**
@@ -40,6 +40,6 @@ class ProductController extends BaseApiController
     {
         $single = new ProductSimple($product);
 
-        return json_success(trans('front::common.get_success'), $single);
+        return read_json_success($single);
     }
 }

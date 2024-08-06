@@ -33,7 +33,6 @@ class PanelServiceProvider extends ServiceProvider
         $this->registerGuard();
         $this->registerCommands();
         $this->registerWebRoutes();
-        $this->registerApiRoutes();
         $this->loadTranslations();
         $this->loadViewTemplates();
         $this->loadViewComponents();
@@ -94,28 +93,6 @@ class PanelServiceProvider extends ServiceProvider
             ->name("$adminName.")
             ->group(function () {
                 $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
-            });
-    }
-
-    /**
-     * Register admin api routes.
-     *
-     * @return void
-     */
-    private function registerApiRoutes(): void
-    {
-        $router      = $this->app['router'];
-        $middlewares = ['auth:sanctum', EventActionHook::class, ContentFilterHook::class];
-        foreach ($middlewares as $middleware) {
-            $router->pushMiddlewareToGroup('panel_api', $middleware);
-        }
-
-        $adminName = panel_name();
-        Route::prefix("api/$adminName")
-            ->middleware('panel_api')
-            ->name("api.$adminName.")
-            ->group(function () {
-                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/api.php'));
             });
     }
 

@@ -39,7 +39,6 @@ class FrontServiceProvider extends ServiceProvider
         load_settings();
         $this->registerGuard();
         $this->registerWebRoutes();
-        $this->registerApiRoutes();
         $this->publishViewTemplates();
         $this->loadThemeViewPath();
         $this->loadViewComponents();
@@ -104,27 +103,6 @@ class FrontServiceProvider extends ServiceProvider
                     });
             }
         }
-    }
-
-    /**
-     * Register frontend api routes.
-     *
-     * @return void
-     */
-    protected function registerApiRoutes(): void
-    {
-        $router      = $this->app['router'];
-        $middlewares = [EventActionHook::class, ContentFilterHook::class];
-        foreach ($middlewares as $middleware) {
-            $router->pushMiddlewareToGroup('api', $middleware);
-        }
-
-        Route::prefix('api')
-            ->middleware('api')
-            ->name('api.')
-            ->group(function () {
-                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/api.php'));
-            });
     }
 
     /**

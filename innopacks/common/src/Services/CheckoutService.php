@@ -302,7 +302,7 @@ class CheckoutService extends BaseService
             DB::commit();
 
             $this->checkout->delete();
-            CartService::getInstance()->getCartBuilder()->delete();
+            CartService::getInstance($this->customerID)->getCartBuilder()->delete();
 
             return $order;
         } catch (Exception $e) {

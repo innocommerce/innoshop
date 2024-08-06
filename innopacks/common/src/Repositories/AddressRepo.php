@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Address;
 use InnoShop\Common\Models\Country;
 use InnoShop\Common\Models\State;
+use Throwable;
 
 class AddressRepo extends BaseRepo
 {
@@ -60,7 +61,7 @@ class AddressRepo extends BaseRepo
     /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {

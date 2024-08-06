@@ -32,7 +32,7 @@ return [
     'created_at'     => 'Creado el',
     'delete_confirm' => '¿Estás seguro de que deseas eliminarlo?',
 
-    'get_success'       => 'Obtener con éxito',
+    'read_success'      => 'Obtener con éxito',
     'saved_success'     => 'Guardado con éxito',
     'updated_success'   => 'Actualizado con éxito',
     'deleted_success'   => 'Eliminado con éxito',

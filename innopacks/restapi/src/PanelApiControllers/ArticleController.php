@@ -7,20 +7,21 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Panel\ApiControllers;
+namespace InnoShop\RestAPI\PanelApiControllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Article;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Panel\Requests\ArticleRequest;
 
-class ArticleController extends BaseApiController
+class ArticleController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -41,7 +42,7 @@ class ArticleController extends BaseApiController
             $article = ArticleRepo::getInstance()->create($data);
 
             return json_success(trans('panel::common.updated_success'), $article);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -58,7 +59,7 @@ class ArticleController extends BaseApiController
             ArticleRepo::getInstance()->update($article, $data);
 
             return json_success(trans('panel::common.updated_success'), $article);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -73,7 +74,7 @@ class ArticleController extends BaseApiController
             ArticleRepo::getInstance()->destroy($article);
 
             return json_success(trans('panel::common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

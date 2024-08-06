@@ -7,13 +7,15 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Front\ApiControllers;
+namespace InnoShop\RestAPI\FrontApiControllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Repositories\Category\TreeRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 
-class CategoryController extends BaseApiController
+class CategoryController extends BaseController
 {
     /**
      * @param  Request  $request
@@ -23,8 +25,19 @@ class CategoryController extends BaseApiController
     {
         $filters = $request->all();
 
-        $categories = CategoryRepo::getInstance()->withActive()->builder($filters)->get();
+        $categories = CategoryRepo::getInstance()->withActive()->builder($filters)->paginate();
 
-        return json_success('获取成功', $categories);
+        return read_json_success($categories);
+    }
+
+    /**
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function tree(): JsonResponse
+    {
+        $categoryTree = TreeRepo::getInstance()->getCategoryTree();
+
+        return read_json_success($categoryTree);
     }
 }

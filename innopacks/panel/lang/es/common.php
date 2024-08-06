@@ -56,6 +56,7 @@ return [
     'no_data'          => 'Sin datos',
     'verify_required'  => 'Por favor, complete',
 
+    'read_success'      => 'Lectura realizada con éxito',
     'saved_success'     => 'Guardado correctamente',
     'updated_success'   => 'Actualizado correctamente',
     'deleted_success'   => 'Eliminado correctamente',

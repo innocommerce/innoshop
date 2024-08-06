@@ -30,7 +30,7 @@
                         @foreach ($child['children'] as $subChild)
                         <div class="accordion-item">
                           <div class="accordion-title">
-                            <a href="{{ $subChild['url'] }}" class="">{{ $subChild['title'] }}</a>
+                            <a href="{{ $subChild['url'] }}" class="">{{ $subChild['name'] }}</a>
                           </div>
                         </div>
                         @endforeach

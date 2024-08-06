@@ -118,7 +118,7 @@ Route::prefix('account')
         Route::get('/addresses', [Account\AddressesController::class, 'index'])->name('addresses.index');
         Route::post('/addresses', [Account\AddressesController::class, 'store'])->name('addresses.store');
         Route::put('/addresses/{address}', [Account\AddressesController::class, 'update'])->name('addresses.update');
-        Route::delete('/favorites/{favorite}', [Account\AddressesController::class, 'destroy'])->name('addresses.destroy');
+        Route::delete('/addresses/{address}', [Account\AddressesController::class, 'destroy'])->name('addresses.destroy');
 
         Route::get('/edit', [Account\EditController::class, 'index'])->name('edit.index');
         Route::put('/edit', [Account\EditController::class, 'update'])->name('edit.update');

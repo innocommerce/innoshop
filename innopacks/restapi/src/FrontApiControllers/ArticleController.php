@@ -7,8 +7,6 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Front\ApiControllers;
+namespace InnoShop\RestAPI\FrontApiControllers;
 
-use App\Http\Controllers\Controller;
-
-class ArticleController extends Controller {}
+class ArticleController extends BaseController {}

@@ -18,6 +18,9 @@ use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Notifications\OrderNewNotification;
 use InnoShop\Common\Notifications\OrderUpdateNotification;
 
+/**
+ * @Property int customer_id
+ */
 class Order extends BaseModel
 {
     use Notifiable;

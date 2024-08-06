@@ -39,6 +39,7 @@
             "InnoShop\\Common\\": "innopacks/common/src",
             "InnoShop\\Front\\": "innopacks/front/src",
             "InnoShop\\Panel\\": "innopacks/panel/src",
+            "InnoShop\\RestAPI\\": "innopacks/restapi/src",
             "InnoShop\\Plugin\\": "innopacks/plugin/src"
         },
         "files": [

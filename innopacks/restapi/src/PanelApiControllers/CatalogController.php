@@ -7,8 +7,9 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Panel\ApiControllers;
+namespace InnoShop\RestAPI\PanelApiControllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -16,13 +17,14 @@ use InnoShop\Common\Models\Catalog;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Panel\Requests\CatalogRequest;
+use Throwable;
 
-class CatalogController extends BaseApiController
+class CatalogController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -34,7 +36,7 @@ class CatalogController extends BaseApiController
     /**
      * @param  CatalogRequest  $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(CatalogRequest $request): JsonResponse
     {
@@ -43,7 +45,7 @@ class CatalogController extends BaseApiController
             $catalog = CatalogRepo::getInstance()->create($data);
 
             return json_success(trans('panel::common.updated_success'), $catalog);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -60,7 +62,7 @@ class CatalogController extends BaseApiController
             CatalogRepo::getInstance()->update($catalog, $data);
 
             return json_success(trans('panel::common.updated_success'), $catalog);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -75,7 +77,7 @@ class CatalogController extends BaseApiController
             CatalogRepo::getInstance()->destroy($catalog);
 
             return json_success(trans('panel::common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -86,7 +88,7 @@ class CatalogController extends BaseApiController
      *
      * @param  Request  $request
      * @return AnonymousResourceCollection
-     * @throws \Exception
+     * @throws Exception
      */
     public function autocomplete(Request $request): AnonymousResourceCollection
     {

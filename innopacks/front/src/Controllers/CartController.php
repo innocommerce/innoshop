@@ -36,7 +36,7 @@ class CartController extends Controller
         try {
             $currentCart = CartService::getInstance()->handleResponse();
 
-            return json_success(trans('front::common.get_success'), $currentCart);
+            return json_success(trans('front::common.read_success'), $currentCart);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }

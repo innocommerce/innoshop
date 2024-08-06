@@ -32,7 +32,7 @@ return [
     'created_at'     => '创建时间',
     'delete_confirm' => '确定要删除吗？',
 
-    'get_success'       => '获取成功',
+    'read_success'      => '获取成功',
     'saved_success'     => '保存成功',
     'updated_success'   => '更新成功',
     'deleted_success'   => '删除成功',

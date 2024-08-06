@@ -18,10 +18,11 @@ use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Customer\Group;
 use InnoShop\Common\Notifications\ForgottenNotification;
 use InnoShop\Common\Notifications\RegistrationNotification;
+use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends AuthUser
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'email', 'password', 'name', 'avatar', 'customer_group_id', 'address_id', 'locale', 'active', 'code', 'from',

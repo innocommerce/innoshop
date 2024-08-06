@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Resources\CategorySimple;
+use Throwable;
 
 class CategoryRepo extends BaseRepo
 {
@@ -88,7 +89,7 @@ class CategoryRepo extends BaseRepo
      *
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {
@@ -107,7 +108,7 @@ class CategoryRepo extends BaseRepo
      * @param  $item
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update($item, $data): mixed
     {
@@ -125,7 +126,7 @@ class CategoryRepo extends BaseRepo
      * @param  Category  $category
      * @param  $data
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function createOrUpdate(Category $category, $data): void
     {
@@ -187,7 +188,7 @@ class CategoryRepo extends BaseRepo
      * @param  $item
      * @param  $children
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function handleChildren($item, $children): void
     {

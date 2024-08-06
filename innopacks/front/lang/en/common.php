@@ -32,7 +32,7 @@ return [
     'created_at'     => 'Created at',
     'delete_confirm' => 'You sure you want to delete it?',
 
-    'get_success'       => 'Get successfully',
+    'read_success'      => 'Get successfully',
     'saved_success'     => 'Saved successfully',
     'updated_success'   => 'Updated successfully',
     'deleted_success'   => 'Deleted successfully',

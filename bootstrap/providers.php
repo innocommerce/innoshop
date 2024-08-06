@@ -8,5 +8,6 @@ return [
     InnoShop\Common\CommonServiceProvider::class,
     InnoShop\Panel\PanelServiceProvider::class,
     InnoShop\Front\FrontServiceProvider::class,
+    InnoShop\RestAPI\RestAPIServiceProvider::class,
     InnoShop\Plugin\PluginServiceProvider::class,
 ];

@@ -184,6 +184,18 @@ if (! function_exists('current_customer_id')) {
     }
 }
 
+if (! function_exists('token_customer_id')) {
+    /**
+     * Get current customer ID
+     *
+     * @return int
+     */
+    function token_customer_id(): int
+    {
+        return request()->user()->id ?? 0;
+    }
+}
+
 if (! function_exists('current_guest_id')) {
     /**
      * Get guest ID from session ID
@@ -315,6 +327,72 @@ if (! function_exists('inno_view')) {
         }
 
         return view($view, $data, $mergeData);
+    }
+}
+
+if (! function_exists('debug_view')) {
+    /**
+     * @param  $params
+     * @return mixed
+     */
+    function debug_view($params): mixed
+    {
+        return view('debug', ['data' => $params]);
+    }
+}
+
+if (! function_exists('create_json_success')) {
+    /**
+     * @param  null  $data
+     * @return JsonResponse
+     */
+    function create_json_success($data = null): JsonResponse
+    {
+        return json_success(trans('panel::common.created_success'), $data);
+    }
+}
+
+if (! function_exists('read_json_success')) {
+    /**
+     * @param  null  $data
+     * @return JsonResponse
+     */
+    function read_json_success($data = null): JsonResponse
+    {
+        return json_success(trans('panel::common.read_success'), $data);
+    }
+}
+
+if (! function_exists('update_json_success')) {
+    /**
+     * @param  null  $data
+     * @return JsonResponse
+     */
+    function update_json_success($data = null): JsonResponse
+    {
+        return json_success(trans('panel::common.updated_success'), $data);
+    }
+}
+
+if (! function_exists('delete_json_success')) {
+    /**
+     * @param  null  $data
+     * @return JsonResponse
+     */
+    function delete_json_success($data = null): JsonResponse
+    {
+        return json_success(trans('panel::common.deleted_success'), $data);
+    }
+}
+
+if (! function_exists('submit_json_success')) {
+    /**
+     * @param  null  $data
+     * @return JsonResponse
+     */
+    function submit_json_success($data = null): JsonResponse
+    {
+        return json_success(trans('panel::common.submitted_success'), $data);
     }
 }
 

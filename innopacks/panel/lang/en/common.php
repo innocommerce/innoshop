@@ -57,6 +57,7 @@ return [
     'no_data'          => 'No data',
     'verify_required'  => 'Please fill out',
 
+    'read_success'      => 'Read successfully',
     'saved_success'     => 'Saved successfully',
     'updated_success'   => 'Updated successfully',
     'deleted_success'   => 'Deleted successfully',

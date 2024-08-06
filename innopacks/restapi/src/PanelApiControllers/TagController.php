@@ -7,8 +7,9 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Panel\ApiControllers;
+namespace InnoShop\RestAPI\PanelApiControllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -17,13 +18,14 @@ use InnoShop\Common\Repositories\TagRepo;
 use InnoShop\Common\Resources\TagListItem;
 use InnoShop\Common\Resources\TagSimple;
 use InnoShop\Panel\Requests\TagRequest;
+use Throwable;
 
-class TagController extends BaseApiController
+class TagController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -41,7 +43,7 @@ class TagController extends BaseApiController
     /**
      * @param  TagRequest  $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(TagRequest $request): JsonResponse
     {
@@ -50,7 +52,7 @@ class TagController extends BaseApiController
             $tag  = TagRepo::getInstance()->create($data);
 
             return json_success(trans('panel::common.updated_success'), $tag);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -67,7 +69,7 @@ class TagController extends BaseApiController
             TagRepo::getInstance()->update($tag, $data);
 
             return json_success(trans('panel::common.updated_success'), $tag);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -82,7 +84,7 @@ class TagController extends BaseApiController
             TagRepo::getInstance()->destroy($tag);
 
             return json_success(trans('panel::common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -93,7 +95,7 @@ class TagController extends BaseApiController
      *
      * @param  Request  $request
      * @return AnonymousResourceCollection
-     * @throws \Exception
+     * @throws Exception
      */
     public function autocomplete(Request $request): AnonymousResourceCollection
     {

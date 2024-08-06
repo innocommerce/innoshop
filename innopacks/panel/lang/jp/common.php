@@ -57,6 +57,7 @@ return [
     'no_data'          => 'データがありません',
     'verify_required'  => '入力してください',
 
+    'read_success'      => '正常に読み込みました',
     'saved_success'     => '保存に成功しました',
     'updated_success'   => '更新に成功しました',
     'deleted_success'   => '削除に成功しました',
