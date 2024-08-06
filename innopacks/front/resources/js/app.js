@@ -28,4 +28,8 @@ $(function () {
     const skuId = $(this).data('sku-id');
     inno.addCart({skuId}, this)
   })
+
+  //Set app-content min height.
+  common.setAppContentMinHeight();
+  $(window).on('resize', common.setAppContentMinHeight)
 })

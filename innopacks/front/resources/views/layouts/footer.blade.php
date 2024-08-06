@@ -1,6 +1,6 @@
 @hookinsert('layout.footer.top')
 
-<footer>
+<footer id="appFooter">
   <div class="footer-box">
     <div class="container">
       <div class="footer-top-links">

@@ -36,7 +36,9 @@
     @include('layouts.header')
   @endif
 
-  @yield('content')
+  <div class="m-0 p-0" id="appContent">
+      @yield('content')
+  </div>
 
   @if (!request('iframe'))
     @include('layouts.footer')

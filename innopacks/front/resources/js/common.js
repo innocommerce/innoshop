@@ -197,5 +197,12 @@ export default {
       url = url.slice(0, -1);
     }
     return url;
-  }
+  },
+
+  setAppContentMinHeight(){
+  let appHeaderHeight=$('#appHeader').outerHeight();
+  let appFooterHeight=$('#appFooter').outerHeight(true);
+  let windowHeight=$(window).outerHeight();
+  $('#appContent').css('min-height', (windowHeight-appHeaderHeight-appFooterHeight-48)+'px');
+}
 };
