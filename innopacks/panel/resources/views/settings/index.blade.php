@@ -39,6 +39,43 @@
               @include('panel::settings._email_setting')
             </div>
 
+              <div class="tab-pane fade" id="tab-setting-email">
+                  <div class="container">
+                      <div class="col-md-6 mx-auto">
+                          <div class="row">
+                              <x-common-form-switch-radio title="{{ __('panel::setting.email_enable') }}" name="email_enable" required value="{{ old('expand', system_setting('email_enable')) }}"></x-common-form-switch-radio>
+                          </div>
+                          @if(system_setting('email_enable'))
+                              <div class="row">
+                                  @php($emailEngine=[['code'=>'SMTP','name'=>'SMTP','value'=>'SMTP'],['code'=>'SENDMAIL','name'=>'SENDMAIL','value'=>'SENDMAIL'],['code'=>'LOG','name'=>'LOG','value'=>'LOG'],])
+                                  <x-common-form-select title="{{ __('panel::setting.email_engine') }}" name="email_engine" :options="$emailEngine" key="code" label="name"
+                                                        value="{{ old('email_engine', system_setting('email_engine')) }}" required placeholder="{{ __('panel::setting.email_engine') }}"/>
+                              </div>
+                              <div class="row">
+                                  <x-common-form-input title="{{ __('panel::setting.email_host') }}" name="email_host" value="{{ old('email_host', system_setting('email_host')) }}" placeholder="{{ __('panel::setting.email_host') }}" required />
+                              </div>
+                              <div class="row">
+                                  <x-common-form-input title="{{ __('panel::setting.email_host_account') }}" name="email_host_account" value="{{ old('email_host_account', system_setting('email_host_account')) }}" placeholder="{{ __('panel::setting.email_host_account') }}" required />
+                              </div>
+                              <div class="row">
+                                  <x-common-form-input type="password" title="{{ __('panel::setting.email_host_password') }}" name="email_host_password" value="{{ old('email_host_password', system_setting('email_host_password')) }}" placeholder="{{ __('panel::setting.email_host_password') }}" required />
+                              </div>
+                              <div class="row">
+                                  @php($emailEncryptionType=[['code'=>'SSL','name'=>'SSL','value'=>'SSL'],['code'=>'TLS','name'=>'TLS','value'=>'TLS'],])
+                                  <x-common-form-select title="{{ __('panel::setting.email_encryption_type') }}" name="email_encryption_type" :options="$emailEncryptionType" key="code" label="name"
+                                                        value="{{ old('email_encryption_type', system_setting('email_encryption_type')) }}" required placeholder="{{ __('panel::setting.email_encryption_type') }}" />
+                              </div>
+                              <div class="row">
+                                  <x-common-form-input title="{{ __('panel::setting.email_port') }}" name="email_port" value="{{ old('email_port', system_setting('email_port')) }}" placeholder="{{ __('panel::setting.email_port') }}" required />
+                              </div>
+                              <div class="row">
+                                  <x-common-form-input title="{{ __('panel::setting.email_timeout') }}" name="email_timeout" value="{{ old('email_timeout', system_setting('email_timeout')) }}" placeholder="{{ __('panel::setting.email_timeout') }}" required />
+                              </div>
+                          @endif
+                      </div>
+                  </div>
+              </div>
+
           </div>
         </div>
       </div>
