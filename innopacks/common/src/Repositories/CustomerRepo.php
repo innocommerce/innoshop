@@ -9,16 +9,18 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Customer;
+use Throwable;
 
 class CustomerRepo extends BaseRepo
 {
     /**
      * @param  $filters
      * @return LengthAwarePaginator
-     * @throws \Exception
+     * @throws Exception
      */
     public function list($filters = []): LengthAwarePaginator
     {
@@ -56,7 +58,7 @@ class CustomerRepo extends BaseRepo
     /**
      * @param  $data
      * @return Customer
-     * @throws \Exception|\Throwable
+     * @throws Exception|Throwable
      */
     public function create($data): Customer
     {
@@ -71,7 +73,7 @@ class CustomerRepo extends BaseRepo
      * @param  $item
      * @param  $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function update($item, $data): mixed
     {
@@ -81,6 +83,29 @@ class CustomerRepo extends BaseRepo
         $item->saveOrFail();
 
         return $item;
+    }
+
+    /**
+     * Update current password
+     *
+     * @param  Customer  $customer
+     * @param  $data
+     * @return bool
+     * @throws Exception
+     */
+    public function updatePassword(mixed $customer, $data): bool
+    {
+        $oldPassword        = $data['old_password'];
+        $newPassword        = $data['new_password']              ?? '';
+        $newPasswordConfirm = $data['new_password_confirmation'] ?? '';
+
+        if (! $customer->verifyPassword($oldPassword)) {
+            throw new Exception('invalid_password');
+        } elseif ($newPassword != $newPasswordConfirm) {
+            throw new Exception('new_password_must_keep_same');
+        }
+
+        return $customer->update(['password' => bcrypt($newPassword)]);
     }
 
     /**
@@ -96,7 +121,7 @@ class CustomerRepo extends BaseRepo
     /**
      * @param  array  $requestData
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleData(array $requestData): array
     {

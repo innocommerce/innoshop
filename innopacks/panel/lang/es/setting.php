@@ -39,4 +39,14 @@ return [
     'default_currency'         => 'Moneda predeterminada',
     'enable_tax'               => 'Habilitar impuestos',
     'backstage_menu_expansion' => 'Menú de backstage expandido por defecto',
+    'email_setting'            => 'Configuración de Correo Electrónico',
+    'email_enable'             => 'Habilitar Servicio de Correo Electrónico',
+    'email_engine'             => 'Motor de Correo Electrónico',
+    'smtp_host'                => 'Host de Correo Electrónico',
+    'smtp_username'            => 'Nombre de Usuario del Host de Correo Electrónico',
+    'smtp_password'            => 'Contraseña del Host de Correo Electrónico',
+    'smtp_encryption'          => 'Tipo de Cifrado de Correo Electrónico',
+    'smtp_port'                => 'Puerto de Correo Electrónico',
+    'smtp_timeout'             => 'Tiempo de Espera de Correo Electrónico (seconds)',
+
 ];

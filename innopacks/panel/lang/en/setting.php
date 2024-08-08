@@ -40,4 +40,13 @@ return [
     'enable_tax'               => 'Enable Tax',
     'login_checkout'           => 'Login Required for Checkout',
     'backstage_menu_expansion' => 'Backstage menu expanded by default',
+    'email_setting'            => 'Email Settings',
+    'email_enable'             => 'Enable Email Service',
+    'email_engine'             => 'Email Engine',
+    'smtp_host'                => 'Email Host',
+    'smtp_username'            => 'Email Host Username',
+    'smtp_password'            => 'Email Host Password',
+    'smtp_encryption'          => 'Email Encryption Type',
+    'smtp_port'                => 'Email Port',
+    'smtp_timeout'             => 'Email Timeout (seconds)',
 ];

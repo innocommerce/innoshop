@@ -56,11 +56,22 @@ class Customer extends AuthUser
     }
 
     /**
+     * Check if the given string matches the user's set password.
+     *
+     * @param  string  $password
+     * @return bool
+     */
+    public function verifyPassword(string $password): bool
+    {
+        return password_verify($password, $this->password);
+    }
+
+    /**
      * @return void
      */
     public function notifyRegistration(): void
     {
-        $useQueue = system_setting('use_queue', true);
+        $useQueue = system_setting('use_queue', false);
         if ($useQueue) {
             $this->notify(new RegistrationNotification($this));
         } else {
@@ -74,7 +85,7 @@ class Customer extends AuthUser
      */
     public function notifyForgotten($code): void
     {
-        $useQueue = system_setting('use_queue', true);
+        $useQueue = system_setting('use_queue', false);
         if ($useQueue) {
             $this->notify(new ForgottenNotification($this, $code));
         } else {

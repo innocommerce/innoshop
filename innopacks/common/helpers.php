@@ -36,6 +36,11 @@ if (! function_exists('load_settings')) {
         if (! installed()) {
             return;
         }
+
+        if (config('inno')) {
+            return;
+        }
+
         $result = SettingRepo::getInstance()->groupedSettings();
         config(['inno' => $result]);
     }

@@ -124,5 +124,7 @@ Route::prefix('account')
         Route::put('/edit', [Account\EditController::class, 'update'])->name('edit.update');
 
         Route::get('/password', [Account\PasswordController::class, 'index'])->name('password.index');
+        Route::put('/password', [Account\PasswordController::class, 'update'])->name('password.update');
+
         Route::get('/logout', [Account\LogoutController::class, 'index'])->name('logout');
     });

@@ -2,7 +2,7 @@
   @if (!$multiple)
     <input type="{{ $type }}" name="{{ $name }}" class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
     @if ($description)
-    <div class="help-text font-size-12 lh-base">{!! $description !!}</div>
+    <div class="text-secondary"><small>{!! $description !!}</small></div>
     @endif
 
     <span class="invalid-feedback" role="alert">

@@ -30,6 +30,7 @@ return [
     'order_history' => 'Order History',
     'state'         => 'State',
     'remark'        => 'Remark',
+    'image'         => 'Image',
     'product'       => 'Product',
     'price'         => 'Price',
     'quantity'      => 'Quantity',

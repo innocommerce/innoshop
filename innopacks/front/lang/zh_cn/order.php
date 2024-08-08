@@ -30,6 +30,7 @@ return [
     'order_history' => '订单历史',
     'state'         => '状态',
     'remark'        => '备注',
+    'image'         => '图片',
     'product'       => '商品',
     'price'         => '价格',
     'quantity'      => '数量',

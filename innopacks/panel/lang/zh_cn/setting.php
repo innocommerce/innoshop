@@ -11,6 +11,7 @@ return [
     'setting'                  => '系统设置',
     'basic'                    => '基本设置',
     'website_data'             => '网站数据',
+    'email_setting'            => '邮件设置',
     'slideshow'                => '首页幻灯片',
     'header_menu'              => '头部导航',
     'footer_menu'              => '页尾导航',
@@ -37,4 +38,13 @@ return [
     'enable_tax'               => '开启税费计算',
     'login_checkout'           => '登录后结账',
     'backstage_menu_expansion' => '后台菜单默认展开',
+    'email_enable'             => '启用邮件服务',
+    'email_engine'             => '邮件引擎',
+    'smtp_host'                => '邮件主机',
+    'smtp_username'            => '邮箱用户名',
+    'smtp_password'            => '邮箱密码',
+    'smtp_encryption'          => '加密方式',
+    'smtp_port'                => '端口',
+    'smtp_timeout'             => '超时时间(秒)',
+
 ];

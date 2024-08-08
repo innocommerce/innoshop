@@ -34,7 +34,7 @@ class Admin extends AuthUser
      */
     public function notifyForgotten($code): void
     {
-        $useQueue = system_setting('use_queue', true);
+        $useQueue = system_setting('use_queue', false);
         if ($useQueue) {
             $this->notify(new ForgottenNotification($this, $code));
         } else {

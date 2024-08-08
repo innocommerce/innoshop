@@ -7,30 +7,32 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Common\Mail;
+namespace InnoShop\Front\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
+use InnoShop\Common\Models\Order;
 
-class ForgottenMail extends Mailable implements ShouldQueue
+class OrderUpdateMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    private string $code;
+    private Order $order;
 
-    private string $email;
+    private string $fromCode;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $code, string $email)
+    public function __construct(Order $order, string $fromCode)
     {
-        $this->code  = $code;
-        $this->email = $email;
+        $this->order    = $order;
+        $this->fromCode = $fromCode;
     }
 
     /**
@@ -40,10 +42,12 @@ class ForgottenMail extends Mailable implements ShouldQueue
      */
     public function build(): static
     {
-        return $this->view('mails.forgotten', [
-            'code'     => $this->code,
-            'is_admin' => false,
-            'email'    => $this->email,
+        $orderLocale = $this->order->locale;
+        App::setLocale($orderLocale);
+
+        return $this->view('mails.order_update', [
+            'order'     => $this->order,
+            'from_code' => $this->fromCode,
         ]);
     }
 }

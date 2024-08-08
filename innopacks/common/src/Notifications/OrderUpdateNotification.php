@@ -12,8 +12,8 @@ namespace InnoShop\Common\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use InnoShop\Common\Mail\OrderUpdateMail;
 use InnoShop\Common\Models\Order;
+use InnoShop\Front\Mail\OrderUpdateMail;
 
 class OrderUpdateNotification extends Notification implements ShouldQueue
 {

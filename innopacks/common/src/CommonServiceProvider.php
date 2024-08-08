@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use InnoShop\Common\Console\Commands;
 
@@ -26,9 +27,11 @@ class CommonServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        load_settings();
         $this->registerConfig();
         $this->registerMigrations();
         $this->registerCommands();
+        $this->loadMailSettings();
         $this->loadViewComponents();
         $this->loadViewTemplates();
     }
@@ -60,7 +63,7 @@ class CommonServiceProvider extends ServiceProvider
      */
     protected function loadTranslations(): void
     {
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'common');
+        $this->loadTranslationsFrom($this->basePath.'lang', 'common');
     }
 
     /**
@@ -75,6 +78,38 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\UpdateCountries::class,
                 Commands\UpdateStates::class,
                 Commands\PublishFrontTheme::class,
+            ]);
+        }
+    }
+
+    /**
+     * Load the email configuration, fetch values from the backend mail,
+     * and override them in config/mail and config/services.
+     * @return void
+     */
+    private function loadMailSettings(): void
+    {
+        $mailEngine = strtolower(system_setting('email_engine'));
+
+        if (empty($mailEngine)) {
+            return;
+        }
+
+        $storeMailAddress = system_setting('email', '');
+
+        Config::set('mail.default', $mailEngine);
+        Config::set('mail.from.address', $storeMailAddress);
+        Config::set('mail.from.name', config('app.name'));
+
+        if ($mailEngine == 'smtp') {
+            Config::set('mail.mailers.smtp', [
+                'transport'  => 'smtp',
+                'host'       => system_setting('smtp_host'),
+                'port'       => system_setting('smtp_port'),
+                'encryption' => system_setting('smtp_encryption'),
+                'username'   => system_setting('smtp_username'),
+                'password'   => system_setting('smtp_password'),
+                'timeout'    => system_setting('smtp_timeout'),
             ]);
         }
     }

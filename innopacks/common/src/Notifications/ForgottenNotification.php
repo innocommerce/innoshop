@@ -12,8 +12,8 @@ namespace InnoShop\Common\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use InnoShop\Common\Mail\ForgottenMail;
 use InnoShop\Common\Models\Customer;
+use InnoShop\Front\Mail\ForgottenMail;
 
 class ForgottenNotification extends Notification implements ShouldQueue
 {

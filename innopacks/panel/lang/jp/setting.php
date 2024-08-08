@@ -36,4 +36,14 @@ return [
     'default_currency'         => 'デフォルト通貨',
     'enable_tax'               => '税金計算を有効化',
     'backstage_menu_expansion' => 'バックエンドメニューのデフォルト展開',
+    'email_setting'            => 'メール設定',
+    'email_enable'             => 'メールサービスを有効にする',
+    'email_engine'             => 'メールエンジン',
+    'smtp_host'                => 'メールホスト',
+    'smtp_username'            => 'メールホストユーザー名',
+    'smtp_password'            => 'メールホストパスワード',
+    'smtp_encryption'          => 'メール暗号化方式',
+    'smtp_port'                => 'メールポート',
+    'smtp_timeout'             => 'メールタイムアウト（秒）',
+
 ];

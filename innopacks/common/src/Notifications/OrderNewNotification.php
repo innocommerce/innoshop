@@ -12,8 +12,8 @@ namespace InnoShop\Common\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use InnoShop\Common\Mail\OrderNewMail;
 use InnoShop\Common\Models\Order;
+use InnoShop\Front\Mail\OrderNewMail;
 
 class OrderNewNotification extends Notification implements ShouldQueue
 {
@@ -40,7 +40,7 @@ class OrderNewNotification extends Notification implements ShouldQueue
     public function via(mixed $notifiable): array
     {
         $drivers[]  = 'database';
-        $mailEngine = system_setting('mail_engine');
+        $mailEngine = system_setting('email_engine');
         if ($mailEngine) {
             $drivers[] = 'mail';
         }
