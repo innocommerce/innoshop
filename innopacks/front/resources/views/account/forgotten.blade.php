@@ -33,7 +33,7 @@
 
                     <form action="{{ front_route('forgotten.password') }}" class="needs-validation" novalidate method="POST">
                         @csrf
-
+                        <input type="hidden" name="email" value="" id="inputEmail">
                         <x-common-form-input name="code" title="{{ __('front::forgotten.verification_code') }}" value="" required="required" placeholder="{{ __('front::forgotten.verification_code') }}" />
                         <x-common-form-input name="password" title="{{ __('front::forgotten.new_password') }}" value="" type="password" required="required" placeholder="{{ __('front::forgotten.new_password') }}" />
                         <x-common-form-input name="password_confirmation" title="{{ __('front::forgotten.confirm_password') }}" value="" type="password" required="required" placeholder="{{ __('front::password.confirm_password') }}" />
@@ -66,7 +66,23 @@
 
 @push('footer')
   <script>
+      (function ($) {
+          $.getUrlParam = function (name) {
+              var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+              var r = window.location.search.substr(1).match(reg);
+              if (r != null) return unescape(r[2]); return null;
+          }
+      })(jQuery);
+
     $(function () {
+        var url = window.location.href;
+        if ($.getUrlParam('code') && $.getUrlParam('email')){
+            $('#sendCardContent').addClass('d-none')
+            $('#verifyCardContent').removeClass('d-none')
+            $('input[name="code"]').val($.getUrlParam('code'))
+            $('input[name="email"]').val($.getUrlParam('email'))
+        }
+
         const modalHint = new bootstrap.Modal('#modalHint', {
             keyboard: false
         })
@@ -80,6 +96,7 @@
                 if (res.success==true){
                     parent.layer.closeAll()
                     modalHint.show()
+                    $('#inputEmail').val($('input[name="email"]').val() ? $('input[name="email"]').val() : $.getUrlParam('email'))
                     $('#sendCardContent').addClass('d-none')
                     $('#verifyCardContent').removeClass('d-none')
                 }
