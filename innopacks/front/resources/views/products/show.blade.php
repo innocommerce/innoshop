@@ -108,33 +108,39 @@
       <li class="nav-item">
         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#product-description-description" type="button">{{ __('front::product.description') }}</button>
       </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-description-attribute" type="button">{{ __('front::product.attribute') }}</button>
-      </li>
+      @if($attributes)
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-description-attribute" type="button">{{ __('front::product.attribute') }}</button>
+        </li>
+      @endif
     </ul>
 
     <div class="tab-content">
       <div class="tab-pane fade show active" id="product-description-description">
         {!! $product->translation->content !!}
       </div>
-      <div class="tab-pane fade" id="product-description-attribute">
-        <table class="table table-bordered">
-          <tbody>
-            <tr>
-              <td>Color</td>
-              <td>Black, Blue, Red</td>
-            </tr>
-            <tr>
-              <td>Size</td>
-              <td>Large, Medium, Small</td>
-            </tr>
-            <tr>
-              <td>Material</td>
-              <td>Cotton, Polyester</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
+      @if($attributes)
+        <div class="tab-pane fade" id="product-description-attribute" role="tabpanel">
+          <table class="table table-bordered attribute-table">
+            @foreach ($attributes as $group)
+              <thead class="table-light">
+              <tr>
+                <td colspan="2"><strong>{{ $group['attribute_group_name'] }}</strong></td>
+              </tr>
+              </thead>
+              <tbody>
+              @foreach ($group['attributes'] as $item)
+                <tr>
+                  <td>{{ $item['attribute'] }}</td>
+                  <td>{{ $item['attribute_value'] }}</td>
+                </tr>
+              @endforeach
+              </tbody>
+            @endforeach
+          </table>
+        </div>
+      @endif
     </div>
   </div>
 </div>

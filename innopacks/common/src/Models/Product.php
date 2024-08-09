@@ -59,9 +59,12 @@ class Product extends BaseModel
     }
 
     /**
+     * Since the attribute is defined within the Laravel core,
+     * Please see https://github.com/laravel/framework/blob/11.x/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php#L52
+     * Consequently, the name of the relation is referred to as productAttributes.
      * @return HasMany
      */
-    public function attributes(): HasMany
+    public function productAttributes(): HasMany
     {
         return $this->hasMany(\InnoShop\Common\Models\Product\Attribute::class, 'product_id');
     }
@@ -146,6 +149,32 @@ class Product extends BaseModel
         return $this->favorites->contains(function ($item) use ($customerId) {
             return $item->customer_id === $customerId;
         });
+    }
+
+    /**
+     * @return array
+     */
+    public function groupedAttributes(): array
+    {
+        $this->loadMissing([
+            'productAttributes.attribute.translation',
+            'productAttributes.attribute.group.translation',
+            'productAttributes.attributeValue.translation',
+        ]);
+        $attributes = [];
+        foreach ($this->productAttributes as $productAttribute) {
+            $attribute = $productAttribute->attribute;
+            $groupID   = $attribute->attribute_group_id;
+            if (! isset($attributes[$groupID]['attribute_group_name'])) {
+                $attributes[$groupID]['attribute_group_name'] = $attribute->group->translation->name;
+            }
+            $attributes[$groupID]['attributes'][] = [
+                'attribute'       => $attribute->translation->name,
+                'attribute_value' => $productAttribute->attributeValue->translation->name,
+            ];
+        }
+
+        return $attributes;
     }
 
     /**

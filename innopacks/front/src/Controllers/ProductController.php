@@ -83,10 +83,11 @@ class ProductController extends Controller
         $product->increment('viewed');
 
         $data = [
-            'product'  => $product,
-            'sku'      => (new SkuListItem($sku))->jsonSerialize(),
-            'skus'     => SkuListItem::collection($product->skus)->jsonSerialize(),
-            'variants' => $product->variables,
+            'product'    => $product,
+            'sku'        => (new SkuListItem($sku))->jsonSerialize(),
+            'skus'       => SkuListItem::collection($product->skus)->jsonSerialize(),
+            'variants'   => $product->variables,
+            'attributes' => $product->groupedAttributes(),
         ];
 
         return inno_view('products.show', $data);
