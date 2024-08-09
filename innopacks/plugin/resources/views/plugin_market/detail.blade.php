@@ -63,7 +63,7 @@
                         </div>
 
                         @if($product['downloadable'])
-                          <button class="btn btn-primary" type="button" id="btnDownload">立即下载</button>
+                          <button class="btn btn-primary" type="button" id="btnDownload" data-product-type="plugin">立即下载</button>
                         @else
                           @include('plugin::shared._billing_method')
                           <button class="btn btn-danger" id="quickBuy" data-sku-id="{{$product['sku_id']}}"
@@ -97,7 +97,7 @@
             $('#btnDownload').click(function (){
                 axios({
                     method: "get",
-                    url: '{{ panel_route('marketplaces.download', ['id' => $product['product_id']]) }}',
+                    url: '{{ panel_route('marketplaces.download', ['id' => $product['product_id'],'type'=>'plugin']) }}',
                     onDownloadProgress : function (progressEvent) {
 
                     }

@@ -96,7 +96,7 @@
             $('#btnDownload').click(function (){
                 axios({
                     method: "get",
-                    url: '{{ panel_route('marketplaces.download', ['id' => $product['product_id']]) }}',
+                    url: '{{ panel_route('marketplaces.download', ['id' => $product['product_id'],'type'=>'theme']) }}',
                     onDownloadProgress : function (progressEvent) {
 
                     }
