@@ -23,7 +23,8 @@ class CheckoutSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $shippingPlugin = plugin($this->shipping_method_code);
+        $parseShipping  = explode('.', $this->shipping_method_code);
+        $shippingPlugin = plugin($parseShipping[0]);
         $billingPlugin  = plugin($this->billing_method_code);
 
         return [

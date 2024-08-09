@@ -19,7 +19,7 @@
           </span>
         </p>
         <p style="font-size: 14px; color: rgb(51, 51, 51); line-height: 24px; margin: 6px 0px 0px; word-wrap: break-word; word-break: break-all;">
-          <a href="{{ $is_admin ? panel_route('forgotten.index') : front_route('forgotten.index') }}?code={{ $code }}&email={{ $email }}" title="" style="font-size: 16px; line-height: 45px; display: block; background-color: #8f4ddf; color: rgb(255, 255, 255); text-align: center; text-decoration: none; margin-top: 20px; border-radius: 3px;">
+          <a href="{{ $is_admin ? panel_route('forgotten.index') : front_route('forgotten.index') }}?code={{ $code }}&email={{ $email }}" title="" style="font-size: 16px; line-height: 45px; display: block; background-color: #944FE8; color: rgb(255, 255, 255); text-align: center; text-decoration: none; margin-top: 20px; border-radius: 3px;">
             {{ __('front::mail.retrieve_password_btn') }}
           </a>
         </p>

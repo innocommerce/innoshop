@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class OrderController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -36,7 +37,7 @@ class OrderController extends BaseController
     /**
      * @param  Order  $order
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function show(Order $order): mixed
     {
@@ -48,7 +49,7 @@ class OrderController extends BaseController
     /**
      * @param  Order  $order
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit(Order $order): mixed
     {
@@ -60,7 +61,7 @@ class OrderController extends BaseController
     /**
      * @param  Order  $order
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function form(Order $order): mixed
     {
@@ -82,7 +83,7 @@ class OrderController extends BaseController
             OrderRepo::getInstance()->destroy($order);
 
             return back()->with('success', trans('panel::common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -97,10 +98,10 @@ class OrderController extends BaseController
         $status  = $request->get('status');
         $comment = $request->get('comment');
         try {
-            StateMachineService::getInstance($order)->changeStatus($status, $comment);
+            StateMachineService::getInstance($order)->changeStatus($status, $comment, true);
 
             return json_success(trans('panel::common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

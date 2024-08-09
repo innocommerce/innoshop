@@ -170,7 +170,7 @@ class OrderRepo extends BaseRepo
             'user_agent'             => $requestData['user_agent']           ?? request()->userAgent(),
             'status'                 => $requestData['status']               ?? 'created',
             'shipping_method_code'   => $requestData['shipping_method_code'] ?? '',
-            'shipping_method_name'   => $requestData['shipping_method_name'] ?? '',
+            'shipping_method_name'   => $requestData['shipping_quote_name']  ?? '',
             'shipping_customer_name' => $saData['name']                      ?? '',
             'shipping_calling_code'  => $saData['calling_code']              ?? '',
             'shipping_telephone'     => $saData['phone']                     ?? '',

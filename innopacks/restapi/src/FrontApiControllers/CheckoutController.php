@@ -82,7 +82,7 @@ class CheckoutController extends BaseController
             }
 
             $order = $checkout->confirm();
-            StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID);
+            StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID, '', true);
 
             return submit_json_success($order);
         } catch (Exception $e) {
@@ -111,12 +111,13 @@ class CheckoutController extends BaseController
         try {
             CartService::getInstance()->addCart($request->all());
 
-            $checkoutService = CheckoutService::getInstance();
+            $customer        = $request->user();
+            $checkoutService = CheckoutService::getInstance($customer->id);
             $checkoutData    = ['billing_method_code' => $request->get('shipping_method_code')];
             $checkoutService->updateValues($checkoutData);
 
             $order = $checkoutService->confirm();
-            StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID);
+            StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID, '', true);
 
             return submit_json_success($order);
         } catch (Exception $e) {

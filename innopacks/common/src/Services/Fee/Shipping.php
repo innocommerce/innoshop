@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Services\Fee;
 
+use Exception;
 use InnoShop\Common\Services\Checkout\ShippingService;
 use Throwable;
 
@@ -55,5 +56,24 @@ class Shipping extends BaseService
         }
 
         return 0;
+    }
+
+    /**
+     * @param  $quoteCode
+     * @return string
+     * @throws Exception
+     */
+    public function getShippingQuoteName($quoteCode): string
+    {
+        $shippingMethods = ShippingService::getInstance($this->checkoutService)->getMethods();
+        foreach ($shippingMethods as $shippingMethod) {
+            foreach ($shippingMethod['quotes'] as $quote) {
+                if ($quote['code'] == $quoteCode) {
+                    return $quote['name'];
+                }
+            }
+        }
+
+        return '';
     }
 }

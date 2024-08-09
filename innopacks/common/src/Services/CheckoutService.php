@@ -24,6 +24,7 @@ use InnoShop\Common\Resources\CheckoutSimple;
 use InnoShop\Common\Services\Checkout\BillingService;
 use InnoShop\Common\Services\Checkout\FeeService;
 use InnoShop\Common\Services\Checkout\ShippingService;
+use InnoShop\Common\Services\Fee\Shipping;
 use InnoShop\Common\Services\Fee\Subtotal;
 use Throwable;
 
@@ -189,9 +190,12 @@ class CheckoutService extends BaseService
             return $this->checkoutData;
         }
 
-        $checkout = $this->getCheckout();
+        $checkout     = $this->getCheckout();
+        $checkoutData = (new CheckoutSimple($checkout))->jsonSerialize();
 
-        return $this->checkoutData = (new CheckoutSimple($checkout))->jsonSerialize();
+        $checkoutData['shipping_quote_name'] = Shipping::getInstance($this)->getShippingQuoteName($checkout->shipping_method_code);
+
+        return $this->checkoutData = $checkoutData;
     }
 
     /**
@@ -230,10 +234,10 @@ class CheckoutService extends BaseService
         $shippingMethods = ShippingService::getInstance($this)->getMethods();
         $billingMethods  = BillingService::getInstance()->getMethods();
 
-        $data['shipping_address_id']  = $defaultAddress['id']       ?? 0;
-        $data['shipping_method_code'] = $shippingMethods[0]['code'] ?? '';
-        $data['billing_address_id']   = $defaultAddress['id']       ?? 0;
-        $data['billing_method_code']  = $billingMethods[0]['code']  ?? '';
+        $data['shipping_address_id']  = $defaultAddress['id']                    ?? 0;
+        $data['shipping_method_code'] = $shippingMethods[0]['quotes'][0]['code'] ?? '';
+        $data['billing_address_id']   = $defaultAddress['id']                    ?? 0;
+        $data['billing_method_code']  = $billingMethods[0]['code']               ?? '';
 
         return CheckoutRepo::getInstance()->create($data);
     }
@@ -289,7 +293,7 @@ class CheckoutService extends BaseService
         DB::beginTransaction();
 
         try {
-            $checkoutData = (new CheckoutSimple($this->checkout))->jsonSerialize();
+            $checkoutData = $this->getCheckoutData();
 
             $checkoutData['total'] = $this->getTotal();
 

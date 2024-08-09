@@ -42,8 +42,8 @@ class LoginRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'email'    => trans('login.email'),
-            'password' => trans('login.password'),
+            'email'    => trans('front::login.email'),
+            'password' => trans('front::login.password'),
         ];
     }
 }

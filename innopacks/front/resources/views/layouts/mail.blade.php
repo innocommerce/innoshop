@@ -14,7 +14,7 @@
                 </a>
               </div>
 
-              <p style="height:2px;background-color: #8f4ddf;border: 0;font-size:0;padding:0;width:100%;margin-top:10px;"></p>
+              <p style="height:2px;background-color: #944FE8;border: 0;font-size:0;padding:0;width:100%;margin-top:10px;"></p>
               <div
                   style="background-color:#fff; padding:23px 0 20px;box-shadow: 0px 1px 1px 0px rgba(122, 55, 55, 0.2);text-align:left;">
                 <table style="width:100%;font-weight:300;margin-bottom:10px;border-collapse:collapse;text-align:left;">
