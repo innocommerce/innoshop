@@ -116,6 +116,7 @@ class Creator
     {
         try {
             Artisan::call('db:seed', ['--force' => true], $this->outputLog);
+            Artisan::call('storage:link', [], $this->outputLog);
         } catch (Exception $e) {
             $this->outputLog->write($e);
             throw $e;
