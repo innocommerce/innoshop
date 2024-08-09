@@ -66,7 +66,7 @@ class ProductRepo extends BaseRepo
      */
     public function destroy(mixed $item): void
     {
-        $item->attributes()->delete();
+        $item->productAttributes()->delete();
         $item->categories()->sync([]);
         $item->images()->delete();
         $item->relations()->delete();
@@ -97,7 +97,7 @@ class ProductRepo extends BaseRepo
             if ($isUpdating) {
                 $product->skus()->delete();
                 $product->translations()->delete();
-                $product->attributes()->delete();
+                $product->productAttributes()->delete();
             }
 
             $product->translations()->createMany($this->handleTranslations($data['translations']));
