@@ -48,13 +48,15 @@ class MarketplaceController
     }
 
     /**
+     * @param  Request  $request
      * @param  int  $slug
      * @return JsonResponse
      */
-    public function download(int $slug): JsonResponse
+    public function download(Request $request, int $slug): JsonResponse
     {
         try {
-            MarketplaceService::getInstance()->download($slug);
+            $type = $request->get('type', 'plugin');
+            MarketplaceService::getInstance()->download($slug, $type);
 
             return json_success('下载成功, 请去插件或主题列表安装使用');
         } catch (\Exception $e) {

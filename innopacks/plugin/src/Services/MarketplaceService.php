@@ -15,6 +15,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use PhpZip\Exception\ZipException;
 use PhpZip\ZipFile;
 
 class MarketplaceService
@@ -172,10 +173,17 @@ class MarketplaceService
      * Download plugin from API and extract.
      *
      * @param  $id
+     * @param  $type
+     * @throws ConnectionException
+     * @throws ZipException
      * @throws Exception
      */
-    public function download($id): void
+    public function download($id, $type): void
     {
+        if (! in_array($type, ['plugin', 'theme'])) {
+            throw new \Exception('Invalid product type!');
+        }
+
         $uri = "/products/$id/download";
 
         $datetime = date('Y-m-d');
@@ -187,7 +195,12 @@ class MarketplaceService
 
         $pluginZip = storage_path('app/'.$pluginPath);
         $zipFile   = new ZipFile;
-        $zipFile->openFile($pluginZip)->extractTo(base_path('plugins'));
+
+        if ($type == 'plugin') {
+            $zipFile->openFile($pluginZip)->extractTo(base_path('plugins'));
+        } else {
+            $zipFile->openFile($pluginZip)->extractTo(base_path('themes'));
+        }
     }
 
     /**
