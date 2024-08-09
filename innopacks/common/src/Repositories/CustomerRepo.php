@@ -86,6 +86,15 @@ class CustomerRepo extends BaseRepo
     }
 
     /**
+     * @param  $email
+     * @return mixed
+     */
+    public function findByEmail($email): mixed
+    {
+        return $this->builder()->where('email', $email)->first();
+    }
+
+    /**
      * Update current password
      *
      * @param  Customer  $customer
@@ -105,6 +114,16 @@ class CustomerRepo extends BaseRepo
             throw new Exception('new_password_must_keep_same');
         }
 
+        return $customer->update(['password' => bcrypt($newPassword)]);
+    }
+
+    /**
+     * @param  mixed  $customer
+     * @param  $newPassword
+     * @return mixed
+     */
+    public function forceUpdatePassword(mixed $customer, $newPassword): mixed
+    {
         return $customer->update(['password' => bcrypt($newPassword)]);
     }
 

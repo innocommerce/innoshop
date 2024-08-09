@@ -92,6 +92,10 @@ Route::post('/login', [Account\LoginController::class, 'store'])->name('login.st
 Route::get('/register', [Account\RegisterController::class, 'index'])->name('register.index');
 Route::post('/register', [Account\RegisterController::class, 'store'])->name('register.store');
 
+Route::get('/forgotten', [Account\ForgottenController::class, 'index'])->name('forgotten.index');
+Route::post('/forgotten/verify_code', [Account\ForgottenController::class, 'sendVerifyCode'])->name('forgotten.verify_code');
+Route::post('/forgotten/password', [Account\ForgottenController::class, 'changePassword'])->name('forgotten.password');
+
 Route::prefix('account')
     ->name('account.')
     ->middleware('customer_auth:customer')

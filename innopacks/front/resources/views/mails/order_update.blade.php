@@ -11,8 +11,10 @@
       <p style="font-size:14px;color:#333; line-height:24px; margin:0;">
         {{ __('front::mail.customer_name', ['name' => $order->customer_name]) }}
       </p>
-      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_details') }}：</p>
-      <table style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse; background-color:#f8f9fa">
+      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_details') }}
+        :</p>
+      <table
+          style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse; background-color:#f8f9fa">
         <thead>
         <tr>
           <td style="font-size:13px;padding: 7px 6px">{{ __('front::order.order_number') }}</td>
@@ -33,7 +35,8 @@
         </tbody>
       </table>
 
-      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_items') }}：</p>
+      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_items') }}
+        ：</p>
       <table style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse; ">
         <thead>
         <tr>
@@ -46,7 +49,9 @@
         <tbody>
         @foreach ($order->items as $product)
           <tr>
-            <td style="border: 1px solid #eee;padding:4px;text-align:center"><img style="width: 60px; height: 60px;" src="{{ image_origin($product->image) }}"></td>
+            <td style="border: 1px solid #eee;padding:4px;text-align:center"><img style="width: 60px; height: 60px;"
+                                                                                  src="{{ image_origin($product->image) }}">
+            </td>
             <td style="font-size:12px; border: 1px solid #eee; width: 50%;padding:4px;">{{ $product->name }}</td>
             <td style="border: 1px solid #eee;padding:4px;font-size: 13px;">{{ $product->quantity }}</td>
             <td style="border: 1px solid #eee;padding:4px;font-size: 13px;">{{ currency_format($product->price, $order->currency_code, $order->currency_value) }}</td>
@@ -55,20 +60,24 @@
         </tbody>
       </table>
 
-      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_total') }}：</p>
-      <table style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse;border:1px solid #eee;">
+      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_total') }}
+        ：</p>
+      <table
+          style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse;border:1px solid #eee;">
         <tbody>
         @foreach ($order->fees as $total)
           <tr>
             <td style="border: 1px solid #eee;padding:4px; background-color: #f8f9fa;font-size:13px;padding: 7px;width: 30%">{{ $total->title }}</td>
-            <td style="border: 1px solid #eee;padding:4px;font-size:13px;padding: 7px"><strong>{{ currency_format($total->value, $order->currency_code, $order->currency_value) }}</strong></td>
+            <td style="border: 1px solid #eee;padding:4px;font-size:13px;padding: 7px">
+              <strong>{{ currency_format($total->value, $order->currency_code, $order->currency_value) }}</strong></td>
           </tr>
         @endforeach
         </tbody>
       </table>
 
       <p style="font-size: 14px; color: rgb(51, 51, 51); line-height: 24px; margin: 6px 0px 0px; word-wrap: break-word; word-break: break-all;">
-        <a href="{{ account_route('orders.show', ['order' => $order, 'email' => $order->email]) }}" title="" style="font-size: 16px; line-height: 45px; display: block; background-color: #944FE8; color: rgb(255, 255, 255); text-align: center; text-decoration: none; margin-top: 20px; border-radius: 3px;">
+        <a href="{{ account_route('orders.show', ['order' => $order, 'email' => $order->email]) }}" title=""
+           style="font-size: 16px; line-height: 45px; display: block; background-color: #944FE8; color: rgb(255, 255, 255); text-align: center; text-decoration: none; margin-top: 20px; border-radius: 3px;">
           {{ __('front::common.view') }}
         </a>
       </p>

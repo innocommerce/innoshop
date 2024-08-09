@@ -26,7 +26,7 @@
           <span class="invalid-feedback" role="alert"><strong>{{ __('front::login.password_required') }}</strong></span>
         </div>
         @if (!request('iframe'))
-          <a href="" class="text-secondary mt-n2 d-block">{{ __('front::login.forget_password') }} <i class="bi bi-question-circle"></i></a>
+          <a href="{{ front_route('forgotten.index') }}" class="text-secondary mt-n2 d-block">{{ __('front::login.forget_password') }} <i class="bi bi-question-circle"></i></a>
         @endif
 
         <div class="btn-submit">

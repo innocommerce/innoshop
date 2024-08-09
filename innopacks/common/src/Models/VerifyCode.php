@@ -7,8 +7,13 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-return [
-    'version' => '0.2.6',
-    'build'   => '20240810',
-    'api_url' => env('INNOSHOP_API_URL', 'https://www.innoshop.cn'),
-];
+namespace InnoShop\Common\Models;
+
+class VerifyCode extends BaseModel
+{
+    protected $table = 'verify_codes';
+
+    protected $fillable = [
+        'account', 'code', 'deleted_at',
+    ];
+}
