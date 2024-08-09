@@ -10,8 +10,9 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
+use InnoShop\Panel\Repositories\Analytics\CustomerRepo;
+use InnoShop\Panel\Repositories\Analytics\ProductRepo;
 use InnoShop\Panel\Repositories\Dashboard\OrderRepo;
-use InnoShop\Panel\Repositories\Dashboard\ProductRepo;
 
 class AnalyticsController extends BaseController
 {
@@ -22,46 +23,49 @@ class AnalyticsController extends BaseController
     public function index(): mixed
     {
         $data = [
-            'order' => [
-                'latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
-            ],
-            'top_sale_products' => ProductRepo::getInstance()->getTopSaleProducts(),
+            'order_latest_week'    => OrderRepo::getInstance()->getOrderCountLatestWeek(),
+            'product_latest_week'  => ProductRepo::getInstance()->getProductCountLatestWeek(),
+            'customer_latest_week' => CustomerRepo::getInstance()->getCustomerCountLatestWeek(),
         ];
 
         return inno_view('panel::analytics.index', $data);
     }
 
-    public function order()
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function order(): mixed
     {
         $data = [
-            'order' => [
-                'latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
-            ],
-            'top_sale_products' => ProductRepo::getInstance()->getTopSaleProducts(),
+            'order_latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
+            'top_sale_products' => \InnoShop\Panel\Repositories\Dashboard\ProductRepo::getInstance()->getTopSaleProducts(),
         ];
 
         return inno_view('panel::analytics.order', $data);
     }
 
-    public function product()
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function product(): mixed
     {
         $data = [
-            'order' => [
-                'latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
-            ],
-            'top_sale_products' => ProductRepo::getInstance()->getTopSaleProducts(),
+            'product_latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
         ];
 
         return inno_view('panel::analytics.product', $data);
     }
 
-    public function customer()
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function customer(): mixed
     {
         $data = [
-            'order' => [
-                'latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
-            ],
-            'top_sale_products' => ProductRepo::getInstance()->getTopSaleProducts(),
+            'customer_latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
         ];
 
         return inno_view('panel::analytics.customer', $data);
