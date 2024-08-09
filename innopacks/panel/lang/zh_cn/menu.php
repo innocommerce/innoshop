@@ -28,8 +28,11 @@ return [
     'attributes'       => '属性',
     'attribute_groups' => '属性组',
 
-    'top_analytic' => '分析',
-    'analytics'    => '数据报表',
+    'top_analytic'      => '分析',
+    'analytics'         => '整站数据',
+    'analytic_order'    => '订单分析',
+    'analytic_product'  => '产品分析',
+    'analytic_customer' => '客户分析',
 
     'marketplaces'  => '应用市场',
     'top_plugin'    => '插件',

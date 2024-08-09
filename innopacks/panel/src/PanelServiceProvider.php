@@ -117,6 +117,7 @@ class PanelServiceProvider extends ServiceProvider
     {
         $this->loadViewComponentsAs('panel', [
             'sidebar'                => Components\Sidebar::class,
+            'chart-line'             => Components\Charts\Line::class,
             'form-codemirror'        => Components\Forms\Codemirror::class,
             'form-autocomplete-list' => Components\Forms\AutocompleteList::class,
         ]);

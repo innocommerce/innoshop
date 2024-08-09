@@ -93,7 +93,7 @@ class Sidebar extends Component
             [
                 'title'    => __('panel::menu.top_analytic'),
                 'icon'     => 'bi-bar-chart',
-                'prefixes' => ['analytics'],
+                'prefixes' => ['analytics', 'analytics_order'],
                 'children' => $this->getAnalyticSubRoutes(),
             ],
             [
@@ -190,7 +190,11 @@ class Sidebar extends Component
             return true;
         }
 
-        $routePart   = substr($route, 0, strpos($route, '.'));
+        $routePart = substr($route, 0, strpos($route, '.'));
+        if (empty($routePart)) {
+            return false;
+        }
+
         $currentPath = substr($this->currentRoute, 0, strpos($this->currentRoute, '.'));
         if ($routePart == $currentPath) {
             return true;
@@ -261,6 +265,9 @@ class Sidebar extends Component
     {
         $routes = [
             ['route' => 'analytics.index', 'title' => __('panel::menu.analytics')],
+            ['route' => 'analytics_order', 'title' => __('panel::menu.analytic_order')],
+            ['route' => 'analytics_product', 'title' => __('panel::menu.analytic_product')],
+            ['route' => 'analytics_customer', 'title' => __('panel::menu.analytic_customer')],
         ];
 
         return fire_hook_filter('component.sidebar.analytic.routes', $routes);
