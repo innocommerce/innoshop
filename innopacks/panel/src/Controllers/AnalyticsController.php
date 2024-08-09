@@ -39,6 +39,7 @@ class AnalyticsController extends BaseController
     {
         $data = [
             'order_latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
+            'total_latest_week' => \InnoShop\Panel\Repositories\Analytics\OrderRepo::getInstance()->getOrderTotalLatestWeek(),
             'top_sale_products' => \InnoShop\Panel\Repositories\Dashboard\ProductRepo::getInstance()->getTopSaleProducts(),
         ];
 
@@ -52,7 +53,7 @@ class AnalyticsController extends BaseController
     public function product(): mixed
     {
         $data = [
-            'product_latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
+            'product_latest_week' => ProductRepo::getInstance()->getProductCountLatestWeek(),
         ];
 
         return inno_view('panel::analytics.product', $data);
@@ -65,7 +66,7 @@ class AnalyticsController extends BaseController
     public function customer(): mixed
     {
         $data = [
-            'customer_latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
+            'customer_latest_week' => CustomerRepo::getInstance()->getCustomerCountLatestWeek(),
         ];
 
         return inno_view('panel::analytics.customer', $data);

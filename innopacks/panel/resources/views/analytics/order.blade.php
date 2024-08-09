@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
-@section('body-class', 'page-home')
+@section('body-class', '')
 
-@section('title', __('panel::menu.analytics'))
+@section('title', __('panel::menu.analytic_order'))
 
 @push('header')
   <script src="{{ asset('vendor/chart/chart.min.js') }}"></script>
@@ -11,12 +11,12 @@
 
   <div class="row">
     <div class="col-12 col-md-6 mb-3">
-      <div class="card">
-        <div class="card-header">{{ __('panel::dashboard.order_trends') }}</div>
-        <div class="card-body">
-          <canvas id="chart-new-quantity"></canvas>
-        </div>
-      </div>
+      <x-panel-chart-line id="order" :labels="$order_latest_week['period']" :title="__('panel::dashboard.order_trends')"
+                          :data="$order_latest_week['totals']"></x-panel-chart-line>
+
+      <x-panel-chart-line id="total" :labels="$total_latest_week['period']" :title="__('panel::analytics.total_trends')"
+                          :data="$total_latest_week['totals']"></x-panel-chart-line>
+
     </div>
     <div class="col-12 col-md-6 mb-3">
       <div class="card top-sale-products">
@@ -53,62 +53,3 @@
     </div>
   </div>
 @endsection
-
-@push('footer')
-  <script>
-    const ctx1 = document.getElementById('chart-new-quantity').getContext('2d');
-    const options = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: false
-      },
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: {
-            drawBorder: false,
-            borderDash: [3],
-          },
-        },
-        x: {
-          beginAtZero: true,
-          grid: {
-            drawBorder: false,
-            display: false
-          },
-        }
-      },
-    };
-
-    const orderGradient = ctx1.createLinearGradient(0, 0, 0, 380);
-    orderGradient.addColorStop(0, 'rgba(76,122,247,0.5)');
-    orderGradient.addColorStop(1, 'rgba(76,122,247,0)');
-
-    const chart1 = new Chart(ctx1, {
-      type: 'line',
-      data: {
-        labels: @json($order['latest_week']['period']),
-        datasets: [{
-          label: '{{ __('panel::dashboard.order_quantity') }}',
-          data: @json($order['latest_week']['totals']),
-          responsive: true,
-          backgroundColor : orderGradient,
-          borderColor : "#3c7af7",
-          fill: true,
-          lineTension: 0.4,
-          datasetStrokeWidth: 3,
-          pointBackgroundColor: '#3c7af7',
-          pointDotStrokeWidth: 4,
-          pointHoverBorderWidth: 8,
-          tension: 0.1
-        }]
-      },
-      options: options
-    });
-  </script>
-@endpush
