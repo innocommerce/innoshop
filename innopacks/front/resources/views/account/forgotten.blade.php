@@ -100,6 +100,7 @@
             }).then(function (res){
                 if (res.success==true){
                     parent.layer.closeAll()
+                    layer.msg(res.message,{ icon:1 })
                     window.location.href='{{ front_route('login.index') }}'
                 }
             }).catch(function (err) {
