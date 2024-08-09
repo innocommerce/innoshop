@@ -9,8 +9,8 @@
 
 return [
     'setting'                  => '系统设置',
-    'basic'                    => '基本设置',
-    'website_data'             => '网站数据',
+    'basic'                    => '基础信息',
+    'website_data'             => '网站设置',
     'email_setting'            => '邮件设置',
     'slideshow'                => '首页幻灯片',
     'header_menu'              => '头部导航',
@@ -27,6 +27,7 @@ return [
     'meta_title'               => 'Meta 标题',
     'meta_keywords'            => 'Meta 关键词',
     'meta_description'         => 'Meta 描述',
+    'panel_name'               => '后台路径',
     'icp_number'               => 'ICP备案号',
     'js_code'                  => '第三方JS代码',
     'default_country'          => '默认国家/地区',

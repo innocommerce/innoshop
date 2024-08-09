@@ -9,29 +9,33 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\CurrencyRepo;
+use InnoShop\Common\Repositories\MailRepo;
 use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Panel\Repositories\ThemeRepo;
+use Throwable;
 
 class SettingController
 {
     /**
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(): mixed
     {
         $data = [
-            'locales'    => locales()->toArray(),
-            'currencies' => CurrencyRepo::getInstance()->enabledList()->toArray(),
-            'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
-            'catalogs'   => CatalogRepo::getInstance()->getTopCatalogs(),
-            'pages'      => PageRepo::getInstance()->withActive()->builder()->get(),
-            'themes'     => ThemeRepo::getInstance()->getListFromPath(),
+            'locales'      => locales()->toArray(),
+            'currencies'   => CurrencyRepo::getInstance()->enabledList()->toArray(),
+            'categories'   => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'catalogs'     => CatalogRepo::getInstance()->getTopCatalogs(),
+            'pages'        => PageRepo::getInstance()->withActive()->builder()->get(),
+            'themes'       => ThemeRepo::getInstance()->getListFromPath(),
+            'mail_engines' => MailRepo::getInstance()->getEngines(),
         ];
 
         return inno_view('panel::settings.index', $data);
@@ -40,7 +44,7 @@ class SettingController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(Request $request): mixed
     {
@@ -55,7 +59,7 @@ class SettingController
             return redirect($settingUrl)
                 ->with('instance', $settings)
                 ->with('success', trans('panel::common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect(panel_route('settings.index'))->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }

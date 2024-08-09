@@ -19,7 +19,7 @@ if (! function_exists('panel_name')) {
      */
     function panel_name(): string
     {
-        return 'panel';
+        return system_setting('panel_name', 'panel');
     }
 }
 

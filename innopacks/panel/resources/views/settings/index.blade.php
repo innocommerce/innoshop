@@ -28,131 +28,15 @@
         <div class="card-body">
           <div class="tab-content">
             <div class="tab-pane fade show active" id="tab-setting-basics">
-              <div class="row">
-                <div class="col-6 col-md-3">
-                  <x-common-form-image title="{{ __('panel::setting.front_logo') }}" name="front_logo"
-                    value="{{ old('front_logo', system_setting('front_logo')) }}" />
-                </div>
-                <div class="col-6 col-md-3">
-                  <x-common-form-image title="{{ __('panel::setting.backend_logo') }}" name="panel_logo"
-                    value="{{ old('panel_logo', system_setting('panel_logo')) }}" />
-                </div>
-                <div class="col-6 col-md-3">
-                  <x-common-form-image title="{{ __('panel::setting.placeholder') }}" name="placeholder"
-                    value="{{ old('placeholder', system_setting('placeholder')) }}" />
-                </div>
-                <div class="col-6 col-md-3">
-                  <x-common-form-image title="{{ __('panel::setting.favicon') }}" name="favicon"
-                    value="{{ old('favicon', system_setting('favicon')) }}" />
-                </div>
-              </div>
-
-              <x-common-form-input title="{{ __('panel::setting.shop_address') }}" name="address" value="{{ old('address', system_setting('address')) }}" placeholder="{{ __('panel::setting.shop_address') }}" />
-
-              <x-common-form-input title="{{ __('panel::setting.telephone') }}" name="telephone" value="{{ old('telephone', system_setting('telephone')) }}" placeholder="{{ __('panel::setting.telephone') }}" />
-
-              <x-common-form-input title="{{ __('panel::setting.email') }}" name="email" value="{{ old('email', system_setting('email')) }}" placeholder="{{ __('panel::setting.email') }}" />
-
-              <x-common-form-input title="{{ __('panel::setting.meta_title') }}" name="meta_title" :value="old('meta_keywords', system_setting('meta_title'))" :multiple="true"  />
-
-              <x-common-form-input title="{{ __('panel::setting.meta_keywords') }}" :multiple="true" name="meta_keywords"
-                :value="old('meta_keywords', system_setting('meta_keywords'))" placeholder="{{ __('panel::setting.meta_keywords') }}" />
-
-              <x-common-form-textarea title="{{ __('panel::setting.meta_description') }}" :multiple="true" name="meta_description"
-                :value="old('meta_description', system_setting('meta_description'))" placeholder="{{ __('panel::setting.meta_description') }}" />
-
-              <x-common-form-input title="{{ __('panel::setting.icp_number') }}" name="icp_number"
-                value="{{ old('icp_number', system_setting('icp_number')) }}" />
-
-              <x-common-form-textarea title="{{ __('panel::setting.js_code') }}" name="js_code"
-                value="{{ old('js_code', system_setting('js_code')) }}" placeholder="{{ __('panel::setting.js_code') }}" />
+              @include('panel::settings._basic_setting')
             </div>
 
             <div class="tab-pane fade" id="tab-setting-webdata">
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group mb-4">
-                    <label class="form-label" for="country_code">{{ __('panel::setting.default_country') }}</label>
-                    <select class="form-select" name="country_code" required></select>
-                    <span class="invalid-feedback" role="alert">{{ __('panel::setting.please_select_country') }}</span>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="form-group mb-4">
-                    <label class="form-label" for="state">{{ __('panel::setting.default_province') }}</label>
-                    <select class="form-select" name="state_code" disabled required></select>
-                    <span class="invalid-feedback" role="alert">">{{ __('panel::setting.please_select_province') }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <x-common-form-select title="{{ __('panel::setting.front_default_language') }}" name="front_locale" :options="$locales" key="code" label="name"
-                                  value="{{ old('front_locale', system_setting('front_locale')) }}" required placeholder="{{ __('panel::setting.front_default_language') }}" />
-
-              <x-common-form-select title="{{ __('panel::setting.default_currency') }}" name="currency" :options="$currencies" key="code" label="name"
-                                   value="{{ old('currency', system_setting('currency')) }}" required placeholder="{{ __('panel::setting.default_currency') }}" />
-
-              <x-common-form-switch-radio title="{{ __('panel::setting.login_checkout') }}" name="login_checkout" required
-                                          value="{{ old('login_checkout', system_setting('login_checkout')) }}"/>
-
-              <x-common-form-switch-radio title="{{ __('panel::setting.backstage_menu_expansion') }}" name="expand" required
-                                          value="{{ old('expand', system_setting('expand')) }}"/>
+              @include('panel::settings._web_data')
             </div>
 
             <div class="tab-pane fade" id="tab-setting-email">
-              <div class="container">
-                <div class="col-md-6 mx-auto">
-                  <div class="row">
-                    <x-common-form-switch-radio title="{{ __('panel::setting.email_enable') }}" name="email_enable"
-                                                required
-                                                value="{{ old('expand', system_setting('email_enable')) }}"></x-common-form-switch-radio>
-                  </div>
-                  @if(system_setting('email_enable'))
-                    <div class="row">
-                      @php($emailEngine=[['code'=>'smtp','name'=>'SMTP','value'=>'SMTP'],['code'=>'sendmail','name'=>'SENDMAIL','value'=>'SENDMAIL'],['code'=>'log','name'=>'LOG','value'=>'LOG'],])
-                      <x-common-form-select title="{{ __('panel::setting.email_engine') }}" name="email_engine"
-                                            :options="$emailEngine" key="code" label="name"
-                                            value="{{ old('email_engine', system_setting('email_engine')) }}" required
-                                            placeholder="{{ __('panel::setting.email_engine') }}"/>
-                    </div>
-                    <div class="row">
-                      <x-common-form-input title="{{ __('panel::setting.smtp_host') }}" name="smtp_host"
-                                           value="{{ old('smtp_host', system_setting('smtp_host')) }}"
-                                           placeholder="{{ __('panel::setting.smtp_host') }}" required/>
-                    </div>
-                    <div class="row">
-                      <x-common-form-input title="{{ __('panel::setting.smtp_username') }}"
-                                           name="smtp_username"
-                                           value="{{ old('smtp_username', system_setting('smtp_username')) }}"
-                                           placeholder="{{ __('panel::setting.smtp_username') }}" required/>
-                    </div>
-                    <div class="row">
-                      <x-common-form-input type="password" title="{{ __('panel::setting.smtp_password') }}"
-                                           name="smtp_password"
-                                           value="{{ old('smtp_password', system_setting('smtp_password')) }}"
-                                           placeholder="{{ __('panel::setting.smtp_password') }}" required/>
-                    </div>
-                    <div class="row">
-                      @php($emailEncryptionType=[['code'=>'SSL','name'=>'SSL','value'=>'SSL'],['code'=>'TLS','name'=>'TLS','value'=>'TLS'],])
-                      <x-common-form-select title="{{ __('panel::setting.smtp_encryption') }}"
-                                            name="smtp_encryption" :options="$emailEncryptionType" key="code"
-                                            label="name"
-                                            value="{{ old('smtp_encryption', system_setting('smtp_encryption')) }}"
-                                            required placeholder="{{ __('panel::setting.smtp_encryption') }}"/>
-                    </div>
-                    <div class="row">
-                      <x-common-form-input title="{{ __('panel::setting.smtp_port') }}" name="smtp_port"
-                                           value="{{ old('smtp_port', system_setting('smtp_port')) }}"
-                                           placeholder="{{ __('panel::setting.smtp_port') }}" required/>
-                    </div>
-                    <div class="row">
-                      <x-common-form-input title="{{ __('panel::setting.smtp_timeout') }}" name="smtp_timeout"
-                                           value="{{ old('smtp_timeout', system_setting('smtp_timeout', 5)) }}"
-                                           placeholder="{{ __('panel::setting.smtp_timeout') }}"/>
-                    </div>
-                  @endif
-                </div>
-              </div>
+              @include('panel::settings._email_setting')
             </div>
 
           </div>
