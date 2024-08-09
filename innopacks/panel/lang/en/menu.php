@@ -28,8 +28,11 @@ return [
     'attributes'       => 'Attributes',
     'attribute_groups' => 'Attr Groups',
 
-    'top_analytic' => 'Analytics',
-    'analytics'    => 'Reports',
+    'top_analytic'      => 'Analytics',
+    'analytics'         => 'Reports',
+    'analytic_order'    => 'Order Report',
+    'analytic_product'  => 'Product Report',
+    'analytic_customer' => 'Customer Report',
 
     'marketplaces'  => 'Marketplaces',
     'top_plugin'    => 'Plugins',

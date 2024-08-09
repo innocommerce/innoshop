@@ -54,7 +54,11 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
-        Route::resource('/analytics', Controllers\CustomerGroupController::class);
+
+        Route::get('/analytics', [Controllers\AnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/analytics/order', [Controllers\AnalyticsController::class, 'order'])->name('analytics_order');
+        Route::get('/analytics/product', [Controllers\AnalyticsController::class, 'product'])->name('analytics_product');
+        Route::get('/analytics/customer', [Controllers\AnalyticsController::class, 'customer'])->name('analytics_customer');
 
         Route::get('/locales', [Controllers\LocaleController::class, 'index'])->name('locales.index');
         Route::post('/locales/install', [Controllers\LocaleController::class, 'install'])->name('locales.install');
