@@ -21,6 +21,7 @@
             <td>{{ __('panel::customer.from') }}</td>
             <td>{{ __('panel::customer.group') }}</td>
             <td>{{ __('panel::customer.locale') }}</td>
+            <td>{{ __('panel::common.created_at') }}</td>
             <td>{{ __('panel::common.active') }}</td>
             <td>{{ __('panel::common.actions') }}</td>
           </tr>
@@ -35,8 +36,9 @@
               <td>{{ $item->email }}</td>
               <td>{{ $item->name }}</td>
               <td>{{ $item->from }}</td>
-              <td>{{ $item->customerGroup->translation->name??'' }}</td>
+              <td>{{ $item->customerGroup->translation->name ?? '-' }}</td>
               <td>{{ $item->locale }}</td>
+              <td>{{ $item->created_at }}</td>
               <td>
                 @include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('customers.active', $item)])
               </td>

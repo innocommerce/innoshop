@@ -21,6 +21,7 @@
               <th>{{ __('panel::common.name') }}</th>
               <th>{{ __('panel::product.price') }}</th>
               <th>{{ __('panel::product.quantity') }}</th>
+              <th>{{ __('panel::common.created_at') }}</th>
               <th>{{ __('panel::common.actions') }}</th>
             </tr>
             </thead>
@@ -39,6 +40,7 @@
                 <td><a href="{{ $product->url }}" class="text-decoration-none" target="_blank">{{ $product->translation->name ?? '' }}</a></td>
                 <td>{{ currency_format($product->masterSku->price) }}</td>
                 <td>{{ $product->masterSku->quantity }}</td>
+                <td>{{ $product->created_at }}</td>
                 <td>
                   <a href="{{ panel_route('products.edit', [$product->id]) }}"
                      class="btn btn-outline-primary btn-sm">{{ __('panel::common.edit')}}</a>

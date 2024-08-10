@@ -25,7 +25,7 @@ class ProductRepo extends BaseRepo
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
-        return $this->builder($filters)->orderByDesc('updated_at')->paginate();
+        return $this->builder($filters)->orderByDesc('id')->paginate();
     }
 
     /**
