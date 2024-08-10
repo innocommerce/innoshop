@@ -151,7 +151,7 @@
 
         const edit = (id) => {
           drawer.value = true
-          axios.get(`/panel/regions/${id}`).then((res) => {
+          axios.get(`/{{ panel_name() }}/regions/${id}`).then((res) => {
             Object.keys(res).forEach(key => form.hasOwnProperty(key) && (form[key] = res[key]));
 
             form.region_states.forEach((item, index) => {
@@ -191,7 +191,7 @@
         }
 
         const submit = () => {
-          const url = form.id ? `/panel/regions/${form.id}` : '{{ panel_route('regions.store') }}'
+          const url = form.id ? `/{{ panel_name() }}/regions/${form.id}` : '{{ panel_route('regions.store') }}'
           const method = form.id ? 'put' : 'post'
           axios[method](url, form).then((res) => {
             drawer.value = false

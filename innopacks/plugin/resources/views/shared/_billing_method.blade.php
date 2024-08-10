@@ -42,7 +42,7 @@
                     layer.msg('{{ __('panel::plugin.payment_method_confirm') }}', {icon: 2})
                     return
                 }
-                axios.post('/panel/marketplaces/quick_checkout', {
+                axios.post('/{{ panel_name() }}/marketplaces/quick_checkout', {
                     'sku_id': $(this).data('sku-id'),
                     'product_id': $(this).data('product-id'),
                     'shipping_method_code': billingMethod,
@@ -50,7 +50,7 @@
                     if (res.success){
                         layer.msg( res.message, { icon:1 })
                     }
-                    if (res.status == 422){
+                    if (res.status === 422){
                         layer.msg( res.message ,{ icon:2 })
                         return
                     }

@@ -56,13 +56,13 @@
   <script>
     $(function () {
       $('.leng-install').click(function () {
-        axios.post('panel/locales/install', {code: $(this).data('code')}).then(function (res) {
+        axios.post('{{ panel_name() }}/locales/install', {code: $(this).data('code')}).then(function (res) {
           window.location.reload()
         })
       });
 
       $('.leng-unload').click(function () {
-        axios.post(`panel/locales/${$(this).data('code')}/uninstall`).then(function (res) {
+        axios.post(`{{ panel_name() }}/locales/${$(this).data('code')}/uninstall`).then(function (res) {
           window.location.reload()
         })
       });

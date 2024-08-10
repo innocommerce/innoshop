@@ -63,7 +63,7 @@
     $('.plugin-enabled-switch input').change(function() {
       var code = $(this).parents('.plugin-item').data('code');
       var enabled = $(this).prop('checked') ? 1 : 0;
-      axios.post('/panel/plugins/enabled', { code: code, enabled: enabled }).then(function(res) {
+      axios.post('/{{ panel_name() }}/plugins/enabled', { code: code, enabled: enabled }).then(function(res) {
         if (res.success) {
           window.location.reload();
         } else {
@@ -73,7 +73,7 @@
     });
 
     function pluginsUpdata(code, type) {
-      const url = type === 'install' ? '/panel/plugins' : '/panel/plugins/' + code;
+      const url = type === 'install' ? '/{{ panel_name() }}/plugins' : '/{{ panel_name() }}/plugins/' + code;
       const method = type === 'install' ? 'post' : 'delete';
 
       axios[method](url, { code: code }).then(function(res) {
