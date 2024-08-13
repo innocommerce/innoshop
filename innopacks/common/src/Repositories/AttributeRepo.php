@@ -78,6 +78,7 @@ class AttributeRepo extends BaseRepo
         return [
             'category_id'        => $requestData['category_id']        ?? 0,
             'attribute_group_id' => $requestData['attribute_group_id'] ?? 0,
+            'position'           => $requestData['position']           ?? 0,
         ];
     }
 }

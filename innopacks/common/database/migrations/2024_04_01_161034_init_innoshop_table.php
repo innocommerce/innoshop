@@ -50,7 +50,7 @@ return new class extends Migration
             $table->string('email', 64)->unique()->comment('Email');
             $table->string('password')->comment('Password');
             $table->string('locale')->default('')->comment('Locale Code');
-            $table->boolean('active')->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -92,7 +92,7 @@ return new class extends Migration
             $table->integer('position')->default(0)->comment('Sort order');
             $table->integer('viewed')->default(0)->comment('Viewed');
             $table->string('author')->nullable()->comment('Author');
-            $table->boolean('active')->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -110,7 +110,7 @@ return new class extends Migration
         Schema::create('attribute_groups', function (Blueprint $table) {
             $table->comment('Attribute Group');
             $table->bigIncrements('id');
-            $table->integer('position')->comment('Sort order');
+            $table->integer('position')->default(0)->comment('Sort order');
             $table->timestamps();
         });
 
@@ -148,7 +148,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('category_id')->comment('Category ID');
             $table->unsignedInteger('attribute_group_id')->index('attribute_group_id')->comment('Attribute Group ID');
-            $table->integer('position')->comment('Sort order');
+            $table->integer('position')->default(0)->comment('Sort order');
             $table->timestamps();
         });
 
@@ -159,8 +159,8 @@ return new class extends Migration
             $table->string('slug', 128)->nullable()->unique()->comment('URL Slug');
             $table->char('first')->comment('First Letter');
             $table->string('logo')->comment('Logo');
-            $table->integer('position')->comment('Sort order');
-            $table->tinyInteger('active')->comment('Active');
+            $table->integer('position')->default(0)->comment('Sort order');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -207,7 +207,7 @@ return new class extends Migration
             $table->integer('parent_id')->default(0)->index('c_parent_id')->comment('Parent ID');
             $table->string('slug', 128)->nullable()->unique()->comment('URL Slug');
             $table->integer('position')->default(0)->comment('Sort order');
-            $table->boolean('active')->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -216,8 +216,8 @@ return new class extends Migration
             $table->bigIncrements('id')->comment('ID');
             $table->unsignedBigInteger('parent_id')->default(0)->index('parent_id')->comment('Parent Category ID');
             $table->string('slug', 128)->nullable()->unique()->comment('URL Slug');
-            $table->integer('position')->nullable()->default(0)->comment('Sort order');
-            $table->boolean('active')->nullable()->default(false)->comment('Active');
+            $table->integer('position')->default(0)->comment('Sort order');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -262,8 +262,8 @@ return new class extends Migration
             $table->string('name', 64)->comment('Name');
             $table->string('code', 16)->comment('Code');
             $table->string('continent', 100)->comment('Continent');
-            $table->integer('position')->comment('Sort order');
-            $table->tinyInteger('active')->comment('Active');
+            $table->integer('position')->default(0)->comment('Sort order');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -276,7 +276,7 @@ return new class extends Migration
             $table->string('symbol_right', 16)->comment('Right Symbol');
             $table->char('decimal_place', 1)->comment('Decimal place');
             $table->double('value')->comment('Currency Rate');
-            $table->tinyInteger('active')->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -329,7 +329,7 @@ return new class extends Migration
             $table->unsignedInteger('customer_group_id')->default(0)->index('c_customer_group_id')->comment('Customer Group ID');
             $table->unsignedInteger('address_id')->default(0)->index('c_address_id')->comment('Default Address ID');
             $table->string('locale', 10)->default('')->comment('Locale Code');
-            $table->tinyInteger('active')->default(0)->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->string('code', 40)->default('')->comment('Find Password Code');
             $table->string('from', 16)->default('')->comment('From');
             $table->softDeletes()->comment('Deleted Time');
@@ -376,7 +376,7 @@ return new class extends Migration
             $table->string('code', 16)->comment('Code');
             $table->string('image')->comment('Country Icon');
             $table->integer('position')->default(0)->comment('Sort order');
-            $table->tinyInteger('active')->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -594,7 +594,7 @@ return new class extends Migration
             $table->string('slug', 128)->nullable()->unique()->comment('URL Slug');
             $table->integer('position')->default(0)->comment('Sort order');
             $table->integer('viewed')->default(0)->comment('Viewed');
-            $table->boolean('active')->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -708,7 +708,7 @@ return new class extends Migration
             $table->json('variables')->nullable()->comment('Product variables for sku with variants');
             $table->boolean('is_virtual')->default(false)->comment('Is Virtual');
             $table->integer('position')->default(0)->comment('Sort order');
-            $table->boolean('active')->default(false)->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->decimal('weight')->default(0)->comment('Weight');
             $table->string('weight_class')->default('')->comment('Weight Class');
             $table->integer('sales')->default(0)->comment('Sales');
@@ -733,7 +733,7 @@ return new class extends Migration
             $table->string('name')->comment('Region Name');
             $table->string('description')->comment('Regin Description');
             $table->integer('position')->default(0)->comment('Sort order');
-            $table->boolean('active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -747,7 +747,7 @@ return new class extends Migration
             $table->string('content');
             $table->integer('like');
             $table->integer('dislike');
-            $table->boolean('active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -795,8 +795,8 @@ return new class extends Migration
             $table->string('country_code')->comment('Country Code');
             $table->string('name', 64)->comment('Name');
             $table->string('code', 16)->comment('Code');
-            $table->integer('position')->comment('Sort order');
-            $table->tinyInteger('active')->comment('Active');
+            $table->integer('position')->default(0)->comment('Sort order');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
@@ -814,7 +814,7 @@ return new class extends Migration
             $table->bigIncrements('id')->comment('ID');
             $table->string('slug', 128)->nullable()->unique()->comment('URL Slug');
             $table->integer('position')->default(0)->comment('Sort order');
-            $table->boolean('active')->comment('Active');
+            $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
         });
 
