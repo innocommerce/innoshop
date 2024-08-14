@@ -24,6 +24,7 @@ class CategorySimple extends JsonResource
     {
         return [
             'id'       => $this->id,
+            'slug'     => $this->slug,
             'locale'   => $this->translation->locale ?? '',
             'name'     => $this->translation->name   ?? '',
             'url'      => $this->url,

@@ -12,22 +12,26 @@ namespace InnoShop\RestAPI\FrontApiControllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\Category\TreeRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
+use InnoShop\Common\Resources\CategorySimple;
 
 class CategoryController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
         $filters = $request->all();
 
-        $categories = CategoryRepo::getInstance()->withActive()->builder($filters)->paginate();
+        $perPage = $request->get('per_page');
 
-        return read_json_success($categories);
+        $categories = CategoryRepo::getInstance()->withActive()->builder($filters)->paginate($perPage);
+
+        return CategorySimple::collection($categories);
     }
 
     /**
