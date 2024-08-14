@@ -146,8 +146,8 @@ class CustomerRepo extends BaseRepo
     {
         $data = [
             'email'             => $requestData['email'],
+            'password'          => '',
             'name'              => $requestData['name'],
-            'avatar'            => $requestData['avatar']            ?? '',
             'customer_group_id' => $requestData['customer_group_id'] ?? 0,
             'address_id'        => $requestData['address_id']        ?? 0,
             'locale'            => $requestData['locale']            ?? locale_code(),
@@ -156,8 +156,14 @@ class CustomerRepo extends BaseRepo
             'from'              => $requestData['from']              ?? 'web',
         ];
 
-        if (isset($requestData['password'])) {
-            $data['password'] = bcrypt($requestData['password']);
+        $avatar = $requestData['avatar'] ?? '';
+        if ($avatar) {
+            $data['avatar'] = $avatar;
+        }
+
+        $password = $requestData['password'] ?? '';
+        if ($password) {
+            $data['password'] = bcrypt($password);
         }
 
         return $data;

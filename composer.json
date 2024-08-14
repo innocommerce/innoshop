@@ -6,7 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-curl": "*",
+        "ext-openssl": "*",
         "ext-pdo": "*",
+        "ext-simplexml": "*",
         "intervention/image": "^3.5",
         "laravel/framework": "^11.0",
         "laravel/octane": "^2.5",
@@ -16,6 +19,7 @@
         "nelexa/zip": "^4.0",
         "spatie/laravel-permission": "^6.7",
         "tormjens/eventy": "^0.9.3",
+        "w7corp/easywechat": "^6.7",
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {

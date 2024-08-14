@@ -47,6 +47,7 @@ return [
     'delete_confirm'  => '确定要删除吗？',
     'confirm'         => '确定',
     'cancel'          => '取消',
+    'available'       => '可用于',
 
     'viewed'           => '查看次数',
     'slug'             => 'SEO 别名',

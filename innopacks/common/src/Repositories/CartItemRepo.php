@@ -12,6 +12,7 @@ namespace InnoShop\Common\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\CartItem;
 use InnoShop\Common\Models\Product\Sku;
+use Throwable;
 
 class CartItemRepo extends BaseRepo
 {
@@ -43,13 +44,18 @@ class CartItemRepo extends BaseRepo
             $builder->where('guest_id', $guestID);
         }
 
+        $selected = $filters['selected'] ?? false;
+        if ($selected) {
+            $builder->where('selected', true);
+        }
+
         return fire_hook_filter('repo.cart_item.builder', $builder);
     }
 
     /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {

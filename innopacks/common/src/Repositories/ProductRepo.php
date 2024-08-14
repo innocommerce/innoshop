@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -16,12 +17,14 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\Product\ImageRepo;
+use Throwable;
 
 class ProductRepo extends BaseRepo
 {
     /**
      * @param  array  $filters
      * @return LengthAwarePaginator
+     * @throws Exception
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
@@ -33,7 +36,7 @@ class ProductRepo extends BaseRepo
      *
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {
@@ -50,8 +53,8 @@ class ProductRepo extends BaseRepo
      * @param  $item
      * @param  $data
      * @return mixed
-     * @throws \Exception
-     * @throws \Throwable
+     * @throws Exception
+     * @throws Throwable
      */
     public function update($item, $data): mixed
     {
@@ -82,7 +85,7 @@ class ProductRepo extends BaseRepo
      * @param  Product  $product
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function createOrUpdate(Product $product, $data): mixed
     {
@@ -118,7 +121,7 @@ class ProductRepo extends BaseRepo
             DB::commit();
 
             return $product;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
@@ -253,8 +256,10 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * attr format: attr=1:1,2,3|5:6,7
      * @param  array  $filters
      * @return Builder
+     * @throws Exception
      */
     public function builder(array $filters = []): Builder
     {
@@ -301,6 +306,24 @@ class ProductRepo extends BaseRepo
             });
         }
 
+        $attr = $filters['attr'] ?? [];
+        if ($attr) {
+            $attributes = parse_attr_filters($attr);
+            foreach ($attributes as $attribute) {
+                $builder->whereHas('productAttributes', function ($query) use ($attribute) {
+                    $query->where('attribute_id', $attribute['attr'])
+                        ->whereIn('attribute_value_id', $attribute['value']);
+                });
+            }
+        }
+
+        $attributeValueIds = parse_int_filters($filters['attribute_value_ids'] ?? []);
+        if ($attributeValueIds) {
+            $builder->whereHas('productAttributes', function (Builder $query) use ($attributeValueIds) {
+                $query->whereIn('attribute_value_id', $attributeValueIds);
+            });
+        }
+
         $keyword = $filters['keyword'] ?? '';
         if ($keyword) {
             $builder->whereHas('translation', function (Builder $query) use ($keyword) {
@@ -328,6 +351,7 @@ class ProductRepo extends BaseRepo
     /**
      * @param  int  $limit
      * @return mixed
+     * @throws Exception
      */
     public function getBestSellerProducts(int $limit = 8): mixed
     {
@@ -342,6 +366,7 @@ class ProductRepo extends BaseRepo
     /**
      * @param  int  $limit
      * @return mixed
+     * @throws Exception
      */
     public function getLatestProducts(int $limit = 8): mixed
     {

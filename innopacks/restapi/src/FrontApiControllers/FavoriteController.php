@@ -12,11 +12,11 @@ namespace InnoShop\RestAPI\FrontApiControllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\Customer\FavoriteRepo;
+use InnoShop\Common\Resources\FavoriteItem;
 
 class FavoriteController extends BaseController
 {
     /**
-     * @param  Request  $request
      * @return mixed
      */
     public function index(): mixed
@@ -26,11 +26,7 @@ class FavoriteController extends BaseController
         ];
         $favorites = FavoriteRepo::getInstance()->list($filters);
 
-        $data = [
-            'favorites' => $favorites,
-        ];
-
-        return read_json_success($data);
+        return FavoriteItem::collection($favorites);
     }
 
     /**
@@ -63,13 +59,14 @@ class FavoriteController extends BaseController
     public function cancel(Request $request): JsonResponse
     {
         try {
-            $filters = [
-                'customer_id' => token_customer_id(),
+            $customerID = token_customer_id();
+            $filters    = [
+                'customer_id' => $customerID,
                 'product_id'  => $request->get('product_id'),
             ];
 
             $favorite = FavoriteRepo::getInstance()->builder($filters)->first();
-            if (current_customer_id() != $favorite->customer_id) {
+            if ($customerID != $favorite->customer_id) {
                 throw new \Exception(trans('front::not_belongs_to_you'));
             }
 

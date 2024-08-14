@@ -11,6 +11,7 @@ return [
     'bank_info'      => '转账银行信息',
     'bank_name'      => '开户行名称',
     'bank_account'   => '银行账号',
+    'bank_username'  => '收款人姓名',
     'bank_comment'   => '备注',
     'order_success'  => '订单提交成功，请付款到以下银行账户:',
     'number'         => '订单号',

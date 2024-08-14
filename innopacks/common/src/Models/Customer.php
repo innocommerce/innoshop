@@ -56,6 +56,14 @@ class Customer extends AuthUser
     }
 
     /**
+     * @return bool
+     */
+    public function getHasPasswordAttribute(): bool
+    {
+        return ! empty($this->password);
+    }
+
+    /**
      * Check if the given string matches the user's set password.
      *
      * @param  string  $password

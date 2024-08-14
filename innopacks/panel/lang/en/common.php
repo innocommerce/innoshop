@@ -44,6 +44,7 @@ return [
     'delete_confirm'  => 'You sure you want to delete it?',
     'confirm'         => 'Confirm',
     'cancel'          => 'Cancel',
+    'available'       => 'Available',
 
     'viewed'           => 'Viewed',
     'image'            => 'Image',

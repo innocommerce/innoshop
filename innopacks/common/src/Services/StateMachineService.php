@@ -185,7 +185,7 @@ class StateMachineService
     }
 
     /**
-     * Get all valid statuses, from paid to completed.
+     * Get all valid statuses, from paid to complete.
      *
      * @return string[]
      */

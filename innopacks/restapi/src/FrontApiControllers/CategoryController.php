@@ -26,8 +26,7 @@ class CategoryController extends BaseController
     public function index(Request $request): AnonymousResourceCollection
     {
         $filters = $request->all();
-
-        $perPage = $request->get('per_page');
+        $perPage = $request->get('per_page', 15);
 
         $categories = CategoryRepo::getInstance()->withActive()->builder($filters)->paginate($perPage);
 

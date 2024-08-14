@@ -22,7 +22,7 @@ class AddressController extends BaseController
      * @param  Request  $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
         $filters = [
             'customer_id' => token_customer_id(),
@@ -52,15 +52,36 @@ class AddressController extends BaseController
     }
 
     /**
+     * @param  Address  $address
+     * @return JsonResponse
+     */
+    public function show(Address $address): JsonResponse
+    {
+        $customerID = token_customer_id();
+        if ($customerID != $address->customer_id) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
+        $result = new AddressListItem($address);
+
+        return read_json_success($result);
+    }
+
+    /**
      * @param  Request  $request
      * @param  Address  $address
      * @return JsonResponse
      */
     public function update(Request $request, Address $address): JsonResponse
     {
+        $customerID = token_customer_id();
+        if ($customerID != $address->customer_id) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
         $data = $request->all();
 
-        $data['customer_id'] = token_customer_id();
+        $data['customer_id'] = $customerID;
 
         $address = AddressRepo::getInstance()->update($address, $data);
         $result  = new AddressListItem($address);
@@ -69,11 +90,10 @@ class AddressController extends BaseController
     }
 
     /**
-     * @param  Request  $request
      * @param  Address  $address
      * @return JsonResponse
      */
-    public function destroy(Request $request, Address $address): JsonResponse
+    public function destroy(Address $address): JsonResponse
     {
         $customerID = token_customer_id();
         if ($customerID != $address->customer_id) {

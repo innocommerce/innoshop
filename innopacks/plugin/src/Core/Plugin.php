@@ -340,6 +340,10 @@ final class Plugin
      */
     public function getFields(): array
     {
+        if ($this->getType() == 'billing') {
+            $this->fields[] = SettingRepo::getInstance()->getPluginAvailableField();
+        }
+
         $this->fields[] = SettingRepo::getInstance()->getPluginActiveField();
         $existValues    = SettingRepo::getInstance()->getPluginFields($this->code);
         foreach ($this->fields as $index => $field) {
@@ -419,7 +423,7 @@ final class Plugin
      */
     public function validateFields($requestData): \Illuminate\Validation\Validator
     {
-        $rules = array_column($this->fields, 'rules', 'name');
+        $rules = array_column($this->getFields(), 'rules', 'name');
 
         return Validator::make($requestData, $rules);
     }

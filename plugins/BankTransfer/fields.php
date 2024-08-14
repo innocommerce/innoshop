@@ -23,10 +23,16 @@ return [
         'rules'     => 'required',
     ],
     [
+        'name'      => 'bank_username',
+        'label_key' => 'common.bank_username',
+        'type'      => 'string',
+        'required'  => true,
+        'rules'     => 'required',
+    ],
+    [
         'name'      => 'bank_comment',
         'label_key' => 'common.bank_comment',
         'type'      => 'textarea',
-        'required'  => true,
-        'rules'     => 'required',
+        'required'  => false,
     ],
 ];

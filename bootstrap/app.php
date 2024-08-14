@@ -52,7 +52,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $middleware->validateCsrfTokens(except: [
-            'callback*'
+            '*callback*'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -165,7 +165,7 @@ class OrderRepo extends BaseRepo
             'total'                  => $requestData['total']                ?? 0,
             'locale'                 => $requestData['locale']               ?? front_locale_code(),
             'currency_code'          => $requestData['currency_code']        ?? current_currency_code(),
-            'currency_value'         => $requestData['currency_value']       ?? 1.0,
+            'currency_value'         => $requestData['currency_value']       ?? current_currency()->value,
             'ip'                     => $requestData['ip']                   ?? request()->ip(),
             'user_agent'             => $requestData['user_agent']           ?? request()->userAgent(),
             'status'                 => $requestData['status']               ?? 'created',

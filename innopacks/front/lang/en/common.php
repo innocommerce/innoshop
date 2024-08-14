@@ -29,6 +29,8 @@ return [
     'search'         => 'Search',
     'back_page'      => 'Go Back',
     'telephone'      => 'Telephone',
+    'in_stock'       => 'In Stock',
+    'out_of_stock'   => 'Out of Stock',
     'created_at'     => 'Created at',
     'delete_confirm' => 'You sure you want to delete it?',
 

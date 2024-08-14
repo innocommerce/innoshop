@@ -1,0 +1,380 @@
+{
+  "status": "success",
+  "message": "获取成功!",
+  "data": [
+    {
+      "code": "slideshow",
+      "content": {
+        "images": [
+          {
+            "image": "https://demo.innoshop.cn/images/demo/banner/banner-1-en.jpg",
+            "show": false,
+            "link": {
+              "type": "product",
+              "value": 1,
+              "link": "https://api.innoshop.net/products/1"
+            },
+            "type": "image"
+          },
+          {
+            "image": "https://demo.innoshop.cn/images/demo/banner/banner-1-en.jpg",
+            "show": true,
+            "link": {
+              "type": "category",
+              "value": 100003,
+              "link": "https://api.innoshop.net/categories/100003"
+            },
+            "type": "image"
+          }
+        ],
+        "module_code": "slideshow"
+      }
+    },
+    {
+      "code": "icons",
+      "content": {
+        "style": {
+          "background_color": ""
+        },
+        "floor": {
+          "zh_cn": "",
+          "en": ""
+        },
+        "images": [
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/1.png",
+            "text": "特惠活动",
+            "sub_text": "",
+            "link": {
+              "type": "category",
+              "value": 100003,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/categories/100003"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/2.png",
+            "text": "全场爆款",
+            "sub_text": "",
+            "link": {
+              "type": "product",
+              "value": 2,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/products/2"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/3.png",
+            "text": "好货推荐",
+            "sub_text": "",
+            "link": {
+              "type": "brand",
+              "value": 1,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/brands/1"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/4.png",
+            "text": "大牌特价",
+            "sub_text": "",
+            "link": {
+              "type": "product",
+              "value": "",
+              "link": ""
+            },
+            "url": ""
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/5.png",
+            "text": "美好假日",
+            "sub_text": "",
+            "link": {
+              "type": "category",
+              "value": 100010,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/categories/100010"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/6.png",
+            "text": "全场购买",
+            "sub_text": "",
+            "link": {
+              "type": "category",
+              "value": 100010,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/categories/100010"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/7.png",
+            "text": "时尚特价",
+            "sub_text": "",
+            "link": {
+              "type": "category",
+              "value": 100007,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/categories/100007"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/8.png",
+            "text": "优惠好物",
+            "sub_text": "",
+            "link": {
+              "type": "category",
+              "value": 100003,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/categories/100003"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/9.png",
+            "text": "冬日新品",
+            "sub_text": "",
+            "link": {
+              "type": "category",
+              "value": 100008,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/categories/100008"
+          },
+          {
+            "image": "https://api.innoshop.net/images/demo/icons/10.png",
+            "text": "夏季上新",
+            "sub_text": "",
+            "link": {
+              "type": "product",
+              "value": 5,
+              "link": ""
+            },
+            "url": "https://api.innoshop.net/products/5"
+          }
+        ],
+        "module_code": "icons",
+        "title": ""
+      }
+    },
+    {
+      "code": "image100",
+      "content": {
+        "style": {
+          "background_color": ""
+        },
+        "images": [
+          {
+            "image": "https://api.innoshop.net/images/demo/banner/banner-4.jpg",
+            "show": true,
+            "link": {
+              "type": "category",
+              "value": 100006,
+              "link": "https://api.innoshop.net/categories/100006"
+            },
+            "type": "image"
+          }
+        ],
+        "module_code": "image100",
+        "full": false
+      }
+    },
+    {
+      "code": "product",
+      "content": {
+        "style": {
+          "background_color": ""
+        },
+        "floor": {
+          "zh_cn": "",
+          "en": ""
+        },
+        "products": [
+          {
+            "sku_id": 1,
+            "product_id": 1,
+            "slug": "galaxy-glow-evening-gown",
+            "url": "https://api.innoshop.net/zh_cn/product-galaxy-glow-evening-gown",
+            "name": "银河流光璀璨晚礼服闪耀全场",
+            "summary": "银河流光璀璨晚礼服闪耀全场",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/1-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/1-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥112.00"
+          },
+          {
+            "sku_id": 7,
+            "product_id": 2,
+            "slug": "urban-elite-suit-jacket",
+            "url": "https://api.innoshop.net/zh_cn/product-urban-elite-suit-jacket",
+            "name": "都市精英风尚西装外套经典剪裁",
+            "summary": "都市精英风尚西装外套经典剪裁",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/2-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/2-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          },
+          {
+            "sku_id": 8,
+            "product_id": 3,
+            "slug": "dawn-stroll-light-trench",
+            "url": "https://api.innoshop.net/zh_cn/product-dawn-stroll-light-trench",
+            "name": "晨曦漫步轻盈薄款风衣春意盎然",
+            "summary": "晨曦漫步轻盈薄款风衣春意盎然",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/3-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/3-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥2,199.99"
+          },
+          {
+            "sku_id": 9,
+            "product_id": 4,
+            "slug": "star-orbit-casual-sweater",
+            "url": "https://api.innoshop.net/zh_cn/product-star-orbit-casual-sweater",
+            "name": "星辰轨迹个性休闲卫衣夜空星辰",
+            "summary": "星辰轨迹个性休闲卫衣夜空星辰",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/4-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/4-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥2,199.99"
+          }
+        ],
+        "title": "推荐商品",
+        "module_code": "product"
+      }
+    },
+    {
+      "code": "category",
+      "content": {
+        "style": {
+          "background_color": ""
+        },
+        "limit": "4",
+        "order": "asc",
+        "category_id": 100003,
+        "category_name": "时尚潮流",
+        "sort": "sales",
+        "floor": {
+          "zh_cn": "",
+          "en": ""
+        },
+        "products": [
+          {
+            "sku_id": 10,
+            "product_id": 5,
+            "slug": "rainbow-fringe-scarf",
+            "url": "https://api.innoshop.net/zh_cn/product-rainbow-fringe-scarf",
+            "name": "幻彩流苏时尚个性围巾绚丽多彩",
+            "summary": "幻彩流苏时尚个性围巾绚丽多彩",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/5-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/5-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥2,199.99"
+          },
+          {
+            "sku_id": 11,
+            "product_id": 6,
+            "slug": "minimalist-classic-shirt",
+            "url": "https://api.innoshop.net/zh_cn/product-minimalist-classic-shirt",
+            "name": "极简风格主义经典衬衫简约不简单",
+            "summary": "极简风格主义经典衬衫简约不简单",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/6-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/6-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          },
+          {
+            "sku_id": 12,
+            "product_id": 7,
+            "slug": "retro-high-waist-jeans",
+            "url": "https://api.innoshop.net/zh_cn/product-retro-high-waist-jeans",
+            "name": "摩登复古风高腰牛仔裤经典再现",
+            "summary": "摩登复古风高腰牛仔裤经典再现",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/7-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/7-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          },
+          {
+            "sku_id": 13,
+            "product_id": 8,
+            "slug": "elegant-lace-sexy-top",
+            "url": "https://api.innoshop.net/zh_cn/product-elegant-lace-sexy-top",
+            "name": "优雅蕾丝边透视性感上衣女性魅力",
+            "summary": "优雅蕾丝边透视性感上衣女性魅力",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/8-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/8-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          }
+        ],
+        "title": "分类商品",
+        "module_code": "category"
+      }
+    },
+    {
+      "code": "latest",
+      "content": {
+        "style": {
+          "background_color": ""
+        },
+        "limit": "4",
+        "floor": {
+          "zh_cn": "",
+          "en": ""
+        },
+        "products": [
+          {
+            "sku_id": 11,
+            "product_id": 6,
+            "slug": "minimalist-classic-shirt",
+            "url": "https://api.innoshop.net/zh_cn/product-minimalist-classic-shirt",
+            "name": "极简风格主义经典衬衫简约不简单",
+            "summary": "极简风格主义经典衬衫简约不简单",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/6-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/6-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          },
+          {
+            "sku_id": 12,
+            "product_id": 7,
+            "slug": "retro-high-waist-jeans",
+            "url": "https://api.innoshop.net/zh_cn/product-retro-high-waist-jeans",
+            "name": "摩登复古风高腰牛仔裤经典再现",
+            "summary": "摩登复古风高腰牛仔裤经典再现",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/7-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/7-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          },
+          {
+            "sku_id": 13,
+            "product_id": 8,
+            "slug": "elegant-lace-sexy-top",
+            "url": "https://api.innoshop.net/zh_cn/product-elegant-lace-sexy-top",
+            "name": "优雅蕾丝边透视性感上衣女性魅力",
+            "summary": "优雅蕾丝边透视性感上衣女性魅力",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/8-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/8-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          },
+          {
+            "sku_id": 14,
+            "product_id": 9,
+            "slug": "men-white-sweatsuit",
+            "url": "https://api.innoshop.net/zh_cn/product-men-white-sweatsuit",
+            "name": "男士白色卫衣套装",
+            "summary": "男士白色卫衣套装",
+            "image_small": "https://api.innoshop.net/cache/images/demo/product/9-100x100.png",
+            "image_big": "https://api.innoshop.net/cache/images/demo/product/9-600x600.png",
+            "price_format": "￥0.01",
+            "origin_price_format": "￥0.00"
+          }
+        ],
+        "title": "最新商品",
+        "module_code": "latest"
+      }
+    }
+  ]
+}

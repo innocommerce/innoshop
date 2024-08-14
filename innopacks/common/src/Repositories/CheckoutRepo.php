@@ -78,13 +78,22 @@ class CheckoutRepo extends BaseRepo
      */
     public function update(mixed $item, $data): mixed
     {
-        $data = $this->handleData($data);
-        $item->fill([
-            'shipping_address_id'  => $data['shipping_address_id'],
-            'shipping_method_code' => $data['shipping_method_code'],
-            'billing_address_id'   => $data['billing_address_id'],
-            'billing_method_code'  => $data['billing_method_code'],
-        ]);
+        if (isset($data['shipping_address_id'])) {
+            $item->shipping_address_id = $data['shipping_address_id'];
+        }
+
+        if (isset($data['shipping_method_code'])) {
+            $item->shipping_method_code = $data['shipping_method_code'];
+        }
+
+        if (isset($data['billing_address_id'])) {
+            $item->billing_address_id = $data['billing_address_id'];
+        }
+
+        if (isset($data['billing_method_code'])) {
+            $item->billing_method_code = $data['billing_method_code'];
+        }
+
         $item->save();
 
         return $item;

@@ -69,4 +69,42 @@ class PaymentService
             return view('orders.pay', ['order' => $this->order, 'error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Pay for API.
+     * @return array
+     * @throws Exception
+     */
+    public function apiPay(): array
+    {
+        $order = $this->order;
+
+        $orderPaymentCode = $this->billingMethodCode;
+        $paymentData      = [
+            'order'           => $order,
+            'payment_setting' => plugin_setting($orderPaymentCode),
+            'params'          => null,
+        ];
+
+        $hookName    = "service.payment.api.$orderPaymentCode.data";
+        $paymentData = fire_hook_filter($hookName, $paymentData);
+
+        $paramError = $paymentData['error'] ?? '';
+        if ($paramError) {
+            throw new Exception($paramError);
+        }
+
+        $params = $paymentData['params'] ?? [];
+        if (empty($params)) {
+            throw new Exception("Empty payment params for {$orderPaymentCode}, please add filter hook: $hookName");
+        }
+
+        return [
+            'order_id'            => $order->id,
+            'order_number'        => $order->number,
+            'billing_method_code' => $order->billing_method_code,
+            'billing_method_name' => $order->billing_method_name,
+            'billing_params'      => $params,
+        ];
+    }
 }

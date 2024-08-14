@@ -57,15 +57,4 @@ class AuthController extends BaseController
             return json_fail($e->getMessage());
         }
     }
-
-    /**
-     * @param  Request  $request
-     * @return JsonResponse
-     */
-    public function customer(Request $request): JsonResponse
-    {
-        $user = $request->user();
-
-        return read_json_success($user);
-    }
 }

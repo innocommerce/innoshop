@@ -19,14 +19,15 @@ class SkuListItem extends JsonResource
      *
      * @param  Request  $request
      * @return array
+     * @throws \Exception
      */
     public function toArray(Request $request): array
     {
-
         return [
             'id'                  => $this->id,
             'product_id'          => $this->product_id,
             'product_image_id'    => $this->product_image_id,
+            'image'               => image_resize($this->image->path ?? ''),
             'variants'            => $this->variants,
             'model'               => $this->model,
             'code'                => $this->code,

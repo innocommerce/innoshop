@@ -130,4 +130,14 @@ class Currency
 
         return $price * ($to / $from);
     }
+
+    /**
+     * @param  $price
+     * @param  $rate
+     * @return float|int
+     */
+    public function convertByRate($price, $rate): float|int
+    {
+        return round($price * $rate, 2);
+    }
 }

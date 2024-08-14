@@ -20,23 +20,9 @@ class HomeController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $data = [
-            [
-                'type'  => 'icon',
-                'items' => [
-                    ['url' => '', 'image' => ''],
-                    ['url' => '', 'image' => ''],
-                ],
-            ],
-            [
-                'type'  => 'slideshow',
-                'items' => [
-                    ['url' => '', 'image' => ''],
-                    ['url' => '', 'image' => ''],
-                ],
-            ],
-        ];
+        $content = file_get_contents(inno_path('restapi/src/Repositories/app_home_data.json'));
+        $data    = json_decode($content, true);
 
-        return read_json_success($data);
+        return read_json_success($data['data']);
     }
 }

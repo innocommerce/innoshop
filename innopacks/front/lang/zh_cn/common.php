@@ -28,6 +28,8 @@ return [
     'pages'          => '单页',
     'search'         => '搜索',
     'telephone'      => '联系电话',
+    'in_stock'       => '有货',
+    'out_of_stock'   => '缺货',
     'back_page'      => '返回上一页',
     'created_at'     => '创建时间',
     'delete_confirm' => '确定要删除吗？',

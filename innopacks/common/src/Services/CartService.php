@@ -139,6 +139,28 @@ class CartService
     }
 
     /**
+     * @return array
+     */
+    public function selectAll(): array
+    {
+        $cartItems = $this->getCartBuilder();
+        $cartItems->update(['selected' => true]);
+
+        return $this->handleResponse();
+    }
+
+    /**
+     * @return array
+     */
+    public function unselectAll(): array
+    {
+        $cartItems = $this->getCartBuilder();
+        $cartItems->update(['selected' => false]);
+
+        return $this->handleResponse();
+    }
+
+    /**
      * After logging in or signing in, merge the items from the guest cart into the user's account.
      *
      * @param  $guestID

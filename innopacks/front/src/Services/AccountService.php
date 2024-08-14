@@ -30,7 +30,7 @@ class AccountService extends BaseService
         $customerData = [
             'email'    => $data['email'],
             'name'     => $parseData[0],
-            'password' => $data['password'],
+            'password' => $data['password'] ?? '',
             'active'   => 1,
         ];
 

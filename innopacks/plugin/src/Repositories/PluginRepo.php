@@ -152,7 +152,20 @@ class PluginRepo
                 $item->plugin = $plugin;
             }
 
-            return $plugin && $plugin->getEnabled();
+            $available = plugin_setting($item->code, 'available', []);
+            if (is_wechat_mini()) {
+                $flag = in_array('wechat_mini', $available);
+            } elseif (is_wechat_official()) {
+                $flag = in_array('wechat_official', $available);
+            } elseif (is_mobile()) {
+                $flag = in_array('mobile_web', $available);
+            } elseif (is_app()) {
+                $flag = in_array('app', $available);
+            } else {
+                $flag = in_array('pc_web', $available);
+            }
+
+            return $plugin && $plugin->getEnabled() && $flag;
         });
     }
 }

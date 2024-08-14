@@ -130,6 +130,55 @@ if (! function_exists('is_mobile')) {
     }
 }
 
+if (! function_exists('is_wechat_official')) {
+    /**
+     * Check if current is WeChat official by user agent.
+     *
+     * @return bool
+     */
+    function is_wechat_official(): bool
+    {
+        $userAgent = request()->userAgent();
+        if (str_contains($userAgent, 'MicroMessenger')) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+if (! function_exists('is_wechat_mini')) {
+    /**
+     * Check if current is WeChat official by user agent.
+     *
+     * @return bool
+     */
+    function is_wechat_mini(): bool
+    {
+        if (request()->header('platform') == 'miniprogram') {
+            return true;
+        }
+        $userAgent = request()->userAgent();
+        if (str_contains($userAgent, 'wxwork') || str_contains($userAgent, 'wxlite') || str_contains($userAgent, 'miniprogram')) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+if (! function_exists('is_app')) {
+    /**
+     * Check if current is APP by request.
+     *
+     * @return bool
+     */
+    function is_app(): bool
+    {
+        return (bool) request()->header('from_app', false);
+    }
+}
+
 if (! function_exists('installed')) {
     /**
      * Check installed by DB connection.
@@ -796,6 +845,52 @@ if (! function_exists('theme_image')) {
         }
 
         return image_resize($destThemePath, $width, $height);
+    }
+}
+
+if (! function_exists('parse_filters')) {
+    /**
+     * @param  mixed  $params
+     * @return array
+     */
+    function parse_int_filters(mixed $params): array
+    {
+        if (is_array($params)) {
+            return $params;
+        }
+        $filters = explode('|', $params);
+
+        return array_filter($filters, function ($filter) {
+            return (int) ($filter) > 0;
+        });
+    }
+}
+
+if (! function_exists('parse_attr_filters')) {
+    /**
+     * @param  mixed  $params
+     * @return array|array[]
+     * @throws Exception
+     */
+    function parse_attr_filters(mixed $params): array
+    {
+        if (is_array($params)) {
+            return $params;
+        }
+
+        $attributes = explode('|', $params);
+
+        return array_map(function ($item) {
+            $itemArr = explode(':', $item);
+            if (count($itemArr) != 2) {
+                throw new \Exception('Invalid attribute parameters!');
+            }
+
+            return [
+                'attr'  => $itemArr[0],
+                'value' => explode(',', $itemArr[1]),
+            ];
+        }, $attributes);
     }
 }
 

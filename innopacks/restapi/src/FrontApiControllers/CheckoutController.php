@@ -25,15 +25,13 @@ class CheckoutController extends BaseController
     /**
      * Get checkout data and render page.
      *
-     * @param  Request  $request
      * @return JsonResponse
      * @throws Throwable
      */
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
         try {
-            $customer = $request->user();
-            $checkout = CheckoutService::getInstance($customer->id);
+            $checkout = CheckoutService::getInstance(token_customer_id());
             $result   = $checkout->getCheckoutResult();
 
             return read_json_success($result);
@@ -53,8 +51,7 @@ class CheckoutController extends BaseController
     {
         try {
             $data     = $request->all();
-            $customer = $request->user();
-            $checkout = CheckoutService::getInstance($customer->id);
+            $checkout = CheckoutService::getInstance(token_customer_id());
             $checkout->updateValues($data);
             $result = $checkout->getCheckoutResult();
 
@@ -75,8 +72,7 @@ class CheckoutController extends BaseController
     {
         try {
             $data     = $request->all();
-            $customer = $request->user();
-            $checkout = CheckoutService::getInstance($customer->id);
+            $checkout = CheckoutService::getInstance(token_customer_id());
             if ($data) {
                 $checkout->updateValues($data);
             }
@@ -96,9 +92,13 @@ class CheckoutController extends BaseController
      */
     public function billingMethods(): JsonResponse
     {
-        $methods = BillingService::getInstance()->getMethods();
+        try {
+            $methods = BillingService::getInstance()->getMethods();
 
-        return read_json_success($methods);
+            return read_json_success($methods);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
     }
 
     /**
@@ -109,10 +109,9 @@ class CheckoutController extends BaseController
     public function quickConfirm(Request $request): JsonResponse
     {
         try {
-            CartService::getInstance()->addCart($request->all());
+            CartService::getInstance(token_customer_id())->addCart($request->all());
 
-            $customer        = $request->user();
-            $checkoutService = CheckoutService::getInstance($customer->id);
+            $checkoutService = CheckoutService::getInstance(token_customer_id());
             $checkoutData    = ['billing_method_code' => $request->get('shipping_method_code')];
             $checkoutService->updateValues($checkoutData);
 
