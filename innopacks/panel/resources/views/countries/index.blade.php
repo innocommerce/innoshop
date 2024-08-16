@@ -20,7 +20,7 @@
             <td>{{ __('panel::common.id')}}</td>
             <td>{{ __('panel::common.name') }}</td>
             <td>{{ __('panel::currency.code') }}</td>
-            <td>{{ __('panel::countries.continent') }}</td>
+            <td>{{ __('panel::country.continent') }}</td>
             <td>{{ __('panel::common.position') }}</td>
             <td>{{ __('panel::common.status') }}</td>
             <td>{{ __('panel::common.actions') }}<</td>
@@ -74,7 +74,7 @@
           <el-input v-model="form.code"></el-input>
         </el-form-item>
 
-        <el-form-item label="{{ __('panel::countries.continent') }}" prop="continent">
+        <el-form-item label="{{ __('panel::country.continent') }}" prop="continent">
           <el-input v-model="form.continent"></el-input>
         </el-form-item>
 
@@ -132,6 +132,8 @@
             drawer.value = false
             inno.msg(res.message)
             window.location.reload()
+          }).catch((err) => {
+            inno.msg(err.response.data.message)
           })
         }
 
