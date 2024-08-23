@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Notifications\Notifiable;
 use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Customer\Group;
+use InnoShop\Common\Models\Customer\Social;
 use InnoShop\Common\Notifications\ForgottenNotification;
 use InnoShop\Common\Notifications\RegistrationNotification;
 use Laravel\Sanctum\HasApiTokens;
@@ -53,6 +54,14 @@ class Customer extends AuthUser
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class, 'customer_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function socials(): HasMany
+    {
+        return $this->hasMany(Social::class, 'customer_id');
     }
 
     /**

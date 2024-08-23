@@ -128,12 +128,13 @@ class CustomerRepo extends BaseRepo
     }
 
     /**
-     * @param  $item
+     * @param  Customer  $item
      * @return void
      */
     public function destroy($item): void
     {
-        $item->translations()->delete();
+        $item->favorites()->delete();
+        $item->socials()->delete();
         $item->delete();
     }
 
