@@ -154,7 +154,7 @@ class CustomerRepo extends BaseRepo
             'locale'            => $requestData['locale']            ?? locale_code(),
             'active'            => $requestData['active']            ?? true,
             'code'              => $requestData['code']              ?? '',
-            'from'              => $requestData['from']              ?? 'web',
+            'from'              => $requestData['from']              ?? 'pc_web',
         ];
 
         $avatar = $requestData['avatar'] ?? '';

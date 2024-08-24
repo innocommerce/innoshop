@@ -31,6 +31,7 @@ class AccountService extends BaseService
             'email'    => $data['email'],
             'name'     => $parseData[0],
             'password' => $data['password'] ?? '',
+            'from'     => $this->checkFrom(),
             'active'   => 1,
         ];
 
@@ -89,5 +90,23 @@ class AccountService extends BaseService
 
         CustomerRepo::getInstance()->forceUpdatePassword($customer, $password);
         $verifyCode->delete();
+    }
+
+    /**
+     * @return string
+     */
+    private function checkFrom(): string
+    {
+        if (is_wechat_mini()) {
+            return 'miniapp';
+        } elseif (is_wechat_official()) {
+            return 'wechat_official';
+        } elseif (is_mobile()) {
+            return 'mobile_web';
+        } elseif (is_app()) {
+            return 'app';
+        } else {
+            return 'pc_web';
+        }
     }
 }
