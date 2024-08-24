@@ -9,12 +9,15 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
+use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\Product\FilterRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Repositories\ReviewRepo;
 use InnoShop\Common\Resources\ProductDetail;
 use InnoShop\Common\Resources\ProductSimple;
 
@@ -23,6 +26,7 @@ class ProductController extends BaseController
     /**
      * @param  Request  $request
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -51,11 +55,25 @@ class ProductController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
+     * @throws Exception
      */
     public function filters(Request $request): mixed
     {
         $builder = ProductRepo::getInstance()->builder($request->all());
 
         return FilterRepo::getInstance($builder)->getCurrentFilters();
+    }
+
+    /**
+     * @param  Product  $product
+     * @return LengthAwarePaginator
+     */
+    public function productReviews(Product $product): LengthAwarePaginator
+    {
+        $filters = [
+            'product_id' => $product->id,
+        ];
+
+        return ReviewRepo::getInstance()->builder($filters)->paginate();
     }
 }

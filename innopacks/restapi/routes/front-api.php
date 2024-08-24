@@ -21,12 +21,16 @@ Route::post('/upload/files', [FrontApiControllers\UploadController::class, 'file
 
 Route::post('/miniapp', [FrontApiControllers\MiniappController::class, 'index'])->name('miniapp.index');
 
+Route::get('/brands', [FrontApiControllers\BrandController::class, 'index'])->name('brands.index');
+Route::get('/brands/group', [FrontApiControllers\BrandController::class, 'group'])->name('brands.group');
+
 Route::get('/categories', [FrontApiControllers\CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/tree', [FrontApiControllers\CategoryController::class, 'tree'])->name('categories.tree');
 
 Route::get('/products', [FrontApiControllers\ProductController::class, 'index'])->name('products.index');
 Route::get('/products/filters', [FrontApiControllers\ProductController::class, 'filters'])->name('products.filters');
 Route::get('/products/{product}', [FrontApiControllers\ProductController::class, 'show'])->name('products.show');
+Route::get('/products/{product}/reviews', [FrontApiControllers\ProductController::class, 'productReviews'])->name('products.reviews');
 
 Route::get('/countries', [FrontApiControllers\CountryController::class, 'index'])->name('countries.index');
 Route::get('/countries/{country}/states', [FrontApiControllers\CountryController::class, 'states'])->name('countries.states');
@@ -58,6 +62,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/favorites', [FrontApiControllers\FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favorites', [FrontApiControllers\FavoriteController::class, 'store'])->name('favorites.store');
     Route::post('/favorites/cancel', [FrontApiControllers\FavoriteController::class, 'cancel'])->name('favorites.cancel');
+
+    Route::get('/reviews', [FrontApiControllers\ReviewController::class, 'index'])->name('reviews.index');
+    Route::post('/reviews', [FrontApiControllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{review}', [FrontApiControllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 
     Route::get('/addresses', [FrontApiControllers\AddressController::class, 'index'])->name('addresses.index');
     Route::post('/addresses', [FrontApiControllers\AddressController::class, 'store'])->name('addresses.store');

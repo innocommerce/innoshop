@@ -740,7 +740,8 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->comment('Review');
             $table->bigIncrements('id')->comment('ID');
-            $table->integer('customer_id')->index('rv_customer_id');
+            $table->integer('customer_id')->nullable()->index('rv_customer_id');
+            $table->integer('product_id')->nullable()->index('rv_product_id');
             $table->integer('order_product_id')->nullable()->index('rv_op_id');
             $table->integer('rating');
             $table->string('title');

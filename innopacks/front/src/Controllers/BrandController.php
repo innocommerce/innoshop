@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Brand;
 use InnoShop\Common\Repositories\BrandRepo;
@@ -33,6 +34,7 @@ class BrandController extends Controller
     /**
      * @param  Brand  $brand
      * @return mixed
+     * @throws Exception
      */
     public function show(Brand $brand): mixed
     {
@@ -42,7 +44,7 @@ class BrandController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function slugShow(Request $request): mixed
     {
@@ -55,6 +57,7 @@ class BrandController extends Controller
     /**
      * @param  $brand
      * @return mixed
+     * @throws Exception
      */
     private function renderShow($brand): mixed
     {
