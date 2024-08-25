@@ -40,7 +40,7 @@ class CustomerRequest extends FormRequest
             $rules['email'] = 'required|email:rfc|unique:customers,email';
         }
 
-        if ($this->request->get('password')) {
+        if ($this->request->get('password') && ! is_admin()) {
             $rules['password'] = 'required|confirmed';
         }
 

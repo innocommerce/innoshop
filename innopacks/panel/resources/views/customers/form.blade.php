@@ -26,6 +26,8 @@
             <x-common-form-input title="名字" name="name" value="{{ old('name', $customer->name) }}" required
                                  placeholder="名字"/>
 
+            <x-common-form-input title="密码" name="password" value="" placeholder="密码"/>
+
             <x-common-form-input title="来源" name="from" value="{{ old('from', $customer->from) }}"
                                  placeholder="来源"/>
 

@@ -60,7 +60,7 @@ class CustomerController extends BaseController
 
             return redirect(panel_route('customers.index'))
                 ->with('instance', $customer)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', trans('panel::common.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
                 ->withInput()
