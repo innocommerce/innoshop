@@ -8,7 +8,7 @@
  */
 
 return [
-    'version' => '0.2.6',
-    'build'   => '20240810',
+    'version' => '0.2.8',
+    'build'   => '20240825',
     'api_url' => env('INNOSHOP_API_URL', 'https://www.innoshop.cn'),
 ];
