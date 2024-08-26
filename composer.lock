@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ff9eb9a1199487f1603e3d573e3a700",
+    "content-hash": "420fd00358a1b07cdc5edf4c2eae97b0",
     "packages": [
         {
             "name": "brick/math",
@@ -3482,16 +3482,16 @@
         },
         {
             "name": "psr/log",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001"
+                "reference": "79dff0b268932c640297f5208d6298f71855c03e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe5ea303b0887d5caefd3d431c3e61ad47037001",
-                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/79dff0b268932c640297f5208d6298f71855c03e",
+                "reference": "79dff0b268932c640297f5208d6298f71855c03e",
                 "shasum": ""
             },
             "require": {
@@ -3526,9 +3526,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/3.0.0"
+                "source": "https://github.com/php-fig/log/tree/3.0.1"
             },
-            "time": "2021-07-14T16:46:02+00:00"
+            "time": "2024-08-21T13:31:24+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -7184,16 +7184,16 @@
         },
         {
             "name": "w7corp/easywechat",
-            "version": "6.15.1",
+            "version": "6.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/w7corp/easywechat.git",
-                "reference": "8902917ceeaa20354301e533ff3725f0044c04ca"
+                "reference": "27e8b686632ff3f0f599c7085f516657a084d821"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/8902917ceeaa20354301e533ff3725f0044c04ca",
-                "reference": "8902917ceeaa20354301e533ff3725f0044c04ca",
+                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/27e8b686632ff3f0f599c7085f516657a084d821",
+                "reference": "27e8b686632ff3f0f599c7085f516657a084d821",
                 "shasum": ""
             },
             "require": {
@@ -7218,7 +7218,6 @@
                 "thenorthmemory/xml": "^1.0"
             },
             "require-dev": {
-                "brainmaestro/composer-git-hooks": "^2.8",
                 "jetbrains/phpstorm-attributes": "^1.0",
                 "laravel/pint": "^1.2",
                 "mikey179/vfsstream": "^1.6",
@@ -7228,24 +7227,6 @@
                 "symfony/var-dumper": "^5.2"
             },
             "type": "library",
-            "extra": {
-                "hooks": {
-                    "pre-commit": [
-                        "composer check-style",
-                        "composer phpstan",
-                        "composer test"
-                    ],
-                    "pre-push": [
-                        "composer check-style"
-                    ],
-                    "config": {
-                        "stop-on-failure": [
-                            "pre-commit",
-                            "pre-push"
-                        ]
-                    }
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "EasyWeChat\\": "src/"
@@ -7271,7 +7252,7 @@
             ],
             "support": {
                 "issues": "https://github.com/w7corp/easywechat/issues",
-                "source": "https://github.com/w7corp/easywechat/tree/6.15.1"
+                "source": "https://github.com/w7corp/easywechat/tree/6.15.2"
             },
             "funding": [
                 {
@@ -7279,7 +7260,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-29T12:23:19+00:00"
+            "time": "2024-08-19T13:33:33+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10153,8 +10134,10 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2",
+        "ext-curl": "*",
         "ext-openssl": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-simplexml": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
