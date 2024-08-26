@@ -47,6 +47,7 @@
             "InnoShop\\Plugin\\": "innopacks/plugin/src"
         },
         "files": [
+            "innopacks/install/helpers.php",
             "innopacks/common/helpers.php",
             "innopacks/panel/helpers.php",
             "innopacks/plugin/helpers.php"

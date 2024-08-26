@@ -41,9 +41,10 @@ class LocaleController extends BaseController
      */
     public function switch(Request $request): RedirectResponse
     {
-        $admin         = current_admin();
-        $destCode      = $request->code;
-        $refererUrl    = $request->headers->get('referer');
+        $admin      = current_admin();
+        $destCode   = $request->code;
+        $refererUrl = $request->headers->get('referer');
+
         $admin->locale = $destCode;
         $admin->save();
         App::setLocale($destCode);
