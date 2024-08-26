@@ -60,7 +60,7 @@ class CustomerController extends BaseController
 
             return redirect(panel_route('customers.index'))
                 ->with('instance', $customer)
-                ->with('success', trans('panel::common.saved_success'));
+                ->with('success', panel_trans('common.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
                 ->withInput()
@@ -109,7 +109,7 @@ class CustomerController extends BaseController
 
             return redirect(panel_route('customers.index'))
                 ->with('instance', $customer)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
                 ->withInput()
@@ -127,7 +127,7 @@ class CustomerController extends BaseController
             CustomerRepo::getInstance()->destroy($customer);
 
             return redirect(panel_route('customers.index'))
-                ->with('success', trans('panel::common.deleted_success'));
+                ->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
                 ->withErrors(['error' => $e->getMessage()]);

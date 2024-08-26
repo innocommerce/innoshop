@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.states'))
+@section('title', __('panel/menu.states'))
 
 @push('header')
 <script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
@@ -17,13 +17,13 @@
         <table class="table align-middle">
           <thead>
           <tr>
-            <th>{{ __('panel::common.id') }}</th>
-            <th>{{ __('panel::state.name') }}</th>
-            <th>{{ __('panel::state.code') }}</th>
-            <th>{{ __('panel::state.country_code') }}</th>
-            <th>{{ __('panel::state.position') }}</th>
-            <th>{{ __('panel::state.active') }}</th>
-            <th>{{ __('panel::common.actions') }}</th>
+            <th>{{ __('panel/common.id') }}</th>
+            <th>{{ __('panel/state.name') }}</th>
+            <th>{{ __('panel/state.code') }}</th>
+            <th>{{ __('panel/state.country_code') }}</th>
+            <th>{{ __('panel/state.position') }}</th>
+            <th>{{ __('panel/state.active') }}</th>
+            <th>{{ __('panel/common.actions') }}</th>
           </tr>
           </thead>
           <tbody>
@@ -38,11 +38,11 @@
                 @include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('states.active', $item->id)])
               </td>
               <td>
-                <button type="button" class="btn btn-sm btn-outline-primary" @click="edit({{ $item->id }})">{{ __('panel::common.edit')}}</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" @click="edit({{ $item->id }})">{{ __('panel/common.edit')}}</button>
                 <form action="{{ panel_route('states.destroy', [$item->id]) }}" method="POST" class="d-inline">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel::common.delete')}}</button>
+                  <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel/common.delete')}}</button>
                 </form>
               </td>
             </tr>
@@ -57,7 +57,7 @@
     </div>
 
     <el-drawer v-model="drawer" size="500" @close="close">
-      <template #header><div class="text-dark fs-4">{{ __('panel::menu.states') }}</div></template>
+      <template #header><div class="text-dark fs-4">{{ __('panel/menu.states') }}</div></template>
       <el-form
         ref="formRef"
         label-position="top"
@@ -66,7 +66,7 @@
         label-width="auto"
         status-icon
       >
-        <el-form-item label="{{ __('panel::common.name') }}" prop="name">
+        <el-form-item label="{{ __('panel/common.name') }}" prop="name">
           <el-input v-model="form.name" placeholder="名称"></el-input>
         </el-form-item>
 
@@ -91,8 +91,8 @@
 
       <template #footer>
         <div style="flex: auto">
-          <el-button @click="drawer = false">{{ __('panel::common.close') }}</el-button>
-          <el-button type="primary" @click="submit">{{ __('panel::common.btn_save') }}</el-button>
+          <el-button @click="drawer = false">{{ __('panel/common.close') }}</el-button>
+          <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
         </div>
       </template>
     </el-drawer>

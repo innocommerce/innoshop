@@ -1,5 +1,5 @@
 <div class="my-4" id="billingMethodsContent">
-    <h5 class="mb-3">{{ __('panel::plugin.payment_method') }}</h5>
+    <h5 class="mb-3">{{ __('panel/plugin.payment_method') }}</h5>
 
 </div>
 @push('footer')
@@ -39,7 +39,7 @@
 
             $('#quickBuy').on('click',function () {
                 if (billingMethod === '') {
-                    layer.msg('{{ __('panel::plugin.payment_method_confirm') }}', {icon: 2})
+                    layer.msg('{{ __('panel/plugin.payment_method_confirm') }}', {icon: 2})
                     return
                 }
                 axios.post('/{{ panel_name() }}/marketplaces/quick_checkout', {

@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-plugins-market')
 
-@section('title', __('panel::menu.plugin_market'))
+@section('title', __('panel/menu.plugin_market'))
 
 @section('content')
   @include('plugin::shared._token_info')
@@ -28,10 +28,10 @@
                         <h4 class="card-title">{{ $product['name'] }}</h4>
                         <div class="my-4">
                           @if($product['viewed'] ?? 0)
-                           <span class="me-2"><small class="text-muted">{{ __('panel::plugin.views') }}: {{ $product['viewed'] }}</small></span>
+                           <span class="me-2"><small class="text-muted">{{ __('panel/plugin.views') }}: {{ $product['viewed'] }}</small></span>
                           @endif
                           @if($product['updated_at'] ?? '')
-                            <span class="me-2e"><small class="text-muted">{{ __('panel::plugin.last_updated') }}: {{ $product['updated_at'] }}</small></span>
+                            <span class="me-2e"><small class="text-muted">{{ __('panel/plugin.last_updated') }}: {{ $product['updated_at'] }}</small></span>
                           @endif
                         </div>
 
@@ -40,13 +40,13 @@
                         <div class="card bg-light px-2 px-md-4 py-2 my-2">
                           <div class="row my-2">
                             <div class="col">
-                              <p class="card-title d-inline me-3">{{ __('panel::plugin.version') }}</p>
+                              <p class="card-title d-inline me-3">{{ __('panel/plugin.version') }}</p>
                               <p class="card-text d-inline">{{ $product['version'] ?? '' }}</p>
                             </div>
                           </div>
                           <div class="row my-2">
                             <div class="col">
-                              <p class="card-title d-inline me-3 align-middle">{{ __('panel::plugin.price') }}</p>
+                              <p class="card-title d-inline me-3 align-middle">{{ __('panel/plugin.price') }}</p>
                               @if($product['origin_price_format'] > $product['price_format'])
                                 <span
                                     class="h4 text-decoration-line-through text-secondary d-inline align-middle">{{ $product['origin_price_format'] }}</span>
@@ -56,7 +56,7 @@
                           </div>
                           <div class="row my-2">
                             <div class="col">
-                              <p class="card-title d-inline me-3">{{ __('panel::plugin.author') }}</p>
+                              <p class="card-title d-inline me-3">{{ __('panel/plugin.author') }}</p>
                               <p class="card-text d-inline">{{ $product['seller_name'] }}</p>
                             </div>
                           </div>

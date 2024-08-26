@@ -39,7 +39,7 @@
             <div class="product-bottom-btns text-start">
               <a class="h5 btn-add-cart buy-now-checkout panel-text-primary text-decoration-underline cursor-pointer cursor-pointer text-start"
                  href="{{ panel_route('plugin_market.show', $product['product_id']) }}" data-id="{{ $product['product_id'] }}"
-                 data-sku-id="{{ $product['sku_id'] }}" data-is-buy-now="true"> {{ __('front::product.view_details') }}
+                 data-sku-id="{{ $product['sku_id'] }}" data-is-buy-now="true"> {{ __('front/product.view_details') }}
               </a>
             </div>
             <div class="product-price text-start">

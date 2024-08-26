@@ -100,7 +100,7 @@ class Order extends BaseModel
      */
     public function getStatusFormatAttribute(): string
     {
-        return trans('front::order.'.$this->status);
+        return front_trans('order.'.$this->status);
     }
 
     /**

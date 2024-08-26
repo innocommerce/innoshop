@@ -51,10 +51,10 @@ class CountryRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name'      => trans('panel::common.name'),
-            'code'      => trans('panel::common.code'),
-            'continent' => trans('panel::country.continent'),
-            'position'  => trans('panel::common.position'),
+            'name'      => panel_trans('common.name'),
+            'code'      => panel_trans('common.code'),
+            'continent' => panel_trans('country.continent'),
+            'position'  => panel_trans('common.position'),
         ];
     }
 }

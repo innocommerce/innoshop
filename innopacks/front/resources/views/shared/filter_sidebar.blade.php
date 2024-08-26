@@ -1,6 +1,6 @@
 <div class="filter-sidebar">
   <div class="filter-sidebar-item">
-    <div class="title">{{ __('front::category.category') }}</div>
+    <div class="title">{{ __('front/category.category') }}</div>
     <div class="content">
       <div class="accordion" id="filter-category">
         @foreach ($categories as $key => $category)

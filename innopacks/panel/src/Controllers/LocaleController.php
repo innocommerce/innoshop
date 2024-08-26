@@ -66,7 +66,7 @@ class LocaleController extends BaseController
 
             return redirect(panel_route('locales.index'))
                 ->with('instance', $locale)
-                ->with('success', trans('panel::common.install_success'));
+                ->with('success', panel_trans('common.install_success'));
         } catch (Exception $e) {
             return redirect(panel_route('locales.index'))->withErrors(['error' => $e->getMessage()]);
         }
@@ -96,7 +96,7 @@ class LocaleController extends BaseController
             $data = $request->all();
             LocaleRepo::getInstance()->update($locale, $data);
 
-            return back()->with('success', trans('panel::common.updated_success'));
+            return back()->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -119,7 +119,7 @@ class LocaleController extends BaseController
 
             return redirect(panel_route('locales.index'))
                 ->with('instance', $locale)
-                ->with('success', trans('panel::common.uninstall_success'));
+                ->with('success', panel_trans('common.uninstall_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -133,13 +133,13 @@ class LocaleController extends BaseController
         try {
             $item = Locale::query()->findOrFail($id);
             if ($item->code == system_setting('front_locale')) {
-                throw new Exception(trans('panel::locale.cannot_disable_default_locale'));
+                throw new Exception(panel_trans('locale.cannot_disable_default_locale'));
             }
 
             $item->active = $request->get('status');
             $item->saveOrFail();
 
-            return json_success(trans('panel::common.updated_success'));
+            return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

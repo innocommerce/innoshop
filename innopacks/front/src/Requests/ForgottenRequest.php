@@ -38,7 +38,7 @@ class ForgottenRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'password' => trans('front::forgotten.password'),
+            'password' => front_trans('forgotten.password'),
         ];
     }
 }

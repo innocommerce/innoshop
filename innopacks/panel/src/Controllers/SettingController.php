@@ -58,7 +58,7 @@ class SettingController
 
             return redirect($settingUrl)
                 ->with('instance', $settings)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('settings.index'))->withInput()->withErrors(['error' => $e->getMessage()]);
         }

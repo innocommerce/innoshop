@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.analytic_order'))
+@section('title', __('panel/menu.analytic_order'))
 
 @push('header')
   <script src="{{ asset('vendor/chart/chart.min.js') }}"></script>
@@ -11,16 +11,16 @@
 
   <div class="row">
     <div class="col-12 col-md-6 mb-3">
-      <x-panel-chart-line id="order" :labels="$order_latest_week['period']" :title="__('panel::dashboard.order_trends')"
+      <x-panel-chart-line id="order" :labels="$order_latest_week['period']" :title="__('panel/dashboard.order_trends')"
                           :data="$order_latest_week['totals']"></x-panel-chart-line>
 
-      <x-panel-chart-line id="total" :labels="$total_latest_week['period']" :title="__('panel::analytics.total_trends')"
+      <x-panel-chart-line id="total" :labels="$total_latest_week['period']" :title="__('panel/analytics.total_trends')"
                           :data="$total_latest_week['totals']"></x-panel-chart-line>
 
     </div>
     <div class="col-12 col-md-6 mb-3">
       <div class="card top-sale-products">
-        <div class="card-header">{{ __('panel::dashboard.top_products') }}</div>
+        <div class="card-header">{{ __('panel/dashboard.top_products') }}</div>
         <div class="card-body pb-0">
           @if ($top_sale_products)
             <table class="table table-last-no-border align-middle mt-n3 mb-0">

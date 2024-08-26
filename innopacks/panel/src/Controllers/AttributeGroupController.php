@@ -64,6 +64,6 @@ class AttributeGroupController extends BaseController
         $attributeGroup->delete();
 
         return redirect(panel_route('attribute_groups.index'))
-            ->with('success', trans('panel::common.deleted_success'));
+            ->with('success', panel_trans('common.deleted_success'));
     }
 }

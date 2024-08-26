@@ -67,7 +67,7 @@ class RegionController extends BaseController
             $data = $request->all();
             RegionRepo::getInstance()->create($data);
 
-            return json_success(trans('panel::common.created_success'));
+            return json_success(panel_trans('common.created_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -109,7 +109,7 @@ class RegionController extends BaseController
             $data = $request->all();
             RegionRepo::getInstance()->update($region, $data);
 
-            return json_success(trans('panel::common.updated_success'));
+            return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -125,7 +125,7 @@ class RegionController extends BaseController
             RegionRepo::getInstance()->destroy($region);
 
             return redirect(panel_route('regions.index'))
-                ->with('success', trans('panel::common.deleted_success'));
+                ->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('regions.index'))
                 ->withErrors(['error' => $e->getMessage()]);

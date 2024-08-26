@@ -41,7 +41,7 @@ class MarketplaceController
             $domainToken = $request->get('domain_token');
             SettingRepo::getInstance()->updateSystemValue('domain_token', $domainToken);
 
-            return json_success(trans('panel::common.updated_success'));
+            return json_success(panel_trans('common.updated_success'));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }

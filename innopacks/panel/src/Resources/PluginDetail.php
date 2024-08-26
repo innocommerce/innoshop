@@ -31,7 +31,7 @@ class PluginDetail extends JsonResource
             'version'     => $this->getVersion(),
             'dir_name'    => $this->getDirName(),
             'type'        => $this->getType(),
-            'type_format' => trans('panel::plugin.'.$this->getType()),
+            'type_format' => panel_trans('plugin.'.$this->getType()),
             'icon'        => plugin_resize($this->getCode(), $this->getIcon()),
             'author'      => $this->getAuthor(),
             'active'      => $this->checkActive(),

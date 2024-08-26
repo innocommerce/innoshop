@@ -45,24 +45,24 @@ class LoginController extends Controller
             $redirectUri = session('front_redirect_uri');
 
             if (! auth('customer')->attempt($request->only('email', 'password'))) {
-                throw new NotAcceptableHttpException(trans('front::login.account_or_password_error'));
+                throw new NotAcceptableHttpException(front_trans('login.account_or_password_error'));
             }
 
             $customer = current_customer();
             if (empty($customer)) {
-                throw new NotFoundHttpException(trans('front::login.empty_customer'));
+                throw new NotFoundHttpException(front_trans('login.empty_customer'));
             }
 
             if (! $customer->active) {
                 auth('customer')->logout();
-                throw new Exception(trans('front::login.inactive_customer'));
+                throw new Exception(front_trans('login.inactive_customer'));
             }
 
             CartService::getInstance(current_customer_id())->mergeCart($oldGuestId);
             session()->forget('front_redirect_uri');
             $data = ['redirect_uri' => $redirectUri];
 
-            return json_success(trans('front::login.login_success'), $data);
+            return json_success(front_trans('login.login_success'), $data);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

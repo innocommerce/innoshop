@@ -36,7 +36,7 @@ class CartController extends Controller
         try {
             $currentCart = CartService::getInstance()->handleResponse();
 
-            return json_success(trans('front::common.read_success'), $currentCart);
+            return json_success(front_trans('common.read_success'), $currentCart);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -54,7 +54,7 @@ class CartController extends Controller
         try {
             $cartData = CartService::getInstance()->addCart($request->all());
 
-            return json_success(trans('front::common.saved_success'), $cartData);
+            return json_success(front_trans('common.saved_success'), $cartData);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -70,7 +70,7 @@ class CartController extends Controller
         try {
             $cartData = CartService::getInstance()->updateCart($cart, $request->all());
 
-            return json_success(trans('front::common.updated_success'), $cartData);
+            return json_success(front_trans('common.updated_success'), $cartData);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -86,7 +86,7 @@ class CartController extends Controller
             $cartIds  = $request->get('cart_ids');
             $cartData = CartService::getInstance()->select($cartIds);
 
-            return json_success(trans('front::common.updated_success'), $cartData);
+            return json_success(front_trans('common.updated_success'), $cartData);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -102,7 +102,7 @@ class CartController extends Controller
             $cartIds  = $request->get('cart_ids');
             $cartData = CartService::getInstance()->unselect($cartIds);
 
-            return json_success(trans('front::common.updated_success'), $cartData);
+            return json_success(front_trans('common.updated_success'), $cartData);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -118,7 +118,7 @@ class CartController extends Controller
             $cart->delete();
             $cartData = CartService::getInstance()->getCartList();
 
-            return json_success(trans('front::common.deleted_success'), $cartData);
+            return json_success(front_trans('common.deleted_success'), $cartData);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }

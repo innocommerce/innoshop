@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.orders'))
+@section('title', __('panel/menu.orders'))
 
 @section('content')
 <div class="card h-min-600">
@@ -11,16 +11,16 @@
       <table class="table align-middle">
         <thead>
           <tr>
-            <td>{{ __('panel::common.id') }}</td>
-            <td>{{ __('panel::order.number') }}</td>
-            <td>{{ __('panel::order.order_items') }}</td>
-            <td>{{ __('panel::order.customer_name') }}</td>
-            <td>{{ __('panel::order.shipping_method_name') }}</td>
-            <td>{{ __('panel::order.billing_method_name') }}</td>
-            <td>{{ __('panel::order.status') }}</td>
-            <td>{{ __('panel::order.total') }}</td>
-            <td>{{ __('panel::order.created_at') }}</td>
-            <td>{{ __('panel::common.actions') }}</td>
+            <td>{{ __('panel/common.id') }}</td>
+            <td>{{ __('panel/order.number') }}</td>
+            <td>{{ __('panel/order.order_items') }}</td>
+            <td>{{ __('panel/order.customer_name') }}</td>
+            <td>{{ __('panel/order.shipping_method_name') }}</td>
+            <td>{{ __('panel/order.billing_method_name') }}</td>
+            <td>{{ __('panel/order.status') }}</td>
+            <td>{{ __('panel/order.total') }}</td>
+            <td>{{ __('panel/order.created_at') }}</td>
+            <td>{{ __('panel/common.actions') }}</td>
           </tr>
         </thead>
         <tbody>
@@ -44,7 +44,7 @@
               <td>{{ $item->total_format }}</td>
               <td>{{ $item->created_at }}</td>
               <td>
-                <a href="{{ panel_route('orders.show', [$item->id]) }}" class="btn btn-sm btn-outline-primary">{{ __('panel::common.view') }}</a>
+                <a href="{{ panel_route('orders.show', [$item->id]) }}" class="btn btn-sm btn-outline-primary">{{ __('panel/common.view') }}</a>
               </td>
             </tr>
           @endforeach

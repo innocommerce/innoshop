@@ -11,15 +11,15 @@
     <div class="row">
       <div class="account-card-box order-info-box">
         <div class="account-card-title d-flex justify-content-between align-items-center">
-          <span class="fw-bold">{{ __('front::order.order_details') }}</span>
+          <span class="fw-bold">{{ __('front/order.order_details') }}</span>
         </div>
         <table class="table table-bordered table-striped mb-3 table-response">
           <thead>
           <tr>
-            <th>{{ __('front::order.order_number') }}</th>
-            <th>{{ __('front::order.order_date') }}</th>
-            <th>{{ __('front::order.order_total') }}</th>
-            <th>{{ __('front::order.order_status') }}</th>
+            <th>{{ __('front/order.order_number') }}</th>
+            <th>{{ __('front/order.order_date') }}</th>
+            <th>{{ __('front/order.order_total') }}</th>
+            <th>{{ __('front/order.order_status') }}</th>
           </tr>
           </thead>
           <tbody>
@@ -36,10 +36,10 @@
           <table class="table products-table align-middle">
             <thead>
             <tr>
-              <th>{{ __('front::order.product') }}</th>
-              <th>{{ __('front::order.price') }}</th>
-              <th>{{ __('front::order.quantity') }}</th>
-              <th>{{ __('front::order.subtotal') }}</th>
+              <th>{{ __('front/order.product') }}</th>
+              <th>{{ __('front/order.price') }}</th>
+              <th>{{ __('front/order.quantity') }}</th>
+              <th>{{ __('front/order.subtotal') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -77,7 +77,7 @@
             <tr>
               <td></td>
               <td></td>
-              <td><strong>{{ __('front::order.order_total') }}</strong></td>
+              <td><strong>{{ __('front/order.order_total') }}</strong></td>
               <td>{{ $order->total_format }}</td>
             </tr>
             </tbody>

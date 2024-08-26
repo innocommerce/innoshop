@@ -1,6 +1,6 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.categories'))
+@section('title', __('panel/menu.categories'))
 
 <x-panel::form.right-btns />
 
@@ -15,7 +15,7 @@
     <div class="col-12 col-md-9">
       <div class="card mb-3">
         <div class="card-header">
-          <h5 class="card-title mb-0">{{ __('panel::common.basic_info') }}</h5>
+          <h5 class="card-title mb-0">{{ __('panel/common.basic_info') }}</h5>
         </div>
         <div class="card-body">
           <div class="accordion accordion-flush locales-accordion" id="data-locales">
@@ -71,14 +71,14 @@
         <div class="card-body">
           <x-common-form-switch-radio title="状态" name="active" :value="old('active', $category->active ?? true)"
             placeholder="状态" />
-          <x-common-form-input title="{{ __('panel::common.slug') }}" name="slug" :value="old('slug', $category->slug ?? '')"
-            placeholder="{{ __('panel::common.slug') }}" />
+          <x-common-form-input title="{{ __('panel/common.slug') }}" name="slug" :value="old('slug', $category->slug ?? '')"
+            placeholder="{{ __('panel/common.slug') }}" />
           <x-common-form-select title="上级分类" name="parent_id" :value="old('parent_id', $catalog->parent_id ?? 0)"
             :options="$categories" key="id" label="name" />
           <x-common-form-input title="排序" name="position" :value="old('position', $category->position ?? 0)"
             placeholder="排序" />
-          <x-common-form-switch-radio title="{{ __('panel::common.whether_enable') }}" name="active" :value="old('active', $category->active ?? true)"
-            placeholder="{{ __('panel::common.whether_enable') }}" / </div>
+          <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $category->active ?? true)"
+            placeholder="{{ __('panel/common.whether_enable') }}" / </div>
         </div>
       </div>
     </div>

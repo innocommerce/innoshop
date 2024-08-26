@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', 'account')
 
-@section('title', __('panel::menu.account'))
+@section('title', __('panel/menu.account'))
 
 <x-panel::form.right-btns />
 
@@ -13,9 +13,9 @@
       @csrf
       @method('put')
 
-      <x-common-form-input title="{{ __('panel::common.name') }}" name="name" value="{{ old('name', $admin->name) }}" required />
-      <x-common-form-input title="{{ __('panel::common.email') }}" name="email" value="{{ old('email', $admin->email) }}" required />
-      <x-common-form-input title="{{ __('panel::common.password') }}" name="password" value="" type="password" />
+      <x-common-form-input title="{{ __('panel/common.name') }}" name="name" value="{{ old('name', $admin->name) }}" required />
+      <x-common-form-input title="{{ __('panel/common.email') }}" name="email" value="{{ old('email', $admin->email) }}" required />
+      <x-common-form-input title="{{ __('panel/common.password') }}" name="password" value="" type="password" />
     </form>
   </div>
 </div>

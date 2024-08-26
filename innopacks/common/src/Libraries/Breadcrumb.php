@@ -41,7 +41,7 @@ class Breadcrumb
             ];
         } elseif ($type == 'route') {
             if (empty($title)) {
-                $title = trans('front::common.'.str_replace('.', '_', $object));
+                $title = front_trans('common.'.str_replace('.', '_', $object));
             }
 
             return [

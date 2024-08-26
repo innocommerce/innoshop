@@ -47,7 +47,7 @@ class RegisterController extends Controller
 
             CartService::getInstance(current_customer_id())->mergeCart($oldGuestId);
 
-            return json_success(trans('front::register.register_success'), ['customer' => $customer]);
+            return json_success(front_trans('register.register_success'), ['customer' => $customer]);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

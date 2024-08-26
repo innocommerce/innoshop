@@ -15,10 +15,10 @@
     <table class="table w-max-800 mx-auto mb-3 mb-md-5 checkout-success-table">
       <thead>
       <tr>
-        <th>{{ __('front::order.order_number') }}</th>
-        <th>{{ __('front::order.order_billing') }}</th>
-        <th>{{ __('front::order.order_total') }}</th>
-        <th>{{ __('front::order.order_status') }}</th>
+        <th>{{ __('front/order.order_number') }}</th>
+        <th>{{ __('front/order.order_billing') }}</th>
+        <th>{{ __('front/order.order_total') }}</th>
+        <th>{{ __('front/order.order_status') }}</th>
       </tr>
       </thead>
       <tbody>

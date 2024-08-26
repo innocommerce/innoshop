@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.order_returns'))
+@section('title', __('panel/menu.order_returns'))
 
 @section('content')
   <div class="card h-min-600">
@@ -11,13 +11,13 @@
         <table class="table align-middle">
           <thead>
           <tr>
-            <td>{{ __('panel::common.id') }}</td>
-            <td>{{ __('panel::order_return.customer') }}</td>
-            <td>{{ __('panel::order_return.order_number') }}</td>
-            <td>{{ __('panel::order_return.number') }}</td>
-            <td>{{ __('panel::order_return.name') }}</td>
-            <td>{{ __('panel::order_return.email') }}</td>
-            <td>{{ __('panel::common.actions') }}</td>
+            <td>{{ __('panel/common.id') }}</td>
+            <td>{{ __('panel/order_return.customer') }}</td>
+            <td>{{ __('panel/order_return.order_number') }}</td>
+            <td>{{ __('panel/order_return.number') }}</td>
+            <td>{{ __('panel/order_return.name') }}</td>
+            <td>{{ __('panel/order_return.email') }}</td>
+            <td>{{ __('panel/common.actions') }}</td>
           </tr>
           </thead>
             <tbody>
@@ -31,11 +31,11 @@
                 <td>{{ $item->active }}</td>
                 <td>
                   <a href="{{ panel_route('order_returns.edit', [$item->id]) }}"
-                     class="btn btn-sm btn-outline-primary">{{ __('panel::common.edit')}}</a>
+                     class="btn btn-sm btn-outline-primary">{{ __('panel/common.edit')}}</a>
                   <form action="{{ panel_route('order_returns.destroy', [$item->id]) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel::common.delete')}}</button>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel/common.delete')}}</button>
                   </form>
                 </td>
               </tr>

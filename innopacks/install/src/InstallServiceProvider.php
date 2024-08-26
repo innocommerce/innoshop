@@ -45,6 +45,10 @@ class InstallServiceProvider extends ServiceProvider
      */
     protected function loadTranslations(): void
     {
+        if (! is_dir(__DIR__.'/../lang')) {
+            return;
+        }
+
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'install');
     }
 

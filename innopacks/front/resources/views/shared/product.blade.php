@@ -10,7 +10,7 @@
       <div class="product-bottom">
         <div class="product-bottom-btns">
           <div class="btn-add-cart cursor-pointer" data-id="{{ $product->id }}"
-               data-sku-id="{{ $product->product_sku_id }}"> {{ __('front::cart.add_to_cart') }}
+               data-sku-id="{{ $product->product_sku_id }}"> {{ __('front/cart.add_to_cart') }}
           </div>
         </div>
         <div class="product-price">

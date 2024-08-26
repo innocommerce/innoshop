@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use InnoShop\Common\Models\Locale;
@@ -27,7 +28,7 @@ class LocaleRepo extends BaseRepo
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getFrontListWithPath(): array
     {
@@ -35,9 +36,9 @@ class LocaleRepo extends BaseRepo
 
         $result = [];
         foreach (front_lang_path_codes() as $localeCode) {
-            $langFile = front_lang_dir()."/$localeCode/base.php";
+            $langFile = lang_path("/$localeCode/front/base.php");
             if (! is_file($langFile)) {
-                throw new \Exception("File ($langFile) not exist!");
+                throw new Exception("File ($langFile) not exist!");
             }
             $baseData = require $langFile;
             $name     = $baseData['name'] ?? $localeCode;
@@ -78,7 +79,7 @@ class LocaleRepo extends BaseRepo
      * Get active list.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getActiveList(): mixed
     {

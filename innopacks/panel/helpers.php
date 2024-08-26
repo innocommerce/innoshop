@@ -83,27 +83,26 @@ if (! function_exists('panel_lang_path_codes')) {
      */
     function panel_lang_path_codes(): array
     {
-        $languageDir = panel_lang_dir();
+        $packages = language_codes();
 
-        return array_values(array_diff(scandir($languageDir), ['..', '.', '.DS_Store']));
+        $panelLangCodes = collect($packages)->filter(function ($code) {
+            return file_exists(lang_path("{$code}/panel"));
+        })->toArray();
+
+        return array_values($panelLangCodes);
     }
 }
 
-if (! function_exists('panel_lang_dir')) {
+if (! function_exists('panel_trans')) {
     /**
-     * Get all panel languages
-     *
-     * @return string
+     * @param  $key
+     * @param  array  $replace
+     * @param  $locale
+     * @return mixed
      */
-    function panel_lang_dir(): string
+    function panel_trans($key = null, array $replace = [], $locale = null): mixed
     {
-        if (is_dir(lang_path('vendor/panel'))) {
-            $languageDir = lang_path('vendor/panel');
-        } else {
-            $languageDir = inno_path('panel/lang');
-        }
-
-        return $languageDir;
+        return trans('panel/'.$key, $replace, $locale);
     }
 }
 

@@ -287,6 +287,19 @@ if (! function_exists('setting_locale_code')) {
     }
 }
 
+if (! function_exists('language_codes')) {
+    /**
+     * 获取语言包列表
+     * @return array
+     */
+    function language_codes(): array
+    {
+        $languageDir = lang_path();
+
+        return array_values(array_diff(scandir($languageDir), ['..', '.', '.DS_Store']));
+    }
+}
+
 if (! function_exists('front_locale_code')) {
     /**
      * Get current locale code.
@@ -341,27 +354,26 @@ if (! function_exists('front_lang_path_codes')) {
      */
     function front_lang_path_codes(): array
     {
-        $languageDir = front_lang_dir();
+        $packages = language_codes();
 
-        return array_values(array_diff(scandir($languageDir), ['..', '.', '.DS_Store']));
+        $panelLangCodes = collect($packages)->filter(function ($code) {
+            return file_exists(lang_path("{$code}/front"));
+        })->toArray();
+
+        return array_values($panelLangCodes);
     }
 }
 
-if (! function_exists('front_lang_dir')) {
+if (! function_exists('front_trans')) {
     /**
-     * Get all panel languages
-     *
-     * @return string
+     * @param  $key
+     * @param  array  $replace
+     * @param  $locale
+     * @return mixed
      */
-    function front_lang_dir(): string
+    function front_trans($key = null, array $replace = [], $locale = null): mixed
     {
-        if (is_dir(lang_path('vendor/front'))) {
-            $languageDir = lang_path('vendor/front');
-        } else {
-            $languageDir = inno_path('front/lang');
-        }
-
-        return $languageDir;
+        return trans('front/'.$key, $replace, $locale);
     }
 }
 
@@ -402,7 +414,7 @@ if (! function_exists('create_json_success')) {
      */
     function create_json_success($data = null): JsonResponse
     {
-        return json_success(trans('panel::common.created_success'), $data);
+        return json_success(panel_trans('common.created_success'), $data);
     }
 }
 
@@ -413,7 +425,7 @@ if (! function_exists('read_json_success')) {
      */
     function read_json_success($data = null): JsonResponse
     {
-        return json_success(trans('panel::common.read_success'), $data);
+        return json_success(panel_trans('common.read_success'), $data);
     }
 }
 
@@ -424,7 +436,7 @@ if (! function_exists('update_json_success')) {
      */
     function update_json_success($data = null): JsonResponse
     {
-        return json_success(trans('panel::common.updated_success'), $data);
+        return json_success(panel_trans('common.updated_success'), $data);
     }
 }
 
@@ -435,7 +447,7 @@ if (! function_exists('delete_json_success')) {
      */
     function delete_json_success($data = null): JsonResponse
     {
-        return json_success(trans('panel::common.deleted_success'), $data);
+        return json_success(panel_trans('common.deleted_success'), $data);
     }
 }
 
@@ -446,7 +458,7 @@ if (! function_exists('submit_json_success')) {
      */
     function submit_json_success($data = null): JsonResponse
     {
-        return json_success(trans('panel::common.submitted_success'), $data);
+        return json_success(panel_trans('common.submitted_success'), $data);
     }
 }
 

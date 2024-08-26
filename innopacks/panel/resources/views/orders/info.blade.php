@@ -1,6 +1,6 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.orders'))
+@section('title', __('panel/menu.orders'))
 
 @push('header')
 <script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
@@ -18,14 +18,14 @@
     @endforeach
     <el-dialog
       v-model="statusDialog"
-      title="{{ __('panel::order.status') }}"
+      title="{{ __('panel/order.status') }}"
       width="500">
-      <div class="mb-2">{{ __('panel::order.comment') }}</div>
-      <textarea v-model="comment" class="form-control" placeholder="{{ __('panel::order.comment') }}" rows="3"></textarea>
+      <div class="mb-2">{{ __('panel/order.comment') }}</div>
+      <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}" rows="3"></textarea>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="statusDialog = false">{{ __('panel::common.close') }}</el-button>
-          <el-button type="primary" @click="submit">{{ __('panel::common.btn_save') }}</el-button>
+          <el-button @click="statusDialog = false">{{ __('panel/common.close') }}</el-button>
+          <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -35,18 +35,18 @@
 
 <div class="card mb-4">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::order.order_info') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/order.order_info') }}</h5>
   </div>
   <div class="card-body">
     <table class="table align-middle">
       <thead>
         <tr>
-          <th>{{ __('panel::order.number') }}</th>
-          <th>{{ __('panel::order.created_at') }}</th>
-          <th>{{ __('panel::order.total') }}</th>
-          <th>{{ __('panel::order.billing_method_code') }}</th>
-          <th>{{ __('panel::order.shipping_method_code') }}</th>
-          <th>{{ __('panel::common.status') }}</th>
+          <th>{{ __('panel/order.number') }}</th>
+          <th>{{ __('panel/order.created_at') }}</th>
+          <th>{{ __('panel/order.total') }}</th>
+          <th>{{ __('panel/order.billing_method_code') }}</th>
+          <th>{{ __('panel/order.shipping_method_code') }}</th>
+          <th>{{ __('panel/common.status') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -65,18 +65,18 @@
 
 <div class="card mb-4">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::order.order_items') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/order.order_items') }}</h5>
   </div>
   <div class="card-body">
     <table class="table products-table align-middle">
       <thead>
         <tr>
-          <th>{{ __('panel::common.id') }}</th>
-          <th>{{ __('panel::order.product') }}</th>
-          <th>{{ __('panel::order.sku_code') }}</th>
-          <th>{{ __('panel::order.quantity') }}</th>
-          <th>{{ __('panel::order.unit_price') }}</th>
-          <th>{{ __('panel::order.subtotal') }}</th>
+          <th>{{ __('panel/common.id') }}</th>
+          <th>{{ __('panel/order.product') }}</th>
+          <th>{{ __('panel/order.sku_code') }}</th>
+          <th>{{ __('panel/order.quantity') }}</th>
+          <th>{{ __('panel/order.unit_price') }}</th>
+          <th>{{ __('panel/order.subtotal') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -106,7 +106,7 @@
         @endforeach
         <tr>
           <td></td><td></td><td></td><td></td>
-          <td><strong>{{ __('panel::order.total') }}</strong></td>
+          <td><strong>{{ __('panel/order.total') }}</strong></td>
           <td>{{ $order->total_format }}</td>
         </tr>
       </tbody>
@@ -116,14 +116,14 @@
 
 <div class="card mb-4">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::order.address') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/order.address') }}</h5>
   </div>
   <div class="card-body">
     <div class="row">
       <div class="col-12 col-md-6">
         <div class="address-card">
           <div class="address-card-header mb-3">
-            <h5 class="address-card-title">{{ __('panel::order.shipping_address') }}</h5>
+            <h5 class="address-card-title">{{ __('panel/order.shipping_address') }}</h5>
           </div>
           <div class="address-card-body">
             <p>{{ $order->shipping_customer_name }}</p>
@@ -136,7 +136,7 @@
       <div class="col-12 col-md-6">
         <div class="address-card">
           <div class="address-card-header mb-3">
-            <h5 class="address-card-title">{{ __('panel::order.billing_address') }}</h5>
+            <h5 class="address-card-title">{{ __('panel/order.billing_address') }}</h5>
           </div>
           <div class="address-card-body">
             <p>{{ $order->billing_customer_name }}</p>
@@ -152,15 +152,15 @@
 
 <div class="card mb-4">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::order.history') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/order.history') }}</h5>
   </div>
   <div class="card-body">
     <table class="table table-response align-middle">
       <thead>
       <tr>
-        <th>{{ __('panel::order.status') }}</th>
-        <th>{{ __('panel::order.comment') }}</th>
-        <th>{{ __('panel::order.date_time') }}</th>
+        <th>{{ __('panel/order.status') }}</th>
+        <th>{{ __('panel/order.comment') }}</th>
+        <th>{{ __('panel/order.date_time') }}</th>
       </tr>
       </thead>
       <tbody>

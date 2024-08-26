@@ -6,21 +6,21 @@
     <td style="width:3.2%;max-width:30px;"></td>
     <td style="max-width:480px;text-align:left;">
       <h1 style="font-size: 20px; line-height: 36px; margin: 0px 0px 22px;">
-        {{ __('front::mail.order_success') }}
+        {{ __('front/mail.order_success') }}
       </h1>
       <p style="font-size:14px;color:#333; line-height:24px; margin:0;">
-        {{ __('front::mail.customer_name', ['name' => $order->customer_name]) }}
+        {{ __('front/mail.customer_name', ['name' => $order->customer_name]) }}
       </p>
-      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_details') }}
+      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front/order.order_details') }}
         ：</p>
       <table
           style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse; background-color:#f8f9fa">
         <thead>
         <tr>
-          <td style="font-size:13px;padding: 7px 6px">{{ __('front::order.order_number') }}</td>
-          <td style="font-size:13px;padding: 7px 6px">{{ __('front::order.order_date') }}</td>
-          <td style="font-size:13px;padding: 7px 6px">{{ __('front::order.order_status') }}</td>
-          <td style="font-size:13px;padding: 7px 6px">{{ __('front::order.order_total') }}</td>
+          <td style="font-size:13px;padding: 7px 6px">{{ __('front/order.order_number') }}</td>
+          <td style="font-size:13px;padding: 7px 6px">{{ __('front/order.order_date') }}</td>
+          <td style="font-size:13px;padding: 7px 6px">{{ __('front/order.order_status') }}</td>
+          <td style="font-size:13px;padding: 7px 6px">{{ __('front/order.order_total') }}</td>
         </tr>
         </thead>
         <tbody>
@@ -35,15 +35,15 @@
         </tbody>
       </table>
 
-      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_items') }}
+      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front/order.order_items') }}
         ：</p>
       <table style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse; ">
         <thead>
         <tr>
-          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px;width: 80px;text-align:center">{{ __('front::order.image') }}</td>
-          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px">{{ __('front::order.product') }}</td>
-          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px">{{ __('front::order.quantity') }}</td>
-          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px">{{ __('front::order.subtotal') }}</td>
+          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px;width: 80px;text-align:center">{{ __('front/order.image') }}</td>
+          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px">{{ __('front/order.product') }}</td>
+          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px">{{ __('front/order.quantity') }}</td>
+          <td style="font-size:13px;border: 1px solid #eee; background-color: #f8f9fa;padding: 7px 4px">{{ __('front/order.subtotal') }}</td>
         </tr>
         </thead>
         <tbody>
@@ -60,7 +60,7 @@
         </tbody>
       </table>
 
-      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front::order.order_total') }}
+      <p style="font-size: 13px;font-weight:bold;margin-bottom:6px;color: #333;">{{ __('front/order.order_total') }}
         ：</p>
       <table
           style="width:100%;font-weight:300;margin-top:10px; margin-bottom:10px;border-collapse:collapse;border:1px solid #eee;">
@@ -78,7 +78,7 @@
       <p style="font-size: 14px; color: rgb(51, 51, 51); line-height: 24px; margin: 6px 0px 0px; word-wrap: break-word; word-break: break-all;">
         <a href="{{ account_route('orders.show', ['order' => $order, 'email' => $order->email]) }}" title=""
            style="font-size: 16px; line-height: 45px; display: block; background-color: #944FE8; color: rgb(255, 255, 255); text-align: center; text-decoration: none; margin-top: 20px; border-radius: 3px;">
-          {{ __('front::common.view') }}
+          {{ __('front/common.view') }}
         </a>
       </p>
 

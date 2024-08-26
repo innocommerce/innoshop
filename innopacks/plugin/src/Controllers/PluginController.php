@@ -47,7 +47,7 @@ class PluginController
             $plugin = app('plugin')->getPluginOrFail($code);
             PluginService::getInstance()->installPlugin($plugin);
 
-            return json_success(trans('panel::common.saved_success'));
+            return json_success(panel_trans('common.saved_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -63,7 +63,7 @@ class PluginController
             $plugin = app('plugin')->getPluginOrFail($code);
             PluginService::getInstance()->uninstallPlugin($plugin);
 
-            return json_success(trans('panel::common.deleted_success'));
+            return json_success(panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -120,7 +120,7 @@ class PluginController
 
         return redirect($currentUrl)
             ->with('instance', $plugin)
-            ->with('success', trans('panel::common.updated_success'));
+            ->with('success', panel_trans('common.updated_success'));
     }
 
     /**
@@ -135,7 +135,7 @@ class PluginController
             app('plugin')->getPluginOrFail($code);
             SettingRepo::getInstance()->updatePluginValue($code, 'active', $enabled);
 
-            return json_success(trans('panel::common.updated_success'));
+            return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         } catch (Throwable $e) {

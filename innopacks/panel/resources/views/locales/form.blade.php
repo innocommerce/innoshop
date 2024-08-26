@@ -1,11 +1,11 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.locale'))
+@section('title', __('panel/menu.locale'))
 
 @section('content')
 <div class="card h-min-600">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::menu.locale') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/menu.locale') }}</h5>
   </div>
   <div class="card-body">
     <form class="needs-validation mt-3" novalidate action="{{ $locale->id ? panel_route('locales.update', [$locale->id]) : panel_route('locales.store') }}" method="POST">

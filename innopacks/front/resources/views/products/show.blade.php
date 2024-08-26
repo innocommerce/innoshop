@@ -56,18 +56,18 @@
           </div>
 
           <div class="stock-wrap">
-            <div class="in-stock badge">{{ __('front::product.in_stock') }}</div>
-            <div class="out-stock badge d-none">{{ __('front::product.out_stock') }}</div>
+            <div class="in-stock badge">{{ __('front/product.in_stock') }}</div>
+            <div class="out-stock badge d-none">{{ __('front/product.out_stock') }}</div>
           </div>
 
           <div class="sub-product-title">{{ $product->translation->summary }}</div>
 
           <ul class="product-param">
-            <li class="sku"><span class="title">{{ __('front::product.sku_code') }}:</span> <span class="value">{{ $sku['code'] }}</span></li>
-            <li class="model {{ !($sku['model'] ?? false) ? 'd-none' : '' }}"><span class="title">{{ __('front::product.model') }}:</span> <span class="value">{{ $sku['model'] }}</span></li>
+            <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span class="value">{{ $sku['code'] }}</span></li>
+            <li class="model {{ !($sku['model'] ?? false) ? 'd-none' : '' }}"><span class="title">{{ __('front/product.model') }}:</span> <span class="value">{{ $sku['model'] }}</span></li>
             @if ($product->categories->count())
             <li class="category">
-              <span class="title">{{ __('front::product.category') }}:</span>
+              <span class="title">{{ __('front/product.category') }}:</span>
               <span class="value">
                 @foreach ($product->categories as $category)
                   <a href="{{ $category->url }}" class="text-dark">{{ $category->translation->name }}</a>{{ !$loop->last ? ', ' : '' }}
@@ -77,7 +77,7 @@
             @endif
             @if($product->brand)
             <li class="brand">
-              <span class="title">{{ __('front::product.brand') }}:</span> <span class="value">
+              <span class="title">{{ __('front/product.brand') }}:</span> <span class="value">
                 <a href="{{ $product->brand->url }}"> {{ $product->brand->name }} </a>
               </span></li>
             @endif
@@ -93,11 +93,11 @@
             </div>
 
             <div class="product-info-btns">
-              <button class="btn btn-primary add-cart">{{ __('front::product.add_to_cart') }}</button>
-              <button class="btn buy-now ms-2">{{ __('front::product.buy_now') }}</button>
+              <button class="btn btn-primary add-cart">{{ __('front/product.add_to_cart') }}</button>
+              <button class="btn buy-now ms-2">{{ __('front/product.buy_now') }}</button>
             </div>
           </div>
-          <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"><i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front::product.add_wishlist') }}</div>
+          <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"><i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}</div>
         </div>
       </div>
     </div>
@@ -106,11 +106,11 @@
   <div class="product-description">
     <ul class="nav nav-tabs tabs-plus">
       <li class="nav-item">
-        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#product-description-description" type="button">{{ __('front::product.description') }}</button>
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#product-description-description" type="button">{{ __('front/product.description') }}</button>
       </li>
       @if($attributes)
         <li class="nav-item">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-description-attribute" type="button">{{ __('front::product.attribute') }}</button>
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-description-attribute" type="button">{{ __('front/product.attribute') }}</button>
         </li>
       @endif
     </ul>

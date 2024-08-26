@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="{{ panel_route('home.index') }}">
-  <title>@yield('title', __('panel::login.title'))</title>
-  <meta name="keywords" content="@yield('keywords', __('panel::login.keywords'))">
-  <meta name="description" content="@yield('description', __('panel::login.description'))">
+  <title>@yield('title', __('panel/login.title'))</title>
+  <meta name="keywords" content="@yield('keywords', __('panel/login.keywords'))">
+  <meta name="description" content="@yield('description', __('panel/login.description'))">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
@@ -40,7 +40,7 @@
       <div class="login-wrap">
         <div class="card login-content">
             <div class="card-header">
-              <h3 class="fw-bold text-center">{{ __('panel::login.login_index') }}</h3>
+              <h3 class="fw-bold text-center">{{ __('panel/login.login_index') }}</h3>
             </div>
 
             <div class="card-body">
@@ -49,7 +49,7 @@
 
                 <div class="form-floating mb-4">
                   <input type="text" name="email" class="form-control" id="email-input" value="{{ old('email', $admin_email ?? '') }}" placeholder="{{ __('common.email') }}">
-                  <label for="email-input">{{ __('panel::login.email') }}</label>
+                  <label for="email-input">{{ __('panel/login.email') }}</label>
                   @error('email')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                   @enderror
@@ -57,7 +57,7 @@
 
                 <div class="form-floating mb-5">
                   <input type="password" name="password" class="form-control" id="password-input" value="{{ old('password', $admin_password ?? '') }}" placeholder="{{ __('shop/login.password') }}">
-                  <label for="password-input">{{ __('panel::login.password') }}</label>
+                  <label for="password-input">{{ __('panel/login.password') }}</label>
                   @error('password')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                   @enderror
@@ -69,7 +69,7 @@
                   </div>
                 @endif
 
-                <div class="d-grid mb-4"><button type="submit" class="btn btn-lg btn-primary">{{ __('panel::common.btn_submit') }}</button></div>
+                <div class="d-grid mb-4"><button type="submit" class="btn btn-lg btn-primary">{{ __('panel/common.btn_submit') }}</button></div>
               </form>
             </div>
         </div>

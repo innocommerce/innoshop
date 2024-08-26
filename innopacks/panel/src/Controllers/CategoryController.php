@@ -63,7 +63,7 @@ class CategoryController extends BaseController
 
             return redirect(panel_route('categories.index'))
                 ->with('instance', $category)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (\Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -108,7 +108,7 @@ class CategoryController extends BaseController
 
             return redirect(panel_route('categories.index'))
                 ->with('instance', $category)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (\Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -123,7 +123,7 @@ class CategoryController extends BaseController
         try {
             CategoryRepo::getInstance()->destroy($category);
 
-            return json_success(trans('panel::common.deleted_success'));
+            return json_success(panel_trans('common.deleted_success'));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }

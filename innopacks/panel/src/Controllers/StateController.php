@@ -67,7 +67,7 @@ class StateController extends BaseController
 
             return redirect(panel_route('states.index'))
                 ->with('instance', $state)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('states.index'))
                 ->withInput()
@@ -111,7 +111,7 @@ class StateController extends BaseController
 
             return redirect(panel_route('states.index'))
                 ->with('instance', $state)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('states.index'))
                 ->withInput()
@@ -129,7 +129,7 @@ class StateController extends BaseController
             StateRepo::getInstance()->destroy($state);
 
             return redirect(panel_route('states.index'))
-                ->with('success', trans('panel::common.deleted_success'));
+                ->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('states.index'))
                 ->withErrors(['error' => $e->getMessage()]);

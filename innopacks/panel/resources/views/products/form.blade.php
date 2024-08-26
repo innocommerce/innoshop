@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-product-form')
 
-@section('title', __('panel::menu.products'))
+@section('title', __('panel/menu.products'))
 <x-panel::form.right-btns formid="product-form" />
 
 @php
@@ -22,7 +22,7 @@ $weightClasses = [
     <div class="col-12 col-md-8">
       <div class="card mb-3">
         <div class="card-header">
-          <h5 class="card-title mb-0">{{ __('panel::common.basic_info') }}</h5>
+          <h5 class="card-title mb-0">{{ __('panel/common.basic_info') }}</h5>
         </div>
         <div class="card-body">
           <div class="accordion accordion-flush locales-accordion mb-3" id="data-locales">
@@ -44,44 +44,44 @@ $weightClasses = [
                 data-bs-parent="#data-locales">
                 <div class="accordion-body">
                   <input type="hidden" name="translations[{{$localeCode}}][locale]" value="{{ $localeCode }}">
-                  <x-common-form-input title="{{ __('panel::product.name') }}" name="translations[{{$localeCode}}][name]"
+                  <x-common-form-input title="{{ __('panel/product.name') }}" name="translations[{{$localeCode}}][name]"
                     value="{{ old('translations.' . $localeCode . '.name', $product->translate($localeCode, 'name')) }}"
-                    required placeholder="{{ __('panel::product.name') }}" />
+                    required placeholder="{{ __('panel/product.name') }}" />
 
-                  <x-common-form-input title="{{ __('panel::product.summary') }}" name="translations[{{$localeCode}}][summary]"
+                  <x-common-form-input title="{{ __('panel/product.summary') }}" name="translations[{{$localeCode}}][summary]"
                   value="{{ old('translations.' . $localeCode . '.summary', $product->translate($localeCode, 'summary')) }}"
-                  required placeholder="{{ __('panel::product.summary') }}" />
+                  required placeholder="{{ __('panel/product.summary') }}" />
 
-                  <x-common-form-rich-text title="{{ __('panel::product.content') }}" name="translations[{{$localeCode}}][content]"
+                  <x-common-form-rich-text title="{{ __('panel/product.content') }}" name="translations[{{$localeCode}}][content]"
                     value="{{ old('translations.' . $localeCode . '.content', $product->translate($localeCode, 'content')) }}"
-                    required placeholder="{{ __('panel::product.describe') }}" />
+                    required placeholder="{{ __('panel/product.describe') }}" />
 
-                  <x-common-form-input title="{{ __('panel::common.meta_title') }}" name="translations[{{$localeCode}}][meta_title]"
+                  <x-common-form-input title="{{ __('panel/common.meta_title') }}" name="translations[{{$localeCode}}][meta_title]"
                     value="{{ old('translations.' . $localeCode . '.meta_title', $product->translate($localeCode, 'meta_title')) }}"
-                    placeholder="{{ __('panel::common.meta_title') }}" />
+                    placeholder="{{ __('panel/common.meta_title') }}" />
 
-                  <x-common-form-input title="{{ __('panel::common.meta_keywords') }}" name="translations[{{$localeCode}}][meta_keywords]"
+                  <x-common-form-input title="{{ __('panel/common.meta_keywords') }}" name="translations[{{$localeCode}}][meta_keywords]"
                     value="{{ old('translations.' . $localeCode . '.meta_keywords', $product->translate($localeCode, 'meta_keywords')) }}"
-                    placeholder="{{ __('panel::common.meta_keywords') }}" />
+                    placeholder="{{ __('panel/common.meta_keywords') }}" />
 
-                  <x-common-form-textarea title="{{ __('panel::common.meta_description') }}" name="translations[{{$localeCode}}][meta_description]"
+                  <x-common-form-textarea title="{{ __('panel/common.meta_description') }}" name="translations[{{$localeCode}}][meta_description]"
                     value="{{ old('translations.' . $localeCode . '.meta_description', $product->translate($localeCode, 'meta_description')) }}"
-                    placeholder="{{ __('panel::common.meta_description') }}" />
+                    placeholder="{{ __('panel/common.meta_description') }}" />
                 </div>
               </div>
             </div>
             @endforeach
           </div>
 
-          <x-common-form-images title="{{ __('panel::common.image') }}" name="images" :values="old('images', $product->images->pluck('path')->toArray())"/>
+          <x-common-form-images title="{{ __('panel/common.image') }}" name="images" :values="old('images', $product->images->pluck('path')->toArray())"/>
 
           <div class="skus-single-box {{ $product->is_multiple() ? 'd-none' : '' }}">
             <div class="row">
               <div class="col-12 col-md-4">
-                <x-common-form-input :title="__('panel::product.price')" name="skus[0][price]" required value="{{ old('skus.0.price', ($product->masterSku->price ?? '')) }}" />
+                <x-common-form-input :title="__('panel/product.price')" name="skus[0][price]" required value="{{ old('skus.0.price', ($product->masterSku->price ?? '')) }}" />
               </div>
               <div class="col-12 col-md-4">
-                <x-common-form-input :title="__('panel::product.quantity')" name="skus[0][quantity]" value="{{ old('skus.0.quantity', $product->masterSku->quantity ?? '') }}" />
+                <x-common-form-input :title="__('panel/product.quantity')" name="skus[0][quantity]" value="{{ old('skus.0.quantity', $product->masterSku->quantity ?? '') }}" />
               </div>
               <div class="col-12 col-md-4">
                 <x-common-form-input title="SKU Code" name="skus[0][code]" required value="{{ old('skus.0.code', $product->masterSku->code ?? '') }}" />
@@ -90,10 +90,10 @@ $weightClasses = [
 
             <div class="row">
               <div class="col-12 col-md-4">
-                <x-common-form-input :title="__('panel::product.model')" name="skus[0][model]" value="{{ old('skus.0.model', $product->masterSku->model ?? '') }}" />
+                <x-common-form-input :title="__('panel/product.model')" name="skus[0][model]" value="{{ old('skus.0.model', $product->masterSku->model ?? '') }}" />
               </div>
               <div class="col-12 col-md-4">
-                <x-common-form-input :title="__('panel::product.origin_price')" name="skus[0][origin_price]" value="{{ old('skus.0.origin_price', $product->masterSku->origin_price ?? '') }}" />
+                <x-common-form-input :title="__('panel/product.origin_price')" name="skus[0][origin_price]" value="{{ old('skus.0.origin_price', $product->masterSku->origin_price ?? '') }}" />
               </div>
             </div>
           </div>
@@ -105,13 +105,13 @@ $weightClasses = [
     <div class="col-12 col-md-4 ps-md-0">
       <div class="card">
         <div class="card-body">
-          <x-common-form-switch-radio :title="__('panel::common.status')" name="active" :value="old('active', $product->active ?? true)" />
-          <x-common-form-select :title="__('panel::product.brand')" name="brand_id" :value="old('brand_id', $product->brand_id ?? 0)" :options="$brands" key="id" label="name" />
-          <x-panel::form.row title="{{ __('panel::product.category') }}">
+          <x-common-form-switch-radio :title="__('panel/common.status')" name="active" :value="old('active', $product->active ?? true)" />
+          <x-common-form-select :title="__('panel/product.brand')" name="brand_id" :value="old('brand_id', $product->brand_id ?? 0)" :options="$brands" key="id" label="name" />
+          <x-panel::form.row title="{{ __('panel/product.category') }}">
             <div class="category-select">
               @if ($categories->count())
               <div class="category-search">
-                <input type="text" class="form-control" placeholder="{{ __('panel::common.filter') }}">
+                <input type="text" class="form-control" placeholder="{{ __('panel/common.filter') }}">
               </div>
               <ul>
                 @foreach ($categories as $category)
@@ -127,20 +127,20 @@ $weightClasses = [
               @endif
             </div>
           </x-panel::form.row>
-          <x-common-form-select :title="__('panel::product.tax_class')" name="tax_class_id" :value="old('tax_class_id', $product->tax_class_id ?? 0)" :options="$tax_classes" key="id" label="name" />
+          <x-common-form-select :title="__('panel/product.tax_class')" name="tax_class_id" :value="old('tax_class_id', $product->tax_class_id ?? 0)" :options="$tax_classes" key="id" label="name" />
           <div class="d-flex">
             <div class="w-25">
-              <x-common-form-input :title="__('panel::product.weight')" name="weight" :value="old('weight', $product->weight ?? '')" :placeholder="__('panel::product.weight')" />
+              <x-common-form-input :title="__('panel/product.weight')" name="weight" :value="old('weight', $product->weight ?? '')" :placeholder="__('panel/product.weight')" />
             </div>
             <div class="ms-1 w-75">
-              <x-common-form-select :title="__('panel::product.weight_class')" name="weight_class" :value="old('weight_class', $product->weight_class ?? 0)" :options="$weightClasses" key="id" label="name" />
+              <x-common-form-select :title="__('panel/product.weight_class')" name="weight_class" :value="old('weight_class', $product->weight_class ?? 0)" :options="$weightClasses" key="id" label="name" />
             </div>
           </div>
-          <x-common-form-input :title="__('panel::product.position')" name="position" :value="old('position', $product->position ?? '')" :placeholder="__('panel::product.position')" />
-          <x-common-form-input :title="__('panel::product.sales')" name="sales" :value="old('sales', $product->sales ?? '')" :placeholder="__('panel::product.sales')" />
-          <x-common-form-input :title="__('panel::product.viewed')" name="viewed" :value="old('viewed', $product->viewed ?? '')" :placeholder="__('panel::product.viewed')" />
-          <x-common-form-input :title="__('panel::common.slug')" name="slug" :value="old('slug', $product->slug ?? '')" :placeholder="__('panel::common.slug')" />
-          <x-common-form-switch-radio :title="__('panel::product.is_virtual')" name="is_virtual" :value="old('is_virtual', $product->is_virtual ?? false)" />
+          <x-common-form-input :title="__('panel/product.position')" name="position" :value="old('position', $product->position ?? '')" :placeholder="__('panel/product.position')" />
+          <x-common-form-input :title="__('panel/product.sales')" name="sales" :value="old('sales', $product->sales ?? '')" :placeholder="__('panel/product.sales')" />
+          <x-common-form-input :title="__('panel/product.viewed')" name="viewed" :value="old('viewed', $product->viewed ?? '')" :placeholder="__('panel/product.viewed')" />
+          <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')" :placeholder="__('panel/common.slug')" />
+          <x-common-form-switch-radio :title="__('panel/product.is_virtual')" name="is_virtual" :value="old('is_virtual', $product->is_virtual ?? false)" />
         </div>
       </div>
     </div>

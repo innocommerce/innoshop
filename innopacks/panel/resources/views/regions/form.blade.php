@@ -1,13 +1,13 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.regions'))
+@section('title', __('panel/menu.regions'))
 
 <x-panel::form.right-btns />
 
 @section('content')
 <div class="card h-min-600">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::menu.regions') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/menu.regions') }}</h5>
   </div>
   <div class="card-body">
     <form class="needs-validation mt-3" id="app-form" novalidate action="{{ $region->id ? panel_route('regions.update', [$region->id]) : panel_route('regions.store') }}" method="POST">
@@ -15,10 +15,10 @@
       @method($region->id ? 'PUT' : 'POST')
 
       <div class="wp-500">
-        <x-common-form-input title="{{ __('panel::region.name') }}" name="name" :value="old('name', $region->name ?? '')" required placeholder="{{ __('panel::region.name') }}" />
-        <x-common-form-input title="{{ __('panel::region.description') }}" name="description" :value="old('description', $region->description ?? '')" required placeholder="{{ __('panel::region.name') }}" />
-        <x-common-form-input title="{{ __('panel::region.position') }}" name="position" :value="old('position', $region->position ?? 0)" required placeholder="{{ __('panel::region.name') }}" />
-        <x-panel::form.row title="{{ __('panel::region.region_states') }}" required>
+        <x-common-form-input title="{{ __('panel/region.name') }}" name="name" :value="old('name', $region->name ?? '')" required placeholder="{{ __('panel/region.name') }}" />
+        <x-common-form-input title="{{ __('panel/region.description') }}" name="description" :value="old('description', $region->description ?? '')" required placeholder="{{ __('panel/region.name') }}" />
+        <x-common-form-input title="{{ __('panel/region.position') }}" name="position" :value="old('position', $region->position ?? 0)" required placeholder="{{ __('panel/region.name') }}" />
+        <x-panel::form.row title="{{ __('panel/region.region_states') }}" required>
           <table class="table table-bordered regions-table">
             <thead>
               <tr>
@@ -41,7 +41,7 @@
                     <select class="form-select form-select-sm" name="region_states[{{ $index }}][state_id]" required data-id="{{ $item->state_id }}"></select>
                   </td>
                   <td class="text-end">
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel::common.delete')}}</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel/common.delete')}}</button>
                   </td>
                 </tr>
                 @php ($index++)
@@ -50,7 +50,7 @@
             <tfoot>
               <tr>
                 <td colspan="3" class="text-end">
-                  <button type="button" class="btn add-tax btn-sm btn-outline-primary">{{ __('panel::common.add') }}</button>
+                  <button type="button" class="btn add-tax btn-sm btn-outline-primary">{{ __('panel/common.add') }}</button>
                 </td>
               </tr>
             </tfoot>
@@ -86,7 +86,7 @@
             </select>
           </td>
           <td class="text-end">
-            <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel::common.delete')}}</button>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel/common.delete')}}</button>
           </td>
         </tr>
       `;

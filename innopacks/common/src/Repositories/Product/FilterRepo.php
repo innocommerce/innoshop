@@ -56,8 +56,8 @@ class FilterRepo
     private function getStockStatusTotal(): array
     {
         return [
-            ['code' => 'in_stock', 'name' => trans('front::common.in_stock')],
-            ['code' => 'out_of_stock', 'name' => trans('front::common.out_of_stock')],
+            ['code' => 'in_stock', 'name' => front_trans('common.in_stock')],
+            ['code' => 'out_of_stock', 'name' => front_trans('common.out_of_stock')],
         ];
     }
 

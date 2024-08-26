@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.tax_rates'))
+@section('title', __('panel/menu.tax_rates'))
 
 @push('header')
 <script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
@@ -10,7 +10,7 @@
 @endpush
 
 @section('page-title-right')
-  <button type="button" class="btn btn-primary btn-add" onclick="app.create()"><i class="bi bi-plus-square"></i> {{ __('panel::common.create') }}</button>
+  <button type="button" class="btn btn-primary btn-add" onclick="app.create()"><i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}</button>
 @endsection
 
 @section('content')
@@ -21,13 +21,13 @@
         <table class="table align-middle">
           <thead>
           <tr>
-            <td>{{ __('panel::common.id') }}</td>
-            <td>{{ __('panel::menu.regions') }}</td>
-            <td>{{ __('panel::tax_classes.taxes') }}</td>
-            <td>{{ __('panel::tax_classes.type') }}</td>
-            <td>{{ __('panel::tax_classes.tax_rate') }}</td>
-            <td>{{ __('panel::common.created_at') }}</td>
-            <td>{{ __('panel::common.actions') }}</td>
+            <td>{{ __('panel/common.id') }}</td>
+            <td>{{ __('panel/menu.regions') }}</td>
+            <td>{{ __('panel/tax_classes.taxes') }}</td>
+            <td>{{ __('panel/tax_classes.type') }}</td>
+            <td>{{ __('panel/tax_classes.tax_rate') }}</td>
+            <td>{{ __('panel/common.created_at') }}</td>
+            <td>{{ __('panel/common.actions') }}</td>
           </tr>
           </thead>
           <tbody>
@@ -40,11 +40,11 @@
               <td>{{ $item->rate }}</td>
               <td>{{ $item->created_at }}</td>
               <td>
-                <button type="button" class="btn btn-sm btn-outline-primary" @click="edit({{ $item->id }})">{{ __('panel::common.edit')}}</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" @click="edit({{ $item->id }})">{{ __('panel/common.edit')}}</button>
                 <form action="{{ panel_route('tax_rates.destroy', [$item->id]) }}" method="POST" class="d-inline">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel::common.delete')}}</button>
+                  <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel/common.delete')}}</button>
                 </form>
               </td>
             </tr>
@@ -59,7 +59,7 @@
     </div>
 
     <el-drawer v-model="drawer" size="500" @close="close">
-      <template #header><div class="text-dark fs-4">{{ __('panel::menu.regions') }}</div></template>
+      <template #header><div class="text-dark fs-4">{{ __('panel/menu.regions') }}</div></template>
       <el-form
         ref="formRef"
         label-position="top"
@@ -68,23 +68,23 @@
         label-width="auto"
         status-icon
       >
-        <el-form-item label="{{ __('panel::tax_classes.taxes') }}" prop="name">
+        <el-form-item label="{{ __('panel/tax_classes.taxes') }}" prop="name">
           <el-input size="large" v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="{{ __('panel::tax_classes.type') }}" prop="type">
+        <el-form-item label="{{ __('panel/tax_classes.type') }}" prop="type">
           <select v-model="form.type" class="form-control">
             <option v-for="item in source.types" :value="item.value">@{{ item.label }}</option>
           </select>
         </el-form-item>
 
-        <el-form-item label="{{ __('panel::tax_classes.tax_rate') }}" prop="rate">
+        <el-form-item label="{{ __('panel/tax_classes.tax_rate') }}" prop="rate">
           <el-input size="large" v-model="form.rate">
             <template #append v-if="form.type == 'percent'">%</template>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="{{ __('panel::menu.regions') }}" prop="region_id">
+        <el-form-item label="{{ __('panel/menu.regions') }}" prop="region_id">
           <select v-model="form.region_id" class="form-control">
             <option v-for="item in source.regions" :value="item.id">@{{ item.name }}</option>
           </select>
@@ -93,8 +93,8 @@
 
       <template #footer>
         <div style="flex: auto">
-          <el-button @click="drawer = false">{{ __('panel::common.close') }}</el-button>
-          <el-button type="primary" @click="submit">{{ __('panel::common.btn_save') }}</el-button>
+          <el-button @click="drawer = false">{{ __('panel/common.close') }}</el-button>
+          <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
         </div>
       </template>
     </el-drawer>

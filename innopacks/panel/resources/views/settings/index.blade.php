@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.settings'))
+@section('title', __('panel/menu.settings'))
 
 <x-panel::form.right-btns />
 
@@ -12,19 +12,19 @@
   <div class="row">
     <div class="col-3">
       <div class="card h-min-600" id="setting-menu">
-        <div class="card-header">{{ __('panel::menu.settings') }}</div>
+        <div class="card-header">{{ __('panel/menu.settings') }}</div>
         <div class="card-body">
           <ul class="nav flex-column settings-nav">
-            <a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-basics">{{ __('panel::setting.basic') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel::setting.website_data') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel::setting.email_setting') }}</a>
+            <a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-basics">{{ __('panel/setting.basic') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel/setting.website_data') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting.email_setting') }}</a>
           </ul>
         </div>
       </div>
     </div>
     <div class="col-9">
       <div class="card h-min-600">
-        <div class="card-header setting-header">{{ __('panel::setting.basic') }}</div>
+        <div class="card-header setting-header">{{ __('panel/setting.basic') }}</div>
         <div class="card-body">
           <div class="tab-content">
             <div class="tab-pane fade show active" id="tab-setting-basics">

@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.themes_settings'))
+@section('title', __('panel/menu.themes_settings'))
 
 <x-panel::form.right-btns/>
 
@@ -13,29 +13,29 @@
     <div class="row">
       <div class="col-3">
         <div class="card h-min-600" id="setting-menu">
-          <div class="card-header">{{ __('panel::menu.themes_settings') }}</div>
+          <div class="card-header">{{ __('panel/menu.themes_settings') }}</div>
           <div class="card-body">
             <ul class="nav flex-column settings-nav">
               <a class="nav-link active" href="#" data-bs-toggle="tab"
-                 data-bs-target="#tab-setting-slideshow">{{ __('panel::setting.slideshow') }}</a>
+                 data-bs-target="#tab-setting-slideshow">{{ __('panel/setting.slideshow') }}</a>
               <a class="nav-link" href="#" data-bs-toggle="tab"
-                 data-bs-target="#tab-setting-header-menu">{{ __('panel::setting.header_menu') }}</a>
+                 data-bs-target="#tab-setting-header-menu">{{ __('panel/setting.header_menu') }}</a>
               <a class="nav-link" href="#" data-bs-toggle="tab"
-                 data-bs-target="#tab-setting-footer-menu">{{ __('panel::setting.footer_menu') }}</a>
+                 data-bs-target="#tab-setting-footer-menu">{{ __('panel/setting.footer_menu') }}</a>
             </ul>
           </div>
         </div>
       </div>
       <div class="col-9">
         <div class="card h-min-600">
-          <div class="card-header setting-header">{{ __('panel::setting.slideshow') }}</div>
+          <div class="card-header setting-header">{{ __('panel/setting.slideshow') }}</div>
           <div class="card-body">
             <div class="tab-content">
               <div class="tab-pane fade show active" id="tab-setting-slideshow">
                 <table class="table table-bordered align-middle">
                   <thead>
-                  <th>{{ __('panel::common.image') }}</th>
-                  <th>{{ __('panel::common.link') }}</th>
+                  <th>{{ __('panel/common.image') }}</th>
+                  <th>{{ __('panel/common.link') }}</th>
                   <th class="text-end" width="100"></th>
                   </thead>
                   <tbody>
@@ -92,7 +92,7 @@
                 <div class="row">
                   <div class="col-4">
                     <div class="card">
-                      <div class="card-header">{{ __('panel::menu.categories') }}</div>
+                      <div class="card-header">{{ __('panel/menu.categories') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
                         <input class="d-none" name="menu_categories" value="">
                         @foreach ($categories as $item)
@@ -109,7 +109,7 @@
                   </div>
                   <div class="col-4">
                     <div class="card">
-                      <div class="card-header">{{ __('panel::setting.catalogs') }}</div>
+                      <div class="card-header">{{ __('panel/setting.catalogs') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
                         <input class="d-none" name="menu_catalogs" value="">
                         @foreach ($catalogs as $item)
@@ -126,7 +126,7 @@
                   </div>
                   <div class="col-4">
                     <div class="card">
-                      <div class="card-header">{{ __('panel::setting.page') }}</div>
+                      <div class="card-header">{{ __('panel/setting.page') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
                         <input class="d-none" name="menu_pages" value="">
                         @foreach ($pages as $item)
@@ -148,7 +148,7 @@
                 <div class="row">
                   <div class="col-4">
                     <div class="card">
-                      <div class="card-header">{{ __('panel::menu.categories') }}</div>
+                      <div class="card-header">{{ __('panel/menu.categories') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
                         <input class="d-none" name="footer_categories" value="">
                         @foreach ($categories as $item)
@@ -165,7 +165,7 @@
                   </div>
                   <div class="col-4">
                     <div class="card">
-                      <div class="card-header">{{ __('panel::setting.catalogs') }}</div>
+                      <div class="card-header">{{ __('panel/setting.catalogs') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
                         <input class="d-none" name="footer_catalogs" value="">
                         @foreach ($catalogs as $item)
@@ -182,7 +182,7 @@
                   </div>
                   <div class="col-4">
                     <div class="card">
-                      <div class="card-header">{{ __('panel::setting.page') }}</div>
+                      <div class="card-header">{{ __('panel/setting.page') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
                         <input class="d-none" name="footer_pages" value="">
                         @foreach ($pages as $item)

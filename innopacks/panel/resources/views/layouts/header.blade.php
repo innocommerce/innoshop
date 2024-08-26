@@ -27,9 +27,9 @@
       <span class="ms-2">{{ current_admin()->name }} <i class="bi bi-chevron-down"></i></span>
 
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="{{ front_route('home.index') }}" target="_blank">{{ __('panel::dashboard.frontend') }}</a></li>
-        <li><a class="dropdown-item" href="{{ panel_route('account.index') }}">{{ __('panel::dashboard.profile') }}</a></li>
-        <li><a class="dropdown-item" href="{{ panel_route('logout.index') }}">{{ __('panel::dashboard.sign_out') }}</a></li>
+        <li><a class="dropdown-item" href="{{ front_route('home.index') }}" target="_blank">{{ __('panel/dashboard.frontend') }}</a></li>
+        <li><a class="dropdown-item" href="{{ panel_route('account.index') }}">{{ __('panel/dashboard.profile') }}</a></li>
+        <li><a class="dropdown-item" href="{{ panel_route('logout.index') }}">{{ __('panel/dashboard.sign_out') }}</a></li>
       </ul>
     </div>
   </div>

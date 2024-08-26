@@ -54,7 +54,7 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <button type="button" class="btn btn-primary btn-lg form-submit w-50">{{ __('front::common.submit') }}</button>
+    <button type="button" class="btn btn-primary btn-lg form-submit w-50">{{ __('front/common.submit') }}</button>
   </div>
 </form>
 

@@ -27,7 +27,7 @@
       </div>
     </div>
     <span class="text-muted" style="font-size: 12px">
-      <i class="bi bi-info-circle"></i> {{ __('panel::common.up_image_text') }}
+      <i class="bi bi-info-circle"></i> {{ __('panel/common.up_image_text') }}
       @if ($max)
       ，最多上传(<span class="imgs-count">{{ count($values) }}</span>/{{ $max }})张
       @endif
@@ -43,7 +43,7 @@
       <div class="modal-body"></div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel::common.close') }}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.close') }}</button>
       </div>
     </div>
   </div>

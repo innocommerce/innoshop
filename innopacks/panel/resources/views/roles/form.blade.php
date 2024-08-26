@@ -1,6 +1,6 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::role.roles'))
+@section('title', __('panel/role.roles'))
 
 <x-panel::form.right-btns/>
 
@@ -8,7 +8,7 @@
 
   <div class="card h-min-600">
     <div class="card-header">
-      <h5 class="card-title mb-0">{{ __('panel::role.roles') }}</h5>
+      <h5 class="card-title mb-0">{{ __('panel/role.roles') }}</h5>
     </div>
     <div class="card-body">
       <form class="needs-validation" id="app-form" novalidate
@@ -18,22 +18,22 @@
         @method($role->id ? 'PUT' : 'POST')
 
         <div class="wp-400">
-          <x-common-form-input title="{{ __('panel::role.name') }}" name="name" value="{{ old('name', $role->name) }}"
-                               required placeholder="{{ __('panel::role.name') }}"/>
+          <x-common-form-input title="{{ __('panel/role.name') }}" name="name" value="{{ old('name', $role->name) }}"
+                               required placeholder="{{ __('panel/role.name') }}"/>
         </div>
 
         <div class="wp-900">
-          <x-panel::form.row title="{{ __('panel::role.permissions') }}">
+          <x-panel::form.row title="{{ __('panel/role.permissions') }}">
             <div class="roles-wrap">
               <table class="table table-bordered">
                 <thead>
                 <tr>
                   <th class="bg-light">
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-select-all">
-                      {{ __('panel::role.select_all') }}
+                      {{ __('panel/role.select_all') }}
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-uncheck">
-                      {{ __('panel::role.unselect_all') }}
+                      {{ __('panel/role.unselect_all') }}
                     </button>
                   </th>
                 </tr>
@@ -43,9 +43,9 @@
                   <tr>
                     <td>
                       <span class="me-2">{{ $item['is_plugin'] ? 'P -' : '' }} {{ $item['label'] }}</span>
-                      [<span class="text-secondary cursor-pointer select-list">{{ __('panel::role.select_all') }}</span>
+                      [<span class="text-secondary cursor-pointer select-list">{{ __('panel/role.select_all') }}</span>
                       /
-                      <span class="text-secondary cursor-pointer cancel-list">{{ __('panel::role.unselect_all') }}</span>]
+                      <span class="text-secondary cursor-pointer cancel-list">{{ __('panel/role.unselect_all') }}</span>]
                     </td>
                   </tr>
                   <tr>

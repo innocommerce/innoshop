@@ -1,6 +1,6 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.customers'))
+@section('title', __('panel/menu.customers'))
 
 <x-panel::form.right-btns/>
 
@@ -9,7 +9,7 @@
     <div class="col-6">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title mb-0">{{ __('panel::menu.customers') }}</h5>
+          <h5 class="card-title mb-0">{{ __('panel/menu.customers') }}</h5>
         </div>
         <div class="card-body">
           <form class="needs-validation" novalidate id="app-form"
@@ -37,8 +37,8 @@
             <x-common-form-select title="语言" name="locale" :options="$locales" key="code" label="name"
                                   value="{{ old('locale', $customer->locale) }}"/>
 
-            <x-common-form-switch-radio title="{{ __('panel::common.whether_enable') }}" name="active" :value="old('active', $page->active ?? true)"
-                                        placeholder="{{ __('panel::common.whether_enable') }}"/>
+            <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $page->active ?? true)"
+                                        placeholder="{{ __('panel/common.whether_enable') }}"/>
 
             <button type="submit" class="d-none"></button>
           </form>
@@ -48,8 +48,8 @@
     <div class="col-6">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">{{ __('panel::customer.address') }}</h5>
-          <button class="btn btn-sm add-address btn-outline-primary">{{ __('panel::common.add') }}</button>
+          <h5 class="card-title mb-0">{{ __('panel/customer.address') }}</h5>
+          <button class="btn btn-sm add-address btn-outline-primary">{{ __('panel/common.add') }}</button>
         </div>
         <div class="card-body">
           {{-- @dd($customer->addresses) --}}
@@ -70,8 +70,8 @@
                 <td>{{ $address['phone'] }}</td>
                 <td class="text-end">
                   <button type="button"
-                          class="btn btn-sm edit-address btn-outline-primary">{{ __('panel::common.edit') }}</button>
-                  <button type="button" class="btn btn-sm btn-outline-danger">{{ __('panel::common.delete') }}</button>
+                          class="btn btn-sm edit-address btn-outline-primary">{{ __('panel/common.edit') }}</button>
+                  <button type="button" class="btn btn-sm btn-outline-danger">{{ __('panel/common.delete') }}</button>
                 </td>
               </tr>
             @endforeach
@@ -86,7 +86,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addressModalLabel">{{ __('front::address.address') }}</h5>
+          <h5 class="modal-title" id="addressModalLabel">{{ __('front/address.address') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -125,8 +125,8 @@
     $('.delete-address').on('click', function () {
       const id = $(this).parents('tr').data('id');
 
-      layer.confirm('{{ __('front::common.delete_confirm') }}', {
-        btn: ['{{ __('front::common.confirm') }}', '{{ __('front::common.cancel') }}']
+      layer.confirm('{{ __('front/common.delete_confirm') }}', {
+        btn: ['{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}']
       }, function () {
         axios.delete(`{{ account_route('addresses.index') }}/${id}`).then(function (res) {
           if (res.success) {

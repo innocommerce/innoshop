@@ -6,7 +6,7 @@
 
 <div class="card variants-box mb-3" id="variants-box">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::product.variant') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/product.variant') }}</h5>
   </div>
 
   <div class="card-body py-0">
@@ -31,33 +31,33 @@
                   </div>
                 </div>
               </div>
-              <div class="right"><button type="button" class="btn btn-outline-secondary btn-sm" @click="variant.variantFormShow = true">{{ __('panel::common.edit') }}</button></div>
+              <div class="right"><button type="button" class="btn btn-outline-secondary btn-sm" @click="variant.variantFormShow = true">{{ __('panel/common.edit') }}</button></div>
             </div>
             <div class="add-variant-form" v-else>
               <div class="mb-3 add-variant-title">
                 <div class="variant-label">
-                  <label class="form-label">{{ __('panel::product.variant_name') }}</label>
+                  <label class="form-label">{{ __('panel/product.variant_name') }}</label>
                   <div class="v-locales-input">
                     <div v-for="locale in locales" class="input-group" :key="locale.code">
                       <span class="input-group-text"><img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid">@{{ locale.name }}</span>
-                      <input type="text" class="form-control" v-model="variant.name[locale.code]" placeholder="{{ __('panel::product.variant_name_help') }}">
+                      <input type="text" class="form-control" v-model="variant.name[locale.code]" placeholder="{{ __('panel/product.variant_name_help') }}">
                     </div>
-                    <span class="text-12 text-danger" style="margin-left: 100px" v-if="variant.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel::common.verify_required') }}</span>
+                    <span class="text-12 text-danger" style="margin-left: 100px" v-if="variant.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel/common.verify_required') }}</span>
                   </div>
                 </div>
               </div>
               <div class="add-variant-values">
-                <label class="form-label">{{ __('panel::product.variant_value') }}</label>
+                <label class="form-label">{{ __('panel/product.variant_value') }}</label>
                 <div class="add-variant-value">
                   <div class="add-variant-value-item" v-for="(value, index) in variant.values" :key="index">
                     <div class="icon"><i class="bi bi-grip-vertical"></i></div>
                     <div class="v-locales-input variant-value">
                       <div v-for="locale in locales" class="input-group" :key="locale.code">
                         <span class="input-group-text"><img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid">@{{ locale.name }}</span>
-                        <input type="text" class="form-control" v-model="value.name[locale.code]" placeholder="{{ __('panel::product.variant_value_help') }}" ref="variantValue">
+                        <input type="text" class="form-control" v-model="value.name[locale.code]" placeholder="{{ __('panel/product.variant_value_help') }}" ref="variantValue">
                         {{-- @keyup.enter="addVariantValue" --}}
                       </div>
-                      <span class="text-12 text-danger" style="margin-left: 100px" v-if="value.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel::common.verify_required') }}</span>
+                      <span class="text-12 text-danger" style="margin-left: 100px" v-if="value.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel/common.verify_required') }}</span>
                     </div>
                     <div class="delete-icon" v-if="variant.values.length > 1" @click="variant.values.splice(index, 1)"><i class="bi bi-trash"></i></div>
                     <div class="delete-icon" v-else></div>
@@ -65,11 +65,11 @@
                   <div class="add-variant-btns">
                     {{-- <div class="text-secondary text-12 mb-2">按回车键新增一行</div> --}}
                     <div class="text-primary text-12 mb-3">
-                      <div class="d-inline-block cursor-pointer" @click="addVariantValue(index)"><i class="bi bi-plus-lg"></i> {{ __('panel::product.add_variant_value') }}</div>
+                      <div class="d-inline-block cursor-pointer" @click="addVariantValue(index)"><i class="bi bi-plus-lg"></i> {{ __('panel/product.add_variant_value') }}</div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
-                      <button type="button" class="btn btn-outline-danger" @click="deleteVariant(index)">{{ __('panel::common.delete') }}</button>
-                      <button type="button" class="btn btn-outline-primary" @click="saveVariant(index)">{{ __('panel::common.btn_save') }}</button>
+                      <button type="button" class="btn btn-outline-danger" @click="deleteVariant(index)">{{ __('panel/common.delete') }}</button>
+                      <button type="button" class="btn btn-outline-primary" @click="saveVariant(index)">{{ __('panel/common.btn_save') }}</button>
                     </div>
                   </div>
                 </div>
@@ -80,12 +80,12 @@
       </draggable>
     </div>
     <div :class="['text-primary add-variant', !variants.length ? 'no-variants' : '']" v-if="variants.length < 3">
-      <div class="d-inline-block cursor-pointer" @click="addVariant"><i class="bi bi-plus-square me-1"></i> {{ __('panel::product.add_variant') }}</div>
+      <div class="d-inline-block cursor-pointer" @click="addVariant"><i class="bi bi-plus-square me-1"></i> {{ __('panel/product.add_variant') }}</div>
     </div>
     <div class="variant-skus-wrap" v-if="smallVariants.length">
       <div class="variant-skus-top" v-if="variants.length > 1">
         <div class="left">
-          <span class="me-2">{{ __('panel::product.group_by') }}</span>
+          <span class="me-2">{{ __('panel/product.group_by') }}</span>
           <select class="form-select form-select-sm" v-model="mainVariantKey">
             <option v-for="(variant, index) in variants" :key="index" :value="index">@{{ variant.name[defaultLocale] }}</option>
           </select>
@@ -93,8 +93,8 @@
         <div class="right">
           <div class="cursor-pointer" @click="allVariantEC">
             <i :class="'bi me-1 ' + (!showAllVariant ? 'bi-chevron-bar-expand' : 'bi-chevron-bar-contract')"></i>
-            <span v-if="!showAllVariant">{{ __('panel::product.expand_all') }}</span>
-            <span v-else>{{ __('panel::product.collapse_all') }}</span>
+            <span v-if="!showAllVariant">{{ __('panel/product.expand_all') }}</span>
+            <span v-else>{{ __('panel/product.collapse_all') }}</span>
           </div>
         </div>
       </div>
@@ -102,12 +102,12 @@
       <div class="variant-skus-table table-responsive">
         <table class="table align-middle">
           <thead>
-            <th style="min-width: 220px">{{ __('panel::product.variant') }} <span class=""></span></th>
+            <th style="min-width: 220px">{{ __('panel/product.variant') }} <span class=""></span></th>
             <th>SKU Code</th>
-            <th>{{ __('panel::product.price') }}</th>
-            <th>{{ __('panel::product.origin_price') }}</th>
-            <th>{{ __('panel::product.model') }}</th>
-            <th>{{ __('panel::product.quantity') }}</th>
+            <th>{{ __('panel/product.price') }}</th>
+            <th>{{ __('panel/product.origin_price') }}</th>
+            <th>{{ __('panel/product.model') }}</th>
+            <th>{{ __('panel/product.quantity') }}</th>
           </thead>
           <tbody>
             <tr v-for="(sku, index) in smallVariants" :key="index" :class="sku.sku_quantity == null ? 'sub-variant' : 'original-variant'">
@@ -122,31 +122,31 @@
                       @{{ sku.sku_group }}
                     </div>
                     <div v-if="variants.length > 1">
-                      <div class="variant-show" v-if="sku.sku_quantity != null" @click="showVariant(sku.init_index, index)">@{{ sku.sku_quantity }} {{ __('panel::product.variant_items') }} <i :class="'bi ' + (sku.show_variant ? 'bi-chevron-up' : 'bi-chevron-down')"></i></div>
+                      <div class="variant-show" v-if="sku.sku_quantity != null" @click="showVariant(sku.init_index, index)">@{{ sku.sku_quantity }} {{ __('panel/product.variant_items') }} <i :class="'bi ' + (sku.show_variant ? 'bi-chevron-up' : 'bi-chevron-down')"></i></div>
                       <div v-else class="sku-text">@{{ sku.text }}</div>
                     </div>
                     <div class="up-master text-12" v-if="sku.sku_quantity == null">
-                      <span v-if="sku.is_default" class="text-success"><i class="bi bi-check-circle-fill"></i> {{ __('panel::product.main_variant') }}</span>
-                      <span class="opacity-50 cursor-pointer" v-else @click="setMasterSku(index)"><i class="bi bi-circle"></i> {{ __('panel::product.main_variant') }}</span>
+                      <span v-if="sku.is_default" class="text-success"><i class="bi bi-check-circle-fill"></i> {{ __('panel/product.main_variant') }}</span>
+                      <span class="opacity-50 cursor-pointer" v-else @click="setMasterSku(index)"><i class="bi bi-circle"></i> {{ __('panel/product.main_variant') }}</span>
                     </div>
                   </div>
                 </div>
               </td>
               <td>
-                <input type="text" :class="['form-control form-control-sm', sku.error ? 'is-invalid other-error' : '']" @input="modifySku(sku.init_index, index, 'code')" v-model="sku.code" :placeholder="sku.sku_quantity == null || variants.length == 1 ? 'SKU Code' : '{{ __('panel::product.batch_edit') }}'">
-                <div class="invalid-feedback">{{ __('panel::product.error_sku_repeat') }}</div>
+                <input type="text" :class="['form-control form-control-sm', sku.error ? 'is-invalid other-error' : '']" @input="modifySku(sku.init_index, index, 'code')" v-model="sku.code" :placeholder="sku.sku_quantity == null || variants.length == 1 ? 'SKU Code' : '{{ __('panel/product.batch_edit') }}'">
+                <div class="invalid-feedback">{{ __('panel/product.error_sku_repeat') }}</div>
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'price')" v-model="sku.price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel::product.price') }}' : '{{ __('panel::product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'price')" v-model="sku.price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.price') }}' : '{{ __('panel/product.batch_edit') }}'">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'origin_price')" v-model="sku.origin_price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel::product.origin_price') }}' : '{{ __('panel::product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'origin_price')" v-model="sku.origin_price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.origin_price') }}' : '{{ __('panel/product.batch_edit') }}'">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'model')" v-model="sku.model" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel::product.model') }}' : '{{ __('panel::product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'model')" v-model="sku.model" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.model') }}' : '{{ __('panel/product.batch_edit') }}'">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'quantity')" v-model="sku.quantity" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel::product.quantity') }}' : '{{ __('panel::product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'quantity')" v-model="sku.quantity" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.quantity') }}' : '{{ __('panel/product.batch_edit') }}'">
               </td>
             </tr>
           </tbody>

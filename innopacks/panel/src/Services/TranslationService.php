@@ -52,7 +52,7 @@ class TranslationService extends BaseService
     public function deleteLocale($locale): void
     {
         if ($locale->code == system_setting('front_locale')) {
-            throw new NotAcceptableHttpException(trans('panel::language.default_locale_cannot_delete'));
+            throw new NotAcceptableHttpException(panel_trans('language.default_locale_cannot_delete'));
         }
         $locale->delete();
 

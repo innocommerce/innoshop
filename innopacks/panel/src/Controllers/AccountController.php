@@ -39,7 +39,7 @@ class AccountController extends BaseController
 
             return redirect(panel_route('account.index'))
                 ->with('instance', $admin)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
 
         } catch (\Exception $e) {
             return redirect(panel_route('account.index'))

@@ -42,8 +42,8 @@ class RegisterRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'email'    => trans('front::login.email'),
-            'password' => trans('front::login.password'),
+            'email'    => front_trans('login.email'),
+            'password' => front_trans('login.password'),
         ];
     }
 }

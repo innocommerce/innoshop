@@ -57,7 +57,7 @@ class OrderReturnController extends BaseController
 
             return redirect(panel_route('order_returns.index'))
                 ->with('instance', $orderReturn)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -102,7 +102,7 @@ class OrderReturnController extends BaseController
 
             return redirect(panel_route('order_returns.index'))
                 ->with('instance', $orderReturn)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -117,7 +117,7 @@ class OrderReturnController extends BaseController
         try {
             OrderReturnRepo::getInstance()->destroy($order_return);
 
-            return back()->with('success', trans('panel::common.deleted_success'));
+            return back()->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

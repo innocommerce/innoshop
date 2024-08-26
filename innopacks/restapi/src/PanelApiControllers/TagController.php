@@ -51,7 +51,7 @@ class TagController extends BaseController
             $data = $request->all();
             $tag  = TagRepo::getInstance()->create($data);
 
-            return json_success(trans('panel::common.updated_success'), $tag);
+            return json_success(panel_trans('common.updated_success'), $tag);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -68,7 +68,7 @@ class TagController extends BaseController
             $data = $request->all();
             TagRepo::getInstance()->update($tag, $data);
 
-            return json_success(trans('panel::common.updated_success'), $tag);
+            return json_success(panel_trans('common.updated_success'), $tag);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -83,7 +83,7 @@ class TagController extends BaseController
         try {
             TagRepo::getInstance()->destroy($tag);
 
-            return json_success(trans('panel::common.deleted_success'));
+            return json_success(panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

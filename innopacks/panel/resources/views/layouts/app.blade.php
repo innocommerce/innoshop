@@ -25,10 +25,10 @@
     }
 
     const lang = {
-      hint: '{{ __('panel::common.hint') }}',
-      delete_confirm: '{{ __('panel::common.delete_confirm') }}',
-      confirm: '{{ __('panel::common.confirm') }}',
-      cancel: '{{ __('panel::common.cancel') }}',
+      hint: '{{ __('panel/common.hint') }}',
+      delete_confirm: '{{ __('panel/common.delete_confirm') }}',
+      confirm: '{{ __('panel/common.confirm') }}',
+      cancel: '{{ __('panel/common.cancel') }}',
     }
   </script>
   @stack('header')

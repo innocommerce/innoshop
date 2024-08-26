@@ -2,7 +2,7 @@
 @section('body-class', 'page-order')
 
 @section('content')
-  <x-front-breadcrumb type="route" value="account.orders.index" title="{{ __('front::account.orders') }}" />
+  <x-front-breadcrumb type="route" value="account.orders.index" title="{{ __('front/account.orders') }}" />
 
   @hookinsert('account.order_index.top')
 
@@ -14,16 +14,16 @@
       <div class="col-12 col-lg-9">
         <div class="account-card-box order-box">
           <div class="account-card-title d-flex justify-content-between align-items-center">
-            <span class="fw-bold">{{ __('front::order.order') }}</span>
+            <span class="fw-bold">{{ __('front/order.order') }}</span>
           </div>
 
             <ul class="nav nav-tabs tabs-plus">
               <li class="nav-item">
-                <a class="nav-link {{ request('status') == '' ? 'active' : '' }}" href="{{ account_route('orders.index') }}">{{ __('front::order.all') }}</a>
+                <a class="nav-link {{ request('status') == '' ? 'active' : '' }}" href="{{ account_route('orders.index') }}">{{ __('front/order.all') }}</a>
               </li>
               @foreach($filter_statuses as $status)
               <li class="nav-item">
-                <a class="nav-link {{ request('status') == $status ? 'active' : '' }}" href="{{ account_route('orders.index', ['status' => $status]) }}">{{ __('front::order.'.$status) }}</a>
+                <a class="nav-link {{ request('status') == $status ? 'active' : '' }}" href="{{ account_route('orders.index', ['status' => $status]) }}">{{ __('front/order.'.$status) }}</a>
               </li>
               @endforeach
             </ul>
@@ -32,12 +32,12 @@
             <table class="table align-middle account-table-box table-response">
               <thead>
               <tr>
-                <th>{{ __('front::order.order_number') }}</th>
-                <th>{{ __('front::order.order_items') }}</th>
-                <th>{{ __('front::order.order_date') }}</th>
-                <th>{{ __('front::order.order_status') }}</th>
-                <th>{{ __('front::order.order_total') }}</th>
-                <th>{{ __('front::common.action') }}</th>
+                <th>{{ __('front/order.order_number') }}</th>
+                <th>{{ __('front/order.order_items') }}</th>
+                <th>{{ __('front/order.order_date') }}</th>
+                <th>{{ __('front/order.order_status') }}</th>
+                <th>{{ __('front/order.order_total') }}</th>
+                <th>{{ __('front/common.action') }}</th>
               </tr>
               </thead>
               <tbody>
@@ -59,7 +59,7 @@
                   </td>
                   <td data-title="Total">{{ $order->total_format }}</td>
                   <td data-title="Actions">
-                    <a href="{{ account_route('orders.show', ['order' => $order] ) }}" class="btn btn-primary">{{ __('front::common.view') }}</a>
+                    <a href="{{ account_route('orders.show', ['order' => $order] ) }}" class="btn btn-primary">{{ __('front/common.view') }}</a>
                   </td>
                 </tr>
               @endforeach

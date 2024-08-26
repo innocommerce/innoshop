@@ -81,7 +81,7 @@ class CheckoutController extends Controller
             $order = $checkout->confirm();
             StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID, '', true);
 
-            return json_success(trans('front::common.submitted_success'), $order);
+            return json_success(front_trans('common.submitted_success'), $order);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

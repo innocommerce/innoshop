@@ -23,7 +23,7 @@
               <div class="col-12 col-md-4 footer-item">
                 <div class="footer-links">
                   <div class="footer-link-title">
-                    <span>{{ __('front::common.products') }}</span>
+                    <span>{{ __('front/common.products') }}</span>
                     <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
                   </div>
                   <ul class="footer-item-content">
@@ -36,7 +36,7 @@
               <div class="col-12 col-md-4 footer-item">
                 <div class="footer-links">
                   <div class="footer-link-title">
-                    <span>{{ __('front::common.news') }}</span>
+                    <span>{{ __('front/common.news') }}</span>
                     <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
                   </div>
                   <ul class="footer-item-content">
@@ -49,7 +49,7 @@
               <div class="col-12 col-md-4 footer-item">
                 <div class="footer-links">
                   <div class="footer-link-title">
-                    <span>{{ __('front::common.pages') }}</span>
+                    <span>{{ __('front/common.pages') }}</span>
                     <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
                   </div>
                   <ul class="footer-item-content">

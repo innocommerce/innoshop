@@ -26,7 +26,7 @@ class Breadcrumb extends Component
     public function __construct($type, $value, string $title = '')
     {
         $this->breadcrumbs[] = [
-            'title' => trans('front::common.home'),
+            'title' => front_trans('common.home'),
             'url'   => front_route('home.index'),
         ];
 
@@ -41,15 +41,15 @@ class Breadcrumb extends Component
         ];
 
         if ($type == 'order' || in_array($value, $accountRoutes)) {
-            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.index', trans('front::account.account'));
+            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.index', front_trans('account.account'));
         }
 
         if ($type == 'order') {
-            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.orders.index', trans('front::account.orders'));
+            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.orders.index', front_trans('account.orders'));
         }
 
         if ($type == 'brand') {
-            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'brands.index', trans('front::product.brand'));
+            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'brands.index', front_trans('product.brand'));
         }
 
         $this->breadcrumbs[] = $breadcrumbLib->getTrail($type, $value, $title);

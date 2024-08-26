@@ -35,7 +35,7 @@ class ShippingService extends BaseService
 
             $bootClass = $this->getBootClass($plugin);
             if (! method_exists($bootClass, 'getQuotes')) {
-                throw new Exception(trans('front::checkout.shipping_quote_error', ['classname' => $bootClass]));
+                throw new Exception(front_trans('checkout.shipping_quote_error', ['classname' => $bootClass]));
             }
 
             $quotes = (new $bootClass)->getQuotes($this->checkoutService);

@@ -2,7 +2,7 @@
 @section('body-class', 'page-cart')
 
 @section('content')
-<x-front-breadcrumb type="route" value="carts.index" title="{{ __('front::cart.cart') }}" />
+<x-front-breadcrumb type="route" value="carts.index" title="{{ __('front/cart.cart') }}" />
 
 @hookinsert('cart.top')
 
@@ -21,11 +21,11 @@
                 @endphp
                 <input class="form-check-input product-all-check" type="checkbox" @if (count($selectedItems) == count($list)) checked @endif>
               </th>
-              <th scope="col">{{ __('front::cart.product') }}</th>
+              <th scope="col">{{ __('front/cart.product') }}</th>
               <th scope="col"></th>
-              <th scope="col">{{ __('front::cart.price') }}</th>
-              <th scope="col">{{ __('front::cart.quantity') }}</th>
-              <th scope="col">{{ __('front::cart.subtotal') }}</th>
+              <th scope="col">{{ __('front/cart.price') }}</th>
+              <th scope="col">{{ __('front/cart.quantity') }}</th>
+              <th scope="col">{{ __('front/cart.subtotal') }}</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -75,20 +75,20 @@
 
       <div class="col-12 col-md-3">
         <div class="cart-data">
-          <div class="title">{{ __('front::cart.cart_total') }}</div>
+          <div class="title">{{ __('front/cart.cart_total') }}</div>
           <ul class="cart-data-list">
-            <li><span>{{ __('front::cart.selected') }}	</span><span class="total-total">{{ $total }}</span></li>
-            <li><span>{{ __('front::cart.total') }}</span><span class="total-amount">{{ $amount_format }}</span></li>
+            <li><span>{{ __('front/cart.selected') }}	</span><span class="total-total">{{ $total }}</span></li>
+            <li><span>{{ __('front/cart.total') }}</span><span class="total-amount">{{ $amount_format }}</span></li>
           </ul>
-          <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout" href="{{ front_route('checkout.index') }}">{{ __('front::cart.go_checkout') }}</a>
+          <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout" href="{{ front_route('checkout.index') }}">{{ __('front/cart.go_checkout') }}</a>
         </div>
       </div>
     </div>
   @else
     <div class="text-center pm-5">
       <img src="{{ asset('icon/empty-cart.svg') }}" class="img-fluid w-max-300 mb-5">
-      <h2>{{ __('front::cart.empty_cart') }}</h2>
-      <a class="btn btn-primary btn-lg mt-3" href="{{ front_route('home.index') }}">{{ __('front::cart.continue') }}</a>
+      <h2>{{ __('front/cart.empty_cart') }}</h2>
+      <a class="btn btn-primary btn-lg mt-3" href="{{ front_route('home.index') }}">{{ __('front/cart.continue') }}</a>
     </div>
   @endif
 </div>

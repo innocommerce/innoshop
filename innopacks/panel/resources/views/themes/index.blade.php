@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', 'theme')
 
-@section('title', __('panel::menu.themes'))
+@section('title', __('panel/menu.themes'))
 
 @section('content')
 <div class="card h-min-600">
@@ -23,7 +23,7 @@
         </div>
       </div>
     @else
-    <x-common-no-data :text="__('panel::themes.no_custom_theme')" />
+    <x-common-no-data :text="__('panel/themes.no_custom_theme')" />
     @endif
   </div>
 </div>

@@ -56,7 +56,7 @@
           <nav class="navbar navbar-expand-md navbar-light">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{{ front_route('home.index') }}">{{ __('front::common.home') }}</a>
+                <a class="nav-link" aria-current="page" href="{{ front_route('home.index') }}">{{ __('front/common.home') }}</a>
               </li>
 
               @hookupdate('layouts.header.menu.pc')
@@ -91,7 +91,7 @@
       </div>
       <div class="right">
         <form action="{{ front_route('products.index') }}" method="get" class="search-group">
-          <input type="text" class="form-control" name="keyword" placeholder="{{ __('front::common.search') }}" value="{{ request('keyword') }}">
+          <input type="text" class="form-control" name="keyword" placeholder="{{ __('front/common.search') }}" value="{{ request('keyword') }}">
           <button type="submit" class="btn"><i class="bi bi-search"></i></button>
         </form>
         <div class="icons">
@@ -103,13 +103,13 @@
 
               <div class="dropdown-menu dropdown-menu-end">
                 @if (current_customer())
-                <a href="{{ front_route('account.index') }}" class="dropdown-item">{{ __('front::account.account') }}</a>
-                <a href="{{ front_route('account.orders.index') }}" class="dropdown-item">{{ __('front::account.orders') }}</a>
-                <a href="{{ front_route('account.favorites.index') }}" class="dropdown-item">{{ __('front::account.favorites') }}</a>
-                <a href="{{ front_route('account.logout') }}" class="dropdown-item">{{ __('front::account.logout') }}</a>
+                <a href="{{ front_route('account.index') }}" class="dropdown-item">{{ __('front/account.account') }}</a>
+                <a href="{{ front_route('account.orders.index') }}" class="dropdown-item">{{ __('front/account.orders') }}</a>
+                <a href="{{ front_route('account.favorites.index') }}" class="dropdown-item">{{ __('front/account.favorites') }}</a>
+                <a href="{{ front_route('account.logout') }}" class="dropdown-item">{{ __('front/account.logout') }}</a>
                 @else
-                <a href="{{ front_route('login.index') }}" class="dropdown-item">{{ __('front::common.login') }}</a>
-                <a href="{{ front_route('register.index') }}" class="dropdown-item">{{ __('front::common.register') }}</a>
+                <a href="{{ front_route('login.index') }}" class="dropdown-item">{{ __('front/common.login') }}</a>
+                <a href="{{ front_route('register.index') }}" class="dropdown-item">{{ __('front/common.register') }}</a>
                 @endif
               </div>
             </div>

@@ -25,7 +25,7 @@
       <p>{{ plugin_setting('bank_transfer.bank_account') }}</p>
       <p>{{ plugin_setting('bank_transfer.bank_comment') }}</p>
     </div>
-    <button type="button" class="btn btn-primary btn-bank-transfer">{{ __('front::common.confirm') }}</button>
+    <button type="button" class="btn btn-primary btn-bank-transfer">{{ __('front/common.confirm') }}</button>
   </div>
 </div>
 

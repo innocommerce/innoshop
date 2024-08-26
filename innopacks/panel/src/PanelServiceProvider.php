@@ -102,6 +102,10 @@ class PanelServiceProvider extends ServiceProvider
      */
     private function loadTranslations(): void
     {
+        if (! is_dir(__DIR__.'/../lang')) {
+            return;
+        }
+
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'panel');
         $this->publishes([
             __DIR__.'/../lang' => $this->app->langPath('vendor/panel'),

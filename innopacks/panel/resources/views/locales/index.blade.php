@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel::menu.locales'))
+@section('title', __('panel/menu.locales'))
 
 @section('content')
   <div class="card h-min-600">
@@ -11,13 +11,13 @@
         <table class="table align-middle">
           <thead>
           <tr>
-            <td>{{ __('panel::common.id') }}</td>
-            <td>{{ __('panel::common.logo') }}</td>
-            <td>{{ __('panel::common.name') }}</td>
-            <td>{{ __('panel::currency.code') }}</td>
-            <td>{{ __('panel::common.position') }}</td>
-            <td>{{ __('panel::common.status') }}</td>
-            <td>{{ __('panel::common.actions') }}</td>
+            <td>{{ __('panel/common.id') }}</td>
+            <td>{{ __('panel/common.logo') }}</td>
+            <td>{{ __('panel/common.name') }}</td>
+            <td>{{ __('panel/currency.code') }}</td>
+            <td>{{ __('panel/common.position') }}</td>
+            <td>{{ __('panel/common.status') }}</td>
+            <td>{{ __('panel/common.actions') }}</td>
           </tr>
           </thead>
           <tbody>
@@ -35,9 +35,9 @@
               </td>
               <td>
                 @if ($item['id'])
-                  <button type="button" class="btn btn-sm btn-outline-danger leng-unload" data-code="{{ $item['code'] }}">{{ __('panel::common.uninstall') }}</button>
+                  <button type="button" class="btn btn-sm btn-outline-danger leng-unload" data-code="{{ $item['code'] }}">{{ __('panel/common.uninstall') }}</button>
                 @else
-                  <button type="button" class="btn btn-sm btn-outline-primary leng-install" data-code="{{ $item['code'] }}">{{ __('panel::common.install') }}</button>
+                  <button type="button" class="btn btn-sm btn-outline-primary leng-install" data-code="{{ $item['code'] }}">{{ __('panel/common.install') }}</button>
                 @endif
               </td>
             </tr>

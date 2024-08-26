@@ -69,7 +69,7 @@ class TaxRateController extends BaseController
             $data = $request->all();
             TaxRateRepo::getInstance()->create($data);
 
-            return json_success(trans('panel::common.created_success'));
+            return json_success(panel_trans('common.created_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -112,7 +112,7 @@ class TaxRateController extends BaseController
             $data = $request->all();
             TaxRateRepo::getInstance()->update($taxRate, $data);
 
-            return json_success(trans('panel::common.updated_success'));
+            return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -128,7 +128,7 @@ class TaxRateController extends BaseController
             TaxRateRepo::getInstance()->destroy($taxRate);
 
             return redirect(panel_route('tax_rates.index'))
-                ->with('success', trans('panel::common.deleted_success'));
+                ->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('tax_rates.index'))
                 ->withErrors(['error' => $e->getMessage()]);

@@ -1,13 +1,13 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.tax_classes'))
+@section('title', __('panel/menu.tax_classes'))
 
 <x-panel::form.right-btns />
 
 @section('content')
 <div class="card h-min-600">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::menu.tax_classes') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/menu.tax_classes') }}</h5>
   </div>
   <div class="card-body">
     <form class="needs-validation" novalidate id="app-form"
@@ -56,7 +56,7 @@
                            value="{{ $rule->priority }}" placeholder="优先级">
                   </td>
                   <td class="text-end">
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel::common.delete')}}</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel/common.delete')}}</button>
                   </td>
                 </tr>
               @endforeach
@@ -64,7 +64,7 @@
             <tfoot>
               <tr>
                 <td colspan="4" class="text-end">
-                  <button type="button" class="btn add-tax btn-sm btn-outline-primary">{{ __('panel::common.add') }}</button>
+                  <button type="button" class="btn add-tax btn-sm btn-outline-primary">{{ __('panel/common.add') }}</button>
                 </td>
               </tr>
             </tfoot>
@@ -105,7 +105,7 @@
           <input type="text" name="tax_rules[{{ $index }}][priority]" class="form-control form-control-sm" value="0" placeholder="优先级">
           </td>
           <td class="text-end">
-            <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel::common.delete')}}</button>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel/common.delete')}}</button>
           </td>
         </tr>
       `;

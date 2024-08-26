@@ -7,7 +7,7 @@
     <script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
   @endpush
 
-  <x-front-breadcrumb type="route" value="checkout.index" title="{{ __('front::checkout.checkout') }}"/>
+  <x-front-breadcrumb type="route" value="checkout.index" title="{{ __('front/checkout.checkout') }}"/>
 
   @hookinsert('checkout.top')
 
@@ -22,15 +22,15 @@
                 <div class="shipping-address">
                   <div class="title-wrap">
                     <div class="title">
-                      {{ __('front::checkout.shipping_address') }}
+                      {{ __('front/checkout.shipping_address') }}
                     </div>
                     <div>
                       <label class="form-check-label me-4">
                         <input class="form-check-input" type="checkbox" v-model="source.same_as_shipping_address">
-                        {{ __('front::checkout.same_shipping_address') }}
+                        {{ __('front/checkout.same_shipping_address') }}
                       </label>
                       <span class="cursor-pointer" v-if="!source.addressEdit" @click="addressEdit(true)"><i
-                            class="bi bi-plus-lg"></i>{{ __('front::checkout.create_address') }}</span>
+                            class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
                     </div>
                   </div>
                   <div class="checkout-select-wrap address-select"
@@ -49,7 +49,7 @@
                         </div>
                       </div>
                       <div class="edit-address text-decoration-underline text-secondary"
-                           @click.stop="editAddress(index)"> {{ __('front::common.edit') }}
+                           @click.stop="editAddress(index)"> {{ __('front/common.edit') }}
                       </div>
                     </div>
                   </div>
@@ -60,11 +60,11 @@
               <div class="addresses-wrap">
                 <div class="shipping-address">
                   <div class="title-wrap">
-                    <div class="title">{{ __('front::checkout.billing_address') }}</div>
+                    <div class="title">{{ __('front/checkout.billing_address') }}</div>
                     <span class="cursor-pointer" v-if="!source.addressEdit" @click="addressEdit(true)"><i
-                          class="bi bi-plus-lg"></i>{{ __('front::checkout.create_address') }}</span>
+                          class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
                     <span class="cursor-pointer" v-else @click="addressEdit(false)">
-                      <i class="bi bi-plus-lg"></i>{{ __('front::checkout.cancel_create') }}
+                      <i class="bi bi-plus-lg"></i>{{ __('front/checkout.cancel_create') }}
                     </span>
                   </div>
                   <div class="checkout-select-wrap address-select"
@@ -95,13 +95,13 @@
             <div v-show="source.addressEdit">
               <div class="checkout-item">
                 <div class="title-wrap">
-                  <div class="title">{{ __('front::checkout.create_address') }}</div>
+                  <div class="title">{{ __('front/checkout.create_address') }}</div>
                   @if (!current_customer())
                   <span class="cursor-pointer btn btn-sm btn-outline-primary" @click="login"><i
-                        class="bi bi-box-arrow-in-right"></i> {{ __('front::common.login') }}</span>
+                        class="bi bi-box-arrow-in-right"></i> {{ __('front/common.login') }}</span>
                   @endif
                   <span class="cursor-pointer" v-if="source.addresses.length" @click="addressEdit(false)"><i
-                        class="bi bi-plus-lg"></i> {{ __('front::checkout.cancel_create') }}</span>
+                        class="bi bi-plus-lg"></i> {{ __('front/checkout.cancel_create') }}</span>
                 </div>
                 @include('shared.address-form')
               </div>
@@ -110,7 +110,7 @@
 
           <div class="checkout-item">
             <div class="title-wrap">
-              <div class="title">{{ __('front::checkout.shipping_methods') }}</div>
+              <div class="title">{{ __('front/checkout.shipping_methods') }}</div>
             </div>
             <div class="checkout-select-wrap">
               <div v-for="item in source.shippingMethods" :key="item.code">
@@ -127,13 +127,13 @@
                 </div>
               </div>
               <div v-if="!source.shippingMethods.length" class="alert alert-warning">
-                <i class="bi bi-exclamation-circle-fill"></i> {{ __('front::checkout.no_shipping_methods') }}</div>
+                <i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_shipping_methods') }}</div>
             </div>
           </div>
 
           <div class="checkout-item">
             <div class="title-wrap">
-              <div class="title">{{ __('front::checkout.billing_methods') }}</div>
+              <div class="title">{{ __('front/checkout.billing_methods') }}</div>
             </div>
             <div class="checkout-select-wrap">
               <div :class="['select-item', current.billing_method_code  == item.code ? 'active' : '']"
@@ -145,16 +145,16 @@
                 </div>
                 <div class="icon"><img :src="item.icon" class="img-fluid"></div>
               </div>
-              <div v-if="!source.billingMethods.length" class="alert alert-warning"><i class="bi bi-exclamation-circle-fill"></i> {{ __('front::checkout.no_billing_methods') }}</div>
+              <div v-if="!source.billingMethods.length" class="alert alert-warning"><i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_billing_methods') }}</div>
             </div>
           </div>
 
           <div class="checkout-item">
             <div class="title-wrap">
-              <div class="title">{{ __('front::checkout.order_comment') }}</div>
+              <div class="title">{{ __('front/checkout.order_comment') }}</div>
             </div>
             <div class="checkout-select">
-              <textarea class="form-control" rows="4" v-model="current.comment" placeholder="{{ __('front::checkout.order_comment') }}"></textarea>
+              <textarea class="form-control" rows="4" v-model="current.comment" placeholder="{{ __('front/checkout.order_comment') }}"></textarea>
             </div>
           </div>
         </div>
@@ -164,10 +164,10 @@
         <div class="checkout-data">
           <div class="checkout-data-content">
             <div class="title-wrap">
-              <div class="title">{{ __('front::checkout.my_order') }}</div>
+              <div class="title">{{ __('front/checkout.my_order') }}</div>
             </div>
             <div class="products-table">
-              <div class="products-table-title"><span>{{ __('front::cart.product') }}</span><span class="text-end">{{ __('front::cart.price') }}</span></div>
+              <div class="products-table-title"><span>{{ __('front/cart.product') }}</span><span class="text-end">{{ __('front/cart.price') }}</span></div>
               <div class="products-table-wrap">
                 @foreach ($cart_list as $product)
                   <div class="products-table-list">
@@ -192,10 +192,10 @@
               @foreach($fee_list as $fee)
                 <li><span>{{ $fee['title'] }}</span><span> {{ $fee['total_format'] }}</span></li>
               @endforeach
-              <li><span>{{ __('front::cart.total') }}</span><span>{{ currency_format($total) }}</span></li>
+              <li><span>{{ __('front/cart.total') }}</span><span>{{ currency_format($total) }}</span></li>
             </ul>
             <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :disabled="isCheckout"
-                    type="button" @click="submitCheckout">{{ __('front::checkout.place_order') }}
+                    type="button" @click="submitCheckout">{{ __('front/checkout.place_order') }}
             </button>
           </div>
         </div>

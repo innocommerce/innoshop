@@ -83,7 +83,7 @@ class RoleRepo
         }
 
         if (empty($items)) {
-            throw new Exception(trans('panel::admin.select_one_role'));
+            throw new Exception(panel_trans('admin.select_one_role'));
         }
         $adminRole->syncPermissions($items);
     }

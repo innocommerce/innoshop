@@ -38,7 +38,7 @@ class SetPasswordRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'new_password' => trans('front::password.new_password'),
+            'new_password' => front_trans('password.new_password'),
         ];
     }
 }

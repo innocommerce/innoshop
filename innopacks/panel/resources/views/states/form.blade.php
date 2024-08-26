@@ -1,11 +1,11 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.state'))
+@section('title', __('panel/menu.state'))
 
 @section('content')
 <div class="card h-min-600">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel::menu.state') }}</h5>
+    <h5 class="card-title mb-0">{{ __('panel/menu.state') }}</h5>
   </div>
   <div class="card-body">
     <form class="needs-validation mt-3" novalidate action="{{ $state->id ? panel_route('states.update', [$state->id]) : panel_route('states.store') }}" method="POST">

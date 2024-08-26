@@ -62,7 +62,7 @@ class RoleController extends BaseController
 
             return redirect(panel_route('roles.index'))
                 ->with('instance', $role)
-                ->with('success', trans('panel::common.created_success'));
+                ->with('success', panel_trans('common.created_success'));
         } catch (Exception $e) {
             return redirect(panel_route('roles.index'))
                 ->withInput()
@@ -107,7 +107,7 @@ class RoleController extends BaseController
 
             return redirect(panel_route('roles.index'))
                 ->with('instance', $role)
-                ->with('success', trans('panel::common.updated_success'));
+                ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('roles.index'))
                 ->withInput()
@@ -125,7 +125,7 @@ class RoleController extends BaseController
             RoleRepo::getInstance()->destroy($role);
 
             return redirect(panel_route('roles.index'))
-                ->with('success', trans('panel::common.deleted_success'));
+                ->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('roles.index'))
                 ->withErrors(['error' => $e->getMessage()]);

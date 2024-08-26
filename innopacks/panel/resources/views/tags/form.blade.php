@@ -1,6 +1,6 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.tags'))
+@section('title', __('panel/menu.tags'))
 
 <x-panel::form.right-btns />
 
@@ -14,7 +14,7 @@
     <div class="col-12 col-md-9">
       <div class="card mb-3 h-min-400">
         <div class="card-header">
-          <h5 class="card-title mb-0">{{ __('panel::common.basic_info') }}</h5>
+          <h5 class="card-title mb-0">{{ __('panel/common.basic_info') }}</h5>
         </div>
         <div class="card-body">
           <div class="accordion accordion-flush locales-accordion" id="data-locales">
@@ -37,7 +37,7 @@
                 <div class="accordion-body">
                   <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
 
-                  <x-common-form-input title="{{ __('panel::article.title') }}" name="translations[{{$localeCode}}][name]"
+                  <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][name]"
                     value="{{ old('translations.' . $localeCode . '.name', $tag->translate($localeCode, 'name')) }}"
                     required />
 
@@ -53,10 +53,10 @@
     <div class="col-12 col-md-3 ps-md-0">
       <div class="card">
         <div class="card-body">
-          <x-common-form-switch-radio title="{{ __('panel::common.whether_enable') }}" name="active" :value="old('active', $tag->active ?? true)"
-            placeholder="{{ __('panel::common.whether_enable') }}" />
-          <x-common-form-input title="{{ __('panel::common.slug') }}" name="slug" :value="old('slug', $tag->slug ?? '')" placeholder="{{ __('panel::common.slug') }}" />
-          <x-common-form-input title="{{ __('panel::common.position') }}" name="position" :value="old('position', $tag->position ?? 0)"
+          <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $tag->active ?? true)"
+            placeholder="{{ __('panel/common.whether_enable') }}" />
+          <x-common-form-input title="{{ __('panel/common.slug') }}" name="slug" :value="old('slug', $tag->slug ?? '')" placeholder="{{ __('panel/common.slug') }}" />
+          <x-common-form-input title="{{ __('panel/common.position') }}" name="position" :value="old('position', $tag->position ?? 0)"
             />
         </div>
       </div>

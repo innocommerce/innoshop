@@ -109,7 +109,7 @@
   </p>
 
   <p>@yield('message')</p>
-  <a href="javascript:history.back()" class="btn-back-home">{{ __('front::common.back_page') }}</a>
+  <a href="javascript:history.back()" class="btn-back-home">{{ __('front/common.back_page') }}</a>
 </div>
 </body>
 </html>

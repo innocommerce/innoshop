@@ -22,7 +22,7 @@ class LocaleRepo extends BaseRepo
     {
         $items = [];
         foreach (panel_lang_path_codes() as $localeCode) {
-            $langFile = panel_lang_dir()."/$localeCode/base.php";
+            $langFile = lang_path("/$localeCode/panel/base.php");
             if (! is_file($langFile)) {
                 throw new Exception("File ($langFile) not exist!");
             }

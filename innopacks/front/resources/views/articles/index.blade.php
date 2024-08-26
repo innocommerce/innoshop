@@ -4,7 +4,7 @@
 
 @section('content')
 
-<x-front-breadcrumb type="route" value="articles.index" title="{{ __('front::article.articles') }}" />
+<x-front-breadcrumb type="route" value="articles.index" title="{{ __('front/article.articles') }}" />
 
 @hookinsert('article.index.top')
 

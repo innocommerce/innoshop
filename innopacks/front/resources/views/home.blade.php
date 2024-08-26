@@ -61,8 +61,8 @@
       <div class="module-product-tab">
         <div class="container">
           <div class="module-title-wrap">
-            <div class="module-title">{{ __('front::home.feature_product') }}</div>
-            <div class="module-sub-title">{{ __('front::home.feature_product_text') }}</div>
+            <div class="module-title">{{ __('front/home.feature_product') }}</div>
+            <div class="module-sub-title">{{ __('front/home.feature_product_text') }}</div>
           </div>
 
           <ul class="nav nav-tabs">
@@ -107,8 +107,8 @@
       <div class="module-product-tab">
         <div class="container">
           <div class="module-title-wrap">
-            <div class="module-title">{{ __('front::home.news_blog') }}</div>
-            <div class="module-sub-title">{{ __('front::home.news_blog_text') }}</div>
+            <div class="module-title">{{ __('front/home.news_blog') }}</div>
+            <div class="module-sub-title">{{ __('front/home.news_blog_text') }}</div>
           </div>
 
           <div class="row gx-3 gx-lg-4">

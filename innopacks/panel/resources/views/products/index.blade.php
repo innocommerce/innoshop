@@ -1,11 +1,11 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-product')
 
-@section('title', __('panel::menu.products'))
+@section('title', __('panel/menu.products'))
 
 @section('page-title-right')
   <a href="{{ panel_route('products.create') }}" class="btn btn-primary"><i
-        class="bi bi-plus-square"></i> {{ __('panel::common.create') }}</a>
+        class="bi bi-plus-square"></i> {{ __('panel/common.create') }}</a>
 @endsection
 
 @section('content')
@@ -16,13 +16,13 @@
           <table class="table align-middle">
             <thead>
             <tr>
-              <th>{{ __('panel::common.id') }}</th>
-              <th class="wp-100">{{ __('panel::common.image') }}</th>
-              <th>{{ __('panel::common.name') }}</th>
-              <th>{{ __('panel::product.price') }}</th>
-              <th>{{ __('panel::product.quantity') }}</th>
-              <th>{{ __('panel::common.created_at') }}</th>
-              <th>{{ __('panel::common.actions') }}</th>
+              <th>{{ __('panel/common.id') }}</th>
+              <th class="wp-100">{{ __('panel/common.image') }}</th>
+              <th>{{ __('panel/common.name') }}</th>
+              <th>{{ __('panel/product.price') }}</th>
+              <th>{{ __('panel/product.quantity') }}</th>
+              <th>{{ __('panel/common.created_at') }}</th>
+              <th>{{ __('panel/common.actions') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -43,11 +43,11 @@
                 <td>{{ $product->created_at }}</td>
                 <td>
                   <a href="{{ panel_route('products.edit', [$product->id]) }}"
-                     class="btn btn-outline-primary btn-sm">{{ __('panel::common.edit')}}</a>
+                     class="btn btn-outline-primary btn-sm">{{ __('panel/common.edit')}}</a>
                   <form action="{{ panel_route('products.destroy', [$product->id]) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel::common.delete')}}</button>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('panel/common.delete')}}</button>
                   </form>
                 </td>
               </tr>

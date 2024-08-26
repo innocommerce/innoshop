@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-plugins-market')
 
-@section('title', __('panel::menu.plugin_market'))
+@section('title', __('panel/menu.plugin_market'))
 
 @section('content')
     @include('plugin::shared._token_info')

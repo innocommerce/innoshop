@@ -1,11 +1,11 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-my-plugins')
 
-@section('title', __('panel::menu.plugins'))
+@section('title', __('panel/menu.plugins'))
 
 @section('content')
 <div class="card h-min-600">
-  <div class="card-header">{{ __('panel::menu.plugins') }}</div>
+  <div class="card-header">{{ __('panel/menu.plugins') }}</div>
 
   <div class="card-body">
 
@@ -30,10 +30,10 @@
               </div>
               <div class="btns">
                 @if ($plugin['installed'])
-                  <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('panel::common.edit') }}</a>
-                  <div class="btn btn-danger btn-sm uninstall-plugin">{{ __('panel::common.uninstall') }}</div>
+                  <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('panel/common.edit') }}</a>
+                  <div class="btn btn-danger btn-sm uninstall-plugin">{{ __('panel/common.uninstall') }}</div>
                   @else
-                  <div class="btn btn-primary btn-sm install-plugin">{{ __('panel::common.install') }}</div>
+                  <div class="btn btn-primary btn-sm install-plugin">{{ __('panel/common.install') }}</div>
                 @endif
               </div>
             </div>

@@ -2,7 +2,7 @@
 @section('body-class', 'page-wishlist')
 
 @section('content')
-<x-front-breadcrumb type="route" value="account.favorites.index" title="{{ __('front::account.favorites') }}" />
+<x-front-breadcrumb type="route" value="account.favorites.index" title="{{ __('front/account.favorites') }}" />
 
 @hookinsert('account.favorites.top')
 
@@ -14,7 +14,7 @@
     <div class="col-12 col-lg-9">
       <div class="account-card-box wishlist-box">
         <div class="account-card-title d-flex justify-content-between align-items-center">
-          <span class="fw-bold">{{ __('front::favorites.favorites') }}</span>
+          <span class="fw-bold">{{ __('front/favorites.favorites') }}</span>
         </div>
 
         @if ($favorites->count())
@@ -34,7 +34,7 @@
                   <div class="product-bottom">
                     <div class="product-bottom-btns">
                       <div class="btn-add-cart cursor-pointer" data-id="{{ $product->id }}"
-                        data-sku-id="{{ $product->product_sku_id }}">{{ __('front::product.add_to_cart') }}</div>
+                        data-sku-id="{{ $product->product_sku_id }}">{{ __('front/product.add_to_cart') }}</div>
                     </div>
                     <div class="product-price">
                       @if ($product->masterSku->origin_price)

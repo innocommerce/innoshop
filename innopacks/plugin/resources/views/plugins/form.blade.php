@@ -1,6 +1,6 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel::menu.plugins'))
+@section('title', __('panel/menu.plugins'))
 
 <x-panel::form.right-btns />
 

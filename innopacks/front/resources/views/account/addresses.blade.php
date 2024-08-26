@@ -2,7 +2,7 @@
 @section('body-class', 'page-addresses')
 
 @section('content')
-  <x-front-breadcrumb type="route" value="account.addresses.index" title="{{ __('front::account.addresses') }}" />
+  <x-front-breadcrumb type="route" value="account.addresses.index" title="{{ __('front/account.addresses') }}" />
 
   @hookinsert('account.addresses.top')
 
@@ -14,8 +14,8 @@
       <div class="col-12 col-lg-9">
         <div class="account-card-box addresses-box">
           <div class="account-card-title d-flex justify-content-between align-items-center">
-            <span class="fw-bold">{{ __('front::address.address') }}</span>
-            <button type="button" class="btn btn-primary add-address">{{ __('front::address.add_new_address') }}</button>
+            <span class="fw-bold">{{ __('front/address.address') }}</span>
+            <button type="button" class="btn btn-primary add-address">{{ __('front/address.add_new_address') }}</button>
           </div>
           <div class="row">
             @foreach($addresses as $index => $address)
@@ -24,8 +24,8 @@
                   <div class="address-card-header">
                     <h5 class="address-card-title">{{ $address['name'] }}</h5>
                     <div class="address-card-actions">
-                      <button type="button" class="btn btn-link edit-address">{{ __('front::common.edit') }}</button>
-                      <button type="button" class="btn btn-link delete-address">{{ __('front::common.delete') }}</button>
+                      <button type="button" class="btn btn-link edit-address">{{ __('front/common.edit') }}</button>
+                      <button type="button" class="btn btn-link delete-address">{{ __('front/common.delete') }}</button>
                     </div>
                   </div>
                   <div class="address-card-body">
@@ -48,7 +48,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addressModalLabel">{{ __('front::address.address') }}</h5>
+          <h5 class="modal-title" id="addressModalLabel">{{ __('front/address.address') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -91,8 +91,8 @@
     $('.delete-address').on('click', function () {
       const id = $(this).closest('.address-card').data('id');
 
-      layer.confirm('{{ __('front::common.delete_confirm') }}', {
-        btn: [ '{{ __('front::common.confirm') }}', '{{ __('front::common.cancel') }}' ]
+      layer.confirm('{{ __('front/common.delete_confirm') }}', {
+        btn: [ '{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}' ]
       }, function () {
         axios.delete(`{{ account_route('addresses.index') }}/${id}`).then(function (res) {
           if (res.success) {

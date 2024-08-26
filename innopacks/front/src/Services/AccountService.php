@@ -76,16 +76,16 @@ class AccountService extends BaseService
         if ($verifyCode->created_at->addMinutes(10) < Carbon::now()) {
             $verifyCode->delete();
 
-            throw new Exception(trans('front::account.verify_code_expired'));
+            throw new Exception(front_trans('account.verify_code_expired'));
         }
 
         if ($verifyCode->code != $code) {
-            throw new Exception(trans('front::account.verify_code_error'));
+            throw new Exception(front_trans('account.verify_code_error'));
         }
 
         $customer = CustomerRepo::getInstance()->findByEmail($account);
         if (! $customer) {
-            throw new Exception(trans('front::account.account_not_exist'));
+            throw new Exception(front_trans('account.account_not_exist'));
         }
 
         CustomerRepo::getInstance()->forceUpdatePassword($customer, $password);

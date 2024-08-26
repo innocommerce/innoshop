@@ -47,7 +47,7 @@ class FavoriteController extends Controller
             ];
             FavoriteRepo::getInstance()->create($data);
 
-            return json_success(trans('front::common.saved_success'));
+            return json_success(front_trans('common.saved_success'));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -69,12 +69,12 @@ class FavoriteController extends Controller
 
             $favorite = FavoriteRepo::getInstance()->builder($filters)->first();
             if (current_customer_id() != $favorite->customer_id) {
-                throw new \Exception(trans('front::not_belongs_to_you'));
+                throw new \Exception(front_trans('not_belongs_to_you'));
             }
 
             $favorite->delete();
 
-            return json_success(trans('front::common.deleted_success'));
+            return json_success(front_trans('common.deleted_success'));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
