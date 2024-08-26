@@ -24,7 +24,7 @@
     <div class="dropdown">
       <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-        {{ __('install/common.'.$locale) }}
+        {{ current_install_locale()['name'] }}
       </button>
       <ul class="dropdown-menu">
         @foreach(install_locales() as $item)

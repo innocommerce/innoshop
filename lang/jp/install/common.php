@@ -9,10 +9,6 @@
 
 return [
     'install_wizard' => 'インストールウィザード',
-    'zh_cn'          => '中文',
-    'en'             => '英語',
-    'es'             => 'スペイン語',
-    'jp'             => '日本语',
     'license'        => 'ライセンス契約',
     'check_env'      => '環境チェック',
     'configuration'  => '設定',

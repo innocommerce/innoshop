@@ -9,10 +9,6 @@
 
 return [
     'install_wizard' => '安装引导',
-    'zh_cn'          => '中文',
-    'en'             => '英文',
-    'es'             => 'Español',
-    'jp'             => '日语',
     'license'        => '许可协议',
     'check_env'      => '环境检测',
     'configuration'  => '参数配置',
