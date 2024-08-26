@@ -45,6 +45,7 @@ return [
     'confirm'         => 'Confirm',
     'cancel'          => 'Cancel',
     'available'       => 'Available',
+    'please_choose'   => 'Please Choose',
 
     'viewed'           => 'Viewed',
     'image'            => 'Image',

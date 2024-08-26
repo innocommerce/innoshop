@@ -31,6 +31,8 @@ return [
     'back_page'      => '前のページに戻る',
     'created_at'     => '作成日時',
     'delete_confirm' => '本当に削除しますか？',
+    'please_choose'  => '選択してください',
+    'error_required' => 'name を入力してください',
 
     'read_success'      => '取得成功',
     'saved_success'     => '保存成功',

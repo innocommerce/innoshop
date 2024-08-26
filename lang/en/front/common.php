@@ -33,6 +33,8 @@ return [
     'out_of_stock'   => 'Out of Stock',
     'created_at'     => 'Created at',
     'delete_confirm' => 'You sure you want to delete it?',
+    'please_choose'  => 'Please Choose',
+    'error_required' => 'Please fill out the :name',
 
     'read_success'      => 'Get successfully',
     'saved_success'     => 'Saved successfully',

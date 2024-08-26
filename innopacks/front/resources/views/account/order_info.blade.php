@@ -93,14 +93,14 @@
           </div>
 
           <div class="account-card-sub-title d-flex justify-content-between align-items-center">
-            <span class="fw-bold">{{ __('front/address.address') }}</span>
+            <span class="fw-bold">{{ __('common/address.address') }}</span>
           </div>
 
           <div class="row mb-4">
             <div class="col-12 col-md-6">
               <div class="address-card">
                 <div class="address-card-header mb-3">
-                  <h5 class="address-card-title border-bottom pb-3">{{ __('front/address.shipping_address') }}</h5>
+                  <h5 class="address-card-title border-bottom pb-3">{{ __('common/address.shipping_address') }}</h5>
                 </div>
                 <div class="address-card-body">
                   <p>{{ $order->shipping_customer_name }}</p>
@@ -114,7 +114,7 @@
             <div class="col-12 col-md-6">
               <div class="address-card">
                 <div class="address-card-header mb-3">
-                  <h5 class="address-card-title border-bottom pb-3">{{ __('front/address.billing_address') }}</h5>
+                  <h5 class="address-card-title border-bottom pb-3">{{ __('common/address.billing_address') }}</h5>
                 </div>
                 <div class="address-card-body">
                   <p>{{ $order->billing_customer_name }}</p>

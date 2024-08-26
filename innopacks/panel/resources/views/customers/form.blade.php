@@ -56,9 +56,9 @@
           <table class="table table-bordered">
             <thead>
             <tr>
-              <th>{{ __('address.name') }}</th>
-              <th>{{ __('address.address') }}</th>
-              <th>{{ __('address.phone') }}</th>
+              <th>{{ __('common/address.name') }}</th>
+              <th>{{ __('common/address.address') }}</th>
+              <th>{{ __('common/address.phone') }}</th>
               <th class="text-end"></th>
             </tr>
             </thead>
@@ -86,11 +86,11 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addressModalLabel">{{ __('front/address.address') }}</h5>
+          <h5 class="modal-title" id="addressModalLabel">{{ __('common/address.address') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          @include('shared.address-form')
+          @include('panel::shared.address-form')
         </div>
       </div>
     </div>

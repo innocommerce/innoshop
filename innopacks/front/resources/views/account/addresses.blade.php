@@ -14,8 +14,8 @@
       <div class="col-12 col-lg-9">
         <div class="account-card-box addresses-box">
           <div class="account-card-title d-flex justify-content-between align-items-center">
-            <span class="fw-bold">{{ __('front/address.address') }}</span>
-            <button type="button" class="btn btn-primary add-address">{{ __('front/address.add_new_address') }}</button>
+            <span class="fw-bold">{{ __('common/address.address') }}</span>
+            <button type="button" class="btn btn-primary add-address">{{ __('common/address.add_new_address') }}</button>
           </div>
           <div class="row">
             @foreach($addresses as $index => $address)
@@ -48,7 +48,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addressModalLabel">{{ __('front/address.address') }}</h5>
+          <h5 class="modal-title" id="addressModalLabel">{{ __('common/address.address') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

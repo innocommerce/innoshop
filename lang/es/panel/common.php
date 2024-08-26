@@ -43,6 +43,7 @@ return [
     'delete_confirm' => '¿Seguro que quieres eliminarlo?',
     'confirm'        => 'Confirmar',
     'cancel'         => 'Cancelar',
+    'please_choose'  => 'Por favor, elige',
 
     'viewed'           => 'Visto',
     'image'            => 'Imagen',

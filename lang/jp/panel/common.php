@@ -47,6 +47,7 @@ return [
     'delete_confirm'  => '本当に削除しますか？',
     'confirm'         => '確認',
     'cancel'          => 'キャンセル',
+    'please_choose'   => '選択してください',
 
     'viewed'           => '閲覧回数',
     'slug'             => 'SEO スラッグ',

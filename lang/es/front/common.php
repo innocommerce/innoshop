@@ -31,6 +31,8 @@ return [
     'telephone'      => 'Teléfono',
     'created_at'     => 'Creado el',
     'delete_confirm' => '¿Estás seguro de que deseas eliminarlo?',
+    'please_choose'  => 'Por favor, elige',
+    'error_required' => 'Por favor, rellene el :name',
 
     'read_success'      => 'Obtener con éxito',
     'saved_success'     => 'Guardado con éxito',

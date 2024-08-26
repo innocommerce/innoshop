@@ -23,7 +23,7 @@
 
             <div class="row">
               <div class="col-12 col-lg-6">
-                <x-common-form-input name="name" title="{{ __('address.name') }}" value="{{ old('name') }}" required="required" placeholder="{{ __('address.name') }}" />
+                <x-common-form-input name="name" title="{{ __('common/address.name') }}" value="{{ old('name') }}" required="required" placeholder="{{ __('common/address.name') }}" />
               </div>
               <div class="col-12 col-lg-6">
                 <x-common-form-input name="number" title="{{ __('front/return.return_number') }}" value="{{ old('number') }}" required="required" placeholder="{{ __('front/return.return_number') }}" />

@@ -1,54 +1,54 @@
 <form  class="needs-validation address-form mb-4" novalidate>
   <input type="hidden" name="id" value="">
   <div class="form-group mb-4">
-    <label class="form-label" for="name">{{ __('address.name') }}</label>
-    <input type="text" class="form-control" name="name" value="" required placeholder="{{ __('address.name') }}" />
-    <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('address.name')]) }}</span>
+    <label class="form-label" for="name">{{ __('common/address.name') }}</label>
+    <input type="text" class="form-control" name="name" value="" required placeholder="{{ __('common/address.name') }}" />
+    <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('common/address.name')]) }}</span>
   </div>
   <div class="form-group mb-4">
-    <label class="form-label" for="email">{{ __('address.address_1') }}</label>
-    <input type="text" class="form-control" name="address_1" value="" required placeholder="{{ __('address.address_1') }}" />
-    <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('address.address_1')]) }}</span>
+    <label class="form-label" for="email">{{ __('common/address.address_1') }}</label>
+    <input type="text" class="form-control" name="address_1" value="" required placeholder="{{ __('common/address.address_1') }}" />
+    <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('common/address.address_1')]) }}</span>
   </div>
   <div class="row gx-2">
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="Address_1">{{ __('address.address_2') }}</label>
-        <input type="text" class="form-control" name="address_2" value="" placeholder="{{ __('address.address_2') }}" />
+        <label class="form-label" for="Address_1">{{ __('common/address.address_2') }}</label>
+        <input type="text" class="form-control" name="address_2" value="" placeholder="{{ __('common/address.address_2') }}" />
       </div>
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="zipcode">{{ __('address.zipcode') }}</label>
-        <input type="text" class="form-control" name="zipcode" value="" required placeholder="{{ __('address.zipcode') }}" />
-        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('address.zipcode')]) }}</span>
+        <label class="form-label" for="zipcode">{{ __('common/address.zipcode') }}</label>
+        <input type="text" class="form-control" name="zipcode" value="" required placeholder="{{ __('common/address.zipcode') }}" />
+        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('common/address.zipcode')]) }}</span>
       </div>
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="city">{{ __('address.city') }}</label>
+        <label class="form-label" for="city">{{ __('common/address.city') }}</label>
         <input type="text" class="form-control" name="city" value="" required placeholder="City" />
-        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('address.city')]) }}</span>
+        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('common/address.city')]) }}</span>
       </div>
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="country_code">{{ __('address.country') }}</label>
+        <label class="form-label" for="country_code">{{ __('common/address.country') }}</label>
         <select class="form-select" name="country_code" required></select>
-        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('address.country')]) }}</span>
+        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('common/address.country')]) }}</span>
       </div>
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="state">{{ __('address.state') }}</label>
+        <label class="form-label" for="state">{{ __('common/address.state') }}</label>
         <select class="form-select" name="state_code" required disabled></select>
-        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('address.state')]) }}</span>
+        <span class="invalid-feedback" role="alert">{{ __('common.error_required', ['name' => __('common/address.state')]) }}</span>
       </div>
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="phone">{{ __('address.phone') }}</label>
-        <input type="text" class="form-control" name="phone" value="" placeholder="{{ __('address.phone') }}" />
+        <label class="form-label" for="phone">{{ __('common/address.phone') }}</label>
+        <input type="text" class="form-control" name="phone" value="" placeholder="{{ __('common/address.phone') }}" />
       </div>
     </div>
   </div>
@@ -87,7 +87,7 @@
       var countries = res.data;
       var countrySelect = $('select[name="country_code"]');
       countrySelect.empty();
-      countrySelect.append('<option value="">{{ __('common.please_choose') }}</option>');
+      countrySelect.append('<option value="">{{ __('panel/common.please_choose') }}</option>');
       countries.forEach(function(country) {
         countrySelect.append('<option value="' + country.code + '"' + (country.code == settingCountryCode ? ' selected' : '') + '>' + country.name + '</option>');
       });
@@ -100,7 +100,7 @@
       var zones = res.data;
       var zoneSelect = $('select[name="state_code"]');
       zoneSelect.empty().prop('disabled', false);
-      zoneSelect.append('<option value="">{{ __('common.please_choose') }}</option>');
+      zoneSelect.append('<option value="">{{ __('panel/common.please_choose') }}</option>');
       zones.forEach(function(zone) {
         zoneSelect.append('<option value="' + zone.code + '"' + (zone.code == settingStateCode ? ' selected' : '') + '>' + zone.name + '</option>');
       });

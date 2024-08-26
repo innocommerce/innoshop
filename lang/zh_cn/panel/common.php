@@ -48,6 +48,7 @@ return [
     'confirm'         => '确定',
     'cancel'          => '取消',
     'available'       => '可用于',
+    'please_choose'   => '请选择',
 
     'viewed'           => '查看次数',
     'slug'             => 'SEO 别名',

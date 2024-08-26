@@ -33,6 +33,8 @@ return [
     'back_page'      => '返回上一页',
     'created_at'     => '创建时间',
     'delete_confirm' => '确定要删除吗？',
+    'please_choose'  => '请选择',
+    'error_required' => '请填写:name',
 
     'read_success'      => '获取成功',
     'saved_success'     => '保存成功',
