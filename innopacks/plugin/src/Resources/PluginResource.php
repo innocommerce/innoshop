@@ -37,7 +37,7 @@ class PluginResource extends JsonResource
             'installed'   => $this->checkInstalled(),
             'edit_url'    => $this->getEditUrl(),
             'icon'        => plugin_resize($this->getCode(), $this->getIcon()),
-            'type_format' => trans('admin/plugin.'.$this->getType()),
+            'type_format' => panel_trans('plugin.'.$this->getType()),
         ];
     }
 }

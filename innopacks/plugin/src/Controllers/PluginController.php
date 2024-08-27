@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\SettingRepo;
 use InnoShop\Plugin\Resources\PluginResource;
 use InnoShop\Plugin\Services\PluginService;
@@ -23,13 +24,21 @@ class PluginController
     /**
      * Get all plugins.
      *
+     * @param  Request  $request
      * @return mixed
      */
-    public function index(): mixed
+    public function index(Request $request): mixed
     {
         $plugins = app('plugin')->getPlugins();
+        $type    = $request->get('type');
+
+        if ($type && in_array($type, Plugin::TYPES)) {
+            $plugins = $plugins->where('type', $type);
+        }
 
         $data = [
+            'types'   => Plugin::TYPES,
+            'type'    => $type,
             'plugins' => array_values(PluginResource::collection($plugins)->jsonSerialize()),
         ];
 

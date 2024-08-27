@@ -8,6 +8,7 @@
  */
 
 return [
+    'all'      => '所有插件',
     'billing'  => '支付方式',
     'shipping' => '配送方式',
     'feature'  => '功能模块',

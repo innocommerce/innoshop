@@ -8,12 +8,13 @@
  */
 
 return [
-    'billing'  => 'Billing',
-    'shipping' => 'Shipping',
-    'feature'  => 'Feature',
-    'fee'      => 'Order Fee',
+    'all'      => 'todo',
+    'billing'  => 'Facturación',
+    'shipping' => 'Envío',
+    'feature'  => 'Característica',
+    'fee'      => 'Tarifa del pedido',
     'social'   => 'Social',
-    'language' => 'Language',
+    'language' => 'Idioma',
 
     'bind_token'             => 'Vincular token',
     'get_token'              => 'Obtener token',

@@ -8,6 +8,7 @@
  */
 
 return [
+    'all'      => 'すべて',
     'billing'  => '支払い方法',
     'shipping' => '配送方法',
     'feature'  => '機能モジュール',
