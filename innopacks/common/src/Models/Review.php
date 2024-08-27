@@ -14,6 +14,6 @@ class Review extends BaseModel
     protected $table = 'reviews';
 
     protected $fillable = [
-        'customer_id', 'product_id', 'order_product_id', 'rating', 'title', 'content', 'like', 'dislike', 'active',
+        'customer_id', 'product_id', 'order_item_id', 'rating', 'title', 'content', 'like', 'dislike', 'active',
     ];
 }

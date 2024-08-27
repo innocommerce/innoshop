@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
+use InnoShop\Common\Resources\OrderDetail;
 use InnoShop\Common\Services\CartService;
 use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Front\Services\PaymentService;
@@ -47,9 +48,10 @@ class OrderController extends BaseController
         if ($order->customer_id != token_customer_id()) {
             return json_fail('Unauthorized', null, 403);
         }
-        $order->load(['items', 'fees']);
+        $order->load(['items.review', 'fees']);
+        $result = new OrderDetail($order);
 
-        return read_json_success($order);
+        return read_json_success($result);
     }
 
     /**
@@ -65,9 +67,10 @@ class OrderController extends BaseController
             return json_fail('Unauthorized', null, 403);
         }
 
-        $order->load(['items', 'fees']);
+        $order->load(['items.review', 'fees']);
+        $result = new OrderDetail($order);
 
-        return read_json_success($order);
+        return read_json_success($result);
     }
 
     /**

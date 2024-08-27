@@ -10,10 +10,12 @@
 namespace InnoShop\Common\Models\Order;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Sku;
+use InnoShop\Common\Models\Review;
 
 class Item extends BaseModel
 {
@@ -27,6 +29,7 @@ class Item extends BaseModel
         'subtotal',
         'price_format',
         'subtotal_format',
+        'has_review',
     ];
 
     /**
@@ -51,6 +54,14 @@ class Item extends BaseModel
     public function productSku(): BelongsTo
     {
         return $this->belongsTo(Sku::class, 'product_sku', 'code');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function review(): HasOne
+    {
+        return $this->hasOne(Review::class, 'order_item_id', 'id');
     }
 
     /**
@@ -79,5 +90,13 @@ class Item extends BaseModel
         $order = $this->order;
 
         return currency_format($this->subtotal, $order->currency_code, $order->currency_value);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasReviewAttribute(): bool
+    {
+        return (bool) $this->review;
     }
 }
