@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
+use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Review;
 use Throwable;
 
@@ -70,16 +71,21 @@ class ReviewRepo extends BaseRepo
      */
     private function handleData($requestData): array
     {
+        $orderItemID = $requestData['order_item_id'] ?? 0;
+        if ($orderItemID) {
+            Item::query()->findOrFail($orderItemID);
+        }
+
         return [
-            'customer_id'      => $requestData['customer_id']      ?? 0,
-            'product_id'       => $requestData['product_id']       ?? 0,
-            'order_product_id' => $requestData['order_product_id'] ?? 0,
-            'rating'           => $requestData['rating']           ?? 0,
-            'title'            => $requestData['title']            ?? '',
-            'content'          => $requestData['content']          ?? '',
-            'like'             => 0,
-            'dislike'          => 0,
-            'active'           => true,
+            'customer_id'   => $requestData['customer_id'] ?? 0,
+            'product_id'    => $requestData['product_id']  ?? 0,
+            'order_item_id' => $orderItemID,
+            'rating'        => $requestData['rating']  ?? 0,
+            'title'         => $requestData['title']   ?? '',
+            'content'       => $requestData['content'] ?? '',
+            'like'          => 0,
+            'dislike'       => 0,
+            'active'        => true,
         ];
     }
 }

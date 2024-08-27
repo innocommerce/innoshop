@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Review;
 use InnoShop\Common\Repositories\ReviewRepo;
+use Throwable;
 
 class ReviewController extends BaseController
 {
@@ -32,13 +33,18 @@ class ReviewController extends BaseController
     /**
      * @param  Request  $request
      * @return JsonResponse
+     * @throws Throwable
      */
     public function store(Request $request): JsonResponse
     {
-        $data   = $request->all();
-        $review = ReviewRepo::getInstance()->create($data);
+        try {
+            $data   = $request->all();
+            $review = ReviewRepo::getInstance()->create($data);
 
-        return create_json_success($review);
+            return create_json_success($review);
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
     }
 
     /**
