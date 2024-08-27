@@ -177,7 +177,7 @@ class StateMachineService
             }
             $result[] = [
                 'status' => $status,
-                'name'   => trans("panel::order.$status"),
+                'name'   => panel_trans("order.$status"),
             ];
         }
 
