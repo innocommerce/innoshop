@@ -15,6 +15,7 @@ return [
     'fee'      => '订单计费',
     'social'   => '社交登录',
     'language' => '语言扩展',
+    'intelli'  => 'AI大模型',
 
     'bind_token'             => '绑定Token',
     'get_token'              => '获取Token',

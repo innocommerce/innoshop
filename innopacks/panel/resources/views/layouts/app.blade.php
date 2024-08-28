@@ -22,6 +22,7 @@
   <script>
     let urls = {
       upload_images: '{{ front_route('upload.images') }}',
+      ai_generate: '{{ panel_route('content_ai.generate') }}',
     }
 
     const lang = {

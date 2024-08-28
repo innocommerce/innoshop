@@ -57,7 +57,8 @@
                 :name="$field['name']"
                 :title="$field['label']"
                 :value="old($field['name'], $field['value'] ?? '')"
-                :options="$field['options']">
+                :options="$field['options']"
+                :emptyOption="$field['emptyOption'] ?? true" >
                 @if (isset($field['description']))
                   <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
                 @endif

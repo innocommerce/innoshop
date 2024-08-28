@@ -10,6 +10,7 @@
 return [
     'title'              => '商品标题',
     'summary'            => '摘要',
+    'selling_point'      => '卖点',
     'content'            => '描述',
     'price'              => '价格',
     'origin_price'       => '原价',

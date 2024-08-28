@@ -9,6 +9,7 @@
 
 namespace InnoShop\Plugin\Core;
 
+use ArrayAccess;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -17,7 +18,7 @@ use Illuminate\Support\Str;
 use InnoShop\Plugin\Repositories\PluginRepo;
 use InnoShop\Plugin\Repositories\SettingRepo;
 
-final class Plugin implements \ArrayAccess, Arrayable
+final class Plugin implements Arrayable, ArrayAccess
 {
     public const TYPES = [
         'billing',
@@ -26,6 +27,7 @@ final class Plugin implements \ArrayAccess, Arrayable
         'fee',
         'social',
         'language',
+        'intelli',
     ];
 
     protected string $type;

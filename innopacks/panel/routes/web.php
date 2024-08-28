@@ -78,6 +78,8 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/settings', [Controllers\SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [Controllers\SettingController::class, 'update'])->name('settings.update');
 
+        Route::post('/content_ai/generate', [Controllers\ContentAIController::class, 'generate'])->name('content_ai.generate');
+
         Route::resource('/admins', Controllers\AdminController::class);
         Route::put('/admins/{currency}/active', [Controllers\AdminController::class, 'active'])->name('admins.active');
 

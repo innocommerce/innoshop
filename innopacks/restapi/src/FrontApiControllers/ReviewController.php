@@ -39,6 +39,8 @@ class ReviewController extends BaseController
     {
         try {
             $data   = $request->all();
+
+            $data['customer_id'] = token_customer_id();
             $review = ReviewRepo::getInstance()->create($data);
 
             return create_json_success($review);

@@ -23,7 +23,11 @@ class Textarea extends Component
 
     public bool $multiple;
 
-    public function __construct(string $name, string $title, $value = null, bool $required = false, bool $multiple = false)
+    public string $column;
+
+    public bool $generate;
+
+    public function __construct(string $name, string $title, $value = null, bool $required = false, bool $multiple = false, string $column = '', bool $generate = false)
     {
         if (! $multiple) {
             $value = html_entity_decode($value, ENT_QUOTES);
@@ -34,9 +38,14 @@ class Textarea extends Component
         $this->value    = $value;
         $this->required = $required;
         $this->multiple = $multiple;
+        $this->column   = $column;
+        $this->generate = $generate;
     }
 
-    public function render()
+    /**
+     * @return mixed
+     */
+    public function render(): mixed
     {
         return view('panel::components.form.textarea');
     }

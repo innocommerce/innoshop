@@ -35,7 +35,11 @@ class Input extends Component
 
     public bool $multiple;
 
-    public function __construct(string $name, string $title, $value = null, bool $required = false, string $error = '', string $type = 'text', string $placeholder = '', string $description = '', bool $disabled = false, bool $readonly = false, bool $multiple = false)
+    public string $column;
+
+    public bool $generate;
+
+    public function __construct(string $name, string $title, $value = null, bool $required = false, string $error = '', string $type = 'text', string $placeholder = '', string $description = '', bool $disabled = false, bool $readonly = false, bool $multiple = false, string $column = '', bool $generate = false)
     {
         if (! $multiple) {
             $value = html_entity_decode($value, ENT_QUOTES);
@@ -52,6 +56,8 @@ class Input extends Component
         $this->disabled    = $disabled;
         $this->readonly    = $readonly;
         $this->multiple    = $multiple;
+        $this->column      = $column;
+        $this->generate    = $generate;
     }
 
     /**

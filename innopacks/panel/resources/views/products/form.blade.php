@@ -42,15 +42,21 @@ $weightClasses = [
               </h2>
               <div id="data-locale-{{ $localeCode }}" class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}"
                 data-bs-parent="#data-locales">
-                <div class="accordion-body">
+                <div class="accordion-body" data-locale-code="{{ $localeCode }}" data-locale-name="{{ $localeName }}">
                   <input type="hidden" name="translations[{{$localeCode}}][locale]" value="{{ $localeCode }}">
                   <x-common-form-input title="{{ __('panel/product.name') }}" name="translations[{{$localeCode}}][name]"
                     value="{{ old('translations.' . $localeCode . '.name', $product->translate($localeCode, 'name')) }}"
                     required placeholder="{{ __('panel/product.name') }}" />
 
-                  <x-common-form-input title="{{ __('panel/product.summary') }}" name="translations[{{$localeCode}}][summary]"
-                  value="{{ old('translations.' . $localeCode . '.summary', $product->translate($localeCode, 'summary')) }}"
-                  required placeholder="{{ __('panel/product.summary') }}" />
+                  <x-common-form-textarea title="{{ __('panel/product.summary') }}" name="translations[{{$localeCode}}][summary]"
+                    value="{{ old('translations.' . $localeCode . '.summary', $product->translate($localeCode, 'summary')) }}"
+                    placeholder="{{ __('panel/product.summary') }}" column="product_summary" generate="true"
+                    description="填写关键字，点击'AI生成'可生成摘要" />
+
+                  <x-common-form-textarea title="{{ __('panel/product.selling_point') }}" name="translations[{{$localeCode}}][selling_point]"
+                    value="{{ old('translations.' . $localeCode . '.selling_point', $product->translate($localeCode, 'selling_point')) }}"
+                    placeholder="{{ __('panel/product.selling_point') }}" column="product_selling_point" generate="true"
+                    description="简单描述产品特点及优势，点击'AI生成'可生成卖点" />
 
                   <x-common-form-rich-text title="{{ __('panel/product.content') }}" name="translations[{{$localeCode}}][content]"
                     value="{{ old('translations.' . $localeCode . '.content', $product->translate($localeCode, 'content')) }}"
@@ -58,15 +64,15 @@ $weightClasses = [
 
                   <x-common-form-input title="{{ __('panel/common.meta_title') }}" name="translations[{{$localeCode}}][meta_title]"
                     value="{{ old('translations.' . $localeCode . '.meta_title', $product->translate($localeCode, 'meta_title')) }}"
-                    placeholder="{{ __('panel/common.meta_title') }}" />
-
-                  <x-common-form-input title="{{ __('panel/common.meta_keywords') }}" name="translations[{{$localeCode}}][meta_keywords]"
-                    value="{{ old('translations.' . $localeCode . '.meta_keywords', $product->translate($localeCode, 'meta_keywords')) }}"
-                    placeholder="{{ __('panel/common.meta_keywords') }}" />
+                    placeholder="{{ __('panel/common.meta_title') }}" column="product_title" generate="true" />
 
                   <x-common-form-textarea title="{{ __('panel/common.meta_description') }}" name="translations[{{$localeCode}}][meta_description]"
                     value="{{ old('translations.' . $localeCode . '.meta_description', $product->translate($localeCode, 'meta_description')) }}"
-                    placeholder="{{ __('panel/common.meta_description') }}" />
+                    placeholder="{{ __('panel/common.meta_description') }}" column="product_description" generate="true" />
+
+                  <x-common-form-input title="{{ __('panel/common.meta_keywords') }}" name="translations[{{$localeCode}}][meta_keywords]"
+                    value="{{ old('translations.' . $localeCode . '.meta_keywords', $product->translate($localeCode, 'meta_keywords')) }}"
+                    placeholder="{{ __('panel/common.meta_keywords') }}" column="product_keywords" generate="true" />
                 </div>
               </div>
             </div>
@@ -106,6 +112,7 @@ $weightClasses = [
       <div class="card">
         <div class="card-body">
           <x-common-form-switch-radio :title="__('panel/common.status')" name="active" :value="old('active', $product->active ?? true)" />
+          <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')" :placeholder="__('panel/common.slug')" column="product_slug" generate="true" />
           <x-common-form-select :title="__('panel/product.brand')" name="brand_id" :value="old('brand_id', $product->brand_id ?? 0)" :options="$brands" key="id" label="name" />
           <x-panel::form.row title="{{ __('panel/product.category') }}">
             <div class="category-select">
@@ -139,7 +146,6 @@ $weightClasses = [
           <x-common-form-input :title="__('panel/product.position')" name="position" :value="old('position', $product->position ?? '')" :placeholder="__('panel/product.position')" />
           <x-common-form-input :title="__('panel/product.sales')" name="sales" :value="old('sales', $product->sales ?? '')" :placeholder="__('panel/product.sales')" />
           <x-common-form-input :title="__('panel/product.viewed')" name="viewed" :value="old('viewed', $product->viewed ?? '')" :placeholder="__('panel/product.viewed')" />
-          <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')" :placeholder="__('panel/common.slug')" />
           <x-common-form-switch-radio :title="__('panel/product.is_virtual')" name="is_virtual" :value="old('is_virtual', $product->is_virtual ?? false)" />
         </div>
       </div>
