@@ -37,6 +37,7 @@ class SettingController
             'pages'        => PageRepo::getInstance()->withActive()->builder()->get(),
             'themes'       => ThemeRepo::getInstance()->getListFromPath(),
             'mail_engines' => MailRepo::getInstance()->getEngines(),
+            'ai_models'    => ContentAIRepo::getInstance()->getModels(),
             'ai_prompts'   => ContentAIRepo::getInstance()->getPrompts(),
         ];
 

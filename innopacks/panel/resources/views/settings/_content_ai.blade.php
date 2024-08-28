@@ -2,15 +2,17 @@
   <div class="row">
     <div class="col-6">
       <x-common-form-select title="{{ __('panel/setting.ai_model') }}" name="email_engine"
-                            :options="$mail_engines" key="code" label="name" :emptyOption="false"
+                            :options="$ai_models" key="code" label="name" :emptyOption="false"
                             value="{{ old('ai_model', system_setting('ai_model')) }}" required
                             placeholder="{{ __('panel/setting.email_engine') }}"/>
     </div>
     <div class="col-6 d-flex align-items-center">
       <div class="form-group mt-4">
         <div class="d-flex flex-nowrap">
-          <a class="btn btn-primary me-1">设置 {{ system_setting('ai_model') }}</a>
-          <a class="btn btn-primary">获取更多</a>
+          <a class="btn btn-primary me-3">{{ __('panel/common.setting') }} {{ system_setting('ai_model') }}</a>
+          <a class="btn btn-primary" href="{{ panel_route('plugins.index', ['type'=>'ai']) }}">
+            {{ __('panel/common.get_more') }}
+          </a>
         </div>
       </div>
     </div>

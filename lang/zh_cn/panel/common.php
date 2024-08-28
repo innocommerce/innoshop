@@ -21,6 +21,7 @@ return [
     'inactive'        => '禁用',
     'close'           => '关闭',
     'actions'         => '操作',
+    'setting'         => '设置',
     'create'          => '新建',
     'add'             => '添加',
     'edit'            => '编辑',
@@ -58,6 +59,7 @@ return [
     'up_image_text'    => '点击上传，或将文件拖入进来',
     'no_data'          => '没有数据',
     'verify_required'  => '请填写',
+    'get_more'         => '获取更多',
 
     'read_success'      => '获取成功',
     'saved_success'     => '保存成功',

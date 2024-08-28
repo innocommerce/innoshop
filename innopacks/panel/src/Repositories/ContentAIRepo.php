@@ -12,6 +12,19 @@ namespace InnoShop\Panel\Repositories;
 class ContentAIRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public function getModels(): array
+    {
+        return [
+            ['code' => 'open_ai', 'name' => 'OpenAI'],
+            ['code' => 'claude', 'name' => 'Claude'],
+            ['code' => 'ollama', 'name' => 'Ollama'],
+            ['code' => 'llama', 'name' => 'Llama'],
+        ];
+    }
+
+    /**
      * @return string[]
      */
     public function getPrompts(): array
