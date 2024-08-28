@@ -18,6 +18,7 @@
             <a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-basics">{{ __('panel/setting.basic') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel/setting.website_data') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting.email_setting') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-content-ai">{{ __('panel/setting.content_ai') }}</a>
           </ul>
         </div>
       </div>
@@ -37,6 +38,10 @@
 
             <div class="tab-pane fade" id="tab-setting-email">
               @include('panel::settings._email_setting')
+            </div>
+
+            <div class="tab-pane fade" id="tab-setting-content-ai">
+              @include('panel::settings._content_ai')
             </div>
 
           </div>
