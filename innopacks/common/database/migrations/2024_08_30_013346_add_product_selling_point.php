@@ -18,8 +18,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pages', function (Blueprint $table) {
-            $table->boolean('show_breadcrumb')->default(true)->after('viewed')->comment('show breadcrumb');
+        Schema::table('product_translations', function (Blueprint $table) {
+            $table->text('selling_point')->nullable()->after('summary')->comment('Selling Point');
         });
     }
 
@@ -28,8 +28,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pages', function (Blueprint $table) {
-            $table->dropColumn('show_breadcrumb');
+        Schema::table('product_translations', function (Blueprint $table) {
+            $table->dropColumn('selling_point');
         });
     }
 };

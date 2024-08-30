@@ -117,6 +117,9 @@
 
     <div class="tab-content">
       <div class="tab-pane fade show active" id="product-description-description">
+        @if($product->translation->selling_point)
+          {!! parsedown($product->translation->selling_point) !!}
+        @endif
         {!! $product->translation->content !!}
       </div>
 

@@ -680,10 +680,10 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->index('pt_product_id')->comment('Product ID');
             $table->string('locale')->comment('Locale Code');
             $table->string('name')->comment('Name');
-            $table->string('summary')->comment('Summary');
+            $table->text('summary')->nullable()->comment('Summary');
             $table->text('content')->comment('Content');
             $table->string('meta_title')->default('')->comment('Meta Title');
-            $table->string('meta_description')->default('')->comment('Meta Description');
+            $table->text('meta_description')->default('')->comment('Meta Description');
             $table->string('meta_keywords')->default('')->comment('Meta Keywords');
             $table->timestamps();
         });

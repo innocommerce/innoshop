@@ -10,6 +10,7 @@
         "ext-openssl": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "erusev/parsedown": "^1.7",
         "intervention/image": "^3.5",
         "laravel/framework": "^11.0",
         "laravel/octane": "^2.5",

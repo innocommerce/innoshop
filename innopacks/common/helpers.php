@@ -940,3 +940,29 @@ if (! function_exists('to_sql')) {
         return $sql;
     }
 }
+
+if (! function_exists('parsedown')) {
+    /**
+     * @param string|null $value
+     * @param bool|null $inline
+     * @return Parsedown|string
+     */
+    function parsedown(?string $value = null, bool $inline = null): Parsedown|string
+    {
+        $parser = new Parsedown();
+
+        if (!func_num_args()) {
+            return $parser;
+        }
+
+        if (is_null($inline)) {
+            $inline = config('parsedown.inline');
+        }
+
+        if ($inline) {
+            return $parser->line($value);
+        }
+
+        return $parser->text($value);
+    }
+}

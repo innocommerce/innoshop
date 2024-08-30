@@ -169,6 +169,7 @@ class ProductRepo extends BaseRepo
                 'locale'           => $translation['locale'],
                 'name'             => $name,
                 'summary'          => $translation['summary']          ?? $name,
+                'selling_point'    => $translation['selling_point']    ?? $name,
                 'content'          => $translation['content']          ?? $name,
                 'meta_title'       => $translation['meta_title']       ?? $name,
                 'meta_description' => $translation['meta_description'] ?? $name,
