@@ -203,7 +203,7 @@
     </div>
   </div>
 
-  @hookinsert('checkout.top')
+  @hookinsert('checkout.bottom')
 
 @endsection
 
