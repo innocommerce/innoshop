@@ -73,12 +73,12 @@ class ReviewRepo extends BaseRepo
     {
         $orderItemID = $requestData['order_item_id'] ?? 0;
         if ($orderItemID) {
-            Item::query()->findOrFail($orderItemID);
+            $orderItem = Item::query()->findOrFail($orderItemID);
         }
 
         return [
             'customer_id'   => $requestData['customer_id'] ?? 0,
-            'product_id'    => $requestData['product_id']  ?? 0,
+            'product_id'    => $requestData['product_id']  ?? ($orderItem->product_id ?? 0),
             'order_item_id' => $orderItemID,
             'rating'        => $requestData['rating']  ?? 0,
             'title'         => $requestData['title']   ?? '',
