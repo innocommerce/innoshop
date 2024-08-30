@@ -8,9 +8,11 @@
  */
 
 return [
-    'setting'                  => 'Ajustes del sistema',
-    'basic'                    => 'Ajustes básicos',
-    'website_data'             => 'Datos del sitio web',
+    'setting'      => 'Ajustes del sistema',
+    'basic'        => 'Ajustes básicos',
+    'website_data' => 'Datos del sitio web',
+    'content_ai'   => 'Generación de Contenido con AI',
+
     'slideshow'                => 'Carrusel de la página de inicio',
     'ranking'                  => 'Clasificación',
     'product'                  => 'Producto',
@@ -48,5 +50,18 @@ return [
     'smtp_encryption'          => 'Tipo de Cifrado de Correo Electrónico',
     'smtp_port'                => 'Puerto de Correo Electrónico',
     'smtp_timeout'             => 'Tiempo de Espera de Correo Electrónico (seconds)',
+
+    'ai_model'                          => 'Gran modelo de IA',
+    'ai_prompt_product_summary'         => 'Solicitud de resumen del producto',
+    'ai_prompt_product_selling_point'   => 'Solicitud de punto de venta del producto',
+    'ai_prompt_product_slug'            => 'Solicitud de slug del producto',
+    'ai_prompt_product_seo_title'       => 'Solicitud de título SEO del producto',
+    'ai_prompt_product_seo_description' => 'Solicitud de descripción SEO del producto',
+    'ai_prompt_product_seo_keywords'    => 'Solicitud de palabras clave SEO del producto',
+    'ai_prompt_article_summary'         => 'Solicitud de resumen del artículo',
+    'ai_prompt_article_slug'            => 'Solicitud de slug del artículo',
+    'ai_prompt_article_seo_title'       => 'Solicitud de título SEO del artículo',
+    'ai_prompt_article_seo_description' => 'Solicitud de descripción SEO del artículo',
+    'ai_prompt_article_seo_keywords'    => 'Solicitud de palabras clave SEO del artículo',
 
 ];

@@ -10,6 +10,7 @@
 return [
     'name'               => 'Name',
     'summary'            => 'Summary',
+    'selling_point'      => 'Selling Point',
     'content'            => 'Description',
     'price'              => 'Price',
     'origin_price'       => 'Original Price',

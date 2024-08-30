@@ -21,6 +21,7 @@ return [
     'inactive'        => '無効',
     'close'           => '閉じる',
     'actions'         => '操作',
+    'setting'         => '設定',
     'create'          => '新規作成',
     'add'             => '追加',
     'edit'            => '編集',
@@ -57,6 +58,7 @@ return [
     'up_image_text'    => 'クリックしてアップロードするか、ファイルをドラッグ＆ドロップしてください',
     'no_data'          => 'データがありません',
     'verify_required'  => '入力してください',
+    'get_more'         => 'もっと取得',
 
     'read_success'      => '正常に読み込みました',
     'saved_success'     => '保存に成功しました',

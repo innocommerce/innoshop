@@ -18,6 +18,7 @@ return [
     'active'         => 'Activo',
     'inactive'       => 'Inactivo',
     'actions'        => 'Acciones',
+    'setting'        => 'Configuración',
     'add'            => 'Agregar',
     'create'         => 'Crear',
     'edit'           => 'Editar',
@@ -56,6 +57,7 @@ return [
     'up_image_text'    => 'Haga clic para subir, o arrastre el archivo aquí',
     'no_data'          => 'Sin datos',
     'verify_required'  => 'Por favor, complete',
+    'get_more'         => 'Obtener más',
 
     'read_success'      => 'Lectura realizada con éxito',
     'saved_success'     => 'Guardado correctamente',

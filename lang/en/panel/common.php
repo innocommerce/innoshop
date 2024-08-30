@@ -18,6 +18,7 @@ return [
     'active'          => 'Active',
     'inactive'        => 'Inactive',
     'actions'         => 'Actions',
+    'setting'         => 'Setting',
     'add'             => 'Add',
     'create'          => 'Create',
     'edit'            => 'Edit',
@@ -58,6 +59,7 @@ return [
     'up_image_text'    => 'Click to upload, or drag the file in',
     'no_data'          => 'No data',
     'verify_required'  => 'Please fill out',
+    'get_more'         => 'Get More',
 
     'read_success'      => 'Read successfully',
     'saved_success'     => 'Saved successfully',

@@ -8,9 +8,11 @@
  */
 
 return [
-    'setting'                  => 'システム設定',
-    'basic'                    => '基本設定',
-    'website_data'             => 'ウェブサイトデータ',
+    'setting'      => 'システム設定',
+    'basic'        => '基本設定',
+    'website_data' => 'ウェブサイトデータ',
+    'content_ai'   => 'AIコンテンツ生成',
+
     'slideshow'                => 'ホームスライドショー',
     'header_menu'              => 'ヘッダーメニュー',
     'footer_menu'              => 'フッターメニュー',
@@ -45,5 +47,18 @@ return [
     'smtp_encryption'          => 'メール暗号化方式',
     'smtp_port'                => 'メールポート',
     'smtp_timeout'             => 'メールタイムアウト（秒）',
+
+    'ai_model'                          => 'AI 大規模モデル',
+    'ai_prompt_product_summary'         => '製品概要プロンプト',
+    'ai_prompt_product_selling_point'   => '製品セールスポイントプロンプト',
+    'ai_prompt_product_slug'            => '製品スラッグプロンプト',
+    'ai_prompt_product_seo_title'       => '製品SEOタイトルプロンプト',
+    'ai_prompt_product_seo_description' => '製品SEO説明プロンプト',
+    'ai_prompt_product_seo_keywords'    => '製品SEOキーワードプロンプト',
+    'ai_prompt_article_summary'         => '記事概要プロンプト',
+    'ai_prompt_article_slug'            => '記事スラッグプロンプト',
+    'ai_prompt_article_seo_title'       => '記事SEOタイトルプロンプト',
+    'ai_prompt_article_seo_description' => '記事SEO説明プロンプト',
+    'ai_prompt_article_seo_keywords'    => '記事SEOキーワードプロンプト',
 
 ];
