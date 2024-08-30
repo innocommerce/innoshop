@@ -79,7 +79,7 @@ return new class extends Migration
             $table->string('image')->nullable()->comment('Article Image');
             $table->text('content')->nullable()->comment('Content');
             $table->string('meta_title')->nullable()->comment('Meta Title');
-            $table->string('meta_description')->nullable()->comment('Meta description');
+            $table->text('meta_description')->nullable()->comment('Meta description');
             $table->string('meta_keywords')->nullable()->comment('Meta keywords');
             $table->timestamps();
         });
@@ -194,10 +194,10 @@ return new class extends Migration
             $table->integer('catalog_id')->index('ct_catalog_id')->comment('Category ID');
             $table->string('locale')->comment('Locale Code');
             $table->string('title')->comment('Title');
-            $table->text('summary')->comment('Category Summary');
-            $table->string('meta_title')->comment('Meta Title');
-            $table->string('meta_description')->comment('Meta Translation');
-            $table->string('meta_keywords')->comment('Meta Keywords');
+            $table->text('summary')->nullable()->comment('Category Summary');
+            $table->string('meta_title')->nullable()->comment('Meta Title');
+            $table->text('meta_description')->nullable()->comment('Meta Translation');
+            $table->string('meta_keywords')->nullable()->comment('Meta Keywords');
             $table->timestamps();
         });
 
@@ -237,9 +237,9 @@ return new class extends Migration
             $table->string('locale')->comment('Locale Code');
             $table->string('name')->comment('Name');
             $table->text('content')->comment('Content');
-            $table->string('meta_title')->default('')->comment('Meta Title');
-            $table->string('meta_description')->default('')->comment('meta  Translation');
-            $table->string('meta_keywords')->default('')->comment('Meta Keywords');
+            $table->string('meta_title')->nullable()->comment('Meta Title');
+            $table->text('meta_description')->nullable()->comment('meta  Translation');
+            $table->string('meta_keywords')->nullable()->comment('Meta Keywords');
             $table->timestamps();
         });
 
@@ -583,7 +583,7 @@ return new class extends Migration
             $table->text('content')->nullable()->comment('Content');
             $table->text('template')->nullable()->comment('Content');
             $table->string('meta_title')->nullable()->comment('Meta Title');
-            $table->string('meta_description')->nullable()->comment('Meta description');
+            $table->text('meta_description')->nullable()->comment('Meta description');
             $table->string('meta_keywords')->nullable()->comment('Meta keywords');
             $table->timestamps();
         });
@@ -682,9 +682,9 @@ return new class extends Migration
             $table->string('name')->comment('Name');
             $table->text('summary')->nullable()->comment('Summary');
             $table->text('content')->comment('Content');
-            $table->string('meta_title')->default('')->comment('Meta Title');
-            $table->text('meta_description')->default('')->comment('Meta Description');
-            $table->string('meta_keywords')->default('')->comment('Meta Keywords');
+            $table->string('meta_title')->nullable()->comment('Meta Title');
+            $table->text('meta_description')->nullable()->comment('Meta Description');
+            $table->string('meta_keywords')->nullable()->comment('Meta Keywords');
             $table->timestamps();
         });
 

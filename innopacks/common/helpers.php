@@ -943,15 +943,15 @@ if (! function_exists('to_sql')) {
 
 if (! function_exists('parsedown')) {
     /**
-     * @param string|null $value
-     * @param bool|null $inline
+     * @param  string|null  $value
+     * @param  bool|null  $inline
      * @return Parsedown|string
      */
-    function parsedown(?string $value = null, bool $inline = null): Parsedown|string
+    function parsedown(?string $value = null, ?bool $inline = null): Parsedown|string
     {
-        $parser = new Parsedown();
+        $parser = new Parsedown;
 
-        if (!func_num_args()) {
+        if (! func_num_args()) {
             return $parser;
         }
 
