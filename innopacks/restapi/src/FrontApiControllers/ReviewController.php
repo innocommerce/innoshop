@@ -9,25 +9,28 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Review;
 use InnoShop\Common\Repositories\ReviewRepo;
+use InnoShop\Common\Resources\ReviewListItem;
 use Throwable;
 
 class ReviewController extends BaseController
 {
     /**
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
-    public function index(): LengthAwarePaginator
+    public function index(): AnonymousResourceCollection
     {
         $filters = [
             'customer_id' => token_customer_id(),
         ];
 
-        return ReviewRepo::getInstance()->builder($filters)->paginate();
+        $list = ReviewRepo::getInstance()->builder($filters)->paginate();
+
+        return ReviewListItem::collection($list);
     }
 
     /**
@@ -44,7 +47,7 @@ class ReviewController extends BaseController
 
             $review = ReviewRepo::getInstance()->create($data);
 
-            return create_json_success($review);
+            return create_json_success(new ReviewListItem($review));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
