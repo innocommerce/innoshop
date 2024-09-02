@@ -21,7 +21,7 @@
           <div class="col-12 col-md-6"></div>
           <div class="col-12 col-md-6"><x-common-form-input title="{{ __('panel/customer.level') }}" name="level" value="{{ old('level', $group->level) }}" required /></div>
           <div class="col-12 col-md-6"><x-common-form-input title="{{ __('panel/customer.mini_cost') }}" name="mini_cost" value="{{ old('mini_cost', $group->mini_cost) }}" required /></div>
-          <div class="col-12 col-md-6"><x-common-form-input title="{{ __('panel/customer.discount_rate') }}" name="discount_rate" value="{{ old('level', $group->level) }}" required />
+          <div class="col-12 col-md-6"><x-common-form-input title="{{ __('panel/customer.discount_rate') }}" name="discount_rate" value="{{ old('level', $group->level) }}" required /></div>
         </div>
 
         <button type="submit" class="d-none"></button>
