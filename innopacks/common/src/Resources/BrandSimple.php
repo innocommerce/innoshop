@@ -26,6 +26,7 @@ class BrandSimple extends JsonResource
     {
         return [
             'id'       => $this->id,
+            'first'    => $this->first,
             'name'     => $this->name,
             'slug'     => $this->slug,
             'logo_url' => image_resize($this->logo),

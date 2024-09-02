@@ -36,8 +36,19 @@ class BrandController extends BaseController
     public function group(): mixed
     {
         $brands     = BrandRepo::getInstance()->withActive()->all();
-        $collection = BrandSimple::collection($brands);
+        $collection = BrandSimple::collection($brands)->jsonSerialize();
 
-        return $collection->groupBy('first');
+        if (empty($collection)) {
+            return read_json_success([]);
+        }
+
+        $items = [];
+        foreach ($collection as $item) {
+            $items[$item['first']]['name']     = $item['first'];
+            $items[$item['first']]['brands'][] = $item;
+        }
+        $items = array_values($items);
+
+        return read_json_success($items);
     }
 }
