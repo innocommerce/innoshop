@@ -78,11 +78,10 @@
           <x-common-form-input title="排序" name="position" :value="old('position', $category->position ?? 0)"
             placeholder="排序" />
           <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $category->active ?? true)"
-            placeholder="{{ __('panel/common.whether_enable') }}" / </div>
+            placeholder="{{ __('panel/common.whether_enable') }}" />
         </div>
       </div>
     </div>
-  </div>
 
   <button type="submit" class="d-none"></button>
 </form>
