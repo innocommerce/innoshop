@@ -377,6 +377,20 @@ if (! function_exists('front_trans')) {
     }
 }
 
+if (! function_exists('theme_trans')) {
+    /**
+     * @param  $themeCode
+     * @param  null  $key
+     * @param  array  $replace
+     * @param  null  $locale
+     * @return mixed
+     */
+    function theme_trans($themeCode, $key = null, array $replace = [], $locale = null): mixed
+    {
+        return trans("theme-$themeCode::$key", $replace, $locale);
+    }
+}
+
 if (! function_exists('inno_view')) {
     /**
      * @param  null  $view
