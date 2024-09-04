@@ -26,10 +26,10 @@ class ReviewRepo extends BaseRepo
         $data   = $this->handleData($data);
         $review = null;
 
-        if ($data['customer_id'] && $data['product_id']) {
+        if ($data['customer_id'] && $data['order_item_id']) {
             $filters = [
                 'customer_id' => $data['customer_id'],
-                'product_id'  => $data['product_id'],
+                'order_item_id'  => $data['order_item_id'],
             ];
             $review = $this->builder($filters)->first();
         }
@@ -60,6 +60,11 @@ class ReviewRepo extends BaseRepo
         $productID = $filters['product_id'] ?? 0;
         if ($productID) {
             $builder->where('product_id', $productID);
+        }
+
+        $orderItemID = $filters['order_item_id'] ?? 0;
+        if ($orderItemID) {
+            $builder->where('order_item_id', $orderItemID);
         }
 
         return $builder;
