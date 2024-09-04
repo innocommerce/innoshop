@@ -122,7 +122,7 @@ class Creator
             throw $e;
         }
 
-        $this->outputLog->write(trans('install::common.finished'));
+        $this->outputLog->write(trans('install/common.finished'));
     }
 
     /**

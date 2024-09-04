@@ -105,7 +105,7 @@ class Checker
             $pdo     = DB::connection()->getPdo();
             $version = $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
             if ($type == 'mysql' && version_compare($version, '5.7', '<')) {
-                $result['db_version'] = trans('install::common.invalid_version');
+                $result['db_version'] = trans('install/common.invalid_version');
 
                 return $result;
             }
@@ -116,18 +116,18 @@ class Checker
         } catch (PDOException $e) {
             switch ($e->getCode()) {
                 case 1115:
-                    $result['db_version'] = trans('install::common.invalid_version');
+                    $result['db_version'] = trans('install/common.invalid_version');
                     break;
                 case 2002:
-                    $result['db_hostname'] = trans('install::common.failed_host_port');
-                    $result['db_port']     = trans('install::common.failed_host_port');
+                    $result['db_hostname'] = trans('install/common.failed_host_port');
+                    $result['db_port']     = trans('install/common.failed_host_port');
                     break;
                 case 1045:
-                    $result['db_username'] = trans('install::common.failed_user_password');
-                    $result['db_password'] = trans('install::common.failed_user_password');
+                    $result['db_username'] = trans('install/common.failed_user_password');
+                    $result['db_password'] = trans('install/common.failed_user_password');
                     break;
                 case 1049:
-                    $result['db_name'] = trans('install::common.failed_db_name');
+                    $result['db_name'] = trans('install/common.failed_db_name');
                     break;
                 default:
                     $result['db_other'] = $e->getMessage();

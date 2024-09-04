@@ -43,8 +43,8 @@ class CompleteRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'admin_email'    => trans('install::common.admin_account'),
-            'admin_password' => trans('install::common.admin_password'),
+            'admin_email'    => trans('install/common.admin_account'),
+            'admin_password' => trans('install/common.admin_password'),
         ];
     }
 }
