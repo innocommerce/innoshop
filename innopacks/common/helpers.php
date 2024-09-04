@@ -428,7 +428,7 @@ if (! function_exists('create_json_success')) {
      */
     function create_json_success($data = null): JsonResponse
     {
-        return json_success(panel_trans('common.created_success'), $data);
+        return json_success(panel_trans('common.saved_success'), $data);
     }
 }
 
