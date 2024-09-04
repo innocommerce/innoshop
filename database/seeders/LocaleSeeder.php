@@ -36,17 +36,10 @@ class LocaleSeeder extends Seeder
                 'active'   => 1,
             ],
             [
-                'name'     => 'Español',
-                'code'     => 'es',
-                'image'    => 'images/flag/es.png',
-                'position' => 1,
-                'active'   => 1,
-            ],
-            [
                 'name'     => '简体中文',
                 'code'     => 'zh_cn',
                 'image'    => 'images/flag/zh_cn.png',
-                'position' => 2,
+                'position' => 1,
                 'active'   => 1,
             ],
         ];

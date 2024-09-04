@@ -47,4 +47,14 @@ class CategoryRequest extends FormRequest
             'translations.*.name'   => 'required',
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function attributes(): array
+    {
+        return [
+            'slug' => panel_trans('common.slug'),
+        ];
+    }
 }

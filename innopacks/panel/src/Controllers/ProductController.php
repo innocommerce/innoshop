@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Product;
@@ -23,7 +24,7 @@ class ProductController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -39,7 +40,7 @@ class ProductController extends BaseController
      * Product creation page.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(): mixed
     {
@@ -60,7 +61,7 @@ class ProductController extends BaseController
             return redirect(panel_route('products.index'))
                 ->with('instance', $product)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect(panel_route('products.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -70,7 +71,7 @@ class ProductController extends BaseController
     /**
      * @param  Product  $product
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit(Product $product): mixed
     {
@@ -80,7 +81,7 @@ class ProductController extends BaseController
     /**
      * @param  $product
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function form($product): mixed
     {
@@ -119,7 +120,7 @@ class ProductController extends BaseController
             return redirect(panel_route('products.index'))
                 ->with('instance', $product)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect(panel_route('products.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -136,7 +137,7 @@ class ProductController extends BaseController
             ProductRepo::getInstance()->destroy($product);
 
             return back()->with('success', panel_trans('common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
