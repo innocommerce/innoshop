@@ -28,8 +28,8 @@ class ReviewRepo extends BaseRepo
 
         if ($data['customer_id'] && $data['order_item_id']) {
             $filters = [
-                'customer_id' => $data['customer_id'],
-                'order_item_id'  => $data['order_item_id'],
+                'customer_id'   => $data['customer_id'],
+                'order_item_id' => $data['order_item_id'],
             ];
             $review = $this->builder($filters)->first();
         }
