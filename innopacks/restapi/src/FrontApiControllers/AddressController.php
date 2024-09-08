@@ -19,7 +19,6 @@ use Throwable;
 class AddressController extends BaseController
 {
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function index(): JsonResponse

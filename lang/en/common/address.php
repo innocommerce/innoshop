@@ -13,6 +13,7 @@ return [
     'shipping_address' => 'Shipping address',
     'billing_address'  => 'Billing address',
     'name'             => 'Name',
+    'email'            => 'Email',
     'address_1'        => 'Address 1',
     'address_2'        => 'Address 2',
     'zipcode'          => 'Zip Code',

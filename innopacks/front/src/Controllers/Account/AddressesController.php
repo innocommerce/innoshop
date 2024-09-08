@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Address;
 use InnoShop\Common\Repositories\AddressRepo;
 use InnoShop\Common\Resources\AddressListItem;
+use Throwable;
 
 class AddressesController extends Controller
 {
@@ -38,7 +39,7 @@ class AddressesController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(Request $request): mixed
     {
@@ -48,7 +49,7 @@ class AddressesController extends Controller
         $address = AddressRepo::getInstance()->create($data);
         $result  = new AddressListItem($address);
 
-        return json_success('success', $result);
+        return create_json_success($result);
     }
 
     /**
@@ -64,7 +65,7 @@ class AddressesController extends Controller
         $address = AddressRepo::getInstance()->update($address, $data);
         $result  = new AddressListItem($address);
 
-        return json_success('success', $result);
+        return update_json_success($result);
     }
 
     /**
@@ -75,6 +76,6 @@ class AddressesController extends Controller
     {
         $address->delete();
 
-        return json_success('success');
+        return delete_json_success();
     }
 }

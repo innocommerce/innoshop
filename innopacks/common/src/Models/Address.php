@@ -16,8 +16,8 @@ class Address extends BaseModel
     protected $table = 'addresses';
 
     protected $fillable = [
-        'customer_id', 'guest_id', 'name', 'phone', 'country_id', 'state_id', 'state', 'city_id', 'city', 'zipcode',
-        'address_1', 'address_2',
+        'customer_id', 'guest_id', 'name', 'email', 'phone', 'country_id', 'state_id', 'state', 'city_id', 'city',
+        'zipcode', 'address_1', 'address_2',
     ];
 
     /**

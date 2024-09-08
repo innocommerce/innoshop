@@ -35,6 +35,7 @@ class AddressListItem extends JsonResource
             'customer_id'  => $this->customer_id,
             'guest_id'     => $this->guest_id,
             'name'         => $this->name,
+            'email'        => $this->email,
             'phone'        => $this->phone,
             'country_id'   => $this->country_id,
             'country_code' => $countryRow->code ?? '',

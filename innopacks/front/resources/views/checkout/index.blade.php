@@ -48,8 +48,8 @@
                           </div>
                         </div>
                       </div>
-                      <div class="edit-address text-decoration-underline text-secondary"
-                           @click.stop="editAddress(index)"> {{ __('front/common.edit') }}
+                      <div class="edit-address text-decoration-underline text-secondary" @click.stop="editAddress(index)">
+                        {{ __('front/common.edit') }}
                       </div>
                     </div>
                   </div>
@@ -84,7 +84,7 @@
                         </div>
                       </div>
                       <div class="edit-address text-decoration-underline text-secondary" @click="editAddress(index)">
-                        编辑
+                        {{ __('front/common.edit') }}
                       </div>
                     </div>
                   </div>

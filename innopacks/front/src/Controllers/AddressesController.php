@@ -31,7 +31,7 @@ class AddressesController extends Controller
         $address = AddressRepo::getInstance()->create($data);
         $result  = new AddressListItem($address);
 
-        return json_success('success', $result);
+        return create_json_success($result);
     }
 
     /**
@@ -48,7 +48,7 @@ class AddressesController extends Controller
         $address = AddressRepo::getInstance()->update($address, $data);
         $result  = new AddressListItem($address);
 
-        return json_success('success', $result);
+        return update_json_success($result);
     }
 
     /**
@@ -61,6 +61,6 @@ class AddressesController extends Controller
     {
         $address->delete();
 
-        return json_success('success');
+        return delete_json_success();
     }
 }

@@ -13,6 +13,7 @@ return [
     'shipping_address' => '配送地址',
     'billing_address'  => '账单地址',
     'name'             => '姓名',
+    'email'            => '邮箱',
     'address_1'        => '地址1',
     'address_2'        => '地址2',
     'zipcode'          => '邮编',

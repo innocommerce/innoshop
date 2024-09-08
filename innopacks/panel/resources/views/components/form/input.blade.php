@@ -12,7 +12,7 @@
       @if ($error)
         {{ $error }}
       @else
-        {{ __('common.error_required', ['name' => $title]) }}
+        {{ __('front/common.error_required', ['name' => $title]) }}
       @endif
     </span>
   @else
@@ -64,7 +64,7 @@
           @if ($error)
               {{ $error }}
             @else
-              {{ __('common.error_required', ['name' => $title]) }}
+              {{ __('front/common.error_required', ['name' => $title]) }}
             @endif
         </span>
         </div>
