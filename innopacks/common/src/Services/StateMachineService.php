@@ -219,7 +219,7 @@ class StateMachineService
         foreach ($nextStatusCodes as $status) {
             $result[] = [
                 'status' => $status,
-                'name'   => trans("panel::order.{$status}"),
+                'name'   => trans("panel/order.{$status}"),
             ];
         }
 
