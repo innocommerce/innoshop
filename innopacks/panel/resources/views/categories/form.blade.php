@@ -38,13 +38,13 @@
                 <div class="accordion-body">
                   <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
 
-                  <x-common-form-input title="标题" name="translations[{{$localeCode}}][name]"
+                  <x-common-form-input title="{{ panel_trans('category.name') }}" name="translations[{{$localeCode}}][name]"
                     value="{{ old('translations.' . $localeCode . '.name', $category->translate($localeCode, 'name')) }}"
-                    required placeholder="标题" />
+                    required placeholder="{{ panel_trans('category.name') }}" />
 
-                  <x-common-form-textarea title="内容" name="translations[{{$localeCode}}][content]"
+                  <x-common-form-textarea title="{{ panel_trans('category.content') }}" name="translations[{{$localeCode}}][content]"
                     value="{{ old('translations.' . $localeCode . '.content', $category->translate($localeCode, 'content')) }}"
-                    placeholder="内容" />
+                    placeholder="{{ panel_trans('category.content') }}" />
 
                   <x-common-form-input title="Meta Title" name="translations[{{$localeCode}}][meta_title]"
                     value="{{ old('translations.' . $localeCode . '.meta_title', $category->translate($localeCode, 'meta_title')) }}"
@@ -69,16 +69,17 @@
     <div class="col-12 col-md-3 ps-md-0">
       <div class="card">
         <div class="card-body">
-          <x-common-form-switch-radio title="状态" name="active" :value="old('active', $category->active ?? true)"
-            placeholder="状态" />
-          <x-common-form-input title="{{ __('panel/common.slug') }}" name="slug" :value="old('slug', $category->slug ?? '')"
-            placeholder="{{ __('panel/common.slug') }}" />
-          <x-common-form-select title="上级分类" name="parent_id" :value="old('parent_id', $catalog->parent_id ?? 0)"
+          <x-common-form-switch-radio title="{{ panel_trans('common.status') }}" name="active" :value="old('active', $category->active ?? true)"
+            placeholder="{{ panel_trans('common.status') }}" />
+          <x-common-form-input title="{{ panel_trans('common.slug') }}" name="slug" :value="old('slug', $category->slug ?? '')"
+            placeholder="{{ panel_trans('common.slug') }}" />
+          <x-common-form-image title="{{ panel_trans('common.image') }}" name="image" value="{{ old('image', $category->image) }}" />
+          <x-common-form-select title="{{ panel_trans('category.parent') }}" name="parent_id" :value="old('parent_id', $catalog->parent_id ?? 0)"
             :options="$categories" key="id" label="name" />
-          <x-common-form-input title="排序" name="position" :value="old('position', $category->position ?? 0)"
-            placeholder="排序" />
-          <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $category->active ?? true)"
-            placeholder="{{ __('panel/common.whether_enable') }}" />
+          <x-common-form-input title="{{ panel_trans('common.position') }}" name="position" :value="old('position', $category->position ?? 0)"
+            placeholder="{{ panel_trans('common.position') }}" />
+          <x-common-form-switch-radio title="{{ panel_trans('common.whether_enable') }}" name="active" :value="old('active', $category->active ?? true)"
+            placeholder="{{ panel_trans('common.whether_enable') }}" />
         </div>
       </div>
     </div>

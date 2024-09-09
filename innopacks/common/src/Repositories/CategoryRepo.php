@@ -157,6 +157,7 @@ class CategoryRepo extends BaseRepo
         return [
             'parent_id' => $data['parent_id'] ?? 0,
             'slug'      => $data['slug'],
+            'image'     => $data['image']    ?? '',
             'position'  => $data['position'] ?? 0,
             'active'    => $data['active']   ?? true,
         ];

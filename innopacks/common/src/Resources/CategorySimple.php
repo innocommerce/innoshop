@@ -30,7 +30,7 @@ class CategorySimple extends JsonResource
             'locale'   => $this->translation->locale ?? '',
             'name'     => $this->translation->name   ?? '',
             'url'      => $this->url,
-            'image'    => image_resize('', 300, 300),
+            'image'    => image_resize($this->image, 300, 300),
             'active'   => $this->active,
             'children' => self::collection($this->children)->jsonSerialize(),
         ];

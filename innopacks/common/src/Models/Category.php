@@ -19,7 +19,7 @@ class Category extends BaseModel
 {
     use HasPackageFactory, Translatable;
 
-    protected $fillable = ['parent_id', 'slug', 'position', 'active'];
+    protected $fillable = ['parent_id', 'slug', 'position', 'image', 'active'];
 
     public $appends = [
         'url',

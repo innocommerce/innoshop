@@ -8,6 +8,7 @@
  */
 
 return [
-    'name'   => 'Name',
-    'parent' => 'Parent',
+    'name'    => 'Name',
+    'parent'  => 'Parent',
+    'content' => 'Content',
 ];
