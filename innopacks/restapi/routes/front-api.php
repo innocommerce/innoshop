@@ -34,7 +34,7 @@ Route::get('/products/{product}/reviews', [FrontApiControllers\ProductController
 
 Route::get('/countries', [FrontApiControllers\CountryController::class, 'index'])->name('countries.index');
 Route::get('/countries/{country}/states', [FrontApiControllers\CountryController::class, 'states'])->name('countries.states');
-Route::get('/states', [FrontApiControllers\StateController::class, 'index'])->name('countries.index');
+Route::get('/states', [FrontApiControllers\StateController::class, 'index'])->name('states.index');
 
 Route::get('/checkout/billing_methods', [FrontApiControllers\CheckoutController::class, 'billingMethods'])->name('checkout.billing_methods');
 Route::post('/checkout/quick_confirm', [FrontApiControllers\CheckoutController::class, 'quickConfirm'])->name('checkout.quick_confirm');
