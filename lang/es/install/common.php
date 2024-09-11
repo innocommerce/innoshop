@@ -22,6 +22,7 @@ return [
     'next_step'            => 'Siguiente',
     'i_agree'              => 'Estoy de acuerdo',
     'env_detection'        => 'Detección de entorno',
+    'db_driver'            => 'controlador de base de datos',
     'environment'          => 'Entorno',
     'current'              => 'Actual',
     'status'               => 'Estado',

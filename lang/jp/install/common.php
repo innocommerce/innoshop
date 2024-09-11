@@ -24,6 +24,7 @@ return [
     'next_step'        => '次のステップ',
     'i_agree'          => '私は読んで同意します',
     'env_detection'    => '環境チェック',
+    'db_driver'        => 'データベース・ドライバー',
     'environment'      => '環境',
     'current'          => '現在',
     'status'           => '状態',
