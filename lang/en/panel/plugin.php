@@ -15,6 +15,7 @@ return [
     'fee'      => 'Order Fee',
     'social'   => 'Social',
     'language' => 'Language',
+    'intelli'  => 'Intelli',
 
     'bind_token'             => 'Bind Token',
     'get_token'              => 'Get Token',
