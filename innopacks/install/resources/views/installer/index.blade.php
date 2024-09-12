@@ -28,7 +28,8 @@
       </button>
       <ul class="dropdown-menu">
         @foreach(install_locales() as $item)
-          <li><a class="dropdown-item" href="{{ route('install.install.index', ['locale' => $item['code']]) }}">{{ $item['name'] }}</a></li>
+          <li><a class="dropdown-item"
+                 href="{{ route('install.install.index', ['locale' => $item['code']]) }}">{{ $item['name'] }}</a></li>
         @endforeach
       </ul>
     </div>
@@ -71,65 +72,31 @@
       </div>
 
       <div class="install-2 install-item d-none">
-        <div class="head-title">{{ __('install/common.env_detection') }}</div>
-        <div class="install-content">
-          <table class="table">
-            <thead>
-            <tr>
-              <th colspan="3" class="bg-light">{{ __('install/common.env_detection') }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>{{ __('install/common.environment') }}</td>
-              <td>{{ __('install/common.current') }}</td>
-              <td>{{ __('install/common.status') }}</td>
-            </tr>
-            <tr>
-              <td>{{ __('install/common.php_version') }}(8.2+)</td>
-              <td>{{ $php_version }}</td>
-              <td><i
-                    class="bi {{ $php_env ? 'text-success bi-check-circle-fill' : 'bi-x-circle-fill text-danger' }}"></i>
-              </td>
-            </tr>
-            @foreach($extensions as $key => $value)
-              <tr>
-                <td>{{ $key }}</td>
-                <td></td>
-                <td><i
-                      class="bi {{ $value ? 'text-success bi-check-circle-fill' : 'bi-x-circle-fill text-danger' }}"></i>
-                </td>
-              </tr>
-            @endforeach
 
-            </tbody>
+        <div class="head-title">
+          <div class="row">
+            <div class="col-6">{{ __('install/common.env_detection') }}</div>
+            <div class="col-6">
+              <div class="row">
+                <div class="col-8 text-end"><span class="driver">{{ __('install/common.db_driver') }}:</span></div>
+                <div class="col-4">
+                  <select id="db-driver" class="form-select form-select-sm">
+                    <option value="mysql" selected>MySQL</option>
+                    <option value="sqlite">SQLite</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <thead>
-            <tr>
-              <th colspan="3" class="bg-light">{{ __('install/common.perm_detection') }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>{{ __('install/common.dir_file') }}</td>
-              <td>{{ __('install/common.config') }}</td>
-              <td>{{ __('install/common.status') }}</td>
-            </tr>
-            @foreach($permissions as $key => $value)
-              <tr>
-                <td>{{ $key }}</td>
-                <td>755</td>
-                <td><i
-                      class="bi {{ $value ? 'text-success bi-check-circle-fill' : 'bi-x-circle-fill text-danger' }}"></i>
-                </td>
-              </tr>
-            @endforeach
-            </tbody>
-          </table>
+        <div class="install-content env-check">
+          @include('install::installer._env_check')
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-          <button type="button" class="btn btn-outline-secondary prev-btn me-3">{{ __('install/common.previous_step') }}</button>
+          <button type="button"
+                  class="btn btn-outline-secondary prev-btn me-3">{{ __('install/common.previous_step') }}</button>
           <button type="button" disabled class="btn btn-primary next-btn">{{ __('install/common.next_step') }}</button>
         </div>
       </div>
@@ -153,7 +120,8 @@
               <div class="col-6 mysql-item">
                 <div class="mb-3">
                   <label for="host" class="form-label">{{ __('install/common.host_address') }}</label>
-                  <input type="text" class="form-control" id="host" name="db_hostname" required placeholder="{{ __('install/common.host') }}"
+                  <input type="text" class="form-control" id="host" name="db_hostname" required
+                         placeholder="{{ __('install/common.host') }}"
                          value="127.0.0.1">
                   <div class="invalid-feedback">{{ __('install/common.host') }}</div>
                 </div>
@@ -161,7 +129,8 @@
               <div class="col-6 mysql-item">
                 <div class="mb-3">
                   <label for="port" class="form-label">{{ __('install/common.port_number') }}</label>
-                  <input type="text" class="form-control" id="port" name="db_port" required placeholder="{{ __('install/common.port') }}"
+                  <input type="text" class="form-control" id="port" name="db_port" required
+                         placeholder="{{ __('install/common.port') }}"
                          value="3306">
                   <div class="invalid-feedback">{{ __('install/common.port') }}</div>
                 </div>
@@ -226,7 +195,8 @@
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-          <button type="button" class="btn btn-outline-secondary prev-btn me-3">{{ __('install/common.previous_step') }}</button>
+          <button type="button"
+                  class="btn btn-outline-secondary prev-btn me-3">{{ __('install/common.previous_step') }}</button>
           <button type="button" disabled class="btn btn-primary next-btn">{{ __('install/common.next_step') }}</button>
         </div>
       </div>
@@ -249,6 +219,27 @@
 </div>
 
 <script>
+  $('#db-driver').change(function () {
+    let code = $(this).val();
+    layer.load(2, {shade: [0.3, '#fff']})
+    $.ajax({
+      url: '{{ $driver_url }}',
+      type: "POST",
+      data: {db_code: code, locale: '{{current_install_locale()['code']}}'},
+      success: function (response) {
+        $('.env-check').html(response);
+        console.log("Success: ", response);
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: ", status, error);
+        layer.msg(error);
+      },
+      complete: function () {
+        layer.closeAll('loading');
+      }
+    });
+  });
+
   $('.next-btn').click(function () {
     var current = $('.install-item').filter('.active');
     var next = current.next('.install-item');
@@ -261,7 +252,7 @@
     }
 
     if (next.hasClass('install-3')) {
-      $('.sql-type').trigger('change');
+      $('.sql-type').val($('#db-driver').val()).prop('disabled', 'disabled').trigger('change');
     }
 
     if (current.hasClass('install-3')) {
@@ -282,7 +273,6 @@
     activeStep(current, next);
   });
 
-  // 上一步
   $('.prev-btn').click(function () {
     var current = $('.install-item').filter('.active');
     var prev = current.prev('.install-item');
@@ -360,25 +350,25 @@
   }
 
   function checkComplete(data, callback) {
-    layer.load(2, {shade: [0.3,'#fff'] })
+    layer.load(2, {shade: [0.3, '#fff']})
     $('.is-invalid').removeClass('is-invalid').next('.invalid-feedback').text('');
     $.ajax({
       url: '/install/complete',
       type: 'POST',
       data: data,
-      success: function(res) {
+      success: function (res) {
         if (res.success) {
           callback(res);
         }
       },
-      error: function(res) {
+      error: function (res) {
         const errors = res.responseJSON.errors;
-        Object.keys(errors).forEach(function(key) {
+        Object.keys(errors).forEach(function (key) {
           $('input[name="' + key + '"]').addClass('is-invalid').next('.invalid-feedback').text(errors[key][0]);
         });
         layer.msg(res.responseJSON.message);
       },
-      complete: function() {
+      complete: function () {
         layer.closeAll('loading');
       }
     });
@@ -386,7 +376,7 @@
 
   function checkStatus() {
     var flag = true;
-    $('.install-2 table .bi').each(function() {
+    $('.install-2 table .bi').each(function () {
       if ($(this).hasClass('text-danger')) {
         flag = false;
       }
@@ -399,14 +389,12 @@
     }
   }
 
-  // 激活状态
   function activeStep(current, next) {
     var index = next.index();
-    // 删除所有步骤的 active 状态
+
     $('.progress-wrap li').removeClass('complete active');
     $('.install-wrap .install-item').removeClass('active').addClass('d-none');
 
-    // index 步骤之前的步骤添加 complete 状态
     $('.progress-wrap li').each(function (i) {
       if (i < index) {
         $(this).addClass('complete active');

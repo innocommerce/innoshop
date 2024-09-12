@@ -24,6 +24,7 @@ return [
     'next_step'        => 'Next',
     'i_agree'          => 'I Agree',
     'env_detection'    => 'Environment Detection',
+    'db_driver'        => 'Database Driver',
     'environment'      => 'Environment',
     'current'          => 'Current',
     'status'           => 'Status',

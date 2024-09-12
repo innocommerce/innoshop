@@ -48,6 +48,31 @@ class InstallController extends Controller
 
     /**
      * @param  Request  $request
+     * @return mixed
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function driverDetect(Request $request): mixed
+    {
+        $data           = Checker::getInstance()->getEnvironment();
+        $locale         = current_install_locale_code();
+        $data['locale'] = $locale;
+
+        App::setLocale($locale);
+
+        $dbCode = $request->get('db_code');
+        if ($dbCode == 'mysql') {
+            unset($data['extensions']['pdo_sqlite']);
+            unset($data['extensions']['sqlite3']);
+        } elseif ($dbCode == 'sqlite') {
+            unset($data['extensions']['pdo_mysql']);
+        }
+
+        return view('install::installer._env_check', $data);
+    }
+
+    /**
+     * @param  Request  $request
      * @return array
      */
     public function checkConnected(Request $request): array

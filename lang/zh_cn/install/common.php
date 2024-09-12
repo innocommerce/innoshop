@@ -24,6 +24,7 @@ return [
     'next_step'        => '下一步',
     'i_agree'          => '我已阅读并同意',
     'env_detection'    => '环境检测',
+    'db_driver'        => '数据库引擎',
     'environment'      => '环境',
     'current'          => '当前',
     'status'           => '状态',

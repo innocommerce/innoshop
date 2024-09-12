@@ -58,6 +58,7 @@ class Checker
                 'public/cache'    => $this->checkPermission('public/cache', 755),
                 'bootstrap/cache' => $this->checkPermission('bootstrap/cache', 755),
             ],
+            'driver_url' => route('install.install.driver_detect'),
         ];
     }
 
