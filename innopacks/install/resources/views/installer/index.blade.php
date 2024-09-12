@@ -78,8 +78,8 @@
             <div class="col-6">{{ __('install/common.env_detection') }}</div>
             <div class="col-6">
               <div class="row">
-                <div class="col-6"><span class="text-sm-center">{{ __('install/common.db_driver') }}:</span></div>
-                <div class="col-6"><span class="text-sm-center">
+                <div class="col-8 text-end"><span class="driver">{{ __('install/common.db_driver') }}:</span></div>
+                <div class="col-4">
                   <select id="db-driver" class="form-select form-select-sm">
                     <option value="mysql" selected>MySQL</option>
                     <option value="sqlite">SQLite</option>
