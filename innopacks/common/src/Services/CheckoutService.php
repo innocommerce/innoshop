@@ -293,7 +293,7 @@ class CheckoutService extends BaseService
     {
         $amount = $this->getTotal();
 
-        return [
+        $result = [
             'cart_list'        => $this->getCartList(),
             'address_list'     => $this->getAddressList(),
             'shipping_methods' => ShippingService::getInstance($this)->getMethods(),
@@ -305,6 +305,8 @@ class CheckoutService extends BaseService
             'amount_format'    => currency_format($amount),
             'is_virtual'       => $this->checkIsVirtual(),
         ];
+
+        return fire_hook_filter('service.checkout.checkout.result', $result);
     }
 
     /**
