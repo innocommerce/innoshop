@@ -111,16 +111,18 @@ class TreeRepo
 
         $categories = Category::query()
             ->with('translation')
-            ->select(['id', 'slug', 'parent_id'])
+            ->select(['id', 'slug', 'parent_id', 'image', 'active'])
             ->get();
 
         $result = [];
         foreach ($categories as $category) {
             $result[$category['id']] = [
-                'id'   => $category->id,
-                'name' => $category->translation->name,
-                'slug' => $category->slug,
-                'url'  => $category->url,
+                'id'     => $category->id,
+                'slug'   => $category->slug,
+                'name'   => $category->translation->name,
+                'url'    => $category->url,
+                'image'  => image_resize($category->image, 300, 300),
+                'active' => (bool) $category->active,
             ];
         }
         self::$categories = $result;
