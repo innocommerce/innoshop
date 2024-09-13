@@ -31,7 +31,7 @@ class CompleteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type'           => 'required|string|in:mysql,sqlite',
+            'db_type'        => 'required|string|in:mysql,sqlite',
             'admin_email'    => 'required|email',
             'admin_password' => 'required|string|min:6',
         ];

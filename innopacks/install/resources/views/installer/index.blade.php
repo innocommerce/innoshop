@@ -105,6 +105,7 @@
         <div class="head-title">{{ __('install/common.param_config') }}</div>
         <div class="install-content">
           <form class="needs-validation" novalidate>
+            <input type="hidden" name="db_type" value="">
             <div class="bg-light py-2 mb-2 text-center fw-bold">{{ __('install/common.db_config') }}</div>
             <div class="row gx-2">
               <div class="col-6">
@@ -252,6 +253,7 @@
     }
 
     if (next.hasClass('install-3')) {
+      $('input[name="db_type"]').val($('#db-driver').val());
       $('.sql-type').val($('#db-driver').val()).prop('disabled', 'disabled').trigger('change');
     }
 
