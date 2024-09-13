@@ -8,13 +8,13 @@
     <div class="card-header">
       <ul class="nav nav-tabs mb-2" id="myTab">
         <li class="nav-item">
-          <a class="nav-link {{ $type == '' ? 'active' : '' }}" type="button" href="{{ panel_route('plugins.index') }}">
+          <a class="nav-link {{ $type == '' ? 'active' : 'fw-normal' }}" type="button" href="{{ panel_route('plugins.index') }}">
             {{ __('panel/plugin.all') }}
           </a>
         </li>
         @foreach($types as $item)
           <li class="nav-item">
-            <a class="nav-link {{ $item==$type ? 'active' : '' }}" type="button" href="{{ panel_route('plugins.index', ['type'=>$item]) }}">
+            <a class="nav-link {{ $item==$type ? 'active' : 'fw-normal' }}" type="button" href="{{ panel_route('plugins.index', ['type'=>$item]) }}">
               {{ __('panel/plugin.'.$item) }}
             </a>
           </li>
