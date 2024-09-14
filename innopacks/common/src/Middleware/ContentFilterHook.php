@@ -29,7 +29,7 @@ class ContentFilterHook
 
         $response = $next($filteredRequest);
 
-        $filteredResponse = fire_hook_filter($hookName.'.response', $response->getContent());
+        $filteredResponse = fire_hook_filter($hookName.'.response', $response);
 
         if (is_string($filteredResponse)) {
             $response->setContent($filteredResponse);
@@ -46,7 +46,8 @@ class ContentFilterHook
      */
     private function parseHookName(Request $request): string
     {
-        $route            = $request->route();
+        $route = $request->route();
+
         $controllerAction = $route->getActionName();
         $controllerAction = str_replace(['InnoShop\\', 'Controllers\\'], '', $controllerAction);
         $controllerAction = str_replace('Controller@', '\\', $controllerAction);

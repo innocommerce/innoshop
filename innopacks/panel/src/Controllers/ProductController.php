@@ -17,6 +17,7 @@ use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\TaxClassRepo;
+use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Panel\Requests\ProductRequest;
 
 class ProductController extends BaseController
@@ -87,12 +88,7 @@ class ProductController extends BaseController
     {
         $categories = CategoryRepo::getInstance()->withActive()->all();
 
-        $skus = $product->skus->map(function ($sku) {
-            $skuArray          = $sku->toArray();
-            $skuArray['image'] = $skuArray['image_path'] ?? '';
-
-            return $skuArray;
-        });
+        $skus = SkuListItem::collection($product->skus)->jsonSerialize();
 
         $data = [
             'product'     => $product,

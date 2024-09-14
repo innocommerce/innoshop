@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\CategoryRepo;
@@ -21,6 +22,7 @@ class ProductController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -54,6 +56,7 @@ class ProductController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
+     * @throws Exception
      */
     public function slugShow(Request $request): mixed
     {

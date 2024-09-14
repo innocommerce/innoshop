@@ -108,7 +108,7 @@ class ProductRepo extends BaseRepo
             $product->categories()->sync($data['categories'] ?? []);
 
             if (isset($data['images'])) {
-                $product->images()->delete();
+                //$product->images()->delete();
                 $this->syncImages($product, $data['images'] ?: []);
             }
 

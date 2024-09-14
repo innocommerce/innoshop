@@ -304,7 +304,7 @@
 
         // 获取有多少个相同的sku,然后添加下标, 判断第一个 - 前的字符是否相同，如果相同就加上下标
         if (typeof init_index != 'undefined' ) {
-          let sameSku = skus.value.filter((e, i) => e.code.split('-')[0] == sku.code)
+          let sameSku = skus.value.filter((e, i) => e.code.split('-')[0] === sku.code)
           sameSku.forEach((e, i) => {
             e.code = sku.code + '-' + i
           })
@@ -366,7 +366,7 @@
         }
 
         let mainVariant = variants.value[mainVariantKey.value]
-        let tempVariants = [mainVariant, ...variants.value.filter((e, i) => i != mainVariantKey.value)]
+        let tempVariants = [mainVariant, ...variants.value.filter((e, i) => i !== mainVariantKey.value)]
         let sku = []
         let skuVariants = []
         let skuVariantsLength = tempVariants.length
@@ -380,6 +380,7 @@
             price: skus.value[i] ? skus.value[i].price : '',
             quantity: skus.value[i] ? skus.value[i].quantity : '',
             image: skus.value[i] ? skus.value[i].image : '',
+            image_url: skus.value[i] ? skus.value[i].image_url : '',
             model: skus.value[i] ? skus.value[i].model : '',
             origin_price: skus.value[i] ? skus.value[i].origin_price : '',
             is_default: skus.value[i] ? skus.value[i].is_default : 0,
