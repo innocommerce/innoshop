@@ -194,6 +194,7 @@
               @endforeach
               <li><span>{{ __('front/cart.total') }}</span><span>{{ currency_format($total) }}</span></li>
             </ul>
+            @hookinsert('checkout.confirm.before')
             <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :disabled="isCheckout"
                     type="button" @click="submitCheckout">{{ __('front/checkout.place_order') }}
             </button>
