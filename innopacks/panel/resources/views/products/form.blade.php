@@ -107,6 +107,9 @@ $weightClasses = [
       </div>
 
       @include('panel::products._form_variant')
+
+      @include('panel::products._form_attribute')
+
     </div>
     <div class="col-12 col-md-4 ps-md-0">
       <div class="card">

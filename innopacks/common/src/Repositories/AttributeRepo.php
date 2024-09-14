@@ -9,15 +9,45 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Attribute;
+use Throwable;
 
 class AttributeRepo extends BaseRepo
 {
     /**
+     * @param  array  $filters
+     * @return Collection
+     */
+    public function all(array $filters = []): Collection
+    {
+        return $this->builder($filters)->get();
+    }
+
+    /**
+     * @param  array  $filters
+     * @return Builder
+     */
+    public function builder(array $filters = []): Builder
+    {
+        $builder = Attribute::query()->with('translation');
+
+        $keyword = $filters['keyword'] ?? '';
+        if ($keyword) {
+            $builder->whereHas('translation', function (Builder $query) use ($keyword) {
+                $query->where('name', 'like', "%$keyword%");
+            });
+        }
+
+        return $builder;
+    }
+
+    /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {
@@ -76,9 +106,9 @@ class AttributeRepo extends BaseRepo
     private function handleData($requestData): array
     {
         return [
-            'category_id'        => $requestData['category_id']        ?? 0,
+            'category_id'        => $requestData['category_id']               ?? 0,
             'attribute_group_id' => $requestData['attribute_group_id'] ?? 0,
-            'position'           => $requestData['position']           ?? 0,
+            'position'           => $requestData['position']                     ?? 0,
         ];
     }
 }

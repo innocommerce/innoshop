@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Attribute\Group;
 use InnoShop\Common\Repositories\BaseRepo;
 use InnoShop\Common\Resources\AttributeGroupSimple;
+use Throwable;
 
 class GroupRepo extends BaseRepo
 {
@@ -22,7 +23,7 @@ class GroupRepo extends BaseRepo
     /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {

@@ -12,7 +12,8 @@ use InnoShop\RestAPI\PanelApiControllers;
 
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
 
-Route::middleware(['auth:sanctum'])->group(function () {
+$middlewares = ['auth:sanctum'];
+Route::middleware($middlewares)->group(function () {
 
     Route::get('/admin', [PanelApiControllers\AuthController::class, 'admin'])->name('auth.admin');
 
@@ -39,5 +40,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/tags', [PanelApiControllers\TagController::class, 'store'])->name('tags.store');
     Route::put('/tags/{tag}', [PanelApiControllers\TagController::class, 'update'])->name('tags.update');
     Route::delete('/tags/{tag}', [PanelApiControllers\TagController::class, 'destroy'])->name('tags.destroy');
+
+    Route::get('/attributes', [PanelApiControllers\AttributeController::class, 'index'])->name('attributes.index');
+    Route::get('/attribute_values', [PanelApiControllers\AttributeValueController::class, 'index'])->name('attribute_values.index');
 
 });

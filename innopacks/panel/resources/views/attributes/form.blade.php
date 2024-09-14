@@ -37,7 +37,7 @@
       <div class="col-12 col-md-6">
         <div class="card h-min-600">
           <div class="card-header d-flex justify-content-between">
-            <h5 class="card-title mb-0">{{ __('panel/attributes.attribute_value') }}</h5>
+            <h5 class="card-title mb-0">{{ __('panel/attribute.attribute_value') }}</h5>
             <button type="button"
                     class="btn btn-sm btn-outline-primary add-value">{{ __('panel/common.add') }}</button>
           </div>
@@ -77,7 +77,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addressModalLabel">{{ __('panel/attributes.attribute_value') }}</h5>
+          <h5 class="modal-title" id="addressModalLabel">{{ __('panel/attribute.attribute_value') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

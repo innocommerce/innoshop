@@ -8,5 +8,7 @@
  */
 
 return [
-    'attribute_value' => '属性値',
+    'attribute_value' => 'Attribute Value',
+    'set_attribute'   => 'Set Attribute',
+    'attribute'       => 'Attribute',
 ];

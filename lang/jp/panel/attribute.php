@@ -8,5 +8,7 @@
  */
 
 return [
-    'attribute_value' => '属性值',
+    'attribute_value' => '属性値',
+    'set_attribute'   => '属性の設定',
+    'attribute'       => '属性＃ゾクセイ＃',
 ];

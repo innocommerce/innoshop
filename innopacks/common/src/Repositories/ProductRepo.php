@@ -103,8 +103,9 @@ class ProductRepo extends BaseRepo
                 $product->productAttributes()->delete();
             }
 
-            $product->translations()->createMany($this->handleTranslations($data['translations']));
             $product->skus()->createMany($this->handleSkus($product, $data['skus']));
+            $product->translations()->createMany($this->handleTranslations($data['translations']));
+            $product->productAttributes()->createMany($data['attributes'] ?? []);
             $product->categories()->sync($data['categories'] ?? []);
 
             if (isset($data['images'])) {

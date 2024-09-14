@@ -17,6 +17,10 @@ class Attribute extends BaseModel
 {
     protected $table = 'product_attributes';
 
+    protected $fillable = [
+        'product_id', 'attribute_id', 'attribute_value_id',
+    ];
+
     /**
      * @return BelongsTo
      */

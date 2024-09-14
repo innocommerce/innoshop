@@ -9,4 +9,6 @@
 
 return [
     'attribute_value' => 'Valor de atributo',
+    'set_attribute'   => 'Establecer atributos',
+    'attribute'       => 'Atributos',
 ];
