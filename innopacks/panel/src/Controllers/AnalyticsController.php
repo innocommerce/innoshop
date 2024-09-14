@@ -38,9 +38,11 @@ class AnalyticsController extends BaseController
     public function order(): mixed
     {
         $data = [
-            'order_latest_week' => OrderRepo::getInstance()->getOrderCountLatestWeek(),
-            'total_latest_week' => \InnoShop\Panel\Repositories\Analytics\OrderRepo::getInstance()->getOrderTotalLatestWeek(),
-            'top_sale_products' => \InnoShop\Panel\Repositories\Dashboard\ProductRepo::getInstance()->getTopSaleProducts(),
+            'order_quantity_latest_month' => OrderRepo::getInstance()->getOrderCountLatestMonth(),
+            'order_quantity_latest_week'  => OrderRepo::getInstance()->getOrderCountLatestWeek(),
+            'order_total_latest_month'    => \InnoShop\Panel\Repositories\Analytics\OrderRepo::getInstance()->getOrderTotalLatestMonth(),
+            'order_total_latest_week'     => \InnoShop\Panel\Repositories\Analytics\OrderRepo::getInstance()->getOrderTotalLatestWeek(),
+            'top_sale_products'           => \InnoShop\Panel\Repositories\Dashboard\ProductRepo::getInstance()->getTopSaleProducts(),
         ];
 
         return inno_view('panel::analytics.order', $data);

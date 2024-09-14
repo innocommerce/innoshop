@@ -10,12 +10,23 @@
 @section('content')
 
   <div class="row">
-    <div class="col-12 col-md-6 mb-3">
-      <x-panel-chart-line id="order" :labels="$order_latest_week['period']" :title="__('panel/dashboard.order_trends')"
-                          :data="$order_latest_week['totals']"></x-panel-chart-line>
 
-      <x-panel-chart-line id="total" :labels="$total_latest_week['period']" :title="__('panel/analytics.total_trends')"
-                          :data="$total_latest_week['totals']"></x-panel-chart-line>
+    <div class="col-12">
+      <x-panel-chart-line id="order_quantity_month" :labels="$order_quantity_latest_month['period']" :title="__('panel/dashboard.order_trends')"
+                          :data="$order_quantity_latest_month['totals']"></x-panel-chart-line>
+    </div>
+
+    <div class="col-12">
+      <x-panel-chart-line id="order_total_month" :labels="$order_total_latest_month['period']" :title="__('panel/analytics.total_trends')"
+                          :data="$order_total_latest_month['totals']"></x-panel-chart-line>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <x-panel-chart-line id="order_quantity_week" :labels="$order_quantity_latest_week['period']" :title="__('panel/dashboard.order_trends')"
+                          :data="$order_quantity_latest_week['totals']"></x-panel-chart-line>
+
+      <x-panel-chart-line id="order_total_week" :labels="$order_total_latest_week['period']" :title="__('panel/analytics.total_trends')"
+                          :data="$order_total_latest_week['totals']"></x-panel-chart-line>
 
     </div>
     <div class="col-12 col-md-6 mb-3">
