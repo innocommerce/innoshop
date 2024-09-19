@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class CategoryController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -43,7 +44,7 @@ class CategoryController extends BaseController
      * Category creation page.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(): mixed
     {
@@ -64,7 +65,7 @@ class CategoryController extends BaseController
             return redirect(panel_route('categories.index'))
                 ->with('instance', $category)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -72,7 +73,7 @@ class CategoryController extends BaseController
     /**
      * @param  Category  $category
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit(Category $category): mixed
     {
@@ -109,7 +110,7 @@ class CategoryController extends BaseController
             return redirect(panel_route('categories.index'))
                 ->with('instance', $category)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -121,10 +122,13 @@ class CategoryController extends BaseController
     public function destroy(Category $category): JsonResponse
     {
         try {
+            if ($category->children()->count()) {
+                throw new \Exception(panel_trans('category.has_children'));
+            }
             CategoryRepo::getInstance()->destroy($category);
 
             return json_success(panel_trans('common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
