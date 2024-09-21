@@ -9,17 +9,19 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use InnoShop\Common\Models\Catalog;
+use Throwable;
 
 class CatalogRepo extends BaseRepo
 {
     /**
      * @param  $filters
      * @return LengthAwarePaginator
-     * @throws \Exception
+     * @throws Exception
      */
     public function list($filters = []): LengthAwarePaginator
     {
@@ -102,11 +104,11 @@ class CatalogRepo extends BaseRepo
     /**
      * @param  $data
      * @return Catalog
-     * @throws \Exception|\Throwable
+     * @throws Exception|Throwable
      */
     public function create($data): Catalog
     {
-        $item = new Catalog($data);
+        $item = new Catalog($this->handleData($data));
         $item->saveOrFail();
         $item->translations()->createMany($data['translations']);
 
@@ -120,7 +122,7 @@ class CatalogRepo extends BaseRepo
      */
     public function update($item, $data): mixed
     {
-        $item->fill($data);
+        $item->fill($this->handleData($data));
         $item->saveOrFail();
         $item->translations()->delete();
         $item->translations()->createMany($data['translations']);
@@ -136,5 +138,18 @@ class CatalogRepo extends BaseRepo
     {
         $item->translations()->delete();
         $item->delete();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function handleData($requestData): array
+    {
+        return [
+            'parent_id' => (int) ($requestData['parent_id'] ?? 0),
+            'slug'      => $requestData['slug'],
+            'position'  => (int) ($requestData['position'] ?? 0),
+            'active'    => (bool) ($requestData['active'] ?? true),
+        ];
     }
 }

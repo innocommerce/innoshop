@@ -41,9 +41,8 @@ class CatalogRequest extends FormRequest
             'position' => 'integer',
             'active'   => 'bool',
 
-            'translations.*.locale'  => 'required',
-            'translations.*.title'   => 'required',
-            'translations.*.content' => 'required',
+            'translations.*.locale' => 'required',
+            'translations.*.title'  => 'required',
         ];
     }
 }
