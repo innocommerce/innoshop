@@ -94,7 +94,6 @@
                     <div class="card">
                       <div class="card-header">{{ __('panel/menu.categories') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
-                        <input class="d-none" name="menu_categories" value="">
                         @foreach ($categories as $item)
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="menu_header_categories[]"
@@ -111,7 +110,6 @@
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.catalogs') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
-                        <input class="d-none" name="menu_catalogs" value="">
                         @foreach ($catalogs as $item)
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="menu_header_catalogs[]"
@@ -128,7 +126,6 @@
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.page') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
-                        <input class="d-none" name="menu_pages" value="">
                         @foreach ($pages as $item)
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="menu_header_pages[]"
@@ -150,7 +147,6 @@
                     <div class="card">
                       <div class="card-header">{{ __('panel/menu.categories') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
-                        <input class="d-none" name="footer_categories" value="">
                         @foreach ($categories as $item)
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="menu_footer_categories[]"
@@ -167,7 +163,6 @@
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.catalogs') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
-                        <input class="d-none" name="footer_catalogs" value="">
                         @foreach ($catalogs as $item)
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="menu_footer_catalogs[]"
@@ -184,7 +179,6 @@
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.page') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
-                        <input class="d-none" name="footer_pages" value="">
                         @foreach ($pages as $item)
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="menu_footer_pages[]"

@@ -57,7 +57,7 @@ class ThemeController extends BaseController
         $settingUrl = panel_route('themes_settings.index');
 
         try {
-            SettingRepo::getInstance()->updateValues($settings);
+            ThemeRepo::getInstance()->updateSetting($settings);
 
             return redirect($settingUrl)
                 ->with('instance', $settings)

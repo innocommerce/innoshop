@@ -10,9 +10,20 @@
 namespace InnoShop\Panel\Repositories;
 
 use Illuminate\Support\Str;
+use InnoShop\Common\Repositories\SettingRepo;
+use Throwable;
 
 class ThemeRepo
 {
+    const SETTING_KEYS = [
+        'menu_header_categories',
+        'menu_header_catalogs',
+        'menu_header_pages',
+        'menu_footer_categories',
+        'menu_footer_catalogs',
+        'menu_footer_pages',
+    ];
+
     /**
      * @return self
      */
@@ -42,5 +53,18 @@ class ThemeRepo
         }
 
         return $themes;
+    }
+
+    /**
+     * @param  $settings
+     * @return void
+     * @throws Throwable
+     */
+    public function updateSetting($settings): void
+    {
+        foreach (self::SETTING_KEYS as $key) {
+            $settings[$key] = $settings[$key] ?? [];
+        }
+        SettingRepo::getInstance()->updateValues($settings);
     }
 }
