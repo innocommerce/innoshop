@@ -31,9 +31,9 @@ class ArticleRequest extends FormRequest
     public function rules(): array
     {
         if ($this->article) {
-            $slugRule = 'alpha_dash|unique:articles,slug,'.$this->article->id;
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:articles,slug,'.$this->article->id;
         } else {
-            $slugRule = 'alpha_dash|unique:articles,slug';
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:articles,slug';
         }
 
         return [

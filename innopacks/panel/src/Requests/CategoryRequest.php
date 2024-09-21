@@ -31,9 +31,9 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         if ($this->category) {
-            $slugRule = 'alpha_dash|unique:categories,slug,'.$this->category->id;
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:categories,slug,'.$this->category->id;
         } else {
-            $slugRule = 'alpha_dash|unique:categories,slug';
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:categories,slug';
         }
 
         return [

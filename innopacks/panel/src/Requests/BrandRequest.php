@@ -31,9 +31,9 @@ class BrandRequest extends FormRequest
     public function rules(): array
     {
         if ($this->brand) {
-            $slugRule = 'alpha_dash|unique:brands,slug,'.$this->brand->id;
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:brands,slug,'.$this->brand->id;
         } else {
-            $slugRule = 'alpha_dash|unique:brands,slug';
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:brands,slug';
         }
 
         return [

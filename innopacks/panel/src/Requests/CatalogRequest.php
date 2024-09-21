@@ -31,9 +31,9 @@ class CatalogRequest extends FormRequest
     public function rules(): array
     {
         if ($this->catalog) {
-            $slugRule = 'required|alpha_dash|unique:articles,slug,'.$this->catalog->id;
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:catalogs,slug,'.$this->catalog->id;
         } else {
-            $slugRule = 'required|alpha_dash|unique:articles,slug';
+            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:catalogs,slug';
         }
 
         return [
