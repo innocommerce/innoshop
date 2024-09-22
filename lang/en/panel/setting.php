@@ -32,6 +32,7 @@ return [
     'meta_title'               => 'Meta Title',
     'meta_keywords'            => 'Meta Keywords',
     'meta_description'         => 'Meta Description',
+    'panel_name'               => 'Panel Path Name',
     'icp_number'               => 'ICP registration number',
     'js_code'                  => 'Third-party JS code',
     'default_country'          => 'Default Country or Region',
