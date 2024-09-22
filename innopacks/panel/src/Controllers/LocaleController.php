@@ -105,24 +105,22 @@ class LocaleController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function uninstall(Request $request): RedirectResponse
+    public function uninstall(Request $request): JsonResponse
     {
         try {
             $code   = $request->code;
             $locale = LocaleRepo::getInstance()->builder(['code' => $code])->firstOrFail();
             if ($locale->code == system_setting('front_locale')) {
-                throw new Exception('默认语言不能卸载');
+                throw new Exception(panel_trans('locale.cannot_uninstall_default_locale'));
             }
             TranslationService::getInstance()->deleteLocale($locale);
             session('locale', setting_locale_code());
 
-            return redirect(panel_route('locales.index'))
-                ->with('instance', $locale)
-                ->with('success', panel_trans('common.uninstall_success'));
+            return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {
-            return back()->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 

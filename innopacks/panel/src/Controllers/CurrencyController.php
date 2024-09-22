@@ -121,7 +121,7 @@ class CurrencyController extends BaseController
     {
         try {
             if ($currency->code == system_setting('currency')) {
-                throw new \Exception('Cannot delete default currency');
+                throw new Exception(panel_trans('currency.cannot_delete_default_currency'));
             }
             CurrencyRepo::getInstance()->destroy($currency);
 

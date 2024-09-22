@@ -17,25 +17,37 @@
 
 <div class="row">
   <div class="col-6">
-    <x-common-form-select title="{{ __('panel/setting.front_default_language') }}" name="front_locale" :options="$locales" key="code" label="name" value="{{ old('front_locale', system_setting('front_locale')) }}" required placeholder="{{ __('panel/setting.front_default_language') }}"/>
+    <x-common-form-select title="{{ __('panel/setting.front_default_language') }}" name="front_locale"
+                          :options="$locales" key="code" label="name" :empty-option="false"
+                          value="{{ old('front_locale', system_setting('front_locale')) }}" required
+                          placeholder="{{ __('panel/setting.front_default_language') }}"/>
   </div>
   <div class="col-6">
-    <x-common-form-select title="{{ __('panel/setting.default_currency') }}" name="currency" :options="$currencies" key="code" label="name" value="{{ old('currency', system_setting('currency')) }}" required placeholder="{{ __('panel/setting.default_currency') }}"/>
+    <x-common-form-select title="{{ __('panel/setting.default_currency') }}" name="currency"
+                          :options="$currencies" key="code" label="name" :empty-option="false"
+                          value="{{ old('currency', system_setting('currency')) }}" required
+                          placeholder="{{ __('panel/setting.default_currency') }}"/>
   </div>
 </div>
 
 <div class="row">
   <div class="col-6">
-    <x-common-form-switch-radio title="{{ __('panel/setting.login_checkout') }}" name="login_checkout" required value="{{ old('login_checkout', system_setting('login_checkout')) }}"/>
+    <x-common-form-switch-radio title="{{ __('panel/setting.login_checkout') }}" name="login_checkout" required
+                                value="{{ old('login_checkout', system_setting('login_checkout')) }}"/>
   </div>
   <div class="col-6">
-    <x-common-form-switch-radio title="{{ __('panel/setting.backstage_menu_expansion') }}" name="expand" required value="{{ old('expand', system_setting('expand')) }}"/>
+    <x-common-form-switch-radio title="{{ __('panel/setting.backstage_menu_expansion') }}" name="expand" required
+                                value="{{ old('expand', system_setting('expand')) }}"/>
   </div>
 </div>
 
 
-<x-common-form-input title="{{ __('panel/setting.panel_name') }}" name="panel_name" value="{{ old('panel_name', system_setting('panel_name')) }}" />
+<x-common-form-input title="{{ __('panel/setting.panel_name') }}" name="panel_name"
+                     value="{{ old('panel_name', system_setting('panel_name')) }}"/>
 
-<x-common-form-input title="{{ __('panel/setting.icp_number') }}" name="icp_number" value="{{ old('icp_number', system_setting('icp_number')) }}" />
+<x-common-form-input title="{{ __('panel/setting.icp_number') }}" name="icp_number"
+                     value="{{ old('icp_number', system_setting('icp_number')) }}"/>
 
-<x-common-form-textarea title="{{ __('panel/setting.js_code') }}" name="js_code" value="{{ old('js_code', system_setting('js_code')) }}" placeholder="{{ __('panel/setting.js_code') }}" />
+<x-common-form-textarea title="{{ __('panel/setting.js_code') }}" name="js_code"
+                        value="{{ old('js_code', system_setting('js_code')) }}"
+                        placeholder="{{ __('panel/setting.js_code') }}"/>
