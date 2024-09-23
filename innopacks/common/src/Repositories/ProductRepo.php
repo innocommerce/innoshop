@@ -105,7 +105,7 @@ class ProductRepo extends BaseRepo
 
             $product->skus()->createMany($this->handleSkus($product, $data['skus']));
             $product->translations()->createMany($this->handleTranslations($data['translations']));
-            $product->productAttributes()->createMany($data['attributes'] ?? []);
+            $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
             $product->categories()->sync($data['categories'] ?? []);
 
             if (isset($data['images'])) {
@@ -158,30 +158,6 @@ class ProductRepo extends BaseRepo
     }
 
     /**
-     * @param  $translations
-     * @return array
-     */
-    private function handleTranslations($translations): array
-    {
-        $items = [];
-        foreach ($translations as $translation) {
-            $name    = $translation['name'];
-            $items[] = [
-                'locale'           => $translation['locale'],
-                'name'             => $name,
-                'summary'          => $translation['summary']          ?? $name,
-                'selling_point'    => $translation['selling_point']    ?? $name,
-                'content'          => $translation['content']          ?? $name,
-                'meta_title'       => $translation['meta_title']       ?? $name,
-                'meta_description' => $translation['meta_description'] ?? $name,
-                'meta_keywords'    => $translation['meta_keywords']    ?? $name,
-            ];
-        }
-
-        return $items;
-    }
-
-    /**
      * @param  $product
      * @param  $skus
      * @return array
@@ -227,6 +203,47 @@ class ProductRepo extends BaseRepo
                 'is_default'       => $isDefault,
                 'position'         => $sku['position'] ?? 0,
             ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param  $translations
+     * @return array
+     */
+    private function handleTranslations($translations): array
+    {
+        $items = [];
+        foreach ($translations as $translation) {
+            $name    = $translation['name'];
+            $items[] = [
+                'locale'           => $translation['locale'],
+                'name'             => $name,
+                'summary'          => $translation['summary']          ?? $name,
+                'selling_point'    => $translation['selling_point']    ?? $name,
+                'content'          => $translation['content']          ?? $name,
+                'meta_title'       => $translation['meta_title']       ?? $name,
+                'meta_description' => $translation['meta_description'] ?? $name,
+                'meta_keywords'    => $translation['meta_keywords']    ?? $name,
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param  $attributes
+     * @return array
+     */
+    private function handleAttributes($attributes): array
+    {
+        $items = [];
+        foreach ($attributes as $attribute) {
+            if (empty($attribute['attribute_id'] ?? []) || empty($attribute['attribute_value_id'] ?? [])) {
+                continue;
+            }
+            $items[] = $attribute;
         }
 
         return $items;
