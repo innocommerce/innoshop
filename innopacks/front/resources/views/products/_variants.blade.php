@@ -53,6 +53,7 @@
       $('.product-price .price').text(masterSku.price_format);
       $('.product-price .old-price').text(masterSku.origin_price_format);
       $('.product-quantity').attr('data-skuid', masterSku.id)
+      $('.main-product-img img').attr('src', masterSku.origin_image_url);
       history.pushState({}, '', inno.updateQueryStringParameter(window.location.href, 'sku_id', masterSku.id));
 
       if (masterSku.quantity * 1 === 0) {
