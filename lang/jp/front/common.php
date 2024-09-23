@@ -8,9 +8,13 @@
  */
 
 return [
+    'name'           => 'の名前をあげる',
+    'image'          => 'イメージ',
+    'date'           => '日付',
     'home'           => 'ホーム',
     'login'          => 'ログイン',
     'register'       => '登録',
+    'date'           => '日付',
     'cancel'         => 'キャンセル',
     'confirm'        => '確認',
     'delete'         => '削除',

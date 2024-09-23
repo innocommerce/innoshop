@@ -23,4 +23,5 @@ return [
     'no_order'          => '<span class="text-decoration-underline">Haga su primer pedido</span> <span>Aún no ha realizado ningún pedido. </span>',
     'forgotten'         => 'Olvidé mi contraseña',
     'verify_code_error' => 'Error en el código de verificación',
+    'reviews'           => 'Mi comentario',
 ];

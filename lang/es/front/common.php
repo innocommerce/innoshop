@@ -8,9 +8,13 @@
  */
 
 return [
+    'name'           => 'Nombre',
+    'image'          => 'Imagen',
+    'date'           => 'Fecha',
     'home'           => 'Inicio',
     'login'          => 'Iniciar sesión',
     'register'       => 'Registrarse',
+    'date'           => 'Fecha',
     'cancel'         => 'Cancelar',
     'confirm'        => 'Confirmar',
     'delete'         => 'Eliminar',
@@ -18,7 +22,6 @@ return [
     'action'         => 'Acción',
     'add'            => 'Agregar',
     'text_hint'      => 'Sugerencia',
-    'image'          => 'Imagen',
     'all'            => 'Todos',
     'status'         => 'Estado',
     'view'           => 'Ver',

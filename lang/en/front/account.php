@@ -23,4 +23,5 @@ return [
     'no_order'          => '<span class="text-decoration-underline">Make your first order</span> <span>You haven\'t placed any orders yet. </span>',
     'forgotten'         => 'Forgot Password',
     'verify_code_error' => 'Verification code error',
+    'reviews'           => 'Reviews',
 ];

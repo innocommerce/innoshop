@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Resources\ReviewListItem;
 use InnoShop\Common\Resources\SkuListItem;
 
 class ProductController extends Controller
@@ -91,6 +92,7 @@ class ProductController extends Controller
             'skus'       => SkuListItem::collection($product->skus)->jsonSerialize(),
             'variants'   => $product->variables,
             'attributes' => $product->groupedAttributes(),
+            'reviews'    => (ReviewListItem::collection($product->reviews))->jsonSerialize(),
         ];
 
         return inno_view('products.show', $data);

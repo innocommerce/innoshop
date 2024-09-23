@@ -38,6 +38,9 @@ Route::middleware(['admin_auth:admin'])
         Route::resource('/brands', Controllers\BrandController::class);
         Route::put('/brands/{currency}/active', [Controllers\BrandController::class, 'active'])->name('brands.active');
 
+        Route::resource('/reviews', Controllers\ReviewController::class);
+        Route::put('/reviews/{review}/active', [Controllers\ReviewController::class, 'active'])->name('reviews.active');
+
         Route::resource('/articles', Controllers\ArticleController::class);
         Route::put('/articles/{currency}/active', [Controllers\ArticleController::class, 'active'])->name('articles.active');
 

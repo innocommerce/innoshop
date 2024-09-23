@@ -34,4 +34,10 @@ return [
     'price'         => '価格',
     'quantity'      => '数量',
     'subtotal'      => '小計',
+    'operation'     => '操作',
+    'add_review'    => 'レビューを追加',
+    'product_name'  => '製品名',
+    'product_image' => '製品画像',
+    'Product_spec'  => '製品仕様',
+    'close'         => '閉める',
 ];

@@ -23,4 +23,5 @@ return [
     'no_order'          => '<span class="text-decoration-underline">进行您的第一个订单</span><span>您尚未下任何订单。</span>',
     'forgotten'         => '忘记密码',
     'verify_code_error' => '验证码错误',
+    'reviews'           => '我的评论',
 ];

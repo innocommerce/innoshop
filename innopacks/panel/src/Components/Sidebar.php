@@ -240,6 +240,7 @@ class Sidebar extends Component
             ['route' => 'brands.index', 'title' => __('panel/menu.brands')],
             ['route' => 'attributes.index', 'title' => __('panel/menu.attributes')],
             ['route' => 'attribute_groups.index', 'title' => __('panel/menu.attribute_groups')],
+            ['route' => 'reviews.index', 'title' => __('panel/menu.reviews')],
         ];
 
         return fire_hook_filter('component.sidebar.product.routes', $routes);

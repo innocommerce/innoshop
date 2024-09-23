@@ -35,4 +35,10 @@ return [
     'price'         => 'Price',
     'quantity'      => 'Quantity',
     'subtotal'      => 'Subtotal',
+    'operation'     => 'Operation',
+    'add_review'    => 'Add Comment',
+    'product_name'  => 'Product Name',
+    'product_image' => 'Product Image',
+    'Product_spec'  => 'Product Specifications',
+    'close'         => 'Close',
 ];

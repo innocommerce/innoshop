@@ -10,7 +10,8 @@
 return [
     'list'            => '一覧',
     'id'              => 'ID',
-    'name'            => '名称',
+    'name'            => 'の名前をあげる',
+    'date'            => '日付',
     'image'           => '画像',
     'link'            => 'リンク',
     'created_at'      => '作成日時',

@@ -58,4 +58,5 @@ return [
     'currencies'  => '通貨為替',
     'tax_classes' => '税クラス設定',
     'tax_rates'   => '税率設定',
+    'reviews'     => 'コメント',
 ];

@@ -14,7 +14,10 @@
       <a href="{{ account_route('orders.index') }}"><i class="bi bi-clipboard2-check"></i>{{ front_trans('account.orders') }}</a>
     </li>
     <li class="{{ equal_route_name('front.account.favorites.index') ? 'active' : '' }}">
-      <a href="{{ account_route('favorites.index') }}"><i class="bi bi-star"></i>{{ front_trans('account.favorites') }}</a>
+      <a href="{{ account_route('favorites.index') }}"><i class="bi bi-heart"></i>{{ front_trans('account.favorites') }}</a>
+    </li>
+    <li class="{{ equal_route_name('front.account.reviews.index') ? 'active' : '' }}">
+      <a href="{{ account_route('reviews.index') }}"><i class="bi bi-chat-dots"></i>{{ front_trans('account.reviews') }}</a>
     </li>
     <li class="{{ equal_route_name('front.account.addresses.index') ? 'active' : '' }}">
       <a href="{{ account_route('addresses.index') }}"><i class="bi bi-geo-alt"></i>{{ front_trans('account.addresses') }}</a>

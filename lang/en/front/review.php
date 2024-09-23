@@ -8,9 +8,7 @@
  */
 
 return [
-    'review_number'    => '评论序号',
-    'review_date'      => '评论日期',
-    'register_submit'  => '立即注册',
-    'have_account'     => '已有账号？点击登录',
-    'register_success' => '注册成功',
+    'review'         => 'Review',
+    'review_content' => 'Rveiew Content',
+    'rating'         => 'Rating',
 ];

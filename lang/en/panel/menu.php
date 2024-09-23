@@ -60,4 +60,5 @@ return [
     'currencies'  => 'Currencies',
     'tax_classes' => 'Tax Classes',
     'tax_rates'   => 'Tax Rates',
+    'reviews'     => 'Reviews',
 ];

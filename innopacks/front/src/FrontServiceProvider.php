@@ -172,6 +172,7 @@ class FrontServiceProvider extends ServiceProvider
     {
         $this->loadViewComponentsAs('front', [
             'breadcrumb' => Components\Breadcrumb::class,
+            'review'     => Components\Review::class,
         ]);
     }
 

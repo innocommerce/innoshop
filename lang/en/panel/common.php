@@ -11,6 +11,8 @@ return [
     'list'            => 'List',
     'id'              => 'ID',
     'name'            => 'Name',
+    'image'           => 'Image',
+    'date'            => 'Date',
     'created_at'      => 'Created',
     'updated_at'      => 'Updated',
     'position'        => 'Position',

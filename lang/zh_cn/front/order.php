@@ -35,4 +35,10 @@ return [
     'price'         => '价格',
     'quantity'      => '数量',
     'subtotal'      => '小计',
+    'operation'     => '操作',
+    'add_review'    => '添加评论',
+    'product_name'  => '产品名称',
+    'product_image' => '产品图片',
+    'Product_spec'  => '产品规格',
+    'close'         => '关闭',
 ];

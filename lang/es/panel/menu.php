@@ -55,4 +55,5 @@ return [
     'currencies'  => 'Monedas',
     'tax_classes' => 'Clases de impuestos',
     'tax_rates'   => 'Tasas de impuestos',
+    'reviews'     => 'Comentarios',
 ];

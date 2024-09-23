@@ -118,6 +118,14 @@ class Product extends BaseModel
     }
 
     /**
+     * @return HasMany
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'product_id');
+    }
+
+    /**
      * @return BelongsToMany
      */
     public function categories(): BelongsToMany

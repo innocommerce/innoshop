@@ -62,4 +62,5 @@ return [
     'currencies'  => '货币汇率',
     'tax_classes' => '税类设置',
     'tax_rates'   => '税率设置',
+    'reviews'     => '评论',
 ];

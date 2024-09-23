@@ -55,7 +55,7 @@ class BaseRepo implements RepoInterface
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
-        return $this->builder($filters)->paginate();
+        return $this->builder($filters)->orderByDesc('id')->paginate();
     }
 
     /**

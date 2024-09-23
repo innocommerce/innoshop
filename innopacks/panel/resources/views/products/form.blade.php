@@ -110,9 +110,11 @@ $weightClasses = [
 
       @include('panel::products._form_attribute')
 
+      @hookinsert('panel.product.form.left.bottom')
     </div>
+
     <div class="col-12 col-md-4 ps-md-0">
-      <div class="card">
+      <div class="card mb-3">
         <div class="card-body">
           <x-common-form-switch-radio :title="__('panel/common.status')" name="active" :value="old('active', $product->active ?? true)" />
           <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')" :placeholder="__('panel/common.slug')" column="product_slug" generate="true" />
@@ -152,6 +154,9 @@ $weightClasses = [
           <x-common-form-switch-radio :title="__('panel/product.is_virtual')" name="is_virtual" :value="old('is_virtual', $product->is_virtual ?? false)" />
         </div>
       </div>
+
+      @hookinsert('panel.product.form.right.bottom')
+
     </div>
   </div>
 

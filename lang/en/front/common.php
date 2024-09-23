@@ -10,6 +10,9 @@
 return [
     'home'           => 'Home',
     'login'          => 'Login',
+    'name'           => 'Name',
+    'image'          => 'Image',
+    'date'           => 'Date',
     'register'       => 'Register',
     'cancel'         => 'Cancel',
     'confirm'        => 'Confirm',
@@ -18,7 +21,6 @@ return [
     'action'         => 'Action',
     'add'            => 'Add',
     'text_hint'      => 'Hint',
-    'image'          => 'Image',
     'all'            => 'All',
     'status'         => 'Status',
     'view'           => 'View',

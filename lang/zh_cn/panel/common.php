@@ -13,6 +13,7 @@ return [
     'name'            => '名称',
     'image'           => '图片',
     'link'            => '链接',
+    'date'            => '日期',
     'created_at'      => '创建时间',
     'updated_at'      => '更新时间',
     'position'        => '排序',

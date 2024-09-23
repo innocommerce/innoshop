@@ -33,4 +33,10 @@ return [
     'price'         => 'Precio',
     'quantity'      => 'Cantidad',
     'subtotal'      => 'Subtotal',
+    'operation'     => 'operación',
+    'add_review'    => 'agregar revisión',
+    'product_name'  => 'nombre del producto',
+    'product_image' => 'imagen del producto',
+    'Product_spec'  => 'especificación del producto',
+    'close'         => 'Cerrar',
 ];

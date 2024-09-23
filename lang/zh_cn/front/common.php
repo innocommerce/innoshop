@@ -8,6 +8,10 @@
  */
 
 return [
+    'name'           => '名称',
+    'image'          => '图片',
+    'date'           => '日期',
+    'logo'           => '品牌',
     'home'           => '首页',
     'login'          => '登录',
     'register'       => '注册',
@@ -18,7 +22,6 @@ return [
     'action'         => '操作',
     'add'            => '添加',
     'text_hint'      => '提示',
-    'image'          => '图片',
     'all'            => '全部',
     'status'         => '状态',
     'view'           => '查看',

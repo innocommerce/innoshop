@@ -29,7 +29,7 @@
             <tr>
               <td>{{ $item->id }}</td>
               <td>
-                <a href="{{ $item->url }}" target="_blank">
+                  <a href="{{ $item->url }}" target="_blank">
                   <img src="{{ image_resize($item->logo) }}" class="img-fluid wh-40">
                 </a>
               </td>

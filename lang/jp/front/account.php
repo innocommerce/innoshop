@@ -23,4 +23,5 @@ return [
     'no_order'          => '<span class="text-decoration-underline">最初の注文をしてください</span><span>まだ注文がありません。</span>',
     'forgotten'         => 'パスワードを忘れた',
     'verify_code_error' => '確認コードが間違っています',
+    'reviews'           => '私のコメント',
 ];
