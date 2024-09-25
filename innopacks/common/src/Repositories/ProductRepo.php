@@ -103,15 +103,16 @@ class ProductRepo extends BaseRepo
                 $product->productAttributes()->delete();
             }
 
-            $product->skus()->createMany($this->handleSkus($product, $data['skus']));
             $product->translations()->createMany($this->handleTranslations($data['translations']));
             $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
             $product->categories()->sync($data['categories'] ?? []);
 
             if (isset($data['images'])) {
-                //$product->images()->delete();
+                $product->images()->delete();
                 $this->syncImages($product, $data['images'] ?: []);
             }
+
+            $product->skus()->createMany($this->handleSkus($product, $data['skus']));
 
             $masterSku = $product->skus()->where('is_default', true)->first();
 
