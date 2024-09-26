@@ -42,9 +42,11 @@ class ForgottenNotification extends Notification implements ShouldQueue
      */
     public function via(mixed $notifiable): array
     {
-        $drivers[]  = 'database';
-        $mailEngine = system_setting('email_engine');
-        if ($mailEngine) {
+        $drivers[] = 'database';
+
+        $mailEnabled = system_setting('email_enable');
+        $mailEngine  = system_setting('email_engine');
+        if ($mailEnabled && $mailEngine) {
             $drivers[] = 'mail';
         }
 
