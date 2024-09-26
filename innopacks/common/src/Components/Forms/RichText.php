@@ -23,7 +23,7 @@ class RichText extends Component
 
     public bool $multiple;
 
-    public function __construct(string $name, string $title, bool $required = false, $value = null, bool $multiple = false)
+    public function __construct(string $name, string $title = '', bool $required = false, $value = null, bool $multiple = false)
     {
         if (! $multiple) {
             $value = html_entity_decode($value, ENT_QUOTES);

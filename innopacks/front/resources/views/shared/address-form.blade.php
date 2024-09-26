@@ -27,11 +27,6 @@
   @endif
 
   <div class="form-group mb-4">
-    <label class="form-label" for="name">{{ __('common/address.name') }}</label>
-    <input type="text" class="form-control" name="name" value="" required placeholder="{{ __('common/address.name') }}" />
-    <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' => __('common/address.name')]) }}</span>
-  </div>
-  <div class="form-group mb-4">
     <label class="form-label" for="email">{{ __('common/address.address_1') }}</label>
     <input type="text" class="form-control" name="address_1" value="" required placeholder="{{ __('common/address.address_1') }}" />
     <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' => __('common/address.address_1')]) }}</span>
