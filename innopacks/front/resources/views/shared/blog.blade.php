@@ -6,7 +6,9 @@
       </a>
     </div>
     <div class="blog-item-info">
-      <div class="blog-catalog"><a href="{{ $item->url }}">{{ $item->catalog->translation->title }}</a></div>
+      @if($item->catalog->translation ?? '')
+        <div class="blog-catalog"><a href="{{ $item->url }}">{{ $item->catalog->translation->title }}</a></div>
+      @endif
       <div class="blog-title">{{ $item->translation->title }}</div>
       <div class="author-wrap">
         @if($item->author)
