@@ -8,5 +8,11 @@
  */
 
 return [
-    'category' => 'Categoría',
+    'category'     => 'Categoría de productos',
+    'default'      => 'Por defecto',
+    'sales_volume' => 'Volumen de ventas',
+    'low'          => 'Bajo',
+    'high'         => 'Alto',
+    'name'         => 'Nombre',
+    'price'        => 'Precio',
 ];

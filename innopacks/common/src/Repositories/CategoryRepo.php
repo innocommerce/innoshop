@@ -36,6 +36,20 @@ class CategoryRepo extends BaseRepo
     }
 
     /**
+     * @return array
+     */
+    public function getPerPageItems(): array
+    {
+        $perPages      = [];
+        $configPerPage = system_setting('product_per_page', 15);
+        for ($index = 1; $index <= 5; $index++) {
+            $perPages[] = $configPerPage * $index;
+        }
+
+        return $perPages;
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

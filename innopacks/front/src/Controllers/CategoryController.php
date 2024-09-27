@@ -83,14 +83,18 @@ class CategoryController extends Controller
             $filters = [
                 'category_id' => $category->id,
                 'keyword'     => $keyword,
+                'sort'        => \request('sort'),
+                'order'       => \request('order'),
+                'per_page'    => \request('per_page'),
             ];
-            $products = ProductRepo::getInstance()->withActive()->builder($filters)->paginate();
+            $products = ProductRepo::getInstance()->getFrontList($filters);
 
             $data = [
-                'slug'       => $slug,
-                'category'   => $category,
-                'categories' => $categories,
-                'products'   => $products,
+                'slug'           => $slug,
+                'category'       => $category,
+                'categories'     => $categories,
+                'products'       => $products,
+                'per_page_items' => CategoryRepo::getInstance()->getPerPageItems(),
             ];
 
             return inno_view('categories.show', $data)->render();

@@ -32,6 +32,40 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * @param  array  $filters
+     * @return LengthAwarePaginator
+     * @throws Exception
+     */
+    public function getFrontList(array $filters = []): LengthAwarePaginator
+    {
+        $sort    = $filters['sort']     ?? 'created_at';
+        $order   = $filters['order']    ?? 'desc';
+        $perPage = $filters['per_page'] ?? 15;
+
+        $builder = $this->withActive()->builder($filters);
+
+        if ($sort == 'pt.name') {
+            $builder->select(['products.*', 'pt.name', 'pt.content']);
+            $builder->join('product_translations as pt', function ($join) {
+                $join->on('products.id', '=', 'pt.product_id')
+                    ->where('pt.locale', locale_code());
+            });
+        } elseif ($sort == 'ps.price') {
+            $builder->select(['products.*', 'ps.price']);
+            $builder->join('product_skus as ps', function ($query) {
+                $query->on('ps.product_id', '=', 'products.id')
+                    ->where('is_default', true);
+            });
+        }
+
+        if ($sort && $order) {
+            $builder->orderBy($sort, $order);
+        }
+
+        return $builder->paginate($perPage);
+    }
+
+    /**
      * Create product.
      *
      * @param  $data

@@ -8,5 +8,11 @@
  */
 
 return [
-    'category' => '商品カテゴリー',
+    'category'     => '商品カテゴリ',
+    'default'      => 'デフォルト',
+    'sales_volume' => '販売数量',
+    'low'          => '低い',
+    'high'         => '高い',
+    'name'         => '名前',
+    'price'        => '価格',
 ];
