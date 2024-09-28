@@ -745,7 +745,6 @@ return new class extends Migration
             $table->integer('product_id')->nullable()->index('rv_product_id');
             $table->integer('order_item_id')->nullable()->index('rv_oi_id');
             $table->integer('rating');
-            $table->string('title');
             $table->string('content');
             $table->integer('like');
             $table->integer('dislike');

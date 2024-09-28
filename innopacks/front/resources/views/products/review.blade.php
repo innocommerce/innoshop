@@ -4,7 +4,9 @@
   <div>
     <div class="review-content">
       <div class="row">
-        <label class="col-8 text-left font-size-25 mb-0" for="review"><h5>{{ __('front/product.input_your_review')}}</h5></label>
+        <label class="col-8 text-left font-size-25 mb-0" for="review">
+          <h5>{{ __('front/product.input_your_review')}}</h5>
+        </label>
 
         <div class="rating col-4 text-end">
           <input type="radio" name="rating" value="5" id="5">

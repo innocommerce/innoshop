@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Review;
@@ -16,6 +17,26 @@ use Throwable;
 
 class ReviewRepo extends BaseRepo
 {
+    /**
+     * @param  $product
+     * @return LengthAwarePaginator
+     */
+    public function getListByProduct($product): LengthAwarePaginator
+    {
+        if (is_object($product)) {
+            $productID = $product->id;
+        } else {
+            $productID = (int) $product;
+        }
+
+        $filters = [
+            'product_id' => $productID,
+            'active'     => true,
+        ];
+
+        return $this->builder($filters)->paginate();
+    }
+
     /**
      * @param  $data
      * @return mixed
@@ -65,6 +86,10 @@ class ReviewRepo extends BaseRepo
         $orderItemID = $filters['order_item_id'] ?? 0;
         if ($orderItemID) {
             $builder->where('order_item_id', $orderItemID);
+        }
+
+        if (isset($filters['active'])) {
+            $builder->where('active', (bool) $filters['active']);
         }
 
         return $builder;
