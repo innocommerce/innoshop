@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="{{ mix('themes/default/css/app.css') }}">
   <script>
     let urls = {
+      upload_images: '{{ front_route('upload.images') }}',
       cart_add: '{{ front_route('carts.store') }}',
       cart_mini: '{{ front_route('carts.mini') }}',
       login: '{{ front_route('login.index') }}',
