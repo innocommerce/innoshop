@@ -21,6 +21,9 @@ Route::middleware(['admin_auth:admin'])
 
         Route::get('/locale/{code}', [Controllers\LocaleController::class, 'switch'])->name('locale.switch');
 
+        Route::post('/upload/images', [Controllers\UploadController::class, 'images'])->name('upload.images');
+        Route::post('/upload/files', [Controllers\UploadController::class, 'files'])->name('upload.files');
+
         Route::resource('/orders', Controllers\OrderController::class);
         Route::put('/orders/{order}/status', [Controllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
 

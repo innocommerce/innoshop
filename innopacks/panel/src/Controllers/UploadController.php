@@ -7,11 +7,11 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Front\Controllers;
+namespace InnoShop\Panel\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use InnoShop\Front\Requests\UploadFileRequest;
-use InnoShop\Front\Requests\UploadImageRequest;
+use InnoShop\Panel\Requests\UploadFileRequest;
+use InnoShop\Panel\Requests\UploadImageRequest;
 
 class UploadController
 {
@@ -25,8 +25,8 @@ class UploadController
     {
         $image    = $request->file('image');
         $type     = $request->file('type', 'common');
-        $filePath = $image->store("/{$type}", 'upload');
-        $realPath = "upload/$filePath";
+        $filePath = $image->store("/{$type}", 'catalog');
+        $realPath = "catalog/$filePath";
 
         $data = [
             'url'   => asset($realPath),
@@ -46,8 +46,8 @@ class UploadController
     {
         $file     = $request->file('file');
         $type     = $request->file('type', 'files');
-        $filePath = $file->store("/{$type}", 'upload');
-        $realPath = "upload/$filePath";
+        $filePath = $file->store("/{$type}", 'catalog');
+        $realPath = "catalog/$filePath";
 
         $data = [
             'url'   => asset($realPath),

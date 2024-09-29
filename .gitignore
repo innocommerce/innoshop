@@ -1,8 +1,10 @@
 /.phpunit.cache
 /node_modules
+/public/catalog
 /public/hot
 /public/storage
 /public/themes
+/public/upload
 /public/mix-manifest.json
 /storage/*.key
 /storage/installed

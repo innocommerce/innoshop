@@ -9,6 +9,7 @@
 
 namespace InnoShop\Front;
 
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -27,7 +28,7 @@ class FrontServiceProvider extends ServiceProvider
      * Boot front service provider.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function boot(): void
     {
@@ -39,6 +40,7 @@ class FrontServiceProvider extends ServiceProvider
 
         load_settings();
         $this->registerGuard();
+        $this->registerUploadFileSystem();
         $this->registerWebRoutes();
         $this->publishViewTemplates();
         $this->loadThemeViewPath();
@@ -71,10 +73,34 @@ class FrontServiceProvider extends ServiceProvider
     }
 
     /**
+     * @return void
+     */
+    protected function registerUploadFileSystem(): void
+    {
+        Config::set('filesystems.disks.upload', [
+            'driver'      => 'local',
+            'root'        => public_path('upload'),
+            'url'         => env('APP_URL').'/upload',
+            'visibility'  => 'public',
+            'throw'       => true,
+            'permissions' => [
+                'file' => [
+                    'public'  => 0755,
+                    'private' => 0755,
+                ],
+                'dir' => [
+                    'public'  => 0755,
+                    'private' => 0755,
+                ],
+            ],
+        ]);
+    }
+
+    /**
      * Register admin front routes.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     protected function registerWebRoutes(): void
     {

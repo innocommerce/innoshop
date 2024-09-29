@@ -114,7 +114,7 @@
       formData.append('type', _self.parents('.is-up-file').data('type'));
 
       _self.find('.img-loading').removeClass('d-none');
-      axios.post('{{ front_route('upload.images') }}', formData, {}).then(function (res) {
+      axios.post(urls.upload_images, formData, {}).then(function (res) {
         let val = res.data.value;
         let url = res.data.url;
         let item = '<div class="img-upload-item wh-80 position-relative d-flex justify-content-center rounded overflow-hidden align-items-center border border-1 mb-1 me-1">';
