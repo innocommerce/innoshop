@@ -27,5 +27,5 @@ return [
     'visit_order_to_review' => 'Visit Order to Leave a Review',
     'submit_review'         => 'Submit Review',
     'input_your_review'     => 'Input Your Review',
-    'input_some_text_here'  => 'Input Some Text Here',
+    'input_some_text_here'  => 'Input Review Here',
 ];
