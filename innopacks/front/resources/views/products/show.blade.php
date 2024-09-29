@@ -145,8 +145,10 @@
           </table>
         </div>
       @endif
+
       <div class="tab-pane fade" id="product-review" role="tabpanel">
-      @include('products.review')</div>
+        @include('products.review')
+      </div>
     </div>
   </div>
 

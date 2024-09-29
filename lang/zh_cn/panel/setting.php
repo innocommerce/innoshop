@@ -41,6 +41,7 @@ return [
     'default_currency'         => '默认货币',
     'enable_tax'               => '开启税费计算',
     'login_checkout'           => '登录后结账',
+    'bought_review'            => '购买后评论',
     'backstage_menu_expansion' => '后台菜单默认展开',
 
     'email_enable'    => '启用邮件服务',

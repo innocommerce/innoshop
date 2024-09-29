@@ -15,7 +15,7 @@ return [
     'password'                  => 'Password',
     'password_required'         => 'Please enter your password',
     'forget_password'           => 'Forgot password',
-    'login_submit'              => 'Submit login',
+    'login_submit'              => 'Login',
     'no_account'                => 'Don\'t have an account? Create',
     'account_or_password_error' => 'Account or password error',
     'empty_customer'            => 'Empty account',

@@ -43,7 +43,8 @@ return [
     'default_currency'         => 'Default Currency',
     'enable_tax'               => 'Enable Tax',
     'login_checkout'           => 'Login Required for Checkout',
-    'backstage_menu_expansion' => 'Backstage menu expanded by default',
+    'bought_review'            => 'Bought Required for Review',
+    'backstage_menu_expansion' => 'Menu Expanded by default',
 
     'email_enable'    => 'Enable Email Service',
     'email_engine'    => 'Email Engine',

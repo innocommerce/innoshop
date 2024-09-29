@@ -15,7 +15,7 @@ return [
     'password'                  => '密码',
     'password_required'         => '请输入密码',
     'forget_password'           => '忘记密码',
-    'login_submit'              => '提交登录',
+    'login_submit'              => '登录',
     'no_account'                => '还没有账号？立即创建',
     'account_or_password_error' => '账号或密码错误',
     'empty_customer'            => '该账号不存在',
