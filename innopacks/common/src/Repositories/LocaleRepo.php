@@ -19,6 +19,30 @@ class LocaleRepo extends BaseRepo
     public static ?Collection $enabledLocales = null;
 
     /**
+     * https://lingohub.com/blog/right-to-left-vs-left-to-right
+     *
+     * Get all RTL languages.
+     * @return string[]
+     */
+    public static function getRtlLanguages(): array
+    {
+        return [
+            'ar'  => 'Arabic',
+            'arc' => 'Aramaic',
+            'dv	' => 'Divehi',
+            'fa	' => 'Persian',
+            'ha	' => 'Hausa',
+            'he	' => 'Hebrew',
+            'khw' => 'Khowar',
+            'ks	' => 'Kashmiri',
+            'ku	' => 'Kurdish',
+            'ps	' => 'Pashto',
+            'ur	' => 'Urdu',
+            'yi	' => 'Yiddish',
+        ];
+    }
+
+    /**
      * @param  $data
      * @return mixed
      */

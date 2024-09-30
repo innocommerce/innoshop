@@ -75,6 +75,22 @@ if (! function_exists('current_panel_locale')) {
     }
 }
 
+if (! function_exists('panel_locale_direction')) {
+    /**
+     * Get locale direction for panel admin.
+     *
+     * @return string
+     * @throws Exception
+     */
+    function panel_locale_direction(): string
+    {
+        $localeCode = panel_locale_code();
+        $rtlCodes   = array_keys(\InnoShop\Common\Repositories\LocaleRepo::getRtlLanguages());
+
+        return in_array($localeCode, $rtlCodes) ? 'rtl' : 'ltr';
+    }
+}
+
 if (! function_exists('panel_lang_path_codes')) {
     /**
      * Get all panel languages
