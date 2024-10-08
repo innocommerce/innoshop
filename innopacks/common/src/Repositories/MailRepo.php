@@ -25,8 +25,8 @@ class MailRepo
     public function getEngines(): array
     {
         $engines = [
+            ['code' => 'none', 'name' => 'NONE', 'value' => 'none'],
             ['code' => 'smtp', 'name' => 'SMTP', 'value' => 'smtp'],
-            ['code' => 'sendmail', 'name' => 'SENDMAIL', 'value' => 'sendmail'],
             ['code' => 'log', 'name' => 'LOG', 'value' => 'log'],
         ];
 

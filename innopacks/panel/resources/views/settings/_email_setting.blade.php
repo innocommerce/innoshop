@@ -1,17 +1,13 @@
 <div class="container">
   <div class="col-md-6 mx-auto">
-    <div class="row">
-      <x-common-form-switch-radio title="{{ __('panel/setting.email_enable') }}" name="email_enable"
-                                  required
-                                  value="{{ old('expand', system_setting('email_enable')) }}"></x-common-form-switch-radio>
-    </div>
-    @if(system_setting('email_enable'))
-      <div class="row">
+  <div class="row">
         <x-common-form-select title="{{ __('panel/setting.email_engine') }}" name="email_engine"
                               :options="$mail_engines" key="code" label="name" :emptyOption="false"
                               value="{{ old('email_engine', system_setting('email_engine')) }}" required
                               placeholder="{{ __('panel/setting.email_engine') }}"/>
       </div>
+
+     <div class="engine smtp d-none">
       <div class="row">
         <x-common-form-input title="{{ __('panel/setting.smtp_host') }}" name="smtp_host"
                              value="{{ old('smtp_host', system_setting('smtp_host')) }}"
@@ -47,6 +43,24 @@
                              value="{{ old('smtp_timeout', system_setting('smtp_timeout', 5)) }}"
                              placeholder="{{ __('panel/setting.smtp_timeout') }}"/>
       </div>
-    @endif
+     </div>
+
+     <div class="engine log d-none">
+       {{ __('panel/setting.log_description') }}
+     </div>
+
+     @hookinsert('panel.settings.mail_engines')
+
   </div>
 </div>
+<script>
+  $('document').ready(function () {
+    $('select[name="email_engine"]').change(function () {
+      var selectedValue = $(this).val();
+      $('.engine').addClass('d-none');
+      if (selectedValue) {
+       $('.'+selectedValue).removeClass('d-none');
+      }
+    });
+  });
+</script>
