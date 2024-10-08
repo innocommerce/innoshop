@@ -50,6 +50,8 @@ return [
     'smtp_encryption'          => 'Tipo de Cifrado de Correo Electrónico',
     'smtp_port'                => 'Puerto de Correo Electrónico',
     'smtp_timeout'             => 'Tiempo de Espera de Correo Electrónico (seconds)',
+    'log_description'          => 'Explicación: el correo no se enviará realmente y el
+     contenidodel correo se guardará en forma de registro en: / storage / logs / laravel.log',
 
     'ai_model'                          => 'Gran modelo de IA',
     'ai_prompt_product_summary'         => 'Solicitud de resumen del producto',

@@ -52,6 +52,7 @@ return [
     'smtp_encryption' => '加密方式',
     'smtp_port'       => '端口',
     'smtp_timeout'    => '超时时间(秒)',
+    'log_description' => '说明:邮件不会真实发送,邮件内容会以日志形式保存在:/storage/logs/laravel.log',
 
     'ai_model'                          => 'AI 大模型',
     'ai_prompt_product_summary'         => '产品摘要提示语',
