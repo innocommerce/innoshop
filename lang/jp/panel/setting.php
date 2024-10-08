@@ -47,6 +47,8 @@ return [
     'smtp_encryption'          => 'メール暗号化方式',
     'smtp_port'                => 'メールポート',
     'smtp_timeout'             => 'メールタイムアウト（秒）',
+    'log_description'          => '説明：メールは実際に送信されません 
+     メールの内容はログ形式で保存されます：/storage/logs/laravel.log',
 
     'ai_model'                          => 'AI 大規模モデル',
     'ai_prompt_product_summary'         => '製品概要プロンプト',

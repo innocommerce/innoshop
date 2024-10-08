@@ -25,9 +25,9 @@ class MailRepo
     public function getEngines(): array
     {
         $engines = [
+            ['code' => 'none', 'name' => 'None', 'value' => 'none'],
             ['code' => 'smtp', 'name' => 'SMTP', 'value' => 'smtp'],
-            ['code' => 'sendmail', 'name' => 'SENDMAIL', 'value' => 'sendmail'],
-            ['code' => 'log', 'name' => 'LOG', 'value' => 'log'],
+            ['code' => 'log', 'name' => 'Log', 'value' => 'log'],
         ];
 
         return fire_hook_filter('common.repo.mail.engines', $engines);
