@@ -54,8 +54,6 @@ return [
     'smtp_encryption' => 'Email Encryption Type',
     'smtp_port'       => 'Email Port',
     'smtp_timeout'    => 'Email Timeout (seconds)',
-    'log_description' => 'Explanation: Emails will not be sent in real form, 
-     and their contents will be saved in the form of logs in:/storage/logs/laravel.log',
 
     'ai_model'                          => 'AI Large Model',
     'ai_prompt_product_summary'         => 'Product Summary Prompt',
