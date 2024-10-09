@@ -1,17 +1,13 @@
 <?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are the default lines which match reasons
-    | that are given by the password broker for a password update attempt
-    | outcome such as failure due to an invalid password / reset token.
-    |
-    */
-
     'reset'     => 'Tu contraseña ha sido restablecida.',
     'sent'      => 'Te hemos enviado un enlace para restablecer tu contraseña.',
     'throttled' => 'Por favor, espera antes de volver a intentarlo.',
