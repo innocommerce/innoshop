@@ -60,7 +60,7 @@ class LocaleRepo extends BaseRepo
 
         $result = [];
         foreach (front_lang_path_codes() as $localeCode) {
-            $langFile = lang_path("/$localeCode/front/base.php");
+            $langFile = lang_path("/$localeCode/common/base.php");
             if (! is_file($langFile)) {
                 throw new Exception("File ($langFile) not exist!");
             }

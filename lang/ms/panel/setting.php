@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'ai_model'                          => 'Model AI Besar',
+    'ai_prompt_article_seo_keywords'    => 'Kata Kunci SEO Artikel',
+    'ai_prompt_article_seo_description' => 'Penerangan SEO Artikel',
+    'ai_prompt_article_seo_title'       => 'Tajuk SEO Artikel',
+    'ai_prompt_article_slug'            => 'Slug Artikel',
+    'ai_prompt_article_summary'         => 'Ringkasan Artikel',
+    'ai_prompt_product_seo_keywords'    => 'Kata Kunci SEO Produk',
+    'ai_prompt_product_seo_description' => 'Penerangan SEO Produk',
+    'ai_prompt_product_seo_title'       => 'Tajuk SEO Produk',
+    'ai_prompt_product_slug'            => 'Slug Produk',
+    'ai_prompt_product_selling_point'   => 'Titik Penjualan Produk',
+    'ai_prompt_product_summary'         => 'Ringkasan Produk',
+    'backstage_menu_expansion'          => 'Layarkan Menu Belakang',
+    'basic'                             => 'Maklumat Asas',
+    'bought_review'                     => 'Ulasan Selepas Membeli',
+    'content_ai'                        => 'Pembuat Kandungan AI',
+    'default_country'                   => 'Negara Lalai',
+    'default_currency'                  => 'Mata Wang Lalai',
+    'default_province'                  => 'Wilayah Lalai',
+    'email'                             => 'Alamat E-mel',
+    'email_enable'                      => 'Dayakan Perkhidmatan E-mel',
+    'email_engine'                      => 'Enjin E-mel',
+    'email_setting'                     => 'Tetapan E-mel',
+    'enable_tax'                        => 'Dayakan Kajian Cukai',
+    'favicon'                           => 'Ikon Kecil Pelayar',
+    'front_logo'                        => 'Logo Depan',
+    'front_default_language'            => 'Bahasa Lalai Depan',
+    'header_menu'                       => 'Navigasi Penu',
+    'icp_number'                        => 'Nombor Pendaftaran ICP',
+    'js_code'                           => 'Kod JS Pihak Kedua',
+    'login_checkout'                    => 'Log Masuk Untuk Menyelesaikan Beli',
+    'meta_description'                  => 'Meta Deskripsi',
+    'meta_keywords'                     => 'Kata Kunci Meta',
+    'meta_title'                        => 'Tajuk Meta',
+    'page'                              => 'Halaman Tunggal',
+    'panel_name'                        => 'Laluan Belakang',
+    'please_select_country'             => 'Sila Pilih Negara',
+    'please_select_province'            => 'Sila Pilih Wilayah',
+    'setting'                           => 'Tetapan Sistem',
+    'shop_address'                      => 'Alamat Kedai',
+    'slideshow'                         => 'Slid Papan Depan',
+    'smtp_encryption'                   => 'Cara Lesenkan SMTP',
+    'smtp_host'                         => 'Hos SMTP',
+    'smtp_password'                     => 'Kata Laluan SMTP',
+    'smtp_port'                         => 'Port SMTP',
+    'smtp_timeout'                      => 'Masa Tamat SMTP',
+    'smtp_username'                     => 'Nama Pengguna SMTP',
+    'telephone'                         => 'Nombor Telefon',
+    'website_data'                      => 'Tetapan Laman Web',
+];
