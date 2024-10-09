@@ -2,10 +2,10 @@
 <div class="product-variant-box">
   @foreach($variants as $key => $variant)
     <div class="product-variant">
-      <div class="variant-title">{{ $variant['name'][locale_code()] ?? '' }}</div>
+      <div class="variant-title">{{ $variant['name'][front_locale_code()] ?? '-' }}</div>
       <div class="variant-values">
         @foreach($variant['values'] as $vk => $value)
-          <div class="variant-value-name" data-variant="{{ $key }}" data-value="{{ $vk }}">{{ $value['name'][front_locale_code()] }}</div>
+          <div class="variant-value-name" data-variant="{{ $key }}" data-value="{{ $vk }}">{{ $value['name'][front_locale_code()] ?? '-' }}</div>
         @endforeach
       </div>
     </div>
