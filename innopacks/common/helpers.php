@@ -789,7 +789,12 @@ if (! function_exists('current_currency')) {
      */
     function current_currency(): mixed
     {
-        return currencies()->where('code', current_currency_code())->first();
+        $currency = currencies()->where('code', current_currency_code())->first();
+        if ($currency) {
+            return $currency;
+        }
+
+        return currencies()->first();
     }
 }
 
