@@ -67,7 +67,7 @@ class Currency
             return $price;
         }
 
-        $currencyRow = $this->currencies[$currency] ?? null;
+        $currencyRow = $this->currencies[strtoupper($currency)] ?? ($this->currencies[strtolower($currency)] ?? null);
         if (empty($currencyRow)) {
             return $price;
         }
