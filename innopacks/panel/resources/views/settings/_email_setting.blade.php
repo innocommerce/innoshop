@@ -1,13 +1,13 @@
 <div class="container">
   <div class="col-12 mx-auto">
-  <div class="row">
-        <x-common-form-select title="{{ __('panel/setting.email_engine') }}" name="email_engine"
-                              :options="$mail_engines" key="code" label="name" :emptyOption="false"
-                              value="{{ old('email_engine', system_setting('email_engine')) }}" required
-                              placeholder="{{ __('panel/setting.email_engine') }}"/>
-      </div>
+    <div class="row">
+      <x-common-form-select title="{{ __('panel/setting.email_engine') }}" name="email_engine"
+                            :options="$mail_engines" key="code" label="name" :emptyOption="false"
+                            value="{{ old('email_engine', system_setting('email_engine')) }}" required
+                            placeholder="{{ __('panel/setting.email_engine') }}"/>
+    </div>
 
-     <div class="engine smtp d-none">
+    <div class="engine smtp d-none">
       <div class="row">
         <x-common-form-input title="{{ __('panel/setting.smtp_host') }}" name="smtp_host"
                              value="{{ old('smtp_host', system_setting('smtp_host')) }}"
@@ -43,13 +43,13 @@
                              value="{{ old('smtp_timeout', system_setting('smtp_timeout', 5)) }}"
                              placeholder="{{ __('panel/setting.smtp_timeout') }}"/>
       </div>
-     </div>
+    </div>
 
-     <div class="engine log d-none">
-       {{ __('panel/setting.log_description') }}
-     </div>
+    <div class="engine log d-none">
+      {{ __('panel/setting.log_description') }}
+    </div>
 
-     @hookinsert('panel.settings.mail_engines')
+    @hookinsert('panel.settings.mail_engines')
 
   </div>
 </div>
@@ -60,7 +60,7 @@
       let selectedValue = $(this).val();
       $('.engine').addClass('d-none');
       if (selectedValue) {
-       $('.'+selectedValue).removeClass('d-none');
+        $('.' + selectedValue).removeClass('d-none');
       }
     });
     elm.trigger('change');
