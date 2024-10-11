@@ -128,6 +128,23 @@ if (! function_exists('plugin_asset')) {
     }
 }
 
+if (! function_exists('plugin_locale_code')) {
+    /**
+     * Get plugin locale code
+     *
+     * @return string
+     * @throws Exception
+     */
+    function plugin_locale_code(): string
+    {
+        if (is_admin()) {
+            return panel_locale_code();
+        }
+
+        return front_locale_code();
+    }
+}
+
 if (! function_exists('fire_hook_action')) {
     /**
      * Fire(Trigger) hook action, used in system.
