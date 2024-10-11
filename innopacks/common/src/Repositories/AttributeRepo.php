@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -64,7 +65,7 @@ class AttributeRepo extends BaseRepo
             DB::commit();
 
             return $attribute;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
@@ -93,7 +94,35 @@ class AttributeRepo extends BaseRepo
             DB::commit();
 
             return $item;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @param  mixed  $item
+     * @throws Exception
+     */
+    public function destroy(mixed $item): void
+    {
+        DB::beginTransaction();
+
+        try {
+            if (is_int($item)) {
+                $item = Attribute::query()->find($item);
+            }
+            if ($item) {
+                foreach ($item->values as $value) {
+                    $value->translations()->delete();
+                }
+                $item->values()->delete();
+                $item->productAttributes()->delete();
+                $item->translations()->delete();
+                $item->delete();
+            }
+            DB::commit();
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
