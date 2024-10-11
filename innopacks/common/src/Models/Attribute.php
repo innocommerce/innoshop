@@ -34,6 +34,14 @@ class Attribute extends BaseModel
     }
 
     /**
+     * @return HasMany
+     */
+    public function productAttributes(): HasMany
+    {
+        return $this->hasMany(Product\Attribute::class, 'attribute_id', 'id');
+    }
+
+    /**
      * @return BelongsTo
      */
     public function group(): BelongsTo
