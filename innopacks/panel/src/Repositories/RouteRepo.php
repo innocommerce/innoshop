@@ -92,6 +92,8 @@ class RouteRepo
             $pluginSpace = $this->getPluginNamespace($controller);
             if (empty($pluginSpace)) {
                 $this->systemModules[] = $routeModule;
+            } else {
+                $routeModule = $pluginSpace;
             }
 
             $routeList[$routeModule][] = [
