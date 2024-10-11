@@ -28,11 +28,11 @@ return [
     'attributes'       => 'คุณลักษณะ',
     'attribute_groups' => 'กลุ่มคุณลักษณะ',
 
-    'top_analytic'      => 'วิเคราะห์',
-    'analytics'         => 'ข้อมูลเว็บไซต์',
-    'analytic_order'    => 'วิเคราะห์คำสั่งซื้อ',
-    'analytic_product'  => 'วิเคราะห์สินค้า',
-    'analytic_customer' => 'วิเคราะห์ลูกค้า',
+    'top_analytic'       => 'วิเคราะห์',
+    'analytics'          => 'ข้อมูลเว็บไซต์',
+    'analytics_order'    => 'วิเคราะห์คำสั่งซื้อ',
+    'analytics_product'  => 'วิเคราะห์สินค้า',
+    'analytics_customer' => 'วิเคราะห์ลูกค้า',
 
     'marketplaces'  => 'ตลาด',
     'top_plugin'    => 'ปลั๊กอิน',

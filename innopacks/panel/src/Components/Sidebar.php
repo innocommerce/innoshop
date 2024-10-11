@@ -266,9 +266,9 @@ class Sidebar extends Component
     {
         $routes = [
             ['route' => 'analytics.index', 'title' => __('panel/menu.analytics')],
-            ['route' => 'analytics_order', 'title' => __('panel/menu.analytic_order')],
-            ['route' => 'analytics_product', 'title' => __('panel/menu.analytic_product')],
-            ['route' => 'analytics_customer', 'title' => __('panel/menu.analytic_customer')],
+            ['route' => 'analytics_order', 'title' => __('panel/menu.analytics_order')],
+            ['route' => 'analytics_product', 'title' => __('panel/menu.analytics_product')],
+            ['route' => 'analytics_customer', 'title' => __('panel/menu.analytics_customer')],
         ];
 
         return fire_hook_filter('component.sidebar.analytic.routes', $routes);

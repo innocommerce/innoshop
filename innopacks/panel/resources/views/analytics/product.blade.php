@@ -1,7 +1,7 @@
 @extends('panel::layouts.app')
 @section('body-class', '')
 
-@section('title', __('panel/menu.analytic_product'))
+@section('title', __('panel/menu.analytics_product'))
 
 @push('header')
   <script src="{{ asset('vendor/chart/chart.min.js') }}"></script>
