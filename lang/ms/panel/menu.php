@@ -10,9 +10,9 @@
 return [
     'account'                => 'Maklumat Peribadi',
     'admins'                 => 'Pengguna Belakang',
-    'analytic_customer'      => 'Analisis Pelanggan',
-    'analytic_order'         => 'Analisis Pesanan',
-    'analytic_product'       => 'Analisis Produk',
+    'analytics_customer'     => 'Analisis Pelanggan',
+    'analytics_order'        => 'Analisis Pesanan',
+    'analytics_product'      => 'Analisis Produk',
     'analytics'              => 'Data Laman Sesawang',
     'articles'               => 'Pengurusan Artikel',
     'attribute_groups'       => 'Kelompok Atribut',
