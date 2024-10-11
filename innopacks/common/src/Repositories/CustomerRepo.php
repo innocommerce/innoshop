@@ -86,6 +86,27 @@ class CustomerRepo extends BaseRepo
     }
 
     /**
+     * Update profile only include avatar, name and email.
+     *
+     * @param  $item
+     * @param  $data
+     * @return mixed
+     */
+    public function updateProfile($item, $data): mixed
+    {
+        $data = [
+            'avatar' => $data['avatar'],
+            'name'   => $data['name'],
+            'email'  => $data['email'],
+        ];
+
+        $item->fill($data);
+        $item->saveOrFail();
+
+        return $item;
+    }
+
+    /**
      * @param  $email
      * @return mixed
      */

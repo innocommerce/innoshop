@@ -42,9 +42,14 @@ class CurrencyRepo extends BaseRepo
     {
         $builder = Currency::query();
 
-        $email = $filters['email'] ?? '';
-        if ($email) {
-            $builder->where('email', 'like', "%$email%");
+        $name = $filters['name'] ?? '';
+        if ($name) {
+            $builder->where('name', 'like', "%$name%");
+        }
+
+        $code = $filters['code'] ?? '';
+        if ($code) {
+            $builder->where('code', 'like', "%$code%");
         }
 
         if (isset($filters['active'])) {
@@ -54,8 +59,8 @@ class CurrencyRepo extends BaseRepo
         $keyword = $filters['keyword'] ?? '';
         if ($keyword) {
             $builder->where(function ($query) use ($keyword) {
-                $query->where('email', 'like', "%$keyword%")
-                    ->orWhere('name', 'like', "%$keyword%");
+                $query->where('name', 'like', "%$keyword%")
+                    ->orWhere('code', 'like', "%$keyword%");
             });
         }
 
