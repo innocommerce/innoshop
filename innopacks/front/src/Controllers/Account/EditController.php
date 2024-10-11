@@ -34,7 +34,7 @@ class EditController extends Controller
         try {
             $data     = $request->only(['avatar', 'name', 'email']);
             $customer = current_customer();
-            CustomerRepo::getInstance()->update($customer, $data);
+            CustomerRepo::getInstance()->updateProfile($customer, $data);
 
             return redirect(account_route('edit.index'))
                 ->with('instance', $customer)
