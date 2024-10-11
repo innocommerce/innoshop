@@ -12,7 +12,8 @@
 
             <div class="dropdown-menu">
               @foreach (locales() as $locale)
-                <a class="dropdown-item" href="{{ front_route('locales.switch', ['code' => $locale->code]) }}">
+                <a class="dropdown-item d-flex" href="{{ front_route('locales.switch', ['code' => $locale->code]) }}">
+                  <div class="wh-20 me-2"><img src="{{ image_origin($locale['image']) }}" class="img-fluid border"></div>
                   {{ $locale->name }}
                 </a>
               @endforeach
