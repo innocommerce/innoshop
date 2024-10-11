@@ -238,7 +238,7 @@ final class Plugin implements Arrayable, ArrayAccess
      */
     public function getLocaleName(): string
     {
-        $currentLocale = locale_code();
+        $currentLocale = plugin_locale_code();
 
         if (is_array($this->name)) {
             if ($this->name[$currentLocale] ?? '') {
@@ -269,7 +269,7 @@ final class Plugin implements Arrayable, ArrayAccess
      */
     public function getLocaleDescription(): string
     {
-        $currentLocale = locale_code();
+        $currentLocale = plugin_locale_code();
 
         if (is_array($this->description)) {
             if ($this->description[$currentLocale] ?? '') {
