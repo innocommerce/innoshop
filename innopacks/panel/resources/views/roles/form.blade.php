@@ -42,7 +42,7 @@
                 @foreach ($permissions as $item)
                   <tr>
                     <td>
-                      <span class="me-2">{{ $item['is_plugin'] ? 'P -' : '' }} {{ $item['label'] }}</span>
+                      <span class="me-2">@if($item['is_plugin']) <i class="bi bi-house-add"></i> @else <i class="bi bi-house"></i> @endif {{ $item['label'] }}</span>
                       [<span class="text-secondary cursor-pointer select-list">{{ __('panel/role.select_all') }}</span>
                       /
                       <span class="text-secondary cursor-pointer cancel-list">{{ __('panel/role.unselect_all') }}</span>]
