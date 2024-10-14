@@ -63,7 +63,7 @@ class PluginServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->registerWebRoutes();
+        $this->registerPanelRoutes();
         $this->loadViewTemplates();
 
         $this->pluginBasePath = base_path('plugins');
@@ -76,7 +76,7 @@ class PluginServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerWebRoutes(): void
+    private function registerPanelRoutes(): void
     {
         $adminName = panel_name();
         Route::prefix($adminName)
@@ -212,9 +212,28 @@ class PluginServiceProvider extends ServiceProvider
      */
     private function loadPluginRoutes($pluginCode): void
     {
+        $this->loadPluginRootRoutes($pluginCode);
         $this->loadPluginPanelRoutes($pluginCode);
         $this->loadPluginFrontRoutes($pluginCode);
         $this->loadPluginFrontApiRoutes($pluginCode);
+    }
+
+    /**
+     * Register callback routes
+     *
+     * @param  $pluginCode
+     */
+    private function loadPluginRootRoutes($pluginCode): void
+    {
+        $pluginBasePath    = $this->pluginBasePath;
+        $callbackRoutePath = "$pluginBasePath/$pluginCode/Routes/root.php";
+        if (file_exists($callbackRoutePath)) {
+            Route::middleware('front')
+                ->name('front.')
+                ->group(function () use ($callbackRoutePath) {
+                    $this->loadRoutesFrom($callbackRoutePath);
+                });
+        }
     }
 
     /**
