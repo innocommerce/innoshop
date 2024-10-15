@@ -8,11 +8,11 @@
  */
 
 return [
-    'name'            => 'ชื่อ',
-    'email'           => 'อีเมล์',
-    'password'        => 'รหัสผ่าน',
-    'locale'          => 'ภาษา',
     'active'          => 'ใช้งาน',
+    'email'           => 'อีเมล์',
+    'locale'          => 'ภาษา',
+    'name'            => 'ชื่อ',
+    'password'        => 'รหัสผ่าน',
     'roles'           => 'บทบาท',
     'system_language' => 'ภาษาของระบบ',
 ];
