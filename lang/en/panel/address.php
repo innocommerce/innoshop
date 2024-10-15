@@ -8,7 +8,7 @@
  */
 
 return [
-    'shipping' => 'Shipping',
     'billing'  => 'Billing',
+    'shipping' => 'Shipping',
     'store'    => 'Store',
 ];

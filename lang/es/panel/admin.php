@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright (c) Since 2024 InnoShop - Todos los derechos reservados
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
  *
  * @link       https://www.innoshop.com
  * @author     InnoShop <team@innoshop.com>
- * @license    https://opensource.org/licenses/OSL-3.0 Licencia de Software Abierto (OSL 3.0)
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
 return [
-    'name'            => 'Nombre',
-    'email'           => 'Correo electrónico',
-    'password'        => 'Contraseña',
-    'locale'          => 'Ubicación',
     'active'          => 'Activo',
+    'email'           => 'Correo electrónico',
+    'locale'          => 'Ubicación',
+    'name'            => 'Nombre',
+    'password'        => 'Contraseña',
     'roles'           => 'Roles',
     'system_language' => 'Idioma del sistema',
 ];
