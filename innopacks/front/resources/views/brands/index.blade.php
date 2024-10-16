@@ -34,3 +34,8 @@
 @hookinsert('brand.index.bottom')
 
 @endsection
+@push('footer')
+<script>
+
+</script>
+@endpush

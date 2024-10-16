@@ -48,4 +48,15 @@ return [
     'top_plugin'         => 'Plugin',
     'top_product'        => 'Produk',
     'top_setting'        => 'Pengaturan',
+    'content_ai'         => 'Generasi Konten AI', // AI内容生成
+    'countries'          => 'Negara atau Wilayah', // 国家或地区
+    'catalogs'           => 'Klasifikasi Artikel',
+    'locale'             => 'Manajemen Bahasa', // 语言管理
+    'locales'            => 'Pengaturan Bahasa', // 语言设置
+    'localization'       => 'Lokalisasi', // 本地化
+    'marketplaces'       => 'Pasar Aplikasi', // 应用市场
+    'order_returns'      => 'Manajemen Purna Jual', // 售后管理
+    'theme_market'       => 'Pasar Tema',
+    'upload'             => 'Fungsi Unggah',
+    'currency'           => 'Pengaturan Nilai Tukar',
 ];

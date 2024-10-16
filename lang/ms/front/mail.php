@@ -21,4 +21,5 @@ return [
     'retrieve_password_title' => 'Mengambil Semula Kata Laluan',
     'retrieve_password_text'  => 'Anda sedang meminta pengaturan semula kata laluan, sila klik butang di bawah untuk menyelesaikan tindakan ini.',
     'retrieve_password_btn'   => 'Klik di sini untuk menetapkan semula kata laluan',
+    'welcome_register'        => 'Selamat Datang untuk Mendaftar',
 ];

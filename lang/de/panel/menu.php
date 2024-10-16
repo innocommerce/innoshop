@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'account'            => 'Persönliche Informationen',
+    'admins'             => 'Admin Benutzer',
+    'analytics'          => 'Gesamte Daten',
+    'analytics_customer' => 'Kundenanalyse',
+    'analytics_order'    => 'Bestellanalyse',
+    'analytics_product'  => 'Produktanalyse',
+    'articles'           => 'Artikelverwaltung',
+    'attribute_groups'   => 'Attributgruppen',
+    'attributes'         => 'Attribute',
+    'brands'             => 'Produktmarken',
+    'catalogs'           => 'Artikelkategorien',
+    'categories'         => 'Produktkategorien',
+    'content_ai'         => 'AI-Inhaltserstellung',
+    'countries'          => 'Länder oder Regionen',
+    'currencies'         => 'Währungskurse',
+    'currency'           => 'Währungseinstellungen',
+    'customer_groups'    => 'Kundengruppen',
+    'customers'          => 'Kundenverwaltung',
+    'dashboard'          => 'Übersicht',
+    'locale'             => 'Sprachverwaltung',
+    'locales'            => 'Spracheinstellungen',
+    'localization'       => 'Lokalisierung',
+    'marketplaces'       => 'Marktplatz',
+    'order_returns'      => 'Rücksendeverwaltung',
+    'orders'             => 'Bestellverwaltung',
+    'pages'              => 'Seitenverwaltung',
+    'plugin_market'      => 'Plugin Markt',
+    'plugins'            => 'Plugin Einstellungen',
+    'product'            => 'Produkt',
+    'products'           => 'Produktverwaltung',
+    'regions'            => 'Regionen',
+    'reviews'            => 'Bewertungsverwaltung',
+    'roles'              => 'Admin Rollen',
+    'settings'           => 'Systemeinstellungen',
+    'states'             => 'Bundesländer oder Staaten',
+    'tags'               => 'Artikel-Tags',
+    'tax_classes'        => 'Steuerklassen',
+    'tax_rates'          => 'Steuersätze',
+    'theme_market'       => 'Themen Markt',
+    'themes'             => 'Themen',
+    'themes_settings'    => 'Oberflächen Einstellungen',
+    'top_analytic'       => 'Analyse',
+    'top_content'        => 'Inhalt',
+    'top_customer'       => 'Kunden',
+    'top_design'         => 'Design',
+    'top_order'          => 'Bestellungen',
+    'top_plugin'         => 'Plugins',
+    'top_product'        => 'Produkte',
+    'top_setting'        => 'Einstellungen',
+    'upload'             => 'Upload Funktion',
+];

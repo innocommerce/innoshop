@@ -8,12 +8,12 @@
  */
 
 return [
-    'name'          => 'Nombre',
-    'code'          => 'Código',
-    'symbol_left'   => 'Símbolo Izquierdo',
-    'symbol_right'  => 'Símbolo Derecho',
-    'decimal_place' => 'Decimal',
-    'value'         => 'Valor',
-    'active'        => 'Activo',
-    'code'          => 'Código',
+    'name'                           => 'Nombre',
+    'code'                           => 'Código',
+    'symbol_left'                    => 'Símbolo Izquierdo',
+    'symbol_right'                   => 'Símbolo Derecho',
+    'decimal_place'                  => 'Decimal',
+    'value'                          => 'Valor',
+    'active'                         => 'Activo',
+    'cannot_delete_default_currency' => 'No se puede eliminar la moneda predeterminada',
 ];

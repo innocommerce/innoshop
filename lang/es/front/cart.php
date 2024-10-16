@@ -8,16 +8,16 @@
  */
 
 return [
-    'cart'        => 'Carrito',
-    'product'     => 'Producto',
-    'price'       => 'Precio',
-    'quantity'    => 'Cantidad',
-    'subtotal'    => 'Subtotal',
-    'cart_total'  => 'Totales del carrito',
-    'selected'    => 'Seleccionado',
-    'total'       => 'Total',
-    'go_checkout' => 'Pagar',
-    'empty_cart'  => 'Tu carrito está vacío',
-    'continue'    => 'Seguir comprando',
     'add_to_cart' => 'Añadir al carrito',
+    'cart'        => 'Carrito',
+    'cart_total'  => 'Totales del carrito',
+    'continue'    => 'Seguir comprando',
+    'empty_cart'  => 'Tu carrito está vacío',
+    'go_checkout' => 'Pagar',
+    'price'       => 'Precio',
+    'product'     => 'Producto',
+    'quantity'    => 'Cantidad',
+    'selected'    => 'Seleccionado',
+    'subtotal'    => 'Subtotal',
+    'total'       => 'Total',
 ];

@@ -30,4 +30,7 @@ return [
     'token_empty'            => 'Token Tidak Boleh Kosong',
     'views'                  => 'Kali Dilihat',
     'version'                => 'Versi',
+    'shipping'               => 'Delivery Method',
+    'social'                 => 'Sign in with Social Account',
+    'view_token'             => 'View Token',
 ];

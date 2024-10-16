@@ -45,4 +45,7 @@ return [
     'table_prefix'         => 'Awalan Jadual',
     'visit_backend'        => 'Lawati Back-end',
     'visit_frontend'       => 'Lawati Front-end',
+    'configuration'        => 'Konfigurasi Parameter',
+    'env_detection'        => 'Pengesanan Persekitaran',
+    'host_address'         => 'Alamat Host',
 ];

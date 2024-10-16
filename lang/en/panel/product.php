@@ -39,4 +39,5 @@ return [
     'collapse_all'       => 'Collapse All',
     'is_virtual'         => 'Is Virtual',
     'error_sku_repeat'   => 'sku cannot be repeated',
+    'title'              => 'Product Title',
 ];

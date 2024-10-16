@@ -17,4 +17,5 @@ return [
     'tag_search' => 'بحث الوسوم',
     'title'      => 'العنوان',
     'viewed'     => 'المشاهدات',
+    'position'   => 'ترتيب',
 ];

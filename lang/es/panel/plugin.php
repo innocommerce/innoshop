@@ -8,14 +8,14 @@
  */
 
 return [
-    'all'      => 'todo',
-    'billing'  => 'Facturación',
-    'shipping' => 'Envío',
-    'feature'  => 'Característica',
-    'fee'      => 'Tarifa del pedido',
-    'social'   => 'Social',
-    'language' => 'Idioma',
-
+    'all'                    => 'todo',
+    'billing'                => 'Facturación',
+    'shipping'               => 'Envío',
+    'feature'                => 'Característica',
+    'fee'                    => 'Tarifa del pedido',
+    'social'                 => 'Social',
+    'language'               => 'Idioma',
+    'intelli'                => 'Modelo grande de IA',
     'bind_token'             => 'Vincular token',
     'get_token'              => 'Obtener token',
     'view_token'             => 'Ver Token',

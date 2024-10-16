@@ -20,4 +20,5 @@ return [
     'no_account'                => 'Belum Punya Akun? Daftar Sekarang',
     'password'                  => 'Password',
     'password_required'         => 'Silakan Masukkan Password',
+    'login_submit'              => 'Masuk',
 ];

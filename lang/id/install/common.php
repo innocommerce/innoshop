@@ -45,4 +45,7 @@ return [
     'table_prefix'         => 'Awalan Tabel',
     'visit_backend'        => 'Kunjungi Backend',
     'visit_frontend'       => 'Kunjungi Frontend',
+    'configuration'        => 'Pengaturan Parameter',
+    'environment'          => 'Lingkungan',
+    'host_address'         => 'Alamat Host',
 ];

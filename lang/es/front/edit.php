@@ -8,9 +8,9 @@
  */
 
 return [
-    'edit'      => 'Editar',
     'avatar'    => 'Avatar',
+    'edit'      => 'Editar',
+    'email'     => 'Correo electrónico',
     'name'      => 'Nombre',
     'name_text' => 'Por favor, ingrese su nombre',
-    'email'     => 'Correo electrónico',
 ];

@@ -33,4 +33,6 @@ return [
     'unselect_all'           => 'Batal Pilih Semua',
     'version'                => 'Versi',
     'views'                  => 'Hitungan Tampilan',
+    'point_to_get_token'     => 'Klik di sini untuk mendapatkan token',
+    'view_token'             => 'Lihat token',
 ];

@@ -44,4 +44,7 @@ return [
     'to_be_used'     => 'Belum Digunakan',
     'unpaid'         => 'Belum Dibayar',
     'unshipped'      => 'Belum Dikirim',
+    'product_spec'   => 'Spesifikasi Produk',  // 产品规格
+    'remark'         => 'Catatan',              // 备注
+    'image'          => 'Gambar',                // 图片
 ];

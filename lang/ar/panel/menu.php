@@ -52,4 +52,10 @@ return [
     'top_plugin'         => 'الاضافات',
     'top_product'        => 'المنتجات',
     'top_setting'        => 'الإعدادات',
+    'catalogs'           => 'تصنيفات المقالات',
+    'content_ai'         => 'توليد المحتوى بالذكاء الاصطناعي',
+    'localization'       => 'التوطين',
+    'order_returns'      => 'إدارة الإرجاع',
+    'plugin_market'      => 'سوق الإضافات',
+    'upload'             => 'وظيفة التحميل',
 ];

@@ -8,8 +8,8 @@
  */
 
 return [
-    'address'          => 'ที่อยู่',
     'add_new_address'  => 'เพิ่มที่อยู่ใหม่',
+    'address'          => 'ที่อยู่',
     'address_1'        => 'ที่อยู่ 1',
     'address_2'        => 'ที่อยู่ 2',
     'billing_address'  => 'ที่อยู่สำหรับออกบิล',

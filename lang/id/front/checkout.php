@@ -20,9 +20,9 @@ return [
     'order_comment'         => 'Komentar Pesanan',
     'password'              => 'Kata Sandi Salah.',
     'place_order'           => 'Pesan Sekarang',
+    'same_shipping_address' => 'Alamat Tagihan Sama dengan Alamat Pengiriman',
     'shipping_address'      => 'Alamat Pengiriman',
     'shipping_methods'      => 'Metode Pengiriman',
     'shipping_quote_error'  => 'Silakan Implementasikan Metode :classname dengan Metode: public function getQuotes($checkoutService)',
-    'same_shipping_address' => 'Alamat Tagihan Sama dengan Alamat Pengiriman',
     'throttle'              => 'Anda Menggunakan Login Berlalu Lama, Silakan Coba Lagi dalam :seconds Detik.',
 ];

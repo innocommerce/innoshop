@@ -18,4 +18,5 @@ return [
     'retrieve_password_btn'   => 'اضغط هنا لإعادة تعيين كلمة المرور',
     'retrieve_password_text'  => 'أنت في طريق استعادة كلمة المرور، يرجى النقر على الزر أدناه لاستكمال العملية.',
     'retrieve_password_title' => 'استعادة كلمة المرور',
+    'welcome_register'        => 'أهلاً وسهلاًبالتسجيل',
 ];

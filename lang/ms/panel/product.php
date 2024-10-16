@@ -37,4 +37,6 @@ return [
     'viewed'             => 'Dilihat',
     'weight'             => 'Berat',
     'weight_class'       => 'Unit Berat',
+    'position'           => 'Kedudukan',
+    'sales'              => 'Jualan',
 ];

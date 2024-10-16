@@ -63,6 +63,7 @@
           <div class="module-title-wrap">
             <div class="module-title">{{ __('front/home.feature_product') }}</div>
             <div class="module-sub-title">{{ __('front/home.feature_product_text') }}</div>
+            
           </div>
 
           <ul class="nav nav-tabs">

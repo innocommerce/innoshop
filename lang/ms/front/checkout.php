@@ -20,9 +20,9 @@ return [
     'order_comment'         => 'Ulasan Pesanan',
     'password'              => 'Kata Laluan Salah.',
     'place_order'           => 'Hantar Pesanan',
+    'same_shipping_address' => 'Alamat Biling Sama dengan Alamat Penghantaran',
     'shipping_address'      => 'Alamat Penghantaran',
     'shipping_methods'      => 'Kaedah Penghantaran',
-    'same_shipping_address' => 'Alamat Biling Sama dengan Alamat Penghantaran',
     'shipping_quote_error'  => 'Sila Implementasikan Kaedah :classname dengan kaedah: public function getQuotes($checkoutService)',
     'throttle'              => 'Anda telah mencuba log masuk terlalu banyak kali, sila cuba lagi dalam :seconds saat',
 ];

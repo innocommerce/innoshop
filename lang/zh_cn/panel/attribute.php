@@ -8,7 +8,7 @@
  */
 
 return [
+    'attribute'       => '属性',
     'attribute_value' => '属性值',
     'set_attribute'   => '设置属性',
-    'attribute'       => '属性',
 ];

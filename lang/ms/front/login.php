@@ -20,4 +20,5 @@ return [
     'no_account'                => 'Belum Punya Akaun? Buat Sekarang',
     'password'                  => 'Kata Laluan',
     'password_required'         => 'Sila Masukkan Kata Laluan',
+    'login_submit'              => 'Log masuk',
 ];

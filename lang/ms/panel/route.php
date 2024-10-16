@@ -8,6 +8,25 @@
  */
 
 return [
+    'content_ai_generate' => 'Penghasilan Kandungan AI',
+    'reviews_active'      => 'Aktifkan Ulasan',
+    'reviews_create'      => 'Buat Ulasan',
+    'reviews_destroy'     => 'Padam Ulasan',
+    'reviews_edit'        => 'Sunting Ulasan',
+    'reviews_index'       => 'Senarai Ulasan',
+    'reviews_show'        => 'Tunjuk Ulasan',
+    'reviews_store'       => 'Simpan Ulasan',
+    'reviews_update'      => 'Kemas Kini Ulasan',
+    'plugin_market_index' => 'Senarai Pasaran Plugin',
+    'plugin_market_show'  => 'Butiran Pasaran Plugin',
+    'theme_market_index'  => 'Senarai Pasaran Tema',
+    'theme_market_show'   => 'Butiran Pasaran Tema',
+    'upload_files'        => 'Muat Naik Fail',
+    'upload_images'       => 'Muat Naik Gambar',
+    'analytics_customer'  => 'Analisis Pelanggan',
+    'analytics_order'     => 'Analisis Pesanan',
+    'analytics_product'   => 'Analisis Produk',
+
     'orders_index'                => 'Senarai Pesanan',
     'orders_create'               => 'Cipta Pesanan',
     'orders_store'                => 'Simpan Pesanan',

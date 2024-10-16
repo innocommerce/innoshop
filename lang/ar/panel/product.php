@@ -38,4 +38,5 @@ return [
     'viewed'             => 'المشاهدات',
     'weight'             => 'الوزن',
     'weight_class'       => 'وحدة الوزن',
+    'sales'              => 'المبيعات',
 ];

@@ -15,4 +15,5 @@ return [
     'high'         => 'High',
     'name'         => 'Name',
     'price'        => 'Price',
+    'sales'        => 'Sales Volume',
 ];

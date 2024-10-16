@@ -19,4 +19,4 @@ return [
     'sales'             => 'Penjualan',
     'sign_out'          => 'Keluar',
     'top_products'      => 'Produk Terlaris',
-];
+    'ranking'           => 'peringkat'];

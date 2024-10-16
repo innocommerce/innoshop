@@ -8,6 +8,7 @@
  */
 
 return [
-    'name'   => 'Nombre',
-    'parent' => 'Padre',
+    'name'    => 'Nombre',
+    'parent'  => 'Padre',
+    'content' => 'Introducción',
 ];

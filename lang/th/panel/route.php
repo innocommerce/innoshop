@@ -8,6 +8,26 @@
  */
 
 return [
+    'content_ai_generate' => 'การสร้างเนื้อหา',
+
+    'analytics_customer'  => 'การวิเคราะห์ลูกค้า',
+    'analytics_order'     => 'การวิเคราะห์คำสั่งซื้อ',
+    'analytics_product'   => 'การวิเคราะห์ผลิตภัณฑ์',
+    'reviews_active'      => 'เปิดใช้งานการรีวิว',
+    'reviews_create'      => 'สร้างรีวิว',
+    'reviews_destroy'     => 'ลบรีวิว',
+    'reviews_edit'        => 'แก้ไขรีวิว',
+    'reviews_index'       => 'รายการรีวิว',
+    'reviews_show'        => 'แสดงรีวิว',
+    'reviews_store'       => 'บันทึกรีวิว',
+    'reviews_update'      => 'อัปเดตรีวิว',
+    'plugin_market_index' => 'รายการตลาดปลั๊กอิน',
+    'plugin_market_show'  => 'รายละเอียดตลาดปลั๊กอิน',
+    'theme_market_index'  => 'รายการตลาดธีม',
+    'theme_market_show'   => 'รายละเอียดตลาดธีม',
+    'upload_files'        => 'อัปโหลดไฟล์',
+    'upload_images'       => 'อัปโหลดภาพ',
+
     'orders_index'                => 'รายการคำสั่งซื้อ',
     'orders_create'               => 'สร้างคำสั่งซื้อ',
     'orders_store'                => 'เก็บคำสั่งซื้อ',

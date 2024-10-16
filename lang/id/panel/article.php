@@ -17,4 +17,5 @@ return [
     'tag_search' => 'Mencari Tag',
     'title'      => 'Judul',
     'viewed'     => 'Dilihat',
+    'position'   => 'Urutkan',
 ];

@@ -8,17 +8,17 @@
  */
 
 return [
-    'address'          => 'Address',
     'add_new_address'  => 'Add new address',
-    'shipping_address' => 'Shipping address',
-    'billing_address'  => 'Billing address',
-    'name'             => 'Name',
-    'email'            => 'Email',
+    'address'          => 'Address',
     'address_1'        => 'Address 1',
     'address_2'        => 'Address 2',
-    'zipcode'          => 'Zip Code',
+    'billing_address'  => 'Billing address',
     'city'             => 'City',
     'country'          => 'Country',
-    'state'            => 'State',
+    'email'            => 'Email',
+    'name'             => 'Name',
     'phone'            => 'Phone',
+    'shipping_address' => 'Shipping address',
+    'state'            => 'State',
+    'zipcode'          => 'Zip Code',
 ];

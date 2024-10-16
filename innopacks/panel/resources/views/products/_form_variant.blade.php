@@ -133,20 +133,20 @@
                 </div>
               </td>
               <td>
-                <input type="text" :class="['form-control form-control-sm', sku.error ? 'is-invalid other-error' : '']" @input="modifySku(sku.init_index, index, 'code')" v-model="sku.code" :placeholder="sku.sku_quantity == null || variants.length == 1 ? 'SKU Code' : '{{ __('panel/product.batch_edit') }}'">
+                <input type="text" :class="['form-control form-control-sm', sku.error ? 'is-invalid other-error' : '']" @input="modifySku(sku.init_index, index, 'code')" v-model="sku.code" :placeholder="sku.sku_quantity == null || variants.length == 1 ? 'SKU Code' : '{{ __("panel/product.batch_edit") }}'">
                 <div class="invalid-feedback">{{ __('panel/product.error_sku_repeat') }}</div>
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'price')" v-model="sku.price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.price') }}' : '{{ __('panel/product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'price')" v-model="sku.price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.price") }}' : '{{ __("panel/product.batch_edit") }}'">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'origin_price')" v-model="sku.origin_price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.origin_price') }}' : '{{ __('panel/product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'origin_price')" v-model="sku.origin_price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.origin_price") }}' : '{{ __("panel/product.batch_edit") }}'">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'model')" v-model="sku.model" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.model') }}' : '{{ __('panel/product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'model')" v-model="sku.model" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.model") }}' : '{{ __("panel/product.batch_edit") }}'">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'quantity')" v-model="sku.quantity" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __('panel/product.quantity') }}' : '{{ __('panel/product.batch_edit') }}'">
+                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'quantity')" v-model="sku.quantity" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.quantity") }}' : '{{ __("panel/product.batch_edit") }}'">
               </td>
             </tr>
           </tbody>

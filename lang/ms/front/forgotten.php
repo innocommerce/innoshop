@@ -20,4 +20,6 @@ return [
     'subtitle_send'          => 'Sila Masukkan Emel Daftar Untuk Menghantar Kod Pengesahan',
     'verification_code'      => 'Kod Pengesahan',
     'verification_code_sent' => 'Kod Pengesahan Telah Dihantar Ke Emel, Sila Masukkan Kod Pengesahan',
+    'submit'                 => 'Hantar',
+    'title'                  => 'Sila ikut arahan untuk mendapatkan semula kata laluan anda.',
 ];

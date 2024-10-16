@@ -11,6 +11,6 @@ return [
     'have_account'     => 'Sudah Punya Akun? Klik untuk Masuk',
     'register_submit'  => 'Daftar Sekarang',
     'register_success' => 'Pendaftaran Berhasil',
-    'review_date'      => 'Tanggal Ulasan',
-    'review_number'    => 'Nomor Ulasan',
+    'register'         => 'Daftar',
+    'register_text'    => 'Silahkan isi form di bawah ini dengan informasi pendaftaran Anda',
 ];

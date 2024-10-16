@@ -7,6 +7,21 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Licencia de Software Abierto (OSL 3.0)
  */
 return [
+    'reviews_active'      => 'Activar comentarios',
+    'reviews_create'      => 'Crear comentario',
+    'reviews_destroy'     => 'Eliminar comentario',
+    'reviews_edit'        => 'Editar comentario',
+    'reviews_index'       => 'Lista de comentarios',
+    'reviews_show'        => 'Mostrar comentario',
+    'reviews_store'       => 'Guardar comentario',
+    'reviews_update'      => 'Actualizar comentario',
+    'upload_files'        => 'Subir archivos',
+    'upload_images'       => 'Subir imágenes',
+    'content_ai_generate' => 'Generación de contenido por IA',
+    'analytics_customer'  => 'Análisis de clientes',
+    'analytics_order'     => 'Análisis de pedidos',
+    'analytics_product'   => 'Análisis de productos',
+
     'orders_index'                => 'Índice de pedidos',
     'orders_create'               => 'Crear pedido',
     'orders_store'                => 'Almacenar pedido',
