@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'account'            => 'Informações Pessoais',
+    'admins'             => 'Usuários do Painel',
+    'analytics'          => 'Dados do Site',
+    'analytics_customer' => 'Análise de Clientes',
+    'analytics_order'    => 'Análise de Pedidos',
+    'analytics_product'  => 'Análise de Produtos',
+    'articles'           => 'Gerenciamento de Artigos',
+    'attribute_groups'   => 'Grupos de Atributos',
+    'attributes'         => 'Atributos',
+    'brands'             => 'Marcas de Produtos',
+    'catalogs'           => 'Categorias de Artigos',
+    'categories'         => 'Categorias de Produtos',
+    'content_ai'         => 'Geração de Conteúdo AI',
+    'countries'          => 'Países e Regiões',
+    'currencies'         => 'Taxas de Câmbio',
+    'currency'           => 'Configurações de Moeda',
+    'customer_groups'    => 'Grupos de Clientes',
+    'customers'          => 'Gerenciamento de Clientes',
+    'dashboard'          => 'Resumo',
+    'locale'             => 'Gerenciamento de Idiomas',
+    'locales'            => 'Configurações de Idioma',
+    'localization'       => 'Localização',
+    'marketplaces'       => 'Mercado de Aplicativos',
+    'order_returns'      => 'Gerenciamento de Devoluções',
+    'orders'             => 'Gerenciamento de Pedidos',
+    'pages'              => 'Gerenciamento de Páginas',
+    'plugin_market'      => 'Mercado de Plugins',
+    'plugins'            => 'Configurações de Plugins',
+    'product'            => 'Produto',
+    'products'           => 'Gerenciamento de Produtos',
+    'regions'            => 'Grupos de Regiões',
+    'reviews'            => 'Gerenciamento de Comentários',
+    'roles'              => 'Papéis do Painel',
+    'settings'           => 'Configurações do Sistema',
+    'states'             => 'Estados e Províncias',
+    'tags'               => 'Etiquetas de Artigos',
+    'tax_classes'        => 'Configurações de Imposto',
+    'tax_rates'          => 'Configurações de Taxas',
+    'theme_market'       => 'Mercado de Temas',
+    'themes'             => 'Trocar de Tema',
+    'themes_settings'    => 'Configurações de Interface',
+    'top_analytic'       => 'Análise',
+    'top_content'        => 'Conteúdo',
+    'top_customer'       => 'Clientes',
+    'top_design'         => 'Interface',
+    'top_order'          => 'Pedidos',
+    'top_plugin'         => 'Plugins',
+    'top_product'        => 'Produtos',
+    'top_setting'        => 'Configurações',
+    'upload'             => 'Funcionalidade de Upload',
+];

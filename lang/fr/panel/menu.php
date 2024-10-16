@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'account'            => 'Informations personnelles',
+    'admins'             => 'Utilisateurs backend',
+    'analytics'          => 'Données globales',
+    'analytics_customer' => 'Analyse des clients',
+    'analytics_order'    => 'Analyse des commandes',
+    'analytics_product'  => 'Analyse des produits',
+    'articles'           => 'Gestion des articles',
+    'attribute_groups'   => 'Groupes d\'attributs',
+    'attributes'         => 'Attributs',
+    'brands'             => 'Marques de produits',
+    'catalogs'           => 'Catégories d\'articles',
+    'categories'         => 'Catégories de produits',
+    'content_ai'         => 'Génération de contenu AI',
+    'countries'          => 'Pays et régions',
+    'currencies'         => 'Taux de change monétaire',
+    'currency'           => 'Paramètres de devise',
+    'customer_groups'    => 'Groupes de clients',
+    'customers'          => 'Gestion des clients',
+    'dashboard'          => 'Aperçu',
+    'locale'             => 'Gestion des langues',
+    'locales'            => 'Paramètres de langue',
+    'localization'       => 'Localisation',
+    'marketplaces'       => 'Place de marché',
+    'order_returns'      => 'Gestion des retours',
+    'orders'             => 'Gestion des commandes',
+    'pages'              => 'Gestion des pages',
+    'plugin_market'      => 'Marché des plugins',
+    'plugins'            => 'Paramètres des plugins',
+    'product'            => 'Produit',
+    'products'           => 'Gestion des produits',
+    'regions'            => 'Groupes régionaux',
+    'reviews'            => 'Gestion des critiques',
+    'roles'              => 'Rôles backend',
+    'settings'           => 'Paramètres système',
+    'states'             => 'États et provinces',
+    'tags'               => 'Étiquettes d\'article',
+    'tax_classes'        => 'Paramètres de taxe',
+    'tax_rates'          => 'Paramètres de taux',
+    'theme_market'       => 'Marché des thèmes',
+    'themes'             => 'Sélection des thèmes',
+    'themes_settings'    => 'Paramètres d\'interface',
+    'top_analytic'       => 'Analytique',
+    'top_content'        => 'Contenu',
+    'top_customer'       => 'Client',
+    'top_design'         => 'Design',
+    'top_order'          => 'Commande',
+    'top_plugin'         => 'Plugin',
+    'top_product'        => 'Produit',
+    'top_setting'        => 'Paramètres',
+    'upload'             => 'Fonctionnalité de téléchargement',
+];
