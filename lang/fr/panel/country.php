@@ -8,5 +8,5 @@
  */
 
 return [
-    'continent' => '大洲',
+    'continent' => 'Continent',
 ];

@@ -8,8 +8,8 @@
  */
 
 return [
-    'confirm_password' => '确认密码',
-    'new_password'     => '新密码',
-    'old_password'     => '旧密码',
-    'password'         => '密码',
+    'confirm_password' => 'Confirmer le mot de passe',
+    'new_password'     => 'Nouveau mot de passe',
+    'old_password'     => 'Ancien mot de passe',
+    'password'         => 'Mot de passe',
 ];

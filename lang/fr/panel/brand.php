@@ -8,7 +8,7 @@
  */
 
 return [
-    'first' => '首字母',
-    'logo'  => '标志',
-    'name'  => '品牌名',
+    'first' => 'Première lettre',
+    'logo'  => 'Logo',
+    'name'  => 'Nom de la marque',
 ];

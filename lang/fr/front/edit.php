@@ -8,9 +8,9 @@
  */
 
 return [
-    'avatar'    => '头像',
-    'edit'      => '编辑资料',
-    'email'     => '邮箱',
-    'name'      => '昵称',
-    'name_text' => '请填写昵称',
+    'avatar'    => 'Avatar',
+    'edit'      => 'Modifier les informations',
+    'email'     => 'Email',
+    'name'      => 'Pseudo',
+    'name_text' => 'Veuillez entrer un pseudo',
 ];

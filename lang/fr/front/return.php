@@ -8,5 +8,5 @@
  */
 
 return [
-    'return_number' => '退换数量',
+    'return_number' => 'Quantité de retour',
 ];

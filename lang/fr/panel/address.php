@@ -8,7 +8,7 @@
  */
 
 return [
-    'billing'  => '账单地址',
-    'shipping' => '配送地址',
-    'store'    => '店铺地址',
+    'billing'  => 'Adresse de facturation',
+    'shipping' => 'Adresse de livraison',
+    'store'    => 'Adresse du magasin',
 ];

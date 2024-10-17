@@ -8,11 +8,11 @@
  */
 
 return [
-    'active'          => '激活状态',
-    'email'           => '电子邮件',
-    'locale'          => '地区设置',
-    'name'            => '姓名',
-    'password'        => '密码',
-    'roles'           => '角色',
-    'system_language' => '系统语言',
+    'active'          => 'État d\'activation',
+    'email'           => 'E-mail',
+    'locale'          => 'Paramètres régionaux',
+    'name'            => 'Nom',
+    'password'        => 'Mot de passe',
+    'roles'           => 'Rôles',
+    'system_language' => 'Langue du système',
 ];

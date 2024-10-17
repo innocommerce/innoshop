@@ -8,12 +8,12 @@
  */
 
 return [
-    'category'     => '产品分类',
-    'default'      => '默认',
-    'high'         => '高',
-    'low'          => '低',
-    'name'         => '名称',
-    'price'        => '价格',
-    'sales'        => '所有分类',
-    'sales_volume' => '销量',
+    'category'     => 'Catégorie de produit',
+    'default'      => 'Par défaut',
+    'high'         => 'Haut',
+    'low'          => 'Bas',
+    'name'         => 'Nom',
+    'price'        => 'Prix',
+    'sales'        => 'Toutes les catégories',
+    'sales_volume' => 'Volume des ventes',
 ];

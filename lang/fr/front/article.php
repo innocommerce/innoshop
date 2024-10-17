@@ -8,5 +8,5 @@
  */
 
 return [
-    'articles' => '文章首页',
+    'articles' => 'Accueil des articles',
 ];

@@ -8,11 +8,11 @@
  */
 
 return [
-    'based'       => '基于地址',
-    'priority'    => '优先级',
-    'rule'        => '规则',
-    'tax_rate'    => '税率',
-    'tax_rate_id' => '所属税率',
-    'taxes'       => '税种',
-    'type'        => '类型',
+    'based'       => 'Basé sur l\'adresse',
+    'priority'    => 'Priorité',
+    'rule'        => 'Règle',
+    'tax_rate'    => 'Taux de taxe',
+    'tax_rate_id' => 'ID du taux de taxe',
+    'taxes'       => 'Types de taxe',
+    'type'        => 'Type',
 ];

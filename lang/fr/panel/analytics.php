@@ -8,7 +8,7 @@
  */
 
 return [
-    'customer_trends' => '用户注册',
-    'product_trends'  => '产品发布',
-    'total_trends'    => '订单总额',
+    'customer_trends' => 'Tendances des clients',
+    'product_trends'  => 'Tendances des produits',
+    'total_trends'    => 'Total des commandes',
 ];

@@ -8,5 +8,5 @@
  */
 
 return [
-    'favorites' => '收藏',
+    'favorites' => 'Favoris',
 ];

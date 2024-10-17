@@ -8,8 +8,8 @@
  */
 
 return [
-    'product'        => '产品',
-    'rating'         => '评级',
-    'review'         => '评论',
-    'review_content' => '评论内容',
+    'product'        => 'Produit',
+    'rating'         => 'Note',
+    'review'         => 'Commentaire',
+    'review_content' => 'Contenu du commentaire',
 ];

@@ -8,9 +8,9 @@
  */
 
 return [
-    'reset'     => '密码重置成功！',
-    'sent'      => '密码重置邮件已发送！',
-    'throttled' => '请稍候再试。',
-    'token'     => '密码重置令牌无效。',
-    'user'      => '找不到该邮箱对应的用户。',
+    'reset'     => 'Le mot de passe a été réinitialisé avec succès !',
+    'sent'      => 'Le courriel de réinitialisation du mot de passe a été envoyé !',
+    'throttled' => 'Veuillez patienter avant de réessayer.',
+    'token'     => 'Le jeton de réinitialisation du mot de passe est invalide.',
+    'user'      => 'Aucun utilisateur n\'a été trouvé avec cet email.',
 ];
