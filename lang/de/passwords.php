@@ -8,9 +8,9 @@
  */
 
 return [
-    'reset'     => '密码重置成功！',
-    'sent'      => '密码重置邮件已发送！',
-    'throttled' => '请稍候再试。',
-    'token'     => '密码重置令牌无效。',
-    'user'      => '找不到该邮箱对应的用户。',
+    'reset'     => 'Passwort wurde erfolgreich zurückgesetzt!',
+    'sent'      => 'Die E-Mail zum Zurücksetzen des Passworts wurde versendet!',
+    'throttled' => 'Bitte warten Sie, bevor Sie es erneut versuchen.',
+    'token'     => 'Der Passwort-Wiederherstellungs-Token ist ungültig.',
+    'user'      => 'Es wurde kein Benutzer mit dieser E-Mail-Adresse gefunden.',
 ];

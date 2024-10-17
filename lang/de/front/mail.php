@@ -8,15 +8,15 @@
  */
 
 return [
-    'btn_buy_now'             => '立即购买',
-    'customer_name'           => '尊敬的 :name，您好！',
-    'order_success'           => '订单提交成功',
-    'order_success_info'      => '您的订单已提交成功，下面是订单明细',
-    'order_update'            => '订单状态更新',
-    'order_update_status'     => '您的订单 :number 状态更新为',
-    'register_end'            => '完成注册，请点击下面按钮回到商城。',
-    'retrieve_password_btn'   => '点击此处重置密码',
-    'retrieve_password_text'  => '您正在找回密码，请点击下面按钮完成操作。',
-    'retrieve_password_title' => '找回密码',
-    'welcome_register'        => '欢迎注册',
+    'btn_buy_now'             => 'Jetzt kaufen',
+    'customer_name'           => 'Sehr geehrte :name, Hallo!',
+    'order_success'           => 'Bestellung erfolgreich',
+    'order_success_info'      => 'Ihre Bestellung wurde erfolgreich übermittelt, hier sind die Details',
+    'order_update'            => 'Bestellstatus aktualisiert',
+    'order_update_status'     => 'Ihre Bestellung :number wurde aktualisiert auf',
+    'register_end'            => 'Registrierung abgeschlossen, klicken Sie auf die Schaltfläche, um zurück zum Geschäft zu gehen.',
+    'retrieve_password_btn'   => 'Zurücksetzen des Passworts',
+    'retrieve_password_text'  => 'Sie sind im Prozess, Ihr Passwort zurückzusetzen, klicken Sie auf die Schaltfläche, um die Aktion abzuschließen.',
+    'retrieve_password_title' => 'Passwort zurücksetzen',
+    'welcome_register'        => 'Willkommen bei der Registrierung',
 ];

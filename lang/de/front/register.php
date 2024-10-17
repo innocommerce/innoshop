@@ -8,9 +8,9 @@
  */
 
 return [
-    'have_account'     => '已有账号？点击登录',
-    'register_submit'  => '立即注册',
-    'register_success' => '注册成功',
-    'review_date'      => '评论日期',
-    'review_number'    => '评论序号',
+    'have_account'     => 'Hast du schon ein Konto? Klicken, um dich anzumelden',
+    'register_submit'  => 'Jetzt registrieren',
+    'register_success' => 'Registrierung erfolgreich',
+    'review_date'      => 'Bewertungsdatum',
+    'review_number'    => 'Bewertungsnummer',
 ];

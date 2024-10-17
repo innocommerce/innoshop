@@ -8,6 +8,6 @@
  */
 
 return [
-    'next'     => '下一页 &raquo;',
-    'previous' => '&laquo; 上一页',
+    'next'     => 'Nächste Seite &raquo;',
+    'previous' => '&laquo; Vorherige Seite',
 ];

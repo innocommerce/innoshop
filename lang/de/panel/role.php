@@ -8,10 +8,10 @@
  */
 
 return [
-    'guard'        => '用户组',
-    'name'         => '角色名称',
-    'permissions'  => '系统权限',
-    'roles'        => '角色管理',
-    'select_all'   => '全选',
-    'unselect_all' => '取消',
+    'guard'        => 'Benutzergruppe',
+    'name'         => 'Rollenname',
+    'permissions'  => 'Systemberechtigungen',
+    'roles'        => 'Rollenverwaltung',
+    'select_all'   => 'Alles auswählen',
+    'unselect_all' => 'Alles abwählen',
 ];

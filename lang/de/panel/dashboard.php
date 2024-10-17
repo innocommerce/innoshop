@@ -8,16 +8,16 @@
  */
 
 return [
-    'customer_quantity' => '客户总数',
-    'frontend'          => '前台首页',
-    'order_amount'      => '订单总额',
-    'order_quantity'    => '订单总数',
-    'order_trends'      => '订单趋势',
-    'product'           => '商品',
-    'product_quantity'  => '产品总数',
-    'profile'           => '个人中心',
-    'ranking'           => '排名',
-    'sales'             => '销量',
-    'sign_out'          => '退出登录',
-    'top_products'      => '热卖商品',
+    'customer_quantity' => 'Kunden insgesamt',
+    'frontend'          => 'Frontend Startseite',
+    'order_amount'      => 'Gesamtbestellungen',
+    'order_quantity'    => 'Anzahl der Bestellungen',
+    'order_trends'      => 'Bestelltrends',
+    'product'           => 'Produkt',
+    'product_quantity'  => 'Produktmenge',
+    'profile'           => 'Profil',
+    'ranking'           => 'Rang',
+    'sales'             => 'Verkäufe',
+    'sign_out'          => 'Abmelden',
+    'top_products'      => 'Top-Verkäufer',
 ];

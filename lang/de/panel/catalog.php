@@ -8,6 +8,6 @@
  */
 
 return [
-    'parent' => '上级分类',
-    'title'  => '标题',
+    'parent' => 'Übergeordnete Kategorie',
+    'title'  => 'Titel',
 ];

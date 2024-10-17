@@ -8,5 +8,5 @@
  */
 
 return [
-    'no_custom_theme' => '系统目录下无自定义模板, 使用 innopacks/front/resources 下默认模板',
+    'no_custom_theme' => 'Kein benutzerdefiniertes Template im Systemordner, Standardtemplate unter innopacks/front/resources wird verwendet',
 ];

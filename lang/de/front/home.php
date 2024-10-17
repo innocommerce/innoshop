@@ -8,8 +8,8 @@
  */
 
 return [
-    'feature_product'      => '推荐商品',
-    'feature_product_text' => '穿上它，让风格成为您的标志。这款时尚服装，以其独特的设计和舒适面料，完美融合个性与优雅。无论是日常出行还是特殊场合，它都是您衣橱中不可或缺的时尚单品。立即拥抱变化，展现您的独特魅力。',
-    'news_blog'            => '最新博客',
-    'news_blog_text'       => '探索未来，引领创新。加入我们，一起见证最新科技的诞生。立即关注我们的最新博客和新闻更新！',
+    'feature_product'      => 'Empfohlene Produkte',
+    'feature_product_text' => 'Trage es und lasse den Style zu deinem Zeichen werden. Diese modische Kleidung vereint mit ihrem einzigartigen Design und komfortablen Stoff das Beste aus Persönlichkeit und Eleganz. Ob Alltagsoutfit oder für besondere Anlässe - es ist der unverzichtbare Modemark in deinem Schrank. Begib dich auf eine Reise der Veränderung und zeige deine einzigartige Charme.',
+    'news_blog'            => 'Neueste Blog-Beiträge',
+    'news_blog_text'       => 'Entdecke Zukunft, führe Innovationen voran. Tritt uns bei und zeuge der Geburt der neuesten Technologien. Bleib auf dem Laufenden mit unserem Blog und den neuesten Nachrichten!',
 ];
