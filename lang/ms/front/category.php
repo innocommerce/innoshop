@@ -8,12 +8,11 @@
  */
 
 return [
-    'category'     => 'Kategori Produk',
-    'default'      => 'Lalai',
-    'high'         => 'Tinggi',
-    'low'          => 'Rendah',
-    'name'         => 'Nama',
-    'price'        => 'Harga',
-    'sales'        => 'Semua Kategori',
-    'sales_volume' => 'Volume Jualan',
+    'category' => 'Kategori Produk',
+    'default'  => 'Lalai',
+    'high'     => 'Tinggi',
+    'low'      => 'Rendah',
+    'name'     => 'Nama',
+    'price'    => 'Harga',
+    'sales'    => 'Jualan',
 ];

@@ -22,8 +22,8 @@
                 <span class="d-none d-md-block">{{ __('front/common.sort') }}:</span>
                 <select class="form-select order-select">
                   <option value="">{{ __('/front/category.default') }}</option>
-                  <option value="products.sales|asc" {{ request('sort') == 'products.sales' && request('order') == 'asc' ? 'selected' : '' }}>{{ __('/front/category.sales_volume') }} ({{ __('/front/category.low') . ' - ' . __('/front/category.high')}})</option>
-                  <option value="products.sales|desc" {{ request('sort') == 'products.sales' && request('order') == 'desc' ? 'selected' : '' }}>{{ __('/front/category.sales_volume') }} ({{ __('/front/category.high') . ' - ' . __('/front/category.low')}})</option>
+                  <option value="products.sales|asc" {{ request('sort') == 'products.sales' && request('order') == 'asc' ? 'selected' : '' }}>{{ __('/front/category.sales') }} ({{ __('/front/category.low') . ' - ' . __('/front/category.high')}})</option>
+                  <option value="products.sales|desc" {{ request('sort') == 'products.sales' && request('order') == 'desc' ? 'selected' : '' }}>{{ __('/front/category.sales') }} ({{ __('/front/category.high') . ' - ' . __('/front/category.low')}})</option>
                   <option value="pt.name|asc" {{ request('sort') == 'pt.name' && request('order') == 'asc' ? 'selected' : '' }}>{{ __('/front/category.name') }} (A - Z)</option>
                   <option value="pt.name|desc" {{ request('sort') == 'pt.name' && request('order') == 'desc' ? 'selected' : '' }}>{{ __('/front/category.name') }} (Z - A)</option>
                   <option value="ps.price|asc" {{ request('sort') == 'ps.price' && request('order') == 'asc' ? 'selected' : '' }}>{{ __('/front/category.price') }} ({{ __('/front/category.low') . ' - ' . __('/front/category.high')}})</option>
