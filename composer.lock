@@ -1170,21 +1170,21 @@
         },
         {
             "name": "intervention/image",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "1786ad5e1789050939d73cd195de4b8eaeeb34ed"
+                "reference": "1e0a2b6d767ef22a095924c6bcb2981da6de6f1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/1786ad5e1789050939d73cd195de4b8eaeeb34ed",
-                "reference": "1786ad5e1789050939d73cd195de4b8eaeeb34ed",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/1e0a2b6d767ef22a095924c6bcb2981da6de6f1e",
+                "reference": "1e0a2b6d767ef22a095924c6bcb2981da6de6f1e",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "intervention/gif": "^4.1",
+                "intervention/gif": "^4.2",
                 "php": "^8.1"
             },
             "require-dev": {
@@ -1226,7 +1226,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/3.8.0"
+                "source": "https://github.com/Intervention/image/tree/3.9.0"
             },
             "funding": [
                 {
@@ -1242,7 +1242,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2024-08-16T14:57:26+00:00"
+            "time": "2024-10-06T15:37:56+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -4027,65 +4027,6 @@
                 }
             ],
             "time": "2024-06-22T23:04:52+00:00"
-        },
-        {
-            "name": "stripe/stripe-php",
-            "version": "v15.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "3df1a19a33477af9ead8984dbd84e8f637c36199"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/3df1a19a33477af9ead8984dbd84e8f637c36199",
-                "reference": "3df1a19a33477af9ead8984dbd84e8f637c36199",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.5.0",
-                "phpstan/phpstan": "^1.2",
-                "phpunit/phpunit": "^5.7 || ^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Stripe\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stripe and contributors",
-                    "homepage": "https://github.com/stripe/stripe-php/contributors"
-                }
-            ],
-            "description": "Stripe PHP Library",
-            "homepage": "https://stripe.com/",
-            "keywords": [
-                "api",
-                "payment processing",
-                "stripe"
-            ],
-            "support": {
-                "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v15.10.0"
-            },
-            "time": "2024-09-18T18:38:30+00:00"
         },
         {
             "name": "symfony/cache",
