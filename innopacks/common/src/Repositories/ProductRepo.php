@@ -22,6 +22,25 @@ use Throwable;
 class ProductRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'quantity', 'type' => 'input', 'label' => trans('panel/product.quantity')],
+            ['name'     => 'price', 'type' => 'range', 'label' => trans('panel/product.price'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
+    /**
      * @param  array  $filters
      * @return LengthAwarePaginator
      * @throws Exception
@@ -182,13 +201,13 @@ class ProductRepo extends BaseRepo
             'product_sku_id'   => $data['product_sku_id']   ?? 0,
             'tax_class_id'     => $data['tax_class_id']     ?? 0,
             'variables'        => $variables,
-            'position'         => $data['position']     ?? 0,
+            'position'         => (int) ($data['position'] ?? 0),
             'weight'           => $data['weight']       ?? 0,
             'weight_class'     => $data['weight_class'] ?? '',
-            'sales'            => $data['sales']        ?? 0,
-            'viewed'           => $data['viewed']       ?? 0,
+            'sales'            => (int) ($data['sales'] ?? 0),
+            'viewed'           => (int) ($data['viewed'] ?? 0),
             'published_at'     => $data['published_at'] ?? now(),
-            'active'           => true,
+            'active'           => (bool) ($data['active'] ?? true),
         ];
     }
 

@@ -28,7 +28,8 @@ class StateController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'states' => StateRepo::getInstance()->list($filters),
+            'criteria' => StateRepo::getCriteria(),
+            'states'   => StateRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::states.index', $data);

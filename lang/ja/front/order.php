@@ -40,6 +40,6 @@ return [
     'product_image' => '製品画像',
     'Product_spec'  => '製品仕様',
     'close'         => '閉める',
-    'image'         => '画像',                   // 图片
+    'image'         => '画像',
     'product_spec'  => '製品仕様',
 ];

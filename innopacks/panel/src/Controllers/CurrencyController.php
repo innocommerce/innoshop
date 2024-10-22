@@ -29,6 +29,7 @@ class CurrencyController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria'   => CurrencyRepo::getCriteria(),
             'currencies' => CurrencyRepo::getInstance()->list($filters),
         ];
 

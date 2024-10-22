@@ -12,6 +12,9 @@
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
+
+    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('countries.index')" />
+
       @if ($countries)
       <div class="table-responsive">
         <table class="table align-middle">
@@ -23,7 +26,7 @@
             <td>{{ __('panel/country.continent') }}</td>
             <td>{{ __('panel/common.position') }}</td>
             <td>{{ __('panel/common.status') }}</td>
-            <td>{{ __('panel/common.actions') }}<</td>
+            <td>{{ __('panel/common.actions') }}</td>
           </tr>
           </thead>
           <tbody>

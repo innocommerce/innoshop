@@ -11,6 +11,9 @@
 @section('content')
   <div class="card h-min-600">
     <div class="card-body">
+
+    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('products.index')" />
+
       @if ($products->count())
         <div class="table-responsive">
           <table class="table align-middle">

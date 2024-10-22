@@ -30,6 +30,7 @@ class CustomerController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria'  => CustomerRepo::getCriteria(),
             'customers' => CustomerRepo::getInstance()->list($filters),
         ];
 

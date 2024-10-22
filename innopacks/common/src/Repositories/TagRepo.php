@@ -17,6 +17,18 @@ use InnoShop\Common\Models\Tag;
 class TagRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/state.name')],
+            ['name' => 'code', 'type' => 'input', 'label' => trans('panel/state.code')],
+            ['name' => 'country_code', 'type' => 'input', 'label' => trans('panel/state.country_code')],
+        ];
+    }
+
+    /**
      * @param  $filters
      * @return LengthAwarePaginator
      * @throws \Exception

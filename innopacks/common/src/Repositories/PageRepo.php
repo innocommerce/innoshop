@@ -18,6 +18,18 @@ use InnoShop\Common\Models\Page;
 class PageRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'title', 'type' => 'input', 'label' => trans('panel/article.title')],
+            ['name' => 'slug', 'type' => 'input', 'label' => trans('panel/common.slug')],
+            ['name' => 'viewed', 'type' => 'input', 'label' => trans('panel/common.viewed')],
+        ];
+    }
+
+    /**
      * @param  $filters
      * @return LengthAwarePaginator
      * @throws Exception

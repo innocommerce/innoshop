@@ -11,16 +11,16 @@ return [
     'account'            => 'Maklumat Peribadi',
     'admins'             => 'Pengguna Admin',
     'analytics'          => 'Data Keseluruhan Laman',
-    'analytics_customer' => 'Analisis Pelanggan', // 客户分析
-    'analytics_order'    => 'Analisis Pesanan', // 订单分析
-    'analytics_product'  => 'Analisis Produk', // 产品分析
+    'analytics_customer' => 'Analisis Pelanggan',
+    'analytics_order'    => 'Analisis Pesanan',
+    'analytics_product'  => 'Analisis Produk',
     'articles'           => 'Pengurusan Artikel',
     'attribute_groups'   => 'Kumpulan Atribut',
     'attributes'         => 'Atribut',
     'brands'             => 'Jenama Produk',
     'catalogs'           => 'Kategori Artikel',
     'categories'         => 'Kategori Produk',
-    'content_ai'         => 'Penjana Kandungan AI', // AI内容生成
+    'content_ai'         => 'Penjana Kandungan AI',
     'countries'          => 'Negara atau Wilayah',
     'currencies'         => 'Kadar Mata Wang',
     'currency'           => 'Tetapan Kadar Mata Wang',
@@ -29,14 +29,14 @@ return [
     'dashboard'          => 'Paparan Utama',
     'locale'             => 'Pengurusan Bahasa',
     'locales'            => 'Tetapan Bahasa',
-    'localization'       => 'Pengelokalan', // 本地化
-    'marketplaces'       => 'Pasar Aplikasi', // 应用市场
+    'localization'       => 'Pengelokalan',
+    'marketplaces'       => 'Pasar Aplikasi',
     'order_returns'      => 'Pengurusan Khidmat Selepas Jualan',
     'orders'             => 'Pengurusan Pesanan',
     'pages'              => 'Pengurusan Halaman',
-    'plugin_market'      => 'Pasar Plugin', // 插件市场
+    'plugin_market'      => 'Pasar Plugin',
     'plugins'            => 'Tetapan Plugin',
-    'product'            => 'Produk', // 产品
+    'product'            => 'Produk',
     'products'           => 'Pengurusan Produk',
     'regions'            => 'Kumpulan Kawasan',
     'reviews'            => 'Pengurusan Ulasan',
@@ -46,7 +46,7 @@ return [
     'tags'               => 'Tag Artikel',
     'tax_classes'        => 'Tetapan Kelas Cukai',
     'tax_rates'          => 'Tetapan Kadar Cukai',
-    'theme_market'       => 'Pasar Tema', // 主题市场
+    'theme_market'       => 'Pasar Tema',
     'themes'             => 'Tukar Tema',
     'themes_settings'    => 'Tetapan Antara Muka',
     'top_analytic'       => 'Analisis',
@@ -57,5 +57,5 @@ return [
     'top_plugin'         => 'Plugin',
     'top_product'        => 'Produk',
     'top_setting'        => 'Tetapan',
-    'upload'             => 'Fungsi Muat Naik', // 上传功能
+    'upload'             => 'Fungsi Muat Naik',
 ];

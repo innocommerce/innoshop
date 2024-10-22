@@ -28,7 +28,8 @@ class AdminController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'admins' => AdminRepo::getInstance()->list($filters),
+            'criteria' => AdminRepo::getCriteria(),
+            'admins'   => AdminRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::admins.index', $data);

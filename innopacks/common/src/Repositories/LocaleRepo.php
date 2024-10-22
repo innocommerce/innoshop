@@ -16,6 +16,18 @@ use InnoShop\Common\Models\Locale;
 
 class LocaleRepo extends BaseRepo
 {
+    /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'code', 'type' => 'input', 'label' => trans('panel/currency.code')],
+            ['name' => 'status', 'type' => 'input', 'label' => trans('panel/common.status')],
+        ];
+    }
+
     public static ?Collection $enabledLocales = null;
 
     /**

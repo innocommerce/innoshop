@@ -18,6 +18,24 @@ use Throwable;
 class CustomerRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/customer.name')],
+            ['name' => 'email', 'type' => 'input', 'label' => trans('panel/customer.email')],
+            ['name' => 'from', 'type' => 'input', 'label' => trans('panel/customer.from')],
+            ['name' => 'group', 'type' => 'input', 'label' => trans('panel/customer.group')],
+            ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/customer.locale')],
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
+    /**
      * @param  $filters
      * @return LengthAwarePaginator
      * @throws Exception

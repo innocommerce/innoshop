@@ -26,7 +26,8 @@ class PageController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'pages' => PageRepo::getInstance()->list($filters),
+            'criteria' => PageRepo::getCriteria(),
+            'pages'    => PageRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::pages.index', $data);

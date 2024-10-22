@@ -18,6 +18,22 @@ use Throwable;
 class ReviewRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'product', 'type' => 'input', 'label' => trans('panel/review.product')],
+            ['name' => 'rating', 'type' => 'input', 'label' => trans('panel/review.rating')],
+            ['name' => 'review_content', 'type' => 'input', 'label' => trans('panel/review.review_content')],
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/order.created_at'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
+    /**
      * @param  $product
      * @return LengthAwarePaginator
      */

@@ -14,6 +14,21 @@ use InnoShop\Common\Models\TaxClass;
 class TaxClassRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('ppanel/common.name')],
+            ['name' => 'description', 'type' => 'input', 'label' => trans('panel/common.description')],
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
+    /**
      * @param  $data
      * @return TaxClass
      * @throws \Throwable

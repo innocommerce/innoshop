@@ -19,6 +19,21 @@ use Throwable;
 class AttributeRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'attribute_groups', 'type' => 'input', 'label' => trans('panel/menu.attribute_groups')],
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
+    /**
      * @param  array  $filters
      * @return Collection
      */

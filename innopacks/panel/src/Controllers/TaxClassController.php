@@ -32,6 +32,7 @@ class TaxClassController extends BaseController
         $taxRates = TaxRateRepo::getInstance()->all();
 
         $data = [
+            'criteria'      => TaxClassRepo::getCriteria(),
             'tax_classes'   => TaxClassRepo::getInstance()->list($filters),
             'tax_rates'     => $taxRates,
             'address_types' => AddressRepo::getAddressTypes(),

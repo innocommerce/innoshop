@@ -8,7 +8,7 @@
  */
 
 return [
-    'customer_trends' => 'Registro de usuarios', // 用户注册
-    'product_trends'  => 'Lanzamiento de productos', // 产品发布
-    'total_trends'    => 'Total de pedidos', // 订单总额
+    'customer_trends' => 'Registro de usuarios',
+    'product_trends'  => 'Lanzamiento de productos',
+    'total_trends'    => 'Total de pedidos',
 ];

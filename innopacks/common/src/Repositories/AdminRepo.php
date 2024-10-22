@@ -15,6 +15,18 @@ use Throwable;
 class AdminRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/admin.name')],
+            ['name' => 'email', 'type' => 'input', 'label' => trans('panel/admin.email')],
+            ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/admin.locale')],
+        ];
+    }
+
+    /**
      * @param  $data
      * @return mixed
      * @throws Throwable

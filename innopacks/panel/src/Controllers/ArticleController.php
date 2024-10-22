@@ -28,6 +28,7 @@ class ArticleController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria' => ArticleRepo::getCriteria(),
             'articles' => ArticleRepo::getInstance()->list($filters),
         ];
 

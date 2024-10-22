@@ -37,7 +37,6 @@ return [
     'viewed'             => 'Dilihat',
     'weight'             => 'Berat',
     'weight_class'       => 'Unit Berat',
-    'selling_point'      => 'Poin penjualan',  // 卖点的印尼语
-
-    'tax_class' => 'Kelas pajak',
+    'selling_point'      => 'Poin penjualan',
+    'tax_class'          => 'Kelas pajak',
 ];

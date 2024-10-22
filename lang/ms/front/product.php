@@ -28,7 +28,7 @@ return [
     'submit_review'         => 'Hantar Ulasan',
     'view_details'          => 'Lihat Butiran',
     'your_review'           => 'Ulasan Anda',
-    'input_some_text_here'  => 'Sila masukkan teks di sini', // 马来西亚语翻译
+    'input_some_text_here'  => 'Sila masukkan teks di sini',
     'input_your_review'     => 'Masukkan ulasan anda',
     'visit_order_to_review' => 'Sila pergi ke pusat peribadi untuk meninggalkan ulasan',
 ];

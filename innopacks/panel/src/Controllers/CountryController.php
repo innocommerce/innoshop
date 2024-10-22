@@ -30,6 +30,7 @@ class CountryController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria'  => CountryRepo::getCriteria(),
             'countries' => CountryRepo::getInstance()->list($filters),
         ];
 

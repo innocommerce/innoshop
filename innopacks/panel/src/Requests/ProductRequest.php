@@ -39,8 +39,6 @@ class ProductRequest extends FormRequest
         return [
             'catalog_id' => 'integer',
             'slug'       => $slugRule,
-            'position'   => 'integer',
-            'viewed'     => 'integer',
             'active'     => 'bool',
 
             'translations.*.locale' => 'required',

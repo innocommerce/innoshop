@@ -30,7 +30,8 @@ class RegionController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'regions' => RegionRepo::getInstance()->list($filters),
+            'criteria' => RegionRepo::getCriteria(),
+            'regions'  => RegionRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::regions.index', $data);

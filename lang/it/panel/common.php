@@ -65,4 +65,7 @@ return [
     'view'              => 'Visualizza',
     'viewed'            => 'Visualizzazioni',
     'whether_enable'    => 'Abilita o meno',
+    'reset'             => 'Ripristina',
+    'expand'            => 'Espandi',
+    'collapse'          => 'Riduci',
 ];

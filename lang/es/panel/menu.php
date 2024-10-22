@@ -27,9 +27,9 @@ return [
     'brands'             => 'Marcas',
     'attributes'         => 'Atributos',
     'attribute_groups'   => 'Grupos de atributos',
-    'analytics_customer' => 'Análisis de clientes', // 客户分析
-    'analytics_order'    => 'Análisis de pedidos',  // 订单分析
-    'analytics_product'  => 'Análisis de productos', // 产品分析
+    'analytics_customer' => 'Análisis de clientes',
+    'analytics_order'    => 'Análisis de pedidos',
+    'analytics_product'  => 'Análisis de productos',
     'top_analytic'       => 'Análisis',
     'analytics'          => 'Informes',
     'content_ai'         => 'Generación de contenido AI',

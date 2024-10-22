@@ -16,6 +16,19 @@ use InnoShop\Common\Models\Article;
 class ArticleRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'title', 'type' => 'input', 'label' => trans('panel/article.title')],
+            ['name' => 'catalog', 'type' => 'input', 'label' => trans('panel/article.catalog')],
+            ['name' => 'tag', 'type' => 'input', 'label' => trans('panel/article.tag')],
+            ['name' => 'slug', 'type' => 'input', 'label' => trans('panel/common.slug')],
+        ];
+    }
+
+    /**
      * @param  array  $filters
      * @return LengthAwarePaginator
      * @throws \Exception

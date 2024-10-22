@@ -8,7 +8,7 @@
  */
 
 return [
-    'customer_trends' => 'ユーザー登録', // Registro de usuarios
-    'product_trends'  => '製品の発売', // Lanzamiento de productos
-    'total_trends'    => '注文合計', // Total de pedidos
+    'customer_trends' => 'ユーザー登録',
+    'product_trends'  => '製品の発売',
+    'total_trends'    => '注文合計',
 ];

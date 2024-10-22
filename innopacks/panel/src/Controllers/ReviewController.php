@@ -28,7 +28,8 @@ class ReviewController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'reviews' => ReviewRepo::getInstance()->list($filters),
+            'criteria' => ReviewRepo::getCriteria(),
+            'reviews'  => ReviewRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::reviews.index', $data);

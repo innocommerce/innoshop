@@ -45,6 +45,7 @@ return [
     'table_prefix'         => 'بادئة الجدول',
     'visit_backend'        => 'زيارة الواجهة الخلفية',
     'visit_frontend'       => 'زيارة الواجهة الأمامية',
-    'configuration'        => 'إعدادات المعلمات', // 参数配置
-    'environment'          => 'البيئة',            // 环境
-    'host_address'         => 'عنوان المضيف',  ];
+    'configuration'        => 'إعدادات المعلمات',
+    'environment'          => 'البيئة',
+    'host_address'         => 'عنوان المضيف',
+];

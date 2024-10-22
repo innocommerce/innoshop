@@ -84,13 +84,13 @@ $weightClasses = [
           <div class="skus-single-box {{ $product->is_multiple() ? 'd-none' : '' }}">
             <div class="row">
               <div class="col-12 col-md-4">
-                <x-common-form-input :title="__('panel/product.price')" name="skus[0][price]" required value="{{ old('skus.0.price', ($product->masterSku->price ?? '')) }}" />
+                <x-common-form-input :title="__('panel/product.price')" name="skus[0][price]" value="{{ old('skus.0.price', ($product->masterSku->price ?? '')) }}" />
               </div>
               <div class="col-12 col-md-4">
                 <x-common-form-input :title="__('panel/product.quantity')" name="skus[0][quantity]" value="{{ old('skus.0.quantity', $product->masterSku->quantity ?? '') }}" />
               </div>
               <div class="col-12 col-md-4">
-                <x-common-form-input title="SKU Code" name="skus[0][code]" required value="{{ old('skus.0.code', $product->masterSku->code ?? '') }}" />
+                <x-common-form-input title="SKU Code" name="skus[0][code]" value="{{ old('skus.0.code', $product->masterSku->code ?? '') }}" />
               </div>
             </div>
 

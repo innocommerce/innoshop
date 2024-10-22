@@ -15,6 +15,17 @@ use InnoShop\Common\Models\Region;
 class RegionRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/region.name')],
+            ['name' => 'description', 'type' => 'input', 'label' => trans('panel/region.description')],
+        ];
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

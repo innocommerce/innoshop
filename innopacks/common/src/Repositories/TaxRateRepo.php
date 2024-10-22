@@ -14,6 +14,23 @@ use InnoShop\Common\Models\TaxRate;
 class TaxRateRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'regions', 'type' => 'input', 'label' => trans('panel/menu.regions')],
+            ['name' => 'taxes', 'type' => 'input', 'label' => trans('panel/tax_classes.taxes')],
+            ['name' => 'type', 'type' => 'input', 'label' => trans('panel/tax_classes.type')],
+            ['name' => 'tax_rate', 'type' => 'input', 'label' => trans('panel/tax_classes.tax_rate')],
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
+    /**
      * @param  $taxRateId
      * @return string
      */

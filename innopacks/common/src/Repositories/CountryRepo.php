@@ -15,6 +15,19 @@ use InnoShop\Common\Models\Country;
 class CountryRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'id', 'type' => 'input', 'label' => trans('panel/common.id')],
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'code', 'type' => 'input', 'label' => trans('panel/currency.code')],
+            ['name' => 'continent', 'type' => 'input', 'label' => trans('panel/country.continent')],
+        ];
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

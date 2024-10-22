@@ -19,6 +19,18 @@ use Throwable;
 class CatalogRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'title', 'type' => 'input', 'label' => trans('panel/catalog.title')],
+            ['name' => 'parent', 'type' => 'input', 'label' => trans('panel/catalog.parent')],
+            ['name' => 'slug', 'type' => 'input', 'label' => trans('panel/common.slug')],
+        ];
+    }
+
+    /**
      * @param  $filters
      * @return LengthAwarePaginator
      * @throws Exception

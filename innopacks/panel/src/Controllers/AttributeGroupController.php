@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Attribute;
@@ -20,11 +21,12 @@ class AttributeGroupController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
         $data = [
+            'criteria'   => GroupRepo::getCriteria(),
             'attributes' => Attribute\Group::query()->with([
                 'translations',
             ])->paginate(),
@@ -46,7 +48,7 @@ class AttributeGroupController extends BaseController
      * @param  Request  $request
      * @param  Group  $attributeGroup
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(Request $request, Attribute\Group $attributeGroup): JsonResponse
     {

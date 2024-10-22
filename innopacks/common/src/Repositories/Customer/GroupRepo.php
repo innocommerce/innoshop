@@ -16,6 +16,22 @@ use InnoShop\Common\Resources\CustomerGroupSimple;
 class GroupRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'level', 'type' => 'input', 'label' => trans('panel/customer.level')],
+            ['name' => 'discount_rate', 'type' => 'input', 'label' => trans('panel/customer.discount_rate')],
+            ['name'     => 'mini_cost', 'type' => 'range', 'label' => trans('panel/customer.mini_cost'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
+    /**
      * @param  $data
      * @return mixed
      * @throws \Throwable

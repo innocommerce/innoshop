@@ -27,6 +27,7 @@ class CatalogController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria' => CatalogRepo::getCriteria(),
             'catalogs' => CatalogRepo::getInstance()->list($filters),
         ];
 

@@ -16,6 +16,9 @@
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
+
+    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('tax_classes.index')" />
+
       @if ($tax_classes->count())
       <div class="table-responsive">
         <table class="table align-middle">

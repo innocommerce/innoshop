@@ -6,6 +6,9 @@
 @section('content')
   <div class="card h-min-600">
     <div class="card-body">
+
+    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('locales.index')" />
+
       @if ($locales)
         <div class="table-responsive">
           <table class="table align-middle">

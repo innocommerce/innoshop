@@ -26,7 +26,8 @@ class TagController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'tags' => TagRepo::getInstance()->list($filters),
+            'criteria' => TagRepo::getCriteria(),
+            'tags'     => TagRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::tags.index', $data);

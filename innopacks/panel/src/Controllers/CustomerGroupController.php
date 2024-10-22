@@ -28,7 +28,8 @@ class CustomerGroupController
     {
         $filters = $request->all();
         $data    = [
-            'groups' => Customer\GroupRepo::getInstance()->list($filters),
+            'criteria' => Customer\GroupRepo::getCriteria(),
+            'groups'   => Customer\GroupRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::customer_groups.index', $data);

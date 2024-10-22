@@ -26,6 +26,7 @@ class AttributeController extends BaseController
     public function index(Request $request): mixed
     {
         $data = [
+            'criteria'   => AttributeRepo::getCriteria(),
             'attributes' => Attribute::query()->with([
                 'translations',
                 'values.translations',

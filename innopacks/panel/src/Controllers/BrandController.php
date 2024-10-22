@@ -26,7 +26,8 @@ class BrandController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'brands' => BrandRepo::getInstance()->list($filters),
+            'criteria' => BrandRepo::getCriteria(),
+            'brands'   => BrandRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::brands.index', $data);

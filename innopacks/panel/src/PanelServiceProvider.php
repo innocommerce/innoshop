@@ -145,6 +145,7 @@ class PanelServiceProvider extends ServiceProvider
     private function loadViewComponents(): void
     {
         $this->loadViewComponentsAs('panel', [
+            'criteria'               => Components\Criteria::class,
             'sidebar'                => Components\Sidebar::class,
             'chart-line'             => Components\Charts\Line::class,
             'form-codemirror'        => Components\Forms\Codemirror::class,

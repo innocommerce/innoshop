@@ -28,6 +28,7 @@ class OrderReturnController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria'      => OrderReturnRepo::getCriteria(),
             'order_returns' => OrderReturnRepo::getInstance()->list($filters),
         ];
 

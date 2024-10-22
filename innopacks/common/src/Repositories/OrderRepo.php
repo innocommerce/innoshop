@@ -19,6 +19,27 @@ use InnoShop\Common\Services\StateMachineService;
 
 class OrderRepo extends BaseRepo
 {
+    public static function getCriteria()
+    {
+        return [
+            ['name' => 'number', 'type' => 'input', 'label' => trans('panel/order.number')],
+            ['name' => 'customer_name', 'type' => 'input', 'label' => trans('panel/order.customer_name')],
+            ['name' => 'email', 'type' => 'input', 'label' => trans('panel/order.email')],
+            ['name' => 'telephone', 'type' => 'input', 'label' => trans('panel/order.telephone')],
+            ['name' => 'shipping_method_name', 'type' => 'input', 'label' => trans('panel/order.shipping_method_name')],
+            ['name' => 'billing_method_name', 'type' => 'input', 'label' => trans('panel/order.billing_method_name')],
+            ['name' => 'status', 'type' => 'input', 'label' => trans('panel/order.status')],
+            ['name'     => 'total', 'type' => 'range', 'label' => trans('panel/order.total'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/order.created_at'),
+                'start' => ['name' => 'start'],
+                'end'   => ['name' => 'end'],
+            ],
+        ];
+    }
+
     /**
      * @return array
      */

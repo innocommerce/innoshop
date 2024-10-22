@@ -16,6 +16,18 @@ use InnoShop\Common\Models\Brand;
 class BrandRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/brand.name')],
+            ['name' => 'first', 'type' => 'input', 'label' => trans('panel/brand.first')],
+            ['name' => 'slug', 'type' => 'input', 'label' => trans('panel/common.slug')],
+        ];
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

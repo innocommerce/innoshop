@@ -29,6 +29,7 @@ class TaxRateController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria'  => TaxRateRepo::getCriteria(),
             'types'     => [['value' => 'percent', 'label' => '百分比'], ['value' => 'fixed', 'label' => '固定']],
             'regions'   => RegionRepo::getInstance()->all()->toArray(),
             'tax_rates' => TaxRateRepo::getInstance()->list($filters),

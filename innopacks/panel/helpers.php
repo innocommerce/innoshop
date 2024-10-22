@@ -170,3 +170,22 @@ if (! function_exists('is_admin')) {
         return false;
     }
 }
+
+if (! function_exists('has_set_value')) {
+    /**
+     * Verify if any fields in the current parameters have been assigned a value.
+     *
+     * @param  $parameters
+     * @return bool
+     */
+    function has_set_value($parameters): bool
+    {
+        foreach ($parameters as $parameter) {
+            if (! is_null($parameter)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

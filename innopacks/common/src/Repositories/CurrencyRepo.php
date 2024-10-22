@@ -17,6 +17,21 @@ use InnoShop\Common\Models\Currency;
 class CurrencyRepo extends BaseRepo
 {
     /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/currency.name')],
+            ['name' => 'code', 'type' => 'input', 'label' => trans('panel/currency.code')],
+            ['name' => 'symbol_left', 'type' => 'input', 'label' => trans('panel/currency.symbol_left')],
+            ['name' => 'symbol_right', 'type' => 'input', 'label' => trans('panel/currency.symbol_right')],
+            ['name' => 'decimal_place', 'type' => 'input', 'label' => trans('panel/currency.decimal_place')],
+            ['name' => 'value', 'type' => 'input', 'label' => trans('panel/currency.value')],
+        ];
+    }
+
+    /**
      * @param  $filters
      * @return LengthAwarePaginator
      * @throws \Exception

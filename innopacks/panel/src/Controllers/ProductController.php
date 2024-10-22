@@ -35,6 +35,7 @@ class ProductController extends BaseController
     {
         $filters = $request->all();
         $data    = [
+            'criteria' => ProductRepo::getCriteria(),
             'products' => ProductRepo::getInstance()->list($filters),
         ];
 

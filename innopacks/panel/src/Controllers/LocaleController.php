@@ -29,7 +29,8 @@ class LocaleController extends BaseController
     public function index(): mixed
     {
         $data = [
-            'locales' => LocaleRepo::getInstance()->getFrontListWithPath(),
+            'criteria' => LocaleRepo::getCriteria(),
+            'locales'  => LocaleRepo::getInstance()->getFrontListWithPath(),
         ];
 
         return inno_view('panel::locales.index', $data);

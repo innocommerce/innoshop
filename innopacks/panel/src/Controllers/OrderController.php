@@ -28,7 +28,8 @@ class OrderController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'orders' => OrderRepo::getInstance()->list($filters),
+            'criteria' => OrderRepo::getCriteria(),
+            'orders'   => OrderRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::orders.index', $data);
