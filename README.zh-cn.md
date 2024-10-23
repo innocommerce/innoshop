@@ -11,22 +11,22 @@
 
 
 <p align="center">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/sa.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/de.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/us.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/es.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/fr.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/id.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/it.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/jp.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/kr.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/my.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/pt.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/ru.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/th.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/vn.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/cn.svg">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/hk.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/sa.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/de.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/us.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/es.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/fr.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/id.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/it.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/jp.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/kr.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/my.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/pt.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/ru.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/th.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/vn.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/cn.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/hk.svg">
 </p>
 
 
@@ -69,17 +69,12 @@ Innoshop 是一个基于 Laravel 11 的开源电子商务系统，支持多语�
 
 ## 贡献者
 
-Thanks to the [Contributors](https://github.com/innocommerce/innoshop/graphs/contributors)
+感谢各位贡献者的支持与贡献! [Contributors](https://github.com/innocommerce/innoshop/graphs/contributors)
 
-<a href="https://github.com/yushine"><img class="avatar-img" src="https://github.com/yushine.png"/></a>
-<a href="https://github.com/liuweixxx"><img class="avatar-img" src="https://github.com/liuweixxx.png"/></a>
-<a href="https://github.com/qxsclass"><img class="avatar-img" src="https://github.com/qxsclass.png"/></a>
-<a href="https://github.com/NeftaliYagua"><img class="avatar-img" src="https://github.com/NeftaliYagua.png"/></a>
-<a href="https://github.com/lunan689"><img class="avatar-img" src="https://github.com/lunan689.png"/></a>
-<a href="https://github.com/LOLU66"><img class="avatar-img" src="https://github.com/LOLU66.png"/></a>
+<a href="https://github.com/yushine"><img class="avatar-img" width="32px" height="32px" src="https://github.com/yushine.png"/></a>
+<a href="https://github.com/liuweixxx"><img class="avatar-img" width="32px" height="32px" src="https://github.com/liuweixxx.png"/></a>
+<a href="https://github.com/qxsclass"><img class="avatar-img" width="32px" height="32px" src="https://github.com/qxsclass.png"/></a>
+<a href="https://github.com/NeftaliYagua"><img class="avatar-img" width="32px" height="32px" src="https://github.com/NeftaliYagua.png"/></a>
+<a href="https://github.com/lunan689"><img class="avatar-img" width="32px" height="32px" src="https://github.com/lunan689.png"/></a>
+<a href="https://github.com/LOLU66"><img class="avatar-img" width="32px" height="32px" src="https://github.com/LOLU66.png"/></a>
 
-
-<style>
-.flag-img{border:1px solid #DEE2E6; width:32px; height:24px;}
-.avatar-img{width:32px; height:32px;}
-</style>
