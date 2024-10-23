@@ -101,6 +101,11 @@ class OrderRepo extends BaseRepo
             $builder->where('number', $number);
         }
 
+        $customerName = $filters['customer_name'] ?? '';
+        if ($customerName) {
+            $builder->where('customer_name', 'like', "%$customerName%");
+        }
+
         $email = $filters['email'] ?? '';
         if ($email) {
             $builder->where('email', $email);

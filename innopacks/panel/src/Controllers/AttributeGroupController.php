@@ -27,9 +27,7 @@ class AttributeGroupController extends BaseController
     {
         $data = [
             'criteria'   => GroupRepo::getCriteria(),
-            'attributes' => Attribute\Group::query()->with([
-                'translations',
-            ])->paginate(),
+            'attributes' => GroupRepo::getInstance()->list($request->all()),
         ];
 
         return inno_view('panel::attribute_groups.index', $data);

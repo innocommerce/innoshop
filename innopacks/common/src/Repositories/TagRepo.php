@@ -22,9 +22,8 @@ class TagRepo extends BaseRepo
     public static function getCriteria(): array
     {
         return [
-            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/state.name')],
-            ['name' => 'code', 'type' => 'input', 'label' => trans('panel/state.code')],
-            ['name' => 'country_code', 'type' => 'input', 'label' => trans('panel/state.country_code')],
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/tag.name')],
+            ['name' => 'code', 'type' => 'input', 'label' => trans('panel/common.slug')],
         ];
     }
 

@@ -25,7 +25,6 @@ class PageRepo extends BaseRepo
         return [
             ['name' => 'title', 'type' => 'input', 'label' => trans('panel/article.title')],
             ['name' => 'slug', 'type' => 'input', 'label' => trans('panel/common.slug')],
-            ['name' => 'viewed', 'type' => 'input', 'label' => trans('panel/common.viewed')],
         ];
     }
 
@@ -59,6 +58,13 @@ class PageRepo extends BaseRepo
         $pageIds = $filters['page_ids'] ?? [];
         if ($pageIds) {
             $builder->whereIn('id', $pageIds);
+        }
+
+        $title = $filters['title'] ?? '';
+        if ($title) {
+            $builder->whereHas('translation', function ($query) use ($title) {
+                $query->where('title', 'like', "%$title%");
+            });
         }
 
         if (isset($filters['active'])) {

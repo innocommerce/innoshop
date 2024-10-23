@@ -87,7 +87,11 @@ class ReviewRepo extends BaseRepo
      */
     public function builder(array $filters = []): Builder
     {
-        $builder = Review::query();
+        $builder = Review::query()->with([
+            'customer',
+            'product',
+            'orderItem',
+        ]);
 
         $customerID = $filters['customer_id'] ?? 0;
         if ($customerID) {
@@ -102,6 +106,23 @@ class ReviewRepo extends BaseRepo
         $orderItemID = $filters['order_item_id'] ?? 0;
         if ($orderItemID) {
             $builder->where('order_item_id', $orderItemID);
+        }
+
+        $content = $filters['content'] ?? ($filters['review_content'] ?? '');
+        if ($content) {
+            $builder->where('content', 'like', "%$content%");
+        }
+
+        $rating = $filters['rating'] ?? '';
+        if ($rating) {
+            $builder->where('rating', $rating);
+        }
+
+        $product = $filters['product'] ?? '';
+        if ($product) {
+            $builder->whereHas('product.translation', function (Builder $query) use ($product) {
+                $query->where('name', 'like', "%$product%");
+            });
         }
 
         if (isset($filters['active'])) {

@@ -27,11 +27,10 @@ class ProductRepo extends BaseRepo
     public static function getCriteria(): array
     {
         return [
-            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
-            ['name' => 'quantity', 'type' => 'input', 'label' => trans('panel/product.quantity')],
+            ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
             ['name'     => 'price', 'type' => 'range', 'label' => trans('panel/product.price'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
+                'start' => ['name' => 'price_start'],
+                'end'   => ['name' => 'price_end'],
             ],
             ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
                 'start' => ['name' => 'start'],
@@ -416,6 +415,30 @@ class ProductRepo extends BaseRepo
 
         if (isset($filters['active'])) {
             $builder->where('products.active', (bool) $filters['active']);
+        }
+
+        $createdStart = $filters['created_start'] ?? '';
+        if ($createdStart) {
+            $builder->where('created_at', '>', $createdStart);
+        }
+
+        $createdEnd = $filters['created_end'] ?? '';
+        if ($createdEnd) {
+            $builder->where('created_at', '<', $createdEnd);
+        }
+
+        $priceStart = $filters['price_start'] ?? '';
+        if ($priceStart) {
+            $builder->whereHas('masterSku', function (Builder $query) use ($priceStart) {
+                $query->where('price', '>', $priceStart);
+            });
+        }
+
+        $priceEnd = $filters['price_end'] ?? '';
+        if ($priceEnd) {
+            $builder->whereHas('masterSku', function (Builder $query) use ($priceEnd) {
+                $query->where('price', '<', $priceEnd);
+            });
         }
 
         return fire_hook_filter('repo.product.builder', $builder);

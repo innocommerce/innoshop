@@ -25,13 +25,11 @@ class AttributeController extends BaseController
      */
     public function index(Request $request): mixed
     {
+        $filters = $request->all();
+
         $data = [
             'criteria'   => AttributeRepo::getCriteria(),
-            'attributes' => Attribute::query()->with([
-                'translations',
-                'values.translations',
-                'group.translations',
-            ])->paginate(),
+            'attributes' => AttributeRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::attributes.index', $data);

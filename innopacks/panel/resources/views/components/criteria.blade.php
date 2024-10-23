@@ -61,8 +61,9 @@
     <div class="col-6">
       <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-search"></i>
         {{ __('panel/common.filter') }}</button>
-      <a href="{{ panel_route('warranties.index') }}" class="btn btn-sm btn-outline-primary">
-        <i class="bi bi-arrow-clockwise"></i> {{ __('panel/common.reset') }}</a>
+      <a href="{{ $action }}" class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-arrow-clockwise"></i> {{ __('panel/common.reset') }}
+      </a>
     </div>
     <div class="col-6 row justify-content-end">
       <div class="col-auto">

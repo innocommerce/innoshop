@@ -24,8 +24,7 @@ class AttributeRepo extends BaseRepo
     public static function getCriteria(): array
     {
         return [
-            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
-            ['name' => 'attribute_groups', 'type' => 'input', 'label' => trans('panel/menu.attribute_groups')],
+            ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
             ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
                 'start' => ['name' => 'start'],
                 'end'   => ['name' => 'end'],
@@ -48,13 +47,28 @@ class AttributeRepo extends BaseRepo
      */
     public function builder(array $filters = []): Builder
     {
-        $builder = Attribute::query()->with('translation');
+        $builder = Attribute::query()->with([
+            'translation',
+            'translations',
+            'values.translations',
+            'group.translations',
+        ]);
 
         $keyword = $filters['keyword'] ?? '';
         if ($keyword) {
             $builder->whereHas('translation', function (Builder $query) use ($keyword) {
                 $query->where('name', 'like', "%$keyword%");
             });
+        }
+
+        $start = $filters['start'] ?? '';
+        if ($start) {
+            $builder->where('created_at', '>', $start);
+        }
+
+        $end = $filters['end'] ?? '';
+        if ($end) {
+            $builder->where('created_at', '<', $end);
         }
 
         return $builder;

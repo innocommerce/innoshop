@@ -25,7 +25,6 @@ class CatalogRepo extends BaseRepo
     {
         return [
             ['name' => 'title', 'type' => 'input', 'label' => trans('panel/catalog.title')],
-            ['name' => 'parent', 'type' => 'input', 'label' => trans('panel/catalog.parent')],
             ['name' => 'slug', 'type' => 'input', 'label' => trans('panel/common.slug')],
         ];
     }
