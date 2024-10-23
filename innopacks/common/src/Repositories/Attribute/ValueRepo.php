@@ -19,6 +19,49 @@ class ValueRepo extends BaseRepo
     public string $model = Value::class;
 
     /**
+     * @param  $attributeID
+     * @param  $translations
+     * @return void
+     */
+    public function createAttribute($attributeID, $translations): void
+    {
+        if (empty($attributeID) || empty($translations)) {
+            return;
+        }
+        $attrValue = Value::query()->create(['attribute_id' => $attributeID]);
+        $this->updateTranslations($attrValue, $translations);
+    }
+
+    /**
+     * @param  $attrValue
+     * @param  $translations
+     * @return void
+     */
+    public function updateTranslations($attrValue, $translations): void
+    {
+        if (is_int($attrValue)) {
+            $attrValue = Value::query()->findOrFail($attrValue);
+        }
+
+        if (empty($attrValue) || empty($translations)) {
+            return;
+        }
+
+        $translationList = [];
+        foreach ($translations as $locale => $name) {
+            $translationList[] = [
+                'locale' => $locale,
+                'name'   => $name,
+            ];
+        }
+
+        if ($translationList) {
+            $attrValue->translations()->delete();
+            $attrValue->translations()->createMany($translationList);
+        }
+    }
+
+    /**
      * @param  array  $filters
      * @return Collection
      */

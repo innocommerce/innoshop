@@ -46,7 +46,7 @@ class HeaderMenuRepo
      * @param  $categoryIds
      * @return array
      */
-    private function getCategories($categoryIds): array
+    public function getCategories($categoryIds): array
     {
         if (empty($categoryIds)) {
             return [];
@@ -59,7 +59,7 @@ class HeaderMenuRepo
      * @param  $catalogIds
      * @return array
      */
-    private function getCatalogs($catalogIds): array
+    public function getCatalogs($catalogIds): array
     {
         if (empty($catalogIds)) {
             return [];
@@ -77,7 +77,7 @@ class HeaderMenuRepo
      * @param  $pageIds
      * @return array
      */
-    private function getPages($pageIds): array
+    public function getPages($pageIds): array
     {
         if (empty($pageIds)) {
             return [];

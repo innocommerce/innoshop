@@ -38,6 +38,8 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/attributes', Controllers\AttributeController::class);
 
+        Route::resource('/attribute_values', Controllers\AttributeValueController::class);
+
         Route::resource('/brands', Controllers\BrandController::class);
         Route::put('/brands/{currency}/active', [Controllers\BrandController::class, 'active'])->name('brands.active');
 

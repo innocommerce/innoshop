@@ -12,8 +12,6 @@
   <div class="card h-min-600">
     <div class="card-body">
 
-    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('roles.index')" />
-
       @if ($roles->count())
         <div class="table-responsive">
           <table class="table align-middle">

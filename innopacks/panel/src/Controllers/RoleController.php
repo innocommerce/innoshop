@@ -24,8 +24,7 @@ class RoleController extends BaseController
     public function index(): mixed
     {
         $data = [
-            'criteria' => Role::getCriteria(),
-            'roles'    => Role::query()->paginate(),
+            'roles' => Role::query()->paginate(),
         ];
 
         return inno_view('panel::roles.index', $data);

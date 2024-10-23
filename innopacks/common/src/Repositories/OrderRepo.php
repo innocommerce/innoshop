@@ -19,7 +19,10 @@ use InnoShop\Common\Services\StateMachineService;
 
 class OrderRepo extends BaseRepo
 {
-    public static function getCriteria()
+    /**
+     * @return array[]
+     */
+    public static function getCriteria(): array
     {
         return [
             ['name' => 'number', 'type' => 'input', 'label' => trans('panel/order.number')],

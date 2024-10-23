@@ -21,6 +21,7 @@
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script>
     let urls = {
+      base_url: '{{ panel_route('home.index') }}',
       upload_images: '{{ panel_route('upload.images') }}',
       ai_generate: '{{ panel_route('content_ai.generate') }}',
     }

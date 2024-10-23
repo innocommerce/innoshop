@@ -34,40 +34,42 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-6">
-        <div class="card h-min-600">
-          <div class="card-header d-flex justify-content-between">
-            <h5 class="card-title mb-0">{{ __('panel/attribute.attribute_value') }}</h5>
-            <button type="button"
-                    class="btn btn-sm btn-outline-primary add-value">{{ __('panel/common.add') }}</button>
-          </div>
-          <div class="card-body">
-            <table class="table align-middle">
-              <thead>
-              <tr>
-                <td>{{ __('panel/common.id') }}</td>
-                <td>{{ __('panel/common.name') }}</td>
-                <td class="text-end">{{ __('panel/common.actions') }}</td>
-              </tr>
-              </thead>
-              <tbody>
-              @foreach($attribute->values as $item)
-                <tr data-id="{{ $item->id }}">
-                  <td>{{ $item->id }}</td>
-                  <td>{{ $item->translation->name }}</td>
-                  <td class="text-end">
-                    <button type="button"
-                            class="btn btn-sm btn-outline-primary edit-value">{{ __('panel/common.edit') }}</button>
-                    <button type="submit"
-                            class="btn btn-sm btn-outline-danger delete-value">{{ __('panel/common.delete') }}</button>
-                  </td>
+      @if($attribute->id)
+        <div class="col-12 col-md-6">
+          <div class="card h-min-600">
+            <div class="card-header d-flex justify-content-between">
+              <h5 class="card-title mb-0">{{ __('panel/attribute.attribute_value') }}</h5>
+              <button type="button"
+                      class="btn btn-sm btn-outline-primary add-value">{{ __('panel/common.add') }}</button>
+            </div>
+            <div class="card-body">
+              <table class="table align-middle">
+                <thead>
+                <tr>
+                  <td>{{ __('panel/common.id') }}</td>
+                  <td>{{ __('panel/common.name') }}</td>
+                  <td class="text-end">{{ __('panel/common.actions') }}</td>
                 </tr>
-              @endforeach
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                @foreach($attribute->values as $item)
+                  <tr data-id="{{ $item->id }}">
+                    <td>{{ $item->id }}</td>
+                    <td>{{ $item->translation->name }}</td>
+                    <td class="text-end">
+                      <button type="button"
+                              class="btn btn-sm btn-outline-primary edit-value">{{ __('panel/common.edit') }}</button>
+                      <button type="button"
+                              class="btn btn-sm btn-outline-danger delete-value">{{ __('panel/common.delete') }}</button>
+                    </td>
+                  </tr>
+                @endforeach
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      @endif
     </div>
 
     <button type="submit" class="d-none"></button>
@@ -81,31 +83,13 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          {{-- <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
-            @foreach (locales() as $locale)
-              <li class="nav-item" role="presentation">
-                <button class="nav-link {{ $loop->first ? 'active' : ''}}" id="{{ $locale['code'] }}" data-bs-toggle="tab" data-bs-target="#values-{{ $locale['code'] }}-pane" type="button">
-                  <img src="{{ asset('images/flag/'. $locale['code'] .'.png') }}" class="me-2" style="width: 20px;">
-                  {{ $locale['name'] }}
-                </button>
-              </li>
-            @endforeach
-          </ul>
-
-          <div class="tab-content pb-3">
-            @foreach (locales() as $locale)
-            <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="values-{{ $locale['code'] }}-pane" role="tabpanel" aria-labelledby="{{ $locale['code'] }}">
-              <input type="text" name="translations[{{ $locale['code'] }}][values]" class="form-control" value="" placeholder="{{ $locale['name'] }}" />
-            </div>
-            @endforeach
-          </div> --}}
-
-          <form class="values-input-wrap">
-            <x-common-form-input title="" :multiple="true" name="values" :value="null" required
+          <form class="values-input-wrap" action="">
+            <input type="hidden" name="attribute_id" value="{{ $attribute->id ?? '' }}">
+            <x-common-form-input title="" :multiple="true" name="values" value="" required
                                  placeholder="{{ __('panel/common.name') }}"/>
 
             <div class="mt-4 d-flex justify-content-center">
-              <button type="button" class="btn btn-primary w-50 form-submit">{{ __('panel/common.btn_save') }}</button>
+              <a type="button" class="btn btn-primary w-50 form-submit">{{ __('panel/common.btn_save') }}</a>
             </div>
           </form>
         </div>
@@ -118,26 +102,59 @@
   <script>
     const attributeValues = @json($attribute->values ?? []);
     let id = null;
+    let attribute_id = @json($attribute->id ?? 0);
 
     $(document).on('click', '.edit-value', function () {
       const tr = $(this).closest('tr');
       id = tr.data('id');
       let value = attributeValues.find(item => item.id === id);
       value.translations.forEach(item => {
-        $(`input[name="translations[${item.locale}][values]"]`).val(item.name);
+        $(`input[name="values[${item.locale}]"]`).val(item.name);
       });
-      // 打开模态框
+
       $('#attributeValuesModal').modal('show');
     });
 
-    $('.add-value').on('click', function () {
+    $(document).on('click', '.add-value', function () {
       id = null;
-      $('.values-input-wrap .form-control').val('');
+      $('.values-input-wrap input.form-control').val('');
       $('#attributeValuesModal').modal('show');
     });
 
-    inno.validateAndSubmitForm('.values-input-wrap', (res) => {
-      console.log(res);
+    $(document).on('click', '.delete-value', function () {
+      const id = $(this).closest('tr').data('id');
+      $.ajax({
+        url: urls.base_url + '/attribute_values/' + id,
+        method: 'DELETE',
+        dataType: 'json',
+        success: (res) => {
+          inno.msg(res.message)
+          window.location.reload();
+        },
+        error: (err) => {
+          inno.msg(err.message)
+        }
+      });
+    });
+
+    inno.validateAndSubmitForm('.values-input-wrap', (response) => {
+      let url = id ? `${urls.base_url}/attribute_values/${id}` : `${urls.base_url}/attribute_values`;
+      let method = id ? 'PUT' : 'POST';
+
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'json',
+        data: response,
+        success: (res) => {
+          inno.msg(res.message)
+          $('#attributeValuesModal').modal('hide');
+          window.location.reload();
+        },
+        error: (err) => {
+          inno.msg(err.message)
+        }
+      });
     });
   </script>
 @endpush

@@ -200,8 +200,12 @@ if (! function_exists('has_set_value')) {
      */
     function has_set_value($parameters): bool
     {
-        foreach ($parameters as $parameter) {
-            if (! is_null($parameter)) {
+        $ignoreList = ['page', 'per_page'];
+        foreach ($parameters as $key => $value) {
+            if (in_array($key, $ignoreList)) {
+                continue;
+            }
+            if (! is_null($value)) {
                 return true;
             }
         }

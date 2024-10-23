@@ -32,7 +32,7 @@
       @foreach (locales() as $locale)
         <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-pane"
              role="tabpanel" aria-labelledby="{{ $locale['code'] }}">
-          @if(is_array($value) && !isset($value[$locale['code']]))
+          @if(empty($value) || (is_array($value) && !isset($value[$locale['code']])))
             <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]"
                    class="form-control {{ $error ? 'is-invalid' : '' }}" value=""
                    placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled
@@ -49,7 +49,7 @@
                    value="{{ $value[$locale['code']]['name'] ?? '' }}" placeholder="{{ $placeholder ?: $title }}"
                    @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
           @elseif(is_object($value))
-            @php ($o_value = $value ? $value->where('locale', $locale['code'])->first() : null)
+            @php ($o_value = $value->where('locale', $locale['code'])->first())
             <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
             <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]"
                    class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $o_value->name ?? '' }}"

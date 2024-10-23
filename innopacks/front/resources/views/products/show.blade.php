@@ -87,7 +87,7 @@
           <div class="product-info-bottom">
             <div class="quantity-wrap">
               <div class="minus"><i class="bi bi-dash-lg"></i></div>
-              <input type="number" class="form-control product-quantity" value="1" data-skuid="{{ $sku['id'] }}">
+              <input type="number" class="form-control product-quantity" value="1" data-sku-id="{{ $sku['id'] }}">
               <div class="plus"><i class="bi bi-plus-lg"></i></div>
             </div>
 

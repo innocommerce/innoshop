@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Repositories;
 
 use InnoShop\Common\Models\Customer;
-use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\StateMachineService;
@@ -32,7 +31,7 @@ class DashboardRepo extends BaseRepo
             [
                 'title'    => panel_trans('dashboard.order_quantity'),
                 'icon'     => 'bi bi-cart',
-                'quantity' => Order::query()->count(),
+                'quantity' => $validOrderBuilder->count(),
                 'url'      => panel_route('orders.index'),
             ],
             [

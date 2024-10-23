@@ -16,6 +16,10 @@ class Value extends BaseModel
 {
     protected $table = 'attribute_values';
 
+    public $fillable = [
+        'attribute_id',
+    ];
+
     /**
      * Define translations relationship
      *
