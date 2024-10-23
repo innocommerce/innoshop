@@ -1,11 +1,38 @@
-[中文说明](https://github.com/innocommerce/innoshop/blob/master/README.zh-cn.md)
+<p align="center">
+    <a href="https://www.innoshop.com"><img src="https://www.innoshop.com/images/logo.png" alt="Total Downloads"></a>
+</p>
 
-[![LICENSE](https://img.shields.io/badge/License-OSL%203.0-green.svg)](https://github.com/innocommerce/innoshop/blob/master/LICENSE.txt)
-[![Language](https://img.shields.io/badge/Language-php-blue.svg)](https://www.php.net/)
-[![Leaderboard](https://img.shields.io/badge/InnoShop%20-purple)](https://www.innoshop.com/)
+
+<p align="center">
+    <a href="https://www.innoshop.com"><img src="https://img.shields.io/badge/License-OSL%203.0-green.svg" alt="Total Downloads"></a>
+    <a href="https://www.php.net"><img src="https://img.shields.io/badge/Language-php%208.2-blue.svg" alt="Total Downloads"></a>
+    <a href="https://www.innoshop.com"><img src="https://img.shields.io/badge/InnoShop%20-purple" alt="Total Downloads"></a>
+</p>
+
+
+<p align="center">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/sa.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/de.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/us.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/es.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/fr.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/id.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/it.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/jp.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/kr.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/my.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/pt.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/ru.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/th.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/vn.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/cn.svg">
+    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/hk.svg">
+</p>
 
 # InnoShop
-InnoShop - Innovative Open Source E-commerce System
+InnoShop - Innovative Open Source E-commerce System.
+
+Innoshop is an Open Source eCommerce System based on Laravel 11, supporting multiple languages, multiple currencies, integrated with OpenAI, and featuring plugin mechanisms and theme template development for enhanced user experience and system extensibility.
 
 ## Introduction
 - A globally oriented open source e-commerce system, a culmination of 15 years of continuous industry development.
@@ -22,14 +49,14 @@ InnoShop - Innovative Open Source E-commerce System
 - Account: admin@innoshop.com
 - Password: 123456
 
-### Demo Frontend Screenshot
+### Frontend Screenshot
 <p align="center">
     <a href="https://www.innoshop.cn"  target="_blank">
         <img src="https://www.innoshop.cn/images/readme/front.jpg?v"  alt="Front">
     </a>
 </p>
 
-### Demo Backend Screenshot
+### Backend Screenshot
 <p align="center">
     <a href="https://www.innoshop.com"  target="_blank">
         <img src="https://www.innoshop.cn/images/readme/panel.jpg?v"  alt="Panel">
@@ -38,3 +65,20 @@ InnoShop - Innovative Open Source E-commerce System
 
 - If you find `InnoShop` helpful, please do not hesitate to give us a star.
 - Every like from you is the driving force for our continuous improvement.
+
+## Contributors
+
+Thanks to the [Contributors](https://github.com/innocommerce/innoshop/graphs/contributors)
+
+<a href="https://github.com/yushine"><img class="avatar-img" src="https://github.com/yushine.png"/></a>
+<a href="https://github.com/liuweixxx"><img class="avatar-img" src="https://github.com/liuweixxx.png"/></a>
+<a href="https://github.com/qxsclass"><img class="avatar-img" src="https://github.com/qxsclass.png"/></a>
+<a href="https://github.com/NeftaliYagua"><img class="avatar-img" src="https://github.com/NeftaliYagua.png"/></a>
+<a href="https://github.com/lunan689"><img class="avatar-img" src="https://github.com/lunan689.png"/></a>
+<a href="https://github.com/LOLU66"><img class="avatar-img" src="https://github.com/LOLU66.png"/></a>
+
+
+<style>
+.flag-img{border:1px solid #DEE2E6; width:32px; height:24px;}
+.avatar-img{width:32px; height:32px;}
+</style>
