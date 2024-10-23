@@ -72,7 +72,7 @@
     </div>
   </div>
 </div>
-<img src="{{ config('innoshop.api_url') }}/en/install/dashboard.jpg?version={{ config('innoshop.version') }}&build_date={{ config('innoshop.build') }}" class="d-none" alt=""/>
+<img src="{{ dashboard_url() }}" class="d-none" alt="dashboard"/>
 @endsection
 
 @push('footer')

@@ -171,6 +171,26 @@ if (! function_exists('is_admin')) {
     }
 }
 
+if (! function_exists('dashboard_url')) {
+    /**
+     * Get dashboard url
+     * like https://www.innoshop.com/install/dashboard.jpg?version=1.0.0&build_date=20250909
+     *
+     * @return string
+     */
+    function dashboard_url(): string
+    {
+        $params = [
+            'base_url'   => panel_route('home.index'),
+            'version'    => config('innoshop.version'),
+            'build_date' => config('innoshop.build'),
+        ];
+        $urlParams = http_build_query($params);
+
+        return config('innoshop.api_url').'/install/dashboard.jpg?'.$urlParams;
+    }
+}
+
 if (! function_exists('has_set_value')) {
     /**
      * Verify if any fields in the current parameters have been assigned a value.
