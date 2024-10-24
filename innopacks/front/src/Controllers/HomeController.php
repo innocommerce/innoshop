@@ -24,8 +24,8 @@ class HomeController extends Controller
         $bestSeller  = ProductRepo::getInstance()->getBestSellerProducts();
         $newArrivals = ProductRepo::getInstance()->getLatestProducts();
         $tabProducts = [
-            ['tab_title' => 'Bestseller', 'products' => $bestSeller],
-            ['tab_title' => 'New arrivals', 'products' => $newArrivals],
+            ['tab_title' => trans('front/home.bestseller'), 'products' => $bestSeller],
+            ['tab_title' => trans('front/home.new_arrival'), 'products' => $newArrivals],
         ];
 
         $news = ArticleRepo::getInstance()->getLatestArticles();
