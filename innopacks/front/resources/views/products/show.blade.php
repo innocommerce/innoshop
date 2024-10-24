@@ -214,7 +214,7 @@
 
   $('.add-cart, .buy-now').on('click', function() {
     const quantity = $('.product-quantity').val();
-    const skuId = $('.product-quantity').data('skuid');
+    const skuId = $('.product-quantity').data('sku-id');
     const isBuyNow = $(this).hasClass('buy-now');
 
     inno.addCart({skuId, quantity, isBuyNow}, this, function (res) {
