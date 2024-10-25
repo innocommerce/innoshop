@@ -70,7 +70,7 @@ Innoshop 是一个基于 Laravel 11 的开源电子商务系统，支持多语�
 
 ## 贡献者
 
-感谢各位贡献者的支持与贡献! [Contributors](https://github.com/innocommerce/innoshop/graphs/contributors)
+感谢各位开发者的支持与贡献! [Contributors](https://github.com/innocommerce/innoshop/graphs/contributors)
 
 <a href="https://github.com/yushine"><img class="avatar-img" width="32px" height="32px" src="https://github.com/yushine.png"/></a>
 <a href="https://github.com/liuweixxx"><img class="avatar-img" width="32px" height="32px" src="https://github.com/liuweixxx.png"/></a>
