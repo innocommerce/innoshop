@@ -13,5 +13,5 @@ return [
     'news_blog'            => '最新博客',
     'news_blog_text'       => '探索未來，引領創新。加入我哋，一齊見證最新科技嘅誕生。立即關注我哋嘅最新博客同新聞更新！',
     'bestseller'           => '暢銷商品',
-    'new_arrival'          => '新品上市'
+    'new_arrival'          => '新品上市',
 ];

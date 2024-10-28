@@ -43,7 +43,9 @@ Innoshop 是一个基于 Laravel 11 的开源电子商务系统，支持多语�
 - 高内聚、低耦合的模块化设计, 简单方便快速开发插件。
 
 ## 开发文档
-- http://docs.innoshop.cn/
+- http://docs.innoshop.cn/zh
+- http://front-api.innoshop.cn
+- http://panel-api.innoshop.cn
 
 ## Demo 演示站
 - 前台: https://demo.innoshop.cn/

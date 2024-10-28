@@ -43,10 +43,12 @@ Innoshop is an Open Source eCommerce System based on Laravel 11, supporting mult
 - Highly cohesive, low coupling modular design, making it simple and convenient for rapid plugin development.
 
 ## Documentation
-- http://docs.innoshop.cn/
+- https://docs.innoshop.cn/en
+- http://front-api.innoshop.cn
+- http://panel-api.innoshop.cn
 
 ## Demo Site
-- Frontend: https://demo.innoshop.cn/
+- Frontend: https://demo.innoshop.cn
 - Backend: https://demo.innoshop.cn/panel
 - Account: admin@innoshop.com
 - Password: 123456
