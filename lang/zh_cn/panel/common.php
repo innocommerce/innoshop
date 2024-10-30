@@ -47,6 +47,7 @@ return [
     'meta_keywords'     => 'Meta 关键词',
     'meta_title'        => 'Meta 标题',
     'name'              => '名称',
+    'no'                => '否',
     'no_data'           => '没有数据',
     'password'          => '密码',
     'please_choose'     => '请选择',
@@ -68,4 +69,5 @@ return [
     'view'              => '查看',
     'viewed'            => '已查看',
     'whether_enable'    => '是否启用',
+    'yes'               => '是',
 ];
