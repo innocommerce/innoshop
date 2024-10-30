@@ -97,6 +97,7 @@
             </div>
           </div>
           <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"><i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}</div>
+          @hookinsert('product.detail.after')
         </div>
       </div>
     </div>
