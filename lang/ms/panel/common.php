@@ -68,4 +68,6 @@ return [
     'view'              => 'Papar',
     'viewed'            => 'Sudah Dipapar',
     'whether_enable'    => 'Aktif atau Tidak',
+    'yes'               => 'ya',
+    'no'                => 'Tidak',
 ];

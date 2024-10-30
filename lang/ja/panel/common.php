@@ -68,4 +68,6 @@ return [
     'view'              => '表示',
     'viewed'            => '閲覧回数',
     'whether_enable'    => '有効にするか',
+    'yes'               => 'はい',
+    'no'                => 'いいえ',
 ];

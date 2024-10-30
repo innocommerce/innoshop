@@ -68,4 +68,6 @@ return [
     'view'              => 'Visualizar',
     'viewed'            => 'Visualizações',
     'whether_enable'    => 'Ativar?',
+    'yes'               => 'Sim',
+    'no'                => 'Não',
 ];

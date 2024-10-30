@@ -462,25 +462,12 @@ return new class extends Migration
         });
 
         Schema::create('order_return_histories', function (Blueprint $table) {
-            $table->comment('Order Return Histories');
+            $table->comment('Order Return History');
             $table->bigIncrements('id')->comment('ID');
-            $table->string('type');
-            $table->string('status');
-            $table->timestamps();
-        });
-
-        Schema::create('order_return_items', function (Blueprint $table) {
-            $table->comment('Order Return Products');
-            $table->bigIncrements('id')->comment('ID');
-            $table->integer('order_return_id')->index('ri_order_return_id');
-            $table->integer('order_product_id')->index('ri_op_id');
-            $table->integer('product_id')->index('ri_product_id');
-            $table->string('product_name');
-            $table->string('product_sku');
-            $table->integer('quantity');
-            $table->tinyInteger('opened');
-            $table->string('status');
-            $table->text('comment');
+            $table->integer('order_return_id')->index('orh_or_id')->comment('Order ID');
+            $table->string('status')->comment('Order Status');
+            $table->boolean('notify')->comment('Notify Or Not');
+            $table->text('comment')->comment('Comment');
             $table->timestamps();
         });
 
@@ -496,15 +483,20 @@ return new class extends Migration
         });
 
         Schema::create('order_returns', function (Blueprint $table) {
-            $table->comment('Order Return');
+            $table->comment('Order Return Products');
             $table->bigIncrements('id')->comment('ID');
             $table->integer('customer_id')->index('or_customer_id');
             $table->integer('order_id')->index('or_order_id');
-            $table->string('order_number');
+            $table->integer('order_item_id')->index('ri_order_item_id');
+            $table->integer('product_id')->index('ri_product_id');
             $table->string('number');
-            $table->string('name');
-            $table->string('email');
-            $table->string('telephone');
+            $table->string('order_number');
+            $table->string('product_name');
+            $table->string('product_sku');
+            $table->tinyInteger('opened');
+            $table->integer('quantity');
+            $table->text('comment');
+            $table->string('status');
             $table->timestamps();
         });
 
