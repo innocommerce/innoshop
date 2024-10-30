@@ -76,7 +76,7 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/locales/{country}/active', [Controllers\LocaleController::class, 'active'])->name('locales.active');
 
         Route::get('/themes', [Controllers\ThemeController::class, 'index'])->name('themes.index');
-        Route::put('/themes/{country}/active', [Controllers\ThemeController::class, 'enable'])->name('themes.active');
+        Route::put('/themes/{code}/active', [Controllers\ThemeController::class, 'enable'])->name('themes.active');
         Route::get('/themes/settings', [Controllers\ThemeController::class, 'settings'])->name('themes_settings.index');
         Route::put('/themes/settings', [Controllers\ThemeController::class, 'updateSettings'])->name('themes_settings.update');
 
