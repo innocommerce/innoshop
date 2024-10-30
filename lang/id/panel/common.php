@@ -47,6 +47,7 @@ return [
     'meta_keywords'     => 'Meta Kata Kunci',
     'meta_title'        => 'Meta Judul',
     'name'              => 'Nama',
+    'no'                => 'Tidak',
     'no_data'           => 'Tidak Ada Data',
     'password'          => 'Kata Sandi',
     'please_choose'     => 'Silakan Pilih',
@@ -68,4 +69,5 @@ return [
     'view'              => 'Lihat',
     'viewed'            => 'Sudah Dilihat',
     'whether_enable'    => 'Aktif atau Tidak',
+    'yes'               => 'Ya',
 ];

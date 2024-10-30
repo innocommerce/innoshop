@@ -319,6 +319,10 @@ final class Plugin implements Arrayable, ArrayAccess
 
     public function getEditUrl(): string
     {
+        if (empty($this->fields)) {
+            return '';
+        }
+
         return panel_route('plugins.edit', ['plugin' => $this->code]);
     }
 

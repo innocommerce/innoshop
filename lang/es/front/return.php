@@ -8,5 +8,16 @@
  */
 
 return [
-    'return_number' => 'Cantidad de devolución',
+
+    'product_id'   => 'ID del producto',
+    'opened'       => 'Embalaje abierto',
+    'comment'      => 'Razón del retorno',
+    'status'       => 'Estado',
+    'created_at'   => 'Fecha de creación',
+    'number'       => 'Número de retorno',
+    'product_name' => 'Nombre del producto',
+    'quantity'     => 'Cantidad',
+    'pending'      => 'Pendiente',
+    'order_number' => 'Número de pedido',
+
 ];

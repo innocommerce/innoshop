@@ -47,8 +47,9 @@
                   </div>
                   <div class="btns">
                     @if ($plugin['installed'])
-                      <a href="{{ $plugin['edit_url'] }}"
-                         class="btn btn-primary btn-sm">{{ __('panel/common.edit') }}</a>
+                      @if($plugin['edit_url'])
+                        <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('panel/common.edit') }}</a>
+                      @endif
                       <div class="btn btn-danger btn-sm uninstall-plugin">{{ __('panel/common.uninstall') }}</div>
                     @else
                       <div class="btn btn-primary btn-sm install-plugin">{{ __('panel/common.install') }}</div>
