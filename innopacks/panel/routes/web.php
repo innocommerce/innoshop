@@ -30,9 +30,10 @@ Route::middleware(['admin_auth:admin'])
         Route::resource('/order_returns', Controllers\OrderReturnController::class);
 
         Route::resource('/products', Controllers\ProductController::class);
+        Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
 
         Route::resource('/categories', Controllers\CategoryController::class);
-        Route::put('/categories/{currency}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');
+        Route::put('/categories/{category}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');
 
         Route::resource('/attribute_groups', Controllers\AttributeGroupController::class);
 
