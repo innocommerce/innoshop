@@ -42,6 +42,7 @@ class Checker
                 'dom'        => extension_loaded('dom'),
                 'fileinfo'   => extension_loaded('fileinfo'),
                 'filter'     => extension_loaded('filter'),
+                'gd'         => extension_loaded('gd'),
                 'hash'       => extension_loaded('hash'),
                 'mbstring'   => extension_loaded('mbstring'),
                 'pdo_mysql'  => extension_loaded('pdo_mysql'),
