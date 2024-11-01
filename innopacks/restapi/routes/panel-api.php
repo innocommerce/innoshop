@@ -19,6 +19,10 @@ Route::middleware($middlewares)->group(function () {
 
     Route::get('/dashboard', [PanelApiControllers\DashboardController::class, 'index'])->name('dashboard.index');
 
+    Route::get('/products', [PanelApiControllers\ProductController::class, 'index'])->name('products.index');
+
+    Route::get('/categories', [PanelApiControllers\CategoryController::class, 'index'])->name('categories.index');
+
     Route::get('/articles', [PanelApiControllers\ArticleController::class, 'index'])->name('articles.index');
     Route::post('/articles', [PanelApiControllers\ArticleController::class, 'store'])->name('articles.store');
     Route::put('/articles/{article}', [PanelApiControllers\ArticleController::class, 'update'])->name('articles.update');
