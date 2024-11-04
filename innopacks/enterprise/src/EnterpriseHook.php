@@ -9,7 +9,7 @@
 
 namespace InnoShop\Enterprise;
 
-use Throwable;
+use InnoShop\Enterprise\Hooks\Product;
 
 class EnterpriseHook
 {
@@ -20,7 +20,9 @@ class EnterpriseHook
 
     /**
      * @return void
-     * @throws Throwable
      */
-    public function init(): void {}
+    public function init(): void
+    {
+        Product::getInstance()->init();
+    }
 }

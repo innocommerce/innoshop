@@ -23,6 +23,8 @@ use Throwable;
 
 class EnterpriseServiceProvider extends ServiceProvider
 {
+    private static bool $loaded = false;
+
     /**
      * config path.
      */
@@ -36,10 +38,11 @@ class EnterpriseServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        load_settings();
-        $this->registerConfig();
-        $this->registerMigrations();
+        if (self::$loaded) {
+            return;
+        }
 
+        $this->registerConfig();
         $this->registerMigrations();
         $this->registerCommands();
         $this->registerFrontRoutes();
@@ -49,6 +52,8 @@ class EnterpriseServiceProvider extends ServiceProvider
         $this->loadViewTemplates();
 
         EnterpriseHook::getInstance()->init();
+
+        self::$loaded = true;
     }
 
     /**
