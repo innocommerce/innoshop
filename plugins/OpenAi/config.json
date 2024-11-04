@@ -1,0 +1,18 @@
+{
+  "code": "open_ai",
+  "name": {
+    "zh_cn": "OpenAI 集成",
+    "en": "OpenAI Integration"
+  },
+  "description": {
+    "zh_cn": "OpenAI 集成, 优化并生成产品、文章相关内容",
+    "en": "OpenAI Integration for Content Generation"
+  },
+  "type": "intelli",
+  "version": "v1.0.0",
+  "icon": "/images/logo.png",
+  "author": {
+    "name": "InnoShop",
+    "email": "edward@innoshop.com"
+  }
+}

@@ -8,8 +8,8 @@
  */
 
 return [
-    'edition' => 'community',
-    'version' => '0.3.5',
-    'build'   => '20241024',
-    'api_url' => env('INNOSHOP_API_URL', 'https://www.innoshop.cn'),
+    'type'    => '计算方式',
+    'fixed'   => '固定运费',
+    'percent' => '百分比',
+    'value'   => '运费值',
 ];
