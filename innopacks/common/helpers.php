@@ -952,7 +952,7 @@ if (! function_exists('innoshop_version')) {
      */
     function innoshop_version(): string
     {
-        return 'v'.config('innoshop.version').'('.config('innoshop.build').')';
+        return ucfirst(config('innoshop.edition')).' v'.config('innoshop.version').'('.config('innoshop.build').')';
     }
 }
 
