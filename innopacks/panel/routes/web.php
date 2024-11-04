@@ -28,6 +28,7 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/orders/{order}/status', [Controllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
 
         Route::resource('/order_returns', Controllers\OrderReturnController::class);
+        Route::put('/order_returns/{order_return}/status', [Controllers\OrderReturnController::class, 'changeStatus'])->name('order_returns.change_status');
 
         Route::resource('/products', Controllers\ProductController::class);
         Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
@@ -63,6 +64,8 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
+        Route::get('/sns', [Controllers\SNSController::class, 'index'])->name('sns.index');
+        Route::post('/sns', [Controllers\SNSController::class, 'store'])->name('sns.store');
 
         Route::get('/analytics', [Controllers\AnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/analytics/order', [Controllers\AnalyticsController::class, 'order'])->name('analytics_order');

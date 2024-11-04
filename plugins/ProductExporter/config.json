@@ -1,0 +1,18 @@
+{
+  "code": "product_exporter",
+  "name": {
+    "zh_cn": "产品批量导入",
+    "en": "Product Exporter"
+  },
+  "description": {
+    "zh_cn": "产品批量导入",
+    "en": "Product Exporter"
+  },
+  "type": "feature",
+  "version": "v1.0.0",
+  "icon": "/images/logo.png",
+  "author": {
+    "name": "InnoShop",
+    "email": "edward@innoshop.com"
+  }
+}

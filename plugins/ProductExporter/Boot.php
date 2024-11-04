@@ -7,9 +7,9 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Enterprise\Hooks;
+namespace Plugin\ProductExporter;
 
-class Product extends Base
+class Boot
 {
     /**
      * @return void
@@ -22,5 +22,15 @@ class Product extends Base
     /**
      * @return void
      */
-    private function addPanelMenu(): void {}
+    private function addPanelMenu(): void
+    {
+        listen_hook_filter('component.sidebar.product.routes', function ($menus) {
+            $menus[] = [
+                'title' => '批量导入',
+                'route' => 'exporter.index',
+            ];
+
+            return $menus;
+        });
+    }
 }

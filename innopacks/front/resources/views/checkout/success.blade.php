@@ -31,7 +31,7 @@
     </table>
 
     <div class="checkout-success-btns d-flex flex-column justify-content-center w-max-400 mx-auto">
-      <a href="{{ front_route('account.orders.show', ['order'=>$order]) }}" class="btn btn-lg btn-primary mb-3">View Orders</a>
+      <a href="{{ front_route('account.orders.number_show', ['number'=>$order->number]) }}" class="btn btn-lg btn-primary mb-3">View Order</a>
       <a href="{{ front_route('home.index') }}" class="btn btn-lg btn-outline-primary">Continue Shopping</a>
     </div>
   </div>

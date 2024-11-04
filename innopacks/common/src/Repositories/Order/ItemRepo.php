@@ -17,6 +17,23 @@ use InnoShop\Common\Repositories\BaseRepo;
 class ItemRepo extends BaseRepo
 {
     /**
+     * @param  $order
+     * @return array
+     */
+    public function getOptions($order): array
+    {
+        $options = [];
+        foreach ($order->items as $item) {
+            $options[] = [
+                'key'   => $item->id,
+                'label' => $item->name,
+            ];
+        }
+
+        return $options;
+    }
+
+    /**
      * @param  Order  $order
      * @param  $items
      * @return void

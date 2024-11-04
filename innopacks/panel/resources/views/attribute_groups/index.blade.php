@@ -4,7 +4,7 @@
 @section('title', __('panel/menu.attribute_groups'))
 
 @push('header')
-<script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
+<script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
 <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
 <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
 @endpush

@@ -7,11 +7,8 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Common\Models\OrderReturn;
-
-use InnoShop\Common\Models\BaseModel;
-
-class Item extends BaseModel
-{
-    protected $table = 'order_return_items';
-}
+return [
+    'title'  => '批量导入',
+    'export' => '导出 Excel',
+    'import' => '导入 Excel',
+];

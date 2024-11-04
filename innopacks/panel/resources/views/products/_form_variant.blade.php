@@ -1,7 +1,7 @@
 @push('header')
-<script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
-<script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
-<script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
+  <script src="{{ asset('vendor/vue/3.5/vue.global.prod.js') }}"></script>
+  <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
+  <script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
 @endpush
 
 <div class="card variants-box mb-3" id="variants-box">

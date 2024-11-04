@@ -12,9 +12,11 @@ namespace InnoShop\Front\Controllers\Account;
 use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\OrderReturn;
+use InnoShop\Common\Repositories\Order\ItemRepo;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Repositories\OrderReturnRepo;
 use InnoShop\Front\Controllers\BaseController;
+use Throwable;
 
 class OrderReturnController extends BaseController
 {
@@ -38,9 +40,13 @@ class OrderReturnController extends BaseController
             'number'      => $number,
             'customer_id' => current_customer_id(),
         ];
+        $order   = OrderRepo::getInstance()->builder($filters)->firstOrFail();
+        $options = ItemRepo::getInstance()->getOptions($order);
+
         $data = [
-            'number' => $number,
-            'order'  => OrderRepo::getInstance()->builder($filters)->firstOrFail(),
+            'number'  => $number,
+            'order'   => $order,
+            'options' => $options,
         ];
 
         return inno_view('account.order_return_create', $data);
@@ -49,20 +55,29 @@ class OrderReturnController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function store(Request $request): mixed
     {
+        $data = $request->all();
         try {
-            $orderReturn = OrderReturnRepo::getInstance()->create($request->all());
+            $data['customer_id'] = current_customer_id();
+            $orderReturn         = OrderReturnRepo::getInstance()->create($data);
 
             return redirect(account_route('order_returns.index'))
                 ->with('instance', $orderReturn);
         } catch (Exception $e) {
-            return redirect(account_route('order_returns.index'))
-                ->withInput()
-                ->withErrors(['error' => $e->getMessage()]);
+            return back()->withInput()->withErrors(['errors' => $e->getMessage()]);
         }
+    }
+
+    public function show(OrderReturn $orderReturn)
+    {
+        $data = [
+            'order_return' => $orderReturn,
+        ];
+
+        return inno_view('account.order_return_show', $data);
     }
 
     /**
@@ -70,7 +85,7 @@ class OrderReturnController extends BaseController
      * @return mixed
      * @throws Exception
      */
-    public function show(OrderReturn $order_return): mixed
+    public function destroy(OrderReturn $order_return): mixed
     {
         $order_return->delete();
 

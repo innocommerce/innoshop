@@ -12,6 +12,7 @@ namespace InnoShop\Front\Controllers\Account;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Review;
 use InnoShop\Common\Repositories\ReviewRepo;
@@ -23,7 +24,7 @@ class ReviewController extends BaseController
     /**
      * @return mixed
      */
-    public function index()
+    public function index(): mixed
     {
         $filters = [
             'customer_id' => current_customer_id(),
@@ -43,10 +44,20 @@ class ReviewController extends BaseController
      */
     public function store(Request $request): mixed
     {
-        $productID = $request->get('product_id');
-        $product   = Product::query()->findOrFail($productID);
-
         try {
+            $productID   = $request->get('product_id');
+            $orderItemID = $request->get('order_item_id');
+            if ($productID) {
+                $product = Product::query()->findOrFail($productID);
+            } elseif ($orderItemID) {
+                $orderItem = Item::query()->findOrFail($orderItemID);
+                $product   = $orderItem->product;
+            }
+
+            if (empty($product)) {
+                throw new \Exception('invalid product.');
+            }
+
             $data = $request->all();
 
             $data['customer_id'] = current_customer_id();

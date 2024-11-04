@@ -22,7 +22,7 @@
     <li class="{{ equal_route_name('front.account.addresses.index') ? 'active' : '' }}">
       <a href="{{ account_route('addresses.index') }}"><i class="bi bi-geo-alt"></i>{{ front_trans('account.addresses') }}</a>
     </li>
-    <li class="{{ equal_route_name('front.account.order_returns.index') ? 'active' : '' }}">
+    <li class="{{ equal_route_name(['front.account.order_returns.index', 'front.account.order_returns.create', 'front.account.order_returns.show']) ? 'active' : '' }}">
       <a href="{{ account_route('order_returns.index') }}"><i class="bi bi-backpack"></i>{{ front_trans('account.order_returns') }}</a>
     </li>
     <li class="{{ equal_route_name('front.account.edit.index') ? 'active' : '' }}">

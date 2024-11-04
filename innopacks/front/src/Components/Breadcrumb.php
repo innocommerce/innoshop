@@ -35,20 +35,22 @@ class Breadcrumb extends Component
         $accountRoutes = [
             'account.orders.index',
             'account.favorites.index',
+            'account.reviews.index',
             'account.addresses.index',
+            'account.order_returns.index',
             'account.edit.index',
             'account.password.index',
         ];
 
-        if ($type == 'order' || in_array($value, $accountRoutes)) {
+        if (in_array($type, ['order', 'order_return']) || in_array($value, $accountRoutes)) {
             $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.index', front_trans('account.account'));
         }
 
         if ($type == 'order') {
             $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.orders.index', front_trans('account.orders'));
-        }
-
-        if ($type == 'brand') {
+        } elseif ($type == 'order_return') {
+            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.order_returns.index', front_trans('account.order_returns'));
+        } elseif ($type == 'brand') {
             $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'brands.index', front_trans('product.brand'));
         }
 

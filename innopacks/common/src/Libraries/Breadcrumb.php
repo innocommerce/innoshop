@@ -42,6 +42,11 @@ class Breadcrumb
                 'title' => $object->number,
                 'url'   => account_route('orders.show', ['order' => $object->id]),
             ];
+        } elseif ($type == 'order_return') {
+            return [
+                'title' => $object->number,
+                'url'   => account_route('order_returns.show', ['order_return' => $object->id]),
+            ];
         } elseif ($type == 'route') {
             if (empty($title)) {
                 $title = front_trans('common.'.str_replace('.', '_', $object));
