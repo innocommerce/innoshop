@@ -1,0 +1,42 @@
+body.page-home {
+  .module-title-wrap {
+    margin-bottom: 30px;
+
+    .module-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: .7rem;
+      position: relative;
+      color: #222;
+
+      @media (max-width: 768px) {
+        font-size: 1.4rem;
+        margin-bottom: .2rem;
+      }
+    }
+
+    .module-sub-title {
+      text-align: center;
+      font-size: 1rem;
+      color: #768088;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.4;
+      max-width: 840px;
+
+      @media (max-width: 768px) {
+        font-size: .87rem;
+      }
+    }
+  }
+
+  .module-line {
+    margin-bottom: 20px;
+
+    @media (min-width: 768px) {
+      margin-bottom: 40px;
+    }
+  }
+}
+

@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'account'            => '개인 정보',
+    'admins'             => '관리자 사용자',
+    'analytics'          => '사이트 분석',
+    'analytics_customer' => '고객 분석',
+    'analytics_order'    => '주문 분석',
+    'analytics_product'  => '상품 분석',
+    'articles'           => '글 관리',
+    'attribute_groups'   => '속성 그룹',
+    'attributes'         => '속성',
+    'brands'             => '상품 브랜드',
+    'catalogs'           => '글 카테고리',
+    'categories'         => '상품 카테고리',
+    'content_ai'         => 'AI 콘텐츠 생성',
+    'countries'          => '국가 또는 지역',
+    'currencies'         => '통화',
+    'currency'           => '환율 설정',
+    'customer_groups'    => '고객 그룹',
+    'customers'          => '고객 관리',
+    'dashboard'          => '대시보드',
+    'locale'             => '언어 관리',
+    'locales'            => '언어 설정',
+    'localization'       => '로컬라이제이션',
+    'marketplaces'       => '마켓플레이스',
+    'order_returns'      => '반품 관리',
+    'orders'             => '주문 관리',
+    'pages'              => '페이지 관리',
+    'plugin_market'      => '플러그인 시장',
+    'plugins'            => '플러그인 설정',
+    'product'            => '상품',
+    'products'           => '상품 관리',
+    'regions'            => '지역 그룹',
+    'reviews'            => '리뷰 관리',
+    'roles'              => '관리자 역할',
+    'settings'           => '시스템 설정',
+    'states'             => '성 또는 주',
+    'tags'               => '글 태그',
+    'tax_classes'        => '세금 클래스',
+    'tax_rates'          => '세율',
+    'theme_market'       => '테마 시장',
+    'themes'             => '테마 전환',
+    'themes_settings'    => '인터페이스 설정',
+    'top_analytic'       => '분석',
+    'top_content'        => '콘텐츠',
+    'top_customer'       => '고객',
+    'top_design'         => '디자인',
+    'top_order'          => '주문',
+    'top_plugin'         => '플러그인',
+    'top_product'        => '상품',
+    'top_setting'        => '설정',
+    'upload'             => '업로드 기능',
+];

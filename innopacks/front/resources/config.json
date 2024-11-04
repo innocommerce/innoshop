@@ -1,0 +1,17 @@
+{
+    "code": "default",
+    "name": {
+        "zh_cn": "InnoShop 默认模板",
+        "en": "InnoShop Default Theme"
+    },
+    "description": {
+        "zh_cn": "InnoShop 默认模板",
+        "en": "InnoShop Default Theme"
+    },
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}

@@ -1,0 +1,69 @@
+.page-login {
+  // background-color: #1B202F;
+  background-color: #f3f8fc;
+  background-image: url('/images/panel/login-bg.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  .container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .locale-wrap {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+
+    .locale {
+      cursor: pointer;
+      padding-bottom: 10px;
+
+      &:hover {
+        .dropdown-menu {
+          display: block;
+          position: absolute;
+          inset: -2px 0px auto auto;
+          margin: 0px;
+          transform: translate3d(0px, 30px, 0px);
+        }
+      }
+    }
+  }
+
+  .login-wrap {
+    width: 100%;
+  }
+
+  .login-content {
+    max-width: 550px;
+    margin: auto;
+    box-shadow: 4px 7px 20px rgba(3, 49, 133, .17);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px 20px;
+
+
+    .card-header {
+      border: none;
+      padding-bottom: 0;
+    }
+
+    .card-body {
+      padding: 30px 30px 0;
+
+      @media (max-width: 768px) {
+        padding: 15px 0 0;
+      }
+    }
+
+    .form-floating {
+      label {
+        font-size: 1rem;
+      }
+    }
+  }
+}

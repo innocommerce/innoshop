@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'account'            => '個人信息',
+    'admins'             => '後台用戶',
+    'analytics'          => '整站數據',
+    'analytics_customer' => '客戶分析',
+    'analytics_order'    => '訂單分析',
+    'analytics_product'  => '產品分析',
+    'articles'           => '文章管理',
+    'attribute_groups'   => '屬性組',
+    'attributes'         => '屬性',
+    'brands'             => '產品品牌',
+    'catalogs'           => '文章分類',
+    'categories'         => '產品分類',
+    'content_ai'         => 'AI內容生成',
+    'countries'          => '國家或者地區',
+    'currencies'         => '貨幣兌率',
+    'currency'           => '匯率設置',
+    'customer_groups'    => '客戶分組',
+    'customers'          => '客戶管理',
+    'dashboard'          => '概覽',
+    'locale'             => '語言管理',
+    'locales'            => '語言設置',
+    'localization'       => '本地化',
+    'marketplaces'       => '應用市場',
+    'order_returns'      => '售後管理',
+    'orders'             => '訂單管理',
+    'pages'              => '單頁管理',
+    'plugin_market'      => '插件市場',
+    'plugins'            => '插件設置',
+    'product'            => '產品',
+    'products'           => '產品管理',
+    'regions'            => '區域組',
+    'reviews'            => '評論管理',
+    'roles'              => '後台角色',
+    'settings'           => '系統設置',
+    'states'             => '省份或者州',
+    'tags'               => '文章標籤',
+    'tax_classes'        => '稅類設置',
+    'tax_rates'          => '稅率設置',
+    'theme_market'       => '主題市場',
+    'themes'             => '主題切換',
+    'themes_settings'    => '界面設置',
+    'top_analytic'       => '分析',
+    'top_content'        => '內容',
+    'top_customer'       => '客戶',
+    'top_design'         => '界面',
+    'top_order'          => '訂單',
+    'top_plugin'         => '插件',
+    'top_product'        => '產品',
+    'top_setting'        => '設置',
+    'upload'             => '上傳功能',
+];

@@ -1,0 +1,18 @@
+$primary: #409eff;
+$price: #E53E3E;
+$panel-primary: #944FE8;
+
+.panel-text-primary {
+    color: $primary !important;
+}
+.panel-item-active {
+    color: $primary !important;
+}
+.panel-item-active-border {
+    color: $primary !important;
+    border-bottom: 2px solid rgba($primary,1) !important;
+}
+.panel-item-hover {
+    color: $primary;
+    background-color: rgba($primary,0.2) !important;
+}

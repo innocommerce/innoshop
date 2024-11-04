@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'account'            => 'ข้อมูลส่วนตัว',
+    'admins'             => 'ผู้ใช้ในระบบหลังบ้าน',
+    'analytics'          => 'ข้อมูลทั้งเว็บไซต์',
+    'analytics_customer' => 'การวิเคราะห์ลูกค้า',
+    'analytics_order'    => 'การวิเคราะห์คำสั่งซื้อ',
+    'analytics_product'  => 'การวิเคราะห์สินค้า',
+    'articles'           => 'การจัดการบทความ',
+    'attribute_groups'   => 'กลุ่มคุณลักษณะ',
+    'attributes'         => 'คุณลักษณะ',
+    'brands'             => 'แบรนด์สินค้า',
+    'catalogs'           => 'หมวดหมู่บทความ',
+    'categories'         => 'หมวดหมู่สินค้า',
+    'content_ai'         => 'การสร้างเนื้อหา AI',
+    'countries'          => 'ประเทศหรือภูมิภาค',
+    'currencies'         => 'อัตราแลกเปลี่ยนเงินตรา',
+    'currency'           => 'การตั้งค่าอัตราแลกเปลี่ยน',
+    'customer_groups'    => 'กลุ่มลูกค้า',
+    'customers'          => 'การจัดการลูกค้า',
+    'dashboard'          => 'ภาพรวม',
+    'locale'             => 'การจัดการภาษา',
+    'locales'            => 'การตั้งค่าภาษา',
+    'localization'       => 'การแปลและปรับท้องถิ่น',
+    'marketplaces'       => 'ตลาดแอปพลิเคชัน',
+    'order_returns'      => 'การจัดการหลังการขาย',
+    'orders'             => 'การจัดการคำสั่งซื้อ',
+    'pages'              => 'การจัดการหน้า',
+    'plugin_market'      => 'ตลาดปลั๊กอิน',
+    'plugins'            => 'การตั้งค่าปลั๊กอิน',
+    'product'            => 'สินค้า',
+    'products'           => 'การจัดการสินค้า',
+    'regions'            => 'กลุ่มภูมิภาค',
+    'reviews'            => 'การจัดการรีวิว',
+    'roles'              => 'บทบาทในระบบหลังบ้าน',
+    'settings'           => 'การตั้งค่าระบบ',
+    'states'             => 'จังหวัดหรือรัฐ',
+    'tags'               => 'แท็กบทความ',
+    'tax_classes'        => 'การตั้งค่าประเภทภาษี',
+    'tax_rates'          => 'การตั้งค่าอัตราภาษี',
+    'theme_market'       => 'ตลาดธีม',
+    'themes'             => 'การเปลี่ยนธีม',
+    'themes_settings'    => 'การตั้งค่าหน้าตา',
+    'top_analytic'       => 'การวิเคราะห์',
+    'top_content'        => 'เนื้อหา',
+    'top_customer'       => 'ลูกค้า',
+    'top_design'         => 'การออกแบบ',
+    'top_order'          => 'คำสั่งซื้อ',
+    'top_plugin'         => 'ปลั๊กอิน',
+    'top_product'        => 'สินค้า',
+    'top_setting'        => 'การตั้งค่า',
+    'upload'             => 'ฟังก์ชันการอัปโหลด',
+];

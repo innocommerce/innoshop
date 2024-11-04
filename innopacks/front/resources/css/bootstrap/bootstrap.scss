@@ -1,0 +1,79 @@
+$primary: #E91E63;
+
+$font-size-base: 0.84rem;
+$border-radius: 0.275rem;
+
+// 开启负边距
+$enable-negative-margins: true;
+// $body-bg: #f7f8f4;
+
+$input-btn-focus-box-shadow: 0 0 11px 0 rgba($color: $primary, $alpha: .1);
+$input-bg: #fff;
+
+$form-select-focus-box-shadow: none;
+// $input-focus-box-shadow: none;
+
+$table-border-color: #e9ecef;
+$table-bg: transparent;
+
+$font-family-base: "Jost", Arial, sans-serif;
+
+$border-radius: 0.275rem;
+$btn-border-radius-sm: 0.175rem;
+$btn-border-radius-lg: 0.275rem;
+$border-radius-lg: 0.275rem;
+
+$bootstrap-icons-font: "bootstrap-icons" !default;
+$bootstrap-icons-font-src: url("/vendor/bootstrap-icons/bootstrap-icons.woff2?08efbba7c53d8c5413793eecb19b20bb") format("woff2"),
+url("/vendor/bootstrap-icons/bootstrap-icons.woff?08efbba7c53d8c5413793eecb19b20bb") format("woff") !default;
+
+@font-face {
+  font-display: block;
+  font-family: $bootstrap-icons-font;
+  src: $bootstrap-icons-font-src;
+}
+
+$pagination-border-width: 0;
+$pagination-bg: #f4f4f5;
+$pagination-color: #606266;
+$pagination-border-radius: 2px;
+$pagination-disabled-bg: $pagination-bg;
+$pagination-disabled-color: #c0c4cc;
+$pagination-hover-color: $primary;
+$pagination-padding-x: 4px;
+$pagination-padding-y: .3rem;
+$pagination-focus-color: #606266;
+
+.pagination-wrap {
+  justify-content: center;
+}
+
+.pagination {
+  > li {
+    margin: 0 5px;
+    font-weight: bold;
+    a, span {
+      text-align: center;
+      border-radius: 2px !important;
+      min-width: 30px;
+    }
+  }
+}
+
+$form-validation-states: (
+  "invalid": (
+    "color": #dc3545,
+    "icon": url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e")
+  )
+);
+
+// $container-max-widths: (
+//   sm: 540px,
+//   md: 720px,
+//   lg: 960px,
+//   xl: 1180px,
+//   xxl: 1380px
+// );
+
+@import 'bootstrap-icons';
+@import '~bootstrap/scss/bootstrap';

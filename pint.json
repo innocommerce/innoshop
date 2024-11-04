@@ -1,0 +1,25 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "array_indentation": true,
+        "array_syntax": {
+            "syntax": "short"
+        },
+        "binary_operator_spaces": {
+            "default": "align_single_space_minimal"
+        },
+        "no_superfluous_phpdoc_tags": false,
+        "phpdoc_separation": false
+    },
+    "exclude": [
+        "app",
+        "bootstrap",
+        "config",
+        "node_modules",
+        "public",
+        "resources",
+        "storage",
+        "themes",
+        "vendor"
+    ]
+}

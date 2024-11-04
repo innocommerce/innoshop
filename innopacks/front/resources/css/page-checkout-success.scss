@@ -1,0 +1,50 @@
+body.page-checkout-success {
+  .checkout-success-box {
+    border: 1px solid #ECF0F4;
+    padding: 20px 10px;
+    max-width: 730px;
+    margin: 0 auto;
+
+    @media (min-width: 768px) {
+      padding: 30px;
+    }
+
+    .order-success-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      img {
+        max-width: 170px;
+
+        @media (min-width: 768px) {
+          max-width: 200px;
+        }
+      }
+    }
+
+    .checkout-success-table {
+      th, td {
+        padding: 10px 0;
+      }
+    }
+
+    .checkout-success-title {
+      margin-bottom: 20px;
+      text-align: center;
+
+      @media (min-width: 768px) {
+        margin-bottom: 30px;
+      }
+
+      span {
+        font-size: 18px;
+        font-weight: bold;
+
+        @media (min-width: 768px) {
+          font-size: 30px;
+        }
+      }
+    }
+  }
+}

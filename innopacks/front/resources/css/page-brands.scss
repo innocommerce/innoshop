@@ -1,0 +1,44 @@
+body.page-brands {
+  .brand-group {
+    width: 100%;
+
+    .btn {
+      border: 1px solid #e8e8e8;
+      &:hover {
+        background-color: #f4f4f4;
+      }
+    }
+  }
+
+  .brands-wrap {
+    margin-top: 30px;
+
+    .item {
+      ul {
+        padding-left: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -10px;
+
+        li {
+          padding: 0 10px;
+          margin-bottom: 20px;
+
+          a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .img {
+              width: 99px;
+              border: 1px solid #e8e8e8;
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
