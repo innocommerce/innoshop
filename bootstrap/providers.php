@@ -6,9 +6,9 @@ return [
 
     InnoShop\Install\InstallServiceProvider::class,
     InnoShop\Common\CommonServiceProvider::class,
-    InnoShop\Enterprise\EnterpriseServiceProvider::class,
     InnoShop\Panel\PanelServiceProvider::class,
     InnoShop\Front\FrontServiceProvider::class,
     InnoShop\RestAPI\RestAPIServiceProvider::class,
+    InnoShop\Enterprise\EnterpriseServiceProvider::class,
     InnoShop\Plugin\PluginServiceProvider::class,
 ];
