@@ -48,6 +48,7 @@ class EnterpriseServiceProvider extends ServiceProvider
         $this->registerFrontRoutes();
         $this->registerFrontApiRoutes();
         $this->registerPanelRoutes();
+        $this->registerRootRoutes();
         $this->loadTranslations();
         $this->loadViewTemplates();
 
@@ -165,6 +166,25 @@ class EnterpriseServiceProvider extends ServiceProvider
         Route::prefix($adminName)
             ->middleware(['panel', 'admin_auth:admin'])
             ->name("$adminName.")
+            ->group(function () use ($routePath) {
+                $this->loadRoutesFrom($routePath);
+            });
+    }
+
+    /**
+     * Register callback routes
+     *
+     * @return void
+     */
+    private function registerRootRoutes(): void
+    {
+        $routePath = realpath($this->basePath.'routes/root.php');
+        if (! file_exists($routePath)) {
+            return;
+        }
+
+        Route::middleware('front')
+            ->name('front.')
             ->group(function () use ($routePath) {
                 $this->loadRoutesFrom($routePath);
             });
