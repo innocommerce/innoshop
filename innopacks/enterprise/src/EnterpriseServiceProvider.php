@@ -38,6 +38,10 @@ class EnterpriseServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (! installed()) {
+            return;
+        }
+
         if (self::$loaded) {
             return;
         }
