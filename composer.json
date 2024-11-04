@@ -85,8 +85,8 @@
             "composer run post-update-cmd",
             "composer run post-root-package-install",
             "composer run post-create-project-cmd",
-          "chmod 755 .env",
-          "chcon -R -t httpd_sys_rw_content_t .env"
+            "chmod 755 .env",
+            "chcon -R -t httpd_sys_rw_content_t .env"
         ]
     },
     "extra": {
