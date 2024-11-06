@@ -1,4 +1,4 @@
-@if (count($variants))
+@if (is_array($variants) && count($variants))
 <div class="product-variant-box">
   @foreach($variants as $key => $variant)
     <div class="product-variant">
