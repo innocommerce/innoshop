@@ -2,7 +2,14 @@
 @section('body-class', 'page-plugins-market')
 
 @section('title', __('panel/menu.theme_market'))
-
+@push('header')
+    <style>
+        .panel-item-active {
+            background-color: #e4eff7 !important;
+            color: #409eff !important;
+        }
+    </style>
+@endpush'header')
 @section('content')
   @include('plugin::shared._token_info')
   <div class="card h-min-600">
