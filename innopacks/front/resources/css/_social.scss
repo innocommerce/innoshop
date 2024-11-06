@@ -1,0 +1,21 @@
+.line {
+    width: 50%;
+    height: 1px;
+    background:  #c3c1c1;
+}
+.word {
+    color: #c3c1c1;
+}
+.social-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+}

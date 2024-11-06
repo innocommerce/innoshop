@@ -42,6 +42,7 @@ return [
     'reviews'            => 'Pengurusan Ulasan',
     'roles'              => 'Peranan Admin',
     'settings'           => 'Tetapan Sistem',
+    'sns'                => 'Log masuk pihak ketiga',
     'states'             => 'Negeri atau Wilayah',
     'tags'               => 'Tag Artikel',
     'tax_classes'        => 'Tetapan Kelas Cukai',

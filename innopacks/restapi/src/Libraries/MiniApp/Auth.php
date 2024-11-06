@@ -13,7 +13,6 @@ use EasyWeChat\Kernel\Exceptions\HttpException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\MiniApp\Application;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use InnoShop\Common\Repositories\Customer\SocialRepo;
 use Symfony\Contracts\HttpClient\Exception;
 use Throwable;
@@ -110,13 +109,7 @@ class Auth
      */
     public function findCustomerByCode(): mixed
     {
-        $socialData = $this->getSocialData();
-        if (! Schema::hasTable('customer_socials')) {
-            $message = '第三方登录未安装，请到网站后台 插件 - 插件设置 - Social，安装';
-
-            throw new \Exception($message);
-        }
-
+        $socialData     = $this->getSocialData();
         $customerSocial = SocialRepo::getInstance()->getSocialByProviderAndUser('miniapp', $socialData['uid']);
         $customer       = $customerSocial->customer ?? null;
         if ($customer) {

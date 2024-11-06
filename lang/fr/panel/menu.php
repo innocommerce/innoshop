@@ -42,6 +42,7 @@ return [
     'reviews'            => 'Gestion des critiques',
     'roles'              => 'Rôles backend',
     'settings'           => 'Paramètres système',
+    'sns'                => 'Connexion tierce partie',
     'states'             => 'États et provinces',
     'tags'               => 'Étiquettes d\'article',
     'tax_classes'        => 'Paramètres de taxe',

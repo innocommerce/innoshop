@@ -1,7 +1,7 @@
 @push('header')
-<script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
-<script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
-<script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
+  <script src="{{ asset('vendor/vue/3.5/vue.global.prod.js') }}"></script>
+  <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
+  <script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
 @endpush
 
 <div class="card variants-box mb-3" id="variants-box">
@@ -436,7 +436,7 @@
         let formData = new FormData();
         formData.append('image', file);
         formData.append('type', 'common');
-        axios.post('{{ front_route('upload.images') }}', formData, {}).then(function (res) {
+        axios.post('{{ front_root_route('upload.images') }}', formData, {}).then(function (res) {
           let val = res.data.value;
 
           // 如果 init_index 不等于 undefined，就要替换这个规格下的所有 sku 的图片

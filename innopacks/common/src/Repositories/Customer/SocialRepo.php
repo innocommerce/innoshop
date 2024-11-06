@@ -9,8 +9,10 @@
 
 namespace InnoShop\Common\Repositories\Customer;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Customer\Social;
@@ -20,6 +22,52 @@ use Throwable;
 
 class SocialRepo extends BaseRepo
 {
+    private const PROVIDER_CODES = [
+        'facebook',
+        'twitter',
+        'google',
+    ];
+
+    /**
+     * @return array
+     */
+    public function getProviders(): array
+    {
+        $items = [];
+        foreach (self::PROVIDER_CODES as $provider) {
+            $items[] = [
+                'code'  => $provider,
+                'label' => panel_trans("sns.{$provider}"),
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function initSocialConfig(): void
+    {
+        $providerSettings = system_setting('social', []);
+        foreach ($providerSettings as $providerSetting) {
+            $provider = $providerSetting['provider'] ?? '';
+            if (empty($provider)) {
+                continue;
+            }
+            $config = [
+                'client_id'     => $providerSetting['client_id'],
+                'client_secret' => $providerSetting['client_secret'],
+                'redirect'      => front_root_route('social.callback', $provider),
+            ];
+            if ($provider == 'twitter') {
+                $provider = 'twitter-oauth-2';
+            }
+            Config::set("services.{$provider}", $config);
+        }
+    }
+
     /**
      * @param  $provider
      * @param  array  $userData

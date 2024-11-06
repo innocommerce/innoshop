@@ -42,6 +42,7 @@ return [
     'reviews'            => 'quản lý đánh giá',
     'roles'              => 'vai trò backend',
     'settings'           => 'thiết lập hệ thống',
+    'sns'                => 'Đăng nhập qua bên thứ ba',
     'states'             => 'tỉnh hoặc bang',
     'tags'               => 'thẻ bài viết',
     'tax_classes'        => 'thiết lập loại thuế',

@@ -42,6 +42,7 @@ return [
     'reviews'            => 'Gestione recensioni',
     'roles'              => 'Ruoli amministratore',
     'settings'           => 'Impostazioni di sistema',
+    'sns'                => 'Accesso di terze parti',
     'states'             => 'Province e stati',
     'tags'               => 'Tag articoli',
     'tax_classes'        => 'Classi fiscali',

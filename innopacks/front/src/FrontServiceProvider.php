@@ -111,8 +111,10 @@ class FrontServiceProvider extends ServiceProvider
         }
 
         Route::middleware('front')
-            ->get('/', [Controllers\HomeController::class, 'index'])
-            ->name('front.home.index');
+            ->name('front.')
+            ->group(function () {
+                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/root.php'));
+            });
 
         $locales = locales();
         if (count($locales) == 1) {

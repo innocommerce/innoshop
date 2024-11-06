@@ -64,6 +64,8 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
+        Route::get('/social', [Controllers\SocialController::class, 'index'])->name('socials.index');
+        Route::post('/social', [Controllers\SocialController::class, 'store'])->name('socials.store');
 
         Route::get('/analytics', [Controllers\AnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/analytics/order', [Controllers\AnalyticsController::class, 'order'])->name('analytics_order');

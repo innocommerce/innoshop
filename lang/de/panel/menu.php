@@ -42,6 +42,7 @@ return [
     'reviews'            => 'Bewertungsverwaltung',
     'roles'              => 'Admin Rollen',
     'settings'           => 'Systemeinstellungen',
+    'sns'                => 'Drittanbieter-Anmeldung',
     'states'             => 'Bundesländer oder Staaten',
     'tags'               => 'Artikel-Tags',
     'tax_classes'        => 'Steuerklassen',
