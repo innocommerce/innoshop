@@ -1,0 +1,14 @@
+.plugin-market-nav-item {
+    & :hover{
+        color: $primary;
+    }
+}
+
+.product-grid-item .product-item-info .product-price {
+    justify-content: left;
+}
+
+.panel-item-active {
+    background-color: #e4eff7;
+    color: #409eff;
+}
