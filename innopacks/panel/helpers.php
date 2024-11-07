@@ -133,9 +133,8 @@ if (! function_exists('panel_route')) {
      */
     function panel_route($name, mixed $parameters = [], bool $absolute = true): string
     {
+        $panelName = panel_name();
         try {
-            $panelName = panel_name();
-
             return route($panelName.'.'.$name, $parameters, $absolute);
         } catch (\Exception $e) {
             return route($panelName.'.dashboard.index');
