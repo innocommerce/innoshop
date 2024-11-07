@@ -53,7 +53,7 @@ class PluginMarketController
         $marketService = MarketplaceService::getInstance()
             ->setPage($request->get('page', 1))
             ->setPerPage($request->get('per_page', 8));
-        $data          = [
+        $data = [
             'categories' => $marketService->getPluginCategories(),
             'product'    => $marketService->getProductDetail($slug),
         ];
