@@ -17,7 +17,7 @@
              class="text-dark text-decoration-none">{{ $product['name'] }}</a></h5>
 
         @if($product['seller_name'])
-          <p class="card-text text-start ">作者：
+          <p class="card-text text-start ">{{ trans('panel/plugin.author') }}：
             <a href="{{ $product['seller_url'] }}" class="text-start" target="_blank">
               <span class="panel-text-primary">{{ $product['seller_name'] }}</span>
             </a>
@@ -43,7 +43,7 @@
               </a>
             </div>
             <div class="product-price text-start">
-              @if ($product['origin_price_format'])
+              @if ($product['origin_price'])
                 <div class="price-old">{{ $product['origin_price_format'] }}</div>
               @endif
               <div class="price-new">{{ $product['price_format'] }}</div>
