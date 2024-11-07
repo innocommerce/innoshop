@@ -28,11 +28,13 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/orders/{order}/status', [Controllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
 
         Route::resource('/order_returns', Controllers\OrderReturnController::class);
+        Route::put('/order_returns/{order_return}/status', [Controllers\OrderReturnController::class, 'changeStatus'])->name('order_returns.change_status');
 
         Route::resource('/products', Controllers\ProductController::class);
+        Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
 
         Route::resource('/categories', Controllers\CategoryController::class);
-        Route::put('/categories/{currency}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');
+        Route::put('/categories/{category}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');
 
         Route::resource('/attribute_groups', Controllers\AttributeGroupController::class);
 
@@ -76,7 +78,7 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/locales/{country}/active', [Controllers\LocaleController::class, 'active'])->name('locales.active');
 
         Route::get('/themes', [Controllers\ThemeController::class, 'index'])->name('themes.index');
-        Route::put('/themes/{country}/active', [Controllers\ThemeController::class, 'enable'])->name('themes.active');
+        Route::put('/themes/{code}/active', [Controllers\ThemeController::class, 'enable'])->name('themes.active');
         Route::get('/themes/settings', [Controllers\ThemeController::class, 'settings'])->name('themes_settings.index');
         Route::put('/themes/settings', [Controllers\ThemeController::class, 'updateSettings'])->name('themes_settings.update');
 

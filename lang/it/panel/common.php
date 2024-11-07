@@ -47,6 +47,7 @@ return [
     'meta_keywords'     => 'Meta parole chiave',
     'meta_title'        => 'Meta titolo',
     'name'              => 'Nome',
+    'no'                => 'no',
     'no_data'           => 'Nessun dato',
     'password'          => 'Password',
     'please_choose'     => 'Si prega di selezionare',
@@ -68,4 +69,5 @@ return [
     'view'              => 'Visualizza',
     'viewed'            => 'Visualizzazioni',
     'whether_enable'    => 'Abilita o meno',
+    'yes'               => 'sì',
 ];

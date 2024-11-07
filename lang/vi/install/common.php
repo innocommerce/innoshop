@@ -48,4 +48,5 @@ return [
     'table_prefix'         => 'Tiền tố bảng',
     'visit_backend'        => 'Truy cập backend',
     'visit_frontend'       => 'Truy cập frontend',
+
 ];

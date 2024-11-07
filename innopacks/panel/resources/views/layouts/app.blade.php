@@ -11,6 +11,7 @@
   <meta name="asset" content="{{ asset('/') }}">
   <meta name="description" content="@yield('description', 'InnoShop')">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="api-token" content="{{ session('api_token') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
@@ -72,8 +73,7 @@
 
       <p class="text-center text-secondary mt-5">
         <a href="https://www.innoshop.com" class="ms-2" target="_blank">InnoShop</a>
-        {{ innoshop_version() }} &copy; {{ date('Y') }} All Rights
-        Reserved
+        {{ innoshop_version() }} &copy; {{ date('Y') }} All Rights Reserved
       </p>
     </div>
   </div>

@@ -10,9 +10,11 @@
 namespace InnoShop\Common\Models\Order;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Order;
+use InnoShop\Common\Models\OrderReturn;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Models\Review;
@@ -62,6 +64,14 @@ class Item extends BaseModel
     public function review(): HasOne
     {
         return $this->hasOne(Review::class, 'order_item_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function returns(): HasMany
+    {
+        return $this->hasMany(OrderReturn::class, 'order_item_id', 'id');
     }
 
     /**

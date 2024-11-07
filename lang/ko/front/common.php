@@ -46,4 +46,6 @@ return [
     'text_hint'         => '힌트',
     'updated_success'   => '업데이트 성공',
     'view'              => '보기',
+    'yes'               => '예',
+    'no'                => '아니요',
 ];

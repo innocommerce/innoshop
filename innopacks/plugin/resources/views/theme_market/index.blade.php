@@ -2,7 +2,14 @@
 @section('body-class', 'page-plugins-market')
 
 @section('title', __('panel/menu.theme_market'))
-
+@push('header')
+    <style>
+        .panel-item-active {
+            background-color: #e4eff7 !important;
+            color: #409eff !important;
+        }
+    </style>
+@endpush'header')
 @section('content')
   @include('plugin::shared._token_info')
   <div class="card h-min-600">
@@ -20,6 +27,31 @@
                 @include('plugin::theme_market._item')
               </div>
             @endforeach
+            @if(isset($products['meta']) && $products['meta']['last_page'] > 1)
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item {{ $products['meta']['current_page'] <= 1 ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $products['meta']['current_page'] - 1]) }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    @for($i = 1; $i <= $products['meta']['last_page']; $i++)
+                        <li class="page-item {{ $products['meta']['current_page'] == $i ? 'active' : '' }}">
+                            <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $i]) }}">
+                                {{ $i }}
+                            </a>
+                        </li>
+                    @endfor
+
+                    <li class="page-item {{ $products['meta']['current_page'] >= $products['meta']['last_page'] ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $products['meta']['current_page'] + 1]) }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            @endif
           </div>
         </div>
       </div>

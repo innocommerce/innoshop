@@ -16,6 +16,7 @@ use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Panel\Repositories\ThemeRepo;
+use Throwable;
 
 class ThemeController extends BaseController
 {
@@ -49,7 +50,7 @@ class ThemeController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function updateSettings(Request $request): mixed
     {
@@ -68,14 +69,20 @@ class ThemeController extends BaseController
     }
 
     /**
+     * @param  Request  $request
      * @param  string  $themeCode
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function enable(string $themeCode): JsonResponse
+    public function enable(Request $request, string $themeCode): JsonResponse
     {
         try {
-            SettingRepo::getInstance()->updateSystemValue('theme', $themeCode);
+            $status = $request->get('status');
+            if (empty($status)) {
+                SettingRepo::getInstance()->updateSystemValue('theme', '');
+            } else {
+                SettingRepo::getInstance()->updateSystemValue('theme', $themeCode);
+            }
 
             return json_success(panel_trans('common.updated_success'));
         } catch (\Exception $e) {

@@ -2,7 +2,7 @@
 @section('body-class', 'page-order')
 
 @section('content')
-  <x-front-breadcrumb type="route" value="account.orders.index" title="{{ __('front/account.orders') }}" />
+  <x-front-breadcrumb type="route" value="account.order_returns.index" title="{{ __('front/account.order_returns') }}" />
 
   @hookinsert('account.order_return_index.top')
 
@@ -21,20 +21,24 @@
             <table class="table table-bordered table-striped mb-3 table-response">
               <thead>
               <tr>
+                <th>{{ __('front/return.number') }}</th>
                 <th>{{ __('front/order.order_number') }}</th>
-                <th>{{ __('front/return.return_number') }}</th>
-                <th>{{ __('front/return.return_status') }}</th>
+                <th>{{ __('front/return.product_name') }}</th>
+                <th>{{ __('front/return.quantity') }}</th>
                 <th>{{ __('front/common.created_at') }}</th>
+                <th>{{ __('front/common.status') }}</th>
                 <th>{{ __('front/common.action') }}</th>
               </tr>
               </thead>
               <tbody>
               @foreach($order_returns as $item)
                 <tr>
-                  <td data-title="{{ __('front/return.return_number') }}"></td>
-                  <td data-title="{{ __('front/return.return_date') }}"></td>
+                  <td data-title="{{ __('front/return.return_number') }}">{{ $item->number }}</td>
+                  <td data-title="{{ __('front/return.return_number') }}">{{ $item->order_number }}</td>
+                  <td data-title="{{ __('front/return.return_date') }}">{{ $item->product_name }}</td>
+                  <td data-title="{{ __('front/return.quantity') }}">{{ $item->quantity }}</td>
                   <td data-title="{{ __('front/return.return_date') }}">{{ $item->created_at }}</td>
-                  <td data-title="{{ __('front/return.return_status') }}"></td>
+                  <td data-title="{{ __('front/return.return_status') }}">{{ $item->status_format }}</td>
                   <td data-title="{{ __('front/common.action') }}">
                     <a href="{{ account_route('order_returns.show', ['order_return'=>$item->id]) }}" class="btn btn-primary">{{ __('front/common.view') }}</a>
                   </td>

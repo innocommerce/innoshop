@@ -10,12 +10,15 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\OrderReturn;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\OrderReturnRepo;
 use InnoShop\Common\Resources\CatalogSimple;
+use InnoShop\Common\Services\ReturnStateService;
+use Throwable;
 
 class OrderReturnController extends BaseController
 {
@@ -49,6 +52,7 @@ class OrderReturnController extends BaseController
     /**
      * @param  Request  $request
      * @return RedirectResponse
+     * @throws Throwable
      */
     public function store(Request $request): RedirectResponse
     {
@@ -75,16 +79,17 @@ class OrderReturnController extends BaseController
     }
 
     /**
-     * @param  $order_return
+     * @param  $orderReturn
      * @return mixed
      * @throws Exception
      */
-    public function form($order_return): mixed
+    public function form($orderReturn): mixed
     {
         $catalogs = CatalogSimple::collection(CatalogRepo::getInstance()->all(['active' => 1]))->jsonSerialize();
         $data     = [
-            'order_return' => $order_return,
-            'catalogs'     => $catalogs,
+            'next_statuses' => ReturnStateService::getInstance($orderReturn)->nextBackendStatuses(),
+            'order_return'  => $orderReturn,
+            'catalogs'      => $catalogs,
         ];
 
         return inno_view('panel::order_returns.form', $data);
@@ -92,14 +97,14 @@ class OrderReturnController extends BaseController
 
     /**
      * @param  Request  $request
-     * @param  OrderReturn  $order_return
+     * @param  OrderReturn  $orderReturn
      * @return RedirectResponse
      */
-    public function update(Request $request, OrderReturn $order_return): RedirectResponse
+    public function update(Request $request, OrderReturn $orderReturn): RedirectResponse
     {
         try {
             $data        = $request->all();
-            $orderReturn = OrderReturnRepo::getInstance()->update($order_return, $data);
+            $orderReturn = OrderReturnRepo::getInstance()->update($orderReturn, $data);
 
             return redirect(panel_route('order_returns.index'))
                 ->with('instance', $orderReturn)
@@ -121,6 +126,24 @@ class OrderReturnController extends BaseController
             return back()->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param  Request  $request
+     * @param  OrderReturn  $orderReturn
+     * @return JsonResponse
+     */
+    public function changeStatus(Request $request, OrderReturn $orderReturn): JsonResponse
+    {
+        $status  = $request->get('status');
+        $comment = $request->get('comment');
+        try {
+            ReturnStateService::getInstance($orderReturn)->changeStatus($status, $comment, true);
+
+            return json_success(panel_trans('common.updated_success'));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
         }
     }
 }
