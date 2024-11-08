@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Models\Attribute\Group;
 use InnoShop\Common\Repositories\Attribute\GroupRepo;
+use Throwable;
 
 class AttributeGroupController extends BaseController
 {
@@ -44,15 +45,35 @@ class AttributeGroupController extends BaseController
 
     /**
      * @param  Request  $request
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $attributeGroup = GroupRepo::getInstance()->create($request->all());
+
+            return create_json_success($attributeGroup);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * @param  Request  $request
      * @param  Group  $attributeGroup
      * @return JsonResponse
      * @throws Exception
      */
     public function update(Request $request, Attribute\Group $attributeGroup): JsonResponse
     {
-        GroupRepo::getInstance()->update($attributeGroup, $request->all());
+        try {
+            $attributeGroup = GroupRepo::getInstance()->update($attributeGroup, $request->all());
 
-        return json_success(trans('common.updated_success'));
+            return update_json_success($attributeGroup);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
     }
 
     /**
