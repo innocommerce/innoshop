@@ -82,6 +82,7 @@ class AttributeGroupController extends BaseController
      */
     public function destroy(Attribute\Group $attributeGroup): mixed
     {
+        $attributeGroup->translations()->delete();
         $attributeGroup->delete();
 
         return redirect(panel_route('attribute_groups.index'))
