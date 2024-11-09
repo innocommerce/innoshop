@@ -11,7 +11,9 @@ namespace Plugin\ProductExporter\Repositories;
 
 use Exception;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Repositories\ProductRepo;
 use Rap2hpoutre\FastExcel\SheetCollection;
+use Throwable;
 
 class ImportRepo
 {
@@ -34,7 +36,7 @@ class ImportRepo
     /**
      * @param  SheetCollection  $excelData
      * @return void
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function importSheets(SheetCollection $excelData): void
     {
@@ -49,35 +51,39 @@ class ImportRepo
     /**
      * @param  $items
      * @return void
+     * @throws Throwable
      */
     private function importProducts($items): void
     {
-        $items = collect($items)->map(function ($item) {
-            if (empty($item['deleted_at'])) {
-                unset($item['deleted_at']);
-            }
-            if (empty($item['slug'])) {
-                $item['slug'] = null;
-            }
-
-            return $item;
-        })->toArray();
-
         if ($this->clearData) {
             Product::query()->truncate();
-            Product::query()->insert($items);
         }
 
+        $productRepo = ProductRepo::getInstance();
         foreach ($items as $item) {
-            $product = Product::query()->find($item['id'] ?? 0);
-            if (empty($product) && ($item['slug'] ?? '')) {
+            if (empty($item['slug'] ?? '')) {
+                continue;
+            }
+            $itemData = $productRepo->handleProductData($item);
+            $product  = Product::query()->find($item['id'] ?? 0);
+            if (empty($product)) {
                 $product = Product::query()->where('slug', $item['slug'] ?? '')->first();
             }
 
             if ($product) {
-                $product->update($item);
+                $product->update($itemData);
             } else {
-                Product::query()->create($item);
+                $product = Product::query()->create($itemData);
+            }
+
+            if (isset($item['image'])) {
+                $product->images()->delete();
+                $images = explode(',', $item['image']);
+                $productRepo->syncImages($product, $images);
+                $coverImage = $product->images()->first();
+                if ($coverImage) {
+                    $coverImage->update(['is_cover' => 1]);
+                }
             }
         }
     }
@@ -90,7 +96,6 @@ class ImportRepo
     {
         if ($this->clearData) {
             Product\Translation::query()->truncate();
-            Product\Translation::query()->insert($items);
         }
 
         foreach ($items as $item) {
@@ -118,7 +123,6 @@ class ImportRepo
     {
         if ($this->clearData) {
             Product\Sku::query()->truncate();
-            Product\Sku::query()->insert($items);
         }
 
         foreach ($items as $item) {
@@ -127,11 +131,34 @@ class ImportRepo
                 $productSku = Product\Sku::query()->where('code', $item['code'] ?? '')->first();
             }
 
+            $itemData = $this->handleSku($item);
             if ($productSku) {
-                $productSku->update($item);
+                $productSku->update($itemData);
             } else {
-                Product\Sku::query()->create($item);
+                Product\Sku::query()->create($itemData);
             }
         }
+    }
+
+    /**
+     * @param  $skuItem
+     * @return array
+     */
+    private function handleSku($skuItem): array
+    {
+        $skuCode = $skuItem['code'] ?? '';
+
+        return [
+            'product_id'       => $skuItem['product_id'],
+            'product_image_id' => 0,
+            'variants'         => [],
+            'code'             => $skuCode,
+            'model'            => $skuItem['model']        ?? $skuCode,
+            'price'            => $skuItem['price']        ?? 0,
+            'origin_price'     => $skuItem['origin_price'] ?? 0,
+            'quantity'         => $skuItem['quantity']     ?? 0,
+            'is_default'       => 1,
+            'position'         => $skuItem['position'] ?? 0,
+        ];
     }
 }

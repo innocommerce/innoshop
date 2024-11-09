@@ -44,9 +44,12 @@ class ExportRepo
         foreach ($items as $item) {
             $itemData = $item->toArray();
 
+            unset($itemData['product_image_id']);
+            unset($itemData['product_video_id']);
+            $itemData['image']      = $item->image->path;
+            $itemData['variables']  = json_encode($itemData['variables']);
             $itemData['created_at'] = $item->created_at->format('Y-m-d H:i:s');
             $itemData['updated_at'] = $item->updated_at->format('Y-m-d H:i:s');
-            $itemData['variables']  = json_encode($itemData['variables']);
 
             $products[] = $itemData;
         }
@@ -86,6 +89,7 @@ class ExportRepo
             foreach ($item->skus as $sku) {
                 $itemData = $sku->toArray();
 
+                $itemData['variants']   = json_encode($itemData['variants']);
                 $itemData['created_at'] = $sku->created_at->format('Y-m-d H:i:s');
                 $itemData['updated_at'] = $sku->updated_at->format('Y-m-d H:i:s');
 
