@@ -25,14 +25,17 @@ class ImageRepo extends BaseRepo
             return null;
         }
 
+        $path  = str_replace('\\', '/', trim($path));
         $image = $product->images()->where('path', $path)->first();
         if ($image) {
             return $image;
         }
 
         return $product->images()->create([
-            'path'     => $path,
-            'position' => 0,
+            'path'       => $path,
+            'is_cover'   => 0,
+            'belong_sku' => 0,
+            'position'   => 0,
         ]);
     }
 }

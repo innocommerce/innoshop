@@ -12,6 +12,7 @@ namespace InnoShop\Common\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product\Image;
@@ -43,19 +44,19 @@ class Product extends BaseModel
     }
 
     /**
-     * @return BelongsTo
+     * @return HasOne
      */
-    public function image(): BelongsTo
+    public function image(): HasOne
     {
-        return $this->belongsTo(Image::class, 'product_image_id');
+        return $this->hasOne(Image::class)->where('is_cover', 1);
     }
 
     /**
-     * @return BelongsTo
+     * @return HasOne
      */
-    public function masterSku(): BelongsTo
+    public function masterSku(): HasOne
     {
-        return $this->belongsTo(Sku::class, 'product_sku_id');
+        return $this->hasOne(Sku::class)->where('is_default', 1);
     }
 
     /**

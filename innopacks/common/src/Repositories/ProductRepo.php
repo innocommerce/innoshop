@@ -166,12 +166,6 @@ class ProductRepo extends BaseRepo
 
             $product->skus()->createMany($this->handleSkus($product, $data['skus']));
 
-            $masterSku = $product->skus()->where('is_default', true)->first();
-
-            $product->product_sku_id   = $masterSku->id;
-            $product->product_image_id = $product->images()->first()->id ?? 0;
-            $product->saveOrFail();
-
             DB::commit();
 
             return $product;
@@ -185,7 +179,7 @@ class ProductRepo extends BaseRepo
      * @param  $data
      * @return string[]
      */
-    private function handleProductData($data): array
+    public function handleProductData($data): array
     {
         $variables = $data['variables'] ?? ($data['variants'] ?? []);
         if (is_string($variables)) {
@@ -215,7 +209,7 @@ class ProductRepo extends BaseRepo
      * @param  $skus
      * @return array
      */
-    private function handleSkus($product, $skus): array
+    public function handleSkus($product, $skus): array
     {
         if (is_string($skus)) {
             $skus = json_decode($skus, true);
@@ -308,8 +302,9 @@ class ProductRepo extends BaseRepo
      * @param  Product  $product
      * @param  $images
      * @return void
+     * @throws Throwable
      */
-    private function syncImages(Product $product, $images): void
+    public function syncImages(Product $product, $images): void
     {
         if (empty($images)) {
             return;
