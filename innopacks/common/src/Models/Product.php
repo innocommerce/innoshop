@@ -174,7 +174,7 @@ class Product extends BaseModel
             $attribute = $productAttribute->attribute;
             $groupID   = $attribute->attribute_group_id;
             if (! isset($attributes[$groupID]['attribute_group_name'])) {
-                $attributes[$groupID]['attribute_group_name'] = $attribute->group->translation->name;
+                $attributes[$groupID]['attribute_group_name'] = $attribute->group->translation->name ?? 'default';
             }
             $attributes[$groupID]['attributes'][] = [
                 'attribute'       => $attribute->translation->name,
