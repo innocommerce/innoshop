@@ -49,7 +49,8 @@ class ThemeMarketController
     public function show(int $slug): mixed
     {
         $marketService = MarketplaceService::getInstance();
-        $data          = [
+
+        $data = [
             'categories' => $marketService->getThemeCategories(),
             'product'    => $marketService->getProductDetail($slug),
         ];

@@ -50,9 +50,8 @@ class PluginMarketController
      */
     public function show(int $slug): mixed
     {
-        $marketService = MarketplaceService::getInstance()
-            ->setPage($request->get('page', 1))
-            ->setPerPage($request->get('per_page', 8));
+        $marketService = MarketplaceService::getInstance();
+
         $data = [
             'categories' => $marketService->getPluginCategories(),
             'product'    => $marketService->getProductDetail($slug),
