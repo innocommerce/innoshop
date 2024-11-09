@@ -227,4 +227,45 @@ class CategoryRepo extends BaseRepo
             }
         }
     }
+
+    /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        if (empty($keyword)) {
+            return [];
+        }
+
+        return Category::query()->with('translation')
+            ->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            })
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get product list by IDs.
+     *
+     * @param  mixed  $categoryIDs
+     * @return mixed
+     */
+    public function getListByCategoryIDs(mixed $categoryIDs): mixed
+    {
+        if (empty($categoryIDs)) {
+            return [];
+        }
+        if (is_string($categoryIDs)) {
+            $categoryIDs = explode(',', $categoryIDs);
+        }
+
+        return Category::query()
+            ->with(['translation'])
+            ->whereIn('id', $categoryIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $categoryIDs).')')
+            ->get();
+    }
 }

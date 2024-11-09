@@ -23,9 +23,10 @@ class PageSimple extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'   => $this->id,
-            'name' => $this->translation->title ?? '',
-            'url'  => $this->url,
+            'id'     => $this->id,
+            'name'   => $this->translation->title ?? '',
+            'url'    => $this->url,
+            'active' => (bool) $this->active,
         ];
     }
 }

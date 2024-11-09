@@ -9,9 +9,11 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Article;
+use Throwable;
 
 class ArticleRepo extends BaseRepo
 {
@@ -30,7 +32,7 @@ class ArticleRepo extends BaseRepo
     /**
      * @param  array  $filters
      * @return LengthAwarePaginator
-     * @throws \Exception
+     * @throws Exception
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
@@ -99,7 +101,7 @@ class ArticleRepo extends BaseRepo
     /**
      * @param  $data
      * @return Article
-     * @throws \Exception|\Throwable
+     * @throws Exception|Throwable
      */
     public function create($data): Article
     {
@@ -145,5 +147,46 @@ class ArticleRepo extends BaseRepo
     {
         $item->translations()->delete();
         $item->delete();
+    }
+
+    /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        if (empty($keyword)) {
+            return [];
+        }
+
+        return Article::query()->with('translation')
+            ->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            })
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get Article list by IDs.
+     *
+     * @param  mixed  $ArticleIDs
+     * @return mixed
+     */
+    public function getListByArticleIDs(mixed $ArticleIDs): mixed
+    {
+        if (empty($ArticleIDs)) {
+            return [];
+        }
+        if (is_string($ArticleIDs)) {
+            $ArticleIDs = explode(',', $ArticleIDs);
+        }
+
+        return Article::query()
+            ->with('translation')
+            ->whereIn('id', $ArticleIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $ArticleIDs).')')
+            ->get();
     }
 }

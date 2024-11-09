@@ -152,6 +152,47 @@ class CatalogRepo extends BaseRepo
     }
 
     /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        if (empty($keyword)) {
+            return [];
+        }
+
+        return Catalog::query()->with('translation')
+            ->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            })
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get catalog list by IDs.
+     *
+     * @param  mixed  $CatalogIDs
+     * @return mixed
+     */
+    public function getListByCatalogIDs(mixed $CatalogIDs): mixed
+    {
+        if (empty($CatalogIDs)) {
+            return [];
+        }
+        if (is_string($CatalogIDs)) {
+            $CatalogIDs = explode(',', $CatalogIDs);
+        }
+
+        return Catalog::query()
+            ->with('translation')
+            ->whereIn('id', $CatalogIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $CatalogIDs).')')
+            ->get();
+    }
+
+    /**
      * @return string[]
      */
     private function handleData($requestData): array

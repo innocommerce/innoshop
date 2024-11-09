@@ -130,4 +130,45 @@ class PageRepo extends BaseRepo
         $item->translations()->delete();
         $item->delete();
     }
+
+    /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        if (empty($keyword)) {
+            return [];
+        }
+
+        return Page::query()->with('translation')
+            ->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            })
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get Page list by IDs.
+     *
+     * @param  mixed  $PageIDs
+     * @return mixed
+     */
+    public function getListByPageIDs(mixed $PageIDs): mixed
+    {
+        if (empty($PageIDs)) {
+            return [];
+        }
+        if (is_string($PageIDs)) {
+            $PageIDs = explode(',', $PageIDs);
+        }
+
+        return Page::query()
+            ->with('translation')
+            ->whereIn('id', $PageIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $PageIDs).')')
+            ->get();
+    }
 }

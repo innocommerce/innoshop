@@ -1,0 +1,18 @@
+{
+  "code": "mobile_builder",
+  "name": {
+    "zh_cn": "小程序(APP)编辑器",
+    "en": "APP Page Builder"
+  },
+  "description": {
+    "zh_cn": "小程序(APP)编辑器",
+    "en": "APP Page Builder"
+  },
+  "type": "feature",
+  "version": "v1.0.0",
+  "icon": "/images/logo.png",
+  "author": {
+    "name": "InnoShop",
+    "email": "edward@innoshop.com"
+  }
+}

@@ -12,8 +12,10 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Page;
 use InnoShop\Common\Repositories\PageRepo;
+use InnoShop\Common\Resources\PageName;
 use InnoShop\Panel\Requests\PageRequest;
 use Throwable;
 
@@ -29,6 +31,18 @@ class PageController extends BaseController
         $filters = $request->all();
 
         return PageRepo::getInstance()->list($filters);
+    }
+
+    /**
+     * @param  Request  $request
+     * @return AnonymousResourceCollection
+     * @throws Exception
+     */
+    public function names(Request $request): AnonymousResourceCollection
+    {
+        $pages = PageRepo::getInstance()->getListByPageIDs($request->get('page_ids'));
+
+        return PageName::collection($pages);
     }
 
     /**
@@ -78,5 +92,20 @@ class PageController extends BaseController
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Fuzzy search for auto complete.
+     * /api/panel/catalogs/autocomplete?keyword=xxx
+     *
+     * @param  Request  $request
+     * @return AnonymousResourceCollection
+     * @throws Exception
+     */
+    public function autocomplete(Request $request): AnonymousResourceCollection
+    {
+        $catalogs = PageRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
+
+        return PageName::collection($catalogs);
     }
 }
