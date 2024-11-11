@@ -217,10 +217,11 @@ class ProductRepo extends BaseRepo
         $onlyOneSku = count($skus) == 1;
 
         $items = [];
-        foreach ($skus as $sku) {
+        foreach ($skus as $index => $sku) {
             $path = $sku['image'] ?? '';
             if ($path) {
-                $image   = ImageRepo::getInstance()->findOrCreate($product, $path);
+                $isCover = ($index == 0);
+                $image   = ImageRepo::getInstance()->findOrCreate($product, $path, $isCover, true);
                 $imageID = $image->id ?? 0;
             } else {
                 $imageID = $sku['product_image_id'] ?? 0;
@@ -309,8 +310,9 @@ class ProductRepo extends BaseRepo
         if (empty($images)) {
             return;
         }
-        foreach ($images as $image) {
-            ImageRepo::getInstance()->findOrCreate($product, $image);
+        foreach ($images as $index => $image) {
+            $isCover = ($index == 0);
+            ImageRepo::getInstance()->findOrCreate($product, $image, $isCover);
         }
     }
 
