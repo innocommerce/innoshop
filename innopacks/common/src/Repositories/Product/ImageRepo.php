@@ -17,22 +17,27 @@ class ImageRepo extends BaseRepo
     /**
      * @param  Product  $product
      * @param  $path
+     * @param  bool  $isCover
+     * @param  bool  $isSku
      * @return mixed
      */
-    public function findOrCreate(Product $product, $path): mixed
+    public function findOrCreate(Product $product, $path, bool $isCover = false, bool $isSku = false): mixed
     {
         if (empty($path)) {
             return null;
         }
 
+        $path  = str_replace('\\', '/', trim($path));
         $image = $product->images()->where('path', $path)->first();
         if ($image) {
             return $image;
         }
 
         return $product->images()->create([
-            'path'     => $path,
-            'position' => 0,
+            'path'       => $path,
+            'is_cover'   => $isCover,
+            'belong_sku' => $isSku,
+            'position'   => 0,
         ]);
     }
 }

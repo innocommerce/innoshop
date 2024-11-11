@@ -177,7 +177,7 @@
                   <div class="mb-3">
                     <label for="admin_email" class="form-label">{{ __('install/common.admin_account') }}</label>
                     <input type="text" class="form-control" id="admin_email" name="admin_email" required
-                           placeholder="{{ __('install/common.admin_account') }}" value="root@innoshop.com">
+                           placeholder="{{ __('install/common.admin_account') }}" value="admin@innoshop.com">
                     <div class="invalid-feedback">{{ __('install/common.admin_account') }}</div>
                   </div>
                 </div>
