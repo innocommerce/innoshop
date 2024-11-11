@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             RegionSeeder::class,
             TaxSeeder::class,
+            PluginSeeder::class,
         ]);
 
         touch(storage_path('installed'));
