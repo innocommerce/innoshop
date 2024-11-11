@@ -11,6 +11,7 @@ namespace InnoShop\Common\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Setting;
+use Throwable;
 
 class SettingRepo extends BaseRepo
 {
@@ -60,7 +61,7 @@ class SettingRepo extends BaseRepo
      * @param  $settings
      * @param  string  $space
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function updateValues($settings, string $space = 'system'): void
     {
@@ -76,7 +77,7 @@ class SettingRepo extends BaseRepo
      * @param  $name
      * @param  $value
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function updateSystemValue($name, $value): mixed
     {
@@ -88,7 +89,7 @@ class SettingRepo extends BaseRepo
      * @param  $name
      * @param  $value
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function updatePluginValue($code, $name, $value): mixed
     {
@@ -100,7 +101,7 @@ class SettingRepo extends BaseRepo
      * @param  $value
      * @param  string  $space
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function updateValue($name, $value, string $space): mixed
     {

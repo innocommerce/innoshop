@@ -34,7 +34,7 @@
                   <div class="product-bottom">
                     <div class="product-bottom-btns">
                       <div class="btn-add-cart cursor-pointer" data-id="{{ $product->id }}"
-                        data-sku-id="{{ $product->product_sku_id }}">{{ __('front/product.add_to_cart') }}</div>
+                        data-sku-id="{{ $product->masterSku->id }}">{{ __('front/product.add_to_cart') }}</div>
                     </div>
                     <div class="product-price">
                       @if ($product->masterSku->origin_price)
