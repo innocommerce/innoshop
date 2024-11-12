@@ -58,11 +58,11 @@ class CustomerGroupController
 
             $customerGroup = Customer\GroupRepo::getInstance()->create($data);
 
-            return redirect(panel_route('groups.index'))
+            return redirect(panel_route('customer_groups.index'))
                 ->with('instance', $customerGroup)
                 ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
-            return redirect(panel_route('groups.index'))
+            return redirect(panel_route('customer_groups.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
         }
@@ -103,11 +103,11 @@ class CustomerGroupController
             $data = $request->all();
             Customer\GroupRepo::getInstance()->update($customerGroup, $data);
 
-            return redirect(panel_route('groups.index'))
+            return redirect(panel_route('customer_groups.index'))
                 ->with('instance', $customerGroup)
                 ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
-            return redirect(panel_route('groups.index'))
+            return redirect(panel_route('customer_groups.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
         }
@@ -120,12 +120,13 @@ class CustomerGroupController
     public function destroy(CustomerGroup $customerGroup): RedirectResponse
     {
         try {
-            Customer\GroupRepo::getInstance()->destroy($customerGroup);
+            $customerGroup->translations()->delete();
+            $customerGroup->delete();
 
-            return redirect(panel_route('groups.index'))
+            return redirect(panel_route('customer_groups.index'))
                 ->with('success', panel_trans('common.deleted_success'));
         } catch (Exception $e) {
-            return redirect(panel_route('groups.index'))
+            return redirect(panel_route('customer_groups.index'))
                 ->withErrors(['error' => $e->getMessage()]);
         }
     }

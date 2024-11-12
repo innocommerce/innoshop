@@ -30,7 +30,7 @@
           @foreach($groups as $item)
             <tr>
               <td>{{ $item->id }}</td>
-              <td>{{ $item->translation->name }}</td>
+              <td>{{ $item->translation->name ?? '' }}</td>
               <td>{{ $item->level }}</td>
               <td>{{ currency_format($item->mini_cost, system_setting('currency')) }}</td>
               <td>{{ $item->discount_rate }}</td>
