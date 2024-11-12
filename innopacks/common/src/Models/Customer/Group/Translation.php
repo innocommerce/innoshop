@@ -16,6 +16,6 @@ class Translation extends BaseModel
     protected $table = 'customer_group_translations';
 
     protected $fillable = [
-        'local', 'name', 'description',
+        'locale', 'name', 'description',
     ];
 }

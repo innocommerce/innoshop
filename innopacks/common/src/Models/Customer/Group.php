@@ -13,12 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Customer\Group\Translation;
-use InnoShop\Common\Traits\Translatable;
 
 class Group extends BaseModel
 {
-    use Translatable;
-
     protected $table = 'customer_groups';
 
     protected $fillable = [

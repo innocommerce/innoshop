@@ -41,8 +41,9 @@ class GroupRepo extends BaseRepo
         $group = new Group($this->handleData($data));
         $group->saveOrFail();
 
+        $translations = $this->handleTranslations($data);
         $group->translations()->delete();
-        $group->translations()->createMany($data['translations']);
+        $group->translations()->createMany($translations);
 
         return $group;
     }
@@ -64,9 +65,27 @@ class GroupRepo extends BaseRepo
     private function handleData($requestData): array
     {
         return [
-            'level'         => $requestData['level'],
-            'mini_cost'     => $requestData['mini_cost'],
-            'discount_rate' => $requestData['discount_rate'],
+            'level'         => (int) $requestData['level'],
+            'mini_cost'     => (float) $requestData['mini_cost'],
+            'discount_rate' => (int) $requestData['discount_rate'],
         ];
+    }
+
+    /**
+     * @param  $requestData
+     * @return array
+     */
+    private function handleTranslations($requestData): array
+    {
+        $items = [];
+        foreach ($requestData['name'] as $locale => $item) {
+            $items[$locale]['locale'] = $locale;
+            $items[$locale]['name']   = $item;
+        }
+        foreach ($requestData['description'] as $locale => $item) {
+            $items[$locale]['description'] = $item;
+        }
+
+        return array_values($items);
     }
 }
