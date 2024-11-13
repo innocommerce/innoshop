@@ -1,0 +1,18 @@
+{
+  "code": "flex_shipping",
+  "name": {
+    "zh_cn": "灵活运费",
+    "en": "Flex Shipping"
+  },
+  "description": {
+    "zh_cn": "灵活运费",
+    "en": "Flex Shipping"
+  },
+  "type": "shipping",
+  "version": "v1.0.0",
+  "icon": "/images/logo.png",
+  "author": {
+    "name": "InnoShop",
+    "email": "edward@innoshop.com"
+  }
+}

@@ -196,9 +196,9 @@
     $('.plugins-select').on('change', function() {
       var path = $(this).val()
       if (path) {
-        window.location.href = 'panel/locales?plugin_code=' + path
+        window.location.href = 'panel/locale_translations?plugin_code=' + path
       } else {
-        window.location.href = 'panel/locales'
+        window.location.href = 'panel/locale_translations'
       }
     })
 
