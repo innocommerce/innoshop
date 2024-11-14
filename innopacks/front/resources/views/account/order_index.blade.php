@@ -23,7 +23,8 @@
               </li>
               @foreach($filter_statuses as $status)
               <li class="nav-item">
-                <a class="nav-link {{ request('status') == $status ? 'active' : '' }}" href="{{ account_route('orders.index', ['status' => $status]) }}">{{ __('front/order.'.$status) }}</a>
+                <a class="nav-link {{ request('status') == $status ? 'active' : '' }}" href="{{ account_route('orders.index', ['status' => $status]) }}">
+                  {{ __('front/order.'.$status) }}</a>
               </li>
               @endforeach
             </ul>
@@ -59,7 +60,7 @@
                   </td>
                   <td data-title="Total">{{ $order->total_format }}</td>
                   <td data-title="Actions">
-                    <a href="{{ account_route('orders.show', ['order' => $order] ) }}" class="btn btn-primary">{{ __('front/common.view') }}</a>
+                    <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary">{{ __('front/common.view') }}</a>
                   </td>
                 </tr>
               @endforeach

@@ -71,7 +71,7 @@
                   </td>
                   <td data-title="Total">{{ $order->total }}</td>
                   <td data-title="Actions">
-                    <a href="{{ account_route('orders.show', ['order' => $order] ) }}" class="btn btn-primary">{{ __('front/common.view') }}</a>
+                    <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary">{{ __('front/common.view') }}</a>
                   </td>
                 </tr>
               @endforeach
