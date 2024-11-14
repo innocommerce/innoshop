@@ -7,7 +7,6 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use Illuminate\Support\Facades\Route;
-use InnoShop\Enterprise\PanelControllers\FileManagerController;
-
-Route::get('file_manager', [FileManagerController::class, 'index'])->name('file_manager.index');
+return [
+    'title' => '文件管理器',
+];

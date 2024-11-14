@@ -52,6 +52,7 @@ class EnterpriseServiceProvider extends ServiceProvider
         $this->registerFrontRoutes();
         $this->registerFrontApiRoutes();
         $this->registerPanelRoutes();
+        $this->registerPanelApiRoutes();
         $this->registerRootRoutes();
         $this->loadTranslations();
         $this->loadViewTemplates();
@@ -172,6 +173,21 @@ class EnterpriseServiceProvider extends ServiceProvider
             ->name("$adminName.")
             ->group(function () use ($routePath) {
                 $this->loadRoutesFrom($routePath);
+            });
+    }
+
+    /**
+     * Register panel api routes.
+     *
+     * @return void
+     */
+    private function registerPanelApiRoutes(): void
+    {
+        Route::prefix('api/panel')
+            ->middleware('panel_api')
+            ->name('api.panel.')
+            ->group(function () {
+                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/panel-api.php'));
             });
     }
 
