@@ -84,7 +84,7 @@
       formData.append('file', file);
       formData.append('type', _self.parents('.inno-common-file').data('type'));
       _self.find('.img-loading').removeClass('d-none');
-      axios.post('{{ front_route('upload.files') }}', formData, {}).then(function (res) {
+      axios.post('{{ front_root_route('upload.files') }}', formData, {}).then(function (res) {
           let val = res.data.value;
           let url = res.data.url;
           _self.find('input').val(val);

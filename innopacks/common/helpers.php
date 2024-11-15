@@ -651,6 +651,22 @@ if (! function_exists('front_route')) {
     }
 }
 
+if (! function_exists('front_root_route')) {
+    /**
+     * Get frontend route
+     *
+     * @param  $name
+     * @param  mixed  $parameters
+     * @param  bool  $absolute
+     * @return string
+     * @throws Exception
+     */
+    function front_root_route($name, mixed $parameters = [], bool $absolute = true): string
+    {
+        return route('front.'.$name, $parameters, $absolute);
+    }
+}
+
 if (! function_exists('has_front_route')) {
     /**
      * Check frontend route exist.

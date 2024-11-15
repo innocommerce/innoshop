@@ -75,10 +75,6 @@ Route::get('/tags', [Controllers\TagController::class, 'index'])->name('tags.ind
 Route::get('/tags/{tag}', [Controllers\TagController::class, 'show'])->name('tags.show');
 Route::get('/tag-{slug}', [Controllers\TagController::class, 'slugShow'])->name('tags.slug_show');
 
-// Upload
-Route::post('/upload/images', [Controllers\UploadController::class, 'images'])->name('upload.images');
-Route::post('/upload/files', [Controllers\UploadController::class, 'files'])->name('upload.files');
-
 // Pages, like product, service, about
 if (installed()) {
     $pages = PageRepo::getInstance()->withActive()->builder()->get();

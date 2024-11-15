@@ -254,6 +254,7 @@ class Sidebar extends Component
         $routes = [
             ['route' => 'customers.index', 'title' => __('panel/menu.customers')],
             ['route' => 'customer_groups.index', 'title' => __('panel/menu.customer_groups')],
+            ['route' => 'socials.index', 'title' => __('panel/menu.sns')],
         ];
 
         return fire_hook_filter('component.sidebar.customer.routes', $routes);

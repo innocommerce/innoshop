@@ -22,19 +22,24 @@
 
         <div class="form-group mb-4">
           <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                  name="password" required autocomplete="new-password" placeholder="{{ __('front/login.password') }}"/>
+                 name="password" required autocomplete="new-password" placeholder="{{ __('front/login.password') }}"/>
           <span class="invalid-feedback" role="alert"><strong>{{ __('front/login.password_required') }}</strong></span>
         </div>
         @if (!request('iframe'))
-          <a href="{{ front_route('forgotten.index') }}" class="text-secondary mt-n2 d-block">{{ __('front/login.forget_password') }} <i class="bi bi-question-circle"></i></a>
+          <a href="{{ front_route('forgotten.index') }}" class="text-secondary mt-n2 d-block">{{
+        __('front/login.forget_password') }} <i class="bi bi-question-circle"></i></a>
         @endif
 
         <div class="btn-submit">
           <button type="button" class="btn btn-primary form-submit btn-lg">{{ __('front/login.login_submit') }}</button>
-          <a href="{{ front_route('register.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{ __('front/login.no_account') }}
+          <a href="{{ front_route('register.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{
+          __('front/login.no_account') }}
             <i class="bi bi-arrow-up-right-square"></i></a>
         </div>
       </form>
+
+      @include('account/_social')
+
     </div>
   </div>
 

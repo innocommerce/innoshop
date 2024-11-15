@@ -19,7 +19,7 @@
   <script>
     let urls = {
       base_url: '{{ front_route('home.index') }}',
-      upload_images: '{{ front_route('upload.images') }}',
+      upload_images: '{{ front_root_route('upload.images') }}',
       cart_add: '{{ front_route('carts.store') }}',
       cart_mini: '{{ front_route('carts.mini') }}',
       login: '{{ front_route('login.index') }}',
