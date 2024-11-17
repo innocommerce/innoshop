@@ -11,7 +11,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Customer\Group as CustomerGroup;
-use InnoShop\Common\Repositories\Customer\GroupRepo;
 
 class CustomerGroupSeeder extends Seeder
 {
@@ -20,8 +19,11 @@ class CustomerGroupSeeder extends Seeder
         $items = $this->getCustomerGroups();
         if ($items) {
             CustomerGroup::query()->truncate();
+            CustomerGroup\Translation::query()->truncate();
             foreach ($items as $item) {
-                GroupRepo::getInstance()->create($item);
+                $translations  = array_pop($item);
+                $customerGroup = CustomerGroup::query()->create($item);
+                $customerGroup->translations()->createMany($translations);
             }
         }
     }
