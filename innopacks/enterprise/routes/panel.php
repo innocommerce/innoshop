@@ -6,9 +6,3 @@
  * @author     InnoShop <team@innoshop.com>
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
-use Illuminate\Support\Facades\Route;
-
-Route::get('/bbb', function () {
-    echo 'bbb';
-})->name('bbb.index');
