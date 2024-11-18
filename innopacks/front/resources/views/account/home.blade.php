@@ -15,8 +15,10 @@
         <div class="account-card-box account-info">
           <div class="account-card-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/account.hello') }}, {{ $customer->name }}</span>
+            @hookupdate('account.home.edit_profile')
             <a href="{{ account_route('edit.index') }}" class="text-secondary">{{ __('front/account.edit') }} <i
                   class="bi bi-arrow-right"></i></a>
+            @endhookupdate
           </div>
 
           <div class="account-data">
