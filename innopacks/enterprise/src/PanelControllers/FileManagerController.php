@@ -217,9 +217,9 @@ class FileManagerController extends BaseController
      * Upload a file to the specified directory.
      *
      * @param  UploadFileRequest  $request
-     * @return array
+     * @return mixed
      */
-    public function uploadFiles(UploadFileRequest $request): array
+    public function uploadFiles(UploadFileRequest $request): mixed
     {
         $file     = $request->file('file');
         $savePath = $request->get('path');
@@ -227,9 +227,10 @@ class FileManagerController extends BaseController
         $originName = $file->getClientOriginalName();
         $fileUrl    = $this->fileManagerService->uploadFile($file, $savePath, $originName);
 
-        return [
+        $data = [
             'name' => $originName,
             'url'  => $fileUrl,
         ];
+        return json_success('success', $data);
     }
 }
