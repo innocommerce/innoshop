@@ -1,0 +1,18 @@
+{
+    "code": "web_builder",
+    "name": {
+        "zh_cn": "Web 首页编辑器",
+        "en": "Web Home Builder"
+    },
+    "description": {
+        "zh_cn": "Web 首页编辑器",
+        "en": "Web Home Builder"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}
