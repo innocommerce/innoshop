@@ -65,7 +65,7 @@ class ReviewController extends BaseController
             ReviewRepo::getInstance()->create($data);
 
             return redirect($product->url)
-                ->with('success', front_route('common.created_success'));
+                ->with('success', front_route('common.saved_success'));
         } catch (Exception $e) {
             return redirect($product->url)
                 ->withErrors(['error' => $e->getMessage()]);

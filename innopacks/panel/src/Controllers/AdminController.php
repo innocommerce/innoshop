@@ -68,7 +68,7 @@ class AdminController extends BaseController
 
             return redirect(panel_route('admins.index'))
                 ->with('instance', $admin)
-                ->with('success', panel_trans('common.created_success'));
+                ->with('success', panel_trans('common.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('admins.index'))
                 ->withErrors(['error' => $e->getMessage()]);
