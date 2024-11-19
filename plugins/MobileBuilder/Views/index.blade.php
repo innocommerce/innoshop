@@ -1815,15 +1815,15 @@
                     "content": {
                     "images": [{
                         "image": {
-                        "zh_cn": "{{ plugin_asset('InnoMobileBuilder','images/demo/banner/banner-1-cn.jpg') }}",
-                        "en": "{{ plugin_asset('InnoMobileBuilder','images/demo/banner/banner-1-en.jpg') }}"
+                        "zh_cn": "{{ plugin_asset('MobileBuilder','images/demo/banner/banner-1-cn.jpg') }}",
+                        "en": "{{ plugin_asset('MobileBuilder','images/demo/banner/banner-1-en.jpg') }}"
                         },
                         "show": false,
                         "link": {"type": "product", "value": 1, "link": ""}
                     }, {
                         "image": {
-                        "zh_cn": "{{ plugin_asset('InnoMobileBuilder','images/demo/banner/banner-2-cn.jpg') }}",
-                        "en": "{{ plugin_asset('InnoMobileBuilder','images/demo/banner/banner-2-en.jpg') }}"
+                        "zh_cn": "{{ plugin_asset('MobileBuilder','images/demo/banner/banner-2-cn.jpg') }}",
+                        "en": "{{ plugin_asset('MobileBuilder','images/demo/banner/banner-2-en.jpg') }}"
                         },
                         "show": true,
                         "link": {"type": "category", "value": 1, "link": ""}
@@ -1837,52 +1837,52 @@
                     "style": {"background_color": ""},
                     "floor": {"zh_cn": "", "en": ""},
                     "images": [{
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/1.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/1.png') }}",
                         "link": {"type": "category", "value": 1},
                         "text": {"zh_cn": "特惠活动", "en": "Special"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/7.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/7.png') }}",
                         "link": {"type": "product", "value": 2},
                         "text": {"zh_cn": "全场爆款", "en": "Explosive"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/1.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/1.png') }}",
                         "link": {"type": "brand", "value": 1},
                         "text": {"zh_cn": "好货推荐", "en": "Selling"},
                         "show": true
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/10.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/10.png') }}",
                         "link": {"type": "product", "value": ""},
                         "text": {"zh_cn": "大牌特价", "en": "Bigname"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/2.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/2.png') }}",
                         "link": {"type": "category", "value": 2},
                         "text": {"zh_cn": "美好假日", "en": "Good"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/4.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/4.png') }}",
                         "link": {"type": "category", "value": 2},
                         "text": {"zh_cn": "全场购买", "en": "Shop all"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/5.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/5.png') }}",
                         "link": {"type": "category", "value": 3},
                         "text": {"zh_cn": "时尚特价", "en": "Fashion"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/6.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/6.png') }}",
                         "link": {"type": "category", "value": 1},
                         "text": {"zh_cn": "优惠好物", "en": "Discount"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/8.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/8.png') }}",
                         "link": {"type": "category", "value": 4},
                         "text": {"zh_cn": "冬日新品", "en": "Newest"},
                         "show": false
                     }, {
-                        "image": "{{ plugin_asset('InnoMobileBuilder','images/demo/app-icons/9.png') }}",
+                        "image": "{{ plugin_asset('MobileBuilder','images/demo/app-icons/9.png') }}",
                         "link": {"type": "product", "value": 5},
                         "text": {"zh_cn": "夏季上新", "en": "Summer"},
                         "show": false
@@ -1911,28 +1911,28 @@
                     "products": [{
                         "id": 1,
                         "name": "都市精英风尚西装外套经典剪裁",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/1-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/1-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 2,
                         "name": "银河流光璀璨晚礼服闪耀全场",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/2-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/2-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 3,
                         "name": "晨曦漫步轻盈薄款风衣春意盎然",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/3-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/3-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 4,
                         "name": "极简风格主义经典衬衫简约不简单",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/4-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/4-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
@@ -1954,28 +1954,28 @@
                     "products": [{
                         "id": 1,
                         "name": "摩登复风高腰牛仔裤经典再现",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/5-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/5-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 2,
                         "name": "幻彩流苏时尚个性围巾绚丽多彩",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/6-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/6-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 3,
                         "name": "男士白色卫衣套装",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/7-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/7-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 4,
                         "name": "优雅蕾���边透视性感上衣女性魅力",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/8-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/8-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
@@ -1993,28 +1993,28 @@
                     "products": [{
                         "id": 1,
                         "name": "都市精英风尚西装外套经典剪裁",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/1-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/1-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 2,
                         "name": "银河流光璀璨晚礼服闪耀全场",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/2-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/2-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 3,
                         "name": "晨曦漫步轻盈薄款风衣春意盎然",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/3-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/3-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
                     }, {
                         "id": 4,
                         "name": "极简风格主义经典衬衫简约不简单",
-                        "image_big": "{{ plugin_asset('InnoMobileBuilder','images/demo/product/4-600x600.png') }}",
+                        "image_big": "{{ plugin_asset('MobileBuilder','images/demo/product/4-600x600.png') }}",
                         "image_format": "",
                         "price_format": "$123.50",
                         "active": true
@@ -2096,7 +2096,7 @@
         },
         images: [
           {
-            image: languagesFill("{{ plugin_asset('InnoMobileBuilder','images/demo/banner/banner-2-en.jpg') }}"),
+            image: languagesFill("{{ plugin_asset('MobileBuilder','images/demo/banner/banner-2-en.jpg') }}"),
             show: true,
             link: {
               type: 'product',
