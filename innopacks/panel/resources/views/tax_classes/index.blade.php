@@ -58,7 +58,7 @@
     </div>
 
     <el-drawer v-model="drawer" size="500" @close="close">
-      <template #header><div class="text-dark fs-4">{{ __('panel/menu.regions') }}</div></template>
+      <template #header><div class="text-dark fs-4">{{ __('panel/menu.tax_classes') }}</div></template>
       <el-form
         ref="formRef"
         label-position="top"
