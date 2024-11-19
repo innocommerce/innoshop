@@ -79,7 +79,9 @@
           <div class="col-9 mb-3 d-flex align-items-center">
             <span class="form-control-plaintext">{{ $order_return->quantity }}</span>
           </div>
-         
+          <div class="col-9 mb-3 d-flex align-items-center">
+            <span class="form-control-plaintext">{{ $order_return->quantity }}</span>
+          </div>
         </div>
 
       </div>
