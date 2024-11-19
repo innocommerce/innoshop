@@ -25,9 +25,10 @@ class BrandName extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'   => $this->id,
-            'slug' => $this->slug,
-            'name' => $this->name,
+            'id'     => $this->id,
+            'slug'   => $this->slug,
+            'name'   => $this->name,
+            'active' => (bool) $this->active,
         ];
     }
 }
