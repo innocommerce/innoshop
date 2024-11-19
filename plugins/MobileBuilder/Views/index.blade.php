@@ -12,8 +12,8 @@
   <!-- 其他已有的依赖 -->
   <script src="{{ asset('vendor/vue/2.7/vue.min.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
-  <script src="{{ plugin_asset('inno_mobile_builder', 'js/vuedraggable.js') }}"></script>
-  <link rel="stylesheet" type="text/css" href="{{ plugin_asset('inno_mobile_builder', 'css/design.css') }}">
+  <script src="{{ plugin_asset('mobile_builder', 'js/vuedraggable.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="{{ plugin_asset('mobile_builder', 'css/design.css') }}">
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script>
@@ -51,7 +51,7 @@
         //定义默认缩略图
       Vue.prototype.thumbnail = function thumbnail(image) {
         if (!image) {
-          return "{{ plugin_asset('inno_mobile_builder', 'images/placeholder.png') }}";
+          return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
         }
 
         // 判断 image 是否以 http 开头
@@ -109,7 +109,7 @@
       <div class="c-title">效果预览</div>
       <div class="perview-content">
         {{--手机通知栏图片--}}
-        <div class="head"><img src="{{ plugin_asset('inno_mobile_builder','images/inno_builder_header_bg.png') }}" class="img-fluid"></div>
+        <div class="head"><img src="{{ plugin_asset('mobile_builder','images/inno_builder_header_bg.png') }}" class="img-fluid"></div>
           {{--空预览区--}}
         <div class="hint" v-if="!form.modules.length">
           <i class="bi bi-brightness-high fs-2"></i>
@@ -962,7 +962,7 @@
                   width: this.targetWidth,
                   height: this.targetHeight
               });
-              console.log("{{ panel_route('inno_mobile_builder.upload.images') }}");
+              console.log("{{ panel_route('mobile_builder.upload.images') }}");
 
               canvas.toBlob((blob) => {
                 const formData = new FormData();
@@ -970,7 +970,7 @@
                 formData.append('type', 'banners');
                 formData.append('_token', '{{ csrf_token() }}');
 
-                axios.post("{{ panel_route('inno_mobile_builder.upload.images') }}", formData).then(response => {
+                axios.post("{{ panel_route('mobile_builder.upload.images') }}", formData).then(response => {
                   if (response.success) {
                       this.src = response.data.url;
                       console.log('Updated src:', this.src);
@@ -1742,7 +1742,7 @@
       methods: {
          // 获取保存的设计数据
         getDesignData() {
-            axios.get('/panel/inno_mobile_builder/design').then(res => {
+            axios.get('/panel/mobile_builder/design').then(res => {
                 console.log(res)
             if (res.success) {
                 this.form.modules = res.data.modules ? res.data.modules.filter(module => module != null) : [];
@@ -1762,7 +1762,7 @@
         },
         saveButtonClicked() {
             console.log('saving...')
-            axios.put('/panel/inno_mobile_builder/design', this.form).then((res) => {
+            axios.put('/panel/mobile_builder/design', this.form).then((res) => {
                 if (res.success) {
                     this.$message.success('保存成功');
                 } else {

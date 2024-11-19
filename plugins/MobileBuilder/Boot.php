@@ -28,7 +28,7 @@ class Boot extends BaseBoot
     {
         listen_hook_filter('component.sidebar.design.routes', function ($data) {
             $data[] = [
-                'route' => 'inno_mobile_builder.index',
+                'route' => 'mobile_builder.index',
                 'title' => trans('MobileBuilder::route.title'),
             ];
 

@@ -10,8 +10,8 @@
 use Illuminate\Support\Facades\Route;
 use Plugin\MobileBuilder\Controllers\MobileBuilderController;
 
-Route::get('/inno_mobile_builder', [MobileBuilderController::class, 'index'])->name('inno_mobile_builder.index');
-Route::post('/inno_mobile_builder/images', [MobileBuilderController::class, 'uploadImages'])->name('inno_mobile_builder.upload.images');
+Route::get('/mobile_builder', [MobileBuilderController::class, 'index'])->name('mobile_builder.index');
+Route::post('/mobile_builder/images', [MobileBuilderController::class, 'uploadImages'])->name('mobile_builder.upload.images');
 
-Route::get('/inno_mobile_builder/design', [MobileBuilderController::class, 'getDesign'])->name('inno_mobile_builder.design.get');
-Route::put('/inno_mobile_builder/design', [MobileBuilderController::class, 'saveDesign'])->name('inno_mobile_builder.design.save');
+Route::get('/mobile_builder/design', [MobileBuilderController::class, 'getDesign'])->name('mobile_builder.design.get');
+Route::put('/mobile_builder/design', [MobileBuilderController::class, 'saveDesign'])->name('mobile_builder.design.save');
