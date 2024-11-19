@@ -65,10 +65,10 @@ class RegionController extends BaseController
     public function store(RegionRequest $request): JsonResponse
     {
         try {
-            $data = $request->all();
-            RegionRepo::getInstance()->create($data);
+            $data   = $request->all();
+            $region = RegionRepo::getInstance()->create($data);
 
-            return json_success(panel_trans('common.created_success'));
+            return create_json_success($region);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
