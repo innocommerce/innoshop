@@ -21,7 +21,6 @@ return [
     'is_virtual'         => '是否虚拟产品',
     'main_variant'       => '主规格',
     'model'              => '型号',
-    'name'               => '名称',
     'origin_price'       => '原价',
     'position'           => '排序',
     'price'              => '价格',

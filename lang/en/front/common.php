@@ -46,4 +46,7 @@ return [
     'text_hint'         => 'Hint',
     'updated_success'   => 'Updated successfully',
     'view'              => 'View',
+    'yes'               => 'yes',
+    'no'                => 'no',
+
 ];

@@ -42,6 +42,7 @@ return [
     'reviews'            => '評論管理',
     'roles'              => '後台角色',
     'settings'           => '系統設置',
+    'sns'                => '三方登錄',
     'states'             => '省份或者州',
     'tags'               => '文章標籤',
     'tax_classes'        => '稅類設置',

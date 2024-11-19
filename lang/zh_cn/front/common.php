@@ -28,6 +28,7 @@ return [
     'logo'              => '品牌',
     'name'              => '名称',
     'news'              => '文章',
+    'no'                => '否',
     'out_of_stock'      => '缺货',
     'page_total_show'   => '显示第 :first 到第 :last 项，共 :total 项',
     'pages'             => '单页',
@@ -46,4 +47,5 @@ return [
     'text_hint'         => '提示',
     'updated_success'   => '更新成功',
     'view'              => '查看',
+    'yes'               => '是',
 ];

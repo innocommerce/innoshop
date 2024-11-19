@@ -30,7 +30,6 @@ return [
     'logo'              => 'Logo',
     'name'              => 'Nama',
     'news'              => 'Berita',
-    'no'                => 'Tidak',
     'not_found'         => 'Tidak Ditemui',
     'of'                => 'dari',
     'out_of_stock'      => 'Stok Habis',
@@ -55,5 +54,6 @@ return [
     'total'             => 'Jumlah',
     'updated_success'   => 'Berjaya Dikemaskini',
     'view'              => 'Lihat',
-    'yes'               => 'Ya',
+    'yes'               => 'ya',
+    'no'                => 'Tidak',
 ];

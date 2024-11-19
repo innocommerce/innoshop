@@ -47,6 +47,7 @@ return [
     'meta_keywords'     => 'كلمات مفتاحية ميتا',
     'meta_title'        => 'عنوان ميتا',
     'name'              => 'اسم',
+    'no'                => 'لا',
     'no_data'           => 'لا توجد بيانات',
     'password'          => 'كلمة المرور',
     'please_choose'     => 'يرجى الاختيار',
@@ -68,4 +69,5 @@ return [
     'view'              => 'عرض',
     'viewed'            => 'عدد المشاهدات',
     'whether_enable'    => 'هل تود التفعيل؟',
+    'yes'               => 'نعم',
 ];

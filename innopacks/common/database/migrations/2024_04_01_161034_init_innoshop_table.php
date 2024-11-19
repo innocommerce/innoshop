@@ -295,7 +295,7 @@ return new class extends Migration
             $table->unsignedInteger('customer_group_id')->index('customer_group_id')->comment('Customer Group ID');
             $table->string('locale', 10)->comment('Locale Code');
             $table->string('name', 256)->comment('Name');
-            $table->text('description')->comment(' Translation');
+            $table->text('description')->nullable()->comment(' Translation');
             $table->timestamps();
         });
 
@@ -724,7 +724,7 @@ return new class extends Migration
             $table->comment('Region');
             $table->bigIncrements('id')->comment('ID');
             $table->string('name')->comment('Region Name');
-            $table->string('description')->comment('Regin Description');
+            $table->string('description')->nullable()->comment('Regin Description');
             $table->integer('position')->default(0)->comment('Sort order');
             $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
@@ -815,7 +815,7 @@ return new class extends Migration
             $table->comment('Tax Class');
             $table->bigIncrements('id')->comment('ID');
             $table->string('name')->comment('Tax Class Name');
-            $table->string('description')->comment('Tax Description');
+            $table->string('description')->nullable()->comment('Tax Description');
             $table->timestamps();
         });
 

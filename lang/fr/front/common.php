@@ -28,6 +28,7 @@ return [
     'logo'              => 'Marque',
     'name'              => 'Nom',
     'news'              => 'Articles',
+    'no'                => 'non',
     'out_of_stock'      => 'Rupture de stock',
     'page_total_show'   => 'Afficher de :first à :last sur :total éléments',
     'pages'             => 'Pages',
@@ -46,4 +47,5 @@ return [
     'text_hint'         => 'Astuce',
     'updated_success'   => 'Mis à jour avec succès',
     'view'              => 'Voir',
+    'yes'               => 'oui',
 ];

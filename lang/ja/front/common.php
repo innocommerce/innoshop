@@ -46,4 +46,7 @@ return [
     'page_total_show'   => '第～を表示する:first',
     'show'              => 'すうりょう',
     'sort'              => 'じゅんじょ',
+    'yes'               => 'はい',
+    'no'                => 'いいえ',
+
 ];

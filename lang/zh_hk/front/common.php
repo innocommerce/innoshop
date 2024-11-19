@@ -46,4 +46,6 @@ return [
     'text_hint'         => '提示',
     'updated_success'   => '更新成功',
     'view'              => '查看',
+    'yes'               => '係',
+    'no'                => '唔係',
 ];

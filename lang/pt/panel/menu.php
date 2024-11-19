@@ -42,6 +42,7 @@ return [
     'reviews'            => 'Gerenciamento de Comentários',
     'roles'              => 'Papéis do Painel',
     'settings'           => 'Configurações do Sistema',
+    'sns'                => 'Login de terceiros',
     'states'             => 'Estados e Províncias',
     'tags'               => 'Etiquetas de Artigos',
     'tax_classes'        => 'Configurações de Imposto',

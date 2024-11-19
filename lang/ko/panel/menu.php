@@ -42,6 +42,7 @@ return [
     'reviews'            => '리뷰 관리',
     'roles'              => '관리자 역할',
     'settings'           => '시스템 설정',
+    'sns'                => '사드파티 로그인',
     'states'             => '성 또는 주',
     'tags'               => '글 태그',
     'tax_classes'        => '세금 클래스',

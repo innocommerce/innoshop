@@ -42,6 +42,7 @@ return [
     'reviews'            => '评论管理',
     'roles'              => '后台角色',
     'settings'           => '系统设置',
+    'sns'                => '三方登录',
     'states'             => '省份或州',
     'tags'               => '文章标签',
     'tax_classes'        => '税类设置',

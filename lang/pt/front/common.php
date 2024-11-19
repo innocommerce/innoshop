@@ -46,4 +46,6 @@ return [
     'text_hint'         => 'Dica',
     'updated_success'   => 'Atualizado com Sucesso',
     'view'              => 'Visualizar',
+    'yes'               => 'Sim',
+    'no'                => 'Não',
 ];

@@ -68,4 +68,6 @@ return [
     'view'              => '보기',
     'viewed'            => '조회 횟수',
     'whether_enable'    => '사용 여부',
+    'yes'               => '예',
+    'no'                => '아니요',
 ];

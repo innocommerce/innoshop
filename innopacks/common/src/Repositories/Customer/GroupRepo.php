@@ -9,6 +9,8 @@
 
 namespace InnoShop\Common\Repositories\Customer;
 
+use Exception;
+use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Customer\Group;
 use InnoShop\Common\Repositories\BaseRepo;
 use InnoShop\Common\Resources\CustomerGroupSimple;
@@ -38,14 +40,21 @@ class GroupRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $group = new Group($this->handleData($data));
-        $group->saveOrFail();
+        DB::beginTransaction();
+        try {
+            $group = new Group($this->handleData($data));
+            $group->saveOrFail();
 
-        $translations = $this->handleTranslations($data);
-        $group->translations()->delete();
-        $group->translations()->createMany($translations);
+            $translations = $this->handleTranslations($data);
+            $group->translations()->delete();
+            $group->translations()->createMany($translations);
+            DB::commit();
 
-        return $group;
+            return $group;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**

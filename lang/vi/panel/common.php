@@ -68,4 +68,6 @@ return [
     'view'              => 'Xem',
     'viewed'            => 'Lượt xem',
     'whether_enable'    => 'Có kích hoạt không',
+    'yes'               => 'Có',
+    'no'                => 'Không',
 ];

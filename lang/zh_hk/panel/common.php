@@ -68,4 +68,6 @@ return [
     'view'              => '查看',
     'viewed'            => '查看次數',
     'whether_enable'    => '是否啟用',
+    'yes'               => '係',
+    'no'                => '唔係',
 ];

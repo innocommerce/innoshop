@@ -46,4 +46,6 @@ return [
     'text_hint'         => 'Gợi ý',
     'updated_success'   => 'Đã cập nhật thành công',
     'view'              => 'Xem',
+    'yes'               => 'Có',
+    'no'                => 'Không',
 ];

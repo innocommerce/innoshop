@@ -42,6 +42,7 @@ return [
     'reviews'            => 'レビュー管理',
     'roles'              => '管理者ロール',
     'settings'           => 'システム設定',
+    'sns'                => 'サードパーティログイン',
     'states'             => '都道府県',
     'tags'               => '記事タグ',
     'tax_classes'        => '税区分設定',

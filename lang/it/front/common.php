@@ -28,6 +28,7 @@ return [
     'logo'              => 'Logo',
     'name'              => 'Nome',
     'news'              => 'Notizie',
+    'no'                => 'no',
     'out_of_stock'      => 'Esaurito',
     'page_total_show'   => 'Mostra da :first a :last di :total',
     'pages'             => 'Pagine',
@@ -46,4 +47,5 @@ return [
     'text_hint'         => 'Suggerimento',
     'updated_success'   => 'Aggiornato con successo',
     'view'              => 'Visualizza',
+    'yes'               => 'sì',
 ];
