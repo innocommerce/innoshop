@@ -1,12 +1,12 @@
 {
   "code": "mobile_builder",
   "name": {
-    "zh_cn": "小程序(APP)编辑器",
-    "en": "APP Page Builder"
+    "zh_cn": "APP(小程序)编辑器",
+    "en": "APP Builder"
   },
   "description": {
-    "zh_cn": "小程序(APP)编辑器",
-    "en": "APP Page Builder"
+    "zh_cn": "APP(小程序)编辑器",
+    "en": "APP Builder"
   },
   "type": "feature",
   "version": "v1.0.0",
