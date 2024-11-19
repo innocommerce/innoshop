@@ -168,4 +168,13 @@ class BrandRepo extends BaseRepo
             ->orderByRaw('FIELD(id, '.implode(',', $BrandIDs).')')
             ->get();
     }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Brand::query()->find($id)->name ?? '';
+    }
 }

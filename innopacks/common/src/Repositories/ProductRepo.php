@@ -518,4 +518,13 @@ class ProductRepo extends BaseRepo
             ->limit($limit)
             ->get();
     }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Product::query()->find($id)->description->name ?? '';
+    }
 }

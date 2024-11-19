@@ -204,4 +204,13 @@ class CatalogRepo extends BaseRepo
             'active'    => (bool) ($requestData['active'] ?? true),
         ];
     }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Catalog::query()->find($id)->description->name ?? '';
+    }
 }

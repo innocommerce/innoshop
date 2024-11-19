@@ -268,4 +268,13 @@ class CategoryRepo extends BaseRepo
             ->orderByRaw('FIELD(id, '.implode(',', $categoryIDs).')')
             ->get();
     }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Category::query()->find($id)->description->name ?? '';
+    }
 }

@@ -171,4 +171,13 @@ class PageRepo extends BaseRepo
             ->orderByRaw('FIELD(id, '.implode(',', $PageIDs).')')
             ->get();
     }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Page::query()->find($id)->description->name ?? '';
+    }
 }
