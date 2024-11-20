@@ -9,8 +9,9 @@
 
 return [
     'id'             => 'ID',
-    'review'         => 'Review',
-    'review_content' => 'Rveiew Content',
-    'rating'         => 'Rating',
     'product'        => 'Product',
+    'rating'         => 'Rating',
+    'review'         => 'Review',
+    'review_content' => 'Review Content',
+    'created_at'     => 'Review At',
 ];
