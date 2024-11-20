@@ -20,6 +20,7 @@
             <td>{{ __('panel/common.id')}}</td>
             <td>{{ __('panel/common.name')}}</td>
             <td>{{ __('panel/menu.attribute_groups')}}</td>
+            <td>{{ __('panel/common.position')}}</td>
             <td>{{ __('panel/common.created_at')}}</td>
             <td>{{ __('panel/common.actions')}}</td>
           </tr>
@@ -30,6 +31,7 @@
               <td>{{ $item->id }}</td>
               <td>{{ $item->translation->name ?? '' }}</td>
               <td>{{ $item->group->translation->name ?? '' }}</td>
+              <td>{{ $item->position }}</td>
               <td>{{ $item->created_at }}</td>
               <td>
                 <a href="{{ panel_route('attributes.edit', [$item->id]) }}"

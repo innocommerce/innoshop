@@ -9,19 +9,21 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Repositories\Attribute\GroupRepo;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Panel\Requests\AttributeRequest;
+use Throwable;
 
 class AttributeController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -39,7 +41,7 @@ class AttributeController extends BaseController
      * Attribute creation page.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(): mixed
     {
@@ -49,7 +51,7 @@ class AttributeController extends BaseController
     /**
      * @param  AttributeRequest  $request
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(AttributeRequest $request): RedirectResponse
     {
@@ -60,7 +62,7 @@ class AttributeController extends BaseController
             return redirect(panel_route('attributes.index'))
                 ->with('instance', $attribute)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect(panel_route('attributes.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -70,7 +72,7 @@ class AttributeController extends BaseController
     /**
      * @param  Attribute  $attribute
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit(Attribute $attribute): mixed
     {
@@ -80,7 +82,7 @@ class AttributeController extends BaseController
     /**
      * @param  $attribute
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function form($attribute): mixed
     {
@@ -97,7 +99,7 @@ class AttributeController extends BaseController
      * @param  AttributeRequest  $request
      * @param  Attribute  $attribute
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(AttributeRequest $request, Attribute $attribute): RedirectResponse
     {
@@ -108,7 +110,7 @@ class AttributeController extends BaseController
             return redirect(panel_route('attributes.index'))
                 ->with('instance', $attribute)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect(panel_route('attributes.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -125,7 +127,7 @@ class AttributeController extends BaseController
             AttributeRepo::getInstance()->destroy($attribute);
 
             return back()->with('success', panel_trans('common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
