@@ -12,6 +12,7 @@ namespace InnoShop\Enterprise\PanelControllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InnoShop\Enterprise\Requests\FileRequest;
 use InnoShop\Enterprise\Services\FileManagerService;
 use InnoShop\Panel\Controllers\BaseController;
 use InnoShop\Panel\Requests\UploadFileRequest;
@@ -63,31 +64,33 @@ class FileManagerController extends BaseController
      * Retrieve a list of directories.
      *
      * @param  Request  $request
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getDirectories(Request $request): mixed
+    public function getDirectories(Request $request): JsonResponse
     {
-        $baseFolder = $request->get('base_folder');
+        $baseFolder = $request->get('base_folder', '/');
+        $data       = $this->fileManagerService->getDirectories($baseFolder);
 
-        $data = $this->fileManagerService->getDirectories($baseFolder);
-
-        return fire_hook_filter('admin.file_manager.directories.data', $data);
+        // 返回 JSON 格式
+        return response()->json([
+            'success' => true,
+            'data'    => $data,
+        ]);
     }
 
     /**
      * Create a new directory.
      *
-     * @param  Request  $request
+     * @param  FileRequest  $request
      * @return JsonResponse
-     * @throws Exception
      */
-    public function createDirectory(Request $request): JsonResponse
+    public function createDirectory(FileRequest $request): JsonResponse
     {
         try {
             $folderName = $request->get('name');
             $this->fileManagerService->createDirectory($folderName);
 
-            return json_success(trans('common.created_success'));
+            return create_json_success();
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -98,14 +101,21 @@ class FileManagerController extends BaseController
      *
      * @param  Request  $request
      * @return JsonResponse
-     * @throws Exception
      */
     public function rename(Request $request): JsonResponse
     {
         try {
-            $originPath = $request->get('origin_name');
-            $newPath    = $request->get('new_name');
-            $this->fileManagerService->updateName($originPath, $newPath);
+            $originName = $request->get('origin_name');
+            $newName    = $request->get('new_name');
+
+            // 确保路径格式正确
+            $originName = $this->normalizePath($originName);
+
+            // 获取目录路径和新文件名
+            $dirPath = dirname($originName);
+            $newPath = $dirPath === '/' ? "/{$newName}" : "{$dirPath}/{$newName}";
+
+            $this->fileManagerService->updateName($originName, $newPath);
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
@@ -114,18 +124,35 @@ class FileManagerController extends BaseController
     }
 
     /**
+     * Normalize file path
+     *
+     * @param  string  $path
+     * @return string
+     */
+    private function normalizePath(string $path): string
+    {
+        $path = preg_replace('#/+#', '/', $path);
+
+        return '/'.ltrim($path, '/');
+    }
+
+    /**
      * Delete specified files in a directory.
      *
      * @param  Request  $request
      * @return JsonResponse
-     * @throws Exception
      */
     public function destroyFiles(Request $request): JsonResponse
     {
         try {
             $requestData = json_decode($request->getContent(), true);
-            $basePath    = $requestData['path']  ?? '';
+            $basePath    = $requestData['path']  ?? '/';
             $files       = $requestData['files'] ?? [];
+
+            if (empty($files)) {
+                throw new Exception(trans('enterprise::file_manager.no_files_selected'));
+            }
+
             $this->fileManagerService->deleteFiles($basePath, $files);
 
             return json_success(trans('common.deleted_success'));
@@ -181,12 +208,29 @@ class FileManagerController extends BaseController
     public function moveFiles(Request $request): JsonResponse
     {
         try {
-            $images   = $request->get('images');
-            $destPath = $request->get('dest_path');
-            $this->fileManagerService->moveFiles($images, $destPath);
+            $requestData = json_decode($request->getContent(), true);
+            $files       = $requestData['files']     ?? [];
+            $destPath    = $requestData['dest_path'] ?? '';
+
+            if (empty($files) || empty($destPath)) {
+                throw new Exception(trans('enterprise::file_manager.invalid_params'));
+            }
+
+            // 记录调试信息
+            \Log::info('Move files request:', [
+                'files'    => $files,
+                'destPath' => $destPath,
+            ]);
+
+            $this->fileManagerService->moveFiles($files, $destPath);
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
+            \Log::error('Move files failed:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return json_fail($e->getMessage());
         }
     }
@@ -231,6 +275,42 @@ class FileManagerController extends BaseController
             'name' => $originName,
             'url'  => $fileUrl,
         ];
+
         return json_success('success', $data);
+    }
+
+    /**
+     * Copy multiple files to a new directory.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function copyFiles(Request $request): JsonResponse
+    {
+        try {
+            $requestData = json_decode($request->getContent(), true);
+            $files       = $requestData['files']     ?? [];
+            $destPath    = $requestData['dest_path'] ?? '';
+
+            if (empty($files) || empty($destPath)) {
+                throw new Exception(trans('enterprise::file_manager.invalid_params'));
+            }
+
+            \Log::info('Copy files request:', [
+                'files'    => $files,
+                'destPath' => $destPath,
+            ]);
+
+            $this->fileManagerService->copyFiles($files, $destPath);
+
+            return json_success(trans('common.updated_success'));
+        } catch (Exception $e) {
+            \Log::error('Copy files failed:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return json_fail($e->getMessage());
+        }
     }
 }

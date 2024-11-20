@@ -20,3 +20,4 @@ Route::delete('file_manager/directories', [FileManagerController::class, 'destro
 Route::post('file_manager/move_directories', [FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
 Route::post('file_manager/move_files', [FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
 Route::get('file_manager/export', [FileManagerController::class, 'exportZip'])->name('file_manager.export');
+Route::post('file_manager/copy_files', [FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');

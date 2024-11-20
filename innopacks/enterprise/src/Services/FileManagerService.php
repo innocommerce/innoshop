@@ -42,7 +42,7 @@ class FileManagerService
             if (is_dir($directory)) {
                 $item           = $this->handleFolder($dirName, $baseName);
                 $subDirectories = $this->getDirectories($dirName);
-                if ($subDirectories) {
+                if (! empty($subDirectories)) {
                     $item['children'] = $subDirectories;
                 }
                 $result[] = $item;
@@ -53,7 +53,7 @@ class FileManagerService
     }
 
     /**
-     * Fetches files in a directory based on filters.
+     * Fetches files and directories in a directory based on filters.
      *
      * @param  string  $baseFolder
      * @param  string  $keyword
@@ -67,37 +67,82 @@ class FileManagerService
     public function getFiles(string $baseFolder, string $keyword, string $sort, string $order, int $page = 1, int $perPage = 20): array
     {
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
-        $files           = glob($currentBasePath.'/*');
 
-        if ($sort === 'created') {
-            usort($files, function ($a, $b) use ($order) {
-                return ($order === 'desc') ? filemtime($b) - filemtime($a) : filemtime($a) - filemtime($b);
-            });
-        } else {
-            natcasesort($files);
-            if ($order === 'desc') {
-                $files = array_reverse($files);
-            }
+        // 获取文件夹
+        $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
+        $folders     = [];
+        foreach ($directories as $directory) {
+            $baseName  = basename($directory);
+            $dirPath   = str_replace($this->fileBasePath, '', $directory);
+            $folders[] = [
+                'id'           => $dirPath,
+                'name'         => $baseName,
+                'path'         => $dirPath,
+                'is_dir'       => true,
+                'thumb'        => asset('icon/folder.png'),
+                'url'          => '',
+                'mime'         => 'directory',
+                'created_time' => filemtime($directory),
+            ];
         }
 
+        // 获取文件
+        $files  = glob($currentBasePath.'/*');
         $images = [];
         foreach ($files as $file) {
+            if (! is_file($file)) {
+                continue;
+            }
             $baseName = basename($file);
             if ($baseName === 'index.html' || ($keyword && ! str_contains($baseName, $keyword))) {
                 continue;
             }
-            $fileName = str_replace(public_path('catalog'), '', $file);
-            if (is_file($file)) {
-                $images[] = $this->handleImage($fileName, $baseName);
-            }
+            $fileName                 = str_replace($this->fileBasePath, '', $file);
+            $fileInfo                 = $this->handleImage($fileName, $baseName);
+            $fileInfo['created_time'] = filemtime($file);
+            $images[]                 = $fileInfo;
         }
 
-        $imageCollection = collect($images);
-        $currentImages   = $imageCollection->forPage($page, $perPage);
+        // 合并文件夹和文件
+        $allItems = array_merge($folders, $images);
+
+        // 排序
+        if ($sort === 'created') {
+            usort($allItems, function ($a, $b) use ($order) {
+                $timeA = $a['created_time'] ?? 0;
+                $timeB = $b['created_time'] ?? 0;
+
+                return ($order === 'desc') ? $timeB - $timeA : $timeA - $timeB;
+            });
+        } else {
+            // 文件夹始终在前
+            usort($allItems, function ($a, $b) use ($order) {
+                if (($a['is_dir'] ?? false) && ! ($b['is_dir'] ?? false)) {
+                    return -1;
+                }
+                if (! ($a['is_dir'] ?? false) && ($b['is_dir'] ?? false)) {
+                    return 1;
+                }
+
+                return ($order === 'desc') ?
+                    strcasecmp($b['name'], $a['name']) :
+                    strcasecmp($a['name'], $b['name']);
+            });
+        }
+
+        // 移除临时的创建时间字段
+        $allItems = array_map(function ($item) {
+            unset($item['created_time']);
+
+            return $item;
+        }, $allItems);
+
+        $collection   = collect($allItems);
+        $currentItems = $collection->forPage($page, $perPage);
 
         return [
-            'images'      => $currentImages->values(),
-            'image_total' => $imageCollection->count(),
+            'images'      => $currentItems->values(),
+            'image_total' => $collection->count(),
             'image_page'  => $page,
         ];
     }
@@ -127,34 +172,107 @@ class FileManagerService
     public function moveDirectory(string $sourcePath, string $destPath): void
     {
         if (empty($sourcePath) || empty($destPath)) {
-            throw new Exception(trans('admin/file_manager.empty_path'));
+            throw new Exception(trans('enterprise::file_manager.empty_path'));
         }
 
+        // 获取源文件夹和目标路径的完整路径
+        $sourceDirPath = public_path("catalog/{$sourcePath}");
+        $destDirPath   = public_path("catalog/{$destPath}");
         $folderName    = basename($sourcePath);
-        $sourceDirPath = public_path("catalog{$this->basePath}{$sourcePath}/");
-        $destDirPath   = public_path("catalog{$this->basePath}{$destPath}");
+        $destFullPath  = rtrim($destDirPath, '/').'/'.$folderName;
 
-        $destFullPath = "{$destDirPath}/{$folderName}";
-        if (! File::exists($destFullPath)) {
-            move_dir($sourceDirPath, $destDirPath);
-        } else {
-            throw new Exception(trans('admin/file_manager.target_dir_exist'));
+        // 验证源文件夹存在
+        if (! is_dir($sourceDirPath)) {
+            throw new Exception(trans('enterprise::file_manager.source_dir_not_exist'));
+        }
+
+        // 验证目标文件夹存在
+        if (! is_dir($destDirPath)) {
+            throw new Exception(trans('enterprise::file_manager.target_dir_not_exist'));
+        }
+
+        // 检查目标路径是否已存在同名文件夹
+        if (is_dir($destFullPath)) {
+            throw new Exception(trans('enterprise::file_manager.target_dir_exist'));
+        }
+
+        // 不能移动到自己的子目录
+        if (strpos($destPath, $sourcePath.'/') === 0) {
+            throw new Exception(trans('enterprise::file_manager.cannot_move_to_subdirectory'));
+        }
+
+        // 记录日志
+        \Log::info('Moving directory:', [
+            'from' => $sourceDirPath,
+            'to'   => $destFullPath,
+        ]);
+
+        // 执行移动
+        if (! @rename($sourceDirPath, $destFullPath)) {
+            \Log::error('Failed to move directory:', [
+                'error' => error_get_last(),
+            ]);
+            throw new Exception(trans('enterprise::file_manager.move_failed'));
         }
     }
 
     /**
      * Moves multiple files to a new directory.
      *
-     * @param  array  $images
+     * @param  array  $files
      * @param  string  $destPath
+     * @throws Exception
      */
-    public function moveFiles(array $images, string $destPath): void
+    public function moveFiles(array $files, string $destPath): void
     {
-        $destDirPath = public_path("catalog{$this->basePath}{$destPath}");
+        if (empty($files)) {
+            throw new Exception(trans('enterprise::file_manager.no_files_selected'));
+        }
 
-        foreach ($images as $image) {
-            $sourceDirPath = public_path($image);
-            File::move($sourceDirPath, "{$destDirPath}/".basename($sourceDirPath));
+        // 确保目标目录存在
+        $destFullPath = public_path("catalog/{$destPath}");
+        if (! is_dir($destFullPath)) {
+            throw new Exception(trans('enterprise::file_manager.target_dir_not_exist'));
+        }
+
+        foreach ($files as $fileName) {
+            // 构建源文件的完整路径
+            $sourcePath = public_path("catalog/{$fileName}");
+            // 构建目标文件的完整路径
+            $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
+
+            // 记录日志
+            \Log::info('Moving file:', [
+                'source'      => $sourcePath,
+                'destination' => $destFilePath,
+                'fileName'    => $fileName,
+                'destPath'    => $destPath,
+            ]);
+
+            if (file_exists($sourcePath)) {
+                // 如果目标文件已存在，先删除
+                if (file_exists($destFilePath)) {
+                    @unlink($destFilePath);
+                }
+
+                // 移动文件
+                if (! @rename($sourcePath, $destFilePath)) {
+                    \Log::error('Failed to move file:', [
+                        'source'      => $sourcePath,
+                        'destination' => $destFilePath,
+                        'error'       => error_get_last(),
+                    ]);
+                    throw new Exception(trans('enterprise::file_manager.move_failed'));
+                } else {
+                    \Log::info('File moved successfully:', [
+                        'from' => $sourcePath,
+                        'to'   => $destFilePath,
+                    ]);
+                }
+            } else {
+                \Log::warning('Source file not found:', ['path' => $sourcePath]);
+                throw new Exception(trans('enterprise::file_manager.source_file_not_exist'));
+            }
         }
     }
 
@@ -203,9 +321,33 @@ class FileManagerService
     public function deleteFiles(string $basePath, array $files): void
     {
         foreach ($files as $file) {
-            $filePath = public_path("catalog{$this->basePath}/{$basePath}/$file");
-            if (file_exists($filePath)) {
-                @unlink($filePath);
+            $fileName = basename($file);
+
+            $filePath = trim($basePath, '/');
+            if (! empty($filePath)) {
+                $filePath .= '/';
+            }
+            $filePath .= $fileName;
+
+            // 完整的物理文件路径
+            $fullPath = public_path("catalog/{$filePath}");
+
+            // 记录日志
+            \Log::info('Deleting file:', [
+                'file_id'   => $file,
+                'base_path' => $basePath,
+                'file_name' => $fileName,
+                'full_path' => $fullPath,
+            ]);
+
+            if (file_exists($fullPath)) {
+                if (@unlink($fullPath)) {
+                    \Log::info('File deleted successfully: '.$fullPath);
+                } else {
+                    \Log::error('Failed to delete file: '.$fullPath);
+                }
+            } else {
+                \Log::warning('File not found: '.$fullPath);
             }
         }
     }
@@ -219,18 +361,23 @@ class FileManagerService
      */
     public function updateName(string $originPath, string $newPath): void
     {
-        $originPath = public_path("catalog{$this->basePath}/{$originPath}");
-        if (! is_dir($originPath) && ! file_exists($originPath)) {
-            throw new Exception(trans('admin/file_manager.target_not_exist'));
+        $originFullPath = public_path("catalog{$this->basePath}{$originPath}");
+        $newFullPath    = public_path("catalog{$this->basePath}{$newPath}");
+
+        if (! is_dir($originFullPath) && ! file_exists($originFullPath)) {
+            throw new Exception(trans('enterprise::file_manager.target_not_exist'));
         }
 
-        $newPath = dirname($originPath).'/'.$newPath;
-        if ($originPath === $newPath || file_exists($newPath)) {
-            throw new Exception(trans('admin/file_manager.rename_failed'));
+        // 如果目标文件已存在，生成新的文件名
+        if (file_exists($newFullPath)) {
+            $dirPath     = dirname($newPath);
+            $newName     = $this->getUniqueFileName($dirPath, basename($newPath));
+            $newPath     = $dirPath === '/' ? "/{$newName}" : "{$dirPath}/{$newName}";
+            $newFullPath = public_path("catalog{$this->basePath}{$newPath}");
         }
 
-        if (! @rename($originPath, $newPath)) {
-            throw new Exception(trans('admin/file_manager.rename_failed'));
+        if (! @rename($originFullPath, $newFullPath)) {
+            throw new Exception(trans('enterprise::file_manager.rename_failed'));
         }
     }
 
@@ -259,7 +406,8 @@ class FileManagerService
      */
     public function getUniqueFileName(string $savePath, string $originName): string
     {
-        if (is_file(public_path('catalog'.$this->basePath.$savePath.'/'.$originName))) {
+        $fullPath = public_path("catalog{$this->basePath}{$savePath}/{$originName}");
+        if (file_exists($fullPath)) {
             $originName = $this->getNewFileName($originName);
 
             return $this->getUniqueFileName($savePath, $originName);
@@ -278,20 +426,24 @@ class FileManagerService
     {
         $extension = pathinfo($originName, PATHINFO_EXTENSION);
         $name      = pathinfo($originName, PATHINFO_FILENAME);
-        if (preg_match('/(.+?)-(\d+)$/', $name, $matches)) {
+
+        if (preg_match('/(.+?)\((\d+)\)$/', $name, $matches)) {
+            // 如果已经有 (n) 格式的后缀，增加数字
             $index = (int) $matches[2] + 1;
-            $name  = "{$matches[1]}-{$index}";
+            $name  = "{$matches[1]}({$index})";
         } else {
-            $name .= '-1';
+            // 添加 (1) 后缀
+            $name .= '(1)';
         }
 
         return "{$name}.{$extension}";
     }
 
     /**
-     * @param  $imagePath
+     * @param  $filePath
      * @param  $baseName
      * @return array
+     * @throws Exception
      */
     protected function handleImage($filePath, $baseName): array
     {
@@ -324,5 +476,64 @@ class FileManagerService
             'name' => $folderName,
             'path' => $folderPath,
         ];
+    }
+
+    /**
+     * Copies multiple files to a new directory.
+     *
+     * @param  array  $files
+     * @param  string  $destPath
+     * @throws Exception
+     */
+    public function copyFiles(array $files, string $destPath): void
+    {
+        if (empty($files)) {
+            throw new Exception(trans('enterprise::file_manager.no_files_selected'));
+        }
+
+        // 确保目标目录存在
+        $destFullPath = public_path("catalog/{$destPath}");
+        if (! is_dir($destFullPath)) {
+            throw new Exception(trans('enterprise::file_manager.target_dir_not_exist'));
+        }
+
+        foreach ($files as $fileName) {
+            // 构建源文件的完整路径
+            $sourcePath = public_path("catalog/{$fileName}");
+            // 构建目标文件的完整路径
+            $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
+
+            // 记录日志
+            \Log::info('Copying file:', [
+                'source'      => $sourcePath,
+                'destination' => $destFilePath,
+            ]);
+
+            if (file_exists($sourcePath)) {
+                // 如果目标文件已存在，生成新的文件名
+                if (file_exists($destFilePath)) {
+                    $newName      = $this->getUniqueFileName($destPath, basename($fileName));
+                    $destFilePath = rtrim($destFullPath, '/').'/'.$newName;
+                }
+
+                // 复制文件
+                if (! @copy($sourcePath, $destFilePath)) {
+                    \Log::error('Failed to copy file:', [
+                        'source'      => $sourcePath,
+                        'destination' => $destFilePath,
+                        'error'       => error_get_last(),
+                    ]);
+                    throw new Exception(trans('enterprise::file_manager.copy_failed'));
+                } else {
+                    \Log::info('File copied successfully:', [
+                        'from' => $sourcePath,
+                        'to'   => $destFilePath,
+                    ]);
+                }
+            } else {
+                \Log::warning('Source file not found:', ['path' => $sourcePath]);
+                throw new Exception(trans('enterprise::file_manager.source_file_not_exist'));
+            }
+        }
     }
 }
