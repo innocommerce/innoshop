@@ -20,9 +20,15 @@
 
   <div class="tab-content w-max-1000" id="">
     @foreach (locales() as $locale)
-    <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-pane" role="tabpanel" aria-labelledby="{{ $locale['code'] }}">
-      <textarea rows="4" type="text" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control" @if ($required) required @endif placeholder="{{ $title }}">{{ $value[$locale['code']] ?? '' }}</textarea>
-    </div>
+      <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-pane" role="tabpanel" aria-labelledby="{{ $locale['code'] }}">
+      @if(is_object($value))
+        @php ($o_value = $value->where('locale', $locale['code'])->first())
+        <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
+        <textarea rows="4" type="text" name="translations[{{ $locale['code'] }}][{{ $name }}]" class="form-control" @if ($required) required @endif placeholder="{{ $title }}">{{ $o_value->description ?? '' }}</textarea>
+      @else
+        <textarea rows="4" type="text" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control" @if ($required) required @endif placeholder="{{ $title }}">{{ $value[$locale['code']] ?? '' }}</textarea>
+      @endif
+      </div>
     @endforeach
   </div>
 @endif

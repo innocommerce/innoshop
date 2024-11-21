@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Customer\Group;
 use InnoShop\Common\Repositories\BaseRepo;
 use InnoShop\Common\Resources\CustomerGroupSimple;
+use Throwable;
 
 class GroupRepo extends BaseRepo
 {
@@ -36,7 +37,7 @@ class GroupRepo extends BaseRepo
     /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {
@@ -51,6 +52,31 @@ class GroupRepo extends BaseRepo
             DB::commit();
 
             return $group;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @param  $item
+     * @param  $data
+     * @return mixed
+     * @throws Exception
+     */
+    public function update($item, $data): mixed
+    {
+        DB::beginTransaction();
+        try {
+            $item->fill($this->handleData($data));
+            $item->saveOrFail();
+
+            $translations = $this->handleTranslations($data);
+            $item->translations()->delete();
+            $item->translations()->createMany($translations);
+            DB::commit();
+
+            return $item;
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -86,15 +112,6 @@ class GroupRepo extends BaseRepo
      */
     private function handleTranslations($requestData): array
     {
-        $items = [];
-        foreach ($requestData['name'] as $locale => $item) {
-            $items[$locale]['locale'] = $locale;
-            $items[$locale]['name']   = $item;
-        }
-        foreach ($requestData['description'] as $locale => $item) {
-            $items[$locale]['description'] = $item;
-        }
-
-        return array_values($items);
+        return array_values($requestData['translations']);
     }
 }

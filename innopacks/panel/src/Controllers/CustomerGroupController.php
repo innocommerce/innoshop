@@ -79,12 +79,12 @@ class CustomerGroupController
     }
 
     /**
-     * @param  $customerGroup
+     * @param  CustomerGroup  $customerGroup
      * @return mixed
-     * @throws Exception
      */
-    public function form($customerGroup): mixed
+    public function form(CustomerGroup $customerGroup): mixed
     {
+        $customerGroup->load(['translations']);
         $data = [
             'group' => $customerGroup,
         ];
