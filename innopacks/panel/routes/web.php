@@ -61,6 +61,7 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/pages/{page}/active', [Controllers\PageController::class, 'active'])->name('pages.active');
 
         Route::resource('/customers', Controllers\CustomerController::class);
+        Route::get('/customers/{customer}/login', [Controllers\CustomerController::class, 'loginFrontend'])->name('customers.login');
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);

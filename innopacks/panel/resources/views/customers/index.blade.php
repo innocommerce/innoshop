@@ -46,6 +46,8 @@
                 @include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('customers.active', $item)])
               </td>
               <td>
+                <a href="{{ panel_route('customers.login', [$item->id]) }}" target="_blank"
+                   class="btn btn-sm btn-outline-primary">{{ __('panel/customer.login_frontend')}}</a>
                 <a href="{{ panel_route('customers.edit', [$item->id]) }}"
                     class="btn btn-sm btn-outline-primary">{{ __('panel/common.edit')}}</a>
                 <form action="{{ panel_route('customers.destroy', [$item->id]) }}" method="POST" class="d-inline">
