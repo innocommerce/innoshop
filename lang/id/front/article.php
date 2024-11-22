@@ -8,5 +8,8 @@
  */
 
 return [
-    'articles' => 'Beranda Artikel',
+    'articles'            => 'Halaman Artikel',
+    'keyword'             => 'Masukkan kata kunci',
+    'news_classification' => 'Klasifikasi Berita',
+    'search'              => 'Cari',
 ];
