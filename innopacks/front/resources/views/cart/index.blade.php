@@ -170,7 +170,7 @@
       if (res.success) {
         inno.msg(res.message)
         $('.total-amount').text(res.data.amount_format);
-        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total);
+        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total_format);
         if (method == 'delete') {
           $(`tr[data-id=${id}]`).remove();
           if (!$('.products-table tbody tr').length) {
@@ -189,7 +189,7 @@
       if (res.success) {
         inno.msg(res.message)
         $('.total-amount').text(res.data.amount_format);
-        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total);
+        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total_format);
       }
     })
   }

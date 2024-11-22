@@ -36,7 +36,7 @@ export default {
         layer.msg(res.message)
       }
 
-      $('.header-cart-icon .icon-quantity').text(res.data.total)
+      $('.header-cart-icon .icon-quantity').text(res.data.total_format)
 
       if (callback) {
         callback(res)
