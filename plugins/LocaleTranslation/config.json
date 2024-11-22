@@ -1,0 +1,18 @@
+{
+    "code": "locale_translation",
+    "name": {
+        "zh_cn": "语言包翻译",
+        "en": "Locale Translation"
+    },
+    "description": {
+        "zh_cn": "语言包自动翻译",
+        "en": "Locale auto translation"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/image/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}
