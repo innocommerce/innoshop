@@ -9,8 +9,10 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Region;
+use Throwable;
 
 class RegionRepo extends BaseRepo
 {
@@ -27,12 +29,42 @@ class RegionRepo extends BaseRepo
 
     /**
      * @param  array  $filters
+     * @return LengthAwarePaginator
+     */
+    public function list(array $filters = []): LengthAwarePaginator
+    {
+        return $this->builder($filters)->orderByDesc('id')->paginate();
+    }
+
+    /**
+     * @param  array  $filters
+     * @return Builder
+     */
+    public function getRegions(array $filters = []): Builder
+    {
+        return $this->builder($filters)->orderBy('position')->orderBy('name');
+    }
+
+    /**
+     * @param  array  $filters
      * @return Builder
      */
     public function builder(array $filters = []): Builder
     {
         $builder = Region::query();
-        $builder->orderBy('position')->orderBy('name');
+        $name    = $filters['name'] ?? '';
+        if ($name) {
+            $builder->where('name', 'like', "%$name%");
+        }
+
+        $description = $filters['description'] ?? '';
+        if ($description) {
+            $builder->where('description', 'like', "%$description%");
+        }
+
+        if (isset($filters['active'])) {
+            $builder->where('active', (bool) $filters['active']);
+        }
 
         return fire_hook_filter('repo.region.builder', $builder);
     }
@@ -40,7 +72,7 @@ class RegionRepo extends BaseRepo
     /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {
