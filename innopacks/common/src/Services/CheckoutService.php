@@ -139,7 +139,11 @@ class CheckoutService extends BaseService
      */
     public function getDefaultAddress(): array
     {
-        $addressList    = $this->getAddressList();
+        $addressList = $this->getAddressList();
+        if (empty($addressList)) {
+            return [];
+        }
+
         $defaultAddress = collect($addressList)->where('default', 1)->first();
 
         return $defaultAddress ?: $addressList[0];

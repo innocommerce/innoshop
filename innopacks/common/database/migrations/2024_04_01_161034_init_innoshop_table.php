@@ -254,6 +254,7 @@ return new class extends Migration
             $table->string('shipping_method_code')->comment('Shipping Method Code');
             $table->integer('billing_address_id')->index('c_ba_id')->comment('Billing Address ID');
             $table->string('billing_method_code')->comment('Billing Method Code');
+            $table->text('comment')->nullable()->comment('Checkout Comment');
             $table->json('reference')->nullable()->comment('Order Extra');
             $table->timestamps();
         });
@@ -555,6 +556,7 @@ return new class extends Migration
             $table->string('billing_address_1')->comment('Billing Address 1');
             $table->string('billing_address_2')->comment('Billing Address 1');
             $table->string('billing_zipcode')->comment('Billing Address Zipcode');
+            $table->text('comment')->nullable()->comment('Order Comment');
             $table->timestamps();
             $table->softDeletes()->comment('Deleted At');
         });

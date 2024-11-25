@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use InnoShop\Common\Models\Country;
 
@@ -38,11 +39,11 @@ class CountryRepo extends BaseRepo
 
     /**
      * @param  array  $filters
-     * @return Builder
+     * @return Collection
      */
-    public function getCountries(array $filters = []): Builder
+    public function getCountries(array $filters = []): Collection
     {
-        return $this->builder($filters)->orderBy('position')->orderBy('name');
+        return $this->withActive()->builder($filters)->orderBy('position')->orderBy('name')->get();
     }
 
     /**
@@ -52,7 +53,9 @@ class CountryRepo extends BaseRepo
     public function builder(array $filters = []): Builder
     {
         $builder = Country::query();
-        $name    = $filters['name'] ?? '';
+        $filters = array_merge($this->filters, $filters);
+
+        $name = $filters['name'] ?? '';
         if ($name) {
             $builder->where('name', 'like', "%$name%");
         }

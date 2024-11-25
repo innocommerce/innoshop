@@ -29,6 +29,10 @@ $(function () {
     inno.addCart({skuId}, this)
   })
 
+  $(function() {
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  });
+
   //Set app-content min height.
   common.setAppContentMinHeight();
   $(window).on('resize', common.setAppContentMinHeight)

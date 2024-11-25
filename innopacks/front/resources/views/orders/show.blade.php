@@ -3,7 +3,8 @@
 
 @section('content')
 
-  <x-front-breadcrumb type="static" value="{{ front_route('orders.pay', ['number'=>$order->number]) }}" title="{{ $order->number }}"/>
+  <x-front-breadcrumb type="static" value="{{ front_route('orders.pay', ['number'=>$order->number]) }}"
+                      title="{{ $order->number }}"/>
 
   @hookinsert('order.show.top')
 
@@ -20,6 +21,7 @@
             <th>{{ __('front/order.order_date') }}</th>
             <th>{{ __('front/order.order_total') }}</th>
             <th>{{ __('front/order.order_status') }}</th>
+            <th>{{ __('front/checkout.order_comment') }}</th>
           </tr>
           </thead>
           <tbody>
@@ -28,10 +30,15 @@
             <td data-title="Order Date">{{ $order->created_at->format('Y-m-d') }}</td>
             <td data-title="Order Total">{{ $order->total_format }}</td>
             <td data-title="Order Status">{{ $order->status_format }}</td>
+            <td data-title="Order comment">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
+                    data-bs-title="{{ sub_string($order->comment, 380) }}">
+                {{ sub_string($order->comment) }}
+              </span>
+            </td>
           </tr>
           </tbody>
         </table>
-
         <div class="products-table mb-4">
           <table class="table products-table align-middle">
             <thead>

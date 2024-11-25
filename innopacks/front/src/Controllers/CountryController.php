@@ -25,7 +25,7 @@ class CountryController extends BaseController
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $countries = CountryRepo::getInstance()->builder($request->all())->get();
+        $countries = CountryRepo::getInstance()->getCountries($request->all());
 
         return CountrySimple::collection($countries);
     }

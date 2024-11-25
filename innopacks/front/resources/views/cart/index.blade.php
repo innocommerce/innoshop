@@ -7,6 +7,14 @@
 @hookinsert('cart.top')
 
 <div class="container">
+
+  @if (session()->has('errors'))
+    <x-common-alert type="danger" msg="{{ session('errors')->first() }}" class="mt-4"/>
+  @endif
+  @if (session('success'))
+    <x-common-alert type="success" msg="{{ session('success') }}" class="mt-4"/>
+  @endif
+
   @if (count($list))
     <div class="row">
       <div class="col-12 col-md-9">
