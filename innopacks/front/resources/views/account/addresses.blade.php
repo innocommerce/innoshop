@@ -2,7 +2,7 @@
 @section('body-class', 'page-addresses')
 
 @section('content')
-  <x-front-breadcrumb type="route" value="account.addresses.index" title="{{ __('front/account.addresses') }}" />
+  <x-front-breadcrumb type="route" value="account.addresses.index" title="{{ __('front/account.addresses') }}"/>
 
   @hookinsert('account.addresses.top')
 
@@ -15,7 +15,8 @@
         <div class="account-card-box addresses-box">
           <div class="account-card-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('common/address.address') }}</span>
-            <button type="button" class="btn btn-primary add-address">{{ __('common/address.add_new_address') }}</button>
+            <button type="button"
+                    class="btn btn-primary add-address">{{ __('common/address.add_new_address') }}</button>
           </div>
           <div class="row">
             @foreach($addresses as $index => $address)
@@ -24,6 +25,11 @@
                   <div class="address-card-header">
                     <h5 class="address-card-title">{{ $address['name'] }}</h5>
                     <div class="address-card-actions">
+                      @if($address['default'])
+                        <div class="bg-success text-white p-1 required rounded">
+                          {{__('front/common.default')}}
+                        </div>
+                      @endif
                       <button type="button" class="btn btn-link edit-address">{{ __('front/common.edit') }}</button>
                       <button type="button" class="btn btn-link delete-address">{{ __('front/common.delete') }}</button>
                     </div>
@@ -33,7 +39,7 @@
                     <p>{{ $address['address_1'] }} {{ $address['address_2'] }}</p>
                     <p>{{ $address['city'] }}</p>
                     <p>{{ $address['state'] }}, {{ $address['country_name'] }}</p>
-                    <p>Phone: {{ $address['phone'] }}</p>
+                    <p>{{ __('common/address.phone') }}: {{ $address['phone'] }}</p>
                   </div>
                 </div>
               </div>
@@ -65,12 +71,13 @@
 @push('footer')
   <script>
     const addresses = @json($addresses);
-    console.log(addresses);
+    const isDefault = $('#default');
 
     $('.add-address').on('click', function () {
       $('.address-form').find('input, select').each(function () {
         $(this).val('')
       })
+      isDefault.val(1);
 
       $('#addressModal').modal('show');
     });
@@ -83,6 +90,12 @@
         $('.address-form').find('input, select').each(function () {
           $(this).val(address[$(this).attr('name')])
         })
+        isDefault.val(1);
+        if (address.default === 1) {
+          isDefault.attr('checked', 'checked');
+        } else {
+          isDefault.removeAttr('checked');
+        }
       })
 
       $('#addressModal').modal('show');
@@ -92,7 +105,7 @@
       const id = $(this).closest('.address-card').data('id');
 
       layer.confirm('{{ __('front/common.delete_confirm') }}', {
-        btn: [ '{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}' ]
+        btn: ['{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}']
       }, function () {
         axios.delete(`{{ account_route('addresses.index') }}/${id}`).then(function (res) {
           if (res.success) {

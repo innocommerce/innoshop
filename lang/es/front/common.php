@@ -16,6 +16,7 @@ return [
     'confirm'           => 'Confirmar',
     'created_at'        => 'Creado el',
     'date'              => 'Fecha',
+    'default'           => 'Dirección predeterminada',
     'delete'            => 'Eliminar',
     'delete_confirm'    => '¿Estás seguro de que deseas eliminarlo?',
     'deleted_success'   => 'Eliminado con éxito',

@@ -16,6 +16,7 @@ return [
     'confirm'           => 'Confirm',
     'created_at'        => 'Created at',
     'date'              => 'Date',
+    'default'           => 'Default',
     'delete'            => 'Delete',
     'delete_confirm'    => 'You sure you want to delete it?',
     'deleted_success'   => 'Deleted successfully',
@@ -28,6 +29,7 @@ return [
     'logo'              => 'Lego',
     'name'              => 'Name',
     'news'              => 'Articles',
+    'no'                => 'no',
     'out_of_stock'      => 'Out of Stock',
     'page_total_show'   => 'Showing :first to :last of :total items',
     'pages'             => 'Pages',
@@ -47,6 +49,4 @@ return [
     'updated_success'   => 'Updated successfully',
     'view'              => 'View',
     'yes'               => 'yes',
-    'no'                => 'no',
-
 ];

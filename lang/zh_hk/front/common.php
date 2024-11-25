@@ -16,6 +16,7 @@ return [
     'confirm'           => '確定',
     'created_at'        => '創建時間',
     'date'              => '日期',
+    'default'           => '默認',
     'delete'            => '刪除',
     'delete_confirm'    => '確定要刪除嗎？',
     'deleted_success'   => '刪除成功',
@@ -28,6 +29,7 @@ return [
     'logo'              => '品牌',
     'name'              => '名稱',
     'news'              => '文章',
+    'no'                => '唔係',
     'out_of_stock'      => '缺貨',
     'page_total_show'   => '顯示第 :first 到第 :last 項，共 :total 項',
     'pages'             => '單頁',
@@ -47,5 +49,4 @@ return [
     'updated_success'   => '更新成功',
     'view'              => '查看',
     'yes'               => '係',
-    'no'                => '唔係',
 ];

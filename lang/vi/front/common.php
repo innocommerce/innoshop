@@ -16,6 +16,7 @@ return [
     'confirm'           => 'Xác nhận',
     'created_at'        => 'Thời gian tạo',
     'date'              => 'Ngày',
+    'default'           => 'Địa chỉ mặc định',
     'delete'            => 'Xóa',
     'delete_confirm'    => 'Bạn có chắc chắn muốn xóa?',
     'deleted_success'   => 'Đã xóa thành công',
@@ -28,6 +29,7 @@ return [
     'logo'              => 'Logo',
     'name'              => 'Tên',
     'news'              => 'Tin tức',
+    'no'                => 'Không',
     'out_of_stock'      => 'Hết hàng',
     'page_total_show'   => 'Hiển thị từ :first đến :last trên :total mục',
     'pages'             => 'Trang',
@@ -47,5 +49,4 @@ return [
     'updated_success'   => 'Đã cập nhật thành công',
     'view'              => 'Xem',
     'yes'               => 'Có',
-    'no'                => 'Không',
 ];

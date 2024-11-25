@@ -16,6 +16,7 @@ return [
     'confirm'           => 'Konfirmasi',
     'created_at'        => 'Waktu Pembuatan',
     'date'              => 'Tanggal',
+    'default'           => 'Alamat default',
     'delete'            => 'Hapus',
     'delete_confirm'    => 'Apakah Anda Yakin untuk Menghapus?',
     'deleted_success'   => 'Safaltāpūrvak haṭānā',

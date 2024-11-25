@@ -16,6 +16,7 @@ return [
     'confirm'           => 'Confirmer',
     'created_at'        => 'Date de création',
     'date'              => 'Date',
+    'default'           => 'Adresse par défaut',
     'delete'            => 'Supprimer',
     'delete_confirm'    => 'Êtes-vous sûr de vouloir supprimer ?',
     'deleted_success'   => 'Supprimé avec succès',

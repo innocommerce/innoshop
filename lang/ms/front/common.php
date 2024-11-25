@@ -16,6 +16,7 @@ return [
     'confirm'           => 'Sahkan',
     'created_at'        => 'Masa Penciptaan',
     'date'              => 'Tarikh',
+    'default'           => 'Alamat lalai',
     'delete'            => 'Padam',
     'delete_confirm'    => 'Anda Pasti Untuk Menghapus?',
     'deleted_success'   => 'Pembuangan berjaya',
@@ -30,6 +31,7 @@ return [
     'logo'              => 'Logo',
     'name'              => 'Nama',
     'news'              => 'Berita',
+    'no'                => 'Tidak',
     'not_found'         => 'Tidak Ditemui',
     'of'                => 'dari',
     'out_of_stock'      => 'Stok Habis',
@@ -55,5 +57,4 @@ return [
     'updated_success'   => 'Berjaya Dikemaskini',
     'view'              => 'Lihat',
     'yes'               => 'ya',
-    'no'                => 'Tidak',
 ];

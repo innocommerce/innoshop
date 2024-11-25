@@ -16,6 +16,7 @@ return [
     'confirm'           => 'ยืนยัน',
     'created_at'        => 'สร้างเมื่อ',
     'date'              => 'วันที่',
+    'default'           => 'ที่อยู่เริ่มต้น',
     'delete'            => 'ลบ',
     'delete_confirm'    => 'คุณต้องการลบหรือไม่',
     'deleted_success'   => 'ลบข้อมูลสำเร็จ',
@@ -28,6 +29,7 @@ return [
     'logo'              => 'โลโก้',
     'name'              => 'ชื่อ',
     'news'              => 'ข่าวสาร',
+    'no'                => 'ไม่ใช่',
     'out_of_stock'      => 'สินค้าหมด',
     'page_total_show'   => 'แสดงจาก :first ถึง :last รายการ ทั้งหมด :total รายการ',
     'pages'             => 'หน้า',
@@ -47,5 +49,4 @@ return [
     'updated_success'   => 'อัปเดตข้อมูลสำเร็จ',
     'view'              => 'ดู',
     'yes'               => 'ใช่',
-    'no'                => 'ไม่ใช่',
 ];

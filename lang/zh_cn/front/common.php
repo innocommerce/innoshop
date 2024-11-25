@@ -17,6 +17,7 @@ return [
     'confirm'           => '确定',
     'created_at'        => '创建时间',
     'date'              => '日期',
+    'default'           => '默认',
     'delete'            => '删除',
     'delete_confirm'    => '确定要删除吗？',
     'deleted_success'   => '删除成功',

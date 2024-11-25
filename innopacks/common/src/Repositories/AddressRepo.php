@@ -67,6 +67,7 @@ class AddressRepo extends BaseRepo
     {
         $address = new Address($this->handleData($data));
         $address->saveOrFail();
+        $this->checkAndSetDefault($address, $data);
 
         return $address;
     }
@@ -80,8 +81,34 @@ class AddressRepo extends BaseRepo
     {
         $item->fill($this->handleData($data));
         $item->saveOrFail();
+        $this->checkAndSetDefault($item, $data);
 
         return $item;
+    }
+
+    /**
+     * @param  $address
+     * @param  $data
+     * @return void
+     */
+    public function checkAndSetDefault($address, $data): void
+    {
+        $default = $data['default'] ?? false;
+        if (! $default) {
+            return;
+        }
+        $this->setDefaultAddress($address);
+    }
+
+    /**
+     * @param  $address
+     * @return void
+     */
+    public function setDefaultAddress($address): void
+    {
+        $this->builder(['customer_id' => $address->customer_id])->update(['default' => false]);
+        $address->default = true;
+        $address->save();
     }
 
     /**
@@ -139,6 +166,7 @@ class AddressRepo extends BaseRepo
             'zipcode'     => $requestData['zipcode']    ?? '',
             'address_1'   => $requestData['address_1']  ?? '',
             'address_2'   => $requestData['address_2']  ?? '',
+            'default'     => $requestData['default']    ?? false,
         ];
     }
 }

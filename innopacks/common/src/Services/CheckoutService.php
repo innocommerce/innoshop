@@ -135,6 +135,17 @@ class CheckoutService extends BaseService
     }
 
     /**
+     * @return mixed
+     */
+    public function getDefaultAddress(): array
+    {
+        $addressList    = $this->getAddressList();
+        $defaultAddress = collect($addressList)->where('default', 1)->first();
+
+        return $defaultAddress ?: $addressList[0];
+    }
+
+    /**
      * @return float
      */
     public function getSubTotal(): float
@@ -269,8 +280,7 @@ class CheckoutService extends BaseService
      */
     public function createCheckout($data): mixed
     {
-        $addressList    = $this->getAddressList();
-        $defaultAddress = $addressList[0] ?? null;
+        $defaultAddress = $this->getDefaultAddress();
 
         $shippingMethods = ShippingService::getInstance($this)->getMethods();
         $billingMethods  = BillingService::getInstance()->getMethods();

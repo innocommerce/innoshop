@@ -41,6 +41,7 @@ return new class extends Migration
             $table->string('zipcode')->comment('Zip Code');
             $table->string('address_1')->comment('Address 1');
             $table->string('address_2')->comment('Address 2');
+            $table->boolean('default')->default(false)->comment('Default Address');
             $table->timestamps();
         });
 
