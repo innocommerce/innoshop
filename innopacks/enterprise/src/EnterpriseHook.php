@@ -9,6 +9,7 @@
 
 namespace InnoShop\Enterprise;
 
+use InnoShop\Enterprise\Hooks\Currency;
 use InnoShop\Enterprise\Hooks\Product;
 
 class EnterpriseHook
@@ -24,5 +25,6 @@ class EnterpriseHook
     public function init(): void
     {
         Product::getInstance()->init();
+        Currency::getInstance()->init();
     }
 }

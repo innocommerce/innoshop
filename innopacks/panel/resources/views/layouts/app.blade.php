@@ -53,7 +53,10 @@
         <h4 class="page-title mb-0">@yield('title')</h4>
         <div class="ms-4 text-danger">@yield('page-title-after')</div>
       </div>
-      <div class="text-nowrap">@yield('page-title-right')</div>
+      <div class="text-nowrap">
+        @yield('page-title-right')
+        @hookinsert('panel.layout.right.button.after')
+      </div>
     </div>
 
     <div class="container-fluid p-0 mt-3">
