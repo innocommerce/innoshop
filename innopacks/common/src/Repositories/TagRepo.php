@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -23,14 +24,14 @@ class TagRepo extends BaseRepo
     {
         return [
             ['name' => 'name', 'type' => 'input', 'label' => trans('panel/tag.name')],
-            ['name' => 'code', 'type' => 'input', 'label' => trans('panel/common.slug')],
+            ['name' => 'slug', 'type' => 'input', 'label' => trans('panel/common.slug')],
         ];
     }
 
     /**
      * @param  $filters
      * @return LengthAwarePaginator
-     * @throws \Exception
+     * @throws Exception
      */
     public function list($filters = []): LengthAwarePaginator
     {
@@ -87,7 +88,7 @@ class TagRepo extends BaseRepo
     /**
      * @param  $data
      * @return Tag
-     * @throws \Exception|\Throwable
+     * @throws Exception|\Throwable
      */
     public function create($data): Tag
     {

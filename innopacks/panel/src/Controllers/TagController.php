@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Tag;
@@ -20,7 +21,7 @@ class TagController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -59,7 +60,7 @@ class TagController extends BaseController
             TagRepo::getInstance()->create($data);
 
             return back()->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -89,7 +90,7 @@ class TagController extends BaseController
             TagRepo::getInstance()->update($tag, $data);
 
             return back()->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -104,7 +105,7 @@ class TagController extends BaseController
             TagRepo::getInstance()->destroy($tag);
 
             return back()->with('success', panel_trans('common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
