@@ -105,7 +105,7 @@ class ArticleRepo extends BaseRepo
      */
     public function create($data): Article
     {
-        $item = new Article($data);
+        $item = new Article($this->handleData($data));
         $item->saveOrFail();
 
         $translations = array_values($data['translations']);
@@ -124,7 +124,7 @@ class ArticleRepo extends BaseRepo
      */
     public function update($item, $data): mixed
     {
-        $item->fill($data);
+        $item->fill($this->handleData($data));
         $item->saveOrFail();
 
         $translations = array_values($data['translations']);
@@ -147,6 +147,22 @@ class ArticleRepo extends BaseRepo
     {
         $item->translations()->delete();
         $item->delete();
+    }
+
+    /**
+     * @param  $data
+     * @return array
+     */
+    private function handleData($data): array
+    {
+        return [
+            'catalog_id' => $data['catalog_id'] ?? 0,
+            'slug'       => $data['slug']       ?? null,
+            'position'   => $data['position']   ?? 0,
+            'viewed'     => $data['viewed']     ?? 0,
+            'author'     => $data['author']     ?? '',
+            'active'     => (bool) $data['active'],
+        ];
     }
 
     /**
