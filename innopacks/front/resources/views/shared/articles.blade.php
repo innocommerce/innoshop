@@ -41,14 +41,14 @@
       <div class="newes-sidebar">
         <div class="search-box">
           <div class="input-group input-group-lg">
-            <input type="text" class="form-control" value="{{ request('keyword') }}" placeholder="请输入关键字">
-            <button class="btn btn-primary" type="button">搜索</button>
+            <input type="text" class="form-control" value="{{ request('keyword') }}" placeholder="{{__("front/article.keyword")}}">
+            <button class="btn btn-primary" type="button">{{__("front/article.search")}}</button>
           </div>
         </div>
 
         @if(isset($catalogs) && $catalogs)
           <div class="sidebar-item">
-            <div class="sidebar-title">新闻分类</div>
+            <div class="sidebar-title">{{__("front/article.news_classification")}}</div>
             <div class="sidebar-list">
               <ul>
                 @foreach($catalogs as $catalog)
