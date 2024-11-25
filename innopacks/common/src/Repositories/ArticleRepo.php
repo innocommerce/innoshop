@@ -70,6 +70,10 @@ class ArticleRepo extends BaseRepo
             $builder->where('catalog_id', $catalogId);
         }
 
+        if (isset($filters['active'])) {
+            $builder->where('active', (bool) $filters['active']);
+        }
+
         $catalog = $filters['catalog'] ?? '';
         if ($catalog) {
             $builder->whereHas('catalog.translation', function (Builder $query) use ($catalog) {
