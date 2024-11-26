@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => '关于',
     'action'            => '操作',
     'add'               => '添加',
     'all'               => '全部',

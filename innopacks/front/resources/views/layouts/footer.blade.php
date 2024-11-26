@@ -8,7 +8,7 @@
           <div class="col-12 col-md-4 footer-item">
             <div class="about">
               <div class="footer-link-title">
-                <span>About us</span>
+                <span>{{ __('front/common.about_us') }}</span>
                 <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
               </div>
               <div class="about-text footer-item-content">

@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => '에 대해',
     'action'            => '작업',
     'add'               => '추가',
     'all'               => '전체',

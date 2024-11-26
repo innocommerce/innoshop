@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'Về',
     'action'            => 'Hành động',
     'add'               => 'Thêm',
     'all'               => 'Tất cả',

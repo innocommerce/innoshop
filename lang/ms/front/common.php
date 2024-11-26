@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'Mengenai',
     'action'            => 'Tindakan',
     'add'               => 'Tambah',
     'all'               => 'Semua',

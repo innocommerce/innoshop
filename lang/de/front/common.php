@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'Über',
     'action'            => 'Aktion',
     'add'               => 'Hinzufügen',
     'all'               => 'Alle',

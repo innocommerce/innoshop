@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'について',
     'action'            => '操作',
     'add'               => '追加',
     'all'               => 'すべて',
@@ -16,7 +17,6 @@ return [
     'confirm'           => '確認',
     'created_at'        => '作成日時',
     'date'              => '日付',
-    'default'           => 'デフォルト住所',
     'delete'            => '削除',
     'delete_confirm'    => '本当に削除しますか？',
     'deleted_success'   => '削除成功',
