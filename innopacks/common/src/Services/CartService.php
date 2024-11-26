@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use InnoShop\Common\Repositories\CartItemRepo;
 use InnoShop\Common\Resources\CartListItem;
+use Throwable;
 
 class CartService
 {
@@ -91,7 +92,7 @@ class CartService
     /**
      * @param  $data
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function addCart($data): array
     {
