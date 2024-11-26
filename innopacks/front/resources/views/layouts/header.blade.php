@@ -59,9 +59,6 @@
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="{{ front_route('home.index') }}">{{ __('front/common.home') }}</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{{ front_route('products.index') }}">{{ __('front/common.products') }}</a>
-              </li>
 
               @hookupdate('layouts.header.menu.pc')
                 @foreach($header_menus as $menu)
@@ -157,9 +154,6 @@
           <div class="accordion-item">
             <div class="nav-item-text">
               <a class="nav-link {{ equal_route_name('home.index') ? 'active' : '' }}" aria-current="page" href="{{ front_route('home.index') }}">{{ __('front/common.home') }}</a>
-            </div>
-            <div class="nav-item-text">
-              <a class="nav-link {{ equal_route_name('products.index') ? 'active' : '' }}" aria-current="page" href="{{ front_route('products.index') }}">{{ __('front/common.products') }}</a>
             </div>
           </div>
 

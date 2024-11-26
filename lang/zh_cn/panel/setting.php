@@ -45,7 +45,7 @@ return [
     'meta_description'                  => 'Meta 描述',
     'meta_keywords'                     => 'Meta 关键词',
     'meta_title'                        => 'Meta 标题',
-    'page'                              => '单页',
+    'page'                              => '文章单页',
     'panel_name'                        => '后台路径',
     'placeholder'                       => '缺省图',
     'please_select_country'             => '请选择国家',
@@ -61,4 +61,7 @@ return [
     'smtp_username'                     => '邮箱用户名',
     'telephone'                         => '联系电话',
     'website_data'                      => '网站设置',
+    'specials'                          => '固定页',
+    'brands'                            => '品牌列表',
+    'products'                          => '产品列表',
 ];

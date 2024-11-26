@@ -19,9 +19,11 @@ class ThemeRepo
         'menu_header_categories',
         'menu_header_catalogs',
         'menu_header_pages',
+        'menu_header_specials',
         'menu_footer_categories',
         'menu_footer_catalogs',
         'menu_footer_pages',
+        'menu_footer_specials',
     ];
 
     /**

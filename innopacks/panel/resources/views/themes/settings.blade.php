@@ -90,7 +90,7 @@
 
               <div class="tab-pane fade" id="tab-setting-header-menu">
                 <div class="row">
-                  <div class="col-4">
+                  <div class="col-3">
                     <div class="card">
                       <div class="card-header">{{ __('panel/menu.categories') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
@@ -106,7 +106,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-4">
+                  <div class="col-3">
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.catalogs') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
@@ -122,7 +122,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-4">
+                  <div class="col-3">
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.page') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
@@ -138,12 +138,28 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-3">
+                    <div class="card">
+                      <div class="card-header">{{ __('panel/setting.specials') }}</div>
+                      <div class="card-body hp-400 overflow-y-auto">
+                        @foreach ($specials as $item)
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="menu_header_specials[]"
+                                   value="{{ $item['type'] }}"
+                                   id="header-page-{{ $item['type'] }}" {{ in_array($item['type'], old('menu_header_specials', system_setting('menu_header_specials', []) ?: [])) ? 'checked' : '' }}>
+                            <label class="form-check ps-0"
+                                   for="header-page-{{ $item['type'] }}">{{ $item['title'] }}</label>
+                          </div>
+                        @endforeach
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div class="tab-pane fade" id="tab-setting-footer-menu">
                 <div class="row">
-                  <div class="col-4">
+                  <div class="col-3">
                     <div class="card">
                       <div class="card-header">{{ __('panel/menu.categories') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
@@ -159,7 +175,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-4">
+                  <div class="col-3">
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.catalogs') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
@@ -175,7 +191,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-4">
+                  <div class="col-3">
                     <div class="card">
                       <div class="card-header">{{ __('panel/setting.page') }}</div>
                       <div class="card-body hp-400 overflow-y-auto">
@@ -186,6 +202,22 @@
                                    id="footer-page-{{ $item->id }}" {{ in_array($item->id, old('menu_footer_pages', system_setting('menu_footer_pages', []) ?: [])) ? 'checked' : '' }}>
                             <label class="form-check ps-0"
                                    for="footer-page-{{ $item->id }}">{{ $item->translation->title }}</label>
+                          </div>
+                        @endforeach
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="card">
+                      <div class="card-header">{{ __('panel/setting.specials') }}</div>
+                      <div class="card-body hp-400 overflow-y-auto">
+                        @foreach ($specials as $item)
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="menu_footer_specials[]"
+                                   value="{{ $item['type'] }}"
+                                   id="footer-page-{{ $item['type'] }}" {{ in_array($item['type'], old('menu_footer_specials', system_setting('menu_footer_specials', []) ?: [])) ? 'checked' : '' }}>
+                            <label class="form-check ps-0"
+                                   for="footer-page-{{ $item['type'] }}">{{ $item['title'] }}</label>
                           </div>
                         @endforeach
                       </div>

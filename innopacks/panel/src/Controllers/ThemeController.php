@@ -9,12 +9,15 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Repositories\SettingRepo;
+use InnoShop\Common\Repositories\SpecialPageRepo;
 use InnoShop\Panel\Repositories\ThemeRepo;
 use Throwable;
 
@@ -34,12 +37,15 @@ class ThemeController extends BaseController
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function settings(): mixed
     {
         $data = [
             'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
             'catalogs'   => CatalogRepo::getInstance()->getTopCatalogs(),
+            'brands'     => BrandRepo::getInstance()->withActive()->builder()->get(),
+            'specials'   => SpecialPageRepo::getInstance()->getOptions(),
             'pages'      => PageRepo::getInstance()->withActive()->builder()->get(),
             'themes'     => ThemeRepo::getInstance()->getListFromPath(),
         ];
@@ -63,7 +69,7 @@ class ThemeController extends BaseController
             return redirect($settingUrl)
                 ->with('instance', $settings)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect($settingUrl)->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -85,7 +91,7 @@ class ThemeController extends BaseController
             }
 
             return json_success(panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

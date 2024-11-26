@@ -12,6 +12,7 @@ return [
     'add'               => '添加',
     'all'               => '全部',
     'back_page'         => '返回上一页',
+    'brands'            => '品牌',
     'cancel'            => '取消',
     'confirm'           => '确定',
     'created_at'        => '创建时间',
@@ -48,4 +49,5 @@ return [
     'updated_success'   => '更新成功',
     'view'              => '查看',
     'yes'               => '是',
+    'specials'          => '链接',
 ];
