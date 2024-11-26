@@ -133,4 +133,28 @@ class CurrencyController extends BaseController
                 ->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * @param  Request  $request
+     * @param  int  $id
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function active(Request $request, int $id): JsonResponse
+    {
+        try {
+            $item = Currency::query()->findOrFail($id);
+
+            if ($item->code == system_setting('currency')) {
+                throw new Exception(panel_trans('currency.cannot_disable_default_currency'));
+            }
+
+            $item->active = $request->get('status');
+            $item->saveOrFail();
+
+            return json_success(panel_trans('common.updated_success'));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
 }
