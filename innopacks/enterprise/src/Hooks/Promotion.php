@@ -25,7 +25,7 @@ class Promotion extends Base
     private function addPanelPromotionMenu(): void
     {
         listen_hook_filter('component.sidebar.menus', function ($data) {
-            $data[3] = [
+            $data[] = [
                 'title'    => '促销',
                 'icon'     => 'bi-gift',
                 'children' => [
