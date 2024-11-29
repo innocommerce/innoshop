@@ -126,52 +126,55 @@
       position: relative;
       margin-bottom: 15px;
       background: #fff;
+      overflow: hidden;
     }
 
-    .file-card:hover {
-      border-color: #8446df;
-      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
-    }
-
-    .file-card.selected {
-      border-color: #8446df;
-      background: rgba(132, 70, 223, 0.05);
-    }
-
-    .file-card .file-thumb {
-      padding: 8px;
+    /* 文件缩略图容器 */
+    .file-thumb {
+      padding: 16px;
       height: 140px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #fafafa;
-      border-radius: 4px 4px 0 0;
+      border-bottom: 1px solid #EBEEF5;
+      user-select: none;
     }
 
-    .file-card .file-thumb img {
+    /* 禁用图片拖拽 */
+    .file-thumb img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    .file-card .file-info {
-      padding: 10px;
-      border-top: 1px solid #EBEEF5;
+    /* 文件信息区域 */
+    .file-info {
+      padding: 12px 16px;
     }
 
-    .file-card .file-name {
-      font-size: 13px;
-      color: #606266;
-      margin: 0;
-      white-space: nowrap;
+    /* 文件名样式 */
+    .file-name {
+      font-weight: 500;
+      color: #303133;
+      margin-bottom: 6px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-break: break-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .file-card .file-size {
+    /* 文件类型样式 */
+    .file-type {
       font-size: 12px;
       color: #909399;
-      margin: 5px 0 0;
+      line-height: 1.4;
     }
 
     /* 自定义 Element UI 主题色 */
@@ -1368,7 +1371,7 @@
                     </div>
                     <div class="file-info">
                       <p class="file-name" :title="file.name">@{{ file.name }}</p>
-                      <p class="file-size">@{{ file.is_dir ? '文件夹' : file.mime }}</p>
+                      <p class="file-type">@{{ file.is_dir ? '文件夹' : file.mime }}</p>
                     </div>
                   </div>
                 </el-col>
@@ -2495,6 +2498,22 @@ new Vue({
     handleTreeDragEnter(event, node, data) {
       if (!this.isDragging || !this.draggedFile) return;
 
+      // 文件夹拖拽检查是否是同一个文件夹
+      if (this.draggedFile.is_dir) {
+        // 获取当前拖拽文件夹的完整路径
+        const draggedPath = this.currentFolder.path + '/' + this.draggedFile.name;
+
+        // 如果是拖到自己或者自己的父文件夹，直接返回
+        if (draggedPath === data.path || data.path.startsWith(draggedPath + '/')) {
+          return;
+        }
+
+        // 如果是拖到当前所在文件夹，直接返回
+        if (data.path === this.currentFolder.path) {
+          return;
+        }
+      }
+
       // 清除所有高亮样式
       document.querySelectorAll('.el-tree-node').forEach(node => {
         node.classList.remove('is-drop-target');
@@ -2541,6 +2560,27 @@ new Vue({
       if (this.isDragging && this.draggedFile) {
         const currentPath = this.currentFolder ? this.currentFolder.path : '/';
         const targetPath = data.path;
+
+        // 检查是否拖放到当前所在文件夹
+        if (currentPath === targetPath) {
+          this.isDragging = false;
+          this.draggedFile = null;
+          return;
+        }
+
+        // 如果是文件夹且正在拖拽的也是文件夹，检查是否是同一个文件夹
+        if (this.draggedFile.is_dir) {
+          // 获取当前拖拽文件夹的完整路径
+          const draggedPath = currentPath + '/' + this.draggedFile.name;
+
+          // 如果是拖到自己或者自己的父文件夹，直接返回
+          if (draggedPath === targetPath || targetPath.startsWith(draggedPath + '/')) {
+            this.isDragging = false;
+            this.draggedFile = null;
+            return;
+          }
+        }
+
         const files = [currentPath + '/' + this.draggedFile.name];
 
         http.post('file_manager/move_files', {
