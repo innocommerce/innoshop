@@ -327,7 +327,6 @@
       margin: 0 -1px;
     }
 
-    /* 禁用态 */
     .el-button.is-disabled,
     .el-button.is-disabled:hover,
     .el-button.is-disabled:focus {
@@ -1055,6 +1054,182 @@
       50% { transform: scale(1.02); }
       100% { transform: scale(1); }
     }
+
+    /* 拖拽相关样式 */
+    .file-card.dragging {
+      opacity: 0.6;
+      transform: scale(0.95);
+      cursor: move;
+    }
+
+    .file-card[data-is-dir="true"].drag-over {
+      background-color: #f0e6fc;
+      border: 2px dashed #8446df;
+      animation: dropTarget 1s ease infinite;
+    }
+
+    @keyframes dropTarget {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    /* 文件夹接收拖拽时的提示 */
+    .file-card[data-is-dir="true"].drag-over::after {
+      content: "放置到此处";
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-size: 12px;
+      color: #8446df;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    /* 文件夹树节点样式 */
+    .el-tree-node__wrapper {
+      width: 100%;
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .custom-tree-node {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    /* 树节点悬停效果 */
+    .el-tree-node__wrapper:hover {
+      background-color: #f5f7fa;
+    }
+
+    /* 选中状态的树节点 */
+    .el-tree-node.is-current > .el-tree-node__content > .el-tree-node__wrapper {
+      background-color: #f0e6fc !important;
+      color: #8446df;
+    }
+
+    /* 右键菜单样式优化 */
+    .file-card-context-menu {
+      position: fixed;
+      background: white;
+      border: 1px solid #EBEEF5;
+      border-radius: 4px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+      z-index: 3000;
+      min-width: 160px;
+      padding: 5px 0;
+    }
+
+    .file-card-context-menu li {
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s;
+    }
+
+    .file-card-context-menu li:hover {
+      background-color: #f0e6fc;
+      color: #8446df;
+    }
+
+    /* 拖拽相关样式 */
+    .el-tree-node.is-dragging {
+      opacity: 0.5;
+      cursor: move;
+    }
+
+    /* 拖拽目标的高亮样式 */
+    .el-tree-node.is-drop-inner > .el-tree-node__content {
+      background-color: #f0e6fc !important;
+      border: 2px dashed #8446df !important;
+      animation: dropTarget 1s ease infinite;
+    }
+
+    /* 确保动画效果持续显示 */
+    @keyframes dropTarget {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    /* 防止其他hover效果覆盖拖拽样式 */
+    .el-tree-node.is-drop-inner > .el-tree-node__content:hover {
+      background-color: #f0e6fc !important;
+    }
+
+    /* 确保拖拽时的样式优先级 */
+    .el-tree-node.is-drop-inner {
+      z-index: 100;
+    }
+
+    /* 文件夹树容器样式 */
+    .folder-tree-container {
+      height: 100%;
+      position: relative;
+    }
+
+    /* 根目录拖拽高亮样式 */
+    .folder-tree-container.drag-over {
+      background-color: #f0e6fc;
+      border: 2px dashed #8446df;
+      border-radius: 4px;
+      animation: dropTarget 1s ease infinite;
+    }
+
+    /* 文件夹节点拖拽高亮样式 */
+    .el-tree-node.drag-over > .el-tree-node__content {
+      background-color: #f0e6fc !important;
+      border: 2px dashed #8446df;
+      animation: dropTarget 1s ease infinite;
+    }
+
+    @keyframes dropTarget {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    /* 添加或修改相关样式 */
+    /* ... 其他样式 ... */
+
+    /* 文件夹树容器样式 */
+    .folder-tree-container {
+      height: 100%;
+      position: relative;
+    }
+
+    /* 根目录拖拽高亮样式 */
+    .folder-tree-container.is-drop-target {
+      background-color: #f0e6fc !important;
+      border: 2px dashed #8446df !important;
+      border-radius: 4px;
+      animation: dropTarget 1s ease infinite;
+    }
+
+    /* 文件夹节点拖拽高亮样式 */
+    .el-tree-node.is-drop-target > .el-tree-node__content {
+      background-color: #f0e6fc !important;
+      border: 2px dashed #8446df !important;
+      animation: dropTarget 1s ease infinite;
+    }
+
+    /* 确保高亮样式优先级 */
+    .el-tree-node.is-drop-target > .el-tree-node__content:hover {
+      background-color: #f0e6fc !important;
+    }
+
+    @keyframes dropTarget {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
   </style>
 @endpush
 
@@ -1112,19 +1287,23 @@
               @node-drag-enter="handleDragEnter"
               @node-drag-leave="handleDragLeave"
               @node-drag-end="handleNodeDragEnd"
-              @node-drop="handleNodeDrop">
-              <span class="custom-tree-node"
-                    slot-scope="{ node, data }"
-                    @dragover.prevent
-                    @dragenter.prevent="handleTreeDragEnter($event, node, data)"
-                    @dragleave.prevent="handleTreeDragLeave($event, node)"
-                    @drop.prevent="handleTreeDrop($event, node, data)">
-                <i :class="[
-                  data.isRoot ? 'el-icon-folder' : 'el-icon-folder',
-                  {'el-icon-folder-opened': node.expanded}
-                ]" style="margin-right: 4px; color: #8446df;"></i>
-                <span>@{{ node.label }}</span>
-              </span>
+              @node-drop="handleNodeDrop"
+              class="folder-tree-container">
+              <div class="el-tree-node__wrapper"
+                   slot-scope="{ node, data }"
+                   @contextmenu.prevent="showFolderContextMenu($event, data, node)"
+                   @dragover.prevent
+                   @dragenter.prevent="handleTreeDragEnter($event, node, data)"
+                   @dragleave.prevent="handleTreeDragLeave($event, node)"
+                   @drop.prevent="handleTreeDrop($event, node, data)">
+                <span class="custom-tree-node">
+                  <i :class="[
+                    data.isRoot ? 'el-icon-folder' : 'el-icon-folder',
+                    {'el-icon-folder-opened': node.expanded}
+                  ]" style="margin-right: 4px; color: #8446df;"></i>
+                  <span>@{{ node.label }}</span>
+                </span>
+              </div>
             </el-tree>
           </div>
         </el-col>
@@ -1166,7 +1345,11 @@
                        :data-is-dir="file.is_dir"
                        draggable="true"
                        @dragstart="handleFileDragStart($event, file)"
-                       @dragend="handleFileDragEnd($event)">
+                       @dragend="handleFileDragEnd($event)"
+                       @dragenter.prevent="handleFileDragEnter($event, file)"
+                       @dragover.prevent
+                       @dragleave.prevent="handleFileDragLeave($event)"
+                       @drop.prevent="handleFileDrop($event, file)">
                     <div v-if="isMultiSelectMode" class="file-checkbox">
                       <el-checkbox
                         :value="selectedFiles.includes(file.id || file.path)"
@@ -1324,11 +1507,22 @@
     </el-dialog>
 
     <!-- 文件夹右键菜单 -->
-    <div class="folder-context-menu" v-show="folderContextMenu.visible" :style="folderContextMenu.style">
+    <div v-if="folderContextMenu.visible"
+         class="file-card-context-menu"
+         :style="{
+           top: folderContextMenu.style.top,
+           left: folderContextMenu.style.left
+         }">
       <ul>
-        <li @click="renameFolder" v-if="!folderContextMenu.folder?.isRoot"><i class="el-icon-edit"></i> 重命名</li>
-        <li @click="moveFolder" v-if="!folderContextMenu.folder?.isRoot"><i class="el-icon-folder"></i> 移动到</li>
-        <li @click="deleteFolder" v-if="!folderContextMenu.folder?.isRoot"><i class="el-icon-delete"></i> 删除</li>
+        <li @click="renameFolder">
+          <i class="el-icon-edit"></i> 重命名
+        </li>
+        <li @click="moveFolder">
+          <i class="el-icon-position"></i> 移动到
+        </li>
+        <li @click="deleteFolder">
+          <i class="el-icon-delete"></i> 删除
+        </li>
       </ul>
     </div>
 
@@ -1851,7 +2045,7 @@ new Vue({
           }
         }).then(res => {
           if (res.success) {
-            this.$message.success('删除功');
+            this.$message.success('删除成功');
             this.selectedFiles = [];
             this.loadFiles(currentPath);
           }
@@ -1931,7 +2125,7 @@ new Vue({
       this.hideContextMenu();
     },
 
-    // 批量复制��
+    // 批量复制文件
     copyFiles() {
       if (!this.selectedFiles.length) return;
       this.copyDialog.visible = true;
@@ -2010,6 +2204,7 @@ new Vue({
       this.folderContextMenu.style.left = event.clientX + 'px';
       this.folderContextMenu.folder = data;
 
+      // 点击其他地方关闭菜单
       document.addEventListener('click', this.hideFolderContextMenu);
     },
 
@@ -2084,7 +2279,7 @@ new Vue({
       // 不能移动到自己或自己的子文件夹下
       if (data.path === this.folderMoveDialog.folder.path ||
           data.path.startsWith(this.folderMoveDialog.folder.path + '/')) {
-        this.$message.warning('不能移动���自己或自己的��文件夹下');
+        this.$message.warning('不能移动到自己或自己的子文件夹下');
         return;
       }
       this.folderMoveDialog.targetPath = data.path;
@@ -2172,38 +2367,18 @@ new Vue({
     },
 
     // 处理树节点拖拽
-    handleNodeDrop(draggingNode, dropNode, dropType, event) {
-      // 如果是文件拖放
-      if (!draggingNode && event.dataTransfer) {
-        try {
-          const dragData = JSON.parse(event.dataTransfer.getData('application/json'));
-          if (dragData.type === 'file') {
-            const file = dragData.data;
-            const targetPath = dropNode.data.path;
+    handleNodeDrop(draggingNode, dropNode, type) {
+      if (type !== 'inner') return;
 
-            // 移动文件到目标文件夹
-            const currentPath = this.currentFolder ? this.currentFolder.path : '/';
-            const files = [currentPath + '/' + file.name];
-
-            http.post('file_manager/move_files', {
-              files: files,
-              dest_path: targetPath
-            }).then(res => {
-              if (res.success) {
-                this.$message.success('移动成功');
-                this.loadFiles(currentPath);
-              }
-            });
-            return;
-          }
-        } catch (e) {
-          console.error('Drop data parse error:', e);
-        }
-      }
-
-      if (dropType !== 'inner') return;
       const sourcePath = draggingNode.data.path;
       const targetPath = dropNode.data.path;
+
+      // 检查是否拖放到当前所在的文件夹
+      const sourceDir = this.getParentPath(sourcePath);
+      if (sourcePath === targetPath || sourceDir === targetPath) {
+        // 如果是拖放到当前文件夹，直接返回，不发送请求
+        return;
+      }
 
       http.post('file_manager/move_directories', {
         source_path: sourcePath,
@@ -2276,6 +2451,11 @@ new Vue({
       if (!dropNode || !dropNode.$el) return;
 
       if (this.handleAllowDrop(draggingNode, dropNode, 'inner')) {
+        // 移除所有其他节点的拖拽样式
+        document.querySelectorAll('.el-tree-node').forEach(node => {
+          node.classList.remove('is-drop-inner');
+        });
+        // 添加当前节点的拖拽样式
         dropNode.$el.classList.add('is-drop-inner');
       }
     },
@@ -2306,8 +2486,8 @@ new Vue({
       this.isDragging = false;
       this.draggedFile = null;
       event.target.classList.remove('dragging');
-      document.querySelectorAll('.el-tree-node').forEach(node => {
-        node.classList.remove('drag-over');
+      document.querySelectorAll('.file-card').forEach(card => {
+        card.classList.remove('drag-over');
       });
     },
 
@@ -2315,29 +2495,163 @@ new Vue({
     handleTreeDragEnter(event, node, data) {
       if (!this.isDragging || !this.draggedFile) return;
 
-      const treeNode = event.target.closest('.el-tree-node');
-      if (treeNode) {
-        document.querySelectorAll('.el-tree-node').forEach(node => {
-          node.classList.remove('drag-over');
-        });
-        treeNode.classList.add('drag-over');
+      // 清除所有高亮样式
+      document.querySelectorAll('.el-tree-node').forEach(node => {
+        node.classList.remove('is-drop-target');
+      });
+      this.$refs.folderTree.$el.classList.remove('is-drop-target');
+
+      if (data.isRoot) {
+        // 如果是根目录，高亮整个树容器
+        this.$refs.folderTree.$el.classList.add('is-drop-target');
+      } else {
+        // 如果是普通文件夹，高亮当前节点
+        const treeNode = event.target.closest('.el-tree-node');
+        if (treeNode) {
+          treeNode.classList.add('is-drop-target');
+        }
       }
     },
 
-    // 树节点离开拖拽
+    // 处理树节点离开拖拽
     handleTreeDragLeave(event, node) {
-      const treeNode = event.target.closest('.el-tree-node');
-      if (treeNode) {
-        treeNode.classList.remove('drag-over');
+      // 检查鼠标是否真的离开了目标元素及其子元素
+      const relatedTarget = event.relatedTarget;
+      const currentTarget = event.currentTarget;
+
+      if (!currentTarget.contains(relatedTarget)) {
+        const treeNode = event.target.closest('.el-tree-node');
+        if (treeNode) {
+          treeNode.classList.remove('is-drop-target');
+        }
+        // 移除根目录高亮
+        this.$refs.folderTree.$el.classList.remove('is-drop-target');
       }
     },
 
-    // 树节点接收放置
+    // 处理树节点放置
     handleTreeDrop(event, node, data) {
-      if (!this.isDragging || !this.draggedFile) return;
+      // 移除所有高亮样式
+      document.querySelectorAll('.el-tree-node').forEach(node => {
+        node.classList.remove('is-drop-target');
+      });
+      this.$refs.folderTree.$el.classList.remove('is-drop-target');
+
+      // 如果是从右侧拖来的文件
+      if (this.isDragging && this.draggedFile) {
+        const currentPath = this.currentFolder ? this.currentFolder.path : '/';
+        const targetPath = data.path;
+        const files = [currentPath + '/' + this.draggedFile.name];
+
+        http.post('file_manager/move_files', {
+          files: files,
+          dest_path: targetPath
+        }).then(res => {
+          if (res.success) {
+            this.$message.success('移动成功');
+            this.loadFiles(currentPath);
+          }
+        }).catch(err => {
+          this.$message.error(err.message || '移动失败');
+        }).finally(() => {
+          this.isDragging = false;
+          this.draggedFile = null;
+        });
+        return;
+      }
+
+      // 处理文件夹树内部的拖拽
+      if (node && data) {
+        const sourcePath = node.data.path;
+        const targetPath = data.path;
+
+        // 检查是否拖放到当前所在的文件夹
+        const sourceDir = this.getParentPath(sourcePath);
+        if (sourcePath === targetPath || sourceDir === targetPath) {
+          return;
+        }
+
+        http.post('file_manager/move_directories', {
+          source_path: sourcePath,
+          dest_path: targetPath
+        }).then(res => {
+          if (res.success) {
+            this.$message.success('移动成功');
+            this.loadFolders();
+            if (this.currentFolder && this.currentFolder.path === sourcePath) {
+              this.loadFiles(targetPath);
+            }
+          }
+        }).catch(err => {
+          this.loadFolders();
+          this.$message.error(err.message || '移动失败');
+        });
+      }
+    },
+
+    // 文件拖入目标
+    handleFileDragEnter(event, file) {
+      // 如果目标不是文件夹，或者是自己，不允许拖入
+      if (!this.isDragging || !this.draggedFile || !file.is_dir ||
+          this.draggedFile.id === file.id ||
+          this.draggedFile.path === file.path) {
+        return;
+      }
+
+      const card = event.target.closest('.file-card');
+      if (card) {
+        // 清除其他文件夹的样式
+        document.querySelectorAll('.file-card').forEach(c => {
+          c.classList.remove('drag-over');
+        });
+        // 添加当前文件夹的样式
+        card.classList.add('drag-over');
+      }
+    },
+
+    // 添加文件拖离目标的处理方法
+    handleFileDragLeave(event) {
+      const card = event.target.closest('.file-card');
+      if (card) {
+        card.classList.remove('drag-over');
+      }
+    },
+
+    // 文件放置处理
+    handleFileDrop(event, targetFile) {
+      event.preventDefault();
+
+      // 如果不是拖拽状态，或者目标不是文件夹，或者是拖拽到自己，直接返回
+      if (!this.isDragging || !this.draggedFile || !targetFile.is_dir ||
+          this.draggedFile.id === targetFile.id ||
+          this.draggedFile.path === targetFile.path) {
+        this.isDragging = false;
+        this.draggedFile = null;
+        document.querySelectorAll('.file-card').forEach(card => {
+          card.classList.remove('drag-over');
+        });
+        return;
+      }
 
       const currentPath = this.currentFolder ? this.currentFolder.path : '/';
-      const targetPath = data.path;
+      const targetPath = currentPath === '/' ?
+        '/' + targetFile.name :
+        currentPath + '/' + targetFile.name;
+
+      // 检查是否在同一个文件夹内拖放
+      const draggedFilePath = this.draggedFile.path;
+      const draggedFileDir = draggedFilePath.substring(0, draggedFilePath.lastIndexOf('/')) || '/';
+
+      if (draggedFileDir === targetPath) {
+        // 如果是在同一个文件夹内拖放，直接返回，不执行移动
+        this.isDragging = false;
+        this.draggedFile = null;
+        document.querySelectorAll('.file-card').forEach(card => {
+          card.classList.remove('drag-over');
+        });
+        return;
+      }
+
       const files = [currentPath + '/' + this.draggedFile.name];
 
       http.post('file_manager/move_files', {
@@ -2351,13 +2665,20 @@ new Vue({
       }).catch(err => {
         this.$message.error(err.message || '移动失败');
       }).finally(() => {
-        // 清理拖拽状态和样式
         this.isDragging = false;
         this.draggedFile = null;
-        document.querySelectorAll('.el-tree-node').forEach(node => {
-          node.classList.remove('drag-over');
+        document.querySelectorAll('.file-card').forEach(card => {
+          card.classList.remove('drag-over');
         });
       });
+    },
+
+    // 添加辅助方法（如果还没有的话）
+    getParentPath(path) {
+      if (!path) return '/';
+      const parts = path.split('/');
+      parts.pop();
+      return parts.join('/') || '/';
     }
   },
   mounted() {
