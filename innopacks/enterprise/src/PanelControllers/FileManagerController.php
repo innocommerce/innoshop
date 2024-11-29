@@ -71,7 +71,6 @@ class FileManagerController extends BaseController
         $baseFolder = $request->get('base_folder', '/');
         $data       = $this->fileManagerService->getDirectories($baseFolder);
 
-        // 返回 JSON 格式
         return response()->json([
             'success' => true,
             'data'    => $data,
@@ -108,10 +107,8 @@ class FileManagerController extends BaseController
             $originName = $request->get('origin_name');
             $newName    = $request->get('new_name');
 
-            // 确保路径格式正确
             $originName = $this->normalizePath($originName);
 
-            // 获取目录路径和新文件名
             $dirPath = dirname($originName);
             $newPath = $dirPath === '/' ? "/{$newName}" : "{$dirPath}/{$newName}";
 
@@ -216,7 +213,6 @@ class FileManagerController extends BaseController
                 throw new Exception(trans('enterprise::file_manager.invalid_params'));
             }
 
-            // 记录调试信息
             \Log::info('Move files request:', [
                 'files'    => $files,
                 'destPath' => $destPath,

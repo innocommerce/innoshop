@@ -68,7 +68,6 @@ class FileManagerService
     {
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
 
-        // 获取文件夹
         $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
         $folders     = [];
         foreach ($directories as $directory) {
@@ -86,7 +85,6 @@ class FileManagerService
             ];
         }
 
-        // 获取文件
         $files  = glob($currentBasePath.'/*');
         $images = [];
         foreach ($files as $file) {
@@ -103,10 +101,8 @@ class FileManagerService
             $images[]                 = $fileInfo;
         }
 
-        // 合并文件夹和文件
         $allItems = array_merge($folders, $images);
 
-        // 排序
         if ($sort === 'created') {
             usort($allItems, function ($a, $b) use ($order) {
                 $timeA = $a['created_time'] ?? 0;
@@ -115,7 +111,7 @@ class FileManagerService
                 return ($order === 'desc') ? $timeB - $timeA : $timeA - $timeB;
             });
         } else {
-            // 文件夹始终在前
+            // folder always in front of files
             usort($allItems, function ($a, $b) use ($order) {
                 if (($a['is_dir'] ?? false) && ! ($b['is_dir'] ?? false)) {
                     return -1;
@@ -130,7 +126,6 @@ class FileManagerService
             });
         }
 
-        // 移除临时的创建时间字段
         $allItems = array_map(function ($item) {
             unset($item['created_time']);
 
@@ -175,39 +170,34 @@ class FileManagerService
             throw new Exception(trans('enterprise::file_manager.empty_path'));
         }
 
-        // 获取源文件夹和目标路径的完整路径
         $sourceDirPath = public_path("catalog/{$sourcePath}");
         $destDirPath   = public_path("catalog/{$destPath}");
         $folderName    = basename($sourcePath);
         $destFullPath  = rtrim($destDirPath, '/').'/'.$folderName;
 
-        // 验证源文件夹存在
+        // confirm origin folder
         if (! is_dir($sourceDirPath)) {
             throw new Exception(trans('enterprise::file_manager.source_dir_not_exist'));
         }
 
-        // 验证目标文件夹存在
+        // confirm target folder
         if (! is_dir($destDirPath)) {
             throw new Exception(trans('enterprise::file_manager.target_dir_not_exist'));
         }
 
-        // 检查目标路径是否已存在同名文件夹
         if (is_dir($destFullPath)) {
             throw new Exception(trans('enterprise::file_manager.target_dir_exist'));
         }
 
-        // 不能移动到自己的子目录
         if (strpos($destPath, $sourcePath.'/') === 0) {
             throw new Exception(trans('enterprise::file_manager.cannot_move_to_subdirectory'));
         }
 
-        // 记录日志
         \Log::info('Moving directory:', [
             'from' => $sourceDirPath,
             'to'   => $destFullPath,
         ]);
 
-        // 执行移动
         if (! @rename($sourceDirPath, $destFullPath)) {
             \Log::error('Failed to move directory:', [
                 'error' => error_get_last(),
@@ -229,19 +219,15 @@ class FileManagerService
             throw new Exception(trans('enterprise::file_manager.no_files_selected'));
         }
 
-        // 确保目标目录存在
         $destFullPath = public_path("catalog/{$destPath}");
         if (! is_dir($destFullPath)) {
             throw new Exception(trans('enterprise::file_manager.target_dir_not_exist'));
         }
 
         foreach ($files as $fileName) {
-            // 构建源文件的完整路径
-            $sourcePath = public_path("catalog/{$fileName}");
-            // 构建目标文件的完整路径
+            $sourcePath   = public_path("catalog/{$fileName}");
             $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
 
-            // 记录日志
             \Log::info('Moving file:', [
                 'source'      => $sourcePath,
                 'destination' => $destFilePath,
@@ -250,12 +236,10 @@ class FileManagerService
             ]);
 
             if (file_exists($sourcePath)) {
-                // 如果目标文件已存在，先删除
                 if (file_exists($destFilePath)) {
                     @unlink($destFilePath);
                 }
 
-                // 移动文件
                 if (! @rename($sourcePath, $destFilePath)) {
                     \Log::error('Failed to move file:', [
                         'source'      => $sourcePath,
@@ -329,10 +313,8 @@ class FileManagerService
             }
             $filePath .= $fileName;
 
-            // 完整的物理文件路径
             $fullPath = public_path("catalog/{$filePath}");
 
-            // 记录日志
             \Log::info('Deleting file:', [
                 'file_id'   => $file,
                 'base_path' => $basePath,
@@ -368,7 +350,6 @@ class FileManagerService
             throw new Exception(trans('enterprise::file_manager.target_not_exist'));
         }
 
-        // 如果目标文件已存在，生成新的文件名
         if (file_exists($newFullPath)) {
             $dirPath     = dirname($newPath);
             $newName     = $this->getUniqueFileName($dirPath, basename($newPath));
@@ -428,11 +409,9 @@ class FileManagerService
         $name      = pathinfo($originName, PATHINFO_FILENAME);
 
         if (preg_match('/(.+?)\((\d+)\)$/', $name, $matches)) {
-            // 如果已经有 (n) 格式的后缀，增加数字
             $index = (int) $matches[2] + 1;
             $name  = "{$matches[1]}({$index})";
         } else {
-            // 添加 (1) 后缀
             $name .= '(1)';
         }
 
@@ -491,32 +470,26 @@ class FileManagerService
             throw new Exception(trans('enterprise::file_manager.no_files_selected'));
         }
 
-        // 确保目标目录存在
         $destFullPath = public_path("catalog/{$destPath}");
         if (! is_dir($destFullPath)) {
             throw new Exception(trans('enterprise::file_manager.target_dir_not_exist'));
         }
 
         foreach ($files as $fileName) {
-            // 构建源文件的完整路径
-            $sourcePath = public_path("catalog/{$fileName}");
-            // 构建目标文件的完整路径
+            $sourcePath   = public_path("catalog/{$fileName}");
             $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
 
-            // 记录日志
             \Log::info('Copying file:', [
                 'source'      => $sourcePath,
                 'destination' => $destFilePath,
             ]);
 
             if (file_exists($sourcePath)) {
-                // 如果目标文件已存在，生成新的文件名
                 if (file_exists($destFilePath)) {
                     $newName      = $this->getUniqueFileName($destPath, basename($fileName));
                     $destFilePath = rtrim($destFullPath, '/').'/'.$newName;
                 }
 
-                // 复制文件
                 if (! @copy($sourcePath, $destFilePath)) {
                     \Log::error('Failed to copy file:', [
                         'source'      => $sourcePath,
