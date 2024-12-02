@@ -10,6 +10,7 @@
 use Illuminate\Support\Facades\Route;
 use InnoShop\RestAPI\PanelApiControllers;
 
+Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('introduction.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
 
 $middlewares = ['auth:sanctum'];
