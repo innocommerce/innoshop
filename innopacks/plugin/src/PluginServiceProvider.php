@@ -213,9 +213,10 @@ class PluginServiceProvider extends ServiceProvider
     private function loadPluginRoutes($pluginCode): void
     {
         $this->loadPluginRootRoutes($pluginCode);
-        $this->loadPluginPanelRoutes($pluginCode);
         $this->loadPluginFrontRoutes($pluginCode);
         $this->loadPluginFrontApiRoutes($pluginCode);
+        $this->loadPluginPanelRoutes($pluginCode);
+        $this->loadPluginPanelApiRoutes($pluginCode);
     }
 
     /**
@@ -232,26 +233,6 @@ class PluginServiceProvider extends ServiceProvider
                 ->name('front.')
                 ->group(function () use ($callbackRoutePath) {
                     $this->loadRoutesFrom($callbackRoutePath);
-                });
-        }
-    }
-
-    /**
-     * Register panel routes
-     *
-     * @param  $pluginCode
-     */
-    private function loadPluginPanelRoutes($pluginCode): void
-    {
-        $pluginBasePath = $this->pluginBasePath;
-        $adminRoutePath = "$pluginBasePath/$pluginCode/Routes/panel.php";
-        if (file_exists($adminRoutePath)) {
-            $adminName = panel_name();
-            Route::prefix($adminName)
-                ->name("$adminName.")
-                ->middleware(['panel', 'admin_auth:admin'])
-                ->group(function () use ($adminRoutePath) {
-                    $this->loadRoutesFrom($adminRoutePath);
                 });
         }
     }
@@ -296,7 +277,7 @@ class PluginServiceProvider extends ServiceProvider
     protected function loadPluginFrontApiRoutes($pluginCode): void
     {
         $pluginBasePath    = $this->pluginBasePath;
-        $frontApiRoutePath = "$pluginBasePath/$pluginCode/Routes/api.php";
+        $frontApiRoutePath = "$pluginBasePath/$pluginCode/Routes/front-api.php";
         if (file_exists($frontApiRoutePath)) {
             Route::prefix('api')
                 ->middleware('api')
@@ -305,6 +286,46 @@ class PluginServiceProvider extends ServiceProvider
                     $this->loadRoutesFrom($frontApiRoutePath);
                 });
         }
+    }
+
+    /**
+     * Register panel routes
+     *
+     * @param  $pluginCode
+     */
+    private function loadPluginPanelRoutes($pluginCode): void
+    {
+        $pluginBasePath = $this->pluginBasePath;
+        $adminRoutePath = "$pluginBasePath/$pluginCode/Routes/panel.php";
+        if (file_exists($adminRoutePath)) {
+            $adminName = panel_name();
+            Route::prefix($adminName)
+                ->name("$adminName.")
+                ->middleware(['panel', 'admin_auth:admin'])
+                ->group(function () use ($adminRoutePath) {
+                    $this->loadRoutesFrom($adminRoutePath);
+                });
+        }
+    }
+
+    /**
+     * @param  $pluginCode
+     * @return void
+     */
+    private function loadPluginPanelApiRoutes($pluginCode): void
+    {
+        $pluginBasePath    = $this->pluginBasePath;
+        $panelApiRoutePath = "$pluginBasePath/$pluginCode/Routes/panel-api.php";
+        if (! file_exists($panelApiRoutePath)) {
+            return;
+        }
+
+        Route::prefix('api/panel')
+            ->middleware('panel_api')
+            ->name('api.panel.')
+            ->group(function () use ($panelApiRoutePath) {
+                $this->loadRoutesFrom($panelApiRoutePath);
+            });
     }
 
     /**
