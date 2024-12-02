@@ -12,12 +12,12 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use InnoShop\Common\Repositories\CategoryRepo;
-use InnoShop\Common\Resources\CategoryName;
-use InnoShop\Common\Resources\CategorySimple;
+use InnoShop\Common\Repositories\BrandRepo;
+use InnoShop\Common\Resources\BrandName;
+use InnoShop\Common\Resources\BrandSimple;
 use InnoShop\RestAPI\FrontApiControllers\BaseController;
 
-class CategoryController extends BaseController
+class BrandController extends BaseController
 {
     /**
      * @param  Request  $request
@@ -28,9 +28,9 @@ class CategoryController extends BaseController
         $filters = $request->all();
         $perPage = $request->get('per_page', 15);
 
-        $categories = CategoryRepo::getInstance()->builder($filters)->paginate($perPage);
+        $categories = BrandRepo::getInstance()->builder($filters)->paginate($perPage);
 
-        return CategorySimple::collection($categories);
+        return BrandSimple::collection($categories);
     }
 
     /**
@@ -40,22 +40,22 @@ class CategoryController extends BaseController
      */
     public function names(Request $request): AnonymousResourceCollection
     {
-        $products = CategoryRepo::getInstance()->getListByCategoryIDs($request->get('category_ids'));
+        $brands = BrandRepo::getInstance()->getListByBrandIDs($request->get('brand_ids'));
 
-        return CategoryName::collection($products);
+        return BrandName::collection($brands);
     }
 
     /**
      * Fuzzy search for auto complete.
-     * /api/panel/categories/autocomplete?keyword=xxx
+     * /api/panel/brands/autocomplete?keyword=xxx
      *
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
     public function autocomplete(Request $request): AnonymousResourceCollection
     {
-        $categories = CategoryRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
+        $categories = BrandRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
 
-        return CategoryName::collection($categories);
+        return BrandName::collection($categories);
     }
 }

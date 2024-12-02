@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Catalog;
 use InnoShop\Common\Repositories\CatalogRepo;
-use InnoShop\Common\Resources\CatalogSimple;
+use InnoShop\Common\Resources\CatalogName;
 use InnoShop\Panel\Requests\CatalogRequest;
 use Throwable;
 
@@ -31,6 +31,18 @@ class CatalogController extends BaseController
         $filters = $request->all();
 
         return CatalogRepo::getInstance()->list($filters);
+    }
+
+    /**
+     * @param  Request  $request
+     * @return AnonymousResourceCollection
+     * @throws Exception
+     */
+    public function names(Request $request): AnonymousResourceCollection
+    {
+        $catalogs = CatalogRepo::getInstance()->getListByCatalogIDs($request->get('catalog_ids'));
+
+        return CatalogName::collection($catalogs);
     }
 
     /**
@@ -92,9 +104,8 @@ class CatalogController extends BaseController
      */
     public function autocomplete(Request $request): AnonymousResourceCollection
     {
-        $title    = $request->get('keyword');
-        $catalogs = CatalogRepo::getInstance()->searchByTitle($title);
+        $catalogs = CatalogRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
 
-        return CatalogSimple::collection($catalogs);
+        return CatalogName::collection($catalogs);
     }
 }

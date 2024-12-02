@@ -12,9 +12,12 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Article;
 use InnoShop\Common\Repositories\ArticleRepo;
+use InnoShop\Common\Resources\ArticleName;
 use InnoShop\Panel\Requests\ArticleRequest;
+use Throwable;
 
 class ArticleController extends BaseController
 {
@@ -31,9 +34,21 @@ class ArticleController extends BaseController
     }
 
     /**
+     * @param  Request  $request
+     * @return AnonymousResourceCollection
+     * @throws Exception
+     */
+    public function names(Request $request): AnonymousResourceCollection
+    {
+        $articles = ArticleRepo::getInstance()->getListByArticleIDs($request->get('article_ids'));
+
+        return ArticleName::collection($articles);
+    }
+
+    /**
      * @param  ArticleRequest  $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(ArticleRequest $request): JsonResponse
     {
@@ -77,5 +92,19 @@ class ArticleController extends BaseController
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Fuzzy search for auto complete.
+     * /api/panel/articles/autocomplete?keyword=xxx
+     *
+     * @param  Request  $request
+     * @return AnonymousResourceCollection
+     */
+    public function autocomplete(Request $request): AnonymousResourceCollection
+    {
+        $categories = ArticleRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
+
+        return ArticleName::collection($categories);
     }
 }
