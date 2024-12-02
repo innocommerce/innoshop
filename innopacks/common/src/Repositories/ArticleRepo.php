@@ -176,16 +176,14 @@ class ArticleRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
-        if (empty($keyword)) {
-            return [];
+        $builder = Article::query()->with(['translation']);
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            });
         }
 
-        return Article::query()->with('translation')
-            ->whereHas('translation', function ($query) use ($keyword) {
-                $query->where('title', 'like', "%{$keyword}%");
-            })
-            ->limit($limit)
-            ->get();
+        return $builder->limit($limit)->get();
     }
 
     /**

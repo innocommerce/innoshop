@@ -30,8 +30,8 @@ class ProductSimple extends JsonResource
         }
 
         return [
+            'id'                  => $this->id,
             'sku_id'              => $sku->id,
-            'product_id'          => $this->id,
             'slug'                => $this->slug,
             'url'                 => $this->url,
             'name'                => $this->translation->name,

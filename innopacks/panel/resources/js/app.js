@@ -17,6 +17,12 @@ $.ajaxSetup({
 });
 const apiToken = document.querySelector('meta[name="api-token"]').getAttribute('content');
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
+$.ajaxSetup({
+  headers: {
+    'Authorization' : 'Bearer ' + apiToken,
+  }
+});
+window.apiToken = $.apiToken = apiToken;
 console.log('apiToken:' + apiToken);
 
 $(function () {

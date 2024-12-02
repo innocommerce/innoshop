@@ -138,16 +138,14 @@ class PageRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
-        if (empty($keyword)) {
-            return [];
+        $builder = Page::query()->with(['translation']);
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            });
         }
 
-        return Page::query()->with('translation')
-            ->whereHas('translation', function ($query) use ($keyword) {
-                $query->where('title', 'like', "%{$keyword}%");
-            })
-            ->limit($limit)
-            ->get();
+        return $builder->limit($limit)->get();
     }
 
     /**

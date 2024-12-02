@@ -83,26 +83,10 @@
       <div class="d-inline-block cursor-pointer" @click="addVariant"><i class="bi bi-plus-square me-1"></i> {{ __('panel/product.add_variant') }}</div>
     </div>
     <div class="variant-skus-wrap" v-if="smallVariants.length">
-      <div class="variant-skus-top" v-if="variants.length > 1">
-        <div class="left">
-          <span class="me-2">{{ __('panel/product.group_by') }}</span>
-          <select class="form-select form-select-sm" v-model="mainVariantKey">
-            <option v-for="(variant, index) in variants" :key="index" :value="index">@{{ variant.name[defaultLocale] }}</option>
-          </select>
-        </div>
-        <div class="right">
-          <div class="cursor-pointer" @click="allVariantEC">
-            <i :class="'bi me-1 ' + (!showAllVariant ? 'bi-chevron-bar-expand' : 'bi-chevron-bar-contract')"></i>
-            <span v-if="!showAllVariant">{{ __('panel/product.expand_all') }}</span>
-            <span v-else>{{ __('panel/product.collapse_all') }}</span>
-          </div>
-        </div>
-      </div>
-
       <div class="variant-skus-table table-responsive">
         <table class="table align-middle">
           <thead>
-            <th style="min-width: 220px">{{ __('panel/product.variant') }} <span class=""></span></th>
+            <th style="min-width: 220px">{{ __('panel/product.variant') }}</th>
             <th>SKU Code</th>
             <th>{{ __('panel/product.price') }}</th>
             <th>{{ __('panel/product.origin_price') }}</th>
@@ -110,43 +94,46 @@
             <th>{{ __('panel/product.quantity') }}</th>
           </thead>
           <tbody>
-            <tr v-for="(sku, index) in smallVariants" :key="index" :class="sku.sku_quantity == null ? 'sub-variant' : 'original-variant'">
+            <tr v-for="(sku, index) in skus" :key="index">
               <td>
                 <div class="sku-image-name">
-                  <div class="up-variant-image" @click="upVariantImage(sku.init_index, index)">
+                  <div class="up-variant-image" @click="upVariantImage(null, index)">
                     <img :src="thumbnail(sku.image, 50, 50)" v-if="sku.image" class="img-fluid">
                     <i class="bi bi-folder-plus" v-else></i>
                   </div>
                   <div>
-                    <div>
-                      @{{ sku.sku_group }}
-                    </div>
-                    <div v-if="variants.length > 1">
-                      <div class="variant-show" v-if="sku.sku_quantity != null" @click="showVariant(sku.init_index, index)">@{{ sku.sku_quantity }} {{ __('panel/product.variant_items') }} <i :class="'bi ' + (sku.show_variant ? 'bi-chevron-up' : 'bi-chevron-down')"></i></div>
-                      <div v-else class="sku-text">@{{ sku.text }}</div>
-                    </div>
-                    <div class="up-master text-12" v-if="sku.sku_quantity == null">
-                      <span v-if="sku.is_default" class="text-success"><i class="bi bi-check-circle-fill"></i> {{ __('panel/product.main_variant') }}</span>
-                      <span class="opacity-50 cursor-pointer" v-else @click="setMasterSku(index)"><i class="bi bi-circle"></i> {{ __('panel/product.main_variant') }}</span>
+                    <div class="sku-text">@{{ sku.text }}</div>
+                    <div class="up-master text-12">
+                      <span v-if="sku.is_default" class="text-success">
+                        <i class="bi bi-check-circle-fill"></i> {{ __('panel/product.main_variant') }}
+                      </span>
+                      <span class="opacity-50 cursor-pointer" v-else @click="setMasterSku(index)">
+                        <i class="bi bi-circle"></i> {{ __('panel/product.main_variant') }}
+                      </span>
                     </div>
                   </div>
                 </div>
               </td>
               <td>
-                <input type="text" :class="['form-control form-control-sm', sku.error ? 'is-invalid other-error' : '']" @input="modifySku(sku.init_index, index, 'code')" v-model="sku.code" :placeholder="sku.sku_quantity == null || variants.length == 1 ? 'SKU Code' : '{{ __("panel/product.batch_edit") }}'">
+                <input type="text" :class="['form-control form-control-sm', sku.error ? 'is-invalid other-error' : '']"
+                  v-model="sku.code" placeholder="SKU Code">
                 <div class="invalid-feedback">{{ __('panel/product.error_sku_repeat') }}</div>
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'price')" v-model="sku.price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.price") }}' : '{{ __("panel/product.batch_edit") }}'">
+                <input type="text" class="form-control form-control-sm"
+                  v-model="sku.price" placeholder="{{ __('panel/product.price') }}">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'origin_price')" v-model="sku.origin_price" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.origin_price") }}' : '{{ __("panel/product.batch_edit") }}'">
+                <input type="text" class="form-control form-control-sm"
+                  v-model="sku.origin_price" placeholder="{{ __('panel/product.origin_price') }}">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'model')" v-model="sku.model" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.model") }}' : '{{ __("panel/product.batch_edit") }}'">
+                <input type="text" class="form-control form-control-sm"
+                  v-model="sku.model" placeholder="{{ __('panel/product.model') }}">
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm" @input="modifySku(sku.init_index, index, 'quantity')" v-model="sku.quantity" :placeholder="sku.sku_quantity == null || variants.length == 1 ? '{{ __("panel/product.quantity") }}' : '{{ __("panel/product.batch_edit") }}'">
+                <input type="text" class="form-control form-control-sm"
+                  v-model="sku.quantity" placeholder="{{ __('panel/product.quantity') }}">
               </td>
             </tr>
           </tbody>
@@ -193,6 +180,13 @@
       onMounted(() => {
         generateSku()
         smallVariantsFormat()
+        $('#product-form').on('submit', function(e) {
+          if (!validateForm()) {
+            e.preventDefault();
+            layer.msg('请至少填写单规格信息或添加多规格商品信息', {icon: 2});
+            return false;
+          }
+        });
       })
 
       watch([mainVariantKey, variants.value], ([newValue1, newValue2], [oldValue1, oldValue2]) => {
@@ -218,78 +212,38 @@
       }, {deep: true})
 
       // 生成 通过...分组 的几个大规格
-      const smallVariantsFormat = (reload = false) => {
+      const smallVariantsFormat = () => {
         if (variants.value.length == 0) {
           smallVariants.value = []
           return
         }
-        // 需要加一个 sku_quantity 字段，就是告诉用户这个规格下有多少个 sku 组合, 类似 "sku_quantity": 6,
-        // {"name":{"zh_cn":"尺寸","en":"Size"},"variantFormShow":false,"values":[{"name":{"zh_cn":"S","en":"S"}},{"name":{"zh_cn":"M","en":"M"}},{"name":{"zh_cn":"L","en":"L"}}]}
-        let mainVariant = variants.value[mainVariantKey.value]
-        let tempVariants = [mainVariant, ...variants.value.filter((e, i) => i != mainVariantKey.value)]
-        let smallVariantArr = [];
 
-        mainVariant.values.forEach((e, i) => {
-          // 找出原始规格item
-          let initIndexItem = smallVariants.value.find((e, s) => e.init_index === i)
-
-          smallVariantArr.push({
-            sku_group: e.name[defaultLocale],
-            price: '',
-            quantity: '',
-            image: '',
-            model: '',
-            origin_price: '',
-            code: '',
-            is_default: 0,
-            init_index: i,
-            show_variant: !reload ? (initIndexItem ? initIndexItem.show_variant : false) : false,
-            sku_quantity: 0,
-          })
-
-          for (let j = 0; j < skus.value.length; j++) {
-            if (skus.value[j].variants[0] === i) {
-              smallVariantArr[i].sku_quantity++
-            }
-          }
-        })
-
-        // 把 smallVariants 里面 show_variant 为 true 的展开
-        if (!reload) {
-          let tempSmallVariants = [];
-          let tempSkus = splitArrayIntoGroups(skus.value, mainVariant.values.length)
-
-          smallVariantArr.forEach((e, i) => {
-            tempSmallVariants.push(e)
-            if (e.show_variant) {
-              tempSmallVariants.push(...tempSkus[e.init_index])
-            }
-          })
-
-          smallVariants.value = tempSmallVariants
-          return;
-        }
-
-        smallVariants.value = smallVariantArr
+        // 直接使用 skus 数据,不再进行分组
+        smallVariants.value = skus.value.map((sku, index) => ({
+          ...sku,
+          init_index: index,
+          show_variant: false,
+          sku_quantity: null
+        }))
       }
 
       const addVariantValue = (index) => {
         variants.value[index].values.push({name: localesFill('')})
       }
 
-      const showVariant = (init_index, index) => {
-        // skus 每 sku_quantity 个分组
-        let sku_quantity = smallVariants.value[index].sku_quantity
-        let tempSkus = skus.value.slice(init_index * sku_quantity, (init_index + 1) * sku_quantity)
+// const showVariant = (init_index, index) => {
+      // // skus 每 sku_quantity 个分组
+      // let sku_quantity = smallVariants.value[index].sku_quantity
+      // let tempSkus = skus.value.slice(init_index * sku_quantity, (init_index + 1) * sku_quantity)
 
-        if (smallVariants.value[index].show_variant) {
-          smallVariants.value[index].show_variant = false
-          smallVariants.value.splice(index + 1, sku_quantity)
-        } else {
-          smallVariants.value[index].show_variant = true
-          smallVariants.value.splice(index + 1, 0, ...tempSkus)
-        }
-      }
+// if (smallVariants.value[index].show_variant) {
+      // smallVariants.value[index].show_variant = false
+      // smallVariants.value.splice(index + 1, sku_quantity)
+      // } else {
+      // smallVariants.value[index].show_variant = true
+      // smallVariants.value.splice(index + 1, 0, ...tempSkus)
+      // }
+      // }
 
       // 修改 sku值，分 批量修改 和 单个修改
       const modifySku = (init_index, index, type) => {
@@ -302,7 +256,7 @@
           e[type] = sku[type]
         })
 
-        // 获取有多少个相同的sku,然后添加下标, 判断第一个 - 前的字符是否相同，如果相同就加上下标
+        // 获取有多少个相同的sku,然后添加下标, 判断一个 - 前的字符是否相同，如果相同就加上下标
         if (typeof init_index != 'undefined' ) {
           let sameSku = skus.value.filter((e, i) => e.code.split('-')[0] === sku.code)
           sameSku.forEach((e, i) => {
@@ -544,6 +498,73 @@
         smallVariantsFormat()
       }
 
+      const validateForm = () => {
+        // 检查单规格表单
+        const singleSkuPrice = $('input[name="skus[0][price]"]').val();
+        const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
+        const singleSkuCode = $('input[name="skus[0][code]"]').val();
+
+        // 检查多规格
+        const hasValidVariants = variants.value.length > 0 && skus.value.some(sku => {
+          return sku.price && sku.quantity && (sku.is_default === 1);
+        });
+
+        // 确保至少有一个完整的 SKU 信息
+        return hasValidVariants || (singleSkuPrice && singleSkuQuantity);
+      }
+
+      // 监听表单提交
+      onMounted(() => {
+        $('#product-form').on('submit', function(e) {
+          if (!validateForm()) {
+            e.preventDefault();
+            layer.msg('请至少填写单规格信息或添加多规格商品信息', {icon: 2});
+            return false;
+          }
+        });
+      });
+
+      // 在切换到多规格时提示用户
+      watch(variants, (newValue) => {
+        if (newValue.length > 0) {
+          const singleSkuPrice = $('input[name="skus[0][price]"]').val();
+          const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
+          const singleSkuCode = $('input[name="skus[0][code]"]').val();
+
+          if (singleSkuPrice || singleSkuQuantity || singleSkuCode) {
+            layer.confirm('切换到多规格后，单规格信息将被忽略，是否继续？', {
+              btn: ['继续', '取消']
+            }, function() {
+              // 用户确认后，可以选择将单规格数据作为第一个多规格的默认值
+              const firstSku = skus.value[0];
+              if (firstSku) {
+                firstSku.price = singleSkuPrice || '';
+                firstSku.quantity = singleSkuQuantity || '';
+                firstSku.code = singleSkuCode || '';
+                firstSku.is_default = 1;
+              }
+
+              // 清空单规格表单
+              $('input[name="skus[0][price]"]').val('');
+              $('input[name="skus[0][quantity]"]').val('');
+              $('input[name="skus[0][code]"]').val('');
+              layer.closeAll();
+            }, function() {
+              // 用户取消，回滚多规格添加
+              variants.value.pop();
+            });
+          }
+        } else {
+          // 切换回单规格模式时，将默认 SKU 的数据同步到单规格表单
+          const defaultSku = skus.value.find(sku => sku.is_default === 1);
+          if (defaultSku) {
+            $('input[name="skus[0][price]"]').val(defaultSku.price);
+            $('input[name="skus[0][quantity]"]').val(defaultSku.quantity);
+            $('input[name="skus[0][code]"]').val(defaultSku.code);
+          }
+        }
+      }, { deep: true });
+
       return {
         skus,
         variants,
@@ -555,7 +576,7 @@
         defaultLocale,
         mainVariantKey,
         smallVariants,
-        showVariant,
+// showVariant,
         modifySku,
         upVariantImage,
         dragVariantsEnd,

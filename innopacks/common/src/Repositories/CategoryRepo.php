@@ -240,16 +240,14 @@ class CategoryRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
-        if (empty($keyword)) {
-            return [];
+        $builder = Category::query()->with(['translation']);
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            });
         }
 
-        return Category::query()->with('translation')
-            ->whereHas('translation', function ($query) use ($keyword) {
-                $query->where('name', 'like', "%{$keyword}%");
-            })
-            ->limit($limit)
-            ->get();
+        return $builder->limit($limit)->get();
     }
 
     /**
