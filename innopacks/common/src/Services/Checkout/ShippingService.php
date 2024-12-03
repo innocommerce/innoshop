@@ -55,6 +55,23 @@ class ShippingService extends BaseService
     }
 
     /**
+     * @return array
+     * @throws Exception
+     */
+    public function getQuoteCodes(): array
+    {
+        $quoteCodes      = [];
+        $shippingMethods = $this->getMethods();
+        foreach ($shippingMethods as $shippingMethod) {
+            foreach ($shippingMethod['quotes'] as $quote) {
+                $quoteCodes[] = $quote['code'];
+            }
+        }
+
+        return $quoteCodes;
+    }
+
+    /**
      * @param  Plugin  $shippingPlugin
      * @return string
      */
