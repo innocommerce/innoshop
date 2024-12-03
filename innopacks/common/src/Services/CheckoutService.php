@@ -219,19 +219,16 @@ class CheckoutService extends BaseService
      */
     public function validateCheckoutData(): void
     {
-        $shippingMethods = ShippingService::getInstance($this)->getMethods();
-        $billingMethods  = BillingService::getInstance()->getMethods();
-
-        $defaultShippingCode = $shippingMethods[0]['quotes'][0]['code'] ?? '';
-        foreach ($shippingMethods as $shippingMethod) {
-            foreach ($shippingMethod['quotes'] as $quote) {
-                if ($this->checkoutData['shipping_method_code'] != $quote['code']) {
-                    $this->updateValues(['shipping_method_code' => $defaultShippingCode]);
-                }
-            }
+        $shippingService    = ShippingService::getInstance($this);
+        $shippingMethods    = $shippingService->getMethods();
+        $shippingQuoteCodes = $shippingService->getQuoteCodes();
+        if (! in_array($this->checkoutData['shipping_method_code'], $shippingQuoteCodes)) {
+            $defaultShippingCode = $shippingMethods[0]['quotes'][0]['code'] ?? '';
+            $this->updateValues(['shipping_method_code' => $defaultShippingCode]);
         }
 
-        $billingCodes = collect($billingMethods)->pluck('code')->toArray();
+        $billingMethods = BillingService::getInstance()->getMethods();
+        $billingCodes   = collect($billingMethods)->pluck('code')->toArray();
         if (! in_array($this->checkoutData['billing_method_code'], $billingCodes)) {
             $this->updateValues(['billing_method_code' => $billingMethods[0]['code'] ?? '']);
         }

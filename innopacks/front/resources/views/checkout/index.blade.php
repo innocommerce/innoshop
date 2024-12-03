@@ -188,12 +188,14 @@
                 @endforeach
               </div>
             </div>
+
             <ul class="cart-data-list">
-              @foreach($fee_list as $fee)
-                <li><span>{{ $fee['title'] }}</span><span> {{ $fee['total_format'] }}</span></li>
-              @endforeach
-              <li><span>{{ __('front/cart.total') }}</span><span>{{ currency_format($total) }}</span></li>
+              <li class="cart-data-list" v-for="fee in source.feeList" :key="fee.title">
+                <span>@{{ fee.title }}</span><span> @{{ fee.total_format }} </span>
+              </li>
+              <li><span>{{ __('front/cart.total') }}</span><span>@{{ source.totalAmount }}</span></li>
             </ul>
+
             @hookinsert('checkout.confirm.before')
             <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :disabled="isCheckout"
                     type="button" @click="submitCheckout">{{ __('front/checkout.place_order') }}
@@ -225,6 +227,8 @@
           billingMethods: @json($billing_methods),
           addressEdit: @json($address_list).length ? false : true,
           same_as_shipping_address: true,
+          feeList: @json($fee_list),
+          totalAmount: @json(currency_format($total)),
         })
 
         const current = reactive({
@@ -289,6 +293,8 @@
 
           axios.put(api.checkout, current).then(function (res) {
             if (res.success) {
+              source.feeList = res.data.fee_list
+              source.totalAmount = res.data.amount_format
               //window.location.href = '{{ front_route('checkout.index') }}'
             }
           })
