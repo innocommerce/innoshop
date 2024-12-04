@@ -547,21 +547,6 @@
           </div>
         </div>
       </div>
-      {{-- <div v-if="showModal" class="modal-overlay">
-        <div class="modal-content">
-          <div class="d-flex justify-content-between align-items-center modal-lete">
-            <div>信息</div>
-            <div><i @click="cancelDelete" class="bi bi-x-lg"></i></div>
-          </div>
-          <div class="fs-5 my-3" style="width: 200px;">
-            <div>要删除该商品吗?</div>
-          </div>
-          <div class="d-flex gap-3 modal-main">
-            <div class="modal-confirm" @click="confirmDelete">确定删除</div>
-            <div class="modal-cancel" @click="cancelDelete">取消</div>
-          </div>
-        </div>
-      </div> --}}
     </div>
   </div>
 </div>
@@ -582,7 +567,6 @@
       const delivermove = ref([]);
       const selectedIndex = ref(null);
       const selectedItem = ref({name: '', list: []});
-      // const showModal = ref(false);
       const currentIndex = ref(null);
 
       watch(
@@ -643,7 +627,7 @@
           display_namecn: '',
           list: [
             {
-              name: '{{ __('FlexShipping::route.essential_information') }}',
+             name: '{{ __('FlexShipping::route.essential_information') }}',
               from: {
                 display_namecn: '',
                 display_nameen: '',
@@ -681,39 +665,6 @@
       const setSubNavigation = (index) => {
         selectedItem.value.subIndx = index;
       };
-
-      // const showConfirmDelete = (index) => {
-      //   currentIndex.value = index;
-      //   showModal.value = true;
-      // };
-
-      // const confirmDelete = () => {
-      //   if (currentIndex.value !== null) {
-      //     delivermove.value.splice(currentIndex.value, 1);
-      //     if (selectedIndex.value === currentIndex.value) {
-      //       if (delivermove.value.length > 0) {
-      //         selectedIndex.value = Math.min(selectedIndex.value, delivermove.value.length - 1);
-      //         selectedItem.value = delivermove.value[selectedIndex.value];
-      //       } else {
-      //         selectedIndex.value = null;
-      //         selectedItem.value = {name: '', list: []};
-      //       }
-      //     } else if (selectedIndex.value > currentIndex.value) {
-      //       selectedIndex.value = Math.max(selectedIndex.value - 1, 0);
-      //     }
-      //   }
-      //   // closeModal();
-      // };
-
-      // const cancelDelete = () => {
-      //   closeModal();
-      // };
-
-      // const closeModal = () => {
-      //   showModal.value = false;
-      //   currentIndex.value = null;
-      // };
-
       const add_rules = () => {
         selectedItem.value.list[selectedItem.value.subIndx].from.items.push({
           start_value: '',
@@ -742,16 +693,31 @@
           })
           };
         });
-        const itemsWithoutState = items.value.map(item => {
-          const {state, ...rest} = item;
-          return rest;
-        });
-        console.log(itemsWithoutState);
+     const flex_shipping = items.value.reduce((result, item) => {
+    // 定义布尔值转换函数
+    const frameToBool = (frameValue) => {
+    return frameValue === '{{ __('FlexShipping::route.forbidden') }}' ? false : true;
+    };
+    
+    // 根据 `state` 的值动态设置对象的键和值
+    if (item.state === '{{ __('FlexShipping::route.sort') }}') {
+    result.sort = item.frame; // 将 sort 设置为 frame 的值
+    } else if (item.state === '{{ __('FlexShipping::route.state') }}') {
+    result.state = frameToBool(item.frame); // 将 state 设置为布尔值
+    } else if (item.state === '{{ __('FlexShipping::route.state_debugging') }}') {
+    result.debug = frameToBool(item.frame); // 将 debug 设置为布尔值
+    }
+    
+    return result; // 返回更新后的对象
+    }, {});
+    
+  
+        console.log(flex_shipping);
         console.log(filteredItems);
 
         axios.put('{{ panel_route('flex_shipping.update') }}', {
-          items: itemsWithoutState,
-          filteredItems: filteredItems
+          flex_shipping,
+          filteredItems,
         })
           .then(response => {
             console.log('服务器返回的数据:', response.data);
@@ -775,17 +741,12 @@
             .then(() => {
             })
             .catch(() => {
-            // 点击了确定删除按钮时执行删除操作
             if (currentIndex.value !== null) {
-            // 删除对应的项
             delivermove.value.splice(currentIndex.value, 1);
-            // 可选：在删除后进行一些后续处理
             if (delivermove.value.length > 0) {
-            // 如果还有剩余项，选择新的项
             selectedIndex.value = Math.min(selectedIndex.value, delivermove.value.length - 1);
             selectedItem.value = delivermove.value[selectedIndex.value];
             } else {
-            // 如果没有剩余项，清空选中项
             selectedIndex.value = null;
             selectedItem.value = { name: '', list: [] };
             }
@@ -801,10 +762,6 @@
         selectedItem,
         selectedIndex,
         addShopItem,
-        // showConfirmDelete,
-        // confirmDelete,
-        // cancelDelete,
-        // showModal,
         currentIndex,
         setSelectedItem,
         setSubNavigation,
