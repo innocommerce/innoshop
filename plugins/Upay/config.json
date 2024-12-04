@@ -1,0 +1,18 @@
+{
+    "code": "upay",
+    "name": {
+        "zh_cn": "USDT 支付",
+        "en": "USDT Payment"
+    },
+    "description": {
+        "zh_cn": "USDT 支付",
+        "en": "USDT Payment"
+    },
+    "type": "billing",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}
