@@ -628,8 +628,7 @@
           list: [
             {
              name: '{{ __('FlexShipping::route.essential_information') }}',
-              from: {
-                display_namecn: '',
+from: {
                 display_nameen: '',
                 description_en: '',
                 description_cn: '',
@@ -650,8 +649,7 @@
               from: {billing: '3', billing_usd: null, method_billing: '', items: [], extra: '', upper_limit: ''}
             }
           ]
-        };
-        newItem.list[0].from.display_namecn = newItem.display_namecn;
+};
         delivermove.value.push(newItem);
         selectedItem.value = newItem;
         selectedIndex.value = delivermove.value.length - 1;
@@ -678,54 +676,56 @@
         selectedItem.value.list[selectedItem.value.subIndx].from.items.splice(index, 1);
       };
 
-      const logSelectedItem = () => {
-        const filteredItems = delivermove.value.map(item => {
-          const {name, subIndx, idx,display_namecn, ...rest} = item;
-         return {
-          ...rest,
-          list: item.list.map((listItem, listIndex) => {
-          const { name: listItemName, ...listRest } = listItem;
-          if (listIndex === 0) {
-          listRest.display_namecn = item.display_namecn || listItem.from.display_namecn;
-          }
-          
-          return listRest;
-          })
-          };
-        });
-     const flex_shipping = items.value.reduce((result, item) => {
-    // 定义布尔值转换函数
-    const frameToBool = (frameValue) => {
-    return frameValue === '{{ __('FlexShipping::route.forbidden') }}' ? false : true;
-    };
-    
-    // 根据 `state` 的值动态设置对象的键和值
-    if (item.state === '{{ __('FlexShipping::route.sort') }}') {
-    result.sort = item.frame; // 将 sort 设置为 frame 的值
-    } else if (item.state === '{{ __('FlexShipping::route.state') }}') {
-    result.state = frameToBool(item.frame); // 将 state 设置为布尔值
-    } else if (item.state === '{{ __('FlexShipping::route.state_debugging') }}') {
-    result.debug = frameToBool(item.frame); // 将 debug 设置为布尔值
-    }
-    
-    return result; // 返回更新后的对象
-    }, {});
-    
-  
-        console.log(flex_shipping);
-        console.log(filteredItems);
+const logSelectedItem = () => {
+// 处理 filteredItems，移除 list 外层字段并合并 `from` 中的内容
+const filteredItems = delivermove.value.map(item => {
+const { list, display_namecn, ...rest } = item; // 解构获取外层的 display_namecn 和其他属性
 
-        axios.put('{{ panel_route('flex_shipping.update') }}', {
-          flex_shipping,
-          filteredItems,
-        })
-          .then(response => {
-            console.log('服务器返回的数据:', response.data);
-          })
-          .catch(error => {
-            console.error('发送请求失败:', error);
-          });
-      };
+// 将 list 数组中的项展平并合并 `from` 和其他属性
+const mergedListItem = item.list.reduce((mergedItem, listItem) => {
+const { from, name, ...listRest } = listItem; // 移除 name 和 from（即展开 from 中的内容）
+
+// 合并每个 listItem 的属性和 from 中的属性
+return {
+...mergedItem,
+...listRest, // 保留 listItem 中的其他属性
+...from, // 展开 from 对象，保留所有 from 的属性
+display_namecn, // 将外层的 display_namecn 添加到当前项中
+};
+}, {}); // 通过 reduce 合并所有 listItem 的属性，初始值是空对象
+
+return mergedListItem;
+});
+// 构建 flex_shipping 对象，保持之前的逻辑
+const flex_shipping = items.value.reduce((result, item) => {
+const frameToBool = (frameValue) => {
+return frameValue === '{{ __('FlexShipping::route.forbidden') }}' ? false : true;
+};
+if (item.state === '{{ __('FlexShipping::route.sort') }}') {
+result.sort = item.frame;
+} else if (item.state === '{{ __('FlexShipping::route.state') }}') {
+result.state = frameToBool(item.frame);
+} else if (item.state === '{{ __('FlexShipping::route.state_debugging') }}') {
+result.debug = frameToBool(item.frame);
+}
+return result;
+}, {});
+// 打印合并后的结果
+console.log(flex_shipping);
+console.log(filteredItems);
+// 发送合并后的数据到后端
+axios.put('{{ panel_route('flex_shipping.update') }}', {
+flex_shipping,
+list: filteredItems, // 将合并后的 list 发送到后端
+})
+.then(response => {
+console.log('服务器返回的数据:', response.data);
+})
+.catch(error => {
+console.error('发送请求失败:', error);
+});
+};
+
             const open = (index) => {
             currentIndex.value = index;
             
