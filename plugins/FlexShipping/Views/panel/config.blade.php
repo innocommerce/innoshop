@@ -749,7 +749,7 @@
         console.log(itemsWithoutState);
         console.log(filteredItems);
 
-        axios.post('/panel/flexshipping', {
+        axios.put('{{ panel_route('flex_shipping.update') }}', {
           items: itemsWithoutState,
           filteredItems: filteredItems
         })
