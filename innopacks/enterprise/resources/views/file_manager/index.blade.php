@@ -1,8 +1,10 @@
-@extends('panel::layouts.app')
+@extends(request()->header('X-Iframe') ? 'panel::layouts.blank' : 'panel::layouts.app')
 
 @section('title', __('enterprise::file_manager.title'))
 
-<x-panel::form.right-btns/>
+@if(!request()->header('X-Iframe'))
+    <x-panel::form.right-btns/>
+@endif
 
 @push('header')
   <script src="{{ asset('vendor/vue/2.7/vue.min.js') }}"></script>
@@ -11,6 +13,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.24.3/vuedraggable.umd.min.js"></script>
+
+  <script>
+    // 从 URL 参数获取配置
+    const urlParams = new URLSearchParams(window.location.search);
+    window.fileManagerConfig = {
+      multiple: urlParams.get('multiple') === '1',
+      type: urlParams.get('type') || 'all',
+      callback: window.parent.fileManagerCallback
+    };
+  </script>
 
   <script>
     // http 请求封装
@@ -1666,7 +1678,9 @@ new Vue({
         targetPath: null,
         folder: null
       },
-      isDragging: false
+      isDragging: false,
+      isIframeMode: {{ json_encode($isIframe) }},
+      fileType: '{{ $type }}',
     }
   },
   methods: {
@@ -2534,7 +2548,7 @@ new Vue({
 
     // 处理树节点离开拖拽
     handleTreeDragLeave(event, node) {
-      // 检查鼠标是否真的离开了目标元素及其子元素
+      // 检查鼠��是否真的离开了目标元素及其子元素
       const relatedTarget = event.relatedTarget;
       const currentTarget = event.currentTarget;
 
@@ -2719,10 +2733,34 @@ new Vue({
       const parts = path.split('/');
       parts.pop();
       return parts.join('/') || '/';
+    },
+
+    // 处理文件选择
+    handleFileSelect(file) {
+      if (this.isIframeMode && window.parent.fileManagerCallback) {
+        if (!this.isMultiSelectMode) {
+          window.parent.fileManagerCallback(file);
+          parent.layer.closeAll();
+          return;
+        }
+        this.toggleFileSelect(file);
+      }
+    },
+
+    // 确认选择（多选模式）
+    confirmSelection() {
+      if (this.isIframeMode && window.parent.fileManagerCallback) {
+        const selectedFiles = this.files.filter(file =>
+          this.selectedFiles.includes(file.id || file.path)
+        );
+        window.parent.fileManagerCallback(selectedFiles);
+        parent.layer.closeAll();
+      }
     }
   },
   mounted() {
     this.loadFolders();
+    this.loadFiles();
   },
   beforeDestroy() {
     document.removeEventListener('click', this.hideContextMenu);

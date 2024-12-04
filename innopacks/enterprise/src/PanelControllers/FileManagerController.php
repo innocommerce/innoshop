@@ -34,7 +34,11 @@ class FileManagerController extends BaseController
      */
     public function index(): mixed
     {
-        $data = $this->fileManagerService->getDirectories();
+        $data = [
+            'isIframe' => request()->header('X-Iframe') === '1',
+            'multiple' => request()->query('multiple') === '1',
+            'type' => request()->query('type', 'all')
+        ];
 
         return inno_view('enterprise::file_manager.index', $data);
     }

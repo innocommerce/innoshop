@@ -148,3 +148,48 @@ const tinymceInit = () => {
     }
   });
 }
+
+// 添加全局文件管理器方法
+window.fileManager = function (options = {}) {
+  // 默认配置
+  const defaultOptions = {
+    width: '90%',
+    height: '80%',
+    title: '文件管理器',
+    callback: null,
+    multiple: false,
+    type: 'all'
+  };
+
+  // 合并配置
+  const settings = { ...defaultOptions, ...options };
+
+  // 将回调函数暂存到全局对象
+  window.fileManagerCallback = settings.callback;
+
+  // 构建带参数的 URL
+  const params = new URLSearchParams({
+    multiple: settings.multiple ? '1' : '0',
+    type: settings.type
+  });
+  const url = `/panel/file_manager?${params.toString()}`;
+
+  // 创建 iframe 层
+  layer.open({
+    type: 2,
+    title: settings.title,
+    shadeClose: false,
+    shade: 0.3,
+    maxmin: true,
+    area: [settings.width, settings.height],
+    content: url,
+    success: function (layero, index) {
+      const iframe = layero.find('iframe')[0];
+
+      // 将回调函数传递给 iframe
+      iframe.onload = function () {
+        iframe.contentWindow.fileManagerCallback = window.fileManagerCallback;
+      };
+    }
+  });
+};

@@ -904,6 +904,8 @@
         },
         selectButtonClicked() {
           // 创建文件输入元素
+            window.fileManager();
+            return;
           const input = document.createElement('input');
           input.type = 'file';
           input.accept = 'image/*';
