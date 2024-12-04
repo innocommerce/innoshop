@@ -445,7 +445,7 @@
                       <div class="d-flex">
                         <div class="mt-3" style="width: 110px;">{{ __('FlexShipping::route.billing_method') }}</div>
                         <table class="table table-bordered caption-top mt-3"
-                          style="margin-left: 15px; margin-right: 15px;">
+                          style="margin-left: 15px; margin-right: 50px;">
                           <thead>
                             <tr class="bs-secondary-bg-rgb">
                               <th scope="col">{{ __('FlexShipping::route.start_value') }}</th>
