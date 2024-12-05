@@ -119,6 +119,7 @@ final class FlexService
             'description' => $description,
             'icon'        => image_resize($this->rawQuote['icon'] ?? ''),
             'cost'        => $cost,
+            'cost_format' => currency_format($cost),
         ];
     }
 

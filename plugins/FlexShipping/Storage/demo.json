@@ -8,7 +8,7 @@
                 "zh_cn": "顺丰快递",
                 "en": "SF Express"
             },
-            "icon": "",
+            "icon": "/images/demo/icons/2.png",
             "description": {
                 "zh_cn": "",
                 "en": ""
@@ -119,7 +119,7 @@
                 "zh_cn": "江浙沪",
                 "en": "JZH"
             },
-            "icon": "",
+            "icon": "/images/demo/icons/6.png",
             "description": {
                 "zh_cn": "",
                 "en": ""
