@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\Address;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Models\Region\State;
 use InnoShop\Common\Services\CheckoutService;
 use Throwable;
 
@@ -40,9 +41,9 @@ final class FlexService
         $checkout = $checkoutService->getCheckout();
 
         $this->checkoutService = $checkoutService;
-        $this->address         = $checkout->shippingAddress;
+        $this->address         = $checkout->shippingAddress ?? null;
         $this->cartList        = $checkoutService->getCartList();
-        $this->customer        = $checkout->customer;
+        $this->customer        = $checkout->customer ?? null;
     }
 
     /**
@@ -81,37 +82,36 @@ final class FlexService
             return null;
         }
 
-        // 调整费用：未固定费用外，设置额外费用及最大费用值
         if (Arr::get($this->rawQuote, 'cost.unit') != 'flat') {
             $extra = (float) Arr::get($this->rawQuote, 'cost.extra');
-            $this->log("Extra cost: {$extra}");
+            $this->log("Extra cost: $extra");
             $cost += $extra;
-            $this->log("Cost + extra = {$extra}");
+            $this->log("Cost + extra = $extra");
 
             $max = (float) Arr::get($this->rawQuote, 'cost.max');
-            $this->log("Max: {$max}");
+            $this->log("Max: $max");
 
             if ($max > 0) {
                 $cost = min($cost, $max);
-                $this->log("Max vs cost: {$cost}");
+                $this->log("Max vs cost: $cost");
             }
 
-            $this->log("Final cost: {$cost}");
+            $this->log("Final cost: $cost");
         }
 
         $localeCode = locale_code();
         $title      = $this->rawQuote['title'][$localeCode] ?? '';
-        $this->log("Title: {$title}");
+        $this->log("Title: $title");
 
         $description = $this->rawQuote['description'][$localeCode] ?? '';
-        $this->log("Description: {$description}");
+        $this->log("Description: $description");
 
         $taxClassId = (int) Arr::get($this->rawQuote, 'tax_class_id');
-        $this->log("Tax class ID: {$taxClassId}");
+        $this->log("Tax class ID: $taxClassId");
 
         $text = $cost;
         // $text = $this->currency->format($this->tax->calculate($cost, $taxClassId, oc_config('config_tax')), registry('currency'));
-        $this->log("Text: {$text}");
+        $this->log("Text: $text");
 
         return [
             'type'        => 'shipping',
@@ -137,56 +137,60 @@ final class FlexService
 
         // Store
         $this->log('Validating store rule...');
-        if (! $this->_validateStoreRule(Arr::get($this->rawQuote, 'rules.store'))) {
+        if (! $this->validateStoreRule(Arr::get($this->rawQuote, 'rules.store'))) {
             $this->log('Failed to pass store rule validation, exit.');
 
             return false;
         }
         // Geo zone
-        if (! $this->_validateGeoZoneRule(Arr::get($this->rawQuote, 'rules.geo_zone'))) {
+        if (! $this->validateGeoZoneRule(Arr::get($this->rawQuote, 'rules.geo_zone'))) {
             return false;
         }
         // Customer group
-        if (! $this->_validateCustomerGroupRule(Arr::get($this->rawQuote, 'rules.customer_group'))) {
+        if (! $this->validateCustomerGroupRule(Arr::get($this->rawQuote, 'rules.customer_group'))) {
             return false;
         }
         // Country
-        if (! $this->_validateCountryRule(Arr::get($this->rawQuote, 'rules.country'))) {
+        if (! $this->validateCountryRule(Arr::get($this->rawQuote, 'rules.country'))) {
             return false;
         }
         // Zone
-        if (! $this->_validateZoneRule(Arr::get($this->rawQuote, 'rules.zone'))) {
+        if (! $this->validateZoneRule(Arr::get($this->rawQuote, 'rules.zone'))) {
             return false;
         }
         // Currency
-        if (! $this->_validateCurrencyRule(Arr::get($this->rawQuote, 'rules.currency'))) {
+        if (! $this->validateCurrencyRule(Arr::get($this->rawQuote, 'rules.currency'))) {
             return false;
         }
         // Product
-        if (! $this->_validateProductRule(Arr::get($this->rawQuote, 'rules.product'))) {
+        if (! $this->validateProductRule(Arr::get($this->rawQuote, 'rules.product'))) {
             return false;
         }
         // Category
-        if (! $this->_validateCategoryRule(Arr::get($this->rawQuote, 'rules.category'))) {
+        if (! $this->validateCategoryRule(Arr::get($this->rawQuote, 'rules.category'))) {
             return false;
         }
         // Manufacturer
-        if (! $this->_validateManufacturerRule(Arr::get($this->rawQuote, 'rules.manufacturer'))) {
+        if (! $this->validateBrandRule(Arr::get($this->rawQuote, 'rules.manufacturer'))) {
             return false;
         }
         // Weekday
-        if (! $this->_validateWeekdayRule(Arr::get($this->rawQuote, 'rules.weekdays'))) {
+        if (! $this->validateWeekdayRule(Arr::get($this->rawQuote, 'rules.weekdays'))) {
             return false;
         }
         // Time range
-        if (! $this->_validateTimeRangeRule(Arr::get($this->rawQuote, 'rules.time'))) {
+        if (! $this->validateTimeRangeRule(Arr::get($this->rawQuote, 'rules.time'))) {
             return false;
         }
 
         return true;
     }
 
-    private function _validateStoreRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateStoreRule($rule): bool
     {
         $this->log(__METHOD__);
 
@@ -206,7 +210,7 @@ final class FlexService
         }
 
         $storeId = (int) $this->config('config_store_id');
-        $this->log("Current store: {$storeId}");
+        $this->log("Current store: $storeId");
 
         if (in_array($storeId, $storeIds)) {
             $this->log('Current store in selected stores, passed.');
@@ -219,7 +223,11 @@ final class FlexService
         return false;
     }
 
-    private function _validateGeoZoneRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateGeoZoneRule($rule): bool
     {
         $this->log(__METHOD__);
 
@@ -239,7 +247,7 @@ final class FlexService
             return false;
         }
 
-        $geoZones = $this->_getZoneToGeoZoneId($geoZoneIds);
+        $geoZones = $this->getZoneToGeoZoneId($geoZoneIds);
         if ($geoZones && $geoZones->count()) {
             $this->log('geo zones found, passed.');
 
@@ -251,7 +259,11 @@ final class FlexService
         return false;
     }
 
-    private function _validateCountryRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateCountryRule($rule): bool
     {
         $this->log(__METHOD__);
 
@@ -266,7 +278,7 @@ final class FlexService
         $this->log('Enabled for selected countries: '.json_encode($countryIds));
 
         $countryId = (int) $this->address['country_id'];
-        $this->log("Current country: {$countryId}");
+        $this->log("Current country: $countryId");
 
         if (in_array($countryId, $countryIds)) {
             $this->log('Current country in selected countries, passed.');
@@ -279,7 +291,11 @@ final class FlexService
         return false;
     }
 
-    private function _validateZoneRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateZoneRule($rule): bool
     {
         $this->log(__METHOD__);
 
@@ -294,7 +310,7 @@ final class FlexService
         $this->log('Enabled for selected zones: '.json_encode($zoneIds));
 
         $zoneId = (int) $this->address['zone_id'];
-        $this->log("Current zone: {$zoneId}");
+        $this->log("Current zone: $zoneId");
 
         if (in_array($zoneId, $zoneIds)) {
             $this->log('Current zone in selected zones, passed.');
@@ -307,7 +323,11 @@ final class FlexService
         return false;
     }
 
-    private function _validateCustomerGroupRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateCustomerGroupRule($rule): bool
     {
         $this->log(__METHOD__);
 
@@ -322,7 +342,7 @@ final class FlexService
         $this->log('Enabled for selected customer groups: '.json_encode($customerGroupIds));
 
         $customerGroupId = (int) $this->customer->customer_group_id;
-        $this->log("Current customer group: {$customerGroupId}");
+        $this->log("Current customer group: $customerGroupId");
 
         if (in_array($customerGroupId, $customerGroupIds)) {
             $this->log('Current customer group in customer groups, passed.');
@@ -335,7 +355,11 @@ final class FlexService
         return false;
     }
 
-    private function _validateCurrencyRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateCurrencyRule($rule): bool
     {
         $this->log(__METHOD__);
 
@@ -350,7 +374,7 @@ final class FlexService
         $this->log('Enabled for selected currencies: '.json_encode($currencyCodes));
 
         $currencyCode = $this->getCurrencyCode();
-        $this->log("Current currency: {$currencyCode}");
+        $this->log("Current currency: $currencyCode");
 
         if (in_array($currencyCode, $currencyCodes)) {
             $this->log('Current currency in selected currencies, passed.');
@@ -363,12 +387,16 @@ final class FlexService
         return false;
     }
 
-    private function _validateProductRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateProductRule($rule): bool
     {
         $this->log(__METHOD__);
 
         $type = Arr::get($rule, 'type', 'all');
-        $this->log("Rule type: {$type}");
+        $this->log("Rule type: $type");
 
         if ($type == 'all') {
             $this->log('Enabled for ALL products (all), passed.');
@@ -380,7 +408,7 @@ final class FlexService
         $productIds = array_column($products, 'id');
         $this->log('Selected products: '.json_encode($productIds));
 
-        $cartProductIds = $this->_getCartProductIds();
+        $cartProductIds = $this->getCartProductIds();
         $cartProductIds = array_unique($cartProductIds);
         $this->log('Current cart products: '.json_encode($cartProductIds));
 
@@ -404,12 +432,12 @@ final class FlexService
 
             $count = count($intersects);
             if ($count) {
-                $this->log("{$count} products in selected list (include), passed.");
+                $this->log("$count products in selected list (include), passed.");
 
                 return true;
             }
 
-            $this->log("{$count} products in selected list (include), failed.");
+            $this->log("$count products in selected list (include), failed.");
 
             return false;
         }
@@ -420,12 +448,12 @@ final class FlexService
 
             $count = count($intersects);
             if (! $count) {
-                $this->log("{$count} products in selected list (exclude), passed.");
+                $this->log("$count products in selected list (exclude), passed.");
 
                 return true;
             }
 
-            $this->log("{$count} products in selected list (exclude), failed.");
+            $this->log("$count products in selected list (exclude), failed.");
 
             return false;
         }
@@ -433,12 +461,16 @@ final class FlexService
         return false;
     }
 
-    private function _validateCategoryRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateCategoryRule($rule): bool
     {
         $this->log(__METHOD__);
 
         $type = Arr::get($rule, 'type', 'all');
-        $this->log("Rule type: {$type}");
+        $this->log("Rule type: $type");
 
         if ($type == 'all') {
             $this->log('Enabled for ALL categories (all), passed.');
@@ -450,11 +482,11 @@ final class FlexService
         $categoryIds = array_column($categories, 'value');
         $this->log('Selected categories: '.json_encode($categoryIds));
 
-        $cartProductCategories = $this->_getCartProductCategories();
+        $cartProductCategories = $this->getCartProductCategories();
 
         if ($type == 'only') {
             foreach ($cartProductCategories as $cartProductId => $cartProductCategoryIds) {
-                $this->log("Cart product: {$cartProductId} - categories: ".json_encode($cartProductCategoryIds));
+                $this->log("Cart product: $cartProductId - categories: ".json_encode($cartProductCategoryIds));
                 $intersects = array_intersect($categoryIds, $cartProductCategoryIds);
                 if (count($intersects) != count($categoryIds)) {
                     $this->log('Not all cart product categories in selected category list, failed.');
@@ -470,7 +502,7 @@ final class FlexService
 
         if ($type == 'include') {
             foreach ($cartProductCategories as $cartProductId => $cartProductCategoryIds) {
-                $this->log("Cart product: {$cartProductId} - categories: ".json_encode($cartProductCategoryIds));
+                $this->log("Cart product: $cartProductId - categories: ".json_encode($cartProductCategoryIds));
                 $intersects = array_intersect($categoryIds, $cartProductCategoryIds);
                 if ($intersects) {
                     $this->log('Cart product categories: '.json_encode($intersects).'in selected list (include), passed.');
@@ -485,7 +517,7 @@ final class FlexService
 
         if ($type == 'exclude') {
             foreach ($cartProductCategories as $cartProductId => $cartProductCategoryIds) {
-                $this->log("Cart product: {$cartProductId} - categories: ".json_encode($cartProductCategoryIds));
+                $this->log("Cart product: $cartProductId - categories: ".json_encode($cartProductCategoryIds));
                 $intersects = array_intersect($categoryIds, $cartProductCategoryIds);
                 if ($intersects) {
                     $this->log('Cart product categories: '.json_encode($intersects).'in selected list (exclude), failed.');
@@ -502,12 +534,16 @@ final class FlexService
         return false;
     }
 
-    private function _validateManufacturerRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateBrandRule($rule): bool
     {
         $this->log(__METHOD__);
 
         $type = Arr::get($rule, 'type', 'all');
-        $this->log("Rule type: {$type}");
+        $this->log("Rule type: $type");
 
         if ($type == 'all') {
             $this->log('Enabled for ALL manufacturers (all), passed.');
@@ -544,7 +580,7 @@ final class FlexService
 
             $count = count($intersects);
             if ($count) {
-                $this->log("{$count} cart product manufacturers in selected list (include), passed.");
+                $this->log("$count cart product manufacturers in selected list (include), passed.");
 
                 return true;
             }
@@ -565,7 +601,7 @@ final class FlexService
                 return true;
             }
 
-            $this->log("{$count} cart product manufacturers in selected list (include), failed.");
+            $this->log("$count cart product manufacturers in selected list (include), failed.");
 
             return false;
         }
@@ -573,7 +609,11 @@ final class FlexService
         return false;
     }
 
-    private function _validateWeekdayRule($weekdays)
+    /**
+     * @param  $weekdays
+     * @return bool
+     */
+    private function validateWeekdayRule($weekdays): bool
     {
         $this->log(__METHOD__);
 
@@ -585,27 +625,31 @@ final class FlexService
 
         // https://www.php.net/manual/en/function.date.php
         $today = (int) date('N');
-        $this->log("Today weekday number: {$today}");
+        $this->log("Today weekday number: $today");
 
         if (! in_array($today, $weekdays)) {
-            $this->log("Today {$today} not in selected weekday list ".json_encode($weekdays).', failed.');
+            $this->log("Today $today not in selected weekday list ".json_encode($weekdays).', failed.');
 
             return false;
         }
 
-        $this->log("Today {$today} in selected weekday list ".json_encode($weekdays).', passed.');
+        $this->log("Today $today in selected weekday list ".json_encode($weekdays).', passed.');
 
         return true;
     }
 
-    private function _validateTimeRangeRule($rule)
+    /**
+     * @param  $rule
+     * @return bool
+     */
+    private function validateTimeRangeRule($rule): bool
     {
         $this->log(__METHOD__);
 
         $start = Arr::get($rule, 'start');
         $end   = Arr::get($rule, 'end');
-        $this->log("Start: {$start}");
-        $this->log("End: {$end}");
+        $this->log("Start: $start");
+        $this->log("End: $end");
 
         if ($start == 'any' && $end == 'any') {
             $this->log('start = any, end = any, passed.');
@@ -614,7 +658,7 @@ final class FlexService
         }
 
         $now = date('H:i');
-        $this->log("Now: {$now}");
+        $this->log("Now: $now");
 
         if ($start == 'any') {
             return $now <= $end;
@@ -626,13 +670,16 @@ final class FlexService
         return ($now >= $start) && ($now <= $end);
     }
 
-    // Calculate costs
-    private function calculateQuoteCost()
+    /**
+     * Calculate quote cost
+     * @return mixed
+     */
+    private function calculateQuoteCost(): mixed
     {
         $this->log(__METHOD__);
 
         $unitType = Arr::get($this->rawQuote, 'cost.unit');
-        $this->log("Unit type: {$unitType}");
+        $this->log("Unit type: $unitType");
 
         // Handle flat first
         if ($unitType == 'flat') {
@@ -647,32 +694,32 @@ final class FlexService
         switch ($unitType) {
             case 'weight':
                 $unit = $this->getCartWeight();
-                $this->log("Weight: {$unit}");
+                $this->log("Weight: $unit");
 
                 break;
             case 'subtotal':
-                $unit = $this->_getCartSubtotal();
-                $this->log("Subtotal: {$unit}");
+                $unit = $this->getCartSubtotal();
+                $this->log("Subtotal: $unit");
 
                 break;
             case 'total_quantity':
-                $unit = $this->_getCartTotalQuantity();
-                $this->log("Total quantity: {$unit}");
+                $unit = $this->getCartTotalQuantity();
+                $this->log("Total quantity: $unit");
 
                 break;
             case 'volume':
                 $unit = $this->_getCartProductTotalVolumes();
-                $this->log("Volume: {$unit}");
+                $this->log("Volume: $unit");
 
                 break;
             case 'volume_weight':
             case 'volume_weight_max':
                 $totalVolumes = $this->_getCartProductTotalVolumes();
-                $this->log("Volume: {$unit}");
+                $this->log("Volume: $unit");
 
                 $operator = Arr::get($this->rawQuote, 'cost.ratio.operator');
                 $constant = (float) Arr::get($this->rawQuote, 'cost.ratio.constant');
-                $this->log("operator: {$operator}, constant: {$constant}");
+                $this->log("operator: $operator, constant: $constant");
 
                 if ($operator && $constant > 0) {
                     switch ($operator) {
@@ -694,25 +741,25 @@ final class FlexService
                             break;
                     }
                 }
-                $this->log("Volume weight: {$unit}");
+                $this->log("Volume weight: $unit");
 
                 if ($unitType == 'volume_weight_max') {
                     $totalWeight = $this->getCartWeight();
                     $unit        = max($unit, $totalWeight);
                 }
-                $this->log("Final volume weight: {$unit}");
+                $this->log("Final volume weight: $unit");
 
                 break;
             default:
-                $this->log("Unknown unit type: {$unitType}");
+                $this->log("Unknown unit type: $unitType");
 
                 break;
         }
 
-        $this->log("Final unit: {$unit}");
+        $this->log("Final unit: $unit");
 
         $costType = Arr::get($this->rawQuote, 'cost.type'); // range/cumulative
-        $this->log("Cost type: {$costType}");
+        $this->log("Cost type: $costType");
 
         $ranges = Arr::get($this->rawQuote, 'cost.ranges');
         if (! $ranges) {
@@ -723,32 +770,32 @@ final class FlexService
 
         if ($costType != 'cumulative') { // Range cost
             foreach ($ranges as $index => $range) {
-                $this->log("Looping ranges index: {$index}");
+                $this->log("Looping ranges index: $index");
 
                 $start = (float) Arr::get($range, 'start');
                 $end   = (float) Arr::get($range, 'end');
                 $cost  = (float) Arr::get($range, 'cost');
                 $block = (float) Arr::get($range, 'block');
-                $this->log("Range: {$start} - {$end}, cost: {$cost}, block: {$block}");
+                $this->log("Range: $start - $end, cost: $cost, block: $block");
 
                 if ($unit < $start || $unit > $end) { // Out of range
-                    $this->log("Unit {$unit} out of range: {$start} - {$end}, skipped.");
+                    $this->log("Unit $unit out of range: $start - $end, skipped.");
 
                     continue;
                 }
 
                 // In range
-                $this->log("Unit {$unit} in range: {$start} - {$end}");
+                $this->log("Unit $unit in range: $start - $end");
 
                 if ($block > 0) {
                     $this->log('Block cost');
 
                     $unit = ceil($unit / $block);
                     $cost *= $unit;
-                    $this->log("Unit: {$unit}, cost: {$cost}");
+                    $this->log("Unit: $unit, cost: $cost");
                 }
 
-                $this->log("Final cost: {$cost}, break.");
+                $this->log("Final cost: $cost, break.");
 
                 return $cost;
             }
@@ -757,18 +804,18 @@ final class FlexService
             $cumulatedUnit = 0;
 
             foreach ($ranges as $index => $range) {
-                $this->log("Looping ranges index: {$index}");
+                $this->log("Looping ranges index: $index");
 
                 $start = (float) Arr::get($range, 'start');
                 $end   = (float) Arr::get($range, 'end');
                 $cost  = (float) Arr::get($range, 'cost');
                 $block = (float) Arr::get($range, 'block');
-                $this->log("Range: {$start} - {$end}, cost: {$cost}, block: {$block}");
+                $this->log("Range: $start - $end, cost: $cost, block: $block");
 
                 // 第 1 条规则，是否满足最小值？
                 if ($index == 0) {
                     if ($unit < $start) {
-                        $this->log("Unit: {$unit} 小于 start: {$start}，退出");
+                        $this->log("Unit: $unit 小于 start: $start, 退出");
 
                         return null;
                     }
@@ -776,50 +823,50 @@ final class FlexService
 
                 // Out of range
                 if ($unit > $end) {
-                    $this->log("Unit {$unit} out of range: {$start} - {$end}, skipped.");
+                    $this->log("Unit $unit out of range: $start - $end, skipped.");
 
                     if ($block > 0) {
                         $this->log('Block cost');
 
                         $blockedUnit = ceil(($end - $cumulatedUnit) / $block);
-                        $this->log("Blocked unit: {$blockedUnit}");
+                        $this->log("Blocked unit: $blockedUnit");
 
-                        $this->log("Blocked cost: {$cost} * {$blockedUnit} = ".($cost * $blockedUnit));
+                        $this->log("Blocked cost: $cost * $blockedUnit = ".($cost * $blockedUnit));
                         $cost *= $blockedUnit;
                     }
 
-                    $this->log("Range cost: {$cost}");
+                    $this->log("Range cost: $cost");
 
                     $cumulatedCost += $cost;
                     $cumulatedUnit = $end;
-                    $this->log("Cumulated cost: {$cumulatedCost}");
-                    $this->log("Cumulated unit: {$cumulatedUnit}");
+                    $this->log("Cumulated cost: $cumulatedCost");
+                    $this->log("Cumulated unit: $cumulatedUnit");
 
                     continue;
                 }
 
                 // In range
-                $this->log("Unit {$unit} in range: {$start} - {$end}");
+                $this->log("Unit $unit in range: $start - $end");
 
                 if ($block > 0) {
                     $this->log('Block > 0, calculate block cost.');
 
                     $unit -= $cumulatedUnit;
-                    $this->log("Remaining unit: {$unit}");
+                    $this->log("Remaining unit: $unit");
 
                     $blockUnit = ceil($unit / $block);
-                    $this->log("Block unit: {$blockUnit}");
+                    $this->log("Block unit: $blockUnit");
 
-                    $this->log("Block cost: {$cost} * {$blockUnit} = ".($cost * $blockUnit));
+                    $this->log("Block cost: $cost * $blockUnit = ".($cost * $blockUnit));
                     $cost *= $blockUnit;
                 }
 
-                $this->log("Range cost: {$cost}");
+                $this->log("Range cost: $cost");
 
                 $cumulatedCost += $cost;
-                $this->log("Cumulated cost: {$cumulatedCost}");
+                $this->log("Cumulated cost: $cumulatedCost");
 
-                $this->log("Final cost: {$cumulatedCost}, break.");
+                $this->log("Final cost: $cumulatedCost, break.");
 
                 return $cumulatedCost;
             }
@@ -835,7 +882,7 @@ final class FlexService
     {
         $volumes               = 0;
         $standardLengthClassId = $this->config('config_length_class_id');
-        foreach ($this->_getCartProducts() as $product) {
+        foreach ($this->getCartProducts() as $product) {
             $productLengthClassId = $product['length_class_id'] ?? 0;
             if (empty($productLengthClassId)) {
                 continue;
@@ -850,25 +897,34 @@ final class FlexService
         return $volumes;
     }
 
-    private function _getCartProducts()
+    /**
+     * @return array
+     */
+    private function getCartProducts(): array
     {
         return $this->cartList;
     }
 
-    private function _getCartProductIds()
+    /**
+     * @return array
+     */
+    private function getCartProductIds(): array
     {
-        $products   = $this->_getCartProducts();
+        $products   = $this->getCartProducts();
         $productIds = array_column($products, 'product_id');
 
         return array_unique($productIds);
     }
 
-    private function _getCartProductCategories()
+    /**
+     * @return array
+     */
+    private function getCartProductCategories(): array
     {
-        $cartProductIds = $this->_getCartProductIds();
+        $cartProductIds = $this->getCartProductIds();
 
         $products = [];
-        $items    = ProductCategory::query()->whereIn('product_id', $cartProductIds)->get();
+        $items    = Product\Category::query()->whereIn('product_id', $cartProductIds)->get();
         foreach ($items as $item) {
             $products[$item->product_id][] = (int) $item->category_id;
         }
@@ -881,7 +937,7 @@ final class FlexService
      */
     private function getBrands(): array
     {
-        $cartProductIds = $this->_getCartProductIds();
+        $cartProductIds = $this->getCartProductIds();
 
         $products = [];
 
@@ -905,13 +961,17 @@ final class FlexService
         return $this->checkoutService->getCartWeight();
     }
 
-    private function _getZoneToGeoZoneId($geoZoneIds)
+    /**
+     * @param  $geoZoneIds
+     * @return mixed
+     */
+    private function getZoneToGeoZoneId($geoZoneIds): mixed
     {
         if (! $this->address) {
             return [];
         }
 
-        return RegionZone::query()
+        return State::query()
             ->whereIn('region_id', $geoZoneIds)
             ->where('country_id', $this->address['country_id'])
             ->where(function (Builder $query) {
@@ -921,16 +981,20 @@ final class FlexService
             ->get();
     }
 
-    private function _getCartSubtotal()
+    /**
+     * @return float
+     */
+    private function getCartSubtotal(): float
     {
-        return $this->totalService->getSubTotal();
+        return $this->checkoutService->getSubTotal();
     }
 
-    private function _getCartTotalQuantity()
+    /**
+     * @return int
+     */
+    private function getCartTotalQuantity(): int
     {
-        // return $this->totalService->countProducts();
-
-        return collect($this->cartList)->sum('quantity');
+        return (int) collect($this->cartList)->sum('quantity');
     }
 
     /**
