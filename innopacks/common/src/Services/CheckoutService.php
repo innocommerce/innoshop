@@ -115,6 +115,20 @@ class CheckoutService extends BaseService
     }
 
     /**
+     * @return mixed
+     */
+    public function getCartWeight(): mixed
+    {
+        $weightTotal = 0;
+        $cartList    = $this->getCartList();
+        foreach ($cartList as $product) {
+            $weightTotal += $product['weight'];
+        }
+
+        return $weightTotal;
+    }
+
+    /**
      * Get current address list.
      *
      * @return array

@@ -29,10 +29,13 @@ class Boot extends BaseBoot
     public function getQuotes(CheckoutService $checkoutService): array
     {
         $quoteData = json_decode(file_get_contents(plugin_path('FlexShipping/Storage/demo.json')), true);
+        if (! $quoteData['active']) {
+            return [];
+        }
 
         $shippingQuotes = [];
         $flexShipping   = FlexService::getInstance($checkoutService);
-        foreach ($quoteData as $index => $quoteSetting) {
+        foreach ($quoteData['quotes'] as $index => $quoteSetting) {
             $quote = $flexShipping->getQuote($quoteSetting);
             if (empty($quote)) {
                 continue;

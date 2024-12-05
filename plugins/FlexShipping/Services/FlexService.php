@@ -13,7 +13,9 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use InnoShop\Common\Models\Checkout;
+use InnoShop\Common\Models\Address;
+use InnoShop\Common\Models\Customer;
+use InnoShop\Common\Models\Product;
 use InnoShop\Common\Services\CheckoutService;
 use Throwable;
 
@@ -21,19 +23,13 @@ final class FlexService
 {
     private CheckoutService $checkoutService;
 
-    private Checkout $checkout;
+    private ?Address $address;
 
-    private $address;
+    private array $cartList;
 
-    private $cartOrder;
+    private array $rawQuote;
 
-    private $cartList;
-
-    private $rawQuote;
-
-    private $logger;
-
-    private $customer;
+    private ?Customer $customer;
 
     /**
      * @param  CheckoutService  $checkoutService
@@ -43,7 +39,6 @@ final class FlexService
     {
         $checkout = $checkoutService->getCheckout();
 
-        $this->checkout        = $checkout;
         $this->checkoutService = $checkoutService;
         $this->address         = $checkout->shippingAddress;
         $this->cartList        = $checkoutService->getCartList();
@@ -67,7 +62,7 @@ final class FlexService
      */
     public function getQuote($rawQuote): ?array
     {
-        $this->log(__METHOD__);
+        $this->log('====== Start'.__METHOD__);
 
         $this->rawQuote = $rawQuote;
         $this->log('Raw quote: '.json_encode($rawQuote));
@@ -104,7 +99,7 @@ final class FlexService
             $this->log("Final cost: {$cost}");
         }
 
-        $localeCode = locale();
+        $localeCode = locale_code();
         $title      = $this->rawQuote['title'][$localeCode] ?? '';
         $this->log("Title: {$title}");
 
@@ -133,7 +128,7 @@ final class FlexService
         $this->log(__METHOD__);
 
         // Status
-        if (! (bool) Arr::get($this->rawQuote, 'status')) {
+        if (! $this->rawQuote['active']) {
             $this->log('Quote disabled, exit.');
 
             return false;
@@ -350,13 +345,13 @@ final class FlexService
             return true;
         }
 
-        $currencyIds = Arr::get($rule, 'ids');
-        $this->log('Enabled for selected currencies: '.json_encode($currencyIds));
+        $currencyCodes = Arr::get($rule, 'ids');
+        $this->log('Enabled for selected currencies: '.json_encode($currencyCodes));
 
-        $currencyId = $this->_getCurrencyId();
-        $this->log("Current currency: {$currencyId}");
+        $currencyCode = $this->getCurrencyCode();
+        $this->log("Current currency: {$currencyCode}");
 
-        if (in_array($currencyId, $currencyIds)) {
+        if (in_array($currencyCode, $currencyCodes)) {
             $this->log('Current currency in selected currencies, passed.');
 
             return true;
@@ -523,7 +518,7 @@ final class FlexService
         $manufacturerIds = array_column($manufacturers, 'value');
         $this->log('Selected manufacturers: '.json_encode($manufacturerIds));
 
-        $cartProductManufacturerIds = $this->_getCartProductManufacturers();
+        $cartProductManufacturerIds = $this->getBrands();
         $cartProductManufacturerIds = array_unique($cartProductManufacturerIds);
         $this->log('Cart product manufacturers: '.json_encode($cartProductManufacturerIds));
 
@@ -650,7 +645,7 @@ final class FlexService
         $unit = 0;
         switch ($unitType) {
             case 'weight':
-                $unit = $this->_getCartWeight();
+                $unit = $this->getCartWeight();
                 $this->log("Weight: {$unit}");
 
                 break;
@@ -701,7 +696,7 @@ final class FlexService
                 $this->log("Volume weight: {$unit}");
 
                 if ($unitType == 'volume_weight_max') {
-                    $totalWeight = $this->_getCartWeight();
+                    $totalWeight = $this->getCartWeight();
                     $unit        = max($unit, $totalWeight);
                 }
                 $this->log("Final volume weight: {$unit}");
@@ -880,13 +875,20 @@ final class FlexService
         return $products;
     }
 
-    private function _getCartProductManufacturers()
+    /**
+     * @return array
+     */
+    private function getBrands(): array
     {
         $cartProductIds = $this->_getCartProductIds();
 
         $products = [];
-        $items    = Product::query()->select('product_id', 'brand_id')
-            ->whereIn('product_id', $cartProductIds)->get();
+
+        $items = Product::query()
+            ->select('product_id', 'brand_id')
+            ->whereIn('product_id', $cartProductIds)
+            ->get();
+
         foreach ($items as $item) {
             $products[$item->product_id] = (int) $item->brand_id;
         }
@@ -894,9 +896,12 @@ final class FlexService
         return $products;
     }
 
-    private function _getCartWeight()
+    /**
+     * @return mixed
+     */
+    private function getCartWeight(): mixed
     {
-        return $this->checkout->getCartWeight();
+        return $this->checkoutService->getCartWeight();
     }
 
     private function _getZoneToGeoZoneId($geoZoneIds)
@@ -927,19 +932,30 @@ final class FlexService
         return collect($this->cartList)->sum('quantity');
     }
 
-    private function _getCurrencyId()
+    /**
+     * @return string
+     */
+    private function getCurrencyCode(): string
     {
-        return current_currency_id();
+        return current_currency_code();
     }
 
-    private function config($key)
+    /**
+     * @param  $key
+     * @return mixed
+     */
+    private function config($key): mixed
     {
-        return plugin_setting($key);
+        return plugin_setting('flex_shipping', $key);
     }
 
-    private function log($message)
+    /**
+     * @param  $message
+     * @return void
+     */
+    private function log($message): void
     {
-        $debug = $this->config('shipping_flex_debug');
+        $debug = $this->config('active');
         if ($debug) {
             Log::info($message);
         }

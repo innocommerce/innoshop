@@ -37,6 +37,7 @@ class CartListItem extends JsonResource
             'sku_id'              => $sku->id,
             'sku_code'            => $sku->code,
             'is_virtual'          => $product->is_virtual,
+            'weight'              => $product->weight,
             'price'               => $sku->price,
             'price_format'        => $sku->price_format,
             'origin_price'        => $sku->origin_price,
