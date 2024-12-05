@@ -14,6 +14,14 @@ use Illuminate\Http\JsonResponse;
 class HomeController extends BaseController
 {
     /**
+     * @return string
+     */
+    public function base(): string
+    {
+        return 'This is Frontend Restful APIs for '.innoshop_version();
+    }
+
+    /**
      * Home page data.
      *
      * @return JsonResponse

@@ -10,7 +10,7 @@
 use Illuminate\Support\Facades\Route;
 use InnoShop\RestAPI\FrontApiControllers;
 
-Route::get('/', [FrontApiControllers\IntroductionController::class, 'index'])->name('introduction.index');
+Route::get('/', [FrontApiControllers\HomeController::class, 'base'])->name('home.base');
 Route::get('/home', [FrontApiControllers\HomeController::class, 'index'])->name('home.index');
 Route::get('/settings', [FrontApiControllers\SettingController::class, 'index'])->name('settings.index');
 

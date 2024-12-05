@@ -10,10 +10,10 @@
 use Illuminate\Support\Facades\Route;
 use InnoShop\RestAPI\PanelApiControllers;
 
-Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('introduction.index');
+Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('base.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
 
-$middlewares = ['auth:sanctum'];
+$middlewares = [];
 Route::middleware($middlewares)->group(function () {
 
     Route::get('/admin', [PanelApiControllers\AuthController::class, 'admin'])->name('auth.admin');

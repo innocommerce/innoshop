@@ -9,13 +9,21 @@
 
 namespace Plugin\FlexShipping\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Panel\Controllers\BaseController;
+use Throwable;
 
 class FlexShippingController extends BaseController
 {
-    public function update(Request $request)
+    /**
+     * @throws Throwable
+     */
+    public function update(Request $request): JsonResponse
     {
-        return $request->all();
+        SettingRepo::getInstance()->updatePluginValue('flex_shipping', 'setting', $request->all());
+
+        return json_success('保存成功');
     }
 }

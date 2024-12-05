@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
-  <script src="{{ asset('vendor/vue/3.5/vue.global.prod.js')}}"></script>
+  <script src="{{ asset('vendor/vue/3.5/vue.global' . (config('app.debug') ? '' : '.prod') . '.js') }}"></script>
   <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
   <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -25,6 +25,7 @@
   <script src="{{ mix('build/panel/js/app.js') }}"></script>
   <script>
     let urls = {
+      api_base: '{{ route('api.panel.base.index') }}',
       base_url: '{{ panel_route('home.index') }}',
       upload_images: '{{ panel_route('upload.images') }}',
       ai_generate: '{{ panel_route('content_ai.generate') }}',

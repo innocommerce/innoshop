@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="{{ mix('themes/default/css/app.css') }}">
   <script>
     let urls = {
+      api_base: '{{ route('api.home.base') }}',
       base_url: '{{ front_route('home.index') }}',
       upload_images: '{{ front_root_route('upload.images') }}',
       cart_add: '{{ front_route('carts.store') }}',

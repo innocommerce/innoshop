@@ -1,779 +1,681 @@
 @extends('panel::layouts.app')
-@section('body-class', 'design-app-home')
-@section('title', __('FlexShipping::route.title'))
+@section('body-class', 'flex-shipping')
+@section('title', __('FlexShipping::setting.heading_title'))
 
 @push('header')
-<script src="{{ asset('vendor/vue/3.5/vue.global.prod.js') }}"></script>
-<script src="{{ asset('vendor/clipboard.min.js') }}"></script>
-<script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
-<script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
-<link rel="stylesheet" href="{{ plugin_asset('flex_shipping', 'css/flexshipp.css') }}">
+ <link rel="stylesheet" href="{{ plugin_asset('flex_shipping', 'css/flex_shipping.css') }}">
 @endpush
 
+@php
+ $taxClasses = \InnoShop\Common\Repositories\TaxClassRepo::getInstance()->all();
+ $geoZones = \InnoShop\Common\Repositories\RegionRepo::getInstance()->all();
+ $customerGroups = \InnoShop\Common\Repositories\Customer\GroupRepo::getInstance()->all();
+ $currencies = \InnoShop\Common\Repositories\CurrencyRepo::getInstance()->enabledList();
+ $currencyCode = current_currency_code();
+ $localeCode = locale_code();
+ $timeNow = date('Y-m-d H:i:s');
+@endphp
+
 @section('content')
-<div class="card h-min-600">
-  <div id="app">
-
-    <div class="card-header d-flex justify-content-between">
-      <div class="mt-2 fs-5">{{ __('FlexShipping::route.freight') }}</div>
-      <button @click="logSelectedItem" class="btn btn-primary">{{ __('FlexShipping::route.add') }}</button>
-    </div>
-    <div class="card-body">
-      <div class="container">
-        <div class="row" style="width: 70%;">
-          <div v-for="(item, index) in items" :key="index" class="col-4 d-flex align-items-center">
-            <div style="width: 80px;" class="me-2">@{{ item.state }}</div>
-            <input v-if="item.state === '{{ __('FlexShipping::route.sort') }}'" type="number"
-              v-model.number="item.frame" class="form-control w-100">
-            <select
-              v-if="['{{ __('FlexShipping::route.state') }}', '{{ __('FlexShipping::route.state_debugging') }}'].includes(item.state)"
-              v-model.number="item.frame" class="form-control w-100">
-              <option value="{{ __('FlexShipping::route.forbidden') }}">{{ __('FlexShipping::route.forbidden') }}
-              </option>
-              <option value="{{ __('FlexShipping::route.enable') }}">{{ __('FlexShipping::route.enable') }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="d-flex gap-5" style="margin-top: 60px;">
-          <div class="col-md-2">
-            <div @click="setSelectedItem(index)" :class="{'selected': selectedIndex === index}" class="move"
-              v-for="(item, index) in delivermove" :key="index">
-              <div class="movediv">@{{ item.display_namecn|| item.name }}</div>
-              <div>
-                {{-- <i class="bi bi-trash" @click="showConfirmDelete(index)"></i> --}}
-                <el-butto plain @click="open(index)">
-                  <i class="bi bi-trash"></i>
-                </el-butto>
-              </div>
-            </div>
-            <div @click="addShopItem" class="d-flex gap-1 add-distribution mt-3">
-              <i class="bi bi-plus-square"></i>
-              <div>{{ __('FlexShipping::route.shipping_method') }}</div>
-            </div>
-          </div>
-
-          <div class="col-md-10">
-            <div class="d-flex">
-              <div v-for="(item, index) in selectedItem.list" :key="index">
-                <div @click="setSubNavigation(index)" :class="{'navigation-cut': selectedItem.subIndx === index}"
-                  class="navigation">@{{ item.name }}
-                </div>
-              </div>
-            </div>
-            <div v-if="selectedItem.subIndx === 0">
-              <div class="mt-3">
-                <div class="mb-3">
-                  <div class="d-flex gap-3">
-                    <div class="general mt-2">{{ __('FlexShipping::route.display_name') }}</div>
-                    <div class="row w-100">
-                      <div class="col-6">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="Informationid input-group-text" id="basic-addon1">中文</span>
-                          </div>
-                          <input v-model="selectedItem.display_namecn" type="text" class="Informationbox form-control"
-                            placeholder="中文" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="Informationid input-group-text" id="basic-addon2">English</span>
-                          </div>
-                          <input v-model="selectedItem.list[selectedItem.subIndx].from.display_nameen" type="text"
-                            class="Informationbox form-control" placeholder="English" aria-label="Username"
-                            aria-describedby="basic-addon2">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex gap-3">
-                    <div class="general mt-2">{{ __('FlexShipping::route.describe') }}</div>
-
-                    <div class="row w-100">
-
-                      <div class="col-6">
-                        <div class="input-group">
-                          <span class="Informationlong input-group-text">中文</span>
-                          <textarea v-model="selectedItem.list[selectedItem.subIndx].from.description_cn"
-                            placeholder="中文" class="Informationbox form-control" aria-label="With textarea"></textarea>
-                        </div>
-
-                        <div class="input-group">
-                          <span class="Informationlong input-group-text">English</span>
-                          <textarea v-model="selectedItem.list[selectedItem.subIndx].from.description_en"
-                            placeholder="English" class="Informationbox form-control"
-                            aria-label="With textarea"></textarea>
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                  <div class="d-flex">
-                    <div class="mt-2">{{ __('FlexShipping::route.icon') }}</div>
-                    <div class="d-flex flex-column flex-grow-1"></div>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex">
-                    <div class="mt-2" style="width: 115px;">{{ __('FlexShipping::route.sort') }}</div>
-                    <div class="row w-100">
-                      <div class="col-6">
-                        <input v-model="selectedItem.list[selectedItem.subIndx].from.sorting" type="number"
-                          class="form-control" placeholder="{{ __('FlexShipping::route.sort') }}" aria-label="Username"
-                          aria-describedby="basic-addon1">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex">
-                    <div class="mt-2" style="width: 115px;">{{ __('FlexShipping::route.tax_category') }}</div>
-                    <div class="row w-100">
-                      <div class="col-6">
-                        <select v-model="selectedItem.list[selectedItem.subIndx].from.category_tax" class="form-select"
-                          aria-label="Default select example">
-                          <option value="0">--无--</option>
-                          <option value="1">选项 1</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex">
-                    <div class="mt-2" style="width: 115px;">{{ __('FlexShipping::route.state') }}</div>
-                    <div class="row w-100">
-                      <div class="col-6">
-                        <select v-model="selectedItem.list[selectedItem.subIndx].from.state" class="form-select"
-                          aria-label="Default select example">
-                          <option value="0">{{ __('FlexShipping::route.forbidden') }}</option>
-                          <option value="1">{{ __('FlexShipping::route.enable') }}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-if="selectedItem.subIndx === 1">
-              <div class="mt-3">
-                <div class="col-12 col-md-6">
-                  <div class="mb-3">
-                    <div class="d-flex">
-                      <div class="mt-2 ">{{ __('FlexShipping::route.group') }}</div>
-                      <div style="flex-grow: 1; margin-left: 50px;">
-                        <input v-model="selectedItem.list[selectedItem.subIndx].from.regional_group"
-                          class="form-control" placeholder="{{ __('FlexShipping::route.group') }}" aria-label="Username"
-                          aria-describedby="basic-addon1">
-                        <div class="mt-2">{{ __('FlexShipping::route.turn') }}
-                          <a href="{{panel_route('regions.index')}}" target="_blank" style="text-decoration: none;">{{
-                            __('FlexShipping::route.configuration') }}</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6">
-                  <div class="mb-3">
-                    <div class="d-flex">
-                      <div class="mt-2">{{ __('FlexShipping::route.service') }}</div>
-                      <div style="flex-grow: 1; margin-left: 65px;">
-                        <select v-model="selectedItem.list[selectedItem.subIndx].from.service" class="form-select"
-                          aria-label="Default select example">
-                          <option value="">{{ __('FlexShipping::route.all_service') }}</option>
-                          <option value="1">{{ __('FlexShipping::route.assign_service') }}</option>
-                        </select>
-                        <div v-if="selectedItem.list[selectedItem.subIndx].from.service==1" class="selection_screen">
-                          <section class="selection_option">
-                            <label class="checkbox-inline mb-1 me-1">
-                              <input v-model="selectedItem.list[selectedItem.subIndx].from.customer_groups"
-                                type="checkbox" :value="1"> {{ __('FlexShipping::route.silver') }}
-                            </label>
-                            <label class="checkbox-inline mb-1 me-1">
-                              <input v-model="selectedItem.list[selectedItem.subIndx].from.customer_groups"
-                                type="checkbox" :value="2"> {{ __('FlexShipping::route.gold') }}
-                            </label>
-                          </section>
-                          <div v-if="selectedItem.list[selectedItem.subIndx].from.customer_groups.length < 1"
-                            class="mt-3 text-danger">
-                            {{ __('FlexShipping::route.client_select') }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6">
-                  <div class="mb-3 mt-5">
-                    <div class="d-flex">
-                      <div class="mt-2">{{ __('FlexShipping::route.currency') }}</div>
-                      <div style="flex-grow: 1; margin-left: 80px;">
-
-                        <select v-model="selectedItem.list[selectedItem.subIndx].from.currency" class="form-select"
-                          aria-label="Default select example">
-                          <option value="">{{ __('FlexShipping::route.all_currency') }}</option>
-                          <option value="currencies">{{ __('FlexShipping::route.assign_currency') }}</option>
-                        </select>
-                        <div v-if="selectedItem.list[selectedItem.subIndx].from.currency === 'currencies'"
-                          class="selection_screen">
-                          <section class="selection_option">
-                            <label class="checkbox-inline mb-1 me-1">
-                              <input v-model="selectedItem.list[selectedItem.subIndx].from.currencies" type="checkbox"
-                                :value="'CNY'">
-                              {{ __('FlexShipping::route.rmb') }}
-                            </label>
-                            <label class="checkbox-inline mb-1 me-1">
-                              <input v-model="selectedItem.list[selectedItem.subIndx].from.currencies" type="checkbox"
-                                :value="'{{ __('FlexShipping::route.usd') }}'">
-                              {{ __('FlexShipping::route.usd') }}
-                            </label>
-                            <label class="checkbox-inline mb-1 me-1">
-                              <input v-model="selectedItem.list[selectedItem.subIndx].from.currencies" type="checkbox"
-                                :value="'EUR'">
-                              {{ __('FlexShipping::route.eur') }}
-                            </label>
-                          </section>
-                          <div v-if="selectedItem.list[selectedItem.subIndx].from.currencies.length < 1"
-                            class="mt-3 text-danger">
-                            {{ __('FlexShipping::route.select_currency') }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-if="selectedItem.subIndx === 2">
-              <div class="mt-3">
-                <div class="mb-3">
-                  <div class="d-flex gap-3" style="width: 100%;">
-                    <div class="mt-2" style="width: 8%;">商品条件</div>
-                    <div style="margin-left: 15px;" class="flex-grow-1">
-                      <select v-model="selectedItem.list[selectedItem.subIndx].from.terms_commodity" class="form-select"
-                        style="width: 45%;" aria-label="商品条件选择">
-                        <option value="1">所有商品</option>
-                        <option value="">购物车只能有以下选定的商品</option>
-                        <option value="2">购物车有以下任一选定的商品即可</option>
-                        <option value="3">购物车不能有以下选定的商品</option>
-                      </select>
-                      <div
-                        v-if="selectedItem.list[selectedItem.subIndx].from.terms_commodity === '' || selectedItem.list[selectedItem.subIndx].from.terms_commodity === '2' || selectedItem.list[selectedItem.subIndx].from.terms_commodity === '3'">
-                        <div class="mt-3">
-                          <div class="input-group mb-3" style="width: 45%;">
-                            <span class="input-group-text" id="basic-addon1">
-                              <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" class="form-control" placeholder="搜索" data-bs-toggle="dropdown"
-                              aria-label="搜索">
-                            <div class="btn-group">
-                              <ul class="dropdown-menu">
-                                <li><a class="dropdown-item">111111111
-                                  </a></li>
-                                <li><a class="dropdown-item">Another action</a></li>
-                                <li><a class="dropdown-item">Something else here</a></li>
-                                <li>
-                                  <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item">Separated link</a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex gap-3" style="width: 100%;">
-                    <div class="mt-2" style="width: 8%;">商品分类条件</div>
-                    <div style="margin-left: 15px;" class="flex-grow-1">
-                      <select v-model="selectedItem.list[selectedItem.subIndx].from.goods_category" class="form-select"
-                        style="width: 45%;" aria-label="商品分类条件选择">
-                        <option value="1">所有分类</option>
-                        <option value="">购物车只能有以下选定的商品分类</option>
-                        <option value="2">购物车有以下任一选定的商品分类即可</option>
-                        <option value="3">购物车不能有以下选定的分类商品</option>
-                      </select>
-                    </div>
-
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="d-flex gap-3" style="width: 100%;">
-                    <div class="mt-2" style="width: 8%;">品牌条件</div>
-                    <div style="margin-left: 15px;" class="flex-grow-1">
-                      <select v-model="selectedItem.list[selectedItem.subIndx].from.brand_conditions"
-                        class="form-select" style="width: 45%;" aria-label="品牌条件选择">
-                        <option value="">所有品牌</option>
-                        <option value="1">购物车只能有以下选定的品牌</option>
-                        <option value="2">购物车有以下任一选定的品牌即可</option>
-                        <option value="3">购物车不能有以下选定的</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-if="selectedItem.subIndx === 3">
-              <div>
-                <div class="mt-3">
-                  <div class="mb-3">
-                    <div class="d-flex gap-3">
-                      <div class="mt-2">{{ __('FlexShipping::route.week') }}</div>
-                      <div style="padding: 12px;">
-                        <section>
-                          <label style="margin-left: 10px" class="checkbox-inline mb-0 me-0">
-                            <input v-model="selectedItem.list[selectedItem.subIndx].from.date" type="checkbox"
-                              :value="1">
-                            {{ __('FlexShipping::route.monday') }}
-                          </label>
-                          <label style="margin-left: 10px" class="checkbox-inline mb-0 me-0">
-                            <input v-model="selectedItem.list[selectedItem.subIndx].from.date" type="checkbox"
-                              :value="2">
-                            {{ __('FlexShipping::route.tuesday') }}
-                          </label>
-                          <label style="margin-left: 10px" class="checkbox-inline mb-0 me-0">
-                            <input v-model="selectedItem.list[selectedItem.subIndx].from.date" type="checkbox"
-                              :value="3">
-                            {{ __('FlexShipping::route.wednesday') }}
-                          </label>
-                          <label style="margin-left: 10px" class="checkbox-inline mb-0 me-0">
-                            <input v-model="selectedItem.list[selectedItem.subIndx].from.date" type="checkbox"
-                              :value="4">
-                            {{ __('FlexShipping::route.thursday') }}
-                          </label>
-                          <label style="margin-left: 10px" class="checkbox-inline mb-0 me-0">
-                            <input v-model="selectedItem.list[selectedItem.subIndx].from.date" type="checkbox"
-                              :value="5">
-                            {{ __('FlexShipping::route.friday') }}
-                          </label>
-                          <label style="margin-left: 10px" class="checkbox-inline mb-0 me-0">
-                            <input v-model="selectedItem.list[selectedItem.subIndx].from.date" type="checkbox"
-                              :value="6">
-                            {{ __('FlexShipping::route.saturday') }}
-                          </label>
-                          <label style="margin-left: 10px" class="checkbox-inline mb-0 me-0">
-                            <input v-model="selectedItem.list[selectedItem.subIndx].from.date" type="checkbox"
-                              :value="7">
-                            {{ __('FlexShipping::route.sunday_full') }}
-                          </label>
-                        </section>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-3">
-                    <div class="d-flex gap-3">
-                      <div class="mt-2" style="width: 80px;">{{ __('FlexShipping::route.time_period') }}</div>
-                      <div class="d-flex gap-3" style="flex: 0 0 50%;">
-                        <div style="flex: 1;">
-                          <select class="form-control" v-model="selectedItem.list[selectedItem.subIndx].from.afternoon">
-                            <option value="">{{ __('FlexShipping::route.any') }}</option>
-                            @for ($i = 0; $i <= 23; $i++) <option value="{{ $i < 10 ? ('0' . $i) : $i }}:00">
-                              {{ $i < 10 ? ('0' . $i) : $i }}:00 @if ($i < 12) {{ __('FlexShipping::route.forenoon') }}
-                                @else {{ __('FlexShipping::route.afternoon') }} @endif </option>
-                                @endfor
-                          </select>
-                        </div>
-                        <div style="flex: 1;">
-                          <select class="form-control" v-model="selectedItem.list[selectedItem.subIndx].from.morning">
-                            <option value="">{{ __('FlexShipping::route.any') }}</option>
-                            @for ($i = 0; $i <= 23; $i++) <option value="{{ $i < 10 ? ('0' . $i) : $i }}:00">
-                              {{ $i < 10 ? ('0' . $i) : $i }}:00 @if ($i < 12) {{ __('FlexShipping::route.forenoon') }}
-                                @else {{ __('FlexShipping::route.afternoon') }} @endif </option>
-                                @endfor
-                          </select>
-                        </div>
-
-                      </div>
-                    </div>
-                    <div class="container d-flex justify-content-start mt-2">
-                      {{ __('FlexShipping::route.current_server_time') }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div v-if="selectedItem.subIndx === 4">
-              <div class="mt-3">
-                <div class="mb-3">
-                  <div class="d-flex gap-3 align-items-center">
-                    <div class="mt-2" style="width: 100px;">{{ __('FlexShipping::route.billing_unit') }}</div>
-                    <div class="col-6">
-                      <select v-model="selectedItem.list[selectedItem.subIndx].from.billing" class="form-select mt-3 "
-                        aria-label="{{ __('FlexShipping::route.billing_unit') }}">
-                        <option value="0">{{ __('FlexShipping::route.fixed_fee') }}</option>
-                        <option value="1">{{ __('FlexShipping::route.total_amount') }}</option>
-                        <option value="2">{{ __('FlexShipping::route.total_weight') }}</option>
-                        <option value="3">{{ __('FlexShipping::route.total_quantity') }}</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="mt-3 mb-3 d-flex gap-3 align-items-center"
-                    v-if="selectedItem.list[selectedItem.subIndx].from.billing==0">
-                    <div style="width: 100px;">{{ __('FlexShipping::route.fixed_fee') }}</div>
-                    <div class="col-6">
-                      <div class="input-group mb-3 mt-3">
-                        <span class="input-group-text" id="basic-addon1">{{ __('FlexShipping::route.usd') }}</span>
-                        <input min="0" v-model="selectedItem.list[selectedItem.subIndx].from.billing_usd" type="number"
-                          class="form-control" placeholder="{{ __('FlexShipping::route.enter_amount') }}"
-                          aria-label="{{ __('FlexShipping::route.enter_amount') }}" aria-describedby="basic-addon1">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mt-3 mb-3 gap-3"
-                    v-if="selectedItem.list[selectedItem.subIndx].from.billing === '1'||selectedItem.list[selectedItem.subIndx].from.billing === '2'||selectedItem.list[selectedItem.subIndx].from.billing === '3'">
-                    <div>
-                      <div class="d-flex align-items-center">
-                        <div class="mt-2" style="width: 100px;">{{ __('FlexShipping::route.billing_method') }}</div>
-                        <div class="col-6">
-                          <select v-model="selectedItem.list[selectedItem.subIndx].from.method_billing"
-                            class="form-select ms-3" style="margin-left: 17px;">
-                            <option value="0">{{ __('FlexShipping::route.range_billing')}}</option>
-                            <option value="1">{{ __('FlexShipping::route.cumulative_billing')}}
-                            </option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div class="d-flex">
-                        <div class="mt-3" style="width: 110px;">{{ __('FlexShipping::route.billing_method') }}</div>
-                        <table class="table table-bordered caption-top mt-3"
-                          style="margin-left: 15px; margin-right: 50px;">
-                          <thead>
-                            <tr class="bs-secondary-bg-rgb">
-                              <th scope="col">{{ __('FlexShipping::route.start_value') }}</th>
-                              <th scope="col">{{ __('FlexShipping::route.end_value')}}</th>
-                              <th scope="col">{{ __('FlexShipping::route.fee')}}</th>
-                              <th scope="col">{{ __('FlexShipping::route.incremental_quantity')}}</th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="(item, index) in selectedItem.list[selectedItem.subIndx].from.items"
-                              :key="index">
-                              <td>
-                                <div class="input-group">
-                                  <span class="input-group-text" id="basic-addon1"> >= </span>
-                                  <input min=0 v-model="item.start_value" type="number" class="form-control"
-                                    aria-label="{{ __('FlexShipping::route.start_value') }}"
-                                    aria-describedby="{{ __('FlexShipping::route.start_value') }}">
-                                </div>
-                              </td>
-                              <td>
-                                <div class="input-group">
-                                  <span class="input-group-text" id="basic-addon1">
-                                    <= </span>
-                                      <input min=0 v-model="item.end_value" type="number" class="form-control"
-                                        aria-label="结束值(含)" aria-describedby="结束值(含)">
-                                </div>
-                              </td>
-                              <td>
-                                <div class="input-group">
-                                  <span class="input-group-text" id="basic-addon1">{{ __('FlexShipping::route.usd')
-                                    }}</span>
-                                  <input min=0 v-model="item.fee" type="number" class="form-control" aria-label="费用"
-                                    aria-describedby="费用">
-                                </div>
-                              </td>
-                              <td>
-                                <div class="input-group">
-                                  <input min=0 v-model="item.progressive_quantity" type="number" class="form-control"
-                                    aria-label="累进数量" aria-describedby="累进数量">
-                                </div>
-                              </td>
-                              <td>
-                                <div class="mt-2 d-flex justify-content-center" style="width: 130px;">
-                                  <div class="btn btn-danger" @click="deleteItem(index)">{{
-                                    __('FlexShipping::route.delete')}}</div>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="bordernone" style="border-left: 1px solid #dee2e6"></td>
-                              <td class="bordernone"></td>
-                              <td class="bordernone"></td>
-                              <td class="bordernone"></td>
-                              <td class="mt-2 d-flex justify-content-center">
-                                <div class="btn btn-primary" @click="add_rules">{{
-                                  __('FlexShipping::route.add_fee_rule')}}</div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-
-                      </div>
-                      <div>
-                        <div class=" mb-3 d-flex gap-3 align-items-center">
-                          <div style="width: 100px;">{{ __('FlexShipping::route.add_fee_rule')}}</div>
-                          <div class="col-6">
-                            <div class="input-group mb-3 mt-3">
-                              <span class="input-group-text" id="basic-addon1">{{ __('FlexShipping::route.usd')
-                                }}</span>
-                              <input v-model="selectedItem.list[selectedItem.subIndx].from.extra" class="form-control"
-                                placeholder="{{ __('FlexShipping::route.enter_amount') }}"
-                                aria-label="{{ __('FlexShipping::route.enter_amount') }}"
-                                aria-describedby="basic-addon1">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <div class=" mb-3 d-flex gap-3 align-items-center">
-                          <div style="width: 100px;">{{ __('FlexShipping::route.maximum_fee') }}</div>
-                          <div class="col-6">
-                            <div class="input-group mb-3 mt-3">
-                              <span class="input-group-text" id="basic-addon1">{{ __('FlexShipping::route.usd')
-                                }}</span>
-                              <input v-model="selectedItem.list[selectedItem.subIndx].from.upper_limit"
-                                class="form-control" placeholder="{{ __('FlexShipping::route.enter_amount') }}"
-                                aria-label="{{ __('FlexShipping::route.enter_amount') }}"
-                                aria-describedby="basic-addon2">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+ <div class="card h-min-600" id="app">
+  <div class="card-header">
+   <button type="button" class="btn btn-primary save-btn" @click="submit">{{ __('panel/common.btn_save') }}</button>
   </div>
-</div>
+  <div class="card-body">
+   <div class="row mb-5">
+    <div class="col-xxl-20 col-xl-3 col-lg-4 col-md-4 d-flex align-items-center">
+     <label class="text-nowrap me-2">{{ __('FlexShipping::setting.entry_sort_order') }}</label>
+     <input type="number" v-model.number="sort_order" placeholder="{{ __('FlexShipping::setting.entry_sort_order') }}"
+      class="form-control wp-200" />
+    </div>
+
+    <div class="col-xxl-20 col-xl-3 col-lg-4 col-md-4 d-flex align-items-center">
+     <label class="text-nowrap me-2">{{ __('FlexShipping::setting.entry_status') }}</label>
+     <select v-model.number="status" class="form-control wp-200">
+      <option value="0">{{ __('FlexShipping::setting.text_disabled') }}</option>
+      <option value="1">{{ __('FlexShipping::setting.text_enabled') }}</option>
+     </select>
+    </div>
+
+    <div class="col-xxl-20 col-xl-3 col-lg-4 col-md-4 d-flex align-items-center">
+     <label class="text-nowrap me-2">{{ __('FlexShipping::setting.entry_debug') }}</label>
+     <div class="wp-200">
+      <select v-model.number="debug" class="form-control">
+       <option value="0">{{ __('FlexShipping::setting.text_disabled') }}</option>
+       <option value="1">{{ __('FlexShipping::setting.text_enabled') }}</option>
+      </select>
+      <div class="text-muted mt-2" v-if="debug">{{ __('FlexShipping::setting.help_debug') }}</div>
+     </div>
+    </div>
+   </div>
+
+   <div class="d-flex ">
+    <div class="wp-200">
+     <div id="quote-list" class="nav nav-pills list-group mb-4" v-if="quotes.length">
+      <a class="list-group-item d-flex justify-content-between align-items-center" :href="'#tab-quote-' + quoteIndex"
+       data-bs-toggle="tab" v-for="(quote, quoteIndex) in quotes">
+       <span v-text="quote.title['{{ $localeCode }}'] || '{{ __('FlexShipping::setting.text_untitled') }}'"></span>
+       <div @click="removeQuoteButtonClicked(quoteIndex)"><i class="bi bi-trash"></i></div>
+      </a>
+     </div>
+     <button class="btn btn-outline-secondary btn-sm add-new" data-toggle="tooltip" type="button"
+      data-placement="bottom" @click="addQuoteButtonClicked">
+      <i class="bi bi-plus-square"></i> {{ __('FlexShipping::setting.button_add_quote') }}
+     </button>
+    </div>
+    <div class=" ms-4">
+     <div class="tab-content">
+      <div v-for="(quote, quoteIndex) in quotes" class="tab-pane" v-bind:id="'tab-quote-' + quoteIndex"
+       :key="quoteIndex">
+       <ul class="nav nav-tabs mb-4">
+        <li><a class="nav-link active" :href="'#tab-quote-general-' + quoteIndex"
+          data-bs-toggle="tab">{{ __('FlexShipping::setting.tab_general') }}</a></li>
+        <li><a class="nav-link" :href="'#tab-quote-common-' + quoteIndex"
+          data-bs-toggle="tab">{{ __('FlexShipping::setting.tab_basic') }}</a></li>
+        <li><a class="nav-link" :href="'#tab-quote-product-' + quoteIndex"
+          data-bs-toggle="tab">{{ __('FlexShipping::setting.tab_product') }}</a></li>
+        <li><a class="nav-link" :href="'#tab-quote-time-' + quoteIndex"
+          data-bs-toggle="tab">{{ __('FlexShipping::setting.tab_time') }}</a></li>
+        <li><a class="nav-link" :href="'#tab-quote-cost-' + quoteIndex"
+          data-bs-toggle="tab">{{ __('FlexShipping::setting.tab_cost') }}</a></li>
+       </ul>
+       <div class="tab-content">
+        <div class="tab-pane active" :id="'tab-quote-general-' + quoteIndex">
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_title') }}</label>
+          <div class="col-auto wp-100-">
+           <vue-input-lang v-model="quote.title"></vue-input-lang>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.description') }}</label>
+          <div class="col-auto wp-400">
+           <vue-input-lang :is-textarea="true" v-model="quote.description"></vue-input-lang>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.shipping_icon') }}</label>
+          <div class="col-auto wp-400">
+            <vue-image v-model="quote.icon"></vue-image>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end"
+           for="input-sort-order">{{ __('FlexShipping::setting.entry_sort_order') }}</label>
+          <div class="col-auto wp-100-">
+           <input type="number" v-model.number="quote.sort_order" id="input-sort-order"
+            placeholder="{{ __('FlexShipping::setting.entry_sort_order') }}" class="form-control wp-400" />
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_tax_class') }}</label>
+          <div class="col-auto wp-100-">
+           <select v-model.number="quote.tax_class_id" class="form-control wp-400">
+            <option value="0">{{ __('FlexShipping::setting.text_none') }}</option>
+            @foreach ($taxClasses as $tax_class)
+             <option value="{{ $tax_class['id'] }}">{{ $tax_class['title'] }}</option>
+            @endforeach
+           </select>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end"
+           for="input-status">{{ __('FlexShipping::setting.entry_status') }}</label>
+          <div class="col-auto wp-100-">
+           <select id="input-status" class="form-control wp-400" v-model.number="quote.status">
+            <option value="0">{{ __('FlexShipping::setting.text_disabled') }}</option>
+            <option value="1">{{ __('FlexShipping::setting.text_enabled') }}</option>
+           </select>
+          </div>
+         </div>
+        </div>
+        <div class="tab-pane" :id="'tab-quote-common-' + quoteIndex">
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_geo_zone') }}</label>
+          <div class="col-auto wp-100-">
+           <select class="form-control wp-400" v-model="quote.rules.geo_zone.type">
+            <option value="all">{{ __('FlexShipping::setting.entry_geo_zone_all') }}</option>
+            @if (count($geoZones))
+             <option value="selected">{{ __('FlexShipping::setting.entry_geo_zone_selected') }}</option>
+            @endif
+           </select>
+           <div v-show="quote.rules.geo_zone.type != 'all'" class="bg-light p-3 wp-400">
+            @foreach ($geoZones as $geo_zone)
+             <label class="checkbox-inline mb-1 me-1">
+              <input type="checkbox" value="{{ $geo_zone->id }}" v-model.number="quote.rules.geo_zone.ids">
+              {{ $geo_zone->name }}
+             </label>
+            @endforeach
+           </div>
+           <div v-if="quote.rules.geo_zone.type != 'all' && quote.rules.geo_zone.ids.length < 1" class="text-danger">
+            {{ __('FlexShipping::setting.error_geo_zone') }}
+           </div>
+           <div class="text-muted mt-2">{{ __('FlexShipping::setting.text_click_to_page') }}
+            <a target="_blank"
+             href="{{ panel_route('regions.index') }}">{{ __('FlexShipping::setting.text_configure') }}</a>
+           </div>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_customer_group') }}</label>
+          <div class="col-auto wp-100-">
+           <select class="form-control wp-400" v-model="quote.rules.customer_group.type">
+            <option value="all">{{ __('FlexShipping::setting.entry_customer_group_all') }}</option>
+            <option value="selected">{{ __('FlexShipping::setting.entry_customer_group_selected') }}</option>
+           </select>
+           <div v-show="quote.rules.customer_group.type != 'all'" class="bg-light p-3 wp-400">
+            @foreach ($customerGroups as $customer_group)
+             <label class="checkbox-inline mb-1 me-1">
+              <input type="checkbox" value="{{ $customer_group->id }}"
+               v-model.number="quote.rules.customer_group.ids"> {{ $customer_group->translation->name }}
+             </label>
+            @endforeach
+           </div>
+           <div v-if="quote.rules.customer_group.type != 'all' && quote.rules.customer_group.ids.length < 1"
+            class="text-danger">
+            {{ __('FlexShipping::setting.error_customer_group') }}
+           </div>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_currency') }}</label>
+          <div class="col-auto wp-100-">
+           <select class="form-control wp-400" v-model="quote.rules.currency.type">
+            <option value="all">{{ __('FlexShipping::setting.entry_currency_all') }}</option>
+            <option value="selected">{{ __('FlexShipping::setting.entry_currency_selected') }}</option>
+           </select>
+           <div v-show="quote.rules.currency.type != 'all'" class="bg-light p-3 wp-400">
+            @foreach ($currencies as $currency)
+             <label class="checkbox-inline mb-1 me-1">
+              <input type="checkbox" value="{{ $currency->id }}" v-model.number="quote.rules.currency.ids">
+              {{ $currency->name }}
+             </label>
+            @endforeach
+           </div>
+           <div v-if="quote.rules.currency.type != 'all' && quote.rules.currency.ids.length < 1" class="text-danger">
+            {{ __('FlexShipping::setting.error_currency') }}
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="tab-pane" :id="'tab-quote-product-' + quoteIndex">
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_product') }}</label>
+          <div class="col-auto wp-100-">
+           <select class="form-control wp-400" v-model="quote.rules.product.type">
+            <option value="all">{{ __('FlexShipping::setting.entry_product_all') }}</option>
+            <option value="only">{{ __('FlexShipping::setting.entry_product_only') }}</option>
+            <option value="include">{{ __('FlexShipping::setting.entry_product_include') }}</option>
+            <option value="exclude">{{ __('FlexShipping::setting.entry_product_exclude') }}</option>
+           </select>
+           <div v-if="quote.rules.product.type != 'all'">
+            <vue-autocomplete type="product" :items="quote.rules.product.items" @update:items="updateItems">
+            </vue-autocomplete>
+            <div v-if="quote.rules.product.items.length < 1" class="text-danger">
+             {{ __('FlexShipping::setting.error_product') }}
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_category') }}</label>
+          <div class="col-auto wp-100-">
+           <select class="form-control wp-400" v-model="quote.rules.category.type">
+            <option value="all">{{ __('FlexShipping::setting.entry_category_all') }}</option>
+            <option value="only">{{ __('FlexShipping::setting.entry_category_only') }}</option>
+            <option value="include">{{ __('FlexShipping::setting.entry_category_include') }}</option>
+            <option value="exclude">{{ __('FlexShipping::setting.entry_category_exclude') }}</option>
+           </select>
+           <div v-if="quote.rules.category.type != 'all'">
+            <vue-autocomplete type="category" :items="quote.rules.category.items" @update:items="updateItems">
+            </vue-autocomplete>
+            <div v-if="quote.rules.category.items.length < 1" class="text-danger">
+             {{ __('FlexShipping::setting.error_category') }}
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_manufacturer') }}</label>
+          <div class="col-auto wp-100-">
+           <select class="form-control wp-400" v-model="quote.rules.brand.type">
+            <option value="all">{{ __('FlexShipping::setting.entry_manufacturer_all') }}</option>
+            <option value="only">{{ __('FlexShipping::setting.entry_manufacturer_only') }}</option>
+            <option value="include">{{ __('FlexShipping::setting.entry_manufacturer_include') }}</option>
+            <option value="exclude">{{ __('FlexShipping::setting.entry_manufacturer_exclude') }}</option>
+           </select>
+           <div v-if="quote.rules.brand.type != 'all'">
+            <vue-autocomplete type="brand" :items="quote.rules.brand.items" @update:items="updateItems">
+            </vue-autocomplete>
+            <div v-if="quote.rules.brand.items.length < 1" class="text-danger">
+             {{ __('FlexShipping::setting.error_manufacturer') }}
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="tab-pane" :id="'tab-quote-time-' + quoteIndex">
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_weekday') }}</label>
+          <div class="col-auto wp-100-">
+           @for ($i = 1; $i <= 7; $i++)
+            <label class="checkbox-inline mt-2 me-1">
+             <input type="checkbox" value="{{ $i }}" v-model.number="quote.rules.weekdays">
+             {{ __('FlexShipping::setting.entry_weekday_' . $i . '') }}
+            </label>
+           @endfor
+          </div>
+         </div>
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_time') }}</label>
+          <div class="col-auto wp-100-">
+           <div class="row">
+            @foreach (['start', 'end'] as $segment)
+             <div class="col-sm-3">
+              <select class="form-control" v-model="quote.rules.time.{{ $segment }}">
+               <option value="any">{{ __('FlexShipping::setting.entry_any') }}</option>
+               @for ($i = 0; $i <= 23; $i++)
+                <option value="{{ $i < 10 ? '0' . $i : $i }}:00">{{ $i < 10 ? '0' . $i : $i }} :00
+                 {{ $i < 12 ? __('FlexShipping::setting.text_am') : __('FlexShipping::setting.text_pm') }}</option>
+               @endfor
+              </select>
+             </div>
+            @endforeach
+           </div>
+           <div class="text-muted mt-2">
+            {{ __('FlexShipping::setting.text_system_time') }}: {{ $timeNow }}
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="tab-pane" :id="'tab-quote-cost-' + quoteIndex">
+         <div class="row g-3 mb-3">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_unit') }}</label>
+          <div class="col-auto wp-100-">
+           <select class="form-control wp-400" v-model="quote.cost.unit">
+            <option value="flat">{{ __('FlexShipping::setting.entry_unit_flat') }}</option>
+            <option value="subtotal">{{ __('FlexShipping::setting.entry_unit_subtotal') }}</option>
+            <option value="weight">{{ __('FlexShipping::setting.entry_unit_weight') }}</option>
+            {{-- <option value="volume">{{ __('FlexShipping::setting.entry_unit_volume') }}</option> --}}
+            <option value="total_quantity">{{ __('FlexShipping::setting.entry_unit_total_quantity') }}</option>
+            {{-- <option value="volume_weight">{{ __('FlexShipping::setting.entry_unit_volume_weight') }}</option> --}}
+            {{-- <option value="volume_weight_max">{{ __('FlexShipping::setting.entry_unit_volume_weight_max') }}
+           </option> --}}
+           </select>
+          </div>
+         </div>
+         <div v-show="quote.cost.unit == 'volume_weight' || quote.cost.unit == 'volume_weight_max'"
+          class="row g-3 mb-3">
+          <label
+           class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_volume_weight_ratio') }}</label>
+          <div class="col-auto wp-100-">
+           <div class="row">
+            <div class="col-sm-3">
+             <select v-model="quote.cost.ratio.operator" class="form-control wp-400">
+              <option value="add">+</option>
+              <option value="subtract">-</option>
+              <option value="multiply">x</option>
+              <option value="divide">÷</option>
+             </select>
+            </div>
+            <div class="col-sm-3">
+             <input type="number" v-model="quote.cost.ratio.constant"
+              placeholder="{{ __('FlexShipping::setting.entry_volume_weight_constant') }}"
+              class="form-control wp-400">
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="row g-3 mb-3" v-if="quote.cost.unit == 'flat'">
+          <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_flat_cost') }}</label>
+          <div class="col-auto wp-100-">
+           <div class="input-group">
+            <div class="input-group-text">{{ $currencyCode }}</div>
+            <input type="number" class="form-control wp-400" v-model="quote.cost.flat_cost">
+           </div>
+          </div>
+         </div>
+         <div v-else>
+          <div class="row g-3 mb-3">
+           <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_cost_type') }}</label>
+           <div class="col-auto wp-100-">
+            <select v-model="quote.cost.type" class="form-control wp-400">
+             <option value="range">{{ __('FlexShipping::setting.entry_cost_type_range') }}</option>
+             <option value="cumulative">{{ __('FlexShipping::setting.entry_cost_type_cumulative') }}</option>
+            </select>
+           </div>
+          </div>
+          <div class="row g-3 mb-3">
+           <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_cost_type') }}</label>
+           <div class="col-auto wp-100-">
+            <table class="table table-bordered">
+             <thead>
+              <tr>
+               <th>{{ __('FlexShipping::setting.entry_cost_start') }}</th>
+               <th>{{ __('FlexShipping::setting.entry_cost_end') }}</th>
+               <th>{{ __('FlexShipping::setting.entry_cost') }}</th>
+               <th style="width: 200px;">{{ __('FlexShipping::setting.entry_cumulative_number') }}</th>
+               <th style="width: 100px;"></th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr v-for="(range, rangeIndex) in quote.cost.ranges">
+               <td>
+                <div class="input-group">
+                 <div class="input-group-text" v-if="rangeIndex == 0">&gt;=</div>
+                 <div class="input-group-text" v-else>&nbsp;&gt;&nbsp;</div>
+                 <input type="number" class="form-control" v-model.number="range.start">
+                </div>
+                <div v-if="range.start < 0" class="text-danger">
+                 <span>{{ __('FlexShipping::setting.error_start_lt_0') }}</span>
+                </div>
+                <div v-if="rangeIndex > 0 && range.start < quote.cost.ranges[rangeIndex - 1]['end']"
+                 class="text-danger">
+                 <span>{{ __('FlexShipping::setting.entry_cost_start') }}: @{{ range.start }}
+                  {{ __('FlexShipping::setting.error_start_lt_last_end') }}: @{{ quote.cost.ranges[rangeIndex - 1]['end'] }}</span>
+                </div>
+               </td>
+               <td>
+                <div class="input-group">
+                 <div class="input-group-text">&lt;=</div>
+                 <input type="number" class="form-control" v-model.number="range.end">
+                </div>
+                <div v-if="range.end < 0" class="text-danger">
+                 <span>{{ __('FlexShipping::setting.error_end_lt_0') }}</span>
+                </div>
+                <div v-if="range.start > range.end" class="text-danger">
+                 <span>{{ __('FlexShipping::setting.entry_cost_end') }}: @{{ range.end }}
+                  {{ __('FlexShipping::setting.error_end_lt_start') }}: @{{ range.start }}</span>
+                </div>
+               </td>
+               <td>
+                <div class="input-group">
+                 <div class="input-group-text">{{ $currencyCode }}</div>
+                 <input type="number" class="form-control" v-model.number="range.cost">
+                </div>
+                <div v-if="range.cost < 0" class="text-danger">
+                 <span>{{ __('FlexShipping::setting.error_cost_lt_0') }}</span>
+                </div>
+               </td>
+               <td style="width: 200px;">
+                <input type="number" class="form-control" v-model.number="range.block">
+                <div v-if="range.block < 0" class="text-danger">
+                 <span>{{ __('FlexShipping::setting.error_cumulative_number_lt_0') }}</span>
+                </div>
+               </td>
+               <td>
+                <button class="btn btn-outline-danger" type="button"
+                 @click="removeCostRangeButtonClicked(quoteIndex, rangeIndex)">{{ __('panel/common.delete') }}</button>
+               </td>
+              </tr>
+             </tbody>
+             <tfoot>
+              <tr>
+               <td colspan="5">
+                <button type="button" class="btn btn-outline-secondary btn-sm float-end"
+                 @click="addCostRangeButtonClicked(quoteIndex)">
+                 {{ __('FlexShipping::setting.button_add_cost') }}
+                </button>
+               </td>
+              </tr>
+             </tfoot>
+            </table>
+           </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+           <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_extra') }}</label>
+           <div class="col-auto wp-100-">
+            <div class="input-group wp-400">
+             <div class="input-group-text">{{ $currencyCode }}</div>
+             <input type="number" class="form-control" v-model.number="quote.cost.extra">
+            </div>
+           </div>
+          </div>
+          <div class="row g-3 mb-3">
+           <label class="wp-100 col-form-label text-end">{{ __('FlexShipping::setting.entry_max') }}</label>
+           <div class="col-auto wp-100-">
+            <div class="input-group wp-400">
+             <div class="input-group-text">{{ $currencyCode }}</div>
+             <input type="number" class="form-control" v-model.number="quote.cost.max">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
 @endsection
 
 @push('footer')
-<script>
-  const { ref, watch, createApp } = Vue;
-     const { ElMessage, ElMessageBox } = ElementPlus;
+ @include('panel::components.vue.vue-autocomplete')
+ @include('panel::components.vue.vue-image')
+ @include('panel::components.vue.vue-input-lang')
+ <script>
+  const user_token = '';
+  const button_confirm_delete = '{{ __('FlexShipping::setting.button_confirm_delete') }}';
+  const button_cancel = '{{ __('FlexShipping::setting.button_cancel') }}';
+  const text_confirm_delete = '{{ __('FlexShipping::setting.text_confirm_delete') }}';
+  const text_save_success = '{{ __('FlexShipping::setting.text_save_success') }}';
+  const error_network = '{{ __('FlexShipping::setting.error_network') }}';
+  const text_untitled = '{{ __('FlexShipping::setting.text_untitled') }}';
+  const i18n = {
+   button_confirm_delete: button_confirm_delete,
+   button_cancel: button_cancel,
+   text_confirm_delete: text_confirm_delete,
+   text_save_success: text_save_success,
+   error_network: error_network,
+   text_untitled: text_untitled,
+  };
 
-     const app = createApp({
-      setup() {
-      const items = ref([
-        {state: '{{ __('FlexShipping::route.sort') }}', frame: '1'},
-        {state: '{{ __('FlexShipping::route.state') }}', frame: '{{ __('FlexShipping::route.forbidden') }}'},
-        {state: '{{ __('FlexShipping::route.state_debugging') }}', frame: '{{ __('FlexShipping::route.forbidden') }}'}
-      ]);
-      const delivermove = ref([]);
-      const selectedIndex = ref(null);
-      const selectedItem = ref({name: '', list: []});
-      const currentIndex = ref(null);
 
-      watch(
-        () => selectedItem.value.list[selectedItem.value.subIndx]?.from,
-        (newFrom, oldFrom) => {
-          const newCurrency = newFrom?.currency;
-          const oldCurrency = oldFrom?.currency;
-          if (newCurrency === '') {
-            selectedItem.value.list[selectedItem.value.subIndx].from.currencies = [];
-          } else if (newCurrency === 'currencies' && oldCurrency !== 'currencies') {
-            selectedItem.value.list[selectedItem.value.subIndx].from.currencies = [];
-          }
+  function showToast(message) {
+   layer.msg(message);
+  }
 
-          const newService = newFrom?.service;
-          if (newService === '') {
-            selectedItem.value.list[selectedItem.value.subIndx].from.customer_groups = [];
-          } else if (newService === '1') {
-            selectedItem.value.list[selectedItem.value.subIndx].from.customer_groups = [];
-          }
-        },
-        {immediate: true}
-      );
+  let _loading = null;
 
-      watch(
-        () => {
-          const currentItem = selectedItem.value.list[selectedItem.value.subIndx];
-          return currentItem ? currentItem.from?.billing : undefined;
-        },
-        (newBilling, oldBilling) => {
-          const currentItem = selectedItem.value.list[selectedItem.value.subIndx];
+  function showLoading() {
+   _loading = layer.load(1, {
+    shade: [0.5, '#fff']
+   });
+  }
 
-          if (!currentItem || !currentItem.from) {
-            return;
-          }
+  function closeLoading() {
+   layer.close(_loading);
+  }
 
-          if (newBilling === '0') {
-            currentItem.from.billing_usd = '';
-            currentItem.from.extra = '';
-            currentItem.from.upper_limit = '';
-            currentItem.from.items = [];
-            currentItem.from.method_billing = '';
-          } else {
-            currentItem.from.billing_usd = '';
-            currentItem.from.extra = '';
-            currentItem.from.upper_limit = '';
-            currentItem.from.items = [];
-            currentItem.from.method_billing = '';
-          }
-        },
-        {immediate: true}
-      );
+  function showConfirm(message, leftButton, rightButton, callback) {
+   const deleteConfirmLayer = layer.confirm(message, {
+    btn: [leftButton, rightButton]
+   }, function() {
+    layer.close(deleteConfirmLayer);
+    callback();
+   });
+  }
 
-      const addShopItem = () => {
-        const newItem = {
-          name: '{{ __('FlexShipping::route.unnamed') }}',
-          idx: delivermove.value.length + 1,
-          subIndx: 0,
-          display_namecn: '',
-          list: [
-            {
-             name: '{{ __('FlexShipping::route.essential_information') }}',
-from: {
-                display_nameen: '',
-                description_en: '',
-                description_cn: '',
-                ocons: '',
-                sorting: '',
-                category_tax: '0',
-                state: '0'
-              }
-            },
-            {
-              name: '{{ __('FlexShipping::route.common_rules') }}',
-              from: {regional_group: '', service: '', customer_groups: [], currency: '', currencies: []}
-            },
-            {name: '{{ __('FlexShipping::route.rules_commodity') }}', from: {terms_commodity: '', goods_category: '', brand_conditions: ''}},
-            {name: '{{ __('FlexShipping::route.rules_time') }}', from: {date: [], morning: '', afternoon: ''}},
-            {
-              name: '{{ __('FlexShipping::route.rules_fees') }}',
-              from: {billing: '3', billing_usd: null, method_billing: '', items: [], extra: '', upper_limit: ''}
-            }
-          ]
-};
-        delivermove.value.push(newItem);
-        selectedItem.value = newItem;
-        selectedIndex.value = delivermove.value.length - 1;
-      };
-
-      const setSelectedItem = (index) => {
-        selectedItem.value = delivermove.value[index];
-        selectedIndex.value = index;
-      };
-
-      const setSubNavigation = (index) => {
-        selectedItem.value.subIndx = index;
-      };
-      const add_rules = () => {
-        selectedItem.value.list[selectedItem.value.subIndx].from.items.push({
-          start_value: '',
-          end_value: '',
-          fee: '',
-          progressive_quantity: ''
-        });
-      };
-
-      const deleteItem = (index) => {
-        selectedItem.value.list[selectedItem.value.subIndx].from.items.splice(index, 1);
-      };
-
-const logSelectedItem = () => {
-// 处理 filteredItems，移除 list 外层字段并合并 `from` 中的内容
-const filteredItems = delivermove.value.map(item => {
-const { list, display_namecn, ...rest } = item; // 解构获取外层的 display_namecn 和其他属性
-
-// 将 list 数组中的项展平并合并 `from` 和其他属性
-const mergedListItem = item.list.reduce((mergedItem, listItem) => {
-const { from, name, ...listRest } = listItem; // 移除 name 和 from（即展开 from 中的内容）
-
-// 合并每个 listItem 的属性和 from 中的属性
-return {
-...mergedItem,
-...listRest, // 保留 listItem 中的其他属性
-...from, // 展开 from 对象，保留所有 from 的属性
-display_namecn, // 将外层的 display_namecn 添加到当前项中
-};
-}, {}); // 通过 reduce 合并所有 listItem 的属性，初始值是空对象
-
-return mergedListItem;
-});
-// 构建 flex_shipping 对象，保持之前的逻辑
-const flex_shipping = items.value.reduce((result, item) => {
-const frameToBool = (frameValue) => {
-return frameValue === '{{ __('FlexShipping::route.forbidden') }}' ? false : true;
-};
-if (item.state === '{{ __('FlexShipping::route.sort') }}') {
-result.sort = item.frame;
-} else if (item.state === '{{ __('FlexShipping::route.state') }}') {
-result.state = frameToBool(item.frame);
-} else if (item.state === '{{ __('FlexShipping::route.state_debugging') }}') {
-result.debug = frameToBool(item.frame);
-}
-return result;
-}, {});
-// 打印合并后的结果
-console.log(flex_shipping);
-console.log(filteredItems);
-// 发送合并后的数据到后端
-axios.put('{{ panel_route('flex_shipping.update') }}', {
-flex_shipping,
-list: filteredItems, // 将合并后的 list 发送到后端
-})
-.then(response => {
-console.log('服务器返回的数据:', response.data);
-})
-.catch(error => {
-console.error('发送请求失败:', error);
-});
-};
-
-            const open = (index) => {
-            currentIndex.value = index;
-            
-            ElMessageBox.confirm(
-            '确认要删除商品吗？',
-            '信息',
-            {
-            distinguishCancelAndClose: true,
-            confirmButtonText: '取消',
-            cancelButtonText: '确定删除',
-            }
-            )
-            .then(() => {
-            })
-            .catch(() => {
-            if (currentIndex.value !== null) {
-            delivermove.value.splice(currentIndex.value, 1);
-            if (delivermove.value.length > 0) {
-            selectedIndex.value = Math.min(selectedIndex.value, delivermove.value.length - 1);
-            selectedItem.value = delivermove.value[selectedIndex.value];
-            } else {
-            selectedIndex.value = null;
-            selectedItem.value = { name: '', list: [] };
-            }
-            
-            }
-            });
-            };
-     
-
-      return {
-        items,
-        delivermove,
-        selectedItem,
-        selectedIndex,
-        addShopItem,
-        currentIndex,
-        setSelectedItem,
-        setSubNavigation,
-        logSelectedItem,
-        deleteItem,
-        add_rules,
-        open
-      };
+  function newQuoteFactory() {
+   return {
+    title: {},
+    icon: '',
+    description: {},
+    sort_order: 0,
+    tax_class_id: 0,
+    status: 0,
+    rules: {
+     store: {
+      type: 'all',
+      ids: []
+     },
+     geo_zone: {
+      type: 'all',
+      ids: []
+     },
+     country: {
+      type: 'all',
+      ids: []
+     },
+     customer_group: {
+      type: 'all',
+      ids: []
+     },
+     zone: {
+      type: 'all',
+      ids: []
+     },
+     currency: {
+      type: 'all',
+      ids: []
+     },
+     product: {
+      type: 'all',
+      items: []
+     },
+     category: {
+      type: 'all',
+      items: []
+     },
+     brand: {
+      type: 'all',
+      items: []
+     },
+     weekdays: [1, 2, 3, 4, 5, 6, 7],
+     time: {
+      start: 'any',
+      end: 'any'
+     }
+    },
+    cost: {
+     unit: 'weight',
+     type: 'range',
+     ratio: {
+      operator: 'divide',
+      constant: null
+     },
+     ranges: [],
+     flat_cost: null,
+     max: null,
+     extra: null,
     }
+   }
+  }
+
+  function newCostRangeFactory() {
+   return {
+    start: null,
+    end: null,
+    cost: null,
+    block: 0,
+   }
+  }
+  const {
+   ref,
+   reactive,
+   watch,
+   createApp,
+   computed
+  } = Vue;
+
+  const app = createApp({
+   components: {
+    VueAutocomplete,
+    VueImage,
+    VueInputLang,
+   },
+   setup() {
+    const status = ref(@json($plugin->getSetting('setting.status') ?? 1));
+    const debug = ref(@json($plugin->getSetting('setting.debug') ?? 0));
+    const sort_order = ref(@json($plugin->getSetting('setting.sort_order') ?? 0));
+    const quotes = reactive(@json($plugin->getSetting('setting.quotes') ?? []));
+
+    const validateQuote = function() {};
+
+    const submit = function() {
+     const postData = {
+      status: this.status,
+      sort_order: this.sort_order,
+      debug: this.debug,
+      quotes: quotes
+     };
+     axios.put('{{ panel_route('flex_shipping.update') }}', postData).then((res) => {
+      if (res.message) {
+       layer.msg(res.message)
+      }
+     })
+    };
+
+    const addQuoteButtonClicked = function() {
+     quotes.push(newQuoteFactory());
+     setTimeout(() => {
+      $('#quote-list').children("a:last-child")[0].click()
+     }, 0)
+    };
+
+    const removeQuoteButtonClicked = function(quoteIndex) {
+     showConfirm(i18n.text_confirm_delete, i18n.button_confirm_delete, i18n.button_cancel, function() {
+      quotes.splice(quoteIndex, 1);
+     });
+    };
+    const addCostRangeButtonClicked = function(quoteIndex) {
+     var newRange = newCostRangeFactory();
+     var rangeCount = quotes[quoteIndex].cost.ranges.length;
+     if (rangeCount > 0) {
+      newRange.start = quotes[quoteIndex].cost.ranges[rangeCount - 1].end;
+     }
+     quotes[quoteIndex].cost.ranges.push(newRange);
+    };
+
+    const removeCostRangeButtonClicked = function(quoteIndex, rangeIndex) {
+     quotes[quoteIndex].cost.ranges.splice(rangeIndex, 1);
+    };
+
+    const updateItems = (newItems) => {
+     quotes[0].rules.product.items.value = newItems;
+    };
+
+    return {
+     status,
+     debug,
+     sort_order,
+     quotes,
+     validateQuote,
+     submit,
+     addQuoteButtonClicked,
+     removeQuoteButtonClicked,
+     addCostRangeButtonClicked,
+     removeCostRangeButtonClicked,
+     updateItems,
+    };
+   },
+
+   watch: {
+    quotes: {
+     handler: function() {
+      this.validateQuote();
+     },
+     deep: true
+    }
+   },
+
+   mounted() {
+    if (this.quotes.length) {
+     $('#quote-list').children("a:first-child")[0].click()
+    }
+   },
   });
 
-  app.use(ElementPlus); 
-  app.mount('#app');
-</script>
+  app.use(ElementPlus);
+  app.mount("#app");
+ </script>
+
+ <style>
+  .nav-link {
+   color: #1f1f1f;
+  }
+ </style>
 @endpush

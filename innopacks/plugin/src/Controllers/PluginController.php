@@ -79,12 +79,10 @@ class PluginController
     }
 
     /**
-     * @param  Request  $request
      * @param  $code
      * @return View
-     * @throws Exception
      */
-    public function edit(Request $request, $code): View
+    public function edit($code): View
     {
         try {
             $plugin = app('plugin')->getPluginOrFail($code);
@@ -96,7 +94,7 @@ class PluginController
             ];
 
             return inno_view($view, $data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $plugin = app('plugin')->getPlugin($code);
             $data   = [
                 'error'       => $e->getMessage(),
