@@ -708,13 +708,13 @@ final class FlexService
 
                 break;
             case 'volume':
-                $unit = $this->_getCartProductTotalVolumes();
+                $unit = $this->getCartProductTotalVolumes();
                 $this->log("Volume: $unit");
 
                 break;
             case 'volume_weight':
             case 'volume_weight_max':
-                $totalVolumes = $this->_getCartProductTotalVolumes();
+                $totalVolumes = $this->getCartProductTotalVolumes();
                 $this->log("Volume: $unit");
 
                 $operator = Arr::get($this->rawQuote, 'cost.ratio.operator');
@@ -877,24 +877,38 @@ final class FlexService
         return null;
     }
 
-    // Private helpers
-    private function _getCartProductTotalVolumes()
+    /**
+     * @return float
+     */
+    private function getCartProductTotalVolumes(): float
     {
-        $volumes               = 0;
-        $standardLengthClassId = $this->config('config_length_class_id');
+        $volumes = 0;
         foreach ($this->getCartProducts() as $product) {
             $productLengthClassId = $product['length_class_id'] ?? 0;
             if (empty($productLengthClassId)) {
                 continue;
             }
 
-            $length = $this->length->convert((float) $product['length'], $productLengthClassId, $standardLengthClassId);
-            $width  = $this->length->convert((float) $product['width'], $productLengthClassId, $standardLengthClassId);
-            $height = $this->length->convert((float) $product['height'], $productLengthClassId, $standardLengthClassId);
+            $length = $this->convertLength($product['length']);
+            $width  = $this->convertLength($product['width']);
+            $height = $this->convertLength($product['height']);
             $volumes += ($length * $width * $height * (int) $product['quantity']);
         }
 
         return $volumes;
+    }
+
+    /**
+     * @param  $value
+     * @param  int  $classID
+     * @return float
+     */
+    private function convertLength($value, int $classID = 0): float
+    {
+        $standardLengthClassId = $this->config('config_length_class_id');
+        $this->log($classID, $standardLengthClassId);
+
+        return (float) $value;
     }
 
     /**
@@ -1015,14 +1029,16 @@ final class FlexService
     }
 
     /**
-     * @param  $message
+     * @param  mixed  ...$messages
      * @return void
      */
-    private function log($message): void
+    private function log(...$messages): void
     {
         $debug = $this->config('active');
         if ($debug) {
-            Log::info($message);
+            foreach ($messages as $message) {
+                Log::info($message);
+            }
         }
     }
 }
