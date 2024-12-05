@@ -1,0 +1,186 @@
+{
+    "active": true,
+    "position": 0,
+    "debug": true,
+    "quotes": [
+        {
+            "title": {
+                "zh_cn": "顺丰快递",
+                "en": "SF Express"
+            },
+            "icon": "",
+            "description": {
+                "zh_cn": "",
+                "en": ""
+            },
+            "position": 0,
+            "tax_class_id": 0,
+            "active": true,
+            "rules": {
+                "store": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "geo_zone": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "country": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "customer_group": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "zone": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "currency": {
+                    "type": "all",
+                    "ids": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "product": {
+                    "type": "all",
+                    "items": [
+                    ]
+                },
+                "category": {
+                    "type": "all",
+                    "items": [
+                    ]
+                },
+                "brand": {
+                    "type": "all",
+                    "items": [
+                    ]
+                },
+                "weekdays": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7
+                ],
+                "time": {
+                    "start": "any",
+                    "end": "any"
+                }
+            },
+            "cost": {
+                "unit": "weight",
+                "type": "range",
+                "ratio": {
+                    "operator": "divide",
+                    "constant": null
+                },
+                "ranges": [
+                ],
+                "flat_cost": null,
+                "max": null,
+                "extra": null
+            }
+        },
+        {
+            "title": {
+                "zh_cn": "江浙沪",
+                "en": "JZH"
+            },
+            "icon": "",
+            "description": {
+                "zh_cn": "",
+                "en": ""
+            },
+            "position": 0,
+            "tax_class_id": 0,
+            "active": true,
+            "rules": {
+                "store": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "geo_zone": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "country": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "customer_group": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "zone": {
+                    "type": "all",
+                    "ids": [
+                    ]
+                },
+                "currency": {
+                    "type": "all",
+                    "ids": [
+                        1,
+                        2
+                    ]
+                },
+                "product": {
+                    "type": "all",
+                    "items": [
+                    ]
+                },
+                "category": {
+                    "type": "all",
+                    "items": [
+                    ]
+                },
+                "brand": {
+                    "type": "all",
+                    "items": [
+                    ]
+                },
+                "weekdays": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7
+                ],
+                "time": {
+                    "start": "any",
+                    "end": "any"
+                }
+            },
+            "cost": {
+                "unit": "weight",
+                "type": "range",
+                "ratio": {
+                    "operator": "divide",
+                    "constant": null
+                },
+                "ranges": [
+                ],
+                "flat_cost": null,
+                "max": null,
+                "extra": null
+            }
+        }
+    ]
+}
