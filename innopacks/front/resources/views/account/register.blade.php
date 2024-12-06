@@ -14,11 +14,13 @@
     <div class="login-sub-title">{{ __('front/register.register_text') }}</div>
     <form action="{{ front_route('register.store') }}" class="needs-validation form-wrap" novalidate>
       @csrf
+      @hookupdate('account.register.email')
       <div class="form-group mb-4">
         <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="{{ __('front/login.email') }}" />
         <span class="invalid-feedback" role="alert"><strong>{{ __('front/login.email_required') }}</strong></span>
       </div>
-
+      @endhookupdate
+      @hookinsert('account.register.email.after')
       <div class="form-group mb-4">
         <input id="password" type="password" class="form-control" name="password" required autocomplete="new-password" placeholder="{{ __('front/login.password') }}" />
         <input class="d-none" name="password_confirmation" />
