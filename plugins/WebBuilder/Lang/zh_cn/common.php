@@ -8,5 +8,6 @@
  */
 
 return [
-    'title' => 'Web 编辑器',
+    'back' => '返回',
+    'save' => '保存',
 ];

@@ -30,6 +30,7 @@ class Boot extends BaseBoot
             $data[] = [
                 'route' => 'web_builder.index',
                 'title' => trans('WebBuilder::route.title'),
+                'blank' => true,
             ];
 
             return $data;

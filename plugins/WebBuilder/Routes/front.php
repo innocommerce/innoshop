@@ -7,6 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-return [
-    'title' => 'Web 编辑器',
-];
+use Illuminate\Support\Facades\Route;
+use Plugin\WebBuilder\FrontControllers\HomeController;
+
+Route::get('/', [HomeController::class, 'index'])->name('home.index');

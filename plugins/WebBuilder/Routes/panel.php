@@ -8,6 +8,18 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\WebBuilder\Controllers\WebBuilderController;
+use Plugin\WebBuilder\PanelControllers\WebBuilderController;
 
-Route::get('/web_builder', [WebBuilderController::class, 'index'])->name('web_builder.index');
+Route::group(['prefix' => 'web_builder'], function () {
+    // 设计器主页面
+    Route::get('/', [WebBuilderController::class, 'index'])->name('web_builder.index');
+
+    // 上传图片
+    Route::post('upload/images', [WebBuilderController::class, 'uploadImages'])->name('web_builder.upload.images');
+
+    // 获取设计数据
+    Route::get('design', [WebBuilderController::class, 'getDesign'])->name('web_builder.design');
+
+    // 保存设计数据
+    Route::put('design', [WebBuilderController::class, 'saveDesign'])->name('web_builder.design.update');
+});
