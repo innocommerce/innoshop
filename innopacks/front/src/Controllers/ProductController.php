@@ -32,8 +32,9 @@ class ProductController extends Controller
         $products = ProductRepo::getInstance()->withActive()->list($filters);
 
         $data = [
-            'products'   => $products,
-            'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'products'       => $products,
+            'categories'     => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'per_page_items' => CategoryRepo::getInstance()->getPerPageItems(),
         ];
 
         return inno_view('products.index', $data);
