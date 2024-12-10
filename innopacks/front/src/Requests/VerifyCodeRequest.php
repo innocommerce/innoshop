@@ -38,7 +38,7 @@ class VerifyCodeRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'email' => front_trans('login.email_address'),
+            'email' => front_trans('login.email'),
         ];
     }
 }

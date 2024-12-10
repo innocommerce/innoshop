@@ -106,7 +106,7 @@ class CommonServiceProvider extends ServiceProvider
                 'transport'  => 'smtp',
                 'host'       => system_setting('smtp_host'),
                 'port'       => system_setting('smtp_port'),
-                'encryption' => system_setting('smtp_encryption'),
+                'encryption' => strtolower(system_setting('smtp_encryption')),
                 'username'   => system_setting('smtp_username'),
                 'password'   => system_setting('smtp_password'),
                 'timeout'    => system_setting('smtp_timeout'),
