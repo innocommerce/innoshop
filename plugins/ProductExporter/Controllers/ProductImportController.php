@@ -9,12 +9,14 @@
 
 namespace Plugin\ProductExporter\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Panel\Controllers\BaseController;
 use Plugin\ProductExporter\Repositories\ExportRepo;
 use Plugin\ProductExporter\Repositories\ImportRepo;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Throwable;
 
 class ProductImportController extends BaseController
 {
@@ -46,7 +48,7 @@ class ProductImportController extends BaseController
             $nameName = 'products-'.date('Y-m-d-H-i-s').'.xlsx';
 
             return (new FastExcel($sheets))->download($nameName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -54,18 +56,23 @@ class ProductImportController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
+     * @throws Throwable
      */
     public function import(Request $request): mixed
     {
         try {
             $clearData = $request->get('clear-data', false);
             $excelFile = $request->file('product_excel_file');
+            if (empty($excelFile)) {
+                throw new Exception('Empty excel file');
+            }
+
             $excelData = (new FastExcel)->importSheets($excelFile);
 
             ImportRepo::getInstance($clearData)->importSheets($excelData);
 
             return redirect(panel_route('exporter.index'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
