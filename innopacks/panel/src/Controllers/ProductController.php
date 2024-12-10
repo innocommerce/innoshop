@@ -23,6 +23,7 @@ use InnoShop\Common\Resources\AttributeSimple;
 use InnoShop\Common\Resources\AttributeValueSimple;
 use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Panel\Requests\ProductRequest;
+use Throwable;
 
 class ProductController extends BaseController
 {
@@ -56,7 +57,7 @@ class ProductController extends BaseController
     /**
      * @param  ProductRequest  $request
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(ProductRequest $request): RedirectResponse
     {
@@ -66,7 +67,7 @@ class ProductController extends BaseController
 
             return redirect(panel_route('products.index'))
                 ->with('instance', $product)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', panel_trans('common.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('products.index'))
                 ->withInput()
@@ -117,7 +118,7 @@ class ProductController extends BaseController
      * @param  ProductRequest  $request
      * @param  Product  $product
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
@@ -159,7 +160,7 @@ class ProductController extends BaseController
         try {
             ProductRepo::getInstance()->copy($product);
 
-            return back()->with('success', panel_trans('common.deleted_success'));
+            return back()->with('success', panel_trans('common.saved_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
