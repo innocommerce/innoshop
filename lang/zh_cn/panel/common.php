@@ -21,6 +21,7 @@ return [
     'close'             => '关闭',
     'collapse'          => '折叠',
     'confirm'           => '确定',
+    'copy'              => '复制',
     'create'            => '新建',
     'created_at'        => '创建时间',
     'date'              => '日期',

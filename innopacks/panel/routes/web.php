@@ -32,6 +32,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/products', Controllers\ProductController::class);
         Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
+        Route::get('/products/{product}/copy', [Controllers\ProductController::class, 'copy'])->name('products.copy');
 
         Route::resource('/categories', Controllers\CategoryController::class);
         Route::put('/categories/{category}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');
@@ -61,6 +62,7 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/pages/{page}/active', [Controllers\PageController::class, 'active'])->name('pages.active');
 
         Route::resource('/customers', Controllers\CustomerController::class);
+        Route::get('/customers/{customer}/login', [Controllers\CustomerController::class, 'loginFrontend'])->name('customers.login');
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
