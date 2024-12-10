@@ -18,14 +18,14 @@ use Throwable;
 class CategoryRepo extends BaseRepo
 {
     /**
-     * @param  array|null  $categoryIds
+     * @param  array|null  $categoryIDs
      * @return array
      */
-    public function getTwoLevelCategories(?array $categoryIds = []): array
+    public function getTwoLevelCategories(?array $categoryIDs = []): array
     {
         $filters = ['active' => true, 'parent_id' => 0];
-        if ($categoryIds) {
-            $filters['category_ids'] = $categoryIds;
+        if ($categoryIDs) {
+            $filters['category_ids'] = $categoryIDs;
         }
 
         $catalogs = $this->builder($filters)
@@ -86,9 +86,14 @@ class CategoryRepo extends BaseRepo
             }
         }
 
-        $categoryIds = $filters['category_ids'] ?? [];
-        if ($categoryIds) {
-            $builder->whereIn('id', $categoryIds);
+        $excludeIDs = $filters['exclude_ids'] ?? [];
+        if ($excludeIDs) {
+            $builder->whereNotIn('id', $excludeIDs);
+        }
+
+        $categoryIDs = $filters['category_ids'] ?? [];
+        if ($categoryIDs) {
+            $builder->whereIn('id', $categoryIDs);
         }
 
         if (isset($filters['active'])) {
