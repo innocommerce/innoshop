@@ -8,8 +8,8 @@
  */
 
 return [
-    'address_erc20'  => 'ERC20(ETH) Address',
-    'address_trc20'  => 'TRC20(TRX) Address',
-    'address_bep20'  => 'BEP20(BNB) Address',
-    'comment'        => '备注',
+    'address_erc20' => 'ERC20(ETH) Address',
+    'address_trc20' => 'TRC20(TRX) Address',
+    'address_bep20' => 'BEP20(BNB) Address',
+    'comment'       => '备注',
 ];

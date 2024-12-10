@@ -149,4 +149,19 @@ class ProductController extends BaseController
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * @param  Product  $product
+     * @return RedirectResponse
+     */
+    public function copy(Product $product): RedirectResponse
+    {
+        try {
+            ProductRepo::getInstance()->copy($product);
+
+            return back()->with('success', panel_trans('common.deleted_success'));
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 }

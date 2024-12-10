@@ -42,8 +42,8 @@
             </td>
             <td><a href="{{ $product->url }}" class="text-decoration-none" target="_blank">{{
                 $product->translation->name ?? '' }}</a></td>
-            <td>{{ currency_format($product->masterSku->price) }}</td>
-            <td>{{ $product->masterSku->quantity }}</td>
+            <td>{{ currency_format($product->masterSku->price ?? 0) }}</td>
+            <td>{{ $product->masterSku->quantity ?? 0 }}</td>
             <td>{{ $product->created_at }}</td>
             <td>@include('panel::shared.list_switch', ['value' => $product->active, 'url' =>
               panel_route('products.active', $product->id)])</td>
@@ -53,6 +53,12 @@
                   <a href="{{ panel_route('products.edit', [$product->id]) }}">
                     <el-button size="small" plain type="primary">{{
                       __('panel/common.edit')}}</el-button>
+                  </a>
+                </div>
+                <div>
+                  <a href="{{ panel_route('products.copy', [$product->id]) }}">
+                    <el-button size="small" plain type="warning">{{
+                      __('panel/common.copy')}}</el-button>
                   </a>
                 </div>
                 <div>

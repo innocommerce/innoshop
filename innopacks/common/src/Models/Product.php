@@ -20,11 +20,12 @@ use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Models\Product\Video;
 use InnoShop\Common\Traits\HasPackageFactory;
+use InnoShop\Common\Traits\Replicate;
 use InnoShop\Common\Traits\Translatable;
 
 class Product extends BaseModel
 {
-    use HasPackageFactory, Translatable;
+    use HasPackageFactory, Replicate, Translatable;
 
     protected $fillable = [
         'brand_id', 'product_image_id', 'product_video_id', 'product_sku_id', 'tax_class_id', 'slug', 'is_virtual',

@@ -32,6 +32,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/products', Controllers\ProductController::class);
         Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
+        Route::get('/products/{product}/copy', [Controllers\ProductController::class, 'copy'])->name('products.copy');
 
         Route::resource('/categories', Controllers\CategoryController::class);
         Route::put('/categories/{category}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');

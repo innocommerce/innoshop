@@ -135,6 +135,45 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * @param  Product  $product
+     * @return mixed
+     */
+    public function copy(Product $product): mixed
+    {
+        $product->load([
+            'skus',
+            'translations',
+            'images',
+            'categories',
+            'productAttributes',
+            'relations',
+            'videos',
+        ]);
+        $copy = $product->replicate();
+
+        $copy->slug .= '-'.rand(0, 99999);
+        $copy->push();
+
+        foreach ($product->getRelations() as $relation => $entries) {
+            foreach ($entries as $entry) {
+                $newEntry = $entry->replicate();
+                if ($relation == 'skus') {
+                    $newEntry->code .= '-'.rand(0, 99999);
+                } elseif ($relation == 'categories') {
+                    $copy->categories()->attach($entry->id);
+
+                    continue;
+                }
+                if ($newEntry->push()) {
+                    $copy->{$relation}()->save($newEntry);
+                }
+            }
+        }
+
+        return $copy;
+    }
+
+    /**
      * Crate or update product.
      *
      * @param  Product  $product
