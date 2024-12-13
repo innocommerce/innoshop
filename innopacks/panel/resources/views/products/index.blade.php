@@ -49,6 +49,10 @@
                 <td>
                   <a href="{{ panel_route('products.edit', [$product->id]) }}"
                      class="btn btn-outline-primary btn-sm">{{ __('panel/common.edit')}}</a>
+
+                  <a href="{{ panel_route('products.copy', [$product->id]) }}"
+                     class="btn btn-outline-warning btn-sm">{{ __('panel/common.copy')}}</a>
+
                   <form action="{{ panel_route('products.destroy', [$product->id]) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
