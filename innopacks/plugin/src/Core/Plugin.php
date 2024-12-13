@@ -319,7 +319,8 @@ final class Plugin implements Arrayable, ArrayAccess
 
     public function getEditUrl(): string
     {
-        if (empty($this->fields)) {
+        $viewFile = $this->getPath().'/Views/panel/config.blade.php';
+        if (empty($this->fields) && ! file_exists($viewFile) && $this->type != 'billing') {
             return '';
         }
 
