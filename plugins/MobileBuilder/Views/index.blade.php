@@ -904,7 +904,8 @@
         },
         selectButtonClicked() {
           // 创建文件输入元素
-            window.fileManager();
+            console.log(window.inno)
+            window.inno.fileManagerIframe();
             return;
           const input = document.createElement('input');
           input.type = 'file';

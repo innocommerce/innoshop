@@ -44,6 +44,22 @@ class FileManagerController extends BaseController
     }
 
     /**
+     * Display the file manager iframe view.
+     *
+     * @return mixed
+     */
+    public function iframe(): mixed
+    {
+        $data = [
+            'isIframe' => true,
+            'multiple' => request()->query('multiple') === '1',
+            'type' => request()->query('type', 'all')
+        ];
+
+        return inno_view('enterprise::file_manager.iframe', $data);
+    }
+
+    /**
      * Retrieve a list of files in a folder based on filters.
      *
      * @param  Request  $request
