@@ -1,0 +1,5 @@
+{
+  "require": {
+    "srmklive/paypal": "^3.0"
+  }
+}

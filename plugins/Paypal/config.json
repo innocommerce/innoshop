@@ -1,0 +1,18 @@
+{
+    "code": "paypal",
+    "name": {
+        "zh_cn": "PayPal",
+        "en": "PayPal"
+    },
+    "description": {
+        "zh_cn": "PayPal 支付",
+        "en": "PayPal Payment Gateway"
+    },
+    "type": "billing",
+    "version": "v1.1.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}
