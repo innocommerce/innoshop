@@ -50,6 +50,22 @@ class CurrencyRepo extends BaseRepo
     }
 
     /**
+     * @return array
+     */
+    public function asOptions(): array
+    {
+        $currencies = [];
+        foreach ($this->enabledList() as $item) {
+            $currencies[] = [
+                'value' => $item->code,
+                'label' => $item->name,
+            ];
+        }
+
+        return $currencies;
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

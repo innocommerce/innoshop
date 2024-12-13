@@ -116,6 +116,9 @@ class Currency
      */
     public function convert($price, $from, $to): float|int
     {
+        $from = strtolower($from);
+        $to   = strtolower($to);
+
         if (isset($this->currencies[$from])) {
             $from = $this->currencies[$from]->value;
         } else {
