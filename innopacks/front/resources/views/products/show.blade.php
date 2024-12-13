@@ -116,6 +116,7 @@
         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-review" type="button">{{ __('front/product.review') }}</button>
       </li>
       @endif
+      @hookinsert('product.tab.after.link')
     </ul>
     <div class="tab-content">
       <div class="tab-pane fade show active" id="product-description-description">
@@ -149,7 +150,8 @@
 
       <div class="tab-pane fade" id="product-review" role="tabpanel">
         @include('products.review')
-      </div>
+      </div> 
+      @hookinsert('product.tab.after.pane')
     </div>
   </div>
 
