@@ -905,7 +905,11 @@
         selectButtonClicked() {
           // 创建文件输入元素
             console.log(window.inno)
-            window.inno.fileManagerIframe();
+            window.inno.fileManagerIframe((file)=>{
+                console.log(file.url); //单个对象
+                this.src = file.url;
+                // this.$emit('input', this.src);
+            });
             return;
           const input = document.createElement('input');
           input.type = 'file';

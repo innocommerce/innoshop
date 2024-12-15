@@ -1371,7 +1371,7 @@
                                                 </div>
                                             </template>
                                             <template v-else>
-                                                <img :src="file.url" :alt="file.name">
+                                                <img :src="file.preview_url" :alt="file.name">
                                             </template>
                                         </div>
                                         <div class="file-info">
@@ -1749,6 +1749,10 @@
 
                     if (this.isMultiSelectMode) {
                         this.toggleFileSelect(file);
+                    } else if (this.isIframeMode && !file.is_dir) {
+                        // 如果是 iframe 模式且点击的是文件（不是文件夹），直接选择并返回
+                        window.parent.fileManagerCallback(file);
+                        parent.layer.closeAll();
                     } else {
                         this.selectedFiles = [file.id || file.path];
                     }
@@ -1771,7 +1775,9 @@
                             this.files = res.images.map(file => ({
                                 ...file,
                                 id: file.id || file.path, // 确保每个文件都有唯一标识
-                                selected: false
+                                selected: false,
+                                preview_url: file.url, // 保存预览URL
+                                url: file.path ? file.path : file.url // 实际文件路径
                             }));
 
                             // 更新分页信息

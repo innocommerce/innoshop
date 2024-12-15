@@ -95,47 +95,29 @@ $(function () {
   });
 
   // 添加文件管理器 iframe 方法到 inno 对象
-  window.inno.fileManagerIframe = function (options = {}) {
-    // 默认配置
+  window.inno.fileManagerIframe = function (callback, options = {}) {
     const defaultOptions = {
-      width: '80%',
-      height: '80%',
-      title: '文件管理器',
-      callback: null,
-      multiple: false,
-      type: 'all'
+      type: 'image',
+      multiple: false
     };
 
-    // 合并配置
-    const settings = { ...defaultOptions, ...options };
+    const finalOptions = { ...defaultOptions, ...options };
 
-    // 将回调函数暂存到全局对象
-    window.fileManagerCallback = settings.callback;
+    // 设置回调函数
+    window.fileManagerCallback = function (files) {
+      if (typeof callback === 'function') {
+        callback(files);
+      }
+    };
 
-    // 构建带参数的 URL
-    const params = new URLSearchParams({
-      multiple: settings.multiple ? '1' : '0',
-      type: settings.type,
-      mode: 'iframe'
-    });
-    const url = `/panel/file_manager/iframe?${params.toString()}`;
-
-    // 创建 iframe 层
+    // 打开文件管理器
     layer.open({
       type: 2,
-      title: settings.title,
+      title: '文件管理器',
       shadeClose: false,
-      shade: 0.3,
-      maxmin: true,
-      area: [settings.width, settings.height],
-      content: url,
-      success: function (layero, index) {
-        const iframe = layero.find('iframe')[0];
-        // 将回调函数传递给 iframe
-        iframe.onload = function () {
-          iframe.contentWindow.fileManagerCallback = window.fileManagerCallback;
-        };
-      }
+      shade: 0.8,
+      area: ['90%', '90%'],
+      content: '/panel/file_manager/iframe?type=' + finalOptions.type + '&multiple=' + (finalOptions.multiple ? '1' : '0')
     });
   };
 })
