@@ -39,4 +39,5 @@ return [
     'viewed'             => '조회수',
     'weight'             => '중량',
     'weight_class'       => '중량 단위',
+    'name'               =>'이름'
 ];

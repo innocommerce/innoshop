@@ -39,4 +39,5 @@ return [
     'viewed'             => 'Visualizações',
     'weight'             => 'Peso',
     'weight_class'       => 'Unidade de Peso',
+    'name'               =>'Nome'
 ];

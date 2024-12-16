@@ -39,4 +39,5 @@ return [
     'weight'             => 'الوزن',
     'weight_class'       => 'وحدة الوزن',
     'sales'              => 'المبيعات',
+      'name'             =>'	الاسم'
 ];

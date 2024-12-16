@@ -39,4 +39,5 @@ return [
     'is_virtual'         => '仮想製品かどうか',
     'error_sku_repeat'   => 'SKUが重複しています',
     'selling_point'      => 'セールスポイント',
+    'name'               =>'明前'
 ];

@@ -39,4 +39,5 @@ return [
     'viewed'             => '瀏覽量',
     'weight'             => '重量',
     'weight_class'       => '重量單位',
+    'name'               => '名稱'
 ];
