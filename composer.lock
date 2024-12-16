@@ -2479,21 +2479,22 @@
         },
         {
             "name": "mobiledetect/mobiledetectlib",
-            "version": "4.8.07",
+            "version": "4.8.09",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "b555b54200fc0416d1fdd43bc61fb40aec7dd493"
+                "reference": "a06fe2e546a06bb8c2639d6823d5250b2efb3209"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/b555b54200fc0416d1fdd43bc61fb40aec7dd493",
-                "reference": "b555b54200fc0416d1fdd43bc61fb40aec7dd493",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/a06fe2e546a06bb8c2639d6823d5250b2efb3209",
+                "reference": "a06fe2e546a06bb8c2639d6823d5250b2efb3209",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
-                "psr/simple-cache": "^2 || ^3"
+                "psr/cache": "^3.0",
+                "psr/simple-cache": "^3"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^v3.65.0",
@@ -2531,7 +2532,7 @@
             ],
             "support": {
                 "issues": "https://github.com/serbanghita/Mobile-Detect/issues",
-                "source": "https://github.com/serbanghita/Mobile-Detect/tree/4.8.07"
+                "source": "https://github.com/serbanghita/Mobile-Detect/tree/4.8.09"
             },
             "funding": [
                 {
@@ -2539,7 +2540,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-09T22:06:06+00:00"
+            "time": "2024-12-10T15:32:06+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -10627,7 +10628,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10638,6 +10639,6 @@
         "ext-pdo": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
