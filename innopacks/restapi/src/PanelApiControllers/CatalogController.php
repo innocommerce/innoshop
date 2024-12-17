@@ -40,7 +40,7 @@ class CatalogController extends BaseController
      */
     public function names(Request $request): AnonymousResourceCollection
     {
-        $catalogs = CatalogRepo::getInstance()->getListByCatalogIDs($request->get('catalog_ids'));
+        $catalogs = CatalogRepo::getInstance()->getListByCatalogIDs($request->get('ids'));
 
         return CatalogName::collection($catalogs);
     }

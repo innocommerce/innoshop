@@ -40,7 +40,7 @@ class BrandController extends BaseController
      */
     public function names(Request $request): AnonymousResourceCollection
     {
-        $brands = BrandRepo::getInstance()->getListByBrandIDs($request->get('brand_ids'));
+        $brands = BrandRepo::getInstance()->getListByBrandIDs($request->get('ids'));
 
         return BrandName::collection($brands);
     }

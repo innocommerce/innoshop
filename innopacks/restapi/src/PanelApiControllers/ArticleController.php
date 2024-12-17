@@ -40,7 +40,7 @@ class ArticleController extends BaseController
      */
     public function names(Request $request): AnonymousResourceCollection
     {
-        $articles = ArticleRepo::getInstance()->getListByArticleIDs($request->get('article_ids'));
+        $articles = ArticleRepo::getInstance()->getListByArticleIDs($request->get('ids'));
 
         return ArticleName::collection($articles);
     }

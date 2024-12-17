@@ -40,7 +40,7 @@ class CategoryController extends BaseController
      */
     public function names(Request $request): AnonymousResourceCollection
     {
-        $products = CategoryRepo::getInstance()->getListByCategoryIDs($request->get('category_ids'));
+        $products = CategoryRepo::getInstance()->getListByCategoryIDs($request->get('ids'));
 
         return CategoryName::collection($products);
     }
