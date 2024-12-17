@@ -13,7 +13,7 @@ use InnoShop\RestAPI\PanelApiControllers;
 Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('base.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
 
-$middlewares = [];
+$middlewares = ['auth:sanctum'];
 Route::middleware($middlewares)->group(function () {
 
     Route::get('/admin', [PanelApiControllers\AuthController::class, 'admin'])->name('auth.admin');
