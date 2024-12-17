@@ -39,5 +39,5 @@ return [
     'viewed'             => 'Nombre de vues',
     'weight'             => 'Poids',
     'weight_class'       => 'Unité de poids',
-    'name'               =>'	Nom'
+    'name'               => '	Nom',
 ];

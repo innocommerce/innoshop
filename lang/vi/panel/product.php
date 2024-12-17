@@ -39,5 +39,5 @@ return [
     'viewed'             => 'lượt xem',
     'weight'             => 'trọng lượng',
     'weight_class'       => 'lớp trọng lượng',
-    'name'               =>'	Tên'
+    'name'               => '	Tên',
 ];

@@ -40,5 +40,5 @@ return [
     'error_sku_repeat'   => 'El sku no puede repetirse',
     'selling_point'      => 'Punto de venta',
     'title'              => 'Título del producto',
-    'name'               => 'Nombre'
+    'name'               => 'Nombre',
 ];

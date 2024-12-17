@@ -39,5 +39,5 @@ return [
     'weight_class'       => 'Unit Berat',
     'selling_point'      => 'Poin penjualan',
     'tax_class'          => 'Kelas pajak',
-    'name'               =>'	Nama'
+    'name'               => '	Nama',
 ];

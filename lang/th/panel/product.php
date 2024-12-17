@@ -39,5 +39,5 @@ return [
     'collapse_all'       => 'ย่อทั้งหมด',
     'is_virtual'         => 'เป็นสินค้าเสมือนหรือไม่',
     'error_sku_repeat'   => 'SKU ไม่สามารถทำซ้ำได้',
-    'name'               => 'ชื่อ'
+    'name'               => 'ชื่อ',
 ];

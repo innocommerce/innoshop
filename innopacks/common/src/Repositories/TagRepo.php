@@ -14,6 +14,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use InnoShop\Common\Models\Tag;
+use Throwable;
 
 class TagRepo extends BaseRepo
 {
@@ -49,6 +50,27 @@ class TagRepo extends BaseRepo
         ];
 
         return $this->builder($filters)->limit(10)->get();
+    }
+
+    /**
+     * Get brand list by IDs.
+     *
+     * @param  mixed  $TagIDs
+     * @return mixed
+     */
+    public function getListByTagIDs(mixed $TagIDs): mixed
+    {
+        if (empty($TagIDs)) {
+            return [];
+        }
+        if (is_string($TagIDs)) {
+            $TagIDs = explode(',', $TagIDs);
+        }
+
+        return Tag::query()->with('translations')
+            ->whereIn('id', $TagIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $TagIDs).')')
+            ->get();
     }
 
     /**
@@ -88,7 +110,7 @@ class TagRepo extends BaseRepo
     /**
      * @param  $data
      * @return Tag
-     * @throws Exception|\Throwable
+     * @throws Exception|Throwable
      */
     public function create($data): Tag
     {

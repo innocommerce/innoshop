@@ -41,6 +41,18 @@ class TagController extends BaseController
     }
 
     /**
+     * @param  Request  $request
+     * @return AnonymousResourceCollection
+     * @throws Exception
+     */
+    public function names(Request $request): AnonymousResourceCollection
+    {
+        $tags = TagRepo::getInstance()->getListByTagIDs($request->get('ids'));
+
+        return TagSimple::collection($tags);
+    }
+
+    /**
      * @param  TagRequest  $request
      * @return JsonResponse
      * @throws Throwable
