@@ -36,8 +36,8 @@ class FileManagerController extends BaseController
     {
         $data = [
             'isIframe' => request()->header('X-Iframe') === '1',
-            'multiple' => request()->query('multiple') === '1',
-            'type' => request()->query('type', 'all')
+            'multiple' => request()->query('multiple')  === '1',
+            'type'     => request()->query('type', 'all'),
         ];
 
         return inno_view('enterprise::file_manager.index', $data);
@@ -53,7 +53,7 @@ class FileManagerController extends BaseController
         $data = [
             'isIframe' => true,
             'multiple' => request()->query('multiple') === '1',
-            'type' => request()->query('type', 'all')
+            'type'     => request()->query('type', 'all'),
         ];
 
         return inno_view('enterprise::file_manager.iframe', $data);
