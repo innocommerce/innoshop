@@ -26,37 +26,37 @@ $weightClasses = [
      <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button"
-        role="tab" aria-controls="home-tab-pane" aria-selected="true">基础信息</button>
+        role="tab" aria-controls="home-tab-pane" aria-selected="true">{{ __('panel/product.basic_information') }}</button>
       </li>
       <li class="nav-item" role="presentation">
        <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description-tab-pane"
-        type="button" role="tab" aria-controls="description-tab-pane" aria-selected="false">产品描述</button>
+        type="button" role="tab" aria-controls="description-tab-pane" aria-selected="false">{{__('panel/product.product_description')}}</button>
       </li>
       <li class="nav-item" role="presentation">
        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button"
-        role="tab" aria-controls="profile-tab-pane" aria-selected="false">规格属性</button>
+        role="tab" aria-controls="profile-tab-pane" aria-selected="false">{{__('panel/product.specification_attribute')}}</button>
       </li>
       <li class="nav-item" role="presentation">
        <button class="nav-link" id="promotion-tab" data-bs-toggle="tab" data-bs-target="#promotion-tab-pane"
-        type="button" role="tab" aria-controls="promotion-tab-pane" aria-selected="false">扩展信息</button>
+        type="button" role="tab" aria-controls="promotion-tab-pane" aria-selected="false">{{__('panel/product.extend_information')}}</button>
       </li>
       <li class="nav-item" role="presentation">
        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button"
-        role="tab" aria-controls="contact-tab-pane" aria-selected="false">SEO</button>
+        role="tab" aria-controls="contact-tab-pane" aria-selected="false">{{__('panel/product.seo')}}</button>
       </li>
       <li class="nav-item" role="presentation">
        <button class="nav-link" id="related-tab" data-bs-toggle="tab" data-bs-target="#related-tab-pane" type="button"
-        role="tab" aria-controls="related-tab-pane" aria-selected="false">相关产品</button>
+        role="tab" aria-controls="related-tab-pane" aria-selected="false">{{__('panel/product.related_products')}}</button>
       </li>
       <li class="nav-item" role="presentation">
        <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button"
-        role="tab" aria-controls="other-tab-pane" aria-selected="false">促销折扣</button>
+        role="tab" aria-controls="other-tab-pane" aria-selected="false">{{__('panel/product.promotional_discount')}}</button>
       </li>
      </ul>
 
      <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-       <div class="mb-3 mt-3">
+      <div class="tab-pane fade show active mt-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+       <div class="mb-3">
         <div class="mb-1 fs-6">{{ __('panel/product.name') }}</div>
         @foreach (locales() as $locale)
         @php($localeCode = $locale->code)
@@ -81,9 +81,9 @@ $weightClasses = [
        <x-common-form-switch-radio :title="__('panel/common.status')" name="active"
         :value="old('active', $product->active ?? true)" />
       </div>
-      <div class="tab-pane fade" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab"
+      <div class="tab-pane fade mt-4" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab"
        tabindex="1">
-       <ul class="nav nav-tabs mt-3 " id="myTab" role="tablist">
+       <ul class="nav nav-tabs" id="myTab" role="tablist">
         @foreach (locales() as $locale)
         @php($localeCode = $locale->code)
         @php($localeName = $locale->name)
@@ -120,7 +120,7 @@ $weightClasses = [
         @endforeach
        </div>
       </div>
-      <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="2">
+      <div class="tab-pane fade mt-4" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="2">
        <div class="mt-2 skus-single-box {{ $product->is_multiple() ? 'd-none' : '' }}">
         <div class="alert alert-info mb-3">
          <i class="bi bi-info-circle me-2"></i>
@@ -155,7 +155,7 @@ $weightClasses = [
        @include('panel::products._form_variant')
        @include('panel::products._form_attribute')
       </div>
-      <div class="tab-pane fade" id="promotion-tab-pane" role="tabpanel" aria-labelledby="promotion-tab" tabindex="3">
+      <div class="tab-pane fade mt-3" id="promotion-tab-pane" role="tabpanel" aria-labelledby="promotion-tab" tabindex="3">
        <div class="d-flex flex-column flex-sm-row gap-3">
         <div class="col-12 col-sm-6">
          <x-common-form-select :title="__('panel/product.tax_class')" name="tax_class_id"
@@ -200,7 +200,7 @@ $weightClasses = [
        <x-common-form-switch-radio :title="__('panel/product.is_virtual')" name="is_virtual"
         :value="old('is_virtual', $product->is_virtual ?? false)" />
       </div>
-      <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="4">
+      <div class="tab-pane fade mt-3" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="4">
        <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')"
         :placeholder="__('panel/common.slug')" column="product_slug" generate="true" />
        <ul class="nav nav-tabs mt-3 " id="myTab" role="tablist">
@@ -235,14 +235,14 @@ $weightClasses = [
            name="translations[{{$localeCode}}][summary]"
            value="{{ old('translations.' . $localeCode . '.summary', $product->translate($localeCode, 'summary')) }}"
            placeholder="{{ __('panel/product.summary') }}" column="product_summary" generate="true"
-           description="填写关键字，点击'AI生成'可生成摘要" />
+           description="{{ __('panel/product.keyword_ai') }}" />
 
           <!-- Selling Point Field -->
           <x-common-form-textarea title="{{ __('panel/product.selling_point') }}"
            name="translations[{{$localeCode}}][selling_point]"
            value="{{ old('translations.' . $localeCode . '.selling_point', $product->translate($localeCode, 'selling_point')) }}"
            placeholder="{{ __('panel/product.selling_point') }}" column="product_selling_point" generate="true"
-           description="简单描述产品特点及优势，点击'AI生成'可生成卖点" />
+           description="{{ __('panel/product.describe') }}" />
 
           <!-- Meta Title Field -->
           <x-common-form-input title="{{ __('panel/common.meta_title') }}"
@@ -266,11 +266,11 @@ $weightClasses = [
         @endforeach
        </div>
       </div>
-      <div class="tab-pane fade" id="related-tab-pane" role="tabpanel" aria-labelledby="related-tab" tabindex="5">
-       <x-panel-form-autocomplete-list name="related_ids[]" :value="old('related_ids', $product->relations->pluck('relation_id')->toArray() ?? [])" placeholder="{{ __('panel/article.tag_search') }}"
-                                       title="相关产品" api="/api/panel/products" />
+      <div class="tab-pane fade mt-3" id="related-tab-pane" role="tabpanel" aria-labelledby="related-tab" tabindex="5">
+       <x-panel-form-autocomplete-list name="related_ids[]" :value="old('related_ids', $product->relations->pluck('relation_id')->toArray() ?? [])" placeholder="{{ __('panel/product.searching_products') }}"
+                                       title="{{__('panel/product.related_products')}}" api="/api/panel/products" />
       </div>
-      <div class="tab-pane fade" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="6">
+      <div class="tab-pane fade mt-3" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="6">
        特价
       </div>
      </div>
