@@ -24,7 +24,7 @@ class CustomerGroupSimple extends JsonResource
     {
         return [
             'id'   => $this->id,
-            'name' => $this->translation->name,
+            'name' => $this->translation->name ?? '',
         ];
     }
 }

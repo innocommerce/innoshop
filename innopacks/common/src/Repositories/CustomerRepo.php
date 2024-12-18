@@ -100,6 +100,9 @@ class CustomerRepo extends BaseRepo
     public function create($data): Customer
     {
         $data = $this->handleData($data);
+        if (! isset($data['password'])) {
+            $data['password'] = '';
+        }
         $item = new Customer($data);
         $item->saveOrFail();
 
@@ -205,7 +208,6 @@ class CustomerRepo extends BaseRepo
     {
         $data = [
             'email'             => $requestData['email'],
-            'password'          => '',
             'name'              => $requestData['name'],
             'customer_group_id' => $requestData['customer_group_id'] ?? 0,
             'address_id'        => $requestData['address_id']        ?? 0,
