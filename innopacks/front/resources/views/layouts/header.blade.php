@@ -121,6 +121,7 @@
           <div class="item">
             <a href="{{ front_route('carts.index') }}" class="header-cart-icon"><img src="{{ asset('icon/cart.svg') }}" class="img-fluid"><span class="icon-quantity">0</span></a>
           </div>
+          @hookinsert('layouts.header.cart.after')
         </div>
       </div>
     </div>

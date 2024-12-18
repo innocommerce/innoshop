@@ -47,7 +47,7 @@ class CartService
      */
     public static function getInstance(int $customerID = 0, string $guestID = ''): static
     {
-        return new self($customerID, $guestID);
+        return new static($customerID, $guestID);
     }
 
     /**
@@ -211,7 +211,7 @@ class CartService
      * @param  array  $data
      * @return array
      */
-    private function mergeAuthId(array $data): array
+    protected function mergeAuthId(array $data): array
     {
         $data['customer_id'] = $this->customerID;
 
