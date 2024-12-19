@@ -53,4 +53,11 @@ return [
     'viewed'                  => '閲覧数',
     'weight'                  => '重量',
     'weight_class'            => '重量単位',
+    'batch_fill'              => '一括入力',
+    'batch_fill_sku'          => 'SKUプレフィックスを入力',
+    'batch_fill_price'        => '統一価格',
+    'batch_fill_origin_price' => '統一原価',
+    'batch_fill_model'        => '統一モデル',
+    'batch_fill_quantity'     => '統一在庫',
+    'batch_fill_apply'        => '適用',
 ];

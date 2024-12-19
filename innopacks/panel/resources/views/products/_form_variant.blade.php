@@ -2,6 +2,55 @@
   <script src="{{ asset('vendor/vue/3.5/vue.global.prod.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
+  <style>
+    .variant-skus-table th {
+      padding-top: 0;
+      vertical-align: bottom;
+    }
+
+    .variant-skus-table .batch-input-item {
+      margin: 0;
+      padding: 10px 0;
+    }
+
+    .variant-skus-table .batch-input-item .input-group {
+      width: 100%;
+      min-width: 120px;
+    }
+
+    .variant-skus-table .batch-input-item .form-control {
+      height: 31px;
+      font-size: 13px;
+      border-right: 0;
+    }
+
+    .variant-skus-table .batch-input-item .btn {
+      border-color: #ced4da;
+      background: #fff;
+      font-size: 13px;
+      padding: 4px 8px;
+    }
+
+    .variant-skus-table .batch-input-item .btn:hover {
+      background: #8446df;
+      border-color: #8446df;
+      color: #fff;
+    }
+
+    .variant-skus-table thead th {
+      background: #f8f9fa;
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    .variant-skus-table tbody td .form-control {
+      font-size: 13px;
+    }
+
+    /* Remove old batch input styles */
+    .batch-input-area {
+      display: none;
+    }
+  </style>
 @endpush
 
 <div class="card variants-box mb-3" id="variants-box">
@@ -86,12 +135,62 @@
       <div class="variant-skus-table table-responsive">
         <table class="table align-middle">
           <thead>
-            <th style="min-width: 220px">{{ __('panel/product.variant') }}</th>
-            <th>SKU Code</th>
-            <th>{{ __('panel/product.price') }}</th>
-            <th>{{ __('panel/product.origin_price') }}</th>
-            <th>{{ __('panel/product.model') }}</th>
-            <th>{{ __('panel/product.quantity') }}</th>
+            <tr>
+              <th style="min-width: 220px">
+                  <div class="batch-input-item mb-2">
+                      {{ __('panel/product.batch_fill') }}
+                  </div>
+                  {{ __('panel/product.variant') }}
+              </th>
+              <th>
+                <div class="batch-input-item mb-2">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" v-model="batchData.skuPrefix" placeholder="{{ __('panel/product.batch_fill_sku') }}">
+                    <button class="btn btn-outline-primary" type="button" @click="batchFillSkuCode">{{ __('panel/product.batch_fill_apply') }}</button>
+                  </div>
+                </div>
+                SKU Code
+              </th>
+              <th>
+                <div class="batch-input-item mb-2">
+                  <div class="input-group input-group-sm">
+                    <input type="number" class="form-control" v-model="batchData.price" placeholder="{{ __('panel/product.batch_fill_price') }}"
+                      min="0" @input="validateBatchPrice">
+                    <button class="btn btn-outline-primary" type="button" @click="batchFillColumn('price')">{{ __('panel/product.batch_fill_apply') }}</button>
+                  </div>
+                </div>
+                {{ __('panel/product.price') }}
+              </th>
+              <th>
+                <div class="batch-input-item mb-2">
+                  <div class="input-group input-group-sm">
+                    <input type="number" class="form-control" v-model="batchData.originPrice" placeholder="{{ __('panel/product.batch_fill_origin_price') }}"
+                      min="0" @input="validateBatchOriginPrice">
+                    <button class="btn btn-outline-primary" type="button" @click="batchFillColumn('originPrice')">{{ __('panel/product.batch_fill_apply') }}</button>
+                  </div>
+                </div>
+                {{ __('panel/product.origin_price') }}
+              </th>
+              <th>
+                <div class="batch-input-item mb-2">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" v-model="batchData.model" placeholder="{{ __('panel/product.batch_fill_model') }}">
+                    <button class="btn btn-outline-primary" type="button" @click="batchFillColumn('model')">{{ __('panel/product.batch_fill_apply') }}</button>
+                  </div>
+                </div>
+                {{ __('panel/product.model') }}
+              </th>
+              <th>
+                <div class="batch-input-item mb-2">
+                  <div class="input-group input-group-sm">
+                    <input type="number" class="form-control" v-model="batchData.quantity" placeholder="{{ __('panel/product.batch_fill_quantity') }}"
+                      min="0" @input="validateBatchQuantity">
+                    <button class="btn btn-outline-primary" type="button" @click="batchFillColumn('quantity')">{{ __('panel/product.batch_fill_apply') }}</button>
+                  </div>
+                </div>
+                {{ __('panel/product.quantity') }}
+              </th>
+            </tr>
           </thead>
           <tbody>
             <tr v-for="(sku, index) in skus" :key="index">
@@ -121,11 +220,13 @@
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"
-                  v-model="sku.price" placeholder="{{ __('panel/product.price') }}">
+                  v-model="sku.price" placeholder="{{ __('panel/product.price') }}"
+                  @input="validatePrice(sku)">
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"
-                  v-model="sku.origin_price" placeholder="{{ __('panel/product.origin_price') }}">
+                  v-model="sku.origin_price" placeholder="{{ __('panel/product.origin_price') }}"
+                  @input="validateOriginPrice(sku)">
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"
@@ -133,7 +234,8 @@
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"
-                  v-model="sku.quantity" placeholder="{{ __('panel/product.quantity') }}">
+                  v-model="sku.quantity" placeholder="{{ __('panel/product.quantity') }}"
+                  @input="validateQuantity(sku)">
               </td>
             </tr>
           </tbody>
@@ -171,6 +273,52 @@
       const mainVariantKey = ref(0)
       const variants = ref(@json(old('variants', $product->variables ?? [])))
       const skus = ref(@json(old('skus', $skus ?? [])))
+
+      // 添加批量填写的数据
+      const batchData = ref({
+        skuPrefix: '',
+        price: '',
+        originPrice: '',
+        model: '',
+        quantity: ''
+      });
+
+      // SKU Code 批量填写
+      const batchFillSkuCode = () => {
+        if (!batchData.value.skuPrefix) {
+          layer.msg('请输入SKU前缀', {icon: 2});
+          return;
+        }
+
+        skus.value.forEach((sku, index) => {
+          const suffix = String(index + 1).padStart(2, '0');
+          sku.code = `${batchData.value.skuPrefix}-${suffix}`;
+        });
+
+        layer.msg('SKU Code 已批量填写', {icon: 1});
+      };
+
+      // 其他列的批量填写
+      const batchFillColumn = (column) => {
+        if (!batchData.value[column]) {
+          layer.msg('请输入要填写的值', {icon: 2});
+          return;
+        }
+
+        const columnMap = {
+          price: 'price',
+          originPrice: 'origin_price',
+          model: 'model',
+          quantity: 'quantity'
+        };
+
+        skus.value.forEach(sku => {
+          sku[columnMap[column]] = batchData.value[column];
+        });
+
+        layer.msg('批量填写成功', {icon: 1});
+      };
+
       if (typeof variants.value === 'string') {
         variants.value = JSON.parse(variants.value);
       }
@@ -256,7 +404,7 @@
           e[type] = sku[type]
         })
 
-        // 获取有多少个相同的sku,然后添加下标, 判断一个 - 前的字符是否相同，如果相同就加上下标
+        // 获取有多少个相同的sku,然后加下标, 判断一个 - 前的字符是否相同，如果相同就加上下标
         if (typeof init_index != 'undefined' ) {
           let sameSku = skus.value.filter((e, i) => e.code.split('-')[0] === sku.code)
           sameSku.forEach((e, i) => {
@@ -565,6 +713,58 @@
         }
       }, { deep: true });
 
+      // Add validation methods
+      const validateBatchPrice = () => {
+        if (batchData.value.price < 0) {
+          batchData.value.price = 0;
+        }
+        if (batchData.value.originPrice && parseFloat(batchData.value.price) > parseFloat(batchData.value.originPrice)) {
+          batchData.value.price = batchData.value.originPrice;
+        }
+      }
+
+      const validateBatchOriginPrice = () => {
+        if (batchData.value.originPrice < 0) {
+          batchData.value.originPrice = 0;
+        }
+        if (batchData.value.price && parseFloat(batchData.value.originPrice) < parseFloat(batchData.value.price)) {
+          batchData.value.originPrice = batchData.value.price;
+        }
+      }
+
+      const validateBatchQuantity = () => {
+        if (batchData.value.quantity < 0) {
+          batchData.value.quantity = 0;
+        }
+      }
+
+      const validatePrice = (sku) => {
+        let price = parseFloat(sku.price);
+        if (isNaN(price) || price < 0) {
+          sku.price = '0';
+        }
+        if (sku.origin_price && price > parseFloat(sku.origin_price)) {
+          sku.price = sku.origin_price;
+        }
+      }
+
+      const validateOriginPrice = (sku) => {
+        let originPrice = parseFloat(sku.origin_price);
+        if (isNaN(originPrice) || originPrice < 0) {
+          sku.origin_price = '0';
+        }
+        if (sku.price && originPrice < parseFloat(sku.price)) {
+          sku.origin_price = sku.price;
+        }
+      }
+
+      const validateQuantity = (sku) => {
+        let quantity = parseInt(sku.quantity);
+        if (isNaN(quantity) || quantity < 0) {
+          sku.quantity = '0';
+        }
+      }
+
       return {
         skus,
         variants,
@@ -584,6 +784,10 @@
         setMasterSku,
         showAllVariant,
         allVariantEC,
+        // 添加新的返回值
+        batchData,
+        batchFillSkuCode,
+        batchFillColumn,
       }
     }
   }).mount('#variants-box');

@@ -52,5 +52,12 @@ return [
     'variant_value_help'      => 'Contoh Nilai Varian: Merah',
     'viewed'                  => 'Dilihat',
     'weight'                  => 'Berat',
-    'weight_class'            => 'Unit Berat',
+    'weight_class'            => 'Unit berat',
+    'batch_fill'              => 'Isi Pukal',
+    'batch_fill_sku'          => 'Masukkan Awalan SKU',
+    'batch_fill_price'        => 'Harga Seragam',
+    'batch_fill_origin_price' => 'Harga Asal Seragam',
+    'batch_fill_model'        => 'Model Seragam',
+    'batch_fill_quantity'     => 'Stok Seragam',
+    'batch_fill_apply'        => 'Guna',
 ];

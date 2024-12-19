@@ -53,4 +53,11 @@ return [
     'viewed'                  => 'Viewed',
     'weight'                  => 'Weight',
     'weight_class'            => 'Weight Unit',
+    'batch_fill'              => 'Batch Fill',
+    'batch_fill_sku'          => 'Enter SKU Prefix',
+    'batch_fill_price'        => 'Unified Price',
+    'batch_fill_origin_price' => 'Unified Original Price',
+    'batch_fill_model'        => 'Unified Model',
+    'batch_fill_quantity'     => 'Unified Stock',
+    'batch_fill_apply'        => 'Apply',
 ];
