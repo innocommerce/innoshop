@@ -2,55 +2,6 @@
   <script src="{{ asset('vendor/vue/3.5/vue.global.prod.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
-  <style>
-    .variant-skus-table th {
-      padding-top: 0;
-      vertical-align: bottom;
-    }
-
-    .variant-skus-table .batch-input-item {
-      margin: 0;
-      padding: 10px 0;
-    }
-
-    .variant-skus-table .batch-input-item .input-group {
-      width: 100%;
-      min-width: 120px;
-    }
-
-    .variant-skus-table .batch-input-item .form-control {
-      height: 31px;
-      font-size: 13px;
-      border-right: 0;
-    }
-
-    .variant-skus-table .batch-input-item .btn {
-      border-color: #ced4da;
-      background: #fff;
-      font-size: 13px;
-      padding: 4px 8px;
-    }
-
-    .variant-skus-table .batch-input-item .btn:hover {
-      background: #8446df;
-      border-color: #8446df;
-      color: #fff;
-    }
-
-    .variant-skus-table thead th {
-      background: #f8f9fa;
-      border-bottom: 2px solid #dee2e6;
-    }
-
-    .variant-skus-table tbody td .form-control {
-      font-size: 13px;
-    }
-
-    /* Remove old batch input styles */
-    .batch-input-area {
-      display: none;
-    }
-  </style>
 @endpush
 
 <div class="card variants-box mb-3" id="variants-box">
