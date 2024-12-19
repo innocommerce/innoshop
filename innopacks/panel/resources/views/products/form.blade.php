@@ -98,7 +98,7 @@ $weightClasses = [
         @endforeach
        </ul>
 
-       <div class="tab-content p-1 border-end border-bottom border-start" id="myTabContent">
+       <div class="tab-content pt-1" id="myTabContent">
         @foreach (locales() as $locale)
         @php($localeCode = $locale->code)
         @php($localeName = $locale->name)

@@ -37,7 +37,7 @@ return [
     'searching_products'      => '请搜索相关商品',
     'selling_point'           => '卖点',
     'seo'                     => 'SEO',
-    'sku_notice'              => '请填写商品单规格信息，或点击下方\"添加规格\"按钮设置多规格商品',
+    'sku_notice'              => '请填写商品单规格信息，或点击下方"添加规格"按钮设置多规格商品',
     'sku_validation_error'    => '请至少完整填写单规格信息或多规格商品信息',
     'specification_attribute' => '规格属性',
     'summary'                 => '摘要',
