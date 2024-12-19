@@ -28,4 +28,5 @@ return [
     'input_some_text_here'  => 'ここにテキストを入力してください',
     'please_login_first'    => 'レビューを投稿する前にログインしてください',
     'visit_order_to_review' => '個人センターに移動してレビューを投稿してください',
+    'related_product'       => '関連商品',
 ];

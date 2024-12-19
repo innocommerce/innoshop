@@ -28,4 +28,5 @@ return [
     'submit_review'         => 'ส่งรีวิว',
     'input_your_review'     => 'กรุณากรอกรีวิวของคุณ',
     'input_some_text_here'  => 'กรุณาพิมพ์ข้อความที่นี่',
+    'related_product'       => 'สินค้าเกี่ยวข้อง',
 ];

@@ -28,4 +28,5 @@ return [
     'view_details'          => 'Details anzeigen',
     'visit_order_to_review' => 'Gehe zu Mein Konto und hinterlasse eine Bewertung',
     'your_review'           => 'Ihre Bewertung',
+    'related_product'       => 'Verwandte Produkte',
 ];

@@ -31,4 +31,5 @@ return [
     'input_some_text_here'  => 'Sila masukkan teks di sini',
     'input_your_review'     => 'Masukkan ulasan anda',
     'visit_order_to_review' => 'Sila pergi ke pusat peribadi untuk meninggalkan ulasan',
+    'related_product'       => '상관 상품',
 ];

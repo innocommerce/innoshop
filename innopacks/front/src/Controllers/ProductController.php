@@ -96,6 +96,7 @@ class ProductController extends Controller
             'variants'   => $product->variables,
             'attributes' => $product->groupedAttributes(),
             'reviews'    => ReviewListItem::collection($reviews)->jsonSerialize(),
+            'related'    => $product->relationProducts,
         ];
 
         return inno_view('products.show', $data);

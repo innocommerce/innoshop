@@ -28,4 +28,5 @@ return [
     'view_details'          => 'Xem chi tiết ngay',
     'visit_order_to_review' => 'Vui lòng đến trung tâm cá nhân để để lại bình luận',
     'your_review'           => 'Đánh giá của bạn',
+    'related_product'       => 'Sản phẩm liên quan',
 ];

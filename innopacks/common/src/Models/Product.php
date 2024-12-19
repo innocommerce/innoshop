@@ -138,6 +138,14 @@ class Product extends BaseModel
     /**
      * @return BelongsToMany
      */
+    public function relationProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_relations', 'product_id', 'relation_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
     public function favCustomers(): BelongsToMany
     {
         return $this->belongsToMany(Customer::class, 'customer_favorites', 'product_id', 'customer_id');

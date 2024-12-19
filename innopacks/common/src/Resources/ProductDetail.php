@@ -55,6 +55,7 @@ class ProductDetail extends JsonResource
             'skus'                => SkuListItem::collection($this->skus)->jsonSerialize(),
             'variants'            => $this->variables,
             'attributes'          => $this->groupedAttributes(),
+            'related'             => ProductSimple::collection($this->relationProducts),
         ];
     }
 }

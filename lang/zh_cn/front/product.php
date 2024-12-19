@@ -28,4 +28,5 @@ return [
     'view_details'          => '立即查看',
     'visit_order_to_review' => '请到个人中心留言评论',
     'your_review'           => '你的评论',
+    'related_product'       => '相关商品',
 ];

@@ -65,7 +65,7 @@ $weightClasses = [
            <img src="{{ image_origin($locale->image) }}" class="img-fluid" alt="{{ $localeName }}">
           </div>
          </span>
-         <div class="col-4">
+         <div class="col-12 col-md-5">
           <input type="text" class="form-control" name="translations[{{$localeCode}}][name]"
            value="{{ old('translations.' . $localeCode . '.name', $product->translate($localeCode, 'name')) }}" required
            placeholder="{{ __('panel/product.name') }}" aria-label="{{ $localeName }}" aria-describedby="basic-addon1">

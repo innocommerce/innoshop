@@ -28,4 +28,5 @@ return [
     'view_details'          => 'Lihat detail sekarang',
     'visit_order_to_review' => 'Silakan kunjungi pusat pribadi untuk meninggalkan ulasan',
     'your_review'           => 'Ulasan Anda',
+    'related_product'       => 'Produk terkait',
 ];

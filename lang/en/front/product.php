@@ -28,4 +28,5 @@ return [
     'submit_review'         => 'Submit Review',
     'input_your_review'     => 'Input Your Review',
     'input_some_text_here'  => 'Input Review Here',
+    'related_product'       => 'Related',
 ];
