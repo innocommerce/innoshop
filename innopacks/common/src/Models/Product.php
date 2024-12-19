@@ -192,7 +192,7 @@ class Product extends BaseModel
      *
      * @return bool
      */
-    public function is_multiple(): bool
+    public function isMultiple(): bool
     {
         return $this->variables || $this->skus->count() > 1;
     }

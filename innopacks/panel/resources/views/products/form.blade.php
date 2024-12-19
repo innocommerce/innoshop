@@ -119,7 +119,7 @@ $weightClasses = [
        </div>
       </div>
       <div class="tab-pane fade mt-4" id="specification-tab-pane" role="tabpanel" aria-labelledby="specification-tab" tabindex="2">
-       <div class="mt-2 skus-single-box {{ $product->is_multiple() ? 'd-none' : '' }}">
+       <div class="mt-2 skus-single-box {{ $product->isMultiple() ? 'd-none' : '' }}">
         <div class="alert alert-info mb-3">
          <i class="bi bi-info-circle me-2"></i>
          {{ __('panel/product.sku_notice') }}
