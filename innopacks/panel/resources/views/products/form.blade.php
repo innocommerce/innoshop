@@ -48,10 +48,6 @@ $weightClasses = [
        <button class="nav-link" id="relation-tab" data-bs-toggle="tab" data-bs-target="#relation-tab-pane" type="button"
         role="tab" aria-controls="relation-tab-pane" aria-selected="false">{{__('panel/product.related_products')}}</button>
       </li>
-      <li class="nav-item" role="presentation">
-       <button class="nav-link" id="promotion-tab" data-bs-toggle="tab" data-bs-target="#promotion-tab-pane" type="button"
-        role="tab" aria-controls="promotion-tab-pane" aria-selected="false">{{__('panel/product.promotional_discount')}}</button>
-      </li>
       @hookinsert('panel.product.edit.tab.nav.bottom')
      </ul>
 
@@ -84,7 +80,7 @@ $weightClasses = [
       </div>
       <div class="tab-pane fade mt-4" id="translation-tab-pane" role="tabpanel" aria-labelledby="translation-tab"
        tabindex="1">
-       <div class="fs-5">{{ __('panel/product.content') }}</div>
+       <div class="mb-1 fs-6">{{ __('panel/product.content') }}</div>
        <ul class="nav nav-tabs" id="myTab" role="tablist">
         @foreach (locales() as $locale)
         @php($localeCode = $locale->code)
@@ -102,7 +98,7 @@ $weightClasses = [
         @endforeach
        </ul>
 
-       <div class="tab-content border-end border-bottom border-start" id="myTabContent">
+       <div class="tab-content p-1 border-end border-bottom border-start" id="myTabContent">
         @foreach (locales() as $locale)
         @php($localeCode = $locale->code)
         @php($localeName = $locale->name)
@@ -268,12 +264,9 @@ $weightClasses = [
         @endforeach
        </div>
       </div>
-      <div class="tab-pane fade mt-3" id="relation-tab-pane" role="tabpanel" aria-labelledby="relation-tab" tabindex="5">
+      <div class="tab-pane fade mt-3 col-md-6" id="relation-tab-pane" role="tabpanel" aria-labelledby="relation-tab" tabindex="5">
        <x-panel-form-autocomplete-list name="related_ids[]" :value="old('related_ids', $product->relations->pluck('relation_id')->toArray() ?? [])" placeholder="{{ __('panel/product.searching_products') }}"
                                        title="{{__('panel/product.related_products')}}" api="/api/panel/products" />
-      </div>
-      <div class="tab-pane fade mt-3" id="promotion-tab-pane" role="tabpanel" aria-labelledby="promotion-tab" tabindex="6">
-       特价
       </div>
       @hookinsert('panel.product.edit.tab.pane.bottom')
      </div>
