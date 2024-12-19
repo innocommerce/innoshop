@@ -84,6 +84,7 @@ $weightClasses = [
       </div>
       <div class="tab-pane fade mt-4" id="translation-tab-pane" role="tabpanel" aria-labelledby="translation-tab"
        tabindex="1">
+       <div class="fs-5">{{ __('panel/product.content') }}</div>
        <ul class="nav nav-tabs" id="myTab" role="tablist">
         @foreach (locales() as $locale)
         @php($localeCode = $locale->code)
@@ -112,7 +113,7 @@ $weightClasses = [
           <input type="hidden" name="translations[{{$localeCode}}][locale]" value="{{ $localeCode }}">
 
           <!-- Content Field -->
-          <x-common-form-rich-text title="{{ __('panel/product.content') }}"
+          <x-common-form-rich-text
            name="translations[{{$localeCode}}][content]"
            value="{{ old('translations.' . $localeCode . '.content', $product->translate($localeCode, 'content')) }}"
            required placeholder="{{ __('panel/product.describe') }}" />
