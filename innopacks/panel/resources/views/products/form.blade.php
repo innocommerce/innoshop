@@ -52,6 +52,7 @@ $weightClasses = [
        <button class="nav-link" id="promotion-tab" data-bs-toggle="tab" data-bs-target="#promotion-tab-pane" type="button"
         role="tab" aria-controls="promotion-tab-pane" aria-selected="false">{{__('panel/product.promotional_discount')}}</button>
       </li>
+      @hookinsert('panel.product.edit.tab.nav.bottom')
      </ul>
 
      <div class="tab-content" id="myTabContent">
@@ -273,6 +274,7 @@ $weightClasses = [
       <div class="tab-pane fade mt-3" id="promotion-tab-pane" role="tabpanel" aria-labelledby="promotion-tab" tabindex="6">
        特价
       </div>
+      @hookinsert('panel.product.edit.tab.pane.bottom')
      </div>
     </div>
    </div>
