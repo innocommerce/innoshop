@@ -41,7 +41,9 @@
               </div>
             </td>
             <td><a href="{{ $product->url }}" class="text-decoration-none" target="_blank">{{
-                $product->translation->name ?? '' }}</a></td>
+                $product->translation->name ?? '' }}</a>
+              @if($product->isMultiple()) &nbsp;<span class="text-bg-success px-1">M</span>@endif
+            </td>
             <td>{{ currency_format($product->masterSku->price ?? 0) }}</td>
             <td>{{ $product->masterSku->quantity ?? 0 }}</td>
             <td>{{ $product->created_at }}</td>
