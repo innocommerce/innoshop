@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Article;
@@ -16,13 +17,14 @@ use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Panel\Requests\ArticleRequest;
+use Throwable;
 
 class ArticleController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -39,7 +41,7 @@ class ArticleController extends BaseController
      * Article creation page.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(): mixed
     {
@@ -49,7 +51,7 @@ class ArticleController extends BaseController
     /**
      * @param  ArticleRequest  $request
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(ArticleRequest $request): RedirectResponse
     {
@@ -60,7 +62,7 @@ class ArticleController extends BaseController
             return redirect(panel_route('articles.index'))
                 ->with('instance', $article)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -68,7 +70,7 @@ class ArticleController extends BaseController
     /**
      * @param  Article  $article
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit(Article $article): mixed
     {
@@ -78,7 +80,7 @@ class ArticleController extends BaseController
     /**
      * @param  $article
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function form($article): mixed
     {
@@ -105,7 +107,7 @@ class ArticleController extends BaseController
             return redirect(panel_route('articles.index'))
                 ->with('instance', $article)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -120,7 +122,7 @@ class ArticleController extends BaseController
             ArticleRepo::getInstance()->destroy($article);
 
             return back()->with('success', panel_trans('common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }

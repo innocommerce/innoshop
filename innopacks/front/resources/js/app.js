@@ -7,6 +7,10 @@ import './bootstrap-validation';
 import './footer';
 import './header';
 
+const apiToken = document.querySelector('meta[name="api-token"]').getAttribute('content');
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
+console.log('apiToken:' + apiToken);
+
 $(function () {
   common.getCarts();
 
@@ -28,6 +32,10 @@ $(function () {
     const skuId = $(this).data('sku-id');
     inno.addCart({skuId}, this)
   })
+
+  $(function() {
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  });
 
   //Set app-content min height.
   common.setAppContentMinHeight();

@@ -26,7 +26,7 @@ class ReviewRepo extends BaseRepo
             ['name' => 'product', 'type' => 'input', 'label' => trans('panel/review.product')],
             ['name' => 'rating', 'type' => 'input', 'label' => trans('panel/review.rating')],
             ['name' => 'review_content', 'type' => 'input', 'label' => trans('panel/review.review_content')],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/order.created_at'),
+            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/review.created_at'),
                 'start' => ['name' => 'start'],
                 'end'   => ['name' => 'end'],
             ],

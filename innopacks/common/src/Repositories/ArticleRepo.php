@@ -9,9 +9,11 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Article;
+use Throwable;
 
 class ArticleRepo extends BaseRepo
 {
@@ -30,7 +32,7 @@ class ArticleRepo extends BaseRepo
     /**
      * @param  array  $filters
      * @return LengthAwarePaginator
-     * @throws \Exception
+     * @throws Exception
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
@@ -68,6 +70,10 @@ class ArticleRepo extends BaseRepo
             $builder->where('catalog_id', $catalogId);
         }
 
+        if (isset($filters['active'])) {
+            $builder->where('active', (bool) $filters['active']);
+        }
+
         $catalog = $filters['catalog'] ?? '';
         if ($catalog) {
             $builder->whereHas('catalog.translation', function (Builder $query) use ($catalog) {
@@ -99,11 +105,11 @@ class ArticleRepo extends BaseRepo
     /**
      * @param  $data
      * @return Article
-     * @throws \Exception|\Throwable
+     * @throws Exception|Throwable
      */
     public function create($data): Article
     {
-        $item = new Article($data);
+        $item = new Article($this->handleData($data));
         $item->saveOrFail();
 
         $translations = array_values($data['translations']);
@@ -122,7 +128,7 @@ class ArticleRepo extends BaseRepo
      */
     public function update($item, $data): mixed
     {
-        $item->fill($data);
+        $item->fill($this->handleData($data));
         $item->saveOrFail();
 
         $translations = array_values($data['translations']);
@@ -145,5 +151,60 @@ class ArticleRepo extends BaseRepo
     {
         $item->translations()->delete();
         $item->delete();
+    }
+
+    /**
+     * @param  $data
+     * @return array
+     */
+    private function handleData($data): array
+    {
+        return [
+            'catalog_id' => $data['catalog_id'] ?? 0,
+            'slug'       => $data['slug']       ?? null,
+            'position'   => $data['position']   ?? 0,
+            'viewed'     => $data['viewed']     ?? 0,
+            'author'     => $data['author']     ?? '',
+            'active'     => (bool) $data['active'],
+        ];
+    }
+
+    /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        $builder = Article::query()->with(['translation']);
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            });
+        }
+
+        return $builder->limit($limit)->get();
+    }
+
+    /**
+     * Get Article list by IDs.
+     *
+     * @param  mixed  $ArticleIDs
+     * @return mixed
+     */
+    public function getListByArticleIDs(mixed $ArticleIDs): mixed
+    {
+        if (empty($ArticleIDs)) {
+            return [];
+        }
+        if (is_string($ArticleIDs)) {
+            $ArticleIDs = explode(',', $ArticleIDs);
+        }
+
+        return Article::query()
+            ->with('translation')
+            ->whereIn('id', $ArticleIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $ArticleIDs).')')
+            ->get();
     }
 }

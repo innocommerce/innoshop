@@ -14,6 +14,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\CartItem;
 use InnoShop\Common\Services\CartService;
+use InnoShop\Front\Requests\CartRequest;
+use Throwable;
 
 class CartController extends Controller
 {
@@ -45,11 +47,11 @@ class CartController extends Controller
     /**
      * Add product sku to cart.
      *
-     * @param  Request  $request
+     * @param  CartRequest  $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function store(Request $request): JsonResponse
+    public function store(CartRequest $request): JsonResponse
     {
         try {
             $cartData = CartService::getInstance()->addCart($request->all());
@@ -61,11 +63,11 @@ class CartController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param  CartRequest  $request
      * @param  CartItem  $cart
      * @return JsonResponse
      */
-    public function update(Request $request, CartItem $cart): JsonResponse
+    public function update(CartRequest $request, CartItem $cart): JsonResponse
     {
         try {
             $cartData = CartService::getInstance()->updateCart($cart, $request->all());

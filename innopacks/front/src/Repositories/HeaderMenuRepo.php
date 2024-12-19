@@ -13,6 +13,7 @@ use Exception;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\PageRepo;
+use InnoShop\Common\Repositories\SpecialPageRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Common\Resources\PageSimple;
 
@@ -34,12 +35,27 @@ class HeaderMenuRepo
      */
     public function getMenus(): array
     {
+        $specials   = $this->getSpecials(system_setting('menu_header_specials'));
         $categories = $this->getCategories(system_setting('menu_header_categories'));
         $catalogs   = $this->getCatalogs(system_setting('menu_header_catalogs'));
         $pages      = $this->getPages(system_setting('menu_header_pages'));
-        $menus      = array_merge($categories, $catalogs, $pages);
+        $menus      = array_merge($specials, $categories, $catalogs, $pages);
 
         return fire_hook_filter('global.header.menus', $menus);
+    }
+
+    /**
+     * @param  $specials
+     * @return array
+     * @throws Exception
+     */
+    public function getSpecials($specials): array
+    {
+        if (empty($specials)) {
+            return [];
+        }
+
+        return SpecialPageRepo::getInstance()->getSpecialLinks($specials);
     }
 
     /**

@@ -10,7 +10,7 @@
 use Illuminate\Support\Facades\Route;
 use InnoShop\RestAPI\PanelApiControllers;
 
-Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('introduction.index');
+Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('base.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
 
 $middlewares = ['auth:sanctum'];
@@ -54,6 +54,7 @@ Route::middleware($middlewares)->group(function () {
     Route::delete('/pages/{page}', [PanelApiControllers\PageController::class, 'destroy'])->name('pages.destroy');
 
     Route::get('/tags', [PanelApiControllers\TagController::class, 'index'])->name('tags.index');
+    Route::get('/tags/names', [PanelApiControllers\TagController::class, 'names'])->name('tags.name');
     Route::get('/tags/autocomplete', [PanelApiControllers\TagController::class, 'autocomplete'])->name('tags.autocomplete');
     Route::post('/tags', [PanelApiControllers\TagController::class, 'store'])->name('tags.store');
     Route::put('/tags/{tag}', [PanelApiControllers\TagController::class, 'update'])->name('tags.update');

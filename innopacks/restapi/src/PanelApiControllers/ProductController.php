@@ -37,7 +37,7 @@ class ProductController extends BaseController
      */
     public function names(Request $request): AnonymousResourceCollection
     {
-        $products = ProductRepo::getInstance()->getListByProductIDs($request->get('product_ids'));
+        $products = ProductRepo::getInstance()->getListByProductIDs($request->get('ids'));
 
         return ProductSimple::collection($products);
     }

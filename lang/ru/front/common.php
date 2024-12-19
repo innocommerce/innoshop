@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'О',
     'action'            => 'действие',
     'add'               => 'добавить',
     'all'               => 'все',
@@ -16,6 +17,7 @@ return [
     'confirm'           => 'подтвердить',
     'created_at'        => 'время создания',
     'date'              => 'дата',
+    'default'           => 'Адрес по умолчанию',
     'delete'            => 'удалить',
     'delete_confirm'    => 'удалить?',
     'deleted_success'   => 'удалено успешно',
@@ -28,6 +30,7 @@ return [
     'logo'              => 'логотип',
     'name'              => 'название',
     'news'              => 'новости',
+    'no'                => 'нет',
     'out_of_stock'      => 'нет в наличии',
     'page_total_show'   => 'показать с :first по :last из :total',
     'pages'             => 'страницы',
@@ -47,5 +50,4 @@ return [
     'updated_success'   => 'обновлено успешно',
     'view'              => 'посмотреть',
     'yes'               => 'да',
-    'no'                => 'нет',
 ];

@@ -48,7 +48,7 @@ class LoginController extends BaseController
         $redirectUri = session('panel_redirect_uri');
         if (auth('admin')->attempt($request->validated())) {
             $apiToken = Auth::guard('admin')->user()->createToken('admin-token')->plainTextToken;
-            session(['api_token' => $apiToken]);
+            session(['panel_api_token' => $apiToken]);
 
             if ($redirectUri) {
                 session()->forget('panel_redirect_uri');

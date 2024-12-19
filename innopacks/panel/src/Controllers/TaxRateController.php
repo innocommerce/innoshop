@@ -67,10 +67,10 @@ class TaxRateController extends BaseController
     public function store(TaxRateRequest $request): JsonResponse
     {
         try {
-            $data = $request->all();
-            TaxRateRepo::getInstance()->create($data);
+            $data    = $request->all();
+            $taxRate = TaxRateRepo::getInstance()->create($data);
 
-            return json_success(panel_trans('common.created_success'));
+            return create_json_success($taxRate);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -110,10 +110,10 @@ class TaxRateController extends BaseController
     public function update(TaxRateRequest $request, TaxRate $taxRate): JsonResponse
     {
         try {
-            $data = $request->all();
-            TaxRateRepo::getInstance()->update($taxRate, $data);
+            $data    = $request->all();
+            $taxRate = TaxRateRepo::getInstance()->update($taxRate, $data);
 
-            return json_success(panel_trans('common.updated_success'));
+            return update_json_success($taxRate);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

@@ -11,17 +11,21 @@
   <meta name="asset" content="{{ asset('/') }}">
   <meta name="description" content="@yield('description', 'InnoShop')">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <meta name="api-token" content="{{ session('api_token') }}">
+  <meta name="api-token" content="{{ session('panel_api_token') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
+  <link rel="stylesheet" href="{{ asset('vendor/element-plus/index.css') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendor/element-plus/index.css') }}">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
-  <script src="{{ mix('build/panel/js/app.js') }}"></script>
+  <script src="{{ asset('vendor/vue/3.5/vue.global' . (config('app.debug') ? '' : '.prod') . '.js') }}"></script>
+  <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
+  <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
+  <script src="{{ mix('build/panel/js/app.js') }}"></script>
   <script>
     let urls = {
+      api_base: '{{ route('api.panel.base.index') }}',
       base_url: '{{ panel_route('home.index') }}',
       upload_images: '{{ panel_route('upload.images') }}',
       ai_generate: '{{ panel_route('content_ai.generate') }}',
@@ -38,50 +42,53 @@
 </head>
 
 <body class="@yield('body-class')">
-@include('panel::layouts.header')
-<div class="main-content">
-  <aside class="sidebar-box navbar-expand-xs border-radius-xl">
-    <div class="sidebar-body">
-      <x-panel-sidebar></x-panel-sidebar>
-    </div>
-    <div class="mb-menu-close"><i class="bi bi-chevron-left"></i></div>
-  </aside>
-
-  <div id="content">
-    <div class="page-title-box py-1 d-flex align-items-center justify-content-between">
-      <div class="d-flex">
-        <h4 class="page-title mb-0">@yield('title')</h4>
-        <div class="ms-4 text-danger">@yield('page-title-after')</div>
+  @include('panel::layouts.header')
+  <div class="main-content">
+    <aside class="sidebar-box navbar-expand-xs border-radius-xl">
+      <div class="sidebar-body">
+        <x-panel-sidebar></x-panel-sidebar>
       </div>
-      <div class="text-nowrap">@yield('page-title-right')</div>
-    </div>
+      <div class="mb-menu-close"><i class="bi bi-chevron-left"></i></div>
+    </aside>
 
-    <div class="container-fluid p-0 mt-3">
-      <div class="content-info">
-        @if (session()->has('errors'))
-          <x-common-alert type="danger" msg="{{ session('errors')->first() }}" class="mt-4"/>
-        @endif
-        @if (session('success'))
-          <x-common-alert type="success" msg="{{ session('success') }}" class="mt-4"/>
-        @endif
-        @yield('content')
+    <div id="content">
+      <div class="page-title-box py-1 d-flex align-items-center justify-content-between">
+        <div class="d-flex">
+          <h4 class="page-title mb-0">@yield('title')</h4>
+          <div class="ms-4 text-danger">@yield('page-title-after')</div>
+        </div>
+        <div class="text-nowrap">
+          @yield('page-title-right')
+          @hookinsert('panel.layout.right.button.after')
+        </div>
       </div>
 
-      <div class="page-bottom-btns">
-        @yield('page-bottom-btns')
-      </div>
+      <div class="container-fluid p-0 mt-3">
+        <div class="content-info">
+          @if (session()->has('errors'))
+            <x-common-alert type="danger" msg="{{ session('errors')->first() }}" class="mt-4"/>
+          @endif
+          @if (session('success'))
+            <x-common-alert type="success" msg="{{ session('success') }}" class="mt-4"/>
+          @endif
+          @yield('content')
+        </div>
 
-      <p class="text-center text-secondary mt-5">
-        <a href="https://www.innoshop.com" class="ms-2" target="_blank">InnoShop</a>
-        {{ innoshop_version() }} &copy; {{ date('Y') }} All Rights Reserved
-      </p>
+        <div class="page-bottom-btns">
+          @yield('page-bottom-btns')
+        </div>
+
+        <p class="text-center text-secondary mt-5">
+          <a href="https://www.innoshop.com" class="ms-2" target="_blank">InnoShop</a>
+          {{ innoshop_version() }} &copy; {{ date('Y') }} All Rights Reserved
+        </p>
+      </div>
     </div>
   </div>
-</div>
 
-@include('panel::layouts.footer')
+  @include('panel::layouts.footer')
 
-@stack('footer')
+  @stack('footer')
 </body>
 
 </html>

@@ -25,8 +25,8 @@
           <i class="bi bi-plus-lg fs-3 text-secondary"></i>
         </div>
       </div>
-      @hookinsert('panel.product.edit.img_upload.after')
     </div>
+    @hookinsert('panel.product.edit.img_upload.after')
     <span class="text-muted" style="font-size: 12px">
       <i class="bi bi-info-circle"></i> {{ __('panel/common.up_image_text') }}
       @if ($max)

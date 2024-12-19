@@ -79,8 +79,10 @@
             <li class="brand">
               <span class="title">{{ __('front/product.brand') }}:</span> <span class="value">
                 <a href="{{ $product->brand->url }}"> {{ $product->brand->name }} </a>
-              </span></li>
+              </span>
+            </li>
             @endif
+            @hookinsert('product.detail.brand.after')
           </ul>
 
           @include('products._variants')
@@ -94,9 +96,12 @@
             <div class="product-info-btns">
               <button class="btn btn-primary add-cart">{{ __('front/product.add_to_cart') }}</button>
               <button class="btn buy-now ms-2">{{ __('front/product.buy_now') }}</button>
+              @hookinsert('product.detail.cart.after')
             </div>
           </div>
-          <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"><i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}</div>
+          <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}">
+            <i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
+          </div>
           @hookinsert('product.detail.after')
         </div>
       </div>
@@ -150,7 +155,8 @@
 
       <div class="tab-pane fade" id="product-review" role="tabpanel">
         @include('products.review')
-      </div> 
+      </div>
+
       @hookinsert('product.detail.tab.pane.after')
     </div>
   </div>

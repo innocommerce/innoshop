@@ -46,9 +46,14 @@ class StateRepo extends BaseRepo
             $builder->where('country_code', $countryCode);
         }
 
+        $name = $filters['name'] ?? '';
+        if ($name) {
+            $builder->where('name', 'like', "%$name%");
+        }
+
         $code = $filters['code'] ?? '';
         if ($code) {
-            $builder->where('code', $code);
+            $builder->where('code', 'like', "%$code%");
         }
 
         return fire_hook_filter('repo.state.builder', $builder);

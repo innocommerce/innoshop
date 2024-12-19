@@ -3,7 +3,7 @@
 @section('title', __('panel/menu.orders'))
 
 @push('header')
-  <script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
+  <script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
   <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
   <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
 @endpush
@@ -16,7 +16,8 @@
       @endforeach
       <el-dialog v-model="statusDialog" title="{{ __('panel/order.status') }}" width="500">
         <div class="mb-2">{{ __('panel/order.comment') }}</div>
-        <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}" rows="3"></textarea>
+        <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}"
+                  rows="3"></textarea>
         <template #footer>
           <div class="dialog-footer">
             <el-button @click="statusDialog = false">{{ __('panel/common.close') }}</el-button>
@@ -149,6 +150,15 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="card-title mb-0">{{ __('front/checkout.order_comment') }}</h5>
+    </div>
+    <div class="card-body">
+      {{ $order->comment }}
     </div>
   </div>
 

@@ -9,9 +9,11 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Brand;
+use Throwable;
 
 class BrandRepo extends BaseRepo
 {
@@ -64,7 +66,7 @@ class BrandRepo extends BaseRepo
      *
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {
@@ -80,7 +82,7 @@ class BrandRepo extends BaseRepo
      * @param  $item
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update($item, $data): mixed
     {
@@ -95,7 +97,7 @@ class BrandRepo extends BaseRepo
      * @param  Brand  $brand
      * @param  $data
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function createOrUpdate(Brand $brand, $data): void
     {
@@ -107,7 +109,7 @@ class BrandRepo extends BaseRepo
             $brand->saveOrFail();
 
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
@@ -127,5 +129,50 @@ class BrandRepo extends BaseRepo
             'position' => $data['position'] ?? 0,
             'active'   => $data['active']   ?? true,
         ];
+    }
+
+    /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        $builder = Brand::query();
+        if ($keyword) {
+            $builder->where('name', 'like', "%{$keyword}%");
+        }
+
+        return $builder->limit($limit)->get();
+    }
+
+    /**
+     * Get brand list by IDs.
+     *
+     * @param  mixed  $BrandIDs
+     * @return mixed
+     */
+    public function getListByBrandIDs(mixed $BrandIDs): mixed
+    {
+        if (empty($BrandIDs)) {
+            return [];
+        }
+        if (is_string($BrandIDs)) {
+            $BrandIDs = explode(',', $BrandIDs);
+        }
+
+        return Brand::query()
+            ->whereIn('id', $BrandIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $BrandIDs).')')
+            ->get();
+    }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Brand::query()->find($id)->name ?? '';
     }
 }

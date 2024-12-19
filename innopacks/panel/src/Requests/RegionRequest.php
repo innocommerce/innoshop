@@ -31,8 +31,7 @@ class RegionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => 'string|required|max:32',
-            'description' => 'string|required',
+            'name' => 'string|required|max:32',
         ];
     }
 }

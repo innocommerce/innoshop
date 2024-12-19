@@ -7,6 +7,14 @@
 @hookinsert('cart.top')
 
 <div class="container">
+
+  @if (session()->has('errors'))
+    <x-common-alert type="danger" msg="{{ session('errors')->first() }}" class="mt-4"/>
+  @endif
+  @if (session('success'))
+    <x-common-alert type="success" msg="{{ session('success') }}" class="mt-4"/>
+  @endif
+
   @if (count($list))
     <div class="row">
       <div class="col-12 col-md-9">
@@ -170,7 +178,7 @@
       if (res.success) {
         inno.msg(res.message)
         $('.total-amount').text(res.data.amount_format);
-        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total);
+        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total_format);
         if (method == 'delete') {
           $(`tr[data-id=${id}]`).remove();
           if (!$('.products-table tbody tr').length) {
@@ -189,7 +197,7 @@
       if (res.success) {
         inno.msg(res.message)
         $('.total-amount').text(res.data.amount_format);
-        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total);
+        $('.total-total, .header-cart-icon .icon-quantity').text(res.data.total_format);
       }
     })
   }

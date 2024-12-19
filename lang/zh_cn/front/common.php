@@ -8,14 +8,17 @@
  */
 
 return [
+    'about_us'          => '关于',
     'action'            => '操作',
     'add'               => '添加',
     'all'               => '全部',
     'back_page'         => '返回上一页',
+    'brands'            => '品牌',
     'cancel'            => '取消',
     'confirm'           => '确定',
     'created_at'        => '创建时间',
     'date'              => '日期',
+    'default'           => '默认',
     'delete'            => '删除',
     'delete_confirm'    => '确定要删除吗？',
     'deleted_success'   => '删除成功',
@@ -48,4 +51,5 @@ return [
     'updated_success'   => '更新成功',
     'view'              => '查看',
     'yes'               => '是',
+    'specials'          => '链接',
 ];

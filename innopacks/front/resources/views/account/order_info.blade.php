@@ -16,8 +16,8 @@
           <div class="account-card-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/order.order_details') }}</span>
             @if($order->status == 'unpaid')
-              <a href="{{ front_route('orders.pay', ['number'=>$order->number]) }}"
-                 class="btn btn-primary">{{ __('front/order.continue_pay') }}</a>
+              <a href="{{ front_route('orders.pay', ['number'=>$order->number]) }}" class="btn btn-primary">{{
+            __('front/order.continue_pay') }}</a>
             @elseif($order->status == 'completed')
               <a href="{{ account_route('order_returns.create', ['order_number'=>$order->number]) }}"
                  class="btn btn-primary">{{ __('front/order.create_rma') }}</a>
@@ -72,12 +72,11 @@
                     </div>
                   </td>
                   <td>
-                    <button type="button" class="btn btn-sm btn-primary add_review"
-                            data-bs-toggle="modal" data-bs-target="#addReview-Modal"
-                            data-name="{{ $product['name'] }}" data-image="{{ $product['image'] }}"
-                            data-ordernumber="{{ $product['order_number'] }}"
-                            data-label="{{ $product['variant_label'] }}"
-                            data-orderitemid="{{ $product['id'] }}" data-productsku="{{ $product['product_sku'] }}">
+                    <button type="button" class="btn btn-sm btn-primary add_review" data-bs-toggle="modal"
+                            data-bs-target="#addReview-Modal" data-name="{{ $product['name'] }}"
+                            data-image="{{ $product['image'] }}" data-ordernumber="{{ $product['order_number'] }}"
+                            data-label="{{ $product['variant_label'] }}" data-orderitemid="{{ $product['id'] }}"
+                            data-productsku="{{ $product['product_sku'] }}">
                       {{ __('front/order.add_review') }}</button>
                   </td>
                   <td>{{ $product['price_format'] }}</td>
@@ -104,40 +103,45 @@
             </table>
           </div>
 
-          <div class="account-card-sub-title d-flex justify-content-between align-items-center">
-            <span class="fw-bold">{{ __('common/address.address') }}</span>
-          </div>
-
           <div class="row mb-4">
             <div class="col-12 col-md-6">
               <div class="address-card">
                 <div class="address-card-header mb-3">
-                  <h5 class="address-card-title border-bottom pb-3">{{ __('common/address.shipping_address') }}</h5>
+                  <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.shipping_address') }}</h5>
                 </div>
                 <div class="address-card-body">
                   <p>{{ $order->shipping_customer_name }}</p>
                   <p>{{ $order->shipping_address_1 }} {{ $order->shipping_address_2 }}</p>
                   <p>{{ $order->shipping_city }}</p>
                   <p>{{ $order->shipping_state }}, {{ $order->shipping_country }}</p>
-                  <p>Phone: {{ $order->shipping_telephone }}</p>
+                  <p>{{ __('common/address.phone') }}: {{ $order->shipping_telephone }}</p>
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-6">
               <div class="address-card">
                 <div class="address-card-header mb-3">
-                  <h5 class="address-card-title border-bottom pb-3">{{ __('common/address.billing_address') }}</h5>
+                  <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.billing_address') }}</h5>
                 </div>
                 <div class="address-card-body">
                   <p>{{ $order->billing_customer_name }}</p>
                   <p>{{ $order->billing_address_1 }} {{ $order->billing_address_2 }}</p>
                   <p>{{ $order->billing_city }}</p>
                   <p>{{ $order->billing_state }}, {{ $order->billing_country }}</p>
-                  <p>Phone: {{ $order->billing_telephone }}</p>
+                  <p>{{ __('common/address.phone') }}: {{ $order->billing_telephone }}</p>
                 </div>
               </div>
             </div>
           </div>
+
+          @if($order->comment)
+            <div class="account-card-sub-title d-flex justify-content-between align-items-center">
+              <span class="fw-bold">{{ __('front/checkout.order_comment') }}</span>
+            </div>
+            <div class="mb-4">
+              <span class="d-inline-block" tabindex="0">{{ $order->comment }}</span>
+            </div>
+          @endif
 
           <div class="account-card-sub-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/order.order_history') }}</span>
@@ -168,14 +172,13 @@
     </div>
   </div>
 
-  <div class="modal fade modal-lg" id="addReview-Modal" tabindex="-1"
-       aria-labelledby="addReview-Modal-Label" aria-hidden="true">
+  <div class="modal fade modal-lg" id="addReview-Modal" tabindex="-1" aria-labelledby="addReview-Modal-Label"
+       aria-hidden="true">
     <div class="modal-dialog  modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="addReview-Modal-Label">{{ __('front/order.add_review') }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"
-                  aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="{{ account_route('reviews.store') }}" method="POST">
           <div class="modal-body">
@@ -210,8 +213,10 @@
                       </tbody>
                     </table>
                   </div>
-                  <label class="col-8 text-left font-size-25 mb-0" for="review"><h5>
-                      {{ __('front/product.input_your_review')}}</h5></label>
+                  <label class="col-8 text-left font-size-25 mb-0" for="review">
+                    <h5>
+                      {{ __('front/product.input_your_review')}}</h5>
+                  </label>
 
                   <div class="rating col-4 text-end">
                     <input type="radio" name="rating" value="5" id="5">

@@ -41,6 +41,7 @@ return new class extends Migration
             $table->string('zipcode')->comment('Zip Code');
             $table->string('address_1')->comment('Address 1');
             $table->string('address_2')->comment('Address 2');
+            $table->boolean('default')->default(false)->comment('Default Address');
             $table->timestamps();
         });
 
@@ -253,6 +254,7 @@ return new class extends Migration
             $table->string('shipping_method_code')->comment('Shipping Method Code');
             $table->integer('billing_address_id')->index('c_ba_id')->comment('Billing Address ID');
             $table->string('billing_method_code')->comment('Billing Method Code');
+            $table->text('comment')->nullable()->comment('Checkout Comment');
             $table->json('reference')->nullable()->comment('Order Extra');
             $table->timestamps();
         });
@@ -295,7 +297,7 @@ return new class extends Migration
             $table->unsignedInteger('customer_group_id')->index('customer_group_id')->comment('Customer Group ID');
             $table->string('locale', 10)->comment('Locale Code');
             $table->string('name', 256)->comment('Name');
-            $table->text('description')->comment(' Translation');
+            $table->text('description')->nullable()->comment(' Translation');
             $table->timestamps();
         });
 
@@ -554,6 +556,7 @@ return new class extends Migration
             $table->string('billing_address_1')->comment('Billing Address 1');
             $table->string('billing_address_2')->comment('Billing Address 1');
             $table->string('billing_zipcode')->comment('Billing Address Zipcode');
+            $table->text('comment')->nullable()->comment('Order Comment');
             $table->timestamps();
             $table->softDeletes()->comment('Deleted At');
         });
@@ -724,7 +727,7 @@ return new class extends Migration
             $table->comment('Region');
             $table->bigIncrements('id')->comment('ID');
             $table->string('name')->comment('Region Name');
-            $table->string('description')->comment('Regin Description');
+            $table->string('description')->nullable()->comment('Regin Description');
             $table->integer('position')->default(0)->comment('Sort order');
             $table->boolean('active')->default(true)->comment('Active');
             $table->timestamps();
@@ -815,7 +818,7 @@ return new class extends Migration
             $table->comment('Tax Class');
             $table->bigIncrements('id')->comment('ID');
             $table->string('name')->comment('Tax Class Name');
-            $table->string('description')->comment('Tax Description');
+            $table->string('description')->nullable()->comment('Tax Description');
             $table->timestamps();
         });
 

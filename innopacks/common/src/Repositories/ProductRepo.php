@@ -195,10 +195,12 @@ class ProductRepo extends BaseRepo
                 $product->skus()->delete();
                 $product->translations()->delete();
                 $product->productAttributes()->delete();
+                $product->relations()->delete();
             }
 
             $product->translations()->createMany($this->handleTranslations($data['translations']));
             $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
+            $product->relations()->createMany($this->handleRelations($data['related_ids'] ?? []));
             $product->categories()->sync($data['categories'] ?? []);
 
             if (isset($data['images'])) {
@@ -334,6 +336,22 @@ class ProductRepo extends BaseRepo
                 continue;
             }
             $items[] = $attribute;
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param  $relationIDs
+     * @return array
+     */
+    private function handleRelations($relationIDs): array
+    {
+        $items = [];
+        foreach ($relationIDs as $relationID) {
+            $items[] = [
+                'relation_id' => $relationID,
+            ];
         }
 
         return $items;
@@ -545,17 +563,14 @@ class ProductRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
-        if (empty($keyword)) {
-            return [];
+        $builder = Product::query()->with(['translation', 'masterSku']);
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            });
         }
 
-        return Product::query()
-            ->with(['translation', 'masterSku'])
-            ->whereHas('translation', function ($query) use ($keyword) {
-                $query->where('name', 'like', "%{$keyword}%");
-            })
-            ->limit($limit)
-            ->get();
+        return $builder->limit($limit)->get();
     }
 
     /**

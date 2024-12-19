@@ -18,14 +18,14 @@ use Throwable;
 class CategoryRepo extends BaseRepo
 {
     /**
-     * @param  array|null  $categoryIds
+     * @param  array|null  $categoryIDs
      * @return array
      */
-    public function getTwoLevelCategories(?array $categoryIds = []): array
+    public function getTwoLevelCategories(?array $categoryIDs = []): array
     {
         $filters = ['active' => true, 'parent_id' => 0];
-        if ($categoryIds) {
-            $filters['category_ids'] = $categoryIds;
+        if ($categoryIDs) {
+            $filters['category_ids'] = $categoryIDs;
         }
 
         $catalogs = $this->builder($filters)
@@ -86,9 +86,14 @@ class CategoryRepo extends BaseRepo
             }
         }
 
-        $categoryIds = $filters['category_ids'] ?? [];
-        if ($categoryIds) {
-            $builder->whereIn('id', $categoryIds);
+        $excludeIDs = $filters['exclude_ids'] ?? [];
+        if ($excludeIDs) {
+            $builder->whereNotIn('id', $excludeIDs);
+        }
+
+        $categoryIDs = $filters['category_ids'] ?? [];
+        if ($categoryIDs) {
+            $builder->whereIn('id', $categoryIDs);
         }
 
         if (isset($filters['active'])) {
@@ -226,5 +231,53 @@ class CategoryRepo extends BaseRepo
                 $this->create($childData);
             }
         }
+    }
+
+    /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        $builder = Category::query()->with(['translation']);
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            });
+        }
+
+        return $builder->limit($limit)->get();
+    }
+
+    /**
+     * Get product list by IDs.
+     *
+     * @param  mixed  $categoryIDs
+     * @return mixed
+     */
+    public function getListByCategoryIDs(mixed $categoryIDs): mixed
+    {
+        if (empty($categoryIDs)) {
+            return [];
+        }
+        if (is_string($categoryIDs)) {
+            $categoryIDs = explode(',', $categoryIDs);
+        }
+
+        return Category::query()
+            ->with(['translation'])
+            ->whereIn('id', $categoryIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $categoryIDs).')')
+            ->get();
+    }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Category::query()->find($id)->description->name ?? '';
     }
 }

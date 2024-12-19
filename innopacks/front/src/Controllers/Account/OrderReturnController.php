@@ -20,7 +20,7 @@ use Throwable;
 
 class OrderReturnController extends BaseController
 {
-    public function index(Request $request)
+    public function index()
     {
         $data = [
             'order_returns' => OrderReturnRepo::getInstance()->list(),
@@ -71,10 +71,15 @@ class OrderReturnController extends BaseController
         }
     }
 
-    public function show(OrderReturn $orderReturn)
+    /**
+     * @param  OrderReturn  $orderReturn
+     * @return mixed
+     */
+    public function show(OrderReturn $orderReturn): mixed
     {
         $data = [
             'order_return' => $orderReturn,
+            'histories'    => $orderReturn->histories()->orderByDesc('id')->get(),
         ];
 
         return inno_view('account.order_return_show', $data);

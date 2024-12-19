@@ -23,7 +23,6 @@ use InnoShop\Common\Resources\AttributeSimple;
 use InnoShop\Common\Resources\AttributeValueSimple;
 use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Panel\Requests\ProductRequest;
-use Throwable;
 
 class ProductController extends BaseController
 {
@@ -57,7 +56,7 @@ class ProductController extends BaseController
     /**
      * @param  ProductRequest  $request
      * @return RedirectResponse
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function store(ProductRequest $request): RedirectResponse
     {
@@ -118,7 +117,7 @@ class ProductController extends BaseController
      * @param  ProductRequest  $request
      * @param  Product  $product
      * @return RedirectResponse
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {

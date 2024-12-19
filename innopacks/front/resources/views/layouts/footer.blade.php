@@ -8,7 +8,7 @@
           <div class="col-12 col-md-4 footer-item">
             <div class="about">
               <div class="footer-link-title">
-                <span>About us</span>
+                <span>{{ __('front/common.about_us') }}</span>
                 <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
               </div>
               <div class="about-text footer-item-content">
@@ -20,7 +20,7 @@
           </div>
           <div class="col-12 col-md-8">
             <div class="row">
-              <div class="col-12 col-md-4 footer-item">
+              <div class="col-12 col-md-3 footer-item">
                 <div class="footer-links">
                   <div class="footer-link-title">
                     <span>{{ __('front/common.products') }}</span>
@@ -33,7 +33,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="col-12 col-md-4 footer-item">
+              <div class="col-12 col-md-3 footer-item">
                 <div class="footer-links">
                   <div class="footer-link-title">
                     <span>{{ __('front/common.news') }}</span>
@@ -46,7 +46,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="col-12 col-md-4 footer-item">
+              <div class="col-12 col-md-3 footer-item">
                 <div class="footer-links">
                   <div class="footer-link-title">
                     <span>{{ __('front/common.pages') }}</span>
@@ -54,6 +54,19 @@
                   </div>
                   <ul class="footer-item-content">
                     @foreach($footer_menus['pages'] as $item)
+                      <li><a href="{{ $item['url'] }}">{{ $item['name'] }}</a></li>
+                    @endforeach
+                  </ul>
+                </div>
+              </div>
+              <div class="col-12 col-md-3 footer-item">
+                <div class="footer-links">
+                  <div class="footer-link-title">
+                    <span>{{ __('front/common.specials') }}</span>
+                    <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
+                  </div>
+                  <ul class="footer-item-content">
+                    @foreach($footer_menus['specials'] as $item)
                       <li><a href="{{ $item['url'] }}">{{ $item['name'] }}</a></li>
                     @endforeach
                   </ul>

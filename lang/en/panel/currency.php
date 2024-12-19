@@ -8,12 +8,13 @@
  */
 
 return [
-    'name'                           => 'Name',
-    'code'                           => 'Code',
-    'symbol_left'                    => 'Left Symbol',
-    'symbol_right'                   => 'Right Symbol',
-    'decimal_place'                  => 'Decimal',
-    'value'                          => 'Value',
-    'active'                         => 'Active',
-    'cannot_delete_default_currency' => 'Cannot delete default currency.',
+    'name'                            => 'Name',
+    'code'                            => 'Code',
+    'symbol_left'                     => 'Left Symbol',
+    'symbol_right'                    => 'Right Symbol',
+    'decimal_place'                   => 'Decimal',
+    'value'                           => 'Value',
+    'active'                          => 'Active',
+    'cannot_delete_default_currency'  => 'Cannot delete default currency.',
+    'cannot_disable_default_currency' => 'Cannot disable default currency.',
 ];

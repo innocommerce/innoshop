@@ -38,6 +38,7 @@ class CheckoutSimple extends JsonResource
             'billing_method_code'  => $this->billing_method_code,
             'billing_method_name'  => $billingPlugin ? $billingPlugin->getLocaleName() : '',
             'reference'            => $this->reference,
+            'comment'              => $this->comment,
         ];
     }
 }

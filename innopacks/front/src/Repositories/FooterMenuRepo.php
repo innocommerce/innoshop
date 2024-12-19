@@ -13,6 +13,7 @@ use Exception;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\PageRepo;
+use InnoShop\Common\Repositories\SpecialPageRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Common\Resources\PageSimple;
 
@@ -38,9 +39,24 @@ class FooterMenuRepo
             'categories' => $this->getCategories(system_setting('menu_footer_categories')),
             'catalogs'   => $this->getCatalogs(system_setting('menu_footer_catalogs')),
             'pages'      => $this->getPages(system_setting('menu_footer_pages')),
+            'specials'   => $this->getSpecials(system_setting('menu_footer_specials')),
         ];
 
         return fire_hook_filter('global.footer.menus', $menus);
+    }
+
+    /**
+     * @param  $specials
+     * @return array
+     * @throws Exception
+     */
+    public function getSpecials($specials): array
+    {
+        if (empty($specials)) {
+            return [];
+        }
+
+        return SpecialPageRepo::getInstance()->getSpecialLinks($specials);
     }
 
     /**

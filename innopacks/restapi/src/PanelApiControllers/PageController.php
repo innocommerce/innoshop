@@ -40,7 +40,7 @@ class PageController extends BaseController
      */
     public function names(Request $request): AnonymousResourceCollection
     {
-        $pages = PageRepo::getInstance()->getListByPageIDs($request->get('page_ids'));
+        $pages = PageRepo::getInstance()->getListByPageIDs($request->get('ids'));
 
         return PageName::collection($pages);
     }

@@ -102,7 +102,7 @@
                 }
             }).catch(function (err) {
                 parent.layer.closeAll()
-                layer.msg(err.message,{ icon:2 })
+                console.log(err.response.data.message)
             })
         })
 

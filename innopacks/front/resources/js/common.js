@@ -36,7 +36,7 @@ export default {
         layer.msg(res.message)
       }
 
-      $('.header-cart-icon .icon-quantity').text(res.data.total)
+      $('.header-cart-icon .icon-quantity').text(res.data.total_format)
 
       if (callback) {
         callback(res)
@@ -84,7 +84,7 @@ export default {
 
   getCarts() {
     axios.get(urls.cart_mini).then((res) => {
-      $('.header-cart-icon .icon-quantity').text(res.data.total)
+      $('.header-cart-icon .icon-quantity').text(res.data.total_format)
     })
   },
 

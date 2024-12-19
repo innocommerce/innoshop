@@ -3,7 +3,7 @@
 @section('title', __('panel/menu.order_returns'))
 
 @push('header')
-  <script src="{{ asset('vendor/vue/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
+  <script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
   <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
   <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
 @endpush
@@ -55,13 +55,13 @@
           </thead>
           <tbody>
           <tr>
-            <td>{{ old('order_number', $order_return->order_number) }}</td>
-            <td>{{ old('number', $order_return->number) }}</td>
-            <td>{{ old('opened', $order_return->opened ? __('front/common.yes') : __('front/common.no')) }}</td>
-            <td>{{ old('product_name', $order_return->product_name) }}</td>
-            <td>{{ old('status', $order_return->status_format) }}</td>
-            <td>{{ old('comment', $order_return->comment) }}</td>
-            <td>{{ old('quantity', $order_return->quantity) }}</td>
+            <td>{{ $order_return->order_number }}</td>
+            <td>{{ $order_return->number }}</td>
+            <td>{{ $order_return->opened ? __('front/common.yes') : __('front/common.no') }}</td>
+            <td>{{ $order_return->product_name }}</td>
+            <td>{{ $order_return->status_format }}</td>
+            <td>{{ $order_return->comment }}</td>
+            <td>{{ $order_return->quantity }}</td>
           </tr>
           </tbody>
         </table>
@@ -85,7 +85,7 @@
         <tbody>
         @foreach($order_return->histories as $history)
           <tr>
-            <td data-title="State">{{ $history->status }}</td>
+            <td data-title="State">{{ $history->status_format }}</td>
             <td data-title="Remark">{{ $history->comment }}</td>
             <td data-title="Update Time">{{ $history->created_at }}</td>
           </tr>

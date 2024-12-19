@@ -10,6 +10,8 @@
 namespace InnoShop\Common\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use InnoShop\Common\Models\Country;
 
 class CountryRepo extends BaseRepo
@@ -20,11 +22,28 @@ class CountryRepo extends BaseRepo
     public static function getCriteria(): array
     {
         return [
-            ['name' => 'id', 'type' => 'input', 'label' => trans('panel/common.id')],
             ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
             ['name' => 'code', 'type' => 'input', 'label' => trans('panel/currency.code')],
             ['name' => 'continent', 'type' => 'input', 'label' => trans('panel/country.continent')],
         ];
+    }
+
+    /**
+     * @param  array  $filters
+     * @return LengthAwarePaginator
+     */
+    public function list(array $filters = []): LengthAwarePaginator
+    {
+        return $this->builder($filters)->orderByDesc('id')->paginate();
+    }
+
+    /**
+     * @param  array  $filters
+     * @return Collection
+     */
+    public function getCountries(array $filters = []): Collection
+    {
+        return $this->withActive()->builder($filters)->orderBy('position')->orderBy('name')->get();
     }
 
     /**
@@ -34,7 +53,26 @@ class CountryRepo extends BaseRepo
     public function builder(array $filters = []): Builder
     {
         $builder = Country::query();
-        $builder->orderBy('position')->orderBy('name');
+        $filters = array_merge($this->filters, $filters);
+
+        $name = $filters['name'] ?? '';
+        if ($name) {
+            $builder->where('name', 'like', "%$name%");
+        }
+
+        $code = $filters['code'] ?? '';
+        if ($code) {
+            $builder->where('code', 'like', "%$code%");
+        }
+
+        $continent = $filters['continent'] ?? '';
+        if ($continent) {
+            $builder->where('continent', 'like', "%$continent%");
+        }
+
+        if (isset($filters['active'])) {
+            $builder->where('active', (bool) $filters['active']);
+        }
 
         return fire_hook_filter('repo.country.builder', $builder);
     }

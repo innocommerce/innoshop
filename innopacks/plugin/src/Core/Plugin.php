@@ -353,6 +353,19 @@ final class Plugin implements Arrayable, ArrayAccess
     }
 
     /**
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getSetting(string $key = ''): mixed
+    {
+        if ($key) {
+            return plugin_setting($this->code, $key);
+        }
+
+        return plugin_setting($this->code);
+    }
+
+    /**
      * Retrieve the corresponding setting fields of the plugin,
      * and obtain the field values that have been stored in the database.
      *

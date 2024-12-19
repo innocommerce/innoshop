@@ -152,6 +152,45 @@ class CatalogRepo extends BaseRepo
     }
 
     /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        $builder = Catalog::query()->with(['translation']);
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('title', 'like', "%{$keyword}%");
+            });
+        }
+
+        return $builder->limit($limit)->get();
+    }
+
+    /**
+     * Get catalog list by IDs.
+     *
+     * @param  mixed  $CatalogIDs
+     * @return mixed
+     */
+    public function getListByCatalogIDs(mixed $CatalogIDs): mixed
+    {
+        if (empty($CatalogIDs)) {
+            return [];
+        }
+        if (is_string($CatalogIDs)) {
+            $CatalogIDs = explode(',', $CatalogIDs);
+        }
+
+        return Catalog::query()
+            ->with('translation')
+            ->whereIn('id', $CatalogIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $CatalogIDs).')')
+            ->get();
+    }
+
+    /**
      * @return string[]
      */
     private function handleData($requestData): array
@@ -162,5 +201,14 @@ class CatalogRepo extends BaseRepo
             'position'  => (int) ($requestData['position'] ?? 0),
             'active'    => (bool) ($requestData['active'] ?? true),
         ];
+    }
+
+    /**
+     * @param  $id
+     * @return string
+     */
+    public function getNameByID($id): string
+    {
+        return Catalog::query()->find($id)->description->name ?? '';
     }
 }

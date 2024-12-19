@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\TaxClass;
@@ -66,22 +67,18 @@ class TaxClassController extends BaseController
 
     /**
      * @param  TaxClassRequest  $request
-     * @return RedirectResponse
+     * @return JsonResponse
      * @throws Throwable
      */
-    public function store(TaxClassRequest $request): RedirectResponse
+    public function store(TaxClassRequest $request): JsonResponse
     {
         try {
             $data     = $request->all();
             $taxClass = TaxClassRepo::getInstance()->create($data);
 
-            return redirect(panel_route('tax_classes.index'))
-                ->with('instance', $taxClass)
-                ->with('success', panel_trans('common.updated_success'));
+            return create_json_success($taxClass);
         } catch (Exception $e) {
-            return redirect(panel_route('tax_classes.index'))
-                ->withInput()
-                ->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 
@@ -116,21 +113,17 @@ class TaxClassController extends BaseController
     /**
      * @param  TaxClassRequest  $request
      * @param  TaxClass  $taxClass
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function update(TaxClassRequest $request, TaxClass $taxClass): RedirectResponse
+    public function update(TaxClassRequest $request, TaxClass $taxClass): JsonResponse
     {
         try {
-            $data = $request->all();
-            TaxClassRepo::getInstance()->update($taxClass, $data);
+            $data     = $request->all();
+            $taxClass = TaxClassRepo::getInstance()->update($taxClass, $data);
 
-            return redirect(panel_route('tax_classes.index'))
-                ->with('instance', $taxClass)
-                ->with('success', panel_trans('common.updated_success'));
+            return update_json_success($taxClass);
         } catch (Exception $e) {
-            return redirect(panel_route('tax_classes.index'))
-                ->withInput()
-                ->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 

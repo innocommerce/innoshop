@@ -41,7 +41,6 @@ class ArticleRequest extends FormRequest
             'slug'       => $slugRule,
             'position'   => 'integer',
             'viewed'     => 'integer',
-            'active'     => 'bool',
 
             'translations.*.locale'  => 'required',
             'translations.*.title'   => 'required',

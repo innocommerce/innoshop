@@ -30,6 +30,7 @@ class BrandSimple extends JsonResource
             'name'     => $this->name,
             'slug'     => $this->slug,
             'logo_url' => image_resize($this->logo),
+            'active'   => (bool) $this->active,
         ];
     }
 }
