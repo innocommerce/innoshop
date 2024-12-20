@@ -245,7 +245,7 @@
           const skuId = $('.product-quantity').data('sku-id');
           const isBuyNow = $(this).hasClass('buy-now');
 
-          inno.addCart({sku_id:skuId, quantity, isBuyNow}, this, function (res) {
+          inno.addCart({skuId, quantity, isBuyNow}, this, function (res) {
             if (isBuyNow) {
               window.location.href = '{{ front_route('carts.index') }}';
             }
