@@ -519,7 +519,7 @@ return new class extends Migration
             $table->integer('customer_group_id')->index('o_cg_id')->comment('Customer Group ID');
             $table->integer('shipping_address_id')->index('o_sa_id')->comment('Shipping Address ID');
             $table->integer('billing_address_id')->index('o_pa_id')->comment('Billing Address  ID');
-            $table->string('customer_name')->comment('Customer名称');
+            $table->string('customer_name')->comment('Customer Name');
             $table->string('email')->comment('Customer Email');
             $table->integer('calling_code')->comment('Calling Code');
             $table->string('telephone')->comment('Telephone');
