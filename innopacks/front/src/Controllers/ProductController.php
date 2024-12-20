@@ -52,7 +52,9 @@ class ProductController extends Controller
         }
 
         $skuId = $request->get('sku_id');
-
+        
+        $product = fire_hook_filter('front.product.show.after',$product);
+        
         return $this->renderShow($product, $skuId);
     }
 
@@ -68,6 +70,8 @@ class ProductController extends Controller
 
         $skuId = $request->get('sku_id');
 
+        $product = fire_hook_filter('front.product.slugshow.after',$product);
+        
         return $this->renderShow($product, $skuId);
     }
 
