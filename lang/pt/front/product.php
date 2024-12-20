@@ -28,4 +28,5 @@ return [
     'view_details'          => 'Ver Detalhes',
     'visit_order_to_review' => 'Por favor, vá ao centro da conta para deixar um comentário',
     'your_review'           => 'Seu Comentário',
+    'related_product'       => 'Produtos relacionados',
 ];

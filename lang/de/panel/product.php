@@ -52,5 +52,12 @@ return [
     'variant_value_help'      => 'Variantenwert, z.B. Rot',
     'viewed'                  => 'Aufrufe',
     'weight'                  => 'Gewicht',
-    'weight_class'            => 'Gewichtsklasse',
+    'weight_class'            => 'Gewichtseinheit',
+    'batch_fill'              => 'Stapelfüllung',
+    'batch_fill_sku'          => 'SKU-Präfix eingeben',
+    'batch_fill_price'        => 'Einheitspreis',
+    'batch_fill_origin_price' => 'Einheitlicher Originalpreis',
+    'batch_fill_model'        => 'Einheitliches Modell',
+    'batch_fill_quantity'     => 'Einheitlicher Bestand',
+    'batch_fill_apply'        => 'Anwenden',
 ];

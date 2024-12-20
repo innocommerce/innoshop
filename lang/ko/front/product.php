@@ -28,4 +28,5 @@ return [
     'view_details'          => '상세 보기',
     'visit_order_to_review' => '개인 센터로 가서 리뷰를 남겨주세요',
     'your_review'           => '내 리뷰',
+    'related_product'       => '관련 상품',
 ];

@@ -1021,6 +1021,18 @@ if (! function_exists('to_sql')) {
     }
 }
 
+if (! function_exists('seller_enabled')) {
+    /**
+     * Get available locales
+     *
+     * @return bool
+     */
+    function seller_enabled(): bool
+    {
+        return class_exists(\InnoShop\Seller\SellerServiceProvider::class);
+    }
+}
+
 if (! function_exists('parsedown')) {
     /**
      * @param  string|null  $value

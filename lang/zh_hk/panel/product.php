@@ -53,4 +53,11 @@ return [
     'viewed'                  => '瀏覽量',
     'weight'                  => '重量',
     'weight_class'            => '重量單位',
+    'batch_fill'              => '一鍵填寫',
+    'batch_fill_sku'          => '輸入SKU前綴',
+    'batch_fill_price'        => '統一價格',
+    'batch_fill_origin_price' => '統一原價',
+    'batch_fill_model'        => '統一型號',
+    'batch_fill_quantity'     => '統一庫存',
+    'batch_fill_apply'        => '應用',
 ];

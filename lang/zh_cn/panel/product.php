@@ -53,4 +53,11 @@ return [
     'viewed'                  => '浏览量',
     'weight'                  => '重量',
     'weight_class'            => '重量单位',
+    'batch_fill'              => '一键填写',
+    'batch_fill_sku'          => '输入SKU前缀',
+    'batch_fill_price'        => '统一价格',
+    'batch_fill_origin_price' => '统一原价',
+    'batch_fill_model'        => '统一型号',
+    'batch_fill_quantity'     => '统一库存',
+    'batch_fill_apply'        => '应用',
 ];

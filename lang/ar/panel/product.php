@@ -53,4 +53,11 @@ return [
     'viewed'                  => 'المشاهدات',
     'weight'                  => 'الوزن',
     'weight_class'            => 'وحدة الوزن',
+    'batch_fill'              => 'تعبئة دفعة',
+    'batch_fill_sku'          => 'أدخل بادئة SKU',
+    'batch_fill_price'        => 'سعر موحد',
+    'batch_fill_origin_price' => 'سعر أصلي موحد',
+    'batch_fill_model'        => 'نموذج موحد',
+    'batch_fill_quantity'     => 'مخزون موحد',
+    'batch_fill_apply'        => 'تطبيق',
 ];

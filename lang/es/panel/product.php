@@ -53,4 +53,11 @@ return [
     'viewed'                  => 'Visto',
     'weight'                  => 'Peso',
     'weight_class'            => 'Unidad de peso',
+    'batch_fill'              => 'Relleno por lotes',
+    'batch_fill_sku'          => 'Ingresar prefijo SKU',
+    'batch_fill_price'        => 'Precio unificado',
+    'batch_fill_origin_price' => 'Precio original unificado',
+    'batch_fill_model'        => 'Modelo unificado',
+    'batch_fill_quantity'     => 'Stock unificado',
+    'batch_fill_apply'        => 'Aplicar',
 ];

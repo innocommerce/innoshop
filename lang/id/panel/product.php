@@ -52,5 +52,12 @@ return [
     'variant_value_help'      => 'Nilai varian, seperti: Merah',
     'viewed'                  => 'Dilihat',
     'weight'                  => 'Berat',
-    'weight_class'            => 'Unit Berat',
+    'weight_class'            => 'Satuan berat',
+    'batch_fill'              => 'Isi Massal',
+    'batch_fill_sku'          => 'Masukkan Awalan SKU',
+    'batch_fill_price'        => 'Harga Seragam',
+    'batch_fill_origin_price' => 'Harga Asli Seragam',
+    'batch_fill_model'        => 'Model Seragam',
+    'batch_fill_quantity'     => 'Stok Seragam',
+    'batch_fill_apply'        => 'Terapkan',
 ];

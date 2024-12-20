@@ -52,5 +52,12 @@ return [
     'variant_value_help'      => 'Valor da variação, ex: Vermelho',
     'viewed'                  => 'Visualizações',
     'weight'                  => 'Peso',
-    'weight_class'            => 'Unidade de Peso',
+    'weight_class'            => 'Unidade de peso',
+    'batch_fill'              => 'Preenchimento em lote',
+    'batch_fill_sku'          => 'Inserir prefixo SKU',
+    'batch_fill_price'        => 'Preço unificado',
+    'batch_fill_origin_price' => 'Preço original unificado',
+    'batch_fill_model'        => 'Modelo unificado',
+    'batch_fill_quantity'     => 'Estoque unificado',
+    'batch_fill_apply'        => 'Aplicar',
 ];
