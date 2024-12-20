@@ -32,10 +32,15 @@ class CartRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'skuId'    => 'required|integer',
+        $rules = [
             'quantity' => 'required|integer|min:1',
         ];
+
+        if (empty($this->cart->id)) {
+            $rules['sku_id'] = 'required|integer';
+        }
+
+        return $rules;
     }
 
     /**
