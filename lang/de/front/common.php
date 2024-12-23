@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'Über',
     'action'            => 'Aktion',
     'add'               => 'Hinzufügen',
     'all'               => 'Alle',
@@ -16,6 +17,7 @@ return [
     'confirm'           => 'Bestätigen',
     'created_at'        => 'Erstellungszeit',
     'date'              => 'Datum',
+    'default'           => 'Standardadresse',
     'delete'            => 'Löschen',
     'delete_confirm'    => 'Möchten Sie wirklich löschen?',
     'deleted_success'   => 'Erfolgreich gelöscht',

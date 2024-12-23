@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => '에 대해',
     'action'            => '작업',
     'add'               => '추가',
     'all'               => '전체',
@@ -16,6 +17,7 @@ return [
     'confirm'           => '확인',
     'created_at'        => '생성 시간',
     'date'              => '날짜',
+    'default'           => '기본 주소',
     'delete'            => '삭제',
     'delete_confirm'    => '정말 삭제하시겠습니까?',
     'deleted_success'   => '삭제 성공',
@@ -28,6 +30,7 @@ return [
     'logo'              => '로고',
     'name'              => '이름',
     'news'              => '뉴스',
+    'no'                => '아니요',
     'out_of_stock'      => '품절',
     'page_total_show'   => ':first번째부터 :last번째까지, 총 :total개',
     'pages'             => '페이지',
@@ -47,5 +50,4 @@ return [
     'updated_success'   => '업데이트 성공',
     'view'              => '보기',
     'yes'               => '예',
-    'no'                => '아니요',
 ];

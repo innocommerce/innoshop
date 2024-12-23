@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Catalog;
@@ -29,7 +30,7 @@ class CatalogController extends Controller
     /**
      * @param  Catalog  $catalog
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function show(Catalog $catalog): mixed
     {
@@ -48,7 +49,7 @@ class CatalogController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function slugShow(Request $request): mixed
     {

@@ -10,6 +10,7 @@
   <meta name="description" content="@yield('description', system_setting_locale('meta_description', 'innoshop是一款创新的开源电子商务平台，基于Laravel 11开发，具有多语言和多货币支持的特性。它采用了基于Hook的强大而灵活的插件架构，为用户提供了丰富的定制和扩展功能。欢迎体验innoshop，打造属于您自己的电子商务平台！'))">
   <meta name="generator" content="InnoShop {{ innoshop_version() }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="api-token" content="{{ session('front_api_token') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
   <link rel="stylesheet" href="{{ mix('themes/default/css/bootstrap.css') }}">
   <script src="{{ mix('themes/default/js/app.js') }}"></script>
@@ -18,6 +19,7 @@
   <link rel="stylesheet" href="{{ mix('themes/default/css/app.css') }}">
   <script>
     let urls = {
+      api_base: '{{ route('api.home.base') }}',
       base_url: '{{ front_route('home.index') }}',
       upload_images: '{{ front_root_route('upload.images') }}',
       cart_add: '{{ front_route('carts.store') }}',

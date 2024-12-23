@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use InnoShop\Common\Repositories\CartItemRepo;
 use InnoShop\Common\Resources\CartListItem;
+use Throwable;
 
 class CartService
 {
@@ -46,7 +47,7 @@ class CartService
      */
     public static function getInstance(int $customerID = 0, string $guestID = ''): static
     {
-        return new self($customerID, $guestID);
+        return new static($customerID, $guestID);
     }
 
     /**
@@ -91,7 +92,7 @@ class CartService
     /**
      * @param  $data
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function addCart($data): array
     {
@@ -195,9 +196,11 @@ class CartService
         $allCartItems      = $this->getCartItems();
         $selectedCartItems = $allCartItems->where('selected', true);
         $selectedAmount    = $selectedCartItems->sum('subtotal');
+        $quantityTotal     = $selectedCartItems->sum('quantity');
 
         return [
-            'total'         => $selectedCartItems->sum('quantity'),
+            'total'         => $quantityTotal,
+            'total_format'  => $quantityTotal <= 99 ? $quantityTotal : '99+',
             'amount'        => $selectedAmount,
             'amount_format' => currency_format($selectedAmount),
             'list'          => CartListItem::collection($allCartItems)->jsonSerialize(),
@@ -208,7 +211,7 @@ class CartService
      * @param  array  $data
      * @return array
      */
-    private function mergeAuthId(array $data): array
+    protected function mergeAuthId(array $data): array
     {
         $data['customer_id'] = $this->customerID;
 

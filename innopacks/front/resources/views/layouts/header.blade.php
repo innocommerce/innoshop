@@ -121,6 +121,7 @@
           <div class="item">
             <a href="{{ front_route('carts.index') }}" class="header-cart-icon"><img src="{{ asset('icon/cart.svg') }}" class="img-fluid"><span class="icon-quantity">0</span></a>
           </div>
+          @hookinsert('layouts.header.cart.after')
         </div>
       </div>
     </div>
@@ -153,7 +154,7 @@
         <div class="accordion accordion-flush" id="menu-accordion">
           <div class="accordion-item">
             <div class="nav-item-text">
-              <a class="nav-link {{ equal_route_name('home.index') ? 'active' : '' }}" aria-current="page" href="{{ front_route('home.index') }}">首页</a>
+              <a class="nav-link {{ equal_route_name('home.index') ? 'active' : '' }}" aria-current="page" href="{{ front_route('home.index') }}">{{ __('front/common.home') }}</a>
             </div>
           </div>
 

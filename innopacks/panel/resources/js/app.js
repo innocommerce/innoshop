@@ -15,26 +15,35 @@ $.ajaxSetup({
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
+const apiToken = document.querySelector('meta[name="api-token"]').getAttribute('content');
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
+$.ajaxSetup({
+  headers: {
+    'Authorization' : 'Bearer ' + apiToken,
+  }
+});
+window.apiToken = $.apiToken = apiToken;
+console.log('apiToken:' + apiToken);
 
 $(function () {
   tinymceInit();
 
-  $('.product-item-card').mouseenter(function (){
+  $('.product-item-card').mouseenter(function () {
     $(this).css('transform', 'translateY(-2%)').removeClass('shadow-sm').addClass('shadow-lg');
-  }).mouseleave(function (){
+  }).mouseleave(function () {
     $(this).css('transform', 'translateY(0)').removeClass('shadow-lg').addClass('shadow-sm');
   });
 
-  $('.plugin-market-nav-item').mouseenter(function (){
+  $('.plugin-market-nav-item').mouseenter(function () {
     $(this).addClass('panel-item-hover');
-  }).mouseleave(function (){
+  }).mouseleave(function () {
     $(this).removeClass('panel-item-hover');
   });
 
   $(document).on('click', '.is-alert .btn-close', function () {
     let top = 70;
     $('.is-alert').each(function () {
-      $(this).animate({top}, 100);
+      $(this).animate({ top }, 100);
       top += $(this).outerHeight() + 10;
     });
   })
@@ -57,22 +66,22 @@ $(function () {
     let formData = {
       locale_code: accordionBody.data('locale-code'),
       locale_name: accordionBody.data('locale-name'),
-      column_name:$(this).data('column'),
+      column_name: $(this).data('column'),
       column_value: inputEle.val()
     };
 
-    layer.load(2, {shade: [0.3,'#fff'] })
+    layer.load(2, { shade: [0.3, '#fff'] })
     axios.post(urls.ai_generate, formData, {}).then(function (res) {
       let message = res.data.message;
       inputEle.val(message);
     }).catch(function (err) {
-      layer.msg(err.response.data.message, {icon: 2});
+      layer.msg(err.response.data.message, { icon: 2 });
     }).finally(function () {
       layer.closeAll('loading');
     });
   });
 
-  $(document).on('focus', '.date input, .datetime input, .time input', function(event) {
+  $(document).on('focus', '.date input, .datetime input, .time input', function (event) {
     if (!$(this).prop('id')) $(this).prop('id', Math.random().toString(36).substring(2));
 
     $(this).attr('autocomplete', 'off');
@@ -84,6 +93,33 @@ $(function () {
       lang: $('html').prop('lang') == 'zh-cn' ? 'cn' : 'en'
     });
   });
+
+  // 添加文件管理器 iframe 方法到 inno 对象
+  window.inno.fileManagerIframe = function (callback, options = {}) {
+    const defaultOptions = {
+      type: 'image',
+      multiple: false
+    };
+
+    const finalOptions = { ...defaultOptions, ...options };
+
+    // 设置回调函数
+    window.fileManagerCallback = function (files) {
+      if (typeof callback === 'function') {
+        callback(files);
+      }
+    };
+
+    // 打开文件管理器
+    layer.open({
+      type: 2,
+      title: '文件管理器',
+      shadeClose: false,
+      shade: 0.8,
+      area: ['90%', '90%'],
+      content: '/panel/file_manager/iframe?type=' + finalOptions.type + '&multiple=' + (finalOptions.multiple ? '1' : '0')
+    });
+  };
 })
 
 const tinymceInit = () => {
@@ -112,26 +148,26 @@ const tinymceInit = () => {
       "微软雅黑='Microsoft YaHei';黑体=黑体;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Georgia=georgia,palatino;Helvetica=helvetica;Times New Roman=times new roman,times;Verdana=verdana,geneva",
     fontsize_formats: "10px 12px 14px 16px 18px 24px 36px 48px 56px 72px 96px",
     lineheight_formats: "1 1.1 1.2 1.3 1.4 1.5 1.7 2.4 3 4",
-    setup: function(ed) {
-      ed.ui.registry.addButton('toolbarImageButton',{
+    setup: function (ed) {
+      ed.ui.registry.addButton('toolbarImageButton', {
         icon: 'image',
-        onAction:function() {
+        onAction: function () {
           $('#form-upload').remove();
           $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
           $('#form-upload input[name=\'file\']').trigger('click');
-          $('#form-upload input[name=\'file\']').on('change', function() {
+          $('#form-upload input[name=\'file\']').on('change', function () {
             let file = this.files[0];
             let formData = new FormData();
             formData.append('image', file);
             formData.append('type', 'common');
-            layer.load(2, {shade: [0.3,'#fff'] })
+            layer.load(2, { shade: [0.3, '#fff'] })
             axios.post(urls.upload_images, formData, {}).then(function (res) {
-                let url = res.data.url;
-                ed.insertContent('<img src="' + url + '" class="img-fluid" />');
+              let url = res.data.url;
+              ed.insertContent('<img src="' + url + '" class="img-fluid" />');
             }).catch(function (err) {
-                layer.msg(err.response.data.message, {icon: 2});
+              layer.msg(err.response.data.message, { icon: 2 });
             }).finally(function () {
-                layer.closeAll('loading');
+              layer.closeAll('loading');
             });
           });
         }

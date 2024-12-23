@@ -134,4 +134,16 @@ class CustomerController extends BaseController
                 ->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * @param  Customer  $customer
+     * @return mixed
+     * @throws Exception
+     */
+    public function loginFrontend(Customer $customer): mixed
+    {
+        auth()->guard('customer')->loginUsingId($customer->id);
+
+        return redirect(account_route('index'));
+    }
 }

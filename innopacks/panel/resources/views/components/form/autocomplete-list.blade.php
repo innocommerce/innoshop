@@ -47,14 +47,14 @@
 @push('footer')
 <script>
   var values = @json($value);
-  axios.get('{{ $api }}?tag_ids=' + values.join(',')).then(function(res) {
+  axios.get('{{ $api }}/names?ids=' + values.join(',')).then(function(res) {
     var data = res.data;
     var list = $('.autocomplete-list-{{ $id }} ul');
     for (var i = 0; i < values.length; i++) {
       var value = values[i];
       for (var j = 0; j < data.length; j++) {
         var item = data[j];
-        if (item['id'] == value) {
+        if (item['id'] === value) {
           list.append(`
             <li class="list-group list-group-item">
               <span class="autocomplete-name">${item['name']}</span>

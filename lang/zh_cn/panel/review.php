@@ -11,5 +11,7 @@ return [
     'id'             => 'ID',
     'product'        => '产品',
     'rating'         => '评级',
+    'review'         => '评论',
     'review_content' => '评论内容',
+    'created_at'     => '评论时间',
 ];

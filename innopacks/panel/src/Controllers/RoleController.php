@@ -62,7 +62,7 @@ class RoleController extends BaseController
 
             return redirect(panel_route('roles.index'))
                 ->with('instance', $role)
-                ->with('success', panel_trans('common.created_success'));
+                ->with('success', panel_trans('common.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('roles.index'))
                 ->withInput()

@@ -8,5 +8,8 @@
  */
 
 return [
-    'articles' => 'Accueil des articles',
+    'articles'            => 'Page d\'accueil des articles',
+    'keyword'             => 'Entrez les mots-clés',
+    'news_classification' => 'Classification des nouvelles',
+    'search'              => 'Recherche',
 ];

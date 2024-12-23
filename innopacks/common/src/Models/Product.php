@@ -20,11 +20,12 @@ use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Models\Product\Video;
 use InnoShop\Common\Traits\HasPackageFactory;
+use InnoShop\Common\Traits\Replicate;
 use InnoShop\Common\Traits\Translatable;
 
 class Product extends BaseModel
 {
-    use HasPackageFactory, Translatable;
+    use HasPackageFactory, Replicate, Translatable;
 
     protected $fillable = [
         'brand_id', 'product_image_id', 'product_video_id', 'product_sku_id', 'tax_class_id', 'slug', 'is_virtual',
@@ -137,6 +138,14 @@ class Product extends BaseModel
     /**
      * @return BelongsToMany
      */
+    public function relationProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_relations', 'product_id', 'relation_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
     public function favCustomers(): BelongsToMany
     {
         return $this->belongsToMany(Customer::class, 'customer_favorites', 'product_id', 'customer_id');
@@ -191,9 +200,9 @@ class Product extends BaseModel
      *
      * @return bool
      */
-    public function is_multiple(): bool
+    public function isMultiple(): bool
     {
-        return $this->skus->count() > 1;
+        return $this->variables || $this->skus->count() > 1;
     }
 
     /**

@@ -31,12 +31,12 @@ export default {
     $btn.addClass('disabled').prepend('<span class="spinner-border spinner-border-sm me-1"></span>');
     $(document).find('.tooltip').remove();
 
-    axios.post(urls.cart_add, {skuId, quantity, buy_now: isBuyNow}).then((res) => {
+    axios.post(urls.cart_add, {sku_id: skuId, quantity, buy_now: isBuyNow}).then((res) => {
       if (!isBuyNow) {
         layer.msg(res.message)
       }
 
-      $('.header-cart-icon .icon-quantity').text(res.data.total)
+      $('.header-cart-icon .icon-quantity').text(res.data.total_format)
 
       if (callback) {
         callback(res)
@@ -84,7 +84,7 @@ export default {
 
   getCarts() {
     axios.get(urls.cart_mini).then((res) => {
-      $('.header-cart-icon .icon-quantity').text(res.data.total)
+      $('.header-cart-icon .icon-quantity').text(res.data.total_format)
     })
   },
 

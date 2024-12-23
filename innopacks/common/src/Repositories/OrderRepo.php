@@ -224,6 +224,7 @@ class OrderRepo extends BaseRepo
             'billing_address_1'      => $baData['address_1']                 ?? '',
             'billing_address_2'      => $baData['address_2']                 ?? '',
             'billing_zipcode'        => $baData['zipcode']                   ?? '',
+            'comment'                => $requestData['comment']              ?? '',
         ];
     }
 

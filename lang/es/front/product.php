@@ -27,4 +27,5 @@ return [
     'view_details'          => 'Ver detalles ahora',
     'visit_order_to_review' => 'Por favor visite el centro personal para dejar una reseña',
     'your_review'           => 'Tu reseña',
+    'related_product'       => 'Productos relacionados',
 ];

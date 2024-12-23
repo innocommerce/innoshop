@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Brand;
@@ -20,7 +21,7 @@ class BrandController extends BaseController
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request): mixed
     {
@@ -37,7 +38,7 @@ class BrandController extends BaseController
      * Brand creation page.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(): mixed
     {
@@ -58,7 +59,7 @@ class BrandController extends BaseController
             return redirect(panel_route('brands.index'))
                 ->with('instance', $brand)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect(panel_route('brands.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -68,7 +69,17 @@ class BrandController extends BaseController
     /**
      * @param  Brand  $brand
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
+     */
+    public function show(Brand $brand): mixed
+    {
+        return $this->form($brand);
+    }
+
+    /**
+     * @param  Brand  $brand
+     * @return mixed
+     * @throws Exception
      */
     public function edit(Brand $brand): mixed
     {
@@ -78,7 +89,7 @@ class BrandController extends BaseController
     /**
      * @param  $brand
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function form($brand): mixed
     {
@@ -104,7 +115,7 @@ class BrandController extends BaseController
             return redirect(panel_route('brands.index'))
                 ->with('instance', $brand)
                 ->with('success', panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect(panel_route('brands.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -121,7 +132,7 @@ class BrandController extends BaseController
             BrandRepo::getInstance()->destroy($brand);
 
             return back()->with('success', panel_trans('common.deleted_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }

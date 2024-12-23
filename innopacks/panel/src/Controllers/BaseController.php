@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,20 +38,20 @@ class BaseController extends Controller
 
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkModel(): void
     {
         if (empty($this->modelClass)) {
-            throw new \Exception('Please define model class first!');
+            throw new Exception('Please define model class first!');
         }
         if (! class_exists($this->modelClass)) {
-            throw new \Exception("Class $this->modelClass doesn't exit!");
+            throw new Exception("Class $this->modelClass doesn't exit!");
         }
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function active(Request $request, int $id): JsonResponse
     {
@@ -62,7 +63,7 @@ class BaseController extends Controller
             $item->saveOrFail();
 
             return json_success(panel_trans('common.updated_success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

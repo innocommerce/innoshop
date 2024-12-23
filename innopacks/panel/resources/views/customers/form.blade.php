@@ -52,7 +52,6 @@
           <button class="btn btn-sm add-address btn-outline-primary">{{ __('panel/common.add') }}</button>
         </div>
         <div class="card-body">
-          {{-- @dd($customer->addresses) --}}
           <table class="table table-bordered">
             <thead>
             <tr>

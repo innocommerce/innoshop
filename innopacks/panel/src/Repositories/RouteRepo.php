@@ -118,7 +118,7 @@ class RouteRepo
         }
         $parts = explode('\\', $controller);
 
-        return $parts[1];
+        return $parts[1] ?? '';
     }
 
     /**

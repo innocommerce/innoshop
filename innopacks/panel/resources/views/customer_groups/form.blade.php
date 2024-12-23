@@ -17,9 +17,9 @@
         @method($group->id ? 'PUT' : 'POST')
 
         <div class="row">
-          <div class="col-12 col-md-6"><x-common-form-input :multiple="true" title="{{ __('panel/common.name') }}" name="name" :value="old('name', $group->name)" required /></div>
+          <div class="col-12 col-md-6"><x-common-form-input :multiple="true" title="{{ __('panel/common.name') }}" name="name" :value="old('name', $group->translations)" required /></div>
           <div class="col-12 col-md-6"><x-common-form-input title="{{ __('panel/customer.level') }}" name="level" value="{{ old('level', $group->level) }}" required /></div>
-          <div class="col-12 col-md-6"><x-common-form-textarea :multiple="true" title="{{ __('panel/common.description') }}" name="description" :value="old('description', $group->description)" /></div>
+          <div class="col-12 col-md-6"><x-common-form-textarea :multiple="true" title="{{ __('panel/common.description') }}" name="description" :value="old('description', $group->translations)" /></div>
           <div class="col-12 col-md-6"><x-common-form-input title="{{ __('panel/customer.mini_cost') }}" name="mini_cost" value="{{ old('mini_cost', $group->mini_cost) }}" required /></div>
           <div class="col-12 col-md-6"><x-common-form-input title="{{ __('panel/customer.discount_rate') }}" name="discount_rate" value="{{ old('discount_rate', $group->discount_rate) }}" required /></div>
         </div>

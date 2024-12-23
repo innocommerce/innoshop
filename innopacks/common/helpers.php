@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use InnoShop\Common\Libraries\ApiHook;
 use InnoShop\Common\Libraries\Currency;
 use InnoShop\Common\Libraries\ViewHook;
 use InnoShop\Common\Repositories\CurrencyRepo;
@@ -443,6 +444,11 @@ if (! function_exists('create_json_success')) {
      */
     function create_json_success($data = null): JsonResponse
     {
+        $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
+        if ($hook) {
+            $data = fire_hook_filter($hook, $data);
+        }
+
         return json_success(panel_trans('common.saved_success'), $data);
     }
 }
@@ -454,6 +460,11 @@ if (! function_exists('read_json_success')) {
      */
     function read_json_success($data = null): JsonResponse
     {
+        $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
+        if ($hook) {
+            $data = fire_hook_filter($hook, $data);
+        }
+
         return json_success(panel_trans('common.read_success'), $data);
     }
 }
@@ -465,6 +476,11 @@ if (! function_exists('update_json_success')) {
      */
     function update_json_success($data = null): JsonResponse
     {
+        $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
+        if ($hook) {
+            $data = fire_hook_filter($hook, $data);
+        }
+
         return json_success(panel_trans('common.updated_success'), $data);
     }
 }
@@ -476,6 +492,11 @@ if (! function_exists('delete_json_success')) {
      */
     function delete_json_success($data = null): JsonResponse
     {
+        $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
+        if ($hook) {
+            $data = fire_hook_filter($hook, $data);
+        }
+
         return json_success(panel_trans('common.deleted_success'), $data);
     }
 }
@@ -487,6 +508,11 @@ if (! function_exists('submit_json_success')) {
      */
     function submit_json_success($data = null): JsonResponse
     {
+        $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
+        if ($hook) {
+            $data = fire_hook_filter($hook, $data);
+        }
+
         return json_success(panel_trans('common.submitted_success'), $data);
     }
 }
@@ -992,6 +1018,18 @@ if (! function_exists('to_sql')) {
         }
 
         return $sql;
+    }
+}
+
+if (! function_exists('seller_enabled')) {
+    /**
+     * Get available locales
+     *
+     * @return bool
+     */
+    function seller_enabled(): bool
+    {
+        return class_exists(\InnoShop\Seller\SellerServiceProvider::class);
     }
 }
 

@@ -6,9 +6,11 @@ body.page-order {
   .tabs-plus {
     margin-bottom: 16px;
   }
-
-  .order-box {
-
+   .order_return{
+    padding-left:20px !important;
+   }
+  .table-responsive{
+    margin-top: 50px;
   }
 }
 
@@ -38,7 +40,7 @@ body.page-order-info {
           right: -10px;
           background-color: $primary;
           color: #fff;
-          font-size: 11px;
+          font-size: 9px;
           border-radius: 50%;
           width: 18px;
           height: 18px;

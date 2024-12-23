@@ -31,8 +31,7 @@ class TaxClassRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => 'string|required',
-            'description' => 'string|required',
+            'name' => 'string|required',
         ];
     }
 }

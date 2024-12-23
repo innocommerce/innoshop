@@ -17,6 +17,7 @@ use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Resources\CategorySimple;
 use InnoShop\Panel\Requests\CategoryRequest;
+use Throwable;
 
 class CategoryController extends BaseController
 {
@@ -54,7 +55,7 @@ class CategoryController extends BaseController
     /**
      * @param  CategoryRequest  $request
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(CategoryRequest $request): RedirectResponse
     {
@@ -81,15 +82,24 @@ class CategoryController extends BaseController
     }
 
     /**
-     * @param  $category
+     * @param  Category  $category
      * @return mixed
      */
-    public function form($category): mixed
+    public function form(Category $category): mixed
     {
-        $categories = CategorySimple::collection(CategoryRepo::getInstance()->all(['active' => 1]))->jsonSerialize();
-        $data       = [
+        $childIDs   = $category->children->pluck('id')->toArray();
+        $excludeIDs = array_unique(array_merge($childIDs, [$category->id]));
+        $filters    = [
+            'active'      => 1,
+            'exclude_ids' => $excludeIDs,
+        ];
+
+        $categories    = CategoryRepo::getInstance()->all($filters);
+        $categoryItems = CategorySimple::collection($categories)->jsonSerialize();
+
+        $data = [
             'category'   => $category,
-            'categories' => $categories,
+            'categories' => $categoryItems,
         ];
 
         return inno_view('panel::categories.form', $data);
@@ -99,7 +109,7 @@ class CategoryController extends BaseController
      * @param  CategoryRequest  $request
      * @param  Category  $category
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {

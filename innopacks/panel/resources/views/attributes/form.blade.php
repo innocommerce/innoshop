@@ -27,7 +27,7 @@
                                   value="{{ old('attribute_group_id', $attribute->attribute_group_id) }}" required
                                   placeholder="{{ __('panel/menu.attribute_groups') }}"/>
 
-            <x-common-form-input title="{{ __('panel/common.position') }}" name="name"
+            <x-common-form-input title="{{ __('panel/common.position') }}" name="position"
                                  :value="old('position', $attribute->position)" required
                                  placeholder="{{ __('panel/common.position') }}"/>
           </div>

@@ -25,10 +25,13 @@ class ProductSimple extends JsonResource
     public function toArray(Request $request): array
     {
         $sku = $this->masterSku;
+        if (empty($sku)) {
+            throw new Exception('Empty SKU for '.$this->id);
+        }
 
         return [
-            'sku_id'              => $sku->id,
-            'product_id'          => $this->id,
+            'id'                  => $this->id,
+            'master_sku_id'       => $sku->id,
             'slug'                => $this->slug,
             'url'                 => $this->url,
             'name'                => $this->translation->name,
@@ -37,6 +40,7 @@ class ProductSimple extends JsonResource
             'image_big'           => image_resize($sku->image->path ?? ($this->image->path ?? ''), 600, 600),
             'price_format'        => $sku->price_format,
             'origin_price_format' => $sku->origin_price_format,
+            'active'              => (bool) $this->active,
         ];
     }
 }

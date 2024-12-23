@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'Informazioni su',
     'action'            => 'Azione',
     'add'               => 'Aggiungi',
     'all'               => 'Tutto',
@@ -16,6 +17,7 @@ return [
     'confirm'           => 'Conferma',
     'created_at'        => 'Creato il',
     'date'              => 'Data',
+    'default'           => 'Indirizzo predefinito',
     'delete'            => 'Elimina',
     'delete_confirm'    => 'Sei sicuro di voler eliminare?',
     'deleted_success'   => 'Eliminato con successo',

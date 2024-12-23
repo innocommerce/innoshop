@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'Sobre',
     'action'            => 'Ação',
     'add'               => 'Adicionar',
     'all'               => 'Tudo',
@@ -16,6 +17,7 @@ return [
     'confirm'           => 'Confirmar',
     'created_at'        => 'Criado Em',
     'date'              => 'Data',
+    'default'           => 'Endereço padrão',
     'delete'            => 'Deletar',
     'delete_confirm'    => 'Tem certeza que deseja deletar?',
     'deleted_success'   => 'Deletado com Sucesso',
@@ -28,6 +30,7 @@ return [
     'logo'              => 'Marca',
     'name'              => 'Nome',
     'news'              => 'Notícias',
+    'no'                => 'Não',
     'out_of_stock'      => 'Fora de Estoque',
     'page_total_show'   => 'Mostrando de :first a :last, total de :total itens',
     'pages'             => 'Páginas',
@@ -47,5 +50,4 @@ return [
     'updated_success'   => 'Atualizado com Sucesso',
     'view'              => 'Visualizar',
     'yes'               => 'Sim',
-    'no'                => 'Não',
 ];

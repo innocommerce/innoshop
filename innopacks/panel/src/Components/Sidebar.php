@@ -64,7 +64,7 @@ class Sidebar extends Component
             [
                 'route' => 'home.index',
                 'title' => __('panel/menu.dashboard'),
-                'icon'  => 'bi-speedometer',
+                'icon'  => 'bi-speedometer2',
             ],
             [
                 'title'    => __('panel/menu.top_order'),

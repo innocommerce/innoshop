@@ -173,12 +173,13 @@
                   <div class="products-table-list">
                     <div>
                       <div class="product-item">
-                        <div class="product-image"><span class="icon-quantity">{{ $product['quantity'] }}</span><img
+                        <div class="product-image"><img
                               src="{{ $product['image'] }}" class="img-fluid"></div>
                         <div class="product-info">
                           <div class="name">{{ $product['product_name'] }}</div>
                           <div class="sku mt-2 text-secondary">{{ $product['sku_code'] }}
                             @if ($product['variant_label']) - {{ $product['variant_label'] }} @endif
+                            x {{ $product['quantity'] }}
                           </div>
                         </div>
                       </div>

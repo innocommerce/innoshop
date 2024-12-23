@@ -28,4 +28,12 @@ class History extends BaseModel
     {
         return $this->belongsTo(OrderReturn::class, 'order_return_id');
     }
+
+    /**
+     * @return string
+     */
+    public function getStatusFormatAttribute(): string
+    {
+        return trans('common/rma.'.$this->status);
+    }
 }

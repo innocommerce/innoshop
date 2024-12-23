@@ -115,6 +115,20 @@ class CheckoutService extends BaseService
     }
 
     /**
+     * @return mixed
+     */
+    public function getCartWeight(): mixed
+    {
+        $weightTotal = 0;
+        $cartList    = $this->getCartList();
+        foreach ($cartList as $product) {
+            $weightTotal += $product['weight'];
+        }
+
+        return $weightTotal;
+    }
+
+    /**
      * Get current address list.
      *
      * @return array
@@ -132,6 +146,21 @@ class CheckoutService extends BaseService
         $addresses = AddressRepo::getInstance()->builder($filters)->get();
 
         return $this->addressList = (AddressListItem::collection($addresses))->jsonSerialize();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultAddress(): array
+    {
+        $addressList = $this->getAddressList();
+        if (empty($addressList)) {
+            return [];
+        }
+
+        $defaultAddress = collect($addressList)->where('default', 1)->first();
+
+        return $defaultAddress ?: $addressList[0];
     }
 
     /**
@@ -266,8 +295,7 @@ class CheckoutService extends BaseService
      */
     public function createCheckout($data): mixed
     {
-        $addressList    = $this->getAddressList();
-        $defaultAddress = $addressList[0] ?? null;
+        $defaultAddress = $this->getDefaultAddress();
 
         $shippingMethods = ShippingService::getInstance($this)->getMethods();
         $billingMethods  = BillingService::getInstance()->getMethods();

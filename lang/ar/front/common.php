@@ -8,6 +8,7 @@
  */
 
 return [
+    'about_us'          => 'حول',
     'action'            => 'الإجراء',
     'add'               => 'إضافة',
     'all'               => 'الكل',
@@ -16,6 +17,7 @@ return [
     'confirm'           => 'تأكيد',
     'created_at'        => 'تاريخ الإنشاء',
     'date'              => 'التاريخ',
+    'default'           => 'العنوان الافتراضي',
     'delete'            => 'حذف',
     'delete_confirm'    => 'هل أنت متأكد من الحذف؟',
     'deleted_success'   => 'تم الحذف بنجاح',

@@ -319,7 +319,8 @@ final class Plugin implements Arrayable, ArrayAccess
 
     public function getEditUrl(): string
     {
-        if (empty($this->fields)) {
+        $viewFile = $this->getPath().'/Views/panel/config.blade.php';
+        if (empty($this->fields) && ! file_exists($viewFile) && $this->type != 'billing') {
             return '';
         }
 
@@ -349,6 +350,19 @@ final class Plugin implements Arrayable, ArrayAccess
     public function getPriority(): int
     {
         return $this->priority;
+    }
+
+    /**
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getSetting(string $key = ''): mixed
+    {
+        if ($key) {
+            return plugin_setting($this->code, $key);
+        }
+
+        return plugin_setting($this->code);
     }
 
     /**
