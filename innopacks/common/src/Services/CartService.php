@@ -198,13 +198,16 @@ class CartService
         $selectedAmount    = $selectedCartItems->sum('subtotal');
         $quantityTotal     = $selectedCartItems->sum('quantity');
 
-        return [
+        $data = [
             'total'         => $quantityTotal,
             'total_format'  => $quantityTotal <= 99 ? $quantityTotal : '99+',
             'amount'        => $selectedAmount,
             'amount_format' => currency_format($selectedAmount),
             'list'          => CartListItem::collection($allCartItems)->jsonSerialize(),
         ];
+        $data = fire_hook_filter('cart.service.handleResponse', $data);
+
+        return $data;
     }
 
     /**
