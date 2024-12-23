@@ -48,6 +48,7 @@
         <div class="col-12 col-lg-6">
           <div class="product-info">
             <h1 class="product-title">{{ $product->translation->name }}</h1>
+              @hookupdate('front.product.show.price')
             <div class="product-price">
               <span class="price">{{ $sku['price_format'] }}</span>
               @if($sku['origin_price'])

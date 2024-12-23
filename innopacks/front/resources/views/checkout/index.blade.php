@@ -71,7 +71,7 @@
                        v-if="source.addresses.length && !source.addressEdit">
                     <div :class="['select-item', current.billing_address_id  == address.id ? 'active' : '']"
                          v-for="address, index in source.addresses" :key="address.id"
-                         @click="updateCheckout('billing_address_id ', address.id)">
+                         @click="updateCheckout('billing_address_id', address.id)">
                       <div class="left">
                         <i class="bi bi-circle"></i>
                         <div class="select-title">

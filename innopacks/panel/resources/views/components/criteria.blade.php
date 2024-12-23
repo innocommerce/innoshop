@@ -5,52 +5,54 @@
       id="collapse-filters">
 
       @foreach($criteria as $item)
-      @if($item['type'] == 'input')
-      <div class="col-md-3 col-sm-6 mb-3">
-        <label for="{{ $item['name'] }}" class="form-label form-label-sm">{{ $item['label'] }}</label>
-        <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}" class="form-control form-control-sm"
-          value="{{ request($item['name']) }}" placeholder="{{ $item['label'] }}">
-      </div>
-      @elseif($item['type'] == 'select')
-      <div class="col-md-3 col-sm-6 mb-3">
-        <label for="{{ $item['name'] }}" class="form-label form-label-sm">{{ $item['label'] }}</label>
-        <select name="{{ $item['name'] }}" id="{{ $item['name'] }}" class="form-select form-select-sm">
-          <option value="">{{ panel_trans('common.please_choose') }}</option>
-          @foreach($item['options'] as $option)
-          <option value="{{ $option['value'] }}" {{ request($item['name'])==$option['value'] ? 'selected' : '' }}>{{
-            $option['label'] }}</option>
-          @endforeach
-        </select>
-      </div>
-      @elseif($item['type'] == 'date')
-      <div class="col-md-3 col-sm-6 mb-3">
-        <label for="{{ $item['name'] }}" class="form-label form-label-sm">{{ $item['label'] }}</label>
-        <input type="date" name="{{ $item['name'] }}" id="{{ $item['name'] }}" class="form-control form-control-sm"
-          value="{{ request($item['name']) }}" placeholder="{{ $item['label'] }}">
-      </div>
-      @elseif($item['type'] == 'range')
-      <div class="col-md-3 col-sm-6 mb-3">
-        <label class="form-label form-label-sm">{{ $item['label'] }}</label>
-        <div class="input-group input-group-sm">
-          <input type="text" name="{{ $item['start']['name'] }}" class="form-control"
-            value="{{ request($item['start']['name']) }}" placeholder="{{ $item['start']['label'] ?? '' }}">
-          <span class="input-group-text">-</span>
-          <input type="text" name="{{ $item['end']['name'] }}" class="form-control"
-            value="{{ request($item['end']['name']) }}" placeholder="{{ $item['end']['label'] ?? '' }}">
-        </div>
-      </div>
-      @elseif($item['type'] == 'date_range')
-      <div class="col-md-3 col-sm-6 mb-3">
-        <label class="form-label form-label-sm">{{ $item['label'] }}</label>
-        <div class="input-group input-group-sm">
-          <input type="date" name="{{ $item['start']['name'] }}" class="form-control"
-            value="{{ request($item['start']['name']) }}" placeholder="{{ $item['start']['label'] ?? '' }}">
-          <span class="input-group-text">-</span>
-          <input type="date" name="{{ $item['end']['name'] }}" class="form-control"
-            value="{{ request($item['end']['name']) }}" placeholder="{{ $item['end']['label'] ?? '' }}">
-        </div>
-      </div>
-      @endif
+        @if($item['type'] == 'input')
+          <div class="col-md-3 col-sm-6 mb-3">
+            <label for="{{ $item['name'] }}" class="form-label form-label-sm">{{ $item['label'] }}</label>
+            <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}" class="form-control form-control-sm"
+                   value="{{ request($item['name']) }}"
+                   placeholder="{{ $item['label'] }}">
+          </div>
+        @elseif($item['type'] == 'select')
+          <div class="col-md-3 col-sm-6 mb-3">
+            <label for="{{ $item['name'] }}" class="form-label form-label-sm">{{ $item['label'] }}</label>
+            <select name="{{ $item['name'] }}" id="{{ $item['name'] }}" class="form-select form-select-sm">
+              <option value="">{{ panel_trans('common.please_choose') }}</option>
+              @foreach($item['options'] as $option)
+                <option value="{{ isset($item['options_key']) ? $option[$item['options_key']] : $option['value'] }}" {{ request($item['name'])==(isset($item['options_key']) ? $option[$item['options_key']] : $option['value']) ? 'selected' : '' }}>{{
+                  isset($option['label_key']) ? trans($option['label_key']) : (isset($item['options_label']) ? $option[$item['options_label']] : $option['label']) }}</option>
+              @endforeach
+            </select>
+          </div>
+        @elseif($item['type'] == 'date')
+          <div class="col-md-3 col-sm-6 mb-3">
+            <label for="{{ $item['name'] }}" class="form-label form-label-sm">{{ $item['label'] }}</label>
+            <input type="date" name="{{ $item['name'] }}" id="{{ $item['name'] }}" class="form-control form-control-sm"
+                   value="{{ request($item['name']) }}"
+                   placeholder="{{ $item['label'] }}">
+          </div>
+        @elseif($item['type'] == 'range')
+          <div class="col-md-3 col-sm-6 mb-3">
+            <label class="form-label form-label-sm">{{ $item['label'] }}</label>
+            <div class="input-group input-group-sm">
+              <input type="text" name="{{ $item['start']['name'] }}" class="form-control" value="{{ request($item['start']['name']) }}"
+                     placeholder="{{ $item['start']['label'] ?? '' }}">
+              <span class="input-group-text">-</span>
+              <input type="text" name="{{ $item['end']['name'] }}" class="form-control" value="{{ request($item['end']['name']) }}"
+                     placeholder="{{ $item['end']['label'] ?? '' }}">
+            </div>
+          </div>
+        @elseif($item['type'] == 'date_range')
+          <div class="col-md-3 col-sm-6 mb-3">
+            <label class="form-label form-label-sm">{{ $item['label'] }}</label>
+            <div class="input-group input-group-sm">
+              <input type="date" name="{{ $item['start']['name'] }}" class="form-control" value="{{ request($item['start']['name']) }}"
+                     placeholder="{{ $item['start']['label'] ?? '' }}">
+              <span class="input-group-text">-</span>
+              <input type="date" name="{{ $item['end']['name'] }}" class="form-control" value="{{ request($item['end']['name']) }}"
+                     placeholder="{{ $item['end']['label'] ?? '' }}">
+            </div>
+          </div>
+        @endif
       @endforeach
 
     </div>

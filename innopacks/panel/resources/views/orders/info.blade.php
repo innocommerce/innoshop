@@ -65,6 +65,7 @@
       <h5 class="card-title mb-0">{{ __('panel/order.order_items') }}</h5>
     </div>
     <div class="card-body">
+        @hookupdate('panel.orders.info.order_items')
       <table class="table products-table align-middle">
         <thead>
         <tr>
@@ -114,6 +115,7 @@
         </tr>
         </tbody>
       </table>
+        @endhookupdate
     </div>
   </div>
 
