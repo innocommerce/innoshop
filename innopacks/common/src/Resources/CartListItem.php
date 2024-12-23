@@ -50,7 +50,7 @@ class CartListItem extends JsonResource
             ],
             'cart' => $this,
         ];
-        $data = fire_hook_filter('cart.list.item.resource', $data);
+        $data = fire_hook_filter('resource.cart_list_item', $data);
 
         return $data['data'];
     }
