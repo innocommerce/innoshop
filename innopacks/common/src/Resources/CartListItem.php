@@ -27,25 +27,31 @@ class CartListItem extends JsonResource
         $product  = $this->product;
         $subtotal = $this->subtotal;
 
-        return [
-            'id'                  => $this->id,
-            'quantity'            => $this->quantity,
-            'product_id'          => $product->id,
-            'product_name'        => $product->translation->name ?? '',
-            'variant_label'       => $sku->variant_label,
-            'tax_class_id'        => $product->tax_class_id,
-            'sku_id'              => $sku->id,
-            'sku_code'            => $sku->code,
-            'is_virtual'          => $product->is_virtual,
-            'weight'              => $product->weight,
-            'price'               => $sku->price,
-            'price_format'        => $sku->price_format,
-            'origin_price'        => $sku->origin_price,
-            'origin_price_format' => $sku->origin_price_format,
-            'subtotal'            => $subtotal,
-            'subtotal_format'     => currency_format($subtotal),
-            'image'               => image_resize($sku->image->path ?? ($product->image->path ?? '')),
-            'selected'            => (bool) $this->selected,
+        $data = [
+            'data' => [
+                'id'                  => $this->id,
+                'quantity'            => $this->quantity,
+                'product_id'          => $product->id,
+                'product_name'        => $product->translation->name ?? '',
+                'variant_label'       => $sku->variant_label,
+                'tax_class_id'        => $product->tax_class_id,
+                'sku_id'              => $sku->id,
+                'sku_code'            => $sku->code,
+                'is_virtual'          => $product->is_virtual,
+                'weight'              => $product->weight,
+                'price'               => $sku->price,
+                'price_format'        => $sku->price_format,
+                'origin_price'        => $sku->origin_price,
+                'origin_price_format' => $sku->origin_price_format,
+                'subtotal'            => $subtotal,
+                'subtotal_format'     => currency_format($subtotal),
+                'image'               => image_resize($sku->image->path ?? ($product->image->path ?? '')),
+                'selected'            => (bool) $this->selected,
+            ],
+            'cart' => $this,
         ];
+        $data = fire_hook_filter('cart.list.item.resource', $data);
+
+        return $data['data'];
     }
 }
