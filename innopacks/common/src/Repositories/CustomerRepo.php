@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Customer;
+use InnoShop\Common\Repositories\Customer\GroupRepo;
 use Throwable;
 
 class CustomerRepo extends BaseRepo
@@ -25,6 +26,11 @@ class CustomerRepo extends BaseRepo
         return [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/customer.name')],
             ['name' => 'email', 'type' => 'input', 'label' => trans('panel/customer.email')],
+
+            ['name' => 'customer_group_id', 'label' => trans('panel/customer.group'), 'type' => 'select',
+                'options' => GroupRepo::getInstance()->getSimpleList(), 'options_key'=> 'id', 'options_label'=> 'name'
+            ],
+
             ['name' => 'from', 'type' => 'input', 'label' => trans('panel/customer.from')],
             ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/customer.locale')],
             ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
@@ -55,6 +61,11 @@ class CustomerRepo extends BaseRepo
         $email = $filters['email'] ?? '';
         if ($email) {
             $builder->where('email', 'like', "%$email%");
+        }
+
+        $customer_group_id = $filters['customer_group_id'] ?? '';
+        if ($customer_group_id) {
+            $builder->where('customer_group_id', $customer_group_id);
         }
 
         if (isset($filters['active'])) {
