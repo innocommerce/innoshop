@@ -148,9 +148,11 @@ $weightClasses = [
           <x-common-form-input :title="__('panel/product.origin_price')" name="skus[0][origin_price]"
            value="{{ old('skus.0.origin_price', $product->masterSku->origin_price ?? '') }}" />
          </div>
+            @hookinsert('panel.product.edit.sku.single.input.item.price.after')
         </div>
        </div>
        @include('panel::products._form_variant')
+        @hookinsert('panel.product.edit.form_variant.after')
        @include('panel::products._form_attribute')
       </div>
       <div class="tab-pane fade mt-3" id="addition-tab-pane" role="tabpanel" aria-labelledby="addition-tab" tabindex="3">

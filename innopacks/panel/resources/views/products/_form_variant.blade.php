@@ -93,6 +93,7 @@
                     </div>
                     <span class="text-12 text-danger" style="margin-left: 100px" v-if="variant.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel/common.verify_required') }}</span>
                   </div>
+                    @hookinsert('panel.product.edit.variant_name.after')
                 </div>
               </div>
               <div class="add-variant-values">
@@ -190,6 +191,7 @@
                 </div>
                 {{ __('panel/product.quantity') }}
               </th>
+                @hookinsert('panel.product.edit.sku.batch.input.item.after')
             </tr>
           </thead>
           <tbody>
@@ -222,6 +224,7 @@
                 <input type="text" class="form-control form-control-sm"
                   v-model="sku.price" placeholder="{{ __('panel/product.price') }}"
                   @input="validatePrice(sku)">
+                  @hookinsert('panel.product.edit.sku.input.item.price.after')
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"
@@ -243,6 +246,7 @@
       </div>
     </div>
   </div>
+    @hookinsert('panel.product.edit.variant.after')
 </div>
 
 @push('footer')
@@ -260,7 +264,7 @@
     return obj;
   }
 
-  createApp({
+  let variantsBoxApp = createApp({
     components: {
       draggable,
     },

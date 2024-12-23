@@ -111,7 +111,13 @@ class Sku extends BaseModel
         foreach ($labels as $label) {
             $vLabel .= $label['name'].':'.$label['value'].'; ';
         }
+        
+        $data = [
+            'vLabel' => $vLabel,
+            'sku'    => $this,
+        ];
+        $data = fire_hook_filter('model.sku.variant_label_attribute', $data);
 
-        return $vLabel;
+        return $data['vLabel'];
     }
 }
