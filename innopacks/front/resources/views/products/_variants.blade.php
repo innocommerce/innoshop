@@ -1,5 +1,6 @@
 @if (is_array($variants) && count($variants))
 <div class="product-variant-box">
+    @hookupdate('front.products.show.variants.value')
   @foreach($variants as $key => $variant)
     <div class="product-variant">
       <div class="variant-title">{{ $variant['name'][front_locale_code()] ?? '-' }}</div>
@@ -10,6 +11,7 @@
       </div>
     </div>
   @endforeach
+    @endhookupdate
 </div>
 @endif
 @push('footer')
