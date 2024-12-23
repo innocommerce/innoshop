@@ -29,7 +29,7 @@
         "barryvdh/laravel-debugbar": "^3.13",
         "fakerphp/faker": "^1.23",
         "kitloong/laravel-migrations-generator": "^7.0",
-        "laravel/pint": "1.18.2",
+        "laravel/pint": "1.18.3",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
