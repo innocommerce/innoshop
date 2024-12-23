@@ -26,11 +26,9 @@ class CustomerRepo extends BaseRepo
         return [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/customer.name')],
             ['name' => 'email', 'type' => 'input', 'label' => trans('panel/customer.email')],
-
-            ['name' => 'customer_group_id', 'label' => trans('panel/customer.group'), 'type' => 'select',
-                'options' => GroupRepo::getInstance()->getSimpleList(), 'options_key'=> 'id', 'options_label'=> 'name'
+            ['name'       => 'customer_group_id', 'label' => trans('panel/customer.group'), 'type' => 'select',
+                'options' => GroupRepo::getInstance()->getSimpleList(), 'options_key' => 'id', 'options_label' => 'name',
             ],
-
             ['name' => 'from', 'type' => 'input', 'label' => trans('panel/customer.from')],
             ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/customer.locale')],
             ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
