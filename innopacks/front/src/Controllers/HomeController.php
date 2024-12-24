@@ -12,6 +12,7 @@ namespace InnoShop\Front\Controllers;
 use App\Http\Controllers\Controller;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Front\Repositories\HomeRepo;
 
 class HomeController extends Controller
 {
@@ -30,6 +31,7 @@ class HomeController extends Controller
 
         $news = ArticleRepo::getInstance()->getLatestArticles();
         $data = [
+            'slideshow'    => HomeRepo::getInstance()->getSlideShow(),
             'tab_products' => $tabProducts,
             'news'         => $news,
         ];

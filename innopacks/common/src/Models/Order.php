@@ -52,6 +52,14 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
+    public function shippingCountry(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');

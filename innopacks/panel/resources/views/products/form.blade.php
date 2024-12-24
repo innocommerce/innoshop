@@ -77,6 +77,7 @@ $weightClasses = [
         :values="old('images', $product->images->pluck('path')->toArray())" />
        <x-common-form-switch-radio :title="__('panel/common.status')" name="active"
         :value="old('active', $product->active ?? true)" />
+        @hookinsert('panel.product.edit.basic.after')
       </div>
       <div class="tab-pane fade mt-4" id="translation-tab-pane" role="tabpanel" aria-labelledby="translation-tab"
        tabindex="1">

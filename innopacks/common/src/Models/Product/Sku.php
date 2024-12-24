@@ -111,7 +111,7 @@ class Sku extends BaseModel
         foreach ($labels as $label) {
             $vLabel .= $label['name'].':'.$label['value'].'; ';
         }
-        
+
         $data = [
             'vLabel' => $vLabel,
             'sku'    => $this,

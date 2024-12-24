@@ -48,13 +48,14 @@
         <div class="col-12 col-lg-6">
           <div class="product-info">
             <h1 class="product-title">{{ $product->translation->name }}</h1>
-              @hookupdate('front.product.show.price')
+            @hookupdate('front.product.show.price')
             <div class="product-price">
               <span class="price">{{ $sku['price_format'] }}</span>
               @if($sku['origin_price'])
                 <span class="old-price ms-2">{{ $sku['origin_price_format'] }}</span>
               @endif
             </div>
+            @endhookupdate
 
             <div class="stock-wrap">
               <div class="in-stock badge">{{ __('front/product.in_stock') }}</div>

@@ -30,8 +30,14 @@ class UploadImageRequest extends FormRequest
      */
     public function rules(): array
     {
+        if (is_admin()) {
+            $rule = 'required|image|mimes:jpg,png,jpeg,gif,svg,webp|max:4096';
+        } else {
+            $rule = 'required|image|mimes:jpg,png,jpeg,gif,webp|max:2048';
+        }
+
         return [
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg,webp|max:4096',
+            'image' => $rule,
             'type'  => 'required|alpha_dash',
         ];
     }

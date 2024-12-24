@@ -895,7 +895,7 @@ if (! function_exists('theme_asset')) {
      */
     function theme_asset(string $theme, string $path, ?bool $secure = null): string
     {
-        if (config('app.debug')) {
+        if (config('app.debug') && Str::endsWith($path, ['.js', '.css'])) {
             return mix("themes/$theme/$path");
         }
 
