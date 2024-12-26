@@ -177,8 +177,8 @@
               </div>
             @endforeach
           </div>
-          @hookinsert('product.detail.tab.pane.after')
         </div>
+        @hookinsert('product.detail.tab.pane.after')
       </div>
 
     </div>
