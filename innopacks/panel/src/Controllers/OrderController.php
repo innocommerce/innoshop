@@ -76,6 +76,19 @@ class OrderController extends BaseController
 
     /**
      * @param  Order  $order
+     * @return mixed
+     */
+    public function printing(Order $order): mixed
+    {
+        $data = [
+            'order' => $order,
+        ];
+
+        return inno_view('panel::orders.printing', $data);
+    }
+
+    /**
+     * @param  Order  $order
      * @return RedirectResponse
      */
     public function destroy(Order $order): RedirectResponse

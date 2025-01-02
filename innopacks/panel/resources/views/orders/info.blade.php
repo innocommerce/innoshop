@@ -14,6 +14,7 @@
       @foreach($next_statuses as $status)
         <button class="btn btn-primary ms-2" @click="edit('{{ $status['status'] }}')">{{ $status['name'] }}</button>
       @endforeach
+        <a class="btn btn-success ms-2" href="{{ panel_route('orders.printing', $order) }}" target="_blank">{{ panel_trans('order.print') }}</a>
       <el-dialog v-model="statusDialog" title="{{ __('panel/order.status') }}" width="500">
         <div class="mb-2">{{ __('panel/order.comment') }}</div>
         <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}"

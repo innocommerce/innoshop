@@ -72,4 +72,9 @@ return [
     'billing_address_2'      => 'Billing Address 2',
     'billing_zipcode'        => 'Billing Zipcode',
     'created_at'             => 'Place At',
+    'index'                  => 'NO.',
+    'image'                  => 'Image',
+    'print'                  => 'Print',
+    'ship_list'              => 'Ship List',
+    'website'                => 'Website',
 ];
