@@ -6,8 +6,11 @@
       </a>
     </div>
     <div class="product-item-info">
-      <div class="product-name"><a href="{{ $product->url }}">{{ $product->translation->name }}</a></div>
-      
+      <div class="product-name">
+          <a href="{{ $product->url }}" data-toggle="tooltip" title="{{ $product->translation->name }}" data-placement="top">
+  {{ $product->translation->name }}
+</a>
+      </div>
       @if(request('style_list') == 'list')
         <div class="sub-product-title">{{ $product->translation->summary }}</div>
       @endif
@@ -33,3 +36,10 @@
     </div>
   </div>
 @endif
+@push('footer')
+<script>
+    $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+@endpush

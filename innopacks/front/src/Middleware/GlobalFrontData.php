@@ -9,6 +9,8 @@
 
 namespace InnoShop\Front\Middleware;
 
+use Closure;
+use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Front\Repositories\FooterMenuRepo;
 use InnoShop\Front\Repositories\HeaderMenuRepo;
@@ -19,14 +21,21 @@ class GlobalFrontData
      * Handle an incoming request.
      *
      * @param  Request  $request
-     * @param  \Closure  $next
+     * @param  Closure  $next
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handle(Request $request, \Closure $next): mixed
+    public function handle(Request $request, Closure $next): mixed
     {
         $customer = current_customer();
         $favTotal = $customer ? $customer->favorites->count() : 0;
+
+        $currentCustomer = current_customer();
+        $frontApiToken   = session('front_api_token');
+        if ($currentCustomer && empty($frontApiToken)) {
+            $apiToken = $currentCustomer->createToken('customer-token')->plainTextToken;
+            session(['front_api_token' => $apiToken]);
+        }
 
         view()->share('current_locale', current_locale());
         view()->share('header_menus', HeaderMenuRepo::getInstance()->getMenus());
