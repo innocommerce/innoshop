@@ -65,7 +65,8 @@
             <td>{{ $item['name'] }}
               @if($item->productSku->variantLabel)
                 <br/><span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
-              @endif</td>
+              @endif
+            </td>
             <td>{{ $item['product_sku'] }}</td>
             <td class="text-right">{{ $item['quantity'] }}</td>
             <td class="text-right">{{ currency_format($item['price']) }}</td>

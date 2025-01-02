@@ -79,21 +79,24 @@
         </tr>
         </thead>
         <tbody>
-        @foreach ($order->items as $product)
+        @foreach ($order->items as $item)
           <tr>
-            <td>{{ $product->id }}</td>
+            <td>{{ $item->id }}</td>
             <td>
               <div class="product-item d-flex align-items-center">
-                <div class="product-image wh-40 border"><img src="{{ $product->image }}" class="img-fluid"></div>
+                <div class="product-image wh-40 border"><img src="{{ $item->image }}" class="img-fluid"></div>
                 <div class="product-info ms-2">
-                  <div class="name">{{ $product->name }}</div>
+                  <div class="name">{{ $item->name }}</div>
+                  @if($item->productSku->variantLabel)
+                    <span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
+                  @endif
                 </div>
               </div>
             </td>
-            <td>{{ $product->product_sku }}</td>
-            <td>{{ $product->quantity }}</td>
-            <td>{{ $product->price_format }}</td>
-            <td>{{ $product->subtotal_format }}</td>
+            <td>{{ $item->product_sku }}</td>
+            <td>{{ $item->quantity }}</td>
+            <td>{{ $item->price_format }}</td>
+            <td>{{ $item->subtotal_format }}</td>
           </tr>
         @endforeach
         @foreach ($order->fees as $total)
