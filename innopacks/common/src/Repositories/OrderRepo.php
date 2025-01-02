@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Address;
@@ -16,14 +17,18 @@ use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Resources\AddressListItem;
 use InnoShop\Common\Services\StateMachineService;
+use Throwable;
 
 class OrderRepo extends BaseRepo
 {
     /**
      * @return array[]
+     * @throws Exception
      */
     public static function getCriteria(): array
     {
+        $statuses = StateMachineService::getAllStatuses();
+
         return [
             ['name' => 'number', 'type' => 'input', 'label' => trans('panel/order.number')],
             ['name' => 'customer_name', 'type' => 'input', 'label' => trans('panel/order.customer_name')],
@@ -31,7 +36,7 @@ class OrderRepo extends BaseRepo
             ['name' => 'telephone', 'type' => 'input', 'label' => trans('panel/order.telephone')],
             ['name' => 'shipping_method_name', 'type' => 'input', 'label' => trans('panel/order.shipping_method_name')],
             ['name' => 'billing_method_name', 'type' => 'input', 'label' => trans('panel/order.billing_method_name')],
-            ['name' => 'status', 'type' => 'input', 'label' => trans('panel/order.status')],
+            ['name' => 'status', 'type' => 'select', 'label' => trans('panel/order.status'), 'options' => $statuses, 'options_key' => 'status', 'options_label' => 'name'],
             ['name'     => 'total', 'type' => 'range', 'label' => trans('panel/order.total'),
                 'start' => ['name' => 'start'],
                 'end'   => ['name' => 'end'],
@@ -145,9 +150,9 @@ class OrderRepo extends BaseRepo
     /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function create($data): mixed
+    public function create($data): Order
     {
         $data  = $this->handleData($data);
         $order = new Order($data);
