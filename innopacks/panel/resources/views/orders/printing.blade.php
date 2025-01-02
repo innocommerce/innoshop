@@ -58,15 +58,19 @@
       </thead>
       <tbody>
       @if ($order->items)
-        @foreach ($order->items as $product)
+        @foreach ($order->items as $item)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td><img class="img-thumbnail" src="{{ $product['image'] }}" style="width: 30px;"></td>
-            <td>{{ $product['name'] }}</td>
-            <td>{{ $product['product_sku'] }}</td>
-            <td class="text-right">{{ $product['quantity'] }}</td>
-            <td class="text-right">{{ currency_format($product['price']) }}</td>
-            <td class="text-right">{{ currency_format($product['subtotal']) }}</td>
+            <td><img class="img-thumbnail" src="{{ $item['image'] }}" style="width: 30px;"></td>
+            <td>{{ $item['name'] }}
+              @if($item->productSku->variantLabel)
+                <br/><span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
+              @endif
+            </td>
+            <td>{{ $item['product_sku'] }}</td>
+            <td class="text-right">{{ $item['quantity'] }}</td>
+            <td class="text-right">{{ currency_format($item['price']) }}</td>
+            <td class="text-right">{{ currency_format($item['subtotal']) }}</td>
           </tr>
         @endforeach
       @endif
