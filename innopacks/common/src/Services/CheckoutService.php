@@ -380,6 +380,12 @@ class CheckoutService extends BaseService
             $this->checkout->delete();
             CartService::getInstance($this->customerID)->getCartBuilder(['selected' => true])->delete();
 
+            $data = [
+                'checkout_data' => $checkoutData,
+                'order'         => $order,
+            ];
+            fire_hook_action('service.checkout.confirm.after', $data);
+
             return $order;
         } catch (Exception $e) {
             DB::rollBack();
