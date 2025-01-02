@@ -25,6 +25,7 @@ Route::middleware(['admin_auth:admin'])
         Route::post('/upload/files', [Controllers\UploadController::class, 'files'])->name('upload.files');
 
         Route::resource('/orders', Controllers\OrderController::class);
+        Route::get('/orders/{order}/printing', [Controllers\OrderController::class, 'printing'])->name('orders.printing');
         Route::put('/orders/{order}/status', [Controllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
 
         Route::resource('/order_returns', Controllers\OrderReturnController::class);
