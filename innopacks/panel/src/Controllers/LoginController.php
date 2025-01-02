@@ -11,7 +11,6 @@ namespace InnoShop\Panel\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use InnoShop\Panel\Requests\LoginRequest;
 
 class LoginController extends BaseController
@@ -47,9 +46,6 @@ class LoginController extends BaseController
     {
         $redirectUri = session('panel_redirect_uri');
         if (auth('admin')->attempt($request->validated())) {
-            $apiToken = Auth::guard('admin')->user()->createToken('admin-token')->plainTextToken;
-            session(['panel_api_token' => $apiToken]);
-
             if ($redirectUri) {
                 session()->forget('panel_redirect_uri');
 

@@ -12,7 +12,6 @@ namespace InnoShop\Front\Controllers\Account;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use InnoShop\Common\Services\CartService;
 use InnoShop\Front\Requests\LoginRequest;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
@@ -62,9 +61,6 @@ class LoginController extends Controller
             CartService::getInstance(current_customer_id())->mergeCart($oldGuestId);
             session()->forget('front_redirect_uri');
             $data = ['redirect_uri' => $redirectUri];
-
-            $apiToken = Auth::guard('customer')->user()->createToken('customer-token')->plainTextToken;
-            session(['front_api_token' => $apiToken]);
 
             return json_success(front_trans('login.login_success'), $data);
         } catch (Exception $e) {

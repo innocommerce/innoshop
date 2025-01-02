@@ -22,6 +22,7 @@ class LogoutController extends Controller
     public function index(): mixed
     {
         Auth::guard('customer')->logout();
+        session()->forget('front_api_token');
 
         return redirect(front_route('home.index'));
     }
