@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use InnoShop\Common\Traits\Translatable;
@@ -45,6 +46,7 @@ class Article extends BaseModel
      * Get slug url link.
      *
      * @return string
+     * @throws Exception
      */
     public function getUrlAttribute(): string
     {
