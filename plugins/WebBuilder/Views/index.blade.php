@@ -422,7 +422,7 @@
                                             </div>
                                             <div class="blog-item-info">
                                                 <div class="blog-catalog" v-if="item.catalog">
-                                                    <a :href="item.url">@{{ item.catalog }}</a>
+                                                    @{{ item.catalog }}
                                                 </div>
                                                 <div class="blog-title">@{{ item.name }}</div>
                                                 <div class="author-wrap">

@@ -54,8 +54,16 @@ class HomeController extends BaseController
                         break;
 
                     case 'article':
-                        if (! empty($content['items'])) {
-                            $content['items'] = ArticleRepo::getInstance()->getListByArticleIDs($content['items']);
+                        if (! empty($content['articles'])) {
+                            $articleIds = array_map(function ($article) {
+                                return is_array($article) ? ($article['id'] ?? null) : $article;
+                            }, $content['articles']);
+
+                            $articleIds = array_filter(array_map('intval', $articleIds));
+
+                            if (! empty($articleIds)) {
+                                $content['articles'] = ArticleRepo::getInstance()->getListByArticleIDs($articleIds);
+                            }
                         }
                         break;
 

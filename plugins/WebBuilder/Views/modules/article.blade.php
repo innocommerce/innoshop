@@ -1,4 +1,4 @@
-@if(!empty($content['items']))
+@if(!empty($content['articles']))
 <section class="module-line">
     <div class="module-article">
         <div class="container">
@@ -12,7 +12,7 @@
             @endif
 
             <div class="row gx-3 gx-lg-4">
-                @foreach($content['items'] as $article)
+                @foreach($content['articles'] as $article)
                     <div class="col-6 col-md-4 col-lg-3">
                         @include('shared.blog', ['item' => $article])
                     </div>
