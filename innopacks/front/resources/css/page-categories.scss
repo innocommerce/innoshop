@@ -6,7 +6,6 @@ body.page-categories {
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
     margin-bottom: 26px;
-
     .right {
       display: flex;
       align-items: center;
@@ -53,7 +52,30 @@ body.page-categories {
     }
   }
 }
+      .wishlist-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    display: none;
+}
 
+
+.image:hover .wishlist-container {
+    display: block; 
+}
+
+.add-wishlist {
+    background-color: rgba(0, 0, 0, 0.5); 
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-wishlist i {
+    margin-right: 5px;
+}
 .filter-sidebar {
   .filter-sidebar-item {
     margin-bottom: 20px;
