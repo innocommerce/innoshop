@@ -15,7 +15,7 @@ $.ajaxSetup({
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
-const apiToken = document.querySelector('meta[name="api-token"]').getAttribute('content');
+const apiToken = $('meta[name="api-token"]').val();
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
 $.ajaxSetup({
   headers: {
