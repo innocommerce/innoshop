@@ -2098,6 +2098,546 @@
     }
 </style>
 
+<!-- 一行四图编辑模块 -->
+<template id="module-editor-four-image-template">
+    <div class="image-edit-wrapper">
+        <div class="module-editor-row">设置</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">模块标题</div>
+            <text-i18n v-model="form.title"></text-i18n>
+
+            <div class="module-edit-title mt-3">副标题</div>
+            <text-i18n v-model="form.subtitle"></text-i18n>
+        </div>
+
+        <div class="module-editor-row">内容</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">图片设置</div>
+            <div class="module-edit-subtitle">建议上传相同尺寸的图片，最佳尺寸400x400，支持拖拽排序</div>
+
+            <draggable
+                ghost-class="dragabble-ghost"
+                :list="form.images"
+                :options="{animation: 330, handle: '.icon-rank'}"
+            >
+                <div class="pb-images-selector" v-for="(item, index) in form.images" :key="index">
+                    <div class="selector-head" @click="itemShow(index)">
+                        <div class="left">
+                            <el-tooltip class="icon-rank" effect="dark" content="拖动排序" placement="left">
+                                <i class="el-icon-rank"></i>
+                            </el-tooltip>
+                            <img :src="thumbnail(item.image[source.locale])" class="img-responsive">
+                            <span class="image-index">图片 @{{ index + 1 }}</span>
+                        </div>
+                        <div class="right">
+                            <el-tooltip effect="dark" content="删除" placement="left">
+                                <div class="remove-item" @click.stop="removeImage(index)">
+                                    <i class="el-icon-delete"></i>
+                                </div>
+                            </el-tooltip>
+                            <i :class="'el-icon-arrow-'+(item.show ? 'up' : 'down')"></i>
+                        </div>
+                    </div>
+                    <div :class="'pb-images-list ' + (item.show ? 'active' : '')">
+                        <div class="pb-images-top">
+                            <pb-image-selector v-model="item.image"
+                                               :aspectRatio="1"
+                                               :targetWidth="400"
+                                               :targetHeight="400"></pb-image-selector>
+                            <div class="tag">建议尺寸: 400 x 400，图片比例1:1</div>
+                        </div>
+                        <div class="link-section">
+                            <div class="module-edit-subtitle">图片说明</div>
+                            <text-i18n v-model="item.description"></text-i18n>
+
+                            <div class="module-edit-subtitle mt-3">图片链接</div>
+                            <link-selector :hide-types="['catalog', 'static']" v-model="item.link"></link-selector>
+                        </div>
+                    </div>
+                </div>
+            </draggable>
+
+            <div class="add-item" v-if="form.images.length < 4">
+                <el-button type="primary" size="small" @click="addImage" icon="el-icon-circle-plus-outline">
+                    添加图片 (@{{ form.images.length }}/4)
+                </el-button>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 一行四图组件脚本 -->
+<script type="text/javascript">
+    Vue.component('module-editor-four_image', {
+        template: '#module-editor-four-image-template',
+        props: ['module'],
+        data: function () {
+            return {
+                form: null,
+                source: {
+                    locale: $locale
+                }
+            }
+        },
+        watch: {
+            form: {
+                handler: function (val) {
+                    // 深度监听 form 的变化，实时更新到父组件
+                    this.$emit('on-changed', val);
+                },
+                deep: true
+            }
+        },
+        created: function () {
+            this.form = JSON.parse(JSON.stringify(this.module));
+        },
+        methods: {
+            thumbnail(image) {
+                if (!image) {
+                    return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+                }
+                if (typeof image === 'string' && image.indexOf('http') === 0) {
+                    return image;
+                }
+                if (typeof image === 'object') {
+                    const locale = this.source.locale;
+                    return image[locale] || image['zh_cn'] || Object.values(image)[0] || "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+                }
+                return asset + image;
+            },
+            addImage() {
+                if (this.form.images.length >= 4) {
+                    this.$message.warning('最多只能添加4张图片');
+                    return;
+                }
+                this.form.images.push({
+                    image: languagesFill(''),
+                    description: languagesFill(''),
+                    link: {
+                        type: 'product',
+                        value: ''
+                    },
+                    show: true
+                });
+            },
+            removeImage(index) {
+                this.form.images.splice(index, 1);
+            },
+            itemShow(index) {
+                this.form.images[index].show = !this.form.images[index].show;
+            }
+        }
+    });
+</script>
+
+<!-- 添加样式 -->
+<style>
+    .pb-images-selector {
+        background: #fff;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+
+    .pb-images-selector .selector-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background: #f5f5f5;
+        border-radius: 4px 4px 0 0;
+        cursor: pointer;
+    }
+
+    .pb-images-selector .selector-head .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pb-images-selector .selector-head .right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .pb-images-selector .selector-head .icon-rank {
+        cursor: move;
+        color: #8446df;
+    }
+
+    .pb-images-selector .selector-head .remove-item {
+        color: #999;
+        cursor: pointer;
+    }
+
+    .pb-images-selector .selector-head .remove-item:hover {
+        color: #ff4d4f;
+    }
+
+    .pb-images-list {
+        display: none;
+        padding: 15px;
+        border: 1px solid #f5f5f5;
+        border-top: none;
+    }
+
+    .pb-images-list.active {
+        display: block;
+    }
+
+    .add-item {
+        text-align: center;
+        margin-top: 15px;
+    }
+</style>
+
+<style>
+    /* 一行四图模块样式 */
+    .module-edit-subtitle {
+        color: #666;
+        font-size: 12px;
+        margin: 5px 0 15px;
+        padding-left: 2px;
+    }
+
+    .pb-images-selector .selector-head .image-index {
+        color: #666;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+
+    .pb-images-selector .link-section {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #f5f5f5;
+    }
+
+    /* 预览区域的一行四图样式 */
+    .four-image-grid {
+        padding: 10px;
+    }
+
+    .four-image-grid .image-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .four-image-grid .image-item {
+        position: relative;
+        padding-bottom: 100%;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+
+    .four-image-grid .image-item img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .four-image-grid .image-description {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 8px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    /* 标题样式 */
+    .module-title-wrap {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .module-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .module-sub-title {
+        font-size: 14px;
+        color: #666;
+    }
+</style>
+
+<!-- 一行四图编辑模块 -->
+<template id="module-editor-four-image-template-plus">
+    <div class="image-edit-wrapper">
+        <div class="module-editor-row">设置</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">模块标题</div>
+            <text-i18n v-model="form.title"></text-i18n>
+
+            <div class="module-edit-title mt-3">副标题</div>
+            <text-i18n v-model="form.subtitle"></text-i18n>
+        </div>
+
+        <div class="module-editor-row">内容</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">图片设置</div>
+            <div class="module-edit-subtitle">建议上传相同尺寸的图片，最佳尺寸400x400，支持拖拽排序</div>
+
+            <draggable
+                ghost-class="dragabble-ghost"
+                :list="form.images"
+                :options="{animation: 330, handle: '.icon-rank'}"
+            >
+                <div class="pb-images-selector" v-for="(item, index) in form.images" :key="index">
+                    <div class="selector-head" @click="itemShow(index)">
+                        <div class="left">
+                            <el-tooltip class="icon-rank" effect="dark" content="拖动排序" placement="left">
+                                <i class="el-icon-rank"></i>
+                            </el-tooltip>
+                            <img :src="thumbnail(item.image[source.locale])" class="img-responsive">
+                            <span class="image-index">图片 @{{ index + 1 }}</span>
+                        </div>
+                        <div class="right">
+                            <el-tooltip effect="dark" content="删除" placement="left">
+                                <div class="remove-item" @click.stop="removeImage(index)">
+                                    <i class="el-icon-delete"></i>
+                                </div>
+                            </el-tooltip>
+                            <i :class="'el-icon-arrow-'+(item.show ? 'up' : 'down')"></i>
+                        </div>
+                    </div>
+                    <div :class="'pb-images-list ' + (item.show ? 'active' : '')">
+                        <div class="pb-images-top">
+                            <pb-image-selector v-model="item.image"
+                                               :aspectRatio="1"
+                                               :targetWidth="400"
+                                               :targetHeight="400"></pb-image-selector>
+                            <div class="tag">建议尺寸: 400 x 400，图片比例1:1</div>
+                        </div>
+                        <div class="link-section">
+                            <div class="module-edit-subtitle">图片说明</div>
+                            <text-i18n v-model="item.description"></text-i18n>
+
+                            <div class="module-edit-subtitle mt-3">图片链接</div>
+                            <link-selector :hide-types="['catalog', 'static']" v-model="item.link"></link-selector>
+                        </div>
+                    </div>
+                </div>
+            </draggable>
+
+            <div class="add-item" v-if="form.images.length < 4">
+                <el-button type="primary" size="small" @click="addImage" icon="el-icon-circle-plus-outline">
+                    添加图片 (@{{ form.images.length }}/4)
+                </el-button>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 一行四图PLUS组件定义 -->
+<script type="text/javascript">
+    Vue.component('module-editor-four_image-plus', {
+        template: '#module-editor-four-image-template-plus',
+        props: ['module'],
+        data: function () {
+            return {
+                form: null,
+                source: {
+                    locale: $locale
+                }
+            }
+        },
+        watch: {
+            form: {
+                handler: function (val) {
+                    // 深度监听 form 的变化，实时更新到父组件
+                    this.$emit('on-changed', val);
+                },
+                deep: true
+            }
+        },
+        created: function () {
+            this.form = JSON.parse(JSON.stringify(this.module));
+        },
+        methods: {
+            thumbnail(image) {
+                if (!image) {
+                    return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+                }
+                if (typeof image === 'string' && image.indexOf('http') === 0) {
+                    return image;
+                }
+                if (typeof image === 'object') {
+                    const locale = this.source.locale;
+                    return image[locale] || image['zh_cn'] || Object.values(image)[0] || "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+                }
+                return asset + image;
+            },
+            addImage() {
+                if (this.form.images.length >= 4) {
+                    this.$message.warning('最多只能添加4张图片');
+                    return;
+                }
+                this.form.images.push({
+                    image: languagesFill(''),
+                    description: languagesFill(''),
+                    link: {
+                        type: 'product',
+                        value: ''
+                    },
+                    show: true
+                });
+            },
+            removeImage(index) {
+                this.form.images.splice(index, 1);
+            },
+            itemShow(index) {
+                this.form.images[index].show = !this.form.images[index].show;
+            }
+        }
+    });
+</script>
+
+<!-- 文章辑模块模板 -->
+<template id="module-editor-article-template">
+    <div class="article-edit-wrapper">
+        <div class="module-editor-row">设置</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">模块标题</div>
+            <text-i18n v-model="form.title"></text-i18n>
+
+            <div class="module-edit-title mt-3">副标题</div>
+            <text-i18n v-model="form.subtitle"></text-i18n>
+        </div>
+
+        <div class="module-editor-row">内容</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">配置文章</div>
+            <div class="tab-info">
+                <div class="module-edit-group">
+                    <div class="autocomplete-group-wrapper">
+                        <el-autocomplete
+                            class="inline-input"
+                            v-model="keyword"
+                            value-key="name"
+                            size="small"
+                            :fetch-suggestions="querySearch"
+                            placeholder="请输入关键字搜索"
+                            :highlight-first-item="true"
+                            @select="handleSelect"
+                            :disabled="articleData.length >= 4">
+                        </el-autocomplete>
+
+                        <div class="item-group-wrapper" v-loading="loading">
+                            <template v-if="articleData.length">
+                                <draggable
+                                    ghost-class="dragabble-ghost"
+                                    :list="articleData"
+                                    @change="itemChange"
+                                    :options="{animation: 330}">
+                                    <div v-for="(item, index) in articleData"
+                                         :key="index"
+                                         class="item">
+                                        <div>
+                                            <i class="el-icon-s-unfold"></i>
+                                            <span>@{{ item.name }}</span>
+                                        </div>
+                                        <i class="el-icon-delete right"
+                                           @click="removeArticle(index)"></i>
+                                    </div>
+                                </draggable>
+                            </template>
+                            <template v-else>
+                                <div class="empty-tip">请添加文章</div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- 添加组件定义 -->
+<script type="text/javascript">
+    Vue.component('module-editor-article', {
+        template: '#module-editor-article-template',
+        props: ['module'],
+        data: function () {
+            return {
+                keyword: '',
+                articleData: [],
+                loading: null,
+                form: null
+            }
+        },
+        watch: {
+            form: {
+                handler: function (val) {
+                    this.$emit('on-changed', val);
+                },
+                deep: true
+            }
+        },
+        created: function () {
+            this.form = JSON.parse(JSON.stringify(this.module));
+            this.loadArticles();
+        },
+        methods: {
+            loadArticles() {
+                if (!this.form.articles.length) return;
+                this.loading = true;
+
+                axios.get('api/panel/articles/names?article_ids=' + this.form.articles.map(e => e.id).join(','), {
+                    headers: {
+                        'Authorization': 'Bearer ' + apiToken
+                    }
+                }).then((res) => {
+                    this.loading = false;
+                    this.articleData = res.data;
+                });
+            },
+
+            querySearch(keyword, cb) {
+                axios.get('api/panel/articles/autocomplete?keyword=' + encodeURIComponent(keyword), {
+                    headers: {
+                        'Authorization': 'Bearer ' + apiToken
+                    }
+                }).then((res) => {
+                    cb(res.data);
+                });
+            },
+
+            handleSelect(item) {
+                if (this.articleData.length >= 4) {
+                    this.$message.warning('最多只能添加4篇文章');
+                    return;
+                }
+                if (!this.form.articles.find(v => v.id === item.id)) {
+                    this.form.articles.push(item);
+                    this.articleData.push(item);
+                }
+                this.keyword = "";
+            },
+
+            itemChange(evt) {
+                this.form.articles = this.articleData;
+            },
+
+            removeArticle(index) {
+                this.articleData.splice(index, 1);
+                this.form.articles.splice(index, 1);
+            },
+
+            limitChange(e) {
+                this.form.limit = e;
+                this.loadArticles();
+            }
+        }
+    });
+</script>
+
 {{--全局总控脚本--}}
 <script>
     $(document).ready(function ($) {
@@ -3136,548 +3676,6 @@
         will-change: transform, opacity;
     }
 </style>
-
-<!-- 一行四图编辑模块 -->
-<template id="module-editor-four-image-template">
-    <div class="image-edit-wrapper">
-        <div class="module-editor-row">设置</div>
-        <div class="module-edit-group">
-            <div class="module-edit-title">模块标题</div>
-            <text-i18n v-model="form.title"></text-i18n>
-
-            <div class="module-edit-title mt-3">副标题</div>
-            <text-i18n v-model="form.subtitle"></text-i18n>
-        </div>
-
-        <div class="module-editor-row">内容</div>
-        <div class="module-edit-group">
-            <div class="module-edit-title">图片设置</div>
-            <div class="module-edit-subtitle">建议上传相同尺寸的图片，最佳尺寸400x400，支持拖拽排序</div>
-
-            <draggable
-                ghost-class="dragabble-ghost"
-                :list="form.images"
-                :options="{animation: 330, handle: '.icon-rank'}"
-            >
-                <div class="pb-images-selector" v-for="(item, index) in form.images" :key="index">
-                    <div class="selector-head" @click="itemShow(index)">
-                        <div class="left">
-                            <el-tooltip class="icon-rank" effect="dark" content="拖动排序" placement="left">
-                                <i class="el-icon-rank"></i>
-                            </el-tooltip>
-                            <img :src="thumbnail(item.image[source.locale])" class="img-responsive">
-                            <span class="image-index">图片 @{{ index + 1 }}</span>
-                        </div>
-                        <div class="right">
-                            <el-tooltip effect="dark" content="删除" placement="left">
-                                <div class="remove-item" @click.stop="removeImage(index)">
-                                    <i class="el-icon-delete"></i>
-                                </div>
-                            </el-tooltip>
-                            <i :class="'el-icon-arrow-'+(item.show ? 'up' : 'down')"></i>
-                        </div>
-                    </div>
-                    <div :class="'pb-images-list ' + (item.show ? 'active' : '')">
-                        <div class="pb-images-top">
-                            <pb-image-selector v-model="item.image"
-                                               :aspectRatio="1"
-                                               :targetWidth="400"
-                                               :targetHeight="400"></pb-image-selector>
-                            <div class="tag">建议尺寸: 400 x 400，图片比例1:1</div>
-                        </div>
-                        <div class="link-section">
-                            <div class="module-edit-subtitle">图片说明</div>
-                            <text-i18n v-model="item.description"></text-i18n>
-
-                            <div class="module-edit-subtitle mt-3">图片链接</div>
-                            <link-selector :hide-types="['catalog', 'static']" v-model="item.link"></link-selector>
-                        </div>
-                    </div>
-                </div>
-            </draggable>
-
-            <div class="add-item" v-if="form.images.length < 4">
-                <el-button type="primary" size="small" @click="addImage" icon="el-icon-circle-plus-outline">
-                    添加图片 (@{{ form.images.length }}/4)
-                </el-button>
-            </div>
-        </div>
-    </div>
-</template>
-<!-- 一行四图组件脚本 -->
-<script type="text/javascript">
-    Vue.component('module-editor-four_image', {
-        template: '#module-editor-four-image-template',
-        props: ['module'],
-        data: function () {
-            return {
-                form: null,
-                source: {
-                    locale: $locale
-                }
-            }
-        },
-        watch: {
-            form: {
-                handler: function (val) {
-                    // 深度监听 form 的变化，实时更新到父组件
-                    this.$emit('on-changed', val);
-                },
-                deep: true
-            }
-        },
-        created: function () {
-            this.form = JSON.parse(JSON.stringify(this.module));
-        },
-        methods: {
-            thumbnail(image) {
-                if (!image) {
-                    return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
-                }
-                if (typeof image === 'string' && image.indexOf('http') === 0) {
-                    return image;
-                }
-                if (typeof image === 'object') {
-                    const locale = this.source.locale;
-                    return image[locale] || image['zh_cn'] || Object.values(image)[0] || "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
-                }
-                return asset + image;
-            },
-            addImage() {
-                if (this.form.images.length >= 4) {
-                    this.$message.warning('最多只能添加4张图片');
-                    return;
-                }
-                this.form.images.push({
-                    image: languagesFill(''),
-                    description: languagesFill(''),
-                    link: {
-                        type: 'product',
-                        value: ''
-                    },
-                    show: true
-                });
-            },
-            removeImage(index) {
-                this.form.images.splice(index, 1);
-            },
-            itemShow(index) {
-                this.form.images[index].show = !this.form.images[index].show;
-            }
-        }
-    });
-</script>
-
-<!-- 添加样式 -->
-<style>
-    .pb-images-selector {
-        background: #fff;
-        border-radius: 4px;
-        margin-bottom: 15px;
-    }
-
-    .pb-images-selector .selector-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background: #f5f5f5;
-        border-radius: 4px 4px 0 0;
-        cursor: pointer;
-    }
-
-    .pb-images-selector .selector-head .left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .pb-images-selector .selector-head .right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .pb-images-selector .selector-head .icon-rank {
-        cursor: move;
-        color: #8446df;
-    }
-
-    .pb-images-selector .selector-head .remove-item {
-        color: #999;
-        cursor: pointer;
-    }
-
-    .pb-images-selector .selector-head .remove-item:hover {
-        color: #ff4d4f;
-    }
-
-    .pb-images-list {
-        display: none;
-        padding: 15px;
-        border: 1px solid #f5f5f5;
-        border-top: none;
-    }
-
-    .pb-images-list.active {
-        display: block;
-    }
-
-    .add-item {
-        text-align: center;
-        margin-top: 15px;
-    }
-</style>
-
-<style>
-    /* 一行四图模块样式 */
-    .module-edit-subtitle {
-        color: #666;
-        font-size: 12px;
-        margin: 5px 0 15px;
-        padding-left: 2px;
-    }
-
-    .pb-images-selector .selector-head .image-index {
-        color: #666;
-        font-size: 12px;
-        margin-left: 10px;
-    }
-
-    .pb-images-selector .link-section {
-        margin-top: 15px;
-        padding-top: 15px;
-        border-top: 1px solid #f5f5f5;
-    }
-
-    /* 预览区域的一行四图样式 */
-    .four-image-grid {
-        padding: 10px;
-    }
-
-    .four-image-grid .image-row {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-    }
-
-    .four-image-grid .image-item {
-        position: relative;
-        padding-bottom: 100%;
-        overflow: hidden;
-        border-radius: 4px;
-    }
-
-    .four-image-grid .image-item img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .four-image-grid .image-description {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 8px;
-        background: rgba(0, 0, 0, 0.6);
-        color: #fff;
-        font-size: 12px;
-        text-align: center;
-    }
-
-    /* 标题样式 */
-    .module-title-wrap {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .module-title {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    .module-sub-title {
-        font-size: 14px;
-        color: #666;
-    }
-</style>
-
-<!-- 一行四图编辑模块 -->
-<template id="module-editor-four-image-template-plus">
-    <div class="image-edit-wrapper">
-        <div class="module-editor-row">设置</div>
-        <div class="module-edit-group">
-            <div class="module-edit-title">模块标题</div>
-            <text-i18n v-model="form.title"></text-i18n>
-
-            <div class="module-edit-title mt-3">副标题</div>
-            <text-i18n v-model="form.subtitle"></text-i18n>
-        </div>
-
-        <div class="module-editor-row">内容</div>
-        <div class="module-edit-group">
-            <div class="module-edit-title">图片设置</div>
-            <div class="module-edit-subtitle">建议上传相同尺寸的图片，最佳尺寸400x400，支持拖拽排序</div>
-
-            <draggable
-                ghost-class="dragabble-ghost"
-                :list="form.images"
-                :options="{animation: 330, handle: '.icon-rank'}"
-            >
-                <div class="pb-images-selector" v-for="(item, index) in form.images" :key="index">
-                    <div class="selector-head" @click="itemShow(index)">
-                        <div class="left">
-                            <el-tooltip class="icon-rank" effect="dark" content="拖动排序" placement="left">
-                                <i class="el-icon-rank"></i>
-                            </el-tooltip>
-                            <img :src="thumbnail(item.image[source.locale])" class="img-responsive">
-                            <span class="image-index">图片 @{{ index + 1 }}</span>
-                        </div>
-                        <div class="right">
-                            <el-tooltip effect="dark" content="删除" placement="left">
-                                <div class="remove-item" @click.stop="removeImage(index)">
-                                    <i class="el-icon-delete"></i>
-                                </div>
-                            </el-tooltip>
-                            <i :class="'el-icon-arrow-'+(item.show ? 'up' : 'down')"></i>
-                        </div>
-                    </div>
-                    <div :class="'pb-images-list ' + (item.show ? 'active' : '')">
-                        <div class="pb-images-top">
-                            <pb-image-selector v-model="item.image"
-                                               :aspectRatio="1"
-                                               :targetWidth="400"
-                                               :targetHeight="400"></pb-image-selector>
-                            <div class="tag">建议尺寸: 400 x 400，图片比例1:1</div>
-                        </div>
-                        <div class="link-section">
-                            <div class="module-edit-subtitle">图片说明</div>
-                            <text-i18n v-model="item.description"></text-i18n>
-
-                            <div class="module-edit-subtitle mt-3">图片链接</div>
-                            <link-selector :hide-types="['catalog', 'static']" v-model="item.link"></link-selector>
-                        </div>
-                    </div>
-                </div>
-            </draggable>
-
-            <div class="add-item" v-if="form.images.length < 4">
-                <el-button type="primary" size="small" @click="addImage" icon="el-icon-circle-plus-outline">
-                    添加图片 (@{{ form.images.length }}/4)
-                </el-button>
-            </div>
-        </div>
-    </div>
-</template>
-<!-- 一行四图PLUS组件定义 -->
-<script type="text/javascript">
-    Vue.component('module-editor-four_image-plus', {
-        template: '#module-editor-four-image-template-plus',
-        props: ['module'],
-        data: function () {
-            return {
-                form: null,
-                source: {
-                    locale: $locale
-                }
-            }
-        },
-        watch: {
-            form: {
-                handler: function (val) {
-                    // 深度监听 form 的变化，实时更新到父组件
-                    this.$emit('on-changed', val);
-                },
-                deep: true
-            }
-        },
-        created: function () {
-            this.form = JSON.parse(JSON.stringify(this.module));
-        },
-        methods: {
-            thumbnail(image) {
-                if (!image) {
-                    return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
-                }
-                if (typeof image === 'string' && image.indexOf('http') === 0) {
-                    return image;
-                }
-                if (typeof image === 'object') {
-                    const locale = this.source.locale;
-                    return image[locale] || image['zh_cn'] || Object.values(image)[0] || "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
-                }
-                return asset + image;
-            },
-            addImage() {
-                if (this.form.images.length >= 4) {
-                    this.$message.warning('最多只能添加4张图片');
-                    return;
-                }
-                this.form.images.push({
-                    image: languagesFill(''),
-                    description: languagesFill(''),
-                    link: {
-                        type: 'product',
-                        value: ''
-                    },
-                    show: true
-                });
-            },
-            removeImage(index) {
-                this.form.images.splice(index, 1);
-            },
-            itemShow(index) {
-                this.form.images[index].show = !this.form.images[index].show;
-            }
-        }
-    });
-</script>
-
-<!-- 文章辑模块模板 -->
-<template id="module-editor-article-template">
-    <div class="article-edit-wrapper">
-        <div class="module-editor-row">设置</div>
-        <div class="module-edit-group">
-            <div class="module-edit-title">模块标题</div>
-            <text-i18n v-model="form.title"></text-i18n>
-
-            <div class="module-edit-title mt-3">副标题</div>
-            <text-i18n v-model="form.subtitle"></text-i18n>
-        </div>
-
-        <div class="module-editor-row">内容</div>
-        <div class="module-edit-group">
-            <div class="module-edit-title">配置文章</div>
-            <div class="tab-info">
-                <div class="module-edit-group">
-                    <div class="autocomplete-group-wrapper">
-                        <el-autocomplete
-                            class="inline-input"
-                            v-model="keyword"
-                            value-key="name"
-                            size="small"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入关键字搜索"
-                            :highlight-first-item="true"
-                            @select="handleSelect"
-                            :disabled="articleData.length >= 4">
-                        </el-autocomplete>
-
-                        <div class="item-group-wrapper" v-loading="loading">
-                            <template v-if="articleData.length">
-                                <draggable
-                                    ghost-class="dragabble-ghost"
-                                    :list="articleData"
-                                    @change="itemChange"
-                                    :options="{animation: 330}">
-                                    <div v-for="(item, index) in articleData"
-                                         :key="index"
-                                         class="item">
-                                        <div>
-                                            <i class="el-icon-s-unfold"></i>
-                                            <span>@{{ item.name }}</span>
-                                        </div>
-                                        <i class="el-icon-delete right"
-                                           @click="removeArticle(index)"></i>
-                                    </div>
-                                </draggable>
-                            </template>
-                            <template v-else>
-                                <div class="empty-tip">请添加文章</div>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
-<!-- 添加组件定义 -->
-<script type="text/javascript">
-    Vue.component('module-editor-article', {
-        template: '#module-editor-article-template',
-        props: ['module'],
-        data: function () {
-            return {
-                keyword: '',
-                articleData: [],
-                loading: null,
-                form: null
-            }
-        },
-        watch: {
-            form: {
-                handler: function (val) {
-                    this.$emit('on-changed', val);
-                },
-                deep: true
-            }
-        },
-        created: function () {
-            this.form = JSON.parse(JSON.stringify(this.module));
-            this.loadArticles();
-        },
-        methods: {
-            loadArticles() {
-                if (!this.form.articles.length) return;
-                this.loading = true;
-
-                axios.get('api/panel/articles/names?article_ids=' + this.form.articles.map(e => e.id).join(','), {
-                    headers: {
-                        'Authorization': 'Bearer ' + apiToken
-                    }
-                }).then((res) => {
-                    this.loading = false;
-                    this.articleData = res.data;
-                });
-            },
-
-            querySearch(keyword, cb) {
-                axios.get('api/panel/articles/autocomplete?keyword=' + encodeURIComponent(keyword), {
-                    headers: {
-                        'Authorization': 'Bearer ' + apiToken
-                    }
-                }).then((res) => {
-                    cb(res.data);
-                });
-            },
-
-            handleSelect(item) {
-                if (this.articleData.length >= 4) {
-                    this.$message.warning('最多只能添加4篇文章');
-                    return;
-                }
-                if (!this.form.articles.find(v => v.id === item.id)) {
-                    this.form.articles.push(item);
-                    this.articleData.push(item);
-                }
-                this.keyword = "";
-            },
-
-            itemChange(evt) {
-                this.form.articles = this.articleData;
-            },
-
-            removeArticle(index) {
-                this.articleData.splice(index, 1);
-                this.form.articles.splice(index, 1);
-            },
-
-            limitChange(e) {
-                this.form.limit = e;
-                this.loadArticles();
-            }
-        }
-    });
-</script>
-
-<!-- 添加样式 -->
 <style>
     .pb-images-selector {
         background: #fff;
