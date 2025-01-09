@@ -219,10 +219,10 @@
 
                             <!-- product 商品模块 -->
                             <div v-if="module && module.code == 'product' && module.content">
-                                <div v-if="module.content.title && module.content.title[source.locale]"
+                                <div v-if="module.content && module.content.title && module.content.title[source.locale]"
                                      class="module-title-wrap">
                                     <div class="module-title">@{{ module.content.title[source.locale] }}</div>
-                                    <div v-if="module.content.subtitle && module.content.subtitle[source.locale]"
+                                    <div v-if="module.content && module.content.subtitle && module.content.subtitle[source.locale]"
                                          class="module-sub-title">@{{ module.content.subtitle[source.locale] }}</div>
                                 </div>
                                 <div v-if="!module.content.products || !module.content.products.length"
@@ -654,7 +654,7 @@
                                     <div v-for="(item, index) in productData" :key="index" class="item">
                                         <div>
                                             <i class="el-icon-s-unfold"></i>
-                                            <span>@{{ item.name }}</span>
+                                            <span>${ item.name }</span>
                                         </div>
                                         <i class="el-icon-delete right" @click="removeProduct(index)"></i>
                                     </div>
@@ -698,76 +698,69 @@
                     this.$emit('on-changed', val);
                 },
                 deep: true
+            }
+        },
+
+        created: function () {
+            this.form = JSON.parse(JSON.stringify(this.module));
+            this.tabsValueProductData();
+        },
+
+        methods: {
+            tabTitleLanguage(titles) {
+                return titles['zh_cn'];
             },
 
-            created: function () {
-                this.form = JSON.parse(JSON.stringify(this.module));
-                this.tabsValueProductData();
+            tabsValueProductData() {
+                var that = this;
+
+                if (!this.form.products.length) return;
+                this.loading = true;
+
+                axios.get('api/panel/products/names?product_ids=' + this.form.products.map(e => e.id).join(','), {
+                    headers: {
+                        'Authorization': 'Bearer ' + apiToken
+                    },
+                    hload: true
+                }).then((res) => {
+                    this.loading = false;
+                    that.productData = res.data;
+                })
             },
 
-            computed: {},
-
-            methods: {
-                tabTitleLanguage(titles) {
-                    return titles['zh_cn'];
-                },
-
-                tabsValueProductData() {
-                    var that = this;
-
-                    if (!this.form.products.length) return;
-                    this.loading = true;
-
-                    axios.get('api/panel/products/names?product_ids=' + this.form.products.map(e => e.id).join(','), {
-                        headers: {
-                            'Authorization': 'Bearer ' + apiToken
-                        },
-                        hload: true
-                    }).then((res) => {
-                        this.loading = false;
-                        that.productData = res.data;
-                    })
-                },
-
-                querySearch(keyword, cb) {
-                    axios.get('api/panel/products/autocomplete?keyword=' + encodeURIComponent(keyword), null, {
-                        headers: {
-                            'Authorization': 'Bearer ' + apiToken
-                        },
-                        hload: true
-                    }).then((res) => {
-                        console.log('获取商品：');
-                        console.log(res)
-                        cb(res.data);
-                    })
-                },
-
-                handleSelect(item) {
-                    if (!this.form.products.find(v => v == item.id)) {
-                        this.form.products.push(item);
-                        this.productData.push(item);
-                    }
-
-                    this.keyword = ""
-                },
-
-                itemChange(evt) {
-                    console.log('itemChange:')
-                    console.log(this.productData)
-                    this.form.products = this.productData
-                },
-
-                addTabData(type) {
-                    console.log(type);
-                },
-
-                removeProduct(index) {
-                    this.productData.splice(index, 1)
-                    this.form.products.splice(index, 1);
-                },
+            querySearch(keyword, cb) {
+                axios.get('api/panel/products/autocomplete?keyword=' + encodeURIComponent(keyword), null, {
+                    headers: {
+                        'Authorization': 'Bearer ' + apiToken
+                    },
+                    hload: true
+                }).then((res) => {
+                    console.log('获取商品：');
+                    console.log(res)
+                    cb(res.data);
+                })
             },
+
+            handleSelect(item) {
+                if (!this.form.products.find(v => v == item.id)) {
+                    this.form.products.push(item);
+                    this.productData.push(item);
+                }
+                this.keyword = "";
+            },
+
+            itemChange(evt) {
+                console.log('itemChange:')
+                console.log(this.productData)
+                this.form.products = this.productData
+            },
+
+            removeProduct(index) {
+                this.productData.splice(index, 1)
+                this.form.products.splice(index, 1);
+            }
         }
-    })
+    });
 </script>
 
 {{--分类商品编辑模块--}}
@@ -2074,7 +2067,7 @@
                                          class="item">
                                         <div>
                                             <i class="el-icon-s-unfold"></i>
-                                            <span>@{{ item.name }}</span>
+                                            <span>${ item.name }</span>
                                         </div>
                                         <i class="el-icon-delete right"
                                            @click="removeArticle(index)"></i>
@@ -2484,6 +2477,15 @@
                         }
                         break;
                     case 'product':
+                        clone.content = {
+                            style: {
+                                background_color: ''
+                            },
+                            floor: this.languagesFill(''),
+                            products: [],
+                            title: this.languagesFill('模块标题'),
+                            subtitle: this.languagesFill('')
+                        };
                         break;
                     case 'category':
                         break;
