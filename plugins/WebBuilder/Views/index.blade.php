@@ -22,6 +22,7 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
     <script src="{{ mix('build/panel/js/app.js') }}"></script>
+    <script src="{{ asset('vendor/tinymce/5.9.1/tinymce.min.js') }}"></script>
     <script>
         let urls = {
             base_url: '{{ panel_route('home.index') }}',
