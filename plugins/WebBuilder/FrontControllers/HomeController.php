@@ -67,6 +67,9 @@ class HomeController extends BaseController
                         }
                         break;
 
+                    case 'rich_text':
+                        break;
+
                     case 'four_image':
                     case 'slideshow':
                     case 'four_image-plus':

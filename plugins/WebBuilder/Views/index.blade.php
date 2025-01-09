@@ -453,6 +453,23 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- rich_text 富文本模块 -->
+                            <div v-if="module && module.code == 'rich_text' && module.content">
+                                <div v-if="module.content.title && module.content.title[source.locale]"
+                                     class="module-title-wrap">
+                                    <div class="module-title">@{{ module.content.title[source.locale] }}</div>
+                                    <div v-if="module.content.subtitle && module.content.subtitle[source.locale]"
+                                         class="module-sub-title">@{{ module.content.subtitle[source.locale] }}</div>
+                                </div>
+                                <div v-if="module.content.content && module.content.content[source.locale]"
+                                     class="rich-text-content"
+                                     v-html="module.content.content[source.locale]">
+                                </div>
+                                <div v-else class="hint-right-edit">
+                                    请在左侧编辑富文本内容
+                                </div>
+                            </div>
                         </div>
                     </draggable>
                 </div>
@@ -2153,6 +2170,187 @@
     });
 </script>
 
+<!-- 富文本编辑器模块模板 -->
+<template id="module-editor-rich_text-template">
+    <div class="rich-text-edit-wrapper">
+        <div class="module-editor-row">设置</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">模块标题</div>
+            <text-i18n v-model="form.title"></text-i18n>
+
+            <div class="module-edit-title mt-3">副标题</div>
+            <text-i18n v-model="form.subtitle"></text-i18n>
+        </div>
+
+        <div class="module-editor-row">内容</div>
+        <div class="module-edit-group">
+            <div class="module-edit-title">富文本内容</div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" v-for="lang in languages" :key="lang.code">
+                    <button class="nav-link" :class="{ active: lang.code === currentLanguage }"
+                            :id="'tab-' + lang.code"
+                            @click="switchLanguage(lang.code)"
+                            type="button"
+                            role="tab">
+                        @{{ lang.name }}
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content pt-3">
+                <div v-for="lang in languages" :key="lang.code"
+                     class="tab-pane fade"
+                     :class="{ 'show active': lang.code === currentLanguage }"
+                     :id="'content-' + lang.code">
+                    <textarea :id="'editor-' + lang.code" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- 富文本编辑器模块脚本 -->
+<script type="text/javascript">
+    Vue.component('module-editor-rich_text', {
+        template: '#module-editor-rich_text-template',
+        props: ['module'],
+        data: function () {
+            return {
+                form: {
+                    title: {},
+                    subtitle: {},
+                    content: {},
+                    style: {
+                        background_color: ''
+                    }
+                },
+                languages: $languages,
+                currentLanguage: 'zh_cn',
+                editors: {}
+            }
+        },
+        watch: {
+            form: {
+                handler: function (val) {
+                    this.$emit('on-changed', JSON.parse(JSON.stringify(val)));
+                },
+                deep: true
+            }
+        },
+        methods: {
+            initTinyMCE(lang) {
+                const self = this;
+                const selector = `#editor-${lang}`;
+
+                if (this.editors[lang]) {
+                    return;
+                }
+
+                tinymce.init({
+                    selector: selector,
+                    height: 400,
+                    menubar: true,
+                    branding: false,
+                    promotion: false,
+                    plugins: [
+                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                        'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                    ],
+                    toolbar: 'undo redo | formatselect | ' +
+                        'bold italic backcolor | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'removeformat | help',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                    language: lang === 'zh_cn' ? 'zh_CN' : 'en',
+                    setup: function (editor) {
+                        self.editors[lang] = editor;
+                        editor.on('change', function () {
+                            self.form.content[lang] = editor.getContent();
+                        });
+                    },
+                    init_instance_callback: function (editor) {
+                        editor.setContent(self.form.content[lang] || '');
+                    }
+                });
+            },
+            switchLanguage(lang) {
+                this.currentLanguage = lang;
+                this.$nextTick(() => {
+                    this.initTinyMCE(lang);
+                });
+            }
+        },
+        mounted: function () {
+            if (this.module && this.module.content) {
+                this.form = JSON.parse(JSON.stringify(this.module));
+            }
+            // 确保每个语言都有初始值
+            this.languages.forEach(lang => {
+                if (!this.form.content[lang.code]) {
+                    this.$set(this.form.content, lang.code, '');
+                }
+            });
+
+            // 初始化第一个语言的编辑器
+            this.$nextTick(() => {
+                this.initTinyMCE(this.currentLanguage);
+            });
+        },
+        beforeDestroy() {
+            // 清理编辑器实例
+            Object.values(this.editors).forEach(editor => {
+                if (editor) {
+                    editor.destroy();
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+.rich-text-edit-wrapper .nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+}
+
+.rich-text-edit-wrapper .nav-tabs .nav-link {
+    margin-bottom: -1px;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.rich-text-edit-wrapper .nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.rich-text-edit-wrapper .tab-content {
+    padding: 1rem 0;
+}
+
+.rich-text-edit-wrapper .tox-tinymce {
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+}
+
+.rich-text-edit-wrapper .language-label {
+    font-size: 13px;
+    color: #666;
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.tox-tinymce-aux {
+    z-index: 3000 !important;
+}
+</style>
+
 {{--全局总控脚本--}}
 <script>
     $(document).ready(function ($) {
@@ -2181,6 +2379,7 @@
             },
             showPropertyPanel: false,
             languages: $languages || [], // 添加 languages 到 data
+            moduleComponents: {} // 用于存储模块组件实例
         },
 
         computed: {
@@ -2205,11 +2404,14 @@
                 }
             },
 
-            'form.modules': function(newVal) {
-                if(newVal.length === 0) {
-                    this.showPropertyPanel = false;
-                    this.design.editingModuleIndex = -1;
-                }
+            'form.modules': {
+                handler: function(newVal) {
+                    if(newVal.length === 0) {
+                        this.showPropertyPanel = false;
+                        this.design.editingModuleIndex = -1;
+                    }
+                },
+                deep: true
             }
         },
 
@@ -2844,6 +3046,21 @@
             title: languagesFill('模块标题'),
             subtitle: languagesFill('探索未来，引领创新，加入我们，一起见证最新科技的诞生。'),
             articles: []
+        }
+    });
+
+    // 富文本模块
+    app.source.modules.push({
+        title: '富文本模块',
+        code: 'rich_text',
+        icon: '<i class="bi bi-file-richtext"></i>',
+        content: {
+            style: {
+                background_color: ''
+            },
+            title: languagesFill(''),
+            subtitle: languagesFill(''),
+            content: languagesFill('')
         }
     });
 </script>
