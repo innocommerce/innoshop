@@ -557,6 +557,15 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * @param  $slug
+     * @return ?Product
+     */
+    public function findBySlug($slug): ?Product
+    {
+        return Product::query()->where('slug', $slug)->first();
+    }
+
+    /**
      * @param  $keyword
      * @param  int  $limit
      * @return mixed

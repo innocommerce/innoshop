@@ -23,6 +23,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/products', [PanelApiControllers\ProductController::class, 'index'])->name('products.index');
     Route::get('/products/names', [PanelApiControllers\ProductController::class, 'names'])->name('products.names');
     Route::get('/products/autocomplete', [PanelApiControllers\ProductController::class, 'autocomplete'])->name('products.autocomplete');
+    Route::post('/products/import', [PanelApiControllers\ProductController::class, 'import'])->name('products.import');
 
     Route::get('/categories', [PanelApiControllers\CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/names', [PanelApiControllers\CategoryController::class, 'names'])->name('categories.names');
