@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Category;
@@ -161,7 +162,7 @@ class CategoryRepo extends BaseRepo
             $category->translations()->createMany($translations);
 
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
@@ -175,10 +176,10 @@ class CategoryRepo extends BaseRepo
     {
         return [
             'parent_id' => $data['parent_id'] ?? 0,
-            'slug'      => $data['slug'],
-            'image'     => $data['image']    ?? '',
-            'position'  => $data['position'] ?? 0,
-            'active'    => $data['active']   ?? true,
+            'slug'      => $data['slug']      ?? null,
+            'image'     => $data['image']     ?? '',
+            'position'  => $data['position']  ?? 0,
+            'active'    => $data['active']    ?? true,
         ];
     }
 
@@ -279,5 +280,46 @@ class CategoryRepo extends BaseRepo
     public function getNameByID($id): string
     {
         return Category::query()->find($id)->description->name ?? '';
+    }
+
+    /**
+     * @param  $name
+     * @param  string  $locale
+     * @return mixed
+     * @throws Exception
+     */
+    public function findByName($name, string $locale = ''): mixed
+    {
+        if (empty($locale)) {
+            $locale = locale_code();
+        }
+
+        $translation = Category\Translation::query()->where('name', $name)->where('locale', $locale)->first();
+
+        return $translation->category ?? null;
+    }
+
+    /**
+     * @param  $name
+     * @param  string  $locale
+     * @return mixed
+     * @throws Throwable
+     */
+    public function findOrCreateByName($name, string $locale = ''): mixed
+    {
+        $category = $this->findByName($name, $locale);
+        if ($category) {
+            return $category;
+        }
+
+        $data = [];
+        foreach (locales() as $locale) {
+            $data['translations'][] = [
+                'locale' => $locale->code,
+                'name'   => $name,
+            ];
+        }
+
+        return $this->create($data);
     }
 }

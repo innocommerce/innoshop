@@ -30,11 +30,11 @@ use Throwable;
 
 class CheckoutService extends BaseService
 {
-    private int $customerID;
+    protected int $customerID;
 
-    private string $guestID;
+    protected string $guestID;
 
-    private array $cartList = [];
+    protected array $cartList = [];
 
     private array $addressList = [];
 
@@ -78,7 +78,7 @@ class CheckoutService extends BaseService
      */
     public static function getInstance(int $customerID = 0, string $guestID = ''): static
     {
-        return new self($customerID, $guestID);
+        return new static($customerID, $guestID);
     }
 
     /**

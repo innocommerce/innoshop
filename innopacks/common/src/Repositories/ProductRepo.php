@@ -231,6 +231,7 @@ class ProductRepo extends BaseRepo
         }
 
         return [
+            'spu_code'         => $data['spu_code'],
             'slug'             => $data['slug'],
             'brand_id'         => $data['brand_id']         ?? 0,
             'product_image_id' => $data['product_image_id'] ?? 0,
@@ -554,6 +555,32 @@ class ProductRepo extends BaseRepo
             ->whereIn('id', $productIDs)
             ->orderByRaw('FIELD(id, '.implode(',', $productIDs).')')
             ->get();
+    }
+
+    /**
+     * @param  $spuCode
+     * @return ?Product
+     */
+    public function findBySpuCode($spuCode): ?Product
+    {
+        if (empty($spuCode)) {
+            return null;
+        }
+
+        return Product::query()->where('spu_code', $spuCode)->first();
+    }
+
+    /**
+     * @param  $slug
+     * @return ?Product
+     */
+    public function findBySlug($slug): ?Product
+    {
+        if (empty($spuCode)) {
+            return null;
+        }
+
+        return Product::query()->where('slug', $slug)->first();
     }
 
     /**

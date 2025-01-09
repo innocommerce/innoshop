@@ -1,6 +1,19 @@
 @extends('layouts.app')
 @section('body-class', 'page-product')
 
+@if($product->translation->meta_title ?? '')
+  @section('title', $product->translation->meta_title ?? '')
+@endif
+
+@if($product->translation->meta_description ?? '')
+  @section('description', $product->translation->meta_description ?? '')
+@endif
+
+@if($product->translation->meta_keywords ?? '')
+  @section('keywords', $product->translation->meta_keywords ?? '')
+@endif
+
+
 @push('header')
   <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
   <link rel="stylesheet" href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}">
