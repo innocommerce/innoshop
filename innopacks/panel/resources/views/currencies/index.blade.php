@@ -41,11 +41,7 @@
           @foreach($currencies as $item)
           <tr>
             <td>{{ $item->id }}</td>
-            <td>{{ $item->name }}
-             @if($item->code == system_setting('currency')) 
-             ({{ __('front/common.default') }})
-             @endif
-            </td>
+            <td>{{ $item->name }}</td>
             <td>{{ $item->code }}</td>
             <td>{{ $item->symbol_left }}</td>
             <td>{{ $item->symbol_right }}</td>

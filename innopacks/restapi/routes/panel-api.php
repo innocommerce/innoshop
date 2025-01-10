@@ -47,6 +47,8 @@ Route::middleware($middlewares)->group(function () {
     Route::put('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'update'])->name('catalogs.update');
     Route::delete('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'destroy'])->name('catalogs.destroy');
 
+    Route::post('/orders/{order}/notes', [PanelApiControllers\OrderController::class, 'updateNote'])->name('orders.update_note');
+
     Route::get('/pages', [PanelApiControllers\PageController::class, 'index'])->name('pages.index');
     Route::get('/pages/names', [PanelApiControllers\PageController::class, 'names'])->name('pages.names');
     Route::get('/pages/autocomplete', [PanelApiControllers\PageController::class, 'autocomplete'])->name('pages.autocomplete');

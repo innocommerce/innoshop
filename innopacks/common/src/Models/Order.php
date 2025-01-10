@@ -41,7 +41,7 @@ class Order extends BaseModel
         'shipping_city', 'shipping_address_1', 'shipping_address_2', 'shipping_zipcode', 'billing_method_code',
         'billing_method_name', 'billing_customer_name', 'billing_calling_code', 'billing_telephone', 'billing_country',
         'billing_country_id', 'billing_state_id', 'billing_state', 'billing_city', 'billing_address_1',
-        'billing_address_2', 'billing_zipcode', 'comment',
+        'billing_address_2', 'billing_zipcode', 'comment', 'admin_note',
     ];
 
     protected $appends = [
