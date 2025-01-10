@@ -2,7 +2,7 @@
   @foreach($menuLinks as $index => $menuLink)
     <div class="accordion-item">
       @if(!$menuLink['has_children'])
-        <a class="accordion-button {{ $menuLink['active'] ? '' : 'collapsed' }}" href="{{ $menuLink['url'] }}">
+        <a class="accordion-button {{ $menuLink['active'] ? '' : 'collapsed' }}" href="{{ $menuLink['url'] }}" @if($menuLink['blank'] ?? false) target="_blank" @endif>
           <span class="icon"><i class="bi {{ $menuLink['icon'] ?? 'bi-house' }}"></i></span> {{ $menuLink['title'] }}
         </a>
       @else
@@ -22,8 +22,9 @@
             <ul class="nav flex-column">
               @foreach($menuLink['children'] as $child)
                 <li class="nav-item">
-                  <a href="{{ $child['url'] }}"
-                     class="nav-link {{ $child['active'] ? 'active' : '' }}">{{ $child['title'] }}</a>
+                  <a href="{{ $child['url'] }}" class="nav-link {{ $child['active'] ? 'active' : '' }}" @if($child['blank'] ?? false) target="_blank" @endif>
+                    {{ $child['title'] }}
+                  </a>
                 </li>
               @endforeach
             </ul>
