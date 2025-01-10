@@ -557,6 +557,7 @@ return new class extends Migration
             $table->string('billing_address_2')->comment('Billing Address 1');
             $table->string('billing_zipcode')->comment('Billing Address Zipcode');
             $table->text('comment')->nullable()->comment('Order Comment');
+            $table->text('admin_note')->nullable()->comment('Admin Note');
             $table->timestamps();
             $table->softDeletes()->comment('Deleted At');
         });
