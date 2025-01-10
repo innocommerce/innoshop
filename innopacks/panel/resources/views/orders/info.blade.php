@@ -163,8 +163,17 @@
     <div class="card-header">
       <h5 class="card-title mb-0">{{ __('front/checkout.order_comment') }}</h5>
     </div>
-    <div class="card-body">
-      {{ $order->comment }}
+    <div class="card-body d-flex">
+      <div class="col-md-6 fs-5 px-3">
+         <div class="fs-5 ">{{ __('panel/order.customer_remarks') }}</div>
+         <div class="fs-6 mt-4">{{ $order->comment }}</div>
+      </div>       
+      <div class="col-md-6 fs-5">
+        <div class=" fs-5">{{ __('panel/order.administrator_remarks') }}</div>
+        <div class="fs-6 mt-3">
+              <input data-order-id="{{ $order->id }}" style="width: 200px;" type="text" class="form-control admin-comment-input" aria-describedby="basic-addon1" value="{{ $order->admin_note }}">
+        </div>
+      </div>
     </div>
   </div>
 
@@ -185,7 +194,7 @@
         @foreach($order->histories as $history)
           <tr>
             <td data-title="State">{{ $history->status }}</td>
-            <td data-title="Remark">{{ $history->comment }}</td>
+            <td data-title="Remark">{{ $order->comment }}</td>
             <td data-title="Update Time">{{ $history->created_at }}</td>
           </tr>
         @endforeach
@@ -198,6 +207,25 @@
 
 @push('footer')
   <script>
+    $(document).ready(function() {
+    $('.admin-comment-input').on('keydown', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); 
+            var comment = $(this).val();
+            var orderId = $(this).data('order-id');
+            var apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
+            axios.post(apiUrl, {
+                admin_note: comment,
+            })
+            .then(function(res) {
+                 inno.msg(res.message);
+                 console.log(res.data.admin_note);
+                 console.log(typeof res.data.admin_note);
+                 $('.admin-comment-input').val(res.data.admin_note);
+            })
+        }
+    });
+   });
     const {createApp, ref} = Vue
     const api = @json(panel_route('orders.change_status', $order));
     const statusApp = createApp({

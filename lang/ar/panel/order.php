@@ -9,6 +9,7 @@
 
 return [
     'address'                => 'العنوان',
+    'administrator_remarks'  => 'ملاحظات المشرف',
     'billing_address'        => 'عنوان الفاتورة',
     'billing_address_1'      => 'عنوان الفاتورة 1',
     'billing_address_2'      => 'عنوان الفاتورة 2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => 'معرّف مجموعة العملاء',
     'customer_id'            => 'معرّف العميل',
     'customer_name'          => 'اسم العميل',
+    'customer_remarks'       => 'ملاحظات العميل',
     'date_time'              => 'وقت التحديث',
     'email'                  => 'البريد الإلكتروني',
     'history'                => 'سجل الحالة',

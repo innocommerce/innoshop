@@ -9,6 +9,7 @@
 
 return [
     'address'                => 'Alamat',
+    'administrator_remarks'  => 'Catatan Pentadbir',
     'billing_address'        => 'Alamat Bil',
     'billing_address_1'      => 'Alamat Bil 1',
     'billing_address_2'      => 'Alamat Bil 2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => 'ID Kumpulan Pelanggan',
     'customer_id'            => 'ID Pelanggan',
     'customer_name'          => 'Nama Pelanggan',
+    'customer_remarks'       => 'Catatan Pelanggan',
     'date_time'              => 'Masa Dikemaskini',
     'email'                  => 'E-mel',
     'history'                => 'Sejarah Status',
