@@ -60,7 +60,7 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="product-info">
-            <h1 class="product-title">{{ $product->translation->name }}</h1>
+            <h1 class="product-title">{{ $product->fallbackName() }}</h1>
             @hookupdate('front.product.show.price')
             <div class="product-price">
               <span class="price">{{ $sku['price_format'] }}</span>
@@ -75,7 +75,7 @@
               <div class="out-stock badge d-none">{{ __('front/product.out_stock') }}</div>
             </div>
 
-            <div class="sub-product-title">{{ $product->translation->summary }}</div>
+            <div class="sub-product-title">{{ $product->fallbackName('summary') }}</div>
 
             <ul class="product-param">
               <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span
@@ -151,10 +151,10 @@
       </ul>
       <div class="tab-content">
         <div class="tab-pane fade show active" id="product-description-description">
-          @if($product->translation->selling_point)
-            {!! parsedown($product->translation->selling_point) !!}
+          @if($product->fallbackName('selling_point'))
+            {!! parsedown($product->fallbackName('selling_point')) !!}
           @endif
-          {!! $product->translation->content !!}
+          {!! $product->fallbackName('content') !!}
         </div>
 
         @if($attributes)

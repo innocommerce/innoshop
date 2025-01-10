@@ -27,9 +27,14 @@ class Breadcrumb
      */
     public function getTrail($type, $object, string $title = ''): array
     {
-        if (in_array($type, ['category', 'product', 'catalog', 'article', 'page', 'tag'])) {
+        if (in_array($type, ['category', 'product', 'tag'])) {
             return [
-                'title' => $object->translation->name ?: $object->translation->title,
+                'title' => $object->fallbackName('name'),
+                'url'   => $object->url,
+            ];
+        } elseif (in_array($type, ['catalog', 'article', 'page'])) {
+            return [
+                'title' => $object->fallbackName('title'),
                 'url'   => $object->url,
             ];
         } elseif ($type == 'brand') {
