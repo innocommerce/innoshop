@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Resources\ProductSimple;
+use InnoShop\RestAPI\Services\ProductImportService;
 use Throwable;
 
 class ProductController extends BaseController
@@ -66,15 +67,13 @@ class ProductController extends BaseController
             $data = $request->all();
             foreach ($data['products'] as $productData) {
                 $product = null;
-                $slug    = $productData['slug'] ?? '';
-                if ($slug) {
-                    $product = ProductRepo::getInstance()->findBySlug($slug);
+                $spuCode = $productData['spu_code'] ?? '';
+                if (empty($spuCode)) {
+                    throw new \Exception('Empty SPU code!');
                 }
-                if ($product) {
-                    ProductRepo::getInstance()->update($product, $productData);
-                } else {
-                    ProductRepo::getInstance()->create($productData);
-                }
+
+                $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
+                ProductImportService::getInstance()->import($productData, $product);
             }
 
             return create_json_success();

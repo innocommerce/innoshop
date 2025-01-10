@@ -28,8 +28,8 @@ class Product extends BaseModel
     use HasPackageFactory, Replicate, Translatable;
 
     protected $fillable = [
-        'brand_id', 'product_image_id', 'product_video_id', 'product_sku_id', 'tax_class_id', 'slug', 'is_virtual',
-        'variables', 'position', 'active', 'weight', 'weight_class', 'sales', 'viewed',
+        'brand_id', 'product_image_id', 'product_video_id', 'product_sku_id', 'tax_class_id', 'spu_code', 'slug',
+        'is_virtual', 'variables', 'position', 'active', 'weight', 'weight_class', 'sales', 'viewed',
     ];
 
     protected $casts = [
