@@ -16,6 +16,7 @@ $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
     'Authorization' : 'Bearer ' + apiToken,
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
 window.apiToken = $.apiToken = apiToken;
