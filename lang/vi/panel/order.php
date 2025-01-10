@@ -9,6 +9,7 @@
 
 return [
     'address'                => 'địa chỉ',
+    'administrator_remarks'  => 'Ghi chú của quản trị viên',
     'billing_address'        => 'địa chỉ hóa đơn',
     'billing_address_1'      => 'địa chỉ hóa đơn 1',
     'billing_address_2'      => 'địa chỉ hóa đơn 2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => 'ID nhóm khách hàng',
     'customer_id'            => 'ID khách hàng',
     'customer_name'          => 'tên khách hàng',
+    'customer_remarks'       => 'Ghi chú của khách hàng',
     'date_time'              => 'thời gian cập nhật',
     'email'                  => 'thư điện tử',
     'history'                => 'lịch sử trạng thái',

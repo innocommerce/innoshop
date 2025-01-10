@@ -9,6 +9,7 @@
 
 return [
     'address'                => '地址',
+    'administrator_remarks'  => '管理员备注',
     'billing_address'        => '账单地址',
     'billing_address_1'      => '账单地址1',
     'billing_address_2'      => '账单地址2',
@@ -35,11 +36,12 @@ return [
     'customer_group_id'      => '客户组ID',
     'customer_id'            => '客户ID',
     'customer_name'          => '客户姓名',
+    'customer_remarks'       => '客户备注',
     'date_time'              => '更新时间',
     'email'                  => '电子邮件',
     'history'                => '状态历史',
-    'index'                  => '序号',
     'image'                  => '图片',
+    'index'                  => '序号',
     'ip'                     => 'IP地址',
     'locale'                 => '客户语言',
     'number'                 => '订单号',

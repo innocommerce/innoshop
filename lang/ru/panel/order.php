@@ -9,6 +9,7 @@
 
 return [
     'address'                => 'Адрес',
+    'administrator_remarks'  => 'Комментарии администратора',
     'billing_address'        => 'Адрес для выставления счета',
     'billing_address_1'      => 'Адрес для выставления счета 1',
     'billing_address_2'      => 'Адрес для выставления счета 2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => 'ID группы клиентов',
     'customer_id'            => 'ID клиента',
     'customer_name'          => 'Имя клиента',
+    'customer_remarks'       => 'Комментарии клиента',
     'date_time'              => 'Время обновления',
     'email'                  => 'Электронная почта',
     'history'                => 'История статусов',

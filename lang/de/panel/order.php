@@ -9,6 +9,7 @@
 
 return [
     'address'                => 'Adresse',
+    'administrator_remarks'  => 'Administratorenbemerkungen',
     'billing_address'        => 'Rechnungsadresse',
     'billing_address_1'      => 'Rechnungsadresse 1',
     'billing_address_2'      => 'Rechnungsadresse 2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => 'Kundengruppe ID',
     'customer_id'            => 'Kunden ID',
     'customer_name'          => 'Kundenname',
+    'customer_remarks'       => 'Kundenbemerkungen',
     'date_time'              => 'Aktualisiert am',
     'email'                  => 'E-Mail',
     'history'                => 'Statusverlauf',

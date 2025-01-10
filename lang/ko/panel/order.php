@@ -9,6 +9,7 @@
 
 return [
     'address'                => '주소',
+    'administrator_remarks'  => '관리자 댓글',
     'billing_address'        => '청구지 주소',
     'billing_address_1'      => '청구지 주소1',
     'billing_address_2'      => '청구지 주소2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => '고객 그룹 ID',
     'customer_id'            => '고객 ID',
     'customer_name'          => '고객 이름',
+    'customer_remarks'       => '고객 댓글',
     'date_time'              => '업데이트 시간',
     'email'                  => '이메일',
     'history'                => '상태 기록',

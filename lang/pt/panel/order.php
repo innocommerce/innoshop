@@ -9,6 +9,7 @@
 
 return [
     'address'                => 'Endereço',
+    'administrator_remarks'  => 'Comentários do administrador',
     'billing_address'        => 'Endereço de Cobrança',
     'billing_address_1'      => 'Endereço de Cobrança 1',
     'billing_address_2'      => 'Endereço de Cobrança 2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => 'ID do Grupo de Clientes',
     'customer_id'            => 'ID do Cliente',
     'customer_name'          => 'Nome do Cliente',
+    'customer_remarks'       => 'Comentários do cliente',
     'date_time'              => 'Data e Hora',
     'email'                  => 'E-mail',
     'history'                => 'Histórico de Status',

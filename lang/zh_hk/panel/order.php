@@ -9,6 +9,7 @@
 
 return [
     'address'                => '地址',
+    'administrator_remarks'  => '管理員備註',
     'billing_address'        => '賬單地址',
     'billing_address_1'      => '賬單地址1',
     'billing_address_2'      => '賬單地址2',
@@ -35,6 +36,7 @@ return [
     'customer_group_id'      => '客戶組ID',
     'customer_id'            => '客戶ID',
     'customer_name'          => '客戶姓名',
+    'customer_remarks'       => '客戶備註',
     'date_time'              => '更新時間',
     'email'                  => '電子郵件',
     'history'                => '狀態歷史',
