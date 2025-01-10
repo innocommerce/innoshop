@@ -30,9 +30,9 @@
             <td><img src="{{ image_resize($item['image'], 90, 60) }}" class="border" style="width: 30px;"></td>
             <td>
              {{ $item['name'] }}
-               @if($item['code']==system_setting('front_locale'))
-              ({{__('front/common.default')}})
-             @endif
+              @if($item['code']==system_setting('front_locale'))
+              ({{ __('front/common.default') }})
+              @endif
             </td>
             <td>{{ $item['code'] }}</td>
             <td>{{ $item['position'] }}</td>

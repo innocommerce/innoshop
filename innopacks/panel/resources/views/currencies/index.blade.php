@@ -43,7 +43,7 @@
             <td>{{ $item->id }}</td>
             <td>{{ $item->name }}
              @if($item->code==system_setting('currency')) 
-             ({{__('front/common.default')}})
+             ({{ __('front/common.default') }})
              @endif
             </td>
             <td>{{ $item->code }}</td>
