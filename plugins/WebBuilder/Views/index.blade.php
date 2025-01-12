@@ -713,20 +713,33 @@
             },
 
             tabsValueProductData() {
-                var that = this;
+                if (!this.form.products || !this.form.products.length) {
+                    this.productData = [];
+                    return;
+                }
 
-                if (!this.form.products.length) return;
                 this.loading = true;
+                var productIds = this.form.products.map(function(product) {
+                    return typeof product === 'object' ? product.id : product;
+                }).join(',');
 
-                axios.get('api/panel/products/names?product_ids=' + this.form.products.map(e => e.id).join(','), {
-                    headers: {
-                        'Authorization': 'Bearer ' + apiToken
-                    },
-                    hload: true
-                }).then((res) => {
+                axios.get('api/panel/products/names', {
+                    params: {
+                        ids: productIds
+                    }
+                }).then(response => {
+                    this.productData = response.data.map(item => {
+                        return {
+                            id: item.id,
+                            name: item.name,
+                            image: item.image_big
+                        };
+                    });
                     this.loading = false;
-                    that.productData = res.data;
-                })
+                }).catch(error => {
+                    console.error('Error loading products:', error);
+                    this.loading = false;
+                });
             },
 
             querySearch(keyword, cb) {
@@ -743,10 +756,26 @@
             },
 
             handleSelect(item) {
-                if (!this.form.products.find(v => v == item.id)) {
-                    this.form.products.push(item);
-                    this.productData.push(item);
+                if (!this.form.products) {
+                    this.form.products = [];
                 }
+
+                // Check if product already exists
+                if (!this.form.products.find(p => (p.id || p) === item.id)) {
+                    // Add to both arrays
+                    this.productData.push({
+                        id: item.id,
+                        name: item.name,
+                        image: item.image_big
+                    });
+
+                    this.form.products.push({
+                        id: item.id,
+                        name: item.name,
+                        image_big: item.image_big
+                    });
+                }
+
                 this.keyword = "";
             },
 
