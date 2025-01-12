@@ -12,6 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="api-token" content="{{ session('api_token') }}">
     <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('vendor/element-plus/index.css') }}">
     <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">

@@ -1160,7 +1160,7 @@
              @click="selectorContentShow = !selectorContentShow">选择链接
         </div>
         <div class="title" @click="selectorContentShow = !selectorContentShow" v-else :title="name"
-             v-loading="nameLoading">@{{ selectorTitle }}: @{{ name[0]?.name ?? '' }}
+             v-loading="nameLoading">@{{ selectorTitle }}: @{{ Array.isArray(name) ? name[0]?.name : name }}
         </div>
         <div :class="'selector-content ' + (selectorContentShow ? 'active' : '')">
           <div @click="selectorType()">无</div>
@@ -1236,7 +1236,7 @@
                       <span
                           :class="'checkbox-plus ' + (link.value == product.id ? 'active':'') + (!product.active ? 'no-status':'')"></span>
                       <img :src="product.image_small" v-if="product.image" class="img-responsive">
-                      <div>@{{ product.name }}</div>
+                      <div>@{{ product.name ? product.name: product.slug  }}</div>
                     </div>
                     <div :class="'right ' + (product.active ? 'ok' : 'no')">
                       <template v-if="product.active">启用</template>
