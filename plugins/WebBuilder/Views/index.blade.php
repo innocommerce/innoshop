@@ -2067,7 +2067,7 @@
                                          class="item">
                                         <div>
                                             <i class="el-icon-s-unfold"></i>
-                                            <span>${ item.name }</span>
+                                            <span>@{{ item.name }}</span>
                                         </div>
                                         <i class="el-icon-delete right"
                                            @click="removeArticle(index)"></i>
