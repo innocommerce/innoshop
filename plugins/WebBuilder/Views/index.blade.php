@@ -1318,7 +1318,7 @@
                           <span
                               :class="'checkbox-plus ' + (link.value == product.id ? 'active':'') + (!product.active ? 'no-status':'')"></span>
                                         <img :src="product.image_small" v-if="product.image" class="img-responsive">
-                                        <div>@{{ product.name }}</div>
+                                        <div>@{{ product.name ? product.name: product.slug  }}</div>
                                     </div>
                                     <div :class="'right ' + (product.active ? 'ok' : 'no')">
                                         <template v-if="product.active">启用</template>
