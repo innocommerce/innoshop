@@ -59,4 +59,6 @@ return [
     'top_product'        => 'สินค้า',
     'top_setting'        => 'การตั้งค่า',
     'upload'             => 'ฟังก์ชันการอัปโหลด',
+    'attribute_values'   => 'ค่าคุณสมบัติ',
+    'socials'            => 'การเข้าสู่ระบบโซเชียล',
 ];

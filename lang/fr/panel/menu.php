@@ -59,4 +59,8 @@ return [
     'top_product'        => 'Produit',
     'top_setting'        => 'Paramètres',
     'upload'             => 'Fonctionnalité de téléchargement',
+    'attribute_values'   => 'Valeurs d\'attributs',
+    'socials'            => 'Connexions sociales',
+    'orders_printing'    => 'Impression de commandes',
+
 ];
