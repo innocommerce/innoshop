@@ -17,6 +17,12 @@ class MetaInfo
 
     private string $type;
 
+    private string $systemMetaTitle;
+
+    private string $systemMetaDescription;
+
+    private string $systemMetaKeywords;
+
     /**
      * @param  $object
      */
@@ -24,6 +30,7 @@ class MetaInfo
     {
         $this->object = $object;
         $this->setType();
+        $this->setSystemInfo();
     }
 
     public static function getInstance($object): MetaInfo
@@ -42,16 +49,30 @@ class MetaInfo
     }
 
     /**
+     * @return void
+     */
+    public function setSystemInfo(): void
+    {
+        $this->systemMetaTitle       = system_setting_locale('meta_title');
+        $this->systemMetaDescription = system_setting_locale('meta_description');
+        $this->systemMetaKeywords    = system_setting_locale('meta_keywords');
+    }
+
+    /**
      * @return string
      */
     public function getTitle(): string
     {
         $metaTitle = $this->object->translation->meta_title ?? '';
-        if ($metaTitle) {
-            return $metaTitle;
+        if (empty($metaTitle)) {
+            $metaTitle = $this->getName();
         }
 
-        return $this->getName();
+        if ($this->systemMetaTitle) {
+            $metaTitle .= ' - '.$this->systemMetaTitle;
+        }
+
+        return $metaTitle;
     }
 
     /**
@@ -60,11 +81,15 @@ class MetaInfo
     public function getDescription(): string
     {
         $metaDescription = $this->object->translation->meta_description ?? '';
-        if ($metaDescription) {
-            return $metaDescription;
+        if (empty($metaDescription)) {
+            $metaDescription = $this->getName();
         }
 
-        return $this->getName();
+        if ($this->systemMetaDescription) {
+            $metaDescription .= '. '.$this->systemMetaDescription;
+        }
+
+        return $metaDescription;
     }
 
     /**
@@ -73,11 +98,15 @@ class MetaInfo
     public function getKeywords(): string
     {
         $metaKeywords = $this->object->translation->meta_keywords ?? '';
-        if ($metaKeywords) {
-            return $metaKeywords;
+        if (empty($metaKeywords)) {
+            $metaKeywords = $this->getName();
         }
 
-        return $this->getName();
+        if ($this->systemMetaKeywords) {
+            $metaKeywords .= ', '.$this->systemMetaKeywords;
+        }
+
+        return $metaKeywords;
     }
 
     /**

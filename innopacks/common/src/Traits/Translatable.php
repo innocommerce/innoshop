@@ -62,11 +62,12 @@ trait Translatable
     /**
      * Get translated name.
      *
+     * @param  string  $field
      * @return string
      */
-    public function translatedName(): string
+    public function translatedName(string $field = 'name'): string
     {
-        return $this->translation->name ?? '';
+        return $this->translation->{$field} ?? '';
     }
 
     /**
@@ -77,7 +78,7 @@ trait Translatable
      */
     public function fallbackName(string $field = 'name'): string
     {
-        $translatedName = $this->translatedName();
+        $translatedName = $this->translatedName($field);
         if ($translatedName) {
             return $translatedName;
         }
