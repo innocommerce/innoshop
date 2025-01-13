@@ -59,4 +59,6 @@ return [
     'top_product'        => 'Produkte',
     'top_setting'        => 'Einstellungen',
     'upload'             => 'Upload Funktion',
+    'attribute_values'   => 'Attributwerte',
+    'socials'            => 'Drittanbieter-Login',
 ];
