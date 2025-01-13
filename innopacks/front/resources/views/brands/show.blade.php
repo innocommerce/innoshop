@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('body-class', 'page-categories')
 
+@section('title', \InnoShop\Common\Libraries\MetaInfo::getInstance($brand)->getTitle())
+@section('description', \InnoShop\Common\Libraries\MetaInfo::getInstance($brand)->getDescription())
+@section('keywords', \InnoShop\Common\Libraries\MetaInfo::getInstance($brand)->getKeywords())
+
 @section('content')
 <x-front-breadcrumb type="brand" :value="$brand" />
 

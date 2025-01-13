@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title', \InnoShop\Common\Libraries\MetaInfo::getInstance($page)->getTitle())
+@section('description', \InnoShop\Common\Libraries\MetaInfo::getInstance($page)->getDescription())
+@section('keywords', \InnoShop\Common\Libraries\MetaInfo::getInstance($page)->getKeywords())
+
 @section('content')
   @if($page->show_breadcrumb)
       <x-front-breadcrumb type="page" :value="$page" />
