@@ -59,4 +59,6 @@ return [
     'top_product'        => 'Prodotti',
     'top_setting'        => 'Impostazioni',
     'upload'             => 'Funzionalità di caricamento',
+    'attribute_values'   => 'Valori degli attributi',
+    'socials'            => 'Accessi sociali',
 ];

@@ -59,4 +59,6 @@ return [
     'top_product'        => 'Produk',
     'top_setting'        => 'Tetapan',
     'upload'             => 'Fungsi Muat Naik',
+    'attribute_values'   => 'Nilai atribut',
+    'socials'            => 'Log masuk sosial',
 ];

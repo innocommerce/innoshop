@@ -60,4 +60,6 @@ return [
     'top_product'        => 'Produk',
     'top_setting'        => 'Pengaturan',
     'upload'             => 'Fungsi Unggah',
+    'attribute_values'   => 'Nilai Atribut',
+    'socials'            => 'Login Sosial',
 ];

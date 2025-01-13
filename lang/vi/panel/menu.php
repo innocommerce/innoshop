@@ -59,4 +59,6 @@ return [
     'top_product'        => 'sản phẩm',
     'top_setting'        => 'thiết lập',
     'upload'             => 'chức năng tải lên',
+    'attribute_values'   => 'Giá trị thuộc tính',
+    'socials'            => 'Đăng nhập xã hội',
 ];

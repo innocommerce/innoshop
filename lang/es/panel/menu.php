@@ -60,4 +60,6 @@ return [
     'top_product'        => 'Producto',
     'top_setting'        => 'Ajuste',
     'upload'             => 'Función de carga',
+    'attribute_values'   => 'Valores de atributos',
+    'socials'            => 'Inicios de sesión sociales',
 ];

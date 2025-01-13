@@ -59,4 +59,6 @@ return [
     'top_product'        => 'المنتجات',
     'top_setting'        => 'الإعدادات',
     'upload'             => 'وظيفة التحميل',
+    'attribute_values'   => 'قيم السمات',
+    'socials'            => 'تسجيل الدخول الاجتماعي',
 ];

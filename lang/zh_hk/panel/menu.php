@@ -59,4 +59,6 @@ return [
     'top_product'        => '產品',
     'top_setting'        => '設置',
     'upload'             => '上傳功能',
+    'attribute_values'   => '屬性值',
+    'socials'            => '社交登入',
 ];

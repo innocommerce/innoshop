@@ -59,4 +59,6 @@ return [
     'top_product'        => '상품',
     'top_setting'        => '설정',
     'upload'             => '업로드 기능',
+    'attribute_values'   => '속성 값',
+    'socials'            => '소셜 로그인',
 ];
