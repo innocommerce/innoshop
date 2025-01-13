@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('body-class', 'page-categories')
 
+@section('title', \InnoShop\Common\Libraries\MetaInfo::getInstance($category)->getTitle())
+@section('description', \InnoShop\Common\Libraries\MetaInfo::getInstance($category)->getDescription())
+@section('keywords', \InnoShop\Common\Libraries\MetaInfo::getInstance($category)->getKeywords())
+
 @section('content')
   <x-front-breadcrumb type="category" :value="$category"/>
 

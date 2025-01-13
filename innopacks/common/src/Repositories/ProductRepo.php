@@ -231,8 +231,8 @@ class ProductRepo extends BaseRepo
         }
 
         return [
-            'spu_code'         => $data['spu_code'],
-            'slug'             => $data['slug'],
+            'spu_code'         => $data['spu_code']         ?? null,
+            'slug'             => $data['slug']             ?? null,
             'brand_id'         => $data['brand_id']         ?? 0,
             'product_image_id' => $data['product_image_id'] ?? 0,
             'product_video_id' => $data['product_video_id'] ?? 0,

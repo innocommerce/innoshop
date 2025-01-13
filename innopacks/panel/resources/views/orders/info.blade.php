@@ -1,12 +1,5 @@
 @extends('panel::layouts.app')
-
 @section('title', __('panel/menu.orders'))
-
-@push('header')
-  <script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
-  <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
-  <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
-@endpush
 
 @section('page-title-right')
   <div class="title-right-btns">
@@ -14,7 +7,8 @@
       @foreach($next_statuses as $status)
         <button class="btn btn-primary ms-2" @click="edit('{{ $status['status'] }}')">{{ $status['name'] }}</button>
       @endforeach
-        <a class="btn btn-success ms-2" href="{{ panel_route('orders.printing', $order) }}" target="_blank">{{ panel_trans('order.print') }}</a>
+      <a class="btn btn-success ms-2" href="{{ panel_route('orders.printing', $order) }}" target="_blank">{{
+            panel_trans('order.print') }}</a>
       <el-dialog v-model="statusDialog" title="{{ __('panel/order.status') }}" width="500">
         <div class="mb-2">{{ __('panel/order.comment') }}</div>
         <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}"
@@ -66,7 +60,7 @@
       <h5 class="card-title mb-0">{{ __('panel/order.order_items') }}</h5>
     </div>
     <div class="card-body">
-        @hookupdate('panel.orders.info.order_items')
+      @hookupdate('panel.orders.info.order_items')
       <table class="table products-table align-middle">
         <thead>
         <tr>
@@ -84,10 +78,11 @@
             <td>{{ $item->id }}</td>
             <td>
               <div class="product-item d-flex align-items-center">
-                <div class="product-image wh-40 border"><img src="{{ $item->image }}" class="img-fluid"></div>
+                <div class="product-image wh-40 border"><img src="{{ $item->image }}" class="img-fluid">
+                </div>
                 <div class="product-info ms-2">
                   <div class="name">{{ $item->name }}</div>
-                  @if($item->productSku->variantLabel)
+                  @if($item->productSku->variantLabel ?? '')
                     <span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
                   @endif
                 </div>
@@ -119,7 +114,7 @@
         </tr>
         </tbody>
       </table>
-        @endhookupdate
+      @endhookupdate
     </div>
   </div>
 
@@ -145,7 +140,7 @@
         <div class="col-12 col-md-6">
           <div class="address-card">
             <div class="address-card-header mb-3">
-              <h5 class="address-card-title">{{ __('panel/order.billing_address') }}</h5>
+              <h5 class="address-card-title">{{ __('panel/order.billing_address') }}</h3>
             </div>
             <div class="address-card-body">
               <p>{{ $order->billing_customer_name }}</p>
@@ -159,19 +154,44 @@
     </div>
   </div>
 
-  <div class="card mb-4">
-    <div class="card-header">
-      <h5 class="card-title mb-0">{{ __('front/checkout.order_comment') }}</h5>
-    </div>
-    <div class="card-body d-flex">
-      <div class="col-md-6 fs-5 px-3">
-         <div class="fs-5 ">{{ __('panel/order.customer_remarks') }}</div>
-         <div class="fs-6 mt-4">{{ $order->comment }}</div>
-      </div>       
-      <div class="col-md-6 fs-5">
-        <div class=" fs-5">{{ __('panel/order.administrator_remarks') }}</div>
-        <div class="fs-6 mt-3">
-              <input data-order-id="{{ $order->id }}" style="width: 200px;" type="text" class="form-control admin-comment-input" aria-describedby="basic-addon1" value="{{ $order->admin_note }}">
+  <div class="mt-4">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">{{ __('front/checkout.order_comment') }}</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-md-6 mb-4">
+            <h6 class="fs-5">{{ __('panel/order.customer_remarks') }}</h6>
+            <p class="mb-0">{{ $order->comment }}</p>
+          </div>
+          <div class="col-12 col-md-6 mb-3">
+            <h6 class="fs-5">{{ __('panel/order.administrator_remarks') }}</h6>
+            <p class="mb-0">{{ $order->admin_note }}</p>
+            <button class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#admin_note">
+              {{ __('panel/common.edit') }}
+            </button>
+
+            <div class="modal fade" id="admin_note" tabindex="-1" aria-labelledby="admin_noteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border border-secondary rounded">
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="admin_noteLabel">{{ __('panel/order.administrator_remarks') }}</h4>
+                  </div>
+                  <div class="modal-body">
+                    <textarea class="form-control admin-comment-input" rows="5"
+                              data-order-id="{{ $order->id }}">{{ $order->admin_note }}</textarea>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="submitComment()">{{ __('panel/order.submit') }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -194,7 +214,7 @@
         @foreach($order->histories as $history)
           <tr>
             <td data-title="State">{{ $history->status }}</td>
-            <td data-title="Remark">{{ $order->comment }}</td>
+            <td data-title="Remark">{{ $history->comment }}</td>
             <td data-title="Update Time">{{ $history->created_at }}</td>
           </tr>
         @endforeach
@@ -207,25 +227,47 @@
 
 @push('footer')
   <script>
-    $(document).ready(function() {
-    $('.admin-comment-input').on('keydown', function(event) {
+    var admin_note = new bootstrap.Modal(document.getElementById('admin_note'));
+    document.querySelector('[data-bs-toggle="modal"]').addEventListener('click', function () {
+      admin_note.show();
+    });
+    $(document).ready(function () {
+      $('.admin-comment-input').on('keydown', function (event) {
         if (event.keyCode === 13) {
-            event.preventDefault(); 
-            var comment = $(this).val();
-            var orderId = $(this).data('order-id');
-            var apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
-            axios.post(apiUrl, {
-                admin_note: comment,
-            })
-            .then(function(res) {
-                 inno.msg(res.message);
-                 console.log(res.data.admin_note);
-                 console.log(typeof res.data.admin_note);
-                 $('.admin-comment-input').val(res.data.admin_note);
+          event.preventDefault();
+          var comment = $(this).val();
+          var orderId = $(this).data('order-id');
+          var apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
+          axios.post(apiUrl, {
+            admin_note: comment,
+          })
+            .then(function (res) {
+              inno.msg(res.message);
+              $('.admin-comment-input').val(res.data.admin_note);
+              window.location.reload()
             })
         }
+      });
     });
-   });
+
+    function submitComment() {
+      var comment = $('.admin-comment-input').val();
+      var orderId = $('.admin-comment-input').data('order-id');
+      var apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
+      axios.post(apiUrl, {
+        admin_note: comment,
+      })
+        .then(function (res) {
+          inno.msg(res.message);
+          var admin_note = bootstrap.Modal.getInstance(document.getElementById('admin_note'));
+          if (admin_note) {
+            admin_note.hide();
+          }
+          $('.admin-comment-input').val(res.data.admin_note);
+          window.location.reload();
+        })
+    }
+
     const {createApp, ref} = Vue
     const api = @json(panel_route('orders.change_status', $order));
     const statusApp = createApp({

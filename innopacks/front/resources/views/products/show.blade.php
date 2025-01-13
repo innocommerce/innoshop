@@ -1,18 +1,9 @@
 @extends('layouts.app')
 @section('body-class', 'page-product')
 
-@if($product->translation->meta_title ?? '')
-  @section('title', $product->translation->meta_title ?? '')
-@endif
-
-@if($product->translation->meta_description ?? '')
-  @section('description', $product->translation->meta_description ?? '')
-@endif
-
-@if($product->translation->meta_keywords ?? '')
-  @section('keywords', $product->translation->meta_keywords ?? '')
-@endif
-
+@section('title', \InnoShop\Common\Libraries\MetaInfo::getInstance($product)->getTitle())
+@section('description', \InnoShop\Common\Libraries\MetaInfo::getInstance($product)->getDescription())
+@section('keywords', \InnoShop\Common\Libraries\MetaInfo::getInstance($product)->getKeywords())
 
 @push('header')
   <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
