@@ -59,4 +59,6 @@ return [
     'top_product'        => '製品',
     'top_setting'        => '設定',
     'upload'             => 'アップロード機能',
+    'attribute_values'   => '属性値',
+    'socials'            => 'ソーシャルログイン',
 ];

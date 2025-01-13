@@ -59,4 +59,6 @@ return [
     'top_product'        => '产品',
     'top_setting'        => '设置',
     'upload'             => '上传功能',
+    'attribute_values'   => '属性值',
+    'socials'            => '三方登录',
 ];

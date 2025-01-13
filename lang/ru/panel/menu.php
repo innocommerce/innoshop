@@ -59,4 +59,6 @@ return [
     'top_product'        => 'Товары',
     'top_setting'        => 'Настройки',
     'upload'             => 'Функции загрузки',
+    'attribute_values'   => 'Значения атрибутов',
+    'socials'            => 'Социальные входы',
 ];
