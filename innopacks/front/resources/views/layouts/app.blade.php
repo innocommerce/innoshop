@@ -26,6 +26,7 @@
       cart_mini: '{{ front_route('carts.mini') }}',
       login: '{{ front_route('login.index') }}',
       favorites: '{{ account_route('favorites.index') }}',
+      favorite_cancel: '{{ account_route('favorites.cancel') }}',
     }
 
     let config = {

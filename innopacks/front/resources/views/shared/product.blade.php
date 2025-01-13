@@ -2,8 +2,11 @@
   <div class="product-grid-item {{ request('style_list') ?? '' }}">
     <div class="image">
       <a href="{{ $product->url }}">
-        <img src="{{ $product->image_url }}" class="img-fluid">
+          <img src="{{ $product->image_url }}" class="img-fluid">
       </a>
+      <div class="wishlist-container add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}">
+          <i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
+      </div>
     </div>
     <div class="product-item-info">
       <div class="product-name">
@@ -43,3 +46,5 @@
 });
 </script>
 @endpush
+<style>
+</style>
