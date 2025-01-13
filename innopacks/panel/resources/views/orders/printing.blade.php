@@ -34,7 +34,7 @@
           <b>{{ __("panel/order.telephone") }}: </b> {{ $order['shipping_telephone'] }}<br/>
           <b>{{ __("panel/order.email") }}: </b> {{ $order['email'] }}<br/>
           <b>{{ __("panel/order.shipping_address") }}:
-          </b> {{ $order['shipping_customer_name'] . "(" . $order['shipping_telephone'] . ")". ' ', $order['shipping_address_1'] . ' ' . $order['shipping_address_2'] . ' ' . $order['shipping_city'] . ' ' . $order['shipping_zone'] . ' ' . $order['shipping_country'] }}
+          </b> {{ $order['shipping_customer_name'] . "(" . $order['shipping_telephone'] . ")". ' ' . $order['shipping_address_1'] . ' ' . $order['shipping_address_2'] . ' ' . $order['shipping_city'] . ' ' . $order['shipping_zone'] . ' ' . $order['shipping_country'] }}
           <br/>
         </td>
         <td style="width: 50%;">
