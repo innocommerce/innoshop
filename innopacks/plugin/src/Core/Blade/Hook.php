@@ -273,11 +273,12 @@ class Hook
                     }
 
                     $output = call_user_func_array($function['function'], $params);
-
-                    $this->outputs[$hook] .= $output;
-
                     if ($this->isUpdate) {
+                        $this->outputs[$hook] = $output;
+
                         $params[1] = $output;
+                    } else {
+                        $this->outputs[$hook] .= $output;
                     }
                 }
             }
