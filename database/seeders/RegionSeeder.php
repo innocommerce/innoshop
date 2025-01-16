@@ -37,12 +37,12 @@ class RegionSeeder extends Seeder
      */
     private function getRegions(): array
     {
-        $country = Country::query()->where('code', 'US')->first();
-        $state   = State::query()->where('country_id', $country->id)->where('code', 'CA')->first();
+        $country = Country::query()->where('code', 'CO')->first();
+        $state   = State::query()->where('country_id', $country->id)->where('code', 'DC')->first();
 
         return [
             [
-                'name'          => 'US-CA',
+                'name'          => 'CO-DC',
                 'description'   => 'California, United States of America',
                 'position'      => 0,
                 'active'        => true,

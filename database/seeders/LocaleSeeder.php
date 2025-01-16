@@ -29,19 +29,21 @@ class LocaleSeeder extends Seeder
     {
         return [
             [
+                'name'     => 'Español',
+                'code'     => 'es',
+                'image'    => 'images/flag/es.png',
+                'position' => 0,
+                'active'   => 1,
+            ],
+
+/*             [
                 'name'     => 'English',
                 'code'     => 'en',
                 'image'    => 'images/flag/en.png',
                 'position' => 0,
                 'active'   => 1,
-            ],
-            [
-                'name'     => '简体中文',
-                'code'     => 'zh_cn',
-                'image'    => 'images/flag/zh_cn.png',
-                'position' => 1,
-                'active'   => 1,
-            ],
+            ], */
+           
         ];
     }
 }

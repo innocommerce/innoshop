@@ -1,11 +1,11 @@
 {
     "code": "bank_transfer",
     "name": {
-        "zh_cn": "银行转账",
+        "zh_cn": "Transferencia Bancaria",
         "en": "Bank Transfer"
     },
     "description": {
-        "zh_cn": "银行转账",
+        "zh_cn": "Transferencia Bancaria",
         "en": "Bank Transfer"
     },
     "type": "billing",

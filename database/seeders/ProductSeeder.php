@@ -45,7 +45,7 @@ class ProductSeeder extends Seeder
                         'name'   => '银河流光璀璨晚礼服闪耀全场',
                     ],
                     [
-                        'locale' => 'en',
+                        'locale' => 'es',
                         'name'   => 'Galaxy Glittering Evening Gown Shines Everywhere',
                     ],
                 ],
@@ -102,7 +102,7 @@ class ProductSeeder extends Seeder
                 ],
                 'variables' => [
                     [
-                        'name'   => ['en' => 'Color', 'zh_cn' => '颜色'],
+                        'name'   => ['es' => 'Color', 'zh_cn' => '颜色'],
                         'values' => [
                             ['image' => '', 'name' => ['en' => 'Red', 'zh_cn' => '红色']],
                             ['image' => '', 'name' => ['en' => 'Green', 'zh_cn' => '绿色']],
@@ -110,7 +110,7 @@ class ProductSeeder extends Seeder
                         ],
                     ],
                     [
-                        'name'   => ['en' => 'Size', 'zh_cn' => '尺寸'],
+                        'name'   => ['es' => 'Size', 'zh_cn' => '尺寸'],
                         'values' => [
                             ['image' => '', 'name' => ['en' => 'Big', 'zh_cn' => '大']],
                             ['image' => '', 'name' => ['en' => 'Small', 'zh_cn' => '小']],
@@ -128,7 +128,7 @@ class ProductSeeder extends Seeder
                         'locale' => 'zh_cn',
                         'name'   => '都市精英风尚西装外套经典剪裁'],
                     [
-                        'locale' => 'en',
+                        'locale' => 'es',
                         'name'   => 'Urban Elite Fashion Suit Jacket Classic Cut',
                     ],
                 ],
