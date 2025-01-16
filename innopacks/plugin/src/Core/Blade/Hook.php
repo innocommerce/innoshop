@@ -253,6 +253,12 @@ class Hook
      */
     protected function run(string $hook, array $params, Callback $callback, ?string $output = null): mixed
     {
+        if (! array_key_exists($hook, $this->watch)) {
+            return $output;
+        } elseif (! is_array($this->watch[$hook])) {
+            return $output;
+        }
+
         if ($this->isUpdate) {
             array_unshift($params, $output);
         }
@@ -261,26 +267,21 @@ class Hook
             array_unshift($params, $callback);
         }
 
-        $this->outputs[$hook] = $output;
+        $this->outputs[$hook] = '';
+        foreach ($this->watch[$hook] as $function) {
+            if (! empty($this->stop[$hook])) {
+                unset($this->stop[$hook]);
 
-        if (array_key_exists($hook, $this->watch)) {
-            if (is_array($this->watch[$hook])) {
-                foreach ($this->watch[$hook] as $function) {
-                    if (! empty($this->stop[$hook])) {
-                        unset($this->stop[$hook]);
+                break;
+            }
 
-                        break;
-                    }
+            $output = call_user_func_array($function['function'], $params);
+            if ($this->isUpdate) {
+                $this->outputs[$hook] = $output;
 
-                    $output = call_user_func_array($function['function'], $params);
-                    if ($this->isUpdate) {
-                        $this->outputs[$hook] = $output;
-
-                        $params[1] = $output;
-                    } else {
-                        $this->outputs[$hook] .= $output;
-                    }
-                }
+                $params[1] = $output;
+            } else {
+                $this->outputs[$hook] .= $output;
             }
         }
 
