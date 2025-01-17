@@ -251,6 +251,18 @@ if (! function_exists('token_customer_id')) {
     }
 }
 
+if (! function_exists('token_customer')) {
+    /**
+     * Get current customer ID
+     *
+     * @return mixed
+     */
+    function token_customer(): mixed
+    {
+        return request()->user();
+    }
+}
+
 if (! function_exists('current_guest_id')) {
     /**
      * Get guest ID from session ID

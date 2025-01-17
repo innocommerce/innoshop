@@ -11,7 +11,7 @@ namespace InnoShop\Common\Models\Order;
 
 use Exception;
 use InnoShop\Common\Models\BaseModel;
-use InnoShop\Common\Services\ReturnStateService;
+use InnoShop\Common\Services\StateMachineService;
 
 class History extends BaseModel
 {
@@ -32,7 +32,7 @@ class History extends BaseModel
             return '';
         }
 
-        $statusMap = array_column(ReturnStateService::getAllStatuses(), 'name', 'status');
+        $statusMap = array_column(StateMachineService::getAllStatuses(), 'name', 'status');
 
         return $statusMap[$statusCode] ?? '';
     }

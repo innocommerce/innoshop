@@ -14,7 +14,10 @@
       <div class="col-12 col-lg-9">
         <div class="account-card-box addresses-box">
           @if (session('success'))
-            <x-common-alert type="success" msg="{{ session('success') }}" class="mt-4" />
+            <x-common-alert type="success" msg="{{ session('success') }}" class="mt-4"/>
+          @endif
+          @if (session('error'))
+            <x-common-alert type="danger" msg="{{ session('error') }}" class="mt-4"/>
           @endif
 
           <div class="account-card-title d-flex justify-content-between align-items-center">
@@ -25,9 +28,14 @@
             @csrf
             @method('PUT')
 
-            <x-common-form-image name="avatar" title="{{ __('front/edit.avatar') }}" value="{{ old('avatar', $customer->avatar) }}" />
-            <x-common-form-input name="name" title="{{ __('front/edit.name') }}" value="{{ old('name', $customer->name) }}" required="required" placeholder="{{ __('front/edit.name') }}" />
-            <x-common-form-input name="email" title="{{ __('front/edit.email') }}" value="{{ old('email', $customer->email) }}" required="required" placeholder="{{ __('front/edit.email') }}" />
+            <x-common-form-image name="avatar" title="{{ __('front/edit.avatar') }}"
+                                 value="{{ old('avatar', $customer->avatar) }}"/>
+            <x-common-form-input name="name" title="{{ __('front/edit.name') }}"
+                                 value="{{ old('name', $customer->name) }}" required="required"
+                                 placeholder="{{ __('front/edit.name') }}"/>
+            <x-common-form-input name="email" title="{{ __('front/edit.email') }}"
+                                 value="{{ old('email', $customer->email) }}" required="required"
+                                 placeholder="{{ __('front/edit.email') }}"/>
 
             <button type="submit" class="btn btn-primary btn-lg w-50">{{ __('front/common.submit') }}</button>
           </form>

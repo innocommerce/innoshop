@@ -144,7 +144,7 @@ class CustomerRepo extends BaseRepo
     public function updateProfile($item, $data): mixed
     {
         $data = [
-            'avatar' => $data['avatar'],
+            'avatar' => $data['avatar'] ?? '',
             'name'   => $data['name'],
             'email'  => $data['email'],
         ];

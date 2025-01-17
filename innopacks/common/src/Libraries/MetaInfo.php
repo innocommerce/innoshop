@@ -53,9 +53,9 @@ class MetaInfo
      */
     public function setSystemInfo(): void
     {
-        $this->systemMetaTitle       = system_setting_locale('meta_title');
-        $this->systemMetaDescription = system_setting_locale('meta_description');
-        $this->systemMetaKeywords    = system_setting_locale('meta_keywords');
+        $this->systemMetaTitle       = (string) system_setting_locale('meta_title');
+        $this->systemMetaDescription = (string) system_setting_locale('meta_description');
+        $this->systemMetaKeywords    = (string) system_setting_locale('meta_keywords');
     }
 
     /**
