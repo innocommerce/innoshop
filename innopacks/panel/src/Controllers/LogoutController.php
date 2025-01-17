@@ -20,6 +20,7 @@ class LogoutController extends BaseController
     {
         $admin = Auth::guard('admin')->user();
         Auth::guard('admin')->logout();
+        session()->forget('panel_api_token');
 
         return redirect(panel_route('login.index'))
             ->with('instance', $admin);

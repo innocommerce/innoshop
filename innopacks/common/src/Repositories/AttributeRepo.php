@@ -42,6 +42,47 @@ class AttributeRepo extends BaseRepo
     }
 
     /**
+     * @param  $name
+     * @param  string  $locale
+     * @return mixed
+     * @throws Exception
+     */
+    public function findByName($name, string $locale = ''): mixed
+    {
+        if (empty($locale)) {
+            $locale = locale_code();
+        }
+
+        $translation = Attribute\Translation::query()->where('name', $name)->where('locale', $locale)->first();
+
+        return $translation->attribute ?? null;
+    }
+
+    /**
+     * @param  $name
+     * @param  string  $locale
+     * @return mixed
+     * @throws Throwable
+     */
+    public function findOrCreateByName($name, string $locale = ''): mixed
+    {
+        $attribute = $this->findByName($name, $locale);
+        if ($attribute) {
+            return $attribute;
+        }
+
+        $data = [];
+        foreach (locales() as $locale) {
+            $data['translations'][] = [
+                'locale' => $locale->code,
+                'name'   => $name,
+            ];
+        }
+
+        return $this->create($data);
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

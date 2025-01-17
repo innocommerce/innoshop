@@ -58,4 +58,31 @@ trait Translatable
     {
         return $this->translations->keyBy('locale')[$locale][$field] ?? '';
     }
+
+    /**
+     * Get translated name.
+     *
+     * @param  string  $field
+     * @return string
+     */
+    public function translatedName(string $field = 'name'): string
+    {
+        return $this->translation->{$field} ?? '';
+    }
+
+    /**
+     * Get fallback name.
+     *
+     * @param  string  $field
+     * @return string
+     */
+    public function fallbackName(string $field = 'name'): string
+    {
+        $translatedName = $this->translatedName($field);
+        if ($translatedName) {
+            return $translatedName;
+        }
+
+        return $this->translate(setting_locale_code(), $field);
+    }
 }

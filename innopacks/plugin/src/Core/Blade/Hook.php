@@ -12,6 +12,7 @@
 namespace InnoShop\Plugin\Core\Blade;
 
 use Barryvdh\Debugbar\Facades\Debugbar;
+use Exception;
 use Illuminate\Support\Arr;
 
 class Hook
@@ -23,6 +24,8 @@ class Hook
     protected array $stop = [];
 
     protected array $mock = [];
+
+    protected array $outputs = [];
 
     protected bool $isUpdate = false;
 
@@ -53,6 +56,7 @@ class Hook
      * @param  string  $htmlContent  content wrapped by hook
      *
      * @return null|void
+     * @throws Exception
      */
     public function get(string $hook, array $params = [], ?callable $callback = null, string $htmlContent = '')
     {
@@ -80,6 +84,7 @@ class Hook
      * @param  callable|null  $callback
      * @param  string  $htmlContent
      * @return string|null
+     * @throws Exception
      */
     public function getHook(string $hook, array $params = [], ?callable $callback = null, string $htmlContent = ''): ?string
     {
@@ -98,6 +103,7 @@ class Hook
      * @param  callable|null  $callback
      * @param  string  $htmlContent
      * @return string|null
+     * @throws Exception
      */
     public function getWrapper(string $hook, array $params = [], ?callable $callback = null, string $htmlContent = ''): ?string
     {
@@ -243,9 +249,16 @@ class Hook
      * @param  string|null  $output  html wrapped by hook
      *
      * @return mixed
+     * @throws Exception
      */
     protected function run(string $hook, array $params, Callback $callback, ?string $output = null): mixed
     {
+        if (! array_key_exists($hook, $this->watch)) {
+            return $output;
+        } elseif (! is_array($this->watch[$hook])) {
+            return $output;
+        }
+
         if ($this->isUpdate) {
             array_unshift($params, $output);
         }
@@ -254,23 +267,25 @@ class Hook
             array_unshift($params, $callback);
         }
 
-        if (array_key_exists($hook, $this->watch)) {
-            if (is_array($this->watch[$hook])) {
-                foreach ($this->watch[$hook] as $function) {
-                    if (! empty($this->stop[$hook])) {
-                        unset($this->stop[$hook]);
+        $this->outputs[$hook] = '';
+        foreach ($this->watch[$hook] as $function) {
+            if (! empty($this->stop[$hook])) {
+                unset($this->stop[$hook]);
 
-                        break;
-                    }
+                break;
+            }
 
-                    $output = call_user_func_array($function['function'], $params);
+            $output = call_user_func_array($function['function'], $params);
+            if ($this->isUpdate) {
+                $this->outputs[$hook] = $output;
 
-                    $params[1] = $output;
-                }
+                $params[1] = $output;
+            } else {
+                $this->outputs[$hook] .= $output;
             }
         }
 
-        return $output;
+        return $this->outputs[$hook] ?? '';
     }
 
     /**

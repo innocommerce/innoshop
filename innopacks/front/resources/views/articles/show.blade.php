@@ -1,6 +1,9 @@
 @extends('layouts.app')
-
 @section('body-class', 'page-news-details')
+
+@section('title', \InnoShop\Common\Libraries\MetaInfo::getInstance($article)->getTitle())
+@section('description', \InnoShop\Common\Libraries\MetaInfo::getInstance($article)->getDescription())
+@section('keywords', \InnoShop\Common\Libraries\MetaInfo::getInstance($article)->getKeywords())
 
 @section('content')
 

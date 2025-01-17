@@ -38,6 +38,7 @@ class ProductSeeder extends Seeder
         return [
             [
                 'brand_id'     => 1,
+                'spu_code'     => 'galaxy-glow-evening-gown',
                 'slug'         => 'galaxy-glow-evening-gown',
                 'translations' => [
                     [
@@ -122,6 +123,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'brand_id'     => 1,
+                'spu_code'     => 'urban-elite-suit-jacket',
                 'slug'         => 'urban-elite-suit-jacket',
                 'translations' => [
                     [

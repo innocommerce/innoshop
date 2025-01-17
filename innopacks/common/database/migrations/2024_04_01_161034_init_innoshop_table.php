@@ -557,6 +557,7 @@ return new class extends Migration
             $table->string('billing_address_2')->comment('Billing Address 1');
             $table->string('billing_zipcode')->comment('Billing Address Zipcode');
             $table->text('comment')->nullable()->comment('Order Comment');
+            $table->text('admin_note')->nullable()->comment('Admin Note');
             $table->timestamps();
             $table->softDeletes()->comment('Deleted At');
         });
@@ -700,6 +701,7 @@ return new class extends Migration
             $table->unsignedInteger('product_video_id')->default(0)->index('p_pv_id')->comment('Video ID');
             $table->unsignedInteger('product_sku_id')->default(0)->index('p_ps_id')->comment('SKU ID');
             $table->unsignedInteger('tax_class_id')->default(0)->index('p_tc_id')->comment('Tax Class ID');
+            $table->string('spu_code', 128)->nullable()->unique()->comment('SPU Code');
             $table->string('slug', 128)->nullable()->unique()->comment('URL Slug');
             $table->json('variables')->nullable()->comment('Product variables for sku with variants');
             $table->boolean('is_virtual')->default(false)->comment('Is Virtual');

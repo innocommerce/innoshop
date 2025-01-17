@@ -11,11 +11,11 @@
   @hookinsert('home.content.top')
 
   <section class="module-content">
-    @if (system_setting('slideshow'))
+    @if ($slideshow)
       <section class="module-line">
         <div class="swiper" id="module-swiper-1">
           <div class="module-swiper swiper-wrapper">
-            @foreach (system_setting('slideshow', []) as $slide)
+            @foreach ($slideshow as $slide)
               @if ($slide['image'][front_locale_code()] ?? false)
                 <div class="swiper-slide">
                   <a href="{{ $slide['link'] ?: 'javascript:void(0)' }}"><img

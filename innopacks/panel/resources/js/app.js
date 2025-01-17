@@ -10,16 +10,12 @@ window.inno = common;
 import dominateColor from "./dominate_color";
 window.dominateColor = dominateColor;
 
-$.ajaxSetup({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }
-});
-const apiToken = document.querySelector('meta[name="api-token"]').getAttribute('content');
+const apiToken = $('meta[name="api-token"]').attr('content');
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
 $.ajaxSetup({
   headers: {
-    'Authorization' : 'Bearer ' + apiToken,
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+    'Authorization' : 'Bearer ' + apiToken
   }
 });
 window.apiToken = $.apiToken = apiToken;

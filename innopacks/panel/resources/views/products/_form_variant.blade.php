@@ -2,55 +2,6 @@
   <script src="{{ asset('vendor/vue/3.5/vue.global.prod.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
-  <style>
-    .variant-skus-table th {
-      padding-top: 0;
-      vertical-align: bottom;
-    }
-
-    .variant-skus-table .batch-input-item {
-      margin: 0;
-      padding: 10px 0;
-    }
-
-    .variant-skus-table .batch-input-item .input-group {
-      width: 100%;
-      min-width: 120px;
-    }
-
-    .variant-skus-table .batch-input-item .form-control {
-      height: 31px;
-      font-size: 13px;
-      border-right: 0;
-    }
-
-    .variant-skus-table .batch-input-item .btn {
-      border-color: #ced4da;
-      background: #fff;
-      font-size: 13px;
-      padding: 4px 8px;
-    }
-
-    .variant-skus-table .batch-input-item .btn:hover {
-      background: #8446df;
-      border-color: #8446df;
-      color: #fff;
-    }
-
-    .variant-skus-table thead th {
-      background: #f8f9fa;
-      border-bottom: 2px solid #dee2e6;
-    }
-
-    .variant-skus-table tbody td .form-control {
-      font-size: 13px;
-    }
-
-    /* Remove old batch input styles */
-    .batch-input-area {
-      display: none;
-    }
-  </style>
 @endpush
 
 <div class="card variants-box mb-3" id="variants-box">
@@ -365,7 +316,7 @@
 
       // 生成 通过...分组 的几个大规格
       const smallVariantsFormat = () => {
-        if (variants.value.length == 0) {
+        if (variants.value.length === 0) {
           smallVariants.value = []
           return
         }
@@ -382,20 +333,6 @@
       const addVariantValue = (index) => {
         variants.value[index].values.push({name: localesFill('')})
       }
-
-// const showVariant = (init_index, index) => {
-      // // skus 每 sku_quantity 个分组
-      // let sku_quantity = smallVariants.value[index].sku_quantity
-      // let tempSkus = skus.value.slice(init_index * sku_quantity, (init_index + 1) * sku_quantity)
-
-// if (smallVariants.value[index].show_variant) {
-      // smallVariants.value[index].show_variant = false
-      // smallVariants.value.splice(index + 1, sku_quantity)
-      // } else {
-      // smallVariants.value[index].show_variant = true
-      // smallVariants.value.splice(index + 1, 0, ...tempSkus)
-      // }
-      // }
 
       // 修改 sku值，分 批量修改 和 单个修改
       const modifySku = (init_index, index, type) => {
@@ -516,7 +453,7 @@
 
         // 如果 is_default 都是0 那么就把第一个设置为主规格
         let isMaster = sku.filter((e, i) => e.is_default == 1)
-        if (isMaster.length == 0) {
+        if (isMaster.length === 0) {
           sku[0].is_default = 1
         }
 
@@ -543,22 +480,7 @@
         formData.append('image', file);
         formData.append('type', 'common');
         axios.post('{{ front_root_route('upload.images') }}', formData, {}).then(function (res) {
-          let val = res.data.value;
-
-          // 如果 init_index 不等于 undefined，就要替换这个规格下的所有 sku 的图片
-          if (typeof init_index != 'undefined') {
-            skus.value.forEach((e, i) => {
-              console.log(e.variants[0], init_index);
-              if (e.variants[0] == init_index) {
-                e.image = val
-              }
-            })
-
-            smallVariants.value[index].image = val
-          } else {
-            getSkusItem(index).image = val
-          }
-
+          getSkusItem(index).image = res.data.value;
         }).catch(function (err) {
           inno.msg(err.response.data.message);
         })
@@ -571,7 +493,7 @@
         // console.log(mainVariantKey.value);
         // 拖拽 Variants 之后要保证 mainVariantKey 的值是正确的
 
-        if (oldIndex == mainVariantKey.value) {
+        if (oldIndex === mainVariantKey.value) {
           mainVariantKey.value = newIndex
         } else if (oldIndex < mainVariantKey.value && newIndex >= mainVariantKey.value) {
           mainVariantKey.value--
@@ -604,8 +526,8 @@
 
       // 找出 skus中的variants 与 smallVariants.value[index].variants 是一样的
       const getSkusItem = (index) => {
-        return tempSkus = skus.value.find((e, i) => {
-          return e.variants.toString() == smallVariants.value[index].variants.toString()
+        return skus.value.find((e, i) => {
+          return e.variants.toString() === smallVariants.value[index].variants.toString()
         })
       }
 
@@ -631,7 +553,7 @@
       // 检测 skus 中是否有重复的 code
       const validateSkus = () => {
         skus.value.forEach((e, i) => {
-          let sameSku = skus.value.filter((s, j) => s.code == e.code)
+          let sameSku = skus.value.filter((s, j) => s.code === e.code)
           if (sameSku.length > 1) {
             e.error = true
           } else {

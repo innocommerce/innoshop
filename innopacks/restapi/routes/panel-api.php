@@ -23,6 +23,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/products', [PanelApiControllers\ProductController::class, 'index'])->name('products.index');
     Route::get('/products/names', [PanelApiControllers\ProductController::class, 'names'])->name('products.names');
     Route::get('/products/autocomplete', [PanelApiControllers\ProductController::class, 'autocomplete'])->name('products.autocomplete');
+    Route::post('/products/import', [PanelApiControllers\ProductController::class, 'import'])->name('products.import');
 
     Route::get('/categories', [PanelApiControllers\CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/names', [PanelApiControllers\CategoryController::class, 'names'])->name('categories.names');
@@ -45,6 +46,8 @@ Route::middleware($middlewares)->group(function () {
     Route::post('/catalogs', [PanelApiControllers\CatalogController::class, 'store'])->name('catalogs.store');
     Route::put('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'update'])->name('catalogs.update');
     Route::delete('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'destroy'])->name('catalogs.destroy');
+
+    Route::post('/orders/{order}/notes', [PanelApiControllers\OrderController::class, 'updateNote'])->name('orders.update_note');
 
     Route::get('/pages', [PanelApiControllers\PageController::class, 'index'])->name('pages.index');
     Route::get('/pages/names', [PanelApiControllers\PageController::class, 'names'])->name('pages.names');

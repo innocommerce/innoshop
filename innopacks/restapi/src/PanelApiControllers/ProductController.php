@@ -10,10 +10,13 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Resources\ProductSimple;
+use InnoShop\RestAPI\Services\ProductImportService;
+use Throwable;
 
 class ProductController extends BaseController
 {
@@ -51,5 +54,31 @@ class ProductController extends BaseController
         $products = ProductRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
 
         return ProductSimple::collection($products);
+    }
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function import(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            foreach ($data['products'] as $productData) {
+                $product = null;
+                $spuCode = $productData['spu_code'] ?? '';
+                if (empty($spuCode)) {
+                    throw new \Exception('Empty SPU code!');
+                }
+
+                $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
+                ProductImportService::getInstance()->import($productData, $product);
+            }
+
+            return create_json_success();
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
     }
 }

@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories\Attribute;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use InnoShop\Common\Models\Attribute\Value;
@@ -21,15 +22,17 @@ class ValueRepo extends BaseRepo
     /**
      * @param  $attributeID
      * @param  $translations
-     * @return void
+     * @return mixed
      */
-    public function createAttribute($attributeID, $translations): void
+    public function createAttribute($attributeID, $translations): mixed
     {
         if (empty($attributeID) || empty($translations)) {
-            return;
+            return null;
         }
         $attrValue = Value::query()->create(['attribute_id' => $attributeID]);
         $this->updateTranslations($attrValue, $translations);
+
+        return $attrValue;
     }
 
     /**
@@ -68,6 +71,48 @@ class ValueRepo extends BaseRepo
     public function all(array $filters = []): Collection
     {
         return $this->builder($filters)->get();
+    }
+
+    /**
+     * @param  $name
+     * @param  string  $locale
+     * @return mixed
+     * @throws Exception
+     */
+    public function findByName($name, string $locale = ''): mixed
+    {
+        if (empty($locale)) {
+            $locale = locale_code();
+        }
+
+        $translation = Value\Translation::query()
+            ->where('name', $name)
+            ->where('locale', $locale)
+            ->first();
+
+        return $translation->value ?? null;
+    }
+
+    /**
+     * @param  $attributeRow
+     * @param  $name
+     * @param  string  $locale
+     * @return mixed
+     * @throws Exception
+     */
+    public function findOrCreateByName($attributeRow, $name, string $locale = ''): mixed
+    {
+        $attributeValue = $this->findByName($name, $locale);
+        if ($attributeValue) {
+            return $attributeValue;
+        }
+
+        $data = [];
+        foreach (locales() as $locale) {
+            $data[$locale->code] = $name;
+        }
+
+        return $this->createAttribute($attributeRow->id, $data);
     }
 
     /**
