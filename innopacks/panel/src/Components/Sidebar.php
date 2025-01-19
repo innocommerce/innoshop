@@ -285,6 +285,7 @@ class Sidebar extends Component
             ['route' => 'catalogs.index', 'title' => __('panel/menu.catalogs')],
             ['route' => 'tags.index', 'title' => __('panel/menu.tags')],
             ['route' => 'pages.index', 'title' => __('panel/menu.pages')],
+            ['route' => 'file_manager.index', 'title' => __('panel/menu.file_manager')],
         ];
 
         return fire_hook_filter('component.sidebar.content.routes', $routes);
