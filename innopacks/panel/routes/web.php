@@ -114,4 +114,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/tax_classes', Controllers\TaxClassController::class);
         Route::resource('/tax_rates', Controllers\TaxRateController::class);
+
+        Route::get('file_manager', [InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'index'])->name('file_manager.index');
+        Route::get('file_manager/iframe', [InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'iframe'])->name('file_manager.iframe');
     });

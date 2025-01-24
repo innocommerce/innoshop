@@ -115,7 +115,7 @@ class CustomerRepo extends BaseRepo
         $item = new Customer($data);
         $item->saveOrFail();
 
-        return $item;
+        return fire_hook_filter('repo.customer.create', $item);
     }
 
     /**
@@ -131,6 +131,8 @@ class CustomerRepo extends BaseRepo
         $item->fill($data);
         $item->saveOrFail();
 
+        fire_hook_filter('repo.customer.update', $item);
+
         return $item;
     }
 
@@ -144,7 +146,7 @@ class CustomerRepo extends BaseRepo
     public function updateProfile($item, $data): mixed
     {
         $data = [
-            'avatar' => $data['avatar'],
+            'avatar' => $data['avatar'] ?? '',
             'name'   => $data['name'],
             'email'  => $data['email'],
         ];

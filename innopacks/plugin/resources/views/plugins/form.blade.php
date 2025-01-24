@@ -36,7 +36,7 @@
                 :placeholder="$field['placeholder'] ?? ''"
                 :description="$field['description'] ?? ''"
                 :error="$errors->first($field['name'])"
-                :required="(bool)$field['required']"
+                :required="(bool)($field['required'] ?? false)"
                 :value="old($field['name'], $field['value'] ?? '')" />
             @endif
 

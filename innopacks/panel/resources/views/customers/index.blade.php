@@ -50,7 +50,7 @@
             </td>
             <td>
               <div class="d-flex gap-1">
-                <a href="{{ panel_route('customers.login', [$item->id]) }}">
+                <a href="{{ panel_route('customers.login', [$item->id]) }}" target="_blank">
                   <el-button size="small" plain type="primary">{{ __('panel/customer.login_frontend')}}</el-button>
                 </a>
                 <a href="{{ panel_route('customers.edit', [$item->id]) }}">

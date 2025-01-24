@@ -142,6 +142,7 @@ class CustomerController extends BaseController
      */
     public function loginFrontend(Customer $customer): mixed
     {
+        session()->forget('front_api_token');
         auth()->guard('customer')->loginUsingId($customer->id);
 
         return redirect(account_route('index'));
