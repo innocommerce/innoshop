@@ -9,7 +9,6 @@
 
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -1041,7 +1040,7 @@ if (! function_exists('seller_enabled')) {
      */
     function seller_enabled(): bool
     {
-        return class_exists(\InnoShop\Seller\SellerServiceProvider::class);
+        return class_exists(\InnoShop\Seller\SellerServiceProvider::class) && env('SELLER_ENABLED', true);
     }
 }
 

@@ -205,9 +205,8 @@ class CartService
             'amount_format' => currency_format($selectedAmount),
             'list'          => CartListItem::collection($allCartItems)->jsonSerialize(),
         ];
-        $data = fire_hook_filter('service.cart.response', $data);
 
-        return $data;
+        return fire_hook_filter('service.cart.response', $data);
     }
 
     /**

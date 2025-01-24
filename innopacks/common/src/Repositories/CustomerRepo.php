@@ -115,7 +115,7 @@ class CustomerRepo extends BaseRepo
         $item = new Customer($data);
         $item->saveOrFail();
 
-        return $item;
+        return fire_hook_filter('repo.customer.create', $item);
     }
 
     /**
@@ -130,6 +130,8 @@ class CustomerRepo extends BaseRepo
 
         $item->fill($data);
         $item->saveOrFail();
+
+        fire_hook_filter('repo.customer.update', $item);
 
         return $item;
     }

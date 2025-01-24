@@ -33,6 +33,7 @@
 
             <x-common-form-select title="用户组" name="customer_group_id" :options="$groups" key="id" label="name"
                                   value="{{ old('customer_group_id', $customer->customer_group_id) }}"/>
+            @hookinsert('panel.customer.form.group.after')
 
             <x-common-form-select title="语言" name="locale" :options="$locales" key="code" label="name"
                                   value="{{ old('locale', $customer->locale) }}"/>
