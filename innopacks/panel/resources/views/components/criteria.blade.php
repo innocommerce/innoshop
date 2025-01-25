@@ -83,27 +83,29 @@
 
 </form>
 
-<script>
-  let filterEl = $('#collapse-filters');
-  let showEl = $('#collapse-button .down');
-  let hideEl = $('#collapse-button .up');
+@push('footer')
+    <script>
+        let filterEl = $('#collapse-filters');
+        let showEl = $('#collapse-button .down');
+        let hideEl = $('#collapse-button .up');
 
-  filterEl.on('show.bs.collapse', function () {
-    showEl.hide();
-    hideEl.show();
-  });
+        filterEl.on('show.bs.collapse', function () {
+            showEl.hide();
+            hideEl.show();
+        });
 
-  filterEl.on('hide.bs.collapse', function () {
-    showEl.show();
-    hideEl.hide();
-  });
+        filterEl.on('hide.bs.collapse', function () {
+            showEl.show();
+            hideEl.hide();
+        });
 
-  if (filterEl.hasClass('show')) {
-    showEl.hide();
-    hideEl.show();
-  } else {
-    showEl.show();
-    hideEl.hide();
-  }
-</script>
+        if (filterEl.hasClass('show')) {
+            showEl.hide();
+            hideEl.show();
+        } else {
+            showEl.show();
+            hideEl.hide();
+        }
+    </script>
+@endpush
 @endif
