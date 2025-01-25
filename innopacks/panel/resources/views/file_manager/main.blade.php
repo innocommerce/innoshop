@@ -1962,34 +1962,18 @@
                             }))
                         }];
 
-                        // 如果有子文件夹，自动选中第一个
-                        if (folders.length > 0) {
-                            const firstFolder = folders[0];
-                            this.currentFolder = {
-                                id: firstFolder.path,
-                                name: firstFolder.name,
-                                path: firstFolder.path
-                            };
+                        // 默认选中根目录
+                        this.currentFolder = {
+                            id: '/',
+                            name: '图片空间',
+                            path: '/'
+                        };
 
-                            // 设置默认展开的节点，包括所有父节点
-                            this.defaultExpandedKeys = ['/', firstFolder.path];
-                            // 如果当前文件夹有子文件夹，也展开它们
-                            if (firstFolder.children) {
-                                firstFolder.children.forEach(child => {
-                                    this.defaultExpandedKeys.push(child.path);
-                                });
-                            }
+                        // 设置默认展开的节点
+                        this.defaultExpandedKeys = ['/'];
 
-                            this.loadFiles(firstFolder.path);
-                        } else {
-                            this.currentFolder = {
-                                id: '/',
-                                name: '图片空间',
-                                path: '/'
-                            };
-                            this.defaultExpandedKeys = ['/'];
-                            this.loadFiles('/');
-                        }
+                        // 加载根目录的文件
+                        this.loadFiles('/');
                     }).catch(err => {
                         this.$message.error('获取文件夹失败：' + err.message);
                     });
