@@ -21,7 +21,7 @@ class ProductImportService
     /**
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): ProductImportService
     {
         return new self;
     }

@@ -74,7 +74,7 @@ class AddressesController extends Controller
      */
     public function destroy(Address $address): mixed
     {
-        $address->delete();
+        AddressRepo::getInstance()->destroy($address);
 
         return delete_json_success();
     }
