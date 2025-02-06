@@ -94,23 +94,25 @@
         .file-manager {
             background: #fff;
             border-radius: 4px;
-            min-height: calc(100vh - 300px);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         /* 左侧文件夹树样式 */
         .folder-tree {
             border-right: 1px solid #EBEEF5;
-            height: calc(100vh - 300px);
             overflow-y: auto;
             padding: 20px;
             background: #fff;
+            height: 100%;
         }
 
         /* 右侧文件列表样式 */
         .file-list {
             padding: 20px;
-            height: calc(100vh - 240px);
             overflow-y: auto;
+            flex: 1;
         }
 
         /* 顶部工具栏 */
@@ -119,6 +121,7 @@
             border-bottom: 1px solid #EBEEF5;
             background: #fff;
             border-radius: 4px 4px 0 0;
+            flex-shrink: 0;
         }
 
         /* 文件卡片样式 */
@@ -202,11 +205,11 @@
 
         /* 分页容器样式 */
         .pagination-container {
-            padding: 20px 0;
+            padding: 20px;
             text-align: right;
             background: #fff;
             border-top: 1px solid #EBEEF5;
-            margin-top: 20px;
+            flex-shrink: 0;
         }
 
         /* 加载状态样式 */
@@ -609,7 +612,7 @@
             text-align: right;
             background: #fff;
             border-top: 1px solid #EBEEF5;
-            margin-top: 20px;
+            flex-shrink: 0;
         }
 
         /* 空状态样式 */
@@ -676,29 +679,48 @@
         }
 
         /* 树节点样式 */
+        .el-tree {
+            background: none;
+        }
+
+        .el-tree-node {
+            white-space: nowrap;
+        }
+
         .el-tree-node__content {
-            height: 32px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding-right: 8px;
         }
 
-        .el-tree-node.is-current > .el-tree-node__content {
-            background-color: #f0e6fc !important;
-            color: #8446df;
-        }
-
-        .el-tree-node__content:hover {
-            background-color: #f5f7fa;
-        }
-
-        /* 文件夹图标样式 */
         .custom-tree-node {
+            flex: 1;
             display: flex;
             align-items: center;
             font-size: 14px;
+            padding: 0 8px;
+        }
+
+        .el-tree-node__expand-icon {
+            color: #909399;
         }
 
         .el-tree-node__content .el-icon-folder,
         .el-tree-node__content .el-icon-folder-opened {
             font-size: 16px;
+            margin-right: 8px;
+        }
+
+        /* 选中状态 */
+        .el-tree-node.is-current > .el-tree-node__content {
+            background-color: #f0e6fc !important;
+            color: #8446df;
+        }
+
+        /* 鼠标悬停状态 */
+        .el-tree-node__content:hover {
+            background-color: #f5f7fa;
         }
 
         /* 展开的文件夹图标颜色 */
