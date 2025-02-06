@@ -262,6 +262,15 @@ class CheckoutService extends BaseService
             $this->updateValues(['billing_method_code' => $billingMethods[0]['code'] ?? '']);
         }
 
+        $addressList = $this->getAddressList();
+        if (! collect($addressList)->contains('id', $this->checkoutData['shipping_address_id'])) {
+            $this->updateValues(['shipping_address_id' => 0]);
+        }
+
+        if (! collect($addressList)->contains('id', $this->checkoutData['billing_address_id'])) {
+            $this->updateValues(['billing_address_id' => 0]);
+        }
+
         $this->checkoutData = $this->freshCheckoutData();
     }
 

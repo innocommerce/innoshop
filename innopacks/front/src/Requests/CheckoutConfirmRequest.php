@@ -11,6 +11,7 @@ namespace InnoShop\Front\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use InnoShop\Common\Services\CheckoutService;
+use Throwable;
 
 class CheckoutConfirmRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class CheckoutConfirmRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function rules(): array
     {
