@@ -34,6 +34,7 @@ return [
     'order_returns'      => 'Order Returns',
     'orders'             => 'Orders',
     'pages'              => 'Pages',
+    'file_manager'       => 'File Manager',
     'plugin_market'      => 'Plugin Market',
     'plugins'            => 'Plugins',
     'product'            => 'Product',

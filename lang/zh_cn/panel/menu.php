@@ -34,6 +34,7 @@ return [
     'order_returns'      => '售后管理',
     'orders'             => '订单管理',
     'pages'              => '单页管理',
+    'file_manager'       => '文件管理器',
     'plugin_market'      => '插件市场',
     'plugins'            => '插件设置',
     'product'            => '产品',
