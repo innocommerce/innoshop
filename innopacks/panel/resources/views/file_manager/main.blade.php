@@ -1745,14 +1745,17 @@
                     this.copyDialog.visible = true;
                 },
                 handleFileClick(event, file) {
-                    if (this.isDragging) return; // 如果正在拖拽，不处理点击事件
+                    if (this.isDragging) return;
 
-                    if (this.isMultiSelectMode) {
-                        this.toggleFileSelect(file);
-                    } else if (this.isIframeMode && !file.is_dir) {
-                        // 如果是 iframe 模式且点击的是文件（不是文件夹），直接选择并返回
-                        window.parent.fileManagerCallback(file);
-                        parent.layer.closeAll();
+                    if (this.isIframeMode && !file.is_dir) {
+                        if (window.fileManagerConfig.multiple) {
+                            // 多选模式：切换选择状态
+                            this.toggleFileSelect(file);
+                        } else {
+                            // 单选模式：直接返回并关闭
+                            window.parent.fileManagerCallback(file);
+                            parent.layer.closeAll();
+                        }
                     } else {
                         this.selectedFiles = [file.id || file.path];
                     }
@@ -1959,34 +1962,18 @@
                             }))
                         }];
 
-                        // 如果有子文件夹，自动选中第一个
-                        if (folders.length > 0) {
-                            const firstFolder = folders[0];
-                            this.currentFolder = {
-                                id: firstFolder.path,
-                                name: firstFolder.name,
-                                path: firstFolder.path
-                            };
+                        // 默认选中根目录
+                        this.currentFolder = {
+                            id: '/',
+                            name: '图片空间',
+                            path: '/'
+                        };
 
-                            // 设置默认展开的节点，包括所有父节点
-                            this.defaultExpandedKeys = ['/', firstFolder.path];
-                            // 如果当前文件夹有子文件夹，也展开它们
-                            if (firstFolder.children) {
-                                firstFolder.children.forEach(child => {
-                                    this.defaultExpandedKeys.push(child.path);
-                                });
-                            }
+                        // 设置默认展开的节点
+                        this.defaultExpandedKeys = ['/'];
 
-                            this.loadFiles(firstFolder.path);
-                        } else {
-                            this.currentFolder = {
-                                id: '/',
-                                name: '图片空间',
-                                path: '/'
-                            };
-                            this.defaultExpandedKeys = ['/'];
-                            this.loadFiles('/');
-                        }
+                        // 加载根目录的文件
+                        this.loadFiles('/');
                     }).catch(err => {
                         this.$message.error('获取文件夹失败：' + err.message);
                     });
@@ -2547,7 +2534,7 @@
 
                 // 处理树节点离开拖拽
                 handleTreeDragLeave(event, node) {
-                    // 检查鼠��是否真的离开了目标元素及其子元素
+                    // 检查鼠是否真的离开了目标元素及其子元素
                     const relatedTarget = event.relatedTarget;
                     const currentTarget = event.currentTarget;
 
@@ -2749,10 +2736,22 @@
                 // 确认选择（多选模式）
                 confirmSelection() {
                     if (this.isIframeMode && window.parent.fileManagerCallback) {
+                        if (this.selectedFiles.length === 0) {
+                            this.$message.warning('请至少选择一个文件');
+                            return;
+                        }
+
                         const selectedFiles = this.files.filter(file =>
                             this.selectedFiles.includes(file.id || file.path)
                         );
-                        window.parent.fileManagerCallback(selectedFiles);
+
+                        if (window.fileManagerConfig.multiple) {
+                            // 多选模式：返回数组
+                            window.parent.fileManagerCallback(selectedFiles);
+                        } else {
+                            // 单选模式：返回单个文件
+                            window.parent.fileManagerCallback(selectedFiles[0]);
+                        }
                         parent.layer.closeAll();
                     }
                 }

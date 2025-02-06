@@ -36,74 +36,38 @@
 
 <script>
   $('.is-up-file .img-upload-item').click(function () {
-      const _self = $(this);
-      $('#form-upload').remove();
-      $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" accept="image/*" name="file" /></form>');
-      $('#form-upload input[name=\'file\']').trigger('click');
-      $('#form-upload input[name=\'file\']').change(function () {
-          let file = $(this).prop('files')[0];
-          imgUploadAjax(file, _self);
-      });
-  })
+    const _self = $(this);
 
-  // 允许拖拽上传
-  $('.is-up-file .img-upload-item').on('dragover', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      $(this).addClass('border-primary');
+    // 调用文件管理器
+    window.inno.fileManagerIframe((file) => {
+      // 处理选中的文件
+      let val = file.path;
+      let url = file.url;
+      _self.find('input').val(val);
+      _self.find('.tool-wrap').removeClass('d-none');
+      _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
+    }, {
+      multiple: false,
+      type: 'image'
+    });
   });
 
-  // dragleave
-  $('.is-up-file .img-upload-item').on('dragleave', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      $(this).removeClass('border-primary');
-  });
-
-  $('.is-up-file .img-upload-item').on('drop', function (e) {
-      e.stopPropagation();
-      let file = e.originalEvent.dataTransfer.files[0];
-      imgUploadAjax(file, $(this));
-      $(this).removeClass('border-primary');
-  });
-
+  // 删除图片
   $('.is-up-file .delete-img').on('click', function (e) {
-      e.stopPropagation();
-      let _self = $(this).parent().parent();
-      _self.find('input').val('');
-      _self.find('.tool-wrap').addClass('d-none');
-      _self.find('.img-info').html('<i class="bi bi-plus-lg fs-3 text-secondary"></i>');
+    e.stopPropagation();
+    let _self = $(this).parent().parent();
+    _self.find('input').val('');
+    _self.find('.tool-wrap').addClass('d-none');
+    _self.find('.img-info').html('<i class="bi bi-plus fs-1 text-secondary opacity-75"></i>');
   });
 
+  // 预览图片
   $('.is-up-file .show-img').on('click', function (e) {
-      e.stopPropagation();
-      let src = $(this).parent().siblings('.img-info').find('img').data('origin-img');
-      let img = '<img src="' + src + '" class="img-fluid">';
-      $('#modal-show-img .modal-body').html(img);
-      $('#modal-show-img').modal('show');
+    e.stopPropagation();
+    let src = $(this).parent().siblings('.img-info').find('img').data('origin-img');
+    let img = '<img src="' + src + '" class="img-fluid">';
+    $('#modal-show-img .modal-body').html(img);
+    $('#modal-show-img').modal('show');
   });
-
-  function imgUploadAjax(file, _self) {
-      if (file.type.indexOf('image') === -1) {
-          alert('请上传图片文件');
-          return;
-      }
-
-      let formData = new FormData();
-      formData.append('image', file);
-      formData.append('type', _self.parents('.is-up-file').data('type'));
-      _self.find('.img-loading').removeClass('d-none');
-      axios.post(urls.upload_images, formData, {}).then(function (res) {
-          let val = res.data.value;
-          let url = res.data.url;
-          _self.find('input').val(val);
-          _self.find('.tool-wrap').removeClass('d-none');
-          _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
-      }).catch(function (err) {
-          inno.msg(err.response.data.message);
-      }).finally(function () {
-          _self.find('.img-loading').addClass('d-none');
-      });
-  }
 </script>
 @endPushOnce
