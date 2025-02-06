@@ -15,7 +15,7 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
 $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-    'Authorization' : 'Bearer ' + apiToken
+    'Authorization': 'Bearer ' + apiToken
   }
 });
 window.apiToken = $.apiToken = apiToken;
@@ -148,23 +148,13 @@ const tinymceInit = () => {
       ed.ui.registry.addButton('toolbarImageButton', {
         icon: 'image',
         onAction: function () {
-          $('#form-upload').remove();
-          $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
-          $('#form-upload input[name=\'file\']').trigger('click');
-          $('#form-upload input[name=\'file\']').on('change', function () {
-            let file = this.files[0];
-            let formData = new FormData();
-            formData.append('image', file);
-            formData.append('type', 'common');
-            layer.load(2, { shade: [0.3, '#fff'] })
-            axios.post(urls.upload_images, formData, {}).then(function (res) {
-              let url = res.data.url;
-              ed.insertContent('<img src="' + url + '" class="img-fluid" />');
-            }).catch(function (err) {
-              layer.msg(err.response.data.message, { icon: 2 });
-            }).finally(function () {
-              layer.closeAll('loading');
-            });
+          inno.fileManagerIframe((file) => {
+            if (file.url) {
+              ed.insertContent('<img src="' + file.url + '" class="img-fluid" />');
+            }
+          }, {
+            type: 'image',
+            multiple: false
           });
         }
       });
