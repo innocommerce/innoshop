@@ -19,12 +19,20 @@ use InnoShop\RestAPI\Services\FileManagerService;
 
 class FileManagerController extends BaseController
 {
-    protected FileManagerService $fileManagerService;
+    protected mixed $fileManagerService;
 
     public function __construct()
     {
         parent::__construct();
-        $this->fileManagerService = new FileManagerService;
+        $this->fileManagerService = $this->getService();
+    }
+
+    /**
+     * @return FileManagerService
+     */
+    private function getService(): mixed
+    {
+        return fire_hook_filter('file_manager.service', new FileManagerService);
     }
 
     /**
