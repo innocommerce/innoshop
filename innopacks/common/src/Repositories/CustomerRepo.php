@@ -240,4 +240,43 @@ class CustomerRepo extends BaseRepo
 
         return $data;
     }
+
+    /**
+     * @param  $keyword
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function autocomplete($keyword, int $limit = 10): mixed
+    {
+        $builder = Customer::query();
+        if ($keyword) {
+            $builder->where(function ($query) use ($keyword) {
+                $query->where('email', 'like', "%$keyword%")
+                    ->orWhere('name', 'like', "%$keyword%");
+            });
+        }
+
+        return $builder->limit($limit)->get();
+    }
+
+    /**
+     * Get customer list by IDs.
+     *
+     * @param  mixed  $customerIDs
+     * @return mixed
+     */
+    public function getListByCustomerIDs(mixed $customerIDs): mixed
+    {
+        if (empty($customerIDs)) {
+            return [];
+        }
+        if (is_string($customerIDs)) {
+            $customerIDs = explode(',', $customerIDs);
+        }
+
+        return Customer::query()
+            ->whereIn('id', $customerIDs)
+            ->orderByRaw('FIELD(id, '.implode(',', $customerIDs).')')
+            ->get();
+    }
 }

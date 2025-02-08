@@ -67,16 +67,23 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/attributes', [PanelApiControllers\AttributeController::class, 'index'])->name('attributes.index');
     Route::get('/attribute_values', [PanelApiControllers\AttributeValueController::class, 'index'])->name('attribute_values.index');
 
-    Route::get('file_manager/files', [PanelApiControllers\FileManagerController::class, 'getFiles'])->name('file_manager.get_files');
-    Route::get('file_manager/directories', [PanelApiControllers\FileManagerController::class, 'getDirectories'])->name('file_manager.get_directories');
-    Route::post('file_manager/directories', [PanelApiControllers\FileManagerController::class, 'createDirectory'])->name('file_manager.create_directory');
-    Route::post('file_manager/upload', [PanelApiControllers\FileManagerController::class, 'uploadFiles'])->name('file_manager.upload');
-    Route::post('file_manager/rename', [PanelApiControllers\FileManagerController::class, 'rename'])->name('file_manager.rename');
-    Route::delete('file_manager/files', [PanelApiControllers\FileManagerController::class, 'destroyFiles'])->name('file_manager.delete_files');
-    Route::delete('file_manager/directories', [PanelApiControllers\FileManagerController::class, 'destroyDirectories'])->name('file_manager.delete_directories');
-    Route::post('file_manager/move_directories', [PanelApiControllers\FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
-    Route::post('file_manager/move_files', [PanelApiControllers\FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
-    Route::get('file_manager/export', [PanelApiControllers\FileManagerController::class, 'exportZip'])->name('file_manager.export');
-    Route::post('file_manager/copy_files', [PanelApiControllers\FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
+    Route::get('/customers', [PanelApiControllers\CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/names', [PanelApiControllers\CustomerController::class, 'names'])->name('customers.name');
+    Route::get('/customers/autocomplete', [PanelApiControllers\CustomerController::class, 'autocomplete'])->name('customers.autocomplete');
+    Route::post('/customers', [PanelApiControllers\CustomerController::class, 'store'])->name('customers.store');
+    Route::put('/customers/{tag}', [PanelApiControllers\CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('/customers/{tag}', [PanelApiControllers\CustomerController::class, 'destroy'])->name('customers.destroy');
+
+    Route::get('/file_manager/files', [PanelApiControllers\FileManagerController::class, 'getFiles'])->name('file_manager.get_files');
+    Route::get('/file_manager/directories', [PanelApiControllers\FileManagerController::class, 'getDirectories'])->name('file_manager.get_directories');
+    Route::post('/file_manager/directories', [PanelApiControllers\FileManagerController::class, 'createDirectory'])->name('file_manager.create_directory');
+    Route::post('/file_manager/upload', [PanelApiControllers\FileManagerController::class, 'uploadFiles'])->name('file_manager.upload');
+    Route::post('/file_manager/rename', [PanelApiControllers\FileManagerController::class, 'rename'])->name('file_manager.rename');
+    Route::delete('/file_manager/files', [PanelApiControllers\FileManagerController::class, 'destroyFiles'])->name('file_manager.delete_files');
+    Route::delete('/file_manager/directories', [PanelApiControllers\FileManagerController::class, 'destroyDirectories'])->name('file_manager.delete_directories');
+    Route::post('/file_manager/move_directories', [PanelApiControllers\FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
+    Route::post('/file_manager/move_files', [PanelApiControllers\FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
+    Route::get('/file_manager/export', [PanelApiControllers\FileManagerController::class, 'exportZip'])->name('file_manager.export');
+    Route::post('/file_manager/copy_files', [PanelApiControllers\FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
 
 });

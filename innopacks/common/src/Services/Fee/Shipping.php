@@ -45,7 +45,7 @@ class Shipping extends BaseService
     {
         $checkoutData       = $this->checkoutService->getCheckoutData();
         $shippingMethodCode = $checkoutData['shipping_method_code'];
-        $shippingMethods    = ShippingService::getInstance($this->checkoutService)->getMethods();
+        $shippingMethods    = ShippingService::getInstance()->setCheckoutService($this->checkoutService)->getMethods();
 
         foreach ($shippingMethods as $shippingMethod) {
             foreach ($shippingMethod['quotes'] as $quote) {
@@ -65,7 +65,7 @@ class Shipping extends BaseService
      */
     public function getShippingQuoteName($quoteCode): string
     {
-        $shippingMethods = ShippingService::getInstance($this->checkoutService)->getMethods();
+        $shippingMethods = ShippingService::getInstance()->setCheckoutService($this->checkoutService)->getMethods();
         foreach ($shippingMethods as $shippingMethod) {
             foreach ($shippingMethod['quotes'] as $quote) {
                 if ($quote['code'] == $quoteCode) {

@@ -11,12 +11,51 @@ namespace InnoShop\Common\Services\Checkout;
 
 use Exception;
 use Illuminate\Support\Str;
+use InnoShop\Common\Entities\ShippingEntity;
+use InnoShop\Common\Services\CheckoutService;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\PluginRepo;
+use Throwable;
 
-class ShippingService extends BaseService
+class ShippingService
 {
     public static ?array $shippingMethods = null;
+
+    protected ?CheckoutService $checkoutService;
+
+    protected ?ShippingEntity $shippingEntity;
+
+    /**
+     * @return static
+     */
+    public static function getInstance(): static
+    {
+        return new static;
+    }
+
+    /**
+     * @param  CheckoutService  $checkoutService
+     * @return ShippingService
+     * @throws Throwable
+     */
+    public function setCheckoutService(CheckoutService $checkoutService): static
+    {
+        $this->checkoutService = $checkoutService;
+        $this->setShippingEntity(ShippingEntity::getInstance()->setCheckoutService($checkoutService));
+
+        return $this;
+    }
+
+    /**
+     * @param  ShippingEntity  $entity
+     * @return static
+     */
+    public function setShippingEntity(ShippingEntity $entity): static
+    {
+        $this->shippingEntity = $entity;
+
+        return $this;
+    }
 
     /**
      * @throws Exception
@@ -38,7 +77,7 @@ class ShippingService extends BaseService
                 throw new Exception(front_trans('checkout.shipping_quote_error', ['classname' => $bootClass]));
             }
 
-            $quotes = (new $bootClass)->getQuotes($this->checkoutService);
+            $quotes = (new $bootClass)->getQuotes($this->shippingEntity);
 
             if ($quotes) {
                 $shippingMethods[] = [
