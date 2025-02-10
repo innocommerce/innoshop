@@ -8275,16 +8275,16 @@
         },
         {
             "name": "kitloong/laravel-migrations-generator",
-            "version": "v7.0.6",
+            "version": "v7.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kitloong/laravel-migrations-generator.git",
-                "reference": "3d036e3030928f904c833a8e004fd4914f301236"
+                "reference": "c0ec3ec0beb18f5a1f516b6cf214879133bcd37e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kitloong/laravel-migrations-generator/zipball/3d036e3030928f904c833a8e004fd4914f301236",
-                "reference": "3d036e3030928f904c833a8e004fd4914f301236",
+                "url": "https://api.github.com/repos/kitloong/laravel-migrations-generator/zipball/c0ec3ec0beb18f5a1f516b6cf214879133bcd37e",
+                "reference": "c0ec3ec0beb18f5a1f516b6cf214879133bcd37e",
                 "shasum": ""
             },
             "require": {
@@ -8336,7 +8336,7 @@
             ],
             "support": {
                 "issues": "https://github.com/kitloong/laravel-migrations-generator/issues",
-                "source": "https://github.com/kitloong/laravel-migrations-generator/tree/v7.0.6"
+                "source": "https://github.com/kitloong/laravel-migrations-generator/tree/v7.0.7"
             },
             "funding": [
                 {
@@ -8348,7 +8348,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-03T12:05:10+00:00"
+            "time": "2025-02-09T13:04:06+00:00"
         },
         {
             "name": "laravel/pint",
@@ -10813,7 +10813,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10824,6 +10824,6 @@
         "ext-pdo": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
