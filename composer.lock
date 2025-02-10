@@ -7807,16 +7807,16 @@
         },
         {
             "name": "w7corp/easywechat",
-            "version": "6.17.1",
+            "version": "6.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/w7corp/easywechat.git",
-                "reference": "32023cd3e5cafa443d072412e435a57e012db0e0"
+                "reference": "5d29981cdffb2df314d62a943d15939a28c9b68e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/32023cd3e5cafa443d072412e435a57e012db0e0",
-                "reference": "32023cd3e5cafa443d072412e435a57e012db0e0",
+                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/5d29981cdffb2df314d62a943d15939a28c9b68e",
+                "reference": "5d29981cdffb2df314d62a943d15939a28c9b68e",
                 "shasum": ""
             },
             "require": {
@@ -7878,7 +7878,7 @@
             ],
             "support": {
                 "issues": "https://github.com/w7corp/easywechat/issues",
-                "source": "https://github.com/w7corp/easywechat/tree/6.17.1"
+                "source": "https://github.com/w7corp/easywechat/tree/6.17.2"
             },
             "funding": [
                 {
@@ -7886,7 +7886,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-10T02:26:22+00:00"
+            "time": "2025-02-08T03:22:25+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10813,7 +10813,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10824,6 +10824,6 @@
         "ext-pdo": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
