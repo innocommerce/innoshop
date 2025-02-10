@@ -9,6 +9,7 @@
       @endforeach
       <a class="btn btn-success ms-2" href="{{ panel_route('orders.printing', $order) }}" target="_blank">{{
             panel_trans('order.print') }}</a>
+      @hookinsert('panel.orders.info.print.after')
       <el-dialog v-model="statusDialog" title="{{ __('panel/order.status') }}" width="500">
         <div class="mb-2">{{ __('panel/order.comment') }}</div>
         <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}"
