@@ -55,6 +55,16 @@ class CheckoutRepo extends BaseRepo
             $builder->where('guest_id', $guestID);
         }
 
+        $shippingAddressID = $filters['shipping_address_id'] ?? 0;
+        if ($shippingAddressID) {
+            $builder->where('shipping_address_id', $shippingAddressID);
+        }
+
+        $billingAddressID = $filters['billing_address_id'] ?? 0;
+        if ($billingAddressID) {
+            $builder->where('billing_address_id', $billingAddressID);
+        }
+
         return fire_hook_filter('repo.checkout.builder', $builder);
     }
 

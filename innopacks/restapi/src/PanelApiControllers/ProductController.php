@@ -69,12 +69,35 @@ class ProductController extends BaseController
                 $product = null;
                 $spuCode = $productData['spu_code'] ?? '';
                 if (empty($spuCode)) {
-                    throw new \Exception('Empty SPU code!');
+                    throw new Exception('Empty SPU code!');
                 }
 
                 $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
                 ProductImportService::getInstance()->import($productData, $product);
             }
+
+            return create_json_success();
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * @param  Request  $request
+     * @param  string  $spuCode
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function update(Request $request, string $spuCode): JsonResponse
+    {
+        try {
+            $data    = $request->all();
+            $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
+            if (! $product) {
+                throw new Exception('Product not found!');
+            }
+
+            ProductImportService::getInstance()->import($data, $product);
 
             return create_json_success();
         } catch (Exception $e) {

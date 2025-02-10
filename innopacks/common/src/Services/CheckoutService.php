@@ -164,6 +164,25 @@ class CheckoutService extends BaseService
     }
 
     /**
+     * @return array
+     * @throws Throwable
+     */
+    public function getShippingAddress(): array
+    {
+        $filters = [
+            'customer_id' => $this->customerID,
+            'guest_id'    => $this->guestID,
+        ];
+        $checkout = CheckoutRepo::getInstance()->builder($filters)->first();
+        $address  = $checkout->shippingAddress ?? null;
+        if (empty($address)) {
+            return $this->getDefaultAddress();
+        }
+
+        return $address->toArray();
+    }
+
+    /**
      * @return float
      */
     public function getSubTotal(): float
@@ -248,7 +267,7 @@ class CheckoutService extends BaseService
      */
     public function validateCheckoutData(): void
     {
-        $shippingService    = ShippingService::getInstance($this);
+        $shippingService    = ShippingService::getInstance()->setCheckoutService($this);
         $shippingMethods    = $shippingService->getMethods();
         $shippingQuoteCodes = $shippingService->getQuoteCodes();
         if (! in_array($this->checkoutData['shipping_method_code'], $shippingQuoteCodes)) {
@@ -260,6 +279,15 @@ class CheckoutService extends BaseService
         $billingCodes   = collect($billingMethods)->pluck('code')->toArray();
         if (! in_array($this->checkoutData['billing_method_code'], $billingCodes)) {
             $this->updateValues(['billing_method_code' => $billingMethods[0]['code'] ?? '']);
+        }
+
+        $addressList = $this->getAddressList();
+        if (! collect($addressList)->contains('id', $this->checkoutData['shipping_address_id'])) {
+            $this->updateValues(['shipping_address_id' => 0]);
+        }
+
+        if (! collect($addressList)->contains('id', $this->checkoutData['billing_address_id'])) {
+            $this->updateValues(['billing_address_id' => 0]);
         }
 
         $this->checkoutData = $this->freshCheckoutData();
@@ -297,7 +325,7 @@ class CheckoutService extends BaseService
     {
         $defaultAddress = $this->getDefaultAddress();
 
-        $shippingMethods = ShippingService::getInstance($this)->getMethods();
+        $shippingMethods = ShippingService::getInstance()->setCheckoutService($this)->getMethods();
         $billingMethods  = BillingService::getInstance()->getMethods();
 
         $data['shipping_address_id']  = $defaultAddress['id']                    ?? 0;
@@ -321,7 +349,7 @@ class CheckoutService extends BaseService
         $result = [
             'cart_list'        => $this->getCartList(),
             'address_list'     => $this->getAddressList(),
-            'shipping_methods' => ShippingService::getInstance($this)->getMethods(),
+            'shipping_methods' => ShippingService::getInstance()->setCheckoutService($this)->getMethods(),
             'billing_methods'  => BillingService::getInstance()->getMethods(),
             'checkout'         => $this->getCheckoutData(),
             'fee_list'         => $this->getFeeList(),

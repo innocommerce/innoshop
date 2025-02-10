@@ -99,7 +99,7 @@ class AddressController extends BaseController
             return json_fail('Unauthorized', null, 403);
         }
 
-        $address->delete();
+        AddressRepo::getInstance()->destroy($address);
 
         return delete_json_success('success');
     }

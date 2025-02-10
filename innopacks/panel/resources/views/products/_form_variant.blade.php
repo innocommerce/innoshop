@@ -461,29 +461,18 @@
       }
 
       const upVariantImage = (init_index, index) => {
-        $('#form-upload').remove();
-        $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" accept="image/*" name="file" /></form>');
-        $('#form-upload input[name=\'file\']').trigger('click');
-        $('#form-upload input[name=\'file\']').change(function () {
-          let file = $(this).prop('files')[0];
-          skuImgUploadAjax(file, init_index, index);
+        inno.fileManagerIframe((file) => {
+          if (file.url) {
+            skus.value[index].image = file.url;
+          }
+        }, {
+          type: 'image',
+          multiple: false
         });
       }
 
       const skuImgUploadAjax = (file, init_index, index) => {
-        if (file.type.indexOf('image') === -1) {
-          alert('请上传图片文件');
-          return;
-        }
-
-        let formData = new FormData();
-        formData.append('image', file);
-        formData.append('type', 'common');
-        axios.post('{{ front_root_route('upload.images') }}', formData, {}).then(function (res) {
-          getSkusItem(index).image = res.data.value;
-        }).catch(function (err) {
-          inno.msg(err.response.data.message);
-        })
+        // 此方法已不再使用，保持为空
       }
 
       const dragVariantsEnd = (evt) => {

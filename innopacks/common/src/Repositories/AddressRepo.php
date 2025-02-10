@@ -87,6 +87,17 @@ class AddressRepo extends BaseRepo
     }
 
     /**
+     * @param  mixed  $item
+     * @return void
+     */
+    public function destroy(mixed $item): void
+    {
+        CheckoutRepo::getInstance()->builder(['shipping_address_id' => $item->id])->update(['shipping_address_id' => 0]);
+        CheckoutRepo::getInstance()->builder(['billing_address_id' => $item->id])->update(['billing_address_id' => 0]);
+        $item->delete();
+    }
+
+    /**
      * @param  $address
      * @param  $data
      * @return void

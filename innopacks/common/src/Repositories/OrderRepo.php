@@ -180,8 +180,8 @@ class OrderRepo extends BaseRepo
 
         $shippingAddressID = (int) $requestData['shipping_address_id'];
         $billingAddressID  = (int) $requestData['billing_address_id'];
-        $shippingAddress   = Address::query()->find($shippingAddressID);
-        $billingAddress    = Address::query()->find($billingAddressID);
+        $shippingAddress   = $shippingAddressID ? Address::query()->findOrFail($shippingAddressID) : null;
+        $billingAddress    = $billingAddressID ? Address::query()->findOrFail($billingAddressID) : null;
 
         $saData = $shippingAddress ? (new AddressListItem($shippingAddress))->jsonSerialize() : [];
         $baData = $billingAddress ? (new AddressListItem($billingAddress))->jsonSerialize() : [];

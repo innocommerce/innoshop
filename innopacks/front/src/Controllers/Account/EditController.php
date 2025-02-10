@@ -43,7 +43,7 @@ class EditController extends Controller
         } catch (Exception $e) {
             return redirect(account_route('edit.index'))
                 ->withInput()
-                ->withErrors(['error' => $e->getMessage()]);
+                ->with(['error' => $e->getMessage()]);
         }
     }
 }
