@@ -28,7 +28,7 @@
             @csrf
             @method('PUT')
 
-            <x-common-form-image name="avatar" title="{{ __('front/edit.avatar') }}"
+            <x-common-form-imagep name="avatar" title="{{ __('front/edit.avatar') }}"
                                  value="{{ old('avatar', $customer->avatar) }}"/>
             <x-common-form-input name="name" title="{{ __('front/edit.name') }}"
                                  value="{{ old('name', $customer->name) }}" required="required"
