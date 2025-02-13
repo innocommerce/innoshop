@@ -287,6 +287,19 @@ if (! function_exists('locales')) {
     }
 }
 
+if (! function_exists('enabled_locale_codes')) {
+    /**
+     * Get available locale codes
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    function enabled_locale_codes(): mixed
+    {
+        return locales()->pluck('code')->toArray();
+    }
+}
+
 if (! function_exists('setting_locale_code')) {
     /**
      * Get setting locale code.

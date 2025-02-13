@@ -84,7 +84,11 @@ class CartItemRepo extends BaseRepo
     private function handleData($requestData): array
     {
         $skuId = $requestData['skuId'] ?? ($requestData['sku_id'] ?? 0);
-        $sku   = Sku::query()->findOrFail($skuId);
+        if ($skuId) {
+            $sku = Sku::query()->findOrFail($skuId);
+        } else {
+            $sku = Sku::query()->where('code', $requestData['sku_code'] ?? '')->firstOrFail();
+        }
 
         $customerID = $requestData['customer_id'] ?? 0;
         $guestID    = $requestData['guest_id']    ?? 0;

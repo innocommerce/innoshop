@@ -43,14 +43,32 @@ class ProductImportService
     }
 
     /**
+     * @param  $product
+     * @param  $productData
+     * @return mixed
+     * @throws Throwable
+     */
+    public function patch($product, $productData): mixed
+    {
+        $productData = $this->handleData($productData);
+
+        return ProductRepo::getInstance()->patch($product, $productData);
+    }
+
+    /**
      * @param  $productData
      * @return mixed
      * @throws Throwable
      */
     private function handleData($productData): mixed
     {
-        $productData['attributes'] = $this->handleAttributes($productData['attributes']);
-        $productData['categories'] = $this->handleCategories($productData['categories']);
+        if (isset($productData['attributes'])) {
+            $productData['attributes'] = $this->handleAttributes($productData['attributes']);
+        }
+
+        if (isset($productData['categories'])) {
+            $productData['categories'] = $this->handleCategories($productData['categories']);
+        }
 
         return $productData;
     }
@@ -65,6 +83,10 @@ class ProductImportService
     private function handleAttributes($attributes): array
     {
         $result = [];
+
+        if (empty($attributes)) {
+            return $result;
+        }
 
         foreach ($attributes as $attribute) {
             if (isset($attribute['attribute_id']) && isset($attribute['attribute_value_id'])) {
