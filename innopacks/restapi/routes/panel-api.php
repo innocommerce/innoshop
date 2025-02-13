@@ -25,6 +25,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/products/autocomplete', [PanelApiControllers\ProductController::class, 'autocomplete'])->name('products.autocomplete');
     Route::post('/products/import', [PanelApiControllers\ProductController::class, 'import'])->name('products.import');
     Route::put('/products/{spu_code}', [PanelApiControllers\ProductController::class, 'update'])->name('products.update');
+    Route::patch('/products/{spu_code}', [PanelApiControllers\ProductController::class, 'patch'])->name('products.patch');
 
     Route::get('/categories', [PanelApiControllers\CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/names', [PanelApiControllers\CategoryController::class, 'names'])->name('categories.names');
