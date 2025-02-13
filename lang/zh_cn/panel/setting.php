@@ -26,6 +26,7 @@ return [
     'bought_review'                     => '购买后评论',
     'catalogs'                          => '文章分类',
     'content_ai'                        => 'AI 内容生成',
+    'debug'                             => '开启调试',
     'default_country'                   => '默认国家/地区',
     'default_currency'                  => '默认货币',
     'default_province'                  => '默认省份',
