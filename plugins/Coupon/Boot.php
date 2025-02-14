@@ -40,17 +40,12 @@ class Boot
 
             return $data;
         });
-
-        //        listen_hook_action('checkout.confirm.after',function ($data) {
-        //            dd($data);
-        //        });
         listen_hook_filter('service.checkout.fee.methods', function ($classes) {
             $classes[] = CouponFee::class;
 
             return $classes;
         });
         listen_blade_insert('checkout.confirm.before', function ($data) {
-            //             dd($data);
             $this->user = $data['customer'];
 
             $code                = session()->get('coupon_code');
@@ -67,14 +62,12 @@ class Boot
                     $this->couponCode = $fee->reference;
                 }
             }
-            $this->user = $order->customer;
-            //            dd($data);
+            $this->user                              = $order->customer;
             $data['machines']['created']['unpaid'][] = function () {
                 $couponService = new CouponService($this->repo);
                 $couponService->redeemCoupon($this->couponCode, $this->orderId, $this->user->id);
             };
 
-            //            session()->forget('coupon_code');
             return $data;
         });
 
