@@ -1,0 +1,20 @@
+{
+    "code": "coupon",
+    "name": {
+        "zh_cn": "优惠券 Coupon",
+        "en": "Coupon"
+    },
+    "description": {
+        "zh_cn": "一款非常便捷实用的优惠券工具，您可以管理和发放您的优惠券，优惠券支持固定扣减也和比例折扣，在账单结账页面可以轻松实现扣减。在后台可以查看消费券的使用记录和订单。",
+        "en": "A highly convenient and practical coupon tool that allows you to manage and distribute your coupons. The coupons support fixed deductions and percentage discounts, and can be easily applied at the billing checkout page. In the backend, you can view the usage records of the coupons and orders.",
+        "jp": "非常に便利で実用的なクーポンツールで、クーポンの管理と配布ができます。クーポンは固定控除と割合割引をサポートしており、請求のチェックアウトページで簡単に適用できます。バックエンドでは、クーポンの使用記録と注文を確認できます。",
+        "es": "Una herramienta de cupones muy conveniente y práctica que le permite gestionar y distribuir sus cupones. Los cupones admiten deducciones fijas y descuentos porcentuales, y se pueden aplicar fácilmente en la página de pago de la factura. En el backend, puede ver los registros de uso de los cupones y los pedidos."
+    },
+    "type": "fee",
+    "version": "v1.1.3",
+    "icon": "/images/coupon_logo.png",
+    "author": {
+        "name": "XING GUI YU",
+        "email": "xingguiyu@foxmail.com"
+    }
+}
