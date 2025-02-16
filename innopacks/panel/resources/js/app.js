@@ -10,7 +10,8 @@ window.inno = common;
 import dominateColor from "./dominate_color";
 window.dominateColor = dominateColor;
 
-const apiToken = $('meta[name="api-token"]').attr('content');
+const apiToken = $('meta[name="api-token"]').attr('content') ||
+  $(window.parent.document).find('meta[name="api-token"]').attr('content');
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
 $.ajaxSetup({
   headers: {
@@ -19,7 +20,9 @@ $.ajaxSetup({
   }
 });
 window.apiToken = $.apiToken = apiToken;
-console.log('apiToken:' + apiToken);
+if (window === window.parent) {  // 只在非 iframe 环境下输出
+  console.log('apiToken:' + apiToken);
+}
 
 $(function () {
   tinymceInit();
