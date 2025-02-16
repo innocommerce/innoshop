@@ -8,10 +8,6 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use InnoShop\Enterprise\PanelControllers\FileManagerController;
 use InnoShop\Enterprise\PanelControllers\VolumePriceController;
-
-Route::get('file_manager', [FileManagerController::class, 'index'])->name('file_manager.index');
-Route::get('file_manager/iframe', [FileManagerController::class, 'iframe'])->name('file_manager.iframe');
 
 Route::get('volume_prices', [VolumePriceController::class, 'index'])->name('volume_prices.index');

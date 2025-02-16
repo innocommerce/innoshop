@@ -14,23 +14,5 @@ class Product extends Base
     /**
      * @return void
      */
-    public function init(): void
-    {
-        $this->addPanelFileManagerMenu();
-    }
-
-    /**
-     * @return void
-     */
-    private function addPanelFileManagerMenu(): void
-    {
-        listen_hook_filter('component.sidebar.product.routes', function ($data) {
-            $data[] = [
-                'route' => 'file_manager.index',
-                'title' => trans('enterprise::file_manager.title'),
-            ];
-
-            return $data;
-        });
-    }
+    public function init(): void {}
 }
