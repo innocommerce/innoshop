@@ -19,7 +19,8 @@
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel/setting.website_data') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting.email_setting') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-content-ai">{{ __('panel/setting.content_ai') }}</a>
-          </ul>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-logistics-information">{{ __('panel/menu.express_company') }}</a>  
+        </ul>
         </div>
       </div>
     </div>
@@ -41,9 +42,12 @@
             </div>
 
             <div class="tab-pane fade" id="tab-setting-content-ai">
-              @include('panel::settings._content_ai')
+              @include('panel::settings._content_ai') 
             </div>
 
+            <div class="tab-pane fade" id="tab-setting-logistics-information">
+              @include('panel::settings._logistics_information')
+            </div>
           </div>
         </div>
       </div>

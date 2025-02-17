@@ -16,6 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use InnoShop\Common\Models\Order\Fee;
 use InnoShop\Common\Models\Order\History;
 use InnoShop\Common\Models\Order\Item;
+use InnoShop\Common\Models\Order\Shipment;
 use InnoShop\Common\Notifications\OrderNewNotification;
 use InnoShop\Common\Notifications\OrderUpdateNotification;
 use InnoShop\Common\Services\StateMachineService;
@@ -86,6 +87,14 @@ class Order extends BaseModel
     public function histories(): HasMany
     {
         return $this->hasMany(History::class, 'order_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function shipments(): HasMany
+    {
+        return $this->hasMany(Shipment::class, 'order_id', 'id');
     }
 
     /**

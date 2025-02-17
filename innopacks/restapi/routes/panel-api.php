@@ -51,6 +51,10 @@ Route::middleware($middlewares)->group(function () {
 
     Route::post('/orders/{order}/notes', [PanelApiControllers\OrderController::class, 'updateNote'])->name('orders.update_note');
 
+    Route::post('/orders/{order}/shipments', [PanelApiControllers\ShipmentController::class, 'store'])->name('shipments.store');
+    Route::delete('/shipments/{shipment}', [PanelApiControllers\ShipmentController::class, 'destroy'])->name('shipments.destroy');
+    Route::get('/shipments/{shipment}/traces', [PanelApiControllers\ShipmentController::class, 'getTraces'])->name('shipments.get_traces');
+
     Route::get('/pages', [PanelApiControllers\PageController::class, 'index'])->name('pages.index');
     Route::get('/pages/names', [PanelApiControllers\PageController::class, 'names'])->name('pages.names');
     Route::get('/pages/autocomplete', [PanelApiControllers\PageController::class, 'autocomplete'])->name('pages.autocomplete');
