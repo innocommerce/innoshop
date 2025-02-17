@@ -8,6 +8,6 @@
  */
 
 return [
-    'title' => 'Başlık',
+    'title'  => 'Başlık',
     'parent' => 'Ebeveyn',
 ];
