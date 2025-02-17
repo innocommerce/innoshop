@@ -7807,16 +7807,16 @@
         },
         {
             "name": "w7corp/easywechat",
-            "version": "6.17.1",
+            "version": "6.17.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/w7corp/easywechat.git",
-                "reference": "32023cd3e5cafa443d072412e435a57e012db0e0"
+                "reference": "42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/32023cd3e5cafa443d072412e435a57e012db0e0",
-                "reference": "32023cd3e5cafa443d072412e435a57e012db0e0",
+                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9",
+                "reference": "42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9",
                 "shasum": ""
             },
             "require": {
@@ -7848,7 +7848,7 @@
                 "laravel/pint": "^1.2",
                 "mikey179/vfsstream": "^1.6",
                 "mockery/mockery": "^1.4.4",
-                "phpstan/phpstan": "^1.0",
+                "phpstan/phpstan": "^1.0 | ^2",
                 "phpunit/phpunit": "^9.5",
                 "symfony/var-dumper": "^5.2"
             },
@@ -7878,7 +7878,7 @@
             ],
             "support": {
                 "issues": "https://github.com/w7corp/easywechat/issues",
-                "source": "https://github.com/w7corp/easywechat/tree/6.17.1"
+                "source": "https://github.com/w7corp/easywechat/tree/6.17.3"
             },
             "funding": [
                 {
@@ -7886,7 +7886,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-10T02:26:22+00:00"
+            "time": "2025-02-13T06:28:42+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10813,7 +10813,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10824,6 +10824,6 @@
         "ext-pdo": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
