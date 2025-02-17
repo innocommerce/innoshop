@@ -141,7 +141,7 @@
         <div class="col-12 col-md-6">
           <div class="address-card">
             <div class="address-card-header mb-3">
-              <h5 class="address-card-title">{{ __('panel/order.billing_address') }}</h3>
+              <h5 class="address-card-title">{{ __('panel/order.billing_address') }}</h5>
             </div>
             <div class="address-card-body">
               <p>{{ $order->billing_customer_name }}</p>
@@ -197,7 +197,39 @@
       </div>
     </div>
   </div>
-
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">{{ __('panel/order.shipping_information') }}</h5>
+      <button class="btn btn-sm btn-primary mt-2" id="addRow">{{ __('panel/order.add') }}</button>
+    </div>
+    <div class="card-body">
+      <table class="table table-response align-middle table-bordered" id="logisticsTable">
+        <thead>
+        <tr>
+            <td>ID</td>
+          <th>{{ __('panel/order.express_company') }}</th>
+          <th>{{ __('panel/order.express_number') }}</th>
+          <th>{{ __('panel/order.create_time') }}</th>
+          <th>{{ __('panel/order.operation') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($order->shipments as $shipment)
+          <tr>
+            <td data-title="id">{{ $shipment->id }}</td>
+            <td data-title="express_company">{{ $shipment->express_company }}</td>
+            <td data-title="express_number">{{ $shipment->express_number }}</td>
+            <td data-title="created_at">{{ $shipment->created_at }}</td>
+            <td>
+              <button class="btn btn-sm btn-primary deleteRow" onclick="deleteShipment('{{ $shipment->id }}')">{{ __('panel/order.delete') }}</button>
+              <button class="btn btn-sm btn-primary viewRow" onclick="viewShipmentDetails('{{ $shipment->id }}')">{{ __('panel/order.view') }}</button>
+            </td>
+          </tr>
+        @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="card-title mb-0">{{ __('panel/order.history') }}</h5>
@@ -214,13 +246,69 @@
         <tbody>
         @foreach($order->histories as $history)
           <tr>
-            <td data-title="State">{{ $history->status }}</td>
-            <td data-title="Remark">{{ $history->comment }}</td>
-            <td data-title="Update Time">{{ $history->created_at }}</td>
+            <td>{{ $history->status }}</td>
+            <td>{{ $history->comment }}</td>
+            <td>{{ $history->created_at }}</td>
           </tr>
         @endforeach
         </tbody>
       </table>
+    </div>
+  </div>
+  <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newShipmentModalLabel">{{ __('panel/order.shipment_information') }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th class="col-3">{{ __('panel/order.time') }}</th>
+                <th class="col-9">{{ __('panel/order.logistics_information') }}</th>
+              </tr>
+            </tbody>
+            <tbody>
+            </tbody>    
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ __('panel/order.confirm') }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editModal" tabindex="-1" aria-bs-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">{{ __('panel/order.edit_logistics_information') }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="logisticsCompany" class="form-label">{{ __('panel/order.express_company') }}</label>
+              <select class="form-control" id="logisticsCompany">
+                @foreach(system_setting('logistics', []) as $expressCompany)
+                  <option value="{{ $expressCompany['code'] }}">{{ $expressCompany['company'] }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="trackingNumber" class="form-label">{{ __('panel/order.express_number') }}</label>
+              <input type="text" class="form-control" id="trackingNumber">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
+          <button type="button" class="btn btn-primary" onclick="submitEdit()">{{ __('panel/order.save_changes') }}</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -232,7 +320,9 @@
     document.querySelector('[data-bs-toggle="modal"]').addEventListener('click', function () {
       admin_note.show();
     });
+
     $(document).ready(function () {
+        
       $('.admin-comment-input').on('keydown', function (event) {
         if (event.keyCode === 13) {
           event.preventDefault();
@@ -249,6 +339,36 @@
             })
         }
       });
+
+      $('#addRow').click(function() {
+        $('#editModal').modal('show');
+      });
+
+      $(document).on('click', '.deleteRow', function() {
+        $(this).closest('tr').remove();
+      });
+
+      window.viewShipmentDetails = function(shipmentId) {
+        axios.get(`${urls.api_base}/shipments/${shipmentId}/traces`)
+            .then(function(response) {
+                if (response.data && response.data.traces) {
+                    const tbody = $('#newShipmentModal .modal-body table tbody').last();
+                    tbody.empty();
+                    response.data.traces.forEach(trace => {
+                        const row = `<tr>
+                            <td>${trace.time}</td>
+                            <td>${trace.station}</td>
+                         </tr>`;
+                        tbody.append(row);
+                    });
+                    var newShipmentModal = new bootstrap.Modal(document.getElementById('newShipmentModal'));
+                    newShipmentModal.show();
+                } 
+            })
+            .catch(function(error) {
+                inno.msg('{{ __('panel/order.no_logistics_information') }}');
+            });
+      }
     });
 
     function submitComment() {
@@ -265,6 +385,34 @@
             admin_note.hide();
           }
           $('.admin-comment-input').val(res.data.admin_note);
+          window.location.reload();
+        })
+    }
+
+    function submitEdit() {
+      const logisticsCompany = $('#logisticsCompany').val();
+      const trackingNumber = $('#trackingNumber').val();
+      const selectedCompanyName = $('#logisticsCompany option:selected').text();
+      const orderId = {{ $order->id }};
+      axios.post(`${urls.api_base}/orders/${orderId}/shipments`, {
+        express_code: logisticsCompany,
+        express_company: selectedCompanyName,
+        express_number: trackingNumber,
+      })
+        .then(function(response) {
+          inno.msg('{{ __('panel/order.add_successfully') }}');
+          $('#editModal').modal('hide');
+          window.location.reload();
+        }).catch(function(res) {
+          inno.msg('{{ __('panel/order.add_failed!') }}');
+        });
+    }
+
+    function deleteShipment(shipmentId) {
+      const apiUrl = `${urls.api_base}/shipments/${shipmentId}`;
+      axios.delete(apiUrl)
+        .then(function(response) {
+          inno.msg('{{ __('panel/order.delete_successfully') }}');
           window.location.reload();
         })
     }
@@ -297,7 +445,6 @@
         }
       }
     })
-
     statusApp.use(ElementPlus);
     statusApp.mount('#status-app');
   </script>
