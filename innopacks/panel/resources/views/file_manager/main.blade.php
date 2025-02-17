@@ -21,31 +21,32 @@
         (function(window) {
             'use strict';
 
+            window.getApiToken = () => {
+                const currentToken = document.querySelector('meta[name="api-token"]')?.getAttribute('content');
+                const parentToken = window.parent?.document.querySelector('meta[name="api-token"]')?.getAttribute('content');
+                return currentToken || parentToken;
+            };
+
             // 创建 axios 实例
             const http = axios.create({
                 baseURL: '/api/panel/',
                 timeout: 30000,
                 headers: {
-                    'Authorization': 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content')
+                    'Authorization': 'Bearer ' + window.getApiToken()
                 }
             });
 
-            // 请求拦截器
-            http.interceptors.request.use(
-                config => {
-                    // 添加 loading
-                    if (window.layer) {
-                        layer.load(2, { shade: [0.3, '#fff'] });
-                    }
-                    return config;
-                },
-                error => {
-                    if (window.layer) {
-                        layer.closeAll('loading');
-                    }
-                    return Promise.reject(error);
+            // 添加请求拦截器，确保每次请求都使用最新的 token
+            http.interceptors.request.use(config => {
+                // 每次请求前重新获取 token
+                config.headers.Authorization = 'Bearer ' + window.getApiToken();
+
+                // 添加 loading
+                if (window.layer) {
+                    layer.load(2, { shade: [0.3, '#fff'] });
                 }
-            );
+                return config;
+            });
 
             // 响应拦截器
             http.interceptors.response.use(
@@ -86,7 +87,7 @@
                     return Promise.reject(error);
                 }
             );
-            window.http = http;
+            window.http = http;  // 确保 http 也被添加到 window 对象上
         })(window);
     </script>
 
@@ -1600,6 +1601,12 @@
     <script>
         new Vue({
             el: '#app',
+            created() {
+            },
+            mounted() {
+                this.loadFolders();
+                this.loadFiles();
+            },
             data() {
                 return {
                     files: [],
@@ -2777,10 +2784,6 @@
                         parent.layer.closeAll();
                     }
                 }
-            },
-            mounted() {
-                this.loadFolders();
-                this.loadFiles();
             },
             beforeDestroy() {
                 document.removeEventListener('click', this.hideContextMenu);
