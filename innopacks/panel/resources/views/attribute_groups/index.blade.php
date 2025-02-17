@@ -50,7 +50,7 @@
           method="POST" class="d-inline">
           @csrf
           @method('DELETE')
-          <el-button size="small" type="danger" plain @click="open">{{ __('panel/common.delete')}}</el-button>
+          <el-button size="small" type="danger" plain @click="open({{ $item->id }})">{{ __('panel/common.delete')}}</el-button>
           </form>
           </div>
           </div>
@@ -168,8 +168,8 @@
       drawer.value = true
       }
       const deleteForm = ref(null);
-      const open = () => {
-      ElMessageBox.confirm(
+      const open = (id) => {
+     ElMessageBox.confirm(
       '确定要删除吗?',
       '提示',
       {
@@ -177,14 +177,15 @@
       cancelButtonText: '取消',
       type: 'warning',
       }
-      )
-      .then(() => {
-
+     )
+    .then(() => {
+      const deleteUrl = urls.base_url + '/attribute_groups/' + id;
+      deleteForm.value.action = deleteUrl;
       deleteForm.value.submit();
-      })
-      .catch(() => {
-      });
-      };
+     })
+  .catch(() => {
+   });
+   };
       const exportFuns = {
       drawer,
       form,
