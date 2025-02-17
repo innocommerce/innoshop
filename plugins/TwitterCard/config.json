@@ -1,0 +1,18 @@
+{
+    "code": "twitter_card",
+    "name": {
+        "zh_cn": "Twitter Card 分享标签",
+        "en": "Twitter Card Tags"
+    },
+    "description": {
+        "zh_cn": "Twitter Card 分享标签",
+        "en": "Twitter Card Tags"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

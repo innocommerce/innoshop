@@ -1,0 +1,18 @@
+{
+    "code": "open_graph",
+    "name": {
+        "zh_cn": "OpenGraph 标签",
+        "en": "OpenGraph Tag"
+    },
+    "description": {
+        "zh_cn": "OpenGraph 标签",
+        "en": "OpenGraph Tag"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}
