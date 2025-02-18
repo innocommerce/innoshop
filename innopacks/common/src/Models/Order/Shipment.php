@@ -14,4 +14,8 @@ use InnoShop\Common\Models\BaseModel;
 class Shipment extends BaseModel
 {
     protected $table = 'order_shipments';
+
+    protected $fillable = [
+        'express_code', 'express_company', 'express_number',
+    ];
 }

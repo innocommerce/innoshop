@@ -16,6 +16,7 @@ return [
     'analytics_product'  => '상품 분석',
     'articles'           => '글 관리',
     'attribute_groups'   => '속성 그룹',
+    'attribute_values'   => '속성 값',
     'attributes'         => '속성',
     'brands'             => '상품 브랜드',
     'catalogs'           => '글 카테고리',
@@ -43,6 +44,7 @@ return [
     'roles'              => '관리자 역할',
     'settings'           => '시스템 설정',
     'sns'                => '사드파티 로그인',
+    'socials'            => '소셜 로그인',
     'states'             => '성 또는 주',
     'tags'               => '글 태그',
     'tax_classes'        => '세금 클래스',
@@ -59,6 +61,4 @@ return [
     'top_product'        => '상품',
     'top_setting'        => '설정',
     'upload'             => '업로드 기능',
-    'attribute_values'   => '속성 값',
-    'socials'            => '소셜 로그인',
 ];

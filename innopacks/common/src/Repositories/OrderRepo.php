@@ -247,13 +247,13 @@ class OrderRepo extends BaseRepo
      *
      * @return string
      */
-    private function generateOrderNumber(): string
+    public static function generateOrderNumber(): string
     {
         $number = date('Ymd').rand(10000, 99999);
-        if (! $this->builder(['number' => $number])->exists()) {
+        if (! Order::query()->where(['number' => $number])->exists()) {
             return $number;
         }
 
-        return $this->generateOrderNumber();
+        return self::generateOrderNumber();
     }
 }

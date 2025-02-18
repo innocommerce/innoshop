@@ -45,7 +45,7 @@ class Breadcrumb
         } elseif ($type == 'order') {
             return [
                 'title' => $object->number,
-                'url'   => account_route('orders.show', ['order' => $object->id]),
+                'url'   => account_route('orders.number_show', ['number' => $object->number]),
             ];
         } elseif ($type == 'order_return') {
             return [

@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'Análisis de productos',
     'articles'           => 'Artículos',
     'attribute_groups'   => 'Grupos de atributos',
+    'attribute_values'   => 'Valores de atributos',
     'attributes'         => 'Atributos',
     'brands'             => 'Marcas',
     'catalogs'           => 'Catálogos',
@@ -44,6 +45,7 @@ return [
     'roles'              => 'Roles',
     'settings'           => 'Ajustes',
     'sns'                => 'Inicio de sesión de terceros',
+    'socials'            => 'Inicios de sesión sociales',
     'states'             => 'Estados',
     'tags'               => 'Etiquetas',
     'tax_classes'        => 'Clases de impuestos',
@@ -60,6 +62,4 @@ return [
     'top_product'        => 'Producto',
     'top_setting'        => 'Ajuste',
     'upload'             => 'Función de carga',
-    'attribute_values'   => 'Valores de atributos',
-    'socials'            => 'Inicios de sesión sociales',
 ];

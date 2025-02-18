@@ -24,10 +24,12 @@ class SpecialPageRepo
      */
     public function getOptions(): array
     {
-        return [
+        $specialOptions = [
             ['type' => 'products', 'title' => trans('panel/setting.products'), 'route' => 'products.index'],
             ['type' => 'brands', 'title' => trans('panel/setting.brands'), 'route' => 'brands.index'],
         ];
+
+        return fire_hook_filter('repo.special.options', $specialOptions);
     }
 
     /**
@@ -56,6 +58,6 @@ class SpecialPageRepo
             ];
         }
 
-        return $items;
+        return fire_hook_filter('repo.special.links', $items);
     }
 }

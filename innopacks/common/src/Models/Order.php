@@ -16,17 +16,11 @@ use Illuminate\Notifications\Notifiable;
 use InnoShop\Common\Models\Order\Fee;
 use InnoShop\Common\Models\Order\History;
 use InnoShop\Common\Models\Order\Item;
+use InnoShop\Common\Models\Order\Shipment;
 use InnoShop\Common\Notifications\OrderNewNotification;
 use InnoShop\Common\Notifications\OrderUpdateNotification;
 use InnoShop\Common\Services\StateMachineService;
 
-/**
- * @Property int customer_id
- * @Property string number
- * @Property float total
- * @Property string currency_code
- * @Property string currency_value
- */
 class Order extends BaseModel
 {
     use Notifiable;
@@ -93,6 +87,34 @@ class Order extends BaseModel
     public function histories(): HasMany
     {
         return $this->hasMany(History::class, 'order_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function shipments(): HasMany
+    {
+        return $this->hasMany(Shipment::class, 'order_id', 'id');
+    }
+
+    /**
+     * Calculate order subtotal.
+     *
+     * @return float
+     */
+    public function calcSubtotal(): float
+    {
+        return round($this->items->sum('subtotal'), 2);
+    }
+
+    /**
+     * Calculate order total.
+     *
+     * @return float
+     */
+    public function calcTotal(): float
+    {
+        return round($this->fees->sum('value'), 2);
     }
 
     /**

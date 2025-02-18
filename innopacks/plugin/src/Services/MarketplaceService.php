@@ -30,6 +30,10 @@ class MarketplaceService
 
     public function __construct()
     {
+        if (! defined('CURL_SSLVERSION_TLSv1_2')) {
+            define('CURL_SSLVERSION_TLSv1_2', 6);
+        }
+
         $this->baseUrl = config('innoshop.api_url').'/api/seller';
 
         $this->client = Http::baseUrl($this->baseUrl)

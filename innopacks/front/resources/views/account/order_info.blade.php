@@ -133,7 +133,7 @@
               </div>
             </div>
           </div>
-
+         
           @if($order->comment)
             <div class="account-card-sub-title d-flex justify-content-between align-items-center">
               <span class="fw-bold">{{ __('front/checkout.order_comment') }}</span>
@@ -142,11 +142,41 @@
               <span class="d-inline-block" tabindex="0">{{ $order->comment }}</span>
             </div>
           @endif
-
+          <div class="account-card-sub-title d-flex justify-content-between align-items-center">
+            <span class="fw-bold">{{ __('front/order.logistics_info') }}</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-response">
+              <thead>
+              <tr>
+                <th>{{ __('front/order.express_code') }}</th>
+                <th>{{ __('front/order.express_company') }}</th>
+                <th>{{ __('front/order.express_number') }}</th>
+                <th>{{ __('front/order.time') }}</th>
+                <th>{{ __('front/order.shipment_info') }}</th>
+              </tr>
+              </thead>
+              <tbody>
+              @foreach($order->shipments as $shipment)
+                <tr class="align-middle">
+                  <td data-title="express_code">{{ $shipment->express_code }}</td>
+                  <td data-title="express_company">{{ $shipment->express_company }}</td>
+                  <td data-title="express_number">{{ $shipment->express_number }}</td>
+                  <td data-title="created_at">{{ $shipment->created_at }}</td>
+                  <td class="align-middle">
+                    <button data-id="{{ $shipment->id }}" type="button" class="btn btn-primary" id="view-shipment-{{ $shipment->id }}">
+                      {{ __('front/order.view') }}
+                    </button>
+                  </td>
+                </tr>
+              @endforeach
+              </tbody>
+            </table>
+          </div>
           <div class="account-card-sub-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/order.order_history') }}</span>
           </div>
-
+           
           <div class="table-responsive">
             <table class="table table-response">
               <thead>
@@ -167,7 +197,6 @@
               </tbody>
             </table>
           </div>
-        </div>
       </div>
     </div>
   </div>
@@ -208,7 +237,6 @@
                         </td>
                         <td data-title="product-name" class="name align-items-center" id="name"></td>
                         <td data-title="product-label" class="label mt-2 text-secondary" id="label"></td>
-                        </td>
                       </tr>
                       </tbody>
                     </table>
@@ -237,11 +265,36 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              {{ __('front/order.close') }}</button>
-            <button type="submit" class="btn btn-primary submit_review">{{ __('front/product.submit_review')}}</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('front/order.close') }}</button>
+            <button type="submit" class="btn btn-primary submit_review">{{ __('front/product.submit_review') }}</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newShipmentModalLabel">{{ __('front/order.shipment_info') }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="col-3">{{ __('front/order.time') }}</th>
+                <th class="col-9">{{ __('front/order.shipment_info') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ ('front/order.confirm') }}</button>
+        </div>
       </div>
     </div>
   </div>
@@ -253,9 +306,7 @@
   <script>
     const exampleModal = document.getElementById('addReview-Modal')
     exampleModal.addEventListener('show.bs.modal', event => {
-
       const button = event.relatedTarget
-
 
       const ordernumber = button.getAttribute('data-ordernumber')
       $('#order_number').text(ordernumber)
@@ -277,5 +328,27 @@
       const modalTitle = exampleModal.querySelector('.modal-title')
       const modalBodyInput = exampleModal.querySelector('.modal-body input')
     })
+
+    $(document).ready(function() {
+      $(document).on('click', '[id^="view-shipment-"]', function() {
+        const shipmentId = $(this).data('id');
+        
+        axios.get(`${urls.api_base}/panel/shipments/${shipmentId}/traces`)
+          .then(response => {
+            const traces = response.data.traces;
+            const tbody = $('#newShipmentModal .modal-body table tbody').last();
+            tbody.empty();
+            
+            traces.forEach(trace => {
+              const row = `<tr>
+                             <td>${trace.time}</td>
+                             <td>${trace.station}</td>
+                           </tr>`;
+              tbody.append(row);
+            });
+            $('#newShipmentModal').modal('show');
+          })
+      });
+    });
   </script>
 @endpush

@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'Produktanalyse',
     'articles'           => 'Artikelverwaltung',
     'attribute_groups'   => 'Attributgruppen',
+    'attribute_values'   => 'Attributwerte',
     'attributes'         => 'Attribute',
     'brands'             => 'Produktmarken',
     'catalogs'           => 'Artikelkategorien',
@@ -43,6 +44,7 @@ return [
     'roles'              => 'Admin Rollen',
     'settings'           => 'Systemeinstellungen',
     'sns'                => 'Drittanbieter-Anmeldung',
+    'socials'            => 'Drittanbieter-Login',
     'states'             => 'Bundesländer oder Staaten',
     'tags'               => 'Artikel-Tags',
     'tax_classes'        => 'Steuerklassen',
@@ -59,6 +61,4 @@ return [
     'top_product'        => 'Produkte',
     'top_setting'        => 'Einstellungen',
     'upload'             => 'Upload Funktion',
-    'attribute_values'   => 'Attributwerte',
-    'socials'            => 'Drittanbieter-Login',
 ];

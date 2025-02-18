@@ -31,17 +31,21 @@
 </div>
 
 <div class="row">
-  <div class="col-4">
+  <div class="col-6 col-md-3">
     <x-common-form-switch-radio title="{{ __('panel/setting.login_checkout') }}" name="login_checkout" required
                                 value="{{ old('login_checkout', system_setting('login_checkout')) }}"/>
   </div>
-  <div class="col-4">
+  <div class="col-6 col-md-3">
     <x-common-form-switch-radio title="{{ __('panel/setting.bought_review') }}" name="bought_review" required
                                 value="{{ old('bought_review', system_setting('bought_review')) }}"/>
   </div>
-  <div class="col-4">
+  <div class="col-6 col-md-3">
     <x-common-form-switch-radio title="{{ __('panel/setting.backstage_menu_expansion') }}" name="expand" required
                                 value="{{ old('expand', system_setting('expand')) }}"/>
+  </div>
+  <div class="col-6 col-md-3">
+    <x-common-form-switch-radio title="{{ __('panel/setting.debug') }}" name="debug" required
+                                value="{{ old('debug', system_setting('debug')) }}"/>
   </div>
 </div>
 

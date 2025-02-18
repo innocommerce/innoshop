@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\Product\ImageRepo;
+use InnoShop\Common\Repositories\Product\VariantRepo;
 use Throwable;
 
 class ProductRepo extends BaseRepo
@@ -220,6 +221,72 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * Crate or update product.
+     *
+     * @param  Product  $product
+     * @param  $data
+     * @return mixed
+     * @throws Throwable
+     */
+    public function patch(Product $product, $data): mixed
+    {
+        DB::beginTransaction();
+
+        try {
+            if (isset($data['variants'])) {
+                $variables         = VariantRepo::getInstance()->mergeVariant($product->variables ?? [], $data['variants']);
+                $data['variables'] = $variables;
+            }
+
+            $product->fill($data);
+            $product->saveOrFail();
+
+            if (isset($data['translations'])) {
+                $translations = $this->handleTranslations($data['translations']);
+                foreach ($translations as $translation) {
+                    $existTranslation = $product->translations()->where('locale', $translation['locale'])->first();
+                    if ($existTranslation) {
+                        $existTranslation->update($translation);
+                    } else {
+                        $product->translations()->create($translation);
+                    }
+                }
+            }
+
+            if (isset($data['attributes'])) {
+                $product->productAttributes()->delete();
+                $product->productAttributes()->createMany($this->handleAttributes($data['attributes']));
+            }
+
+            if (isset($data['related_ids'])) {
+                $product->relations()->delete();
+                $product->relations()->createMany($this->handleRelations($data['related_ids']));
+            }
+
+            if (isset($data['categories'])) {
+                $product->categories()->sync($data['categories']);
+            }
+
+            if (isset($data['images'])) {
+                $product->images()->delete();
+                $this->syncImages($product, $data['images']);
+            }
+
+            if (isset($data['skus'])) {
+                $product->skus()->delete();
+                $product->skus()->createMany($this->handleSkus($product, $data['skus']));
+            }
+
+            DB::commit();
+
+            return $product;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
      * @param  $data
      * @return string[]
      */
@@ -304,11 +371,16 @@ class ProductRepo extends BaseRepo
     /**
      * @param  $translations
      * @return array
+     * @throws Exception
      */
     private function handleTranslations($translations): array
     {
         $items = [];
         foreach ($translations as $translation) {
+            if (! in_array($translation['locale'], enabled_locale_codes())) {
+                continue;
+            }
+
             $name    = $translation['name'];
             $items[] = [
                 'locale'           => $translation['locale'],

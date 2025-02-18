@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'phân tích sản phẩm',
     'articles'           => 'quản lý bài viết',
     'attribute_groups'   => 'nhóm thuộc tính',
+    'attribute_values'   => 'Giá trị thuộc tính',
     'attributes'         => 'thuộc tính',
     'brands'             => 'thương hiệu sản phẩm',
     'catalogs'           => 'phân loại bài viết',
@@ -43,6 +44,7 @@ return [
     'roles'              => 'vai trò backend',
     'settings'           => 'thiết lập hệ thống',
     'sns'                => 'Đăng nhập qua bên thứ ba',
+    'socials'            => 'Đăng nhập xã hội',
     'states'             => 'tỉnh hoặc bang',
     'tags'               => 'thẻ bài viết',
     'tax_classes'        => 'thiết lập loại thuế',
@@ -59,6 +61,4 @@ return [
     'top_product'        => 'sản phẩm',
     'top_setting'        => 'thiết lập',
     'upload'             => 'chức năng tải lên',
-    'attribute_values'   => 'Giá trị thuộc tính',
-    'socials'            => 'Đăng nhập xã hội',
 ];

@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'Analyse des produits',
     'articles'           => 'Gestion des articles',
     'attribute_groups'   => 'Groupes d\'attributs',
+    'attribute_values'   => 'Valeurs d\'attributs',
     'attributes'         => 'Attributs',
     'brands'             => 'Marques de produits',
     'catalogs'           => 'Catégories d\'articles',
@@ -33,6 +34,7 @@ return [
     'marketplaces'       => 'Place de marché',
     'order_returns'      => 'Gestion des retours',
     'orders'             => 'Gestion des commandes',
+    'orders_printing'    => 'Impression de commandes',
     'pages'              => 'Gestion des pages',
     'plugin_market'      => 'Marché des plugins',
     'plugins'            => 'Paramètres des plugins',
@@ -43,6 +45,7 @@ return [
     'roles'              => 'Rôles backend',
     'settings'           => 'Paramètres système',
     'sns'                => 'Connexion tierce partie',
+    'socials'            => 'Connexions sociales',
     'states'             => 'États et provinces',
     'tags'               => 'Étiquettes d\'article',
     'tax_classes'        => 'Paramètres de taxe',
@@ -59,8 +62,4 @@ return [
     'top_product'        => 'Produit',
     'top_setting'        => 'Paramètres',
     'upload'             => 'Fonctionnalité de téléchargement',
-    'attribute_values'   => 'Valeurs d\'attributs',
-    'socials'            => 'Connexions sociales',
-    'orders_printing'    => 'Impression de commandes',
-
 ];

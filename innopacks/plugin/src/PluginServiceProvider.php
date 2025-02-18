@@ -137,9 +137,9 @@ class PluginServiceProvider extends ServiceProvider
         $enabledPlugins = app('plugin')->getEnabledPlugins();
         foreach ($enabledPlugins as $plugin) {
             $pluginCode = $plugin->getDirname();
-            $this->bootPlugin($plugin);
             $this->loadPluginRoutes($pluginCode);
             $this->loadPluginMiddlewares($pluginCode);
+            $this->bootPlugin($plugin);
         }
     }
 
@@ -213,6 +213,7 @@ class PluginServiceProvider extends ServiceProvider
     private function loadPluginRoutes($pluginCode): void
     {
         $this->loadPluginRootRoutes($pluginCode);
+        $this->loadPluginMainRoutes($pluginCode);
         $this->loadPluginFrontRoutes($pluginCode);
         $this->loadPluginFrontApiRoutes($pluginCode);
         $this->loadPluginPanelRoutes($pluginCode);
@@ -231,6 +232,23 @@ class PluginServiceProvider extends ServiceProvider
         if (file_exists($callbackRoutePath)) {
             Route::middleware('front')
                 ->name('front.')
+                ->group(function () use ($callbackRoutePath) {
+                    $this->loadRoutesFrom($callbackRoutePath);
+                });
+        }
+    }
+
+    /**
+     * Register callback routes
+     *
+     * @param  $pluginCode
+     */
+    private function loadPluginMainRoutes($pluginCode): void
+    {
+        $pluginBasePath    = $this->pluginBasePath;
+        $callbackRoutePath = "$pluginBasePath/$pluginCode/Routes/main.php";
+        if (file_exists($callbackRoutePath)) {
+            Route::middleware('front')
                 ->group(function () use ($callbackRoutePath) {
                     $this->loadRoutesFrom($callbackRoutePath);
                 });

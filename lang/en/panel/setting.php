@@ -45,6 +45,7 @@ return [
     'login_checkout'           => 'Login Required for Checkout',
     'bought_review'            => 'Bought Required for Review',
     'backstage_menu_expansion' => 'Menu Expanded by default',
+    'debug'                    => 'Enable Debug',
 
     'email_enable'    => 'Enable Email Service',
     'email_engine'    => 'Email Engine',

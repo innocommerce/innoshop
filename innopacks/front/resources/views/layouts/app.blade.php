@@ -34,6 +34,7 @@
     }
   </script>
   @stack('header')
+  @hookinsert('front.layout.app.head.bottom')
 </head>
 
 <body class="@yield('body-class')">

@@ -1,10 +1,10 @@
 <?php
 /**
- * Copyright (c) Desde 2024 InnoShop - Todos los derechos reservados
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
  *
  * @link       https://www.innoshop.com
  * @author     InnoShop <team@innoshop.com>
- * @license    https://opensource.org/licenses/OSL-3.0 Licencia de software de código abierto (OSL 3.0)
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
 return [
@@ -25,6 +25,7 @@ return [
     'basic'                             => 'Información básica',
     'bought_review'                     => 'Comentarios después de la compra',
     'catalogs'                          => 'Categorías de artículos',
+    'company_name'                      => 'Nombre de la empresa',
     'content_ai'                        => 'Generación de contenido de IA',
     'default_country'                   => 'País/Región por defecto',
     'default_currency'                  => 'Moneda por defecto',
@@ -34,6 +35,9 @@ return [
     'email_engine'                      => 'Motor de correo electrónico',
     'email_setting'                     => 'Configuraciones de correo electrónico',
     'enable_tax'                        => 'Habilitar cálculo de impuestos',
+    'express_code'                      => 'Código',
+    'express_code_hint'                 => 'Letras, números y guiones bajos',
+    'express_company'                   => 'Compañía de mensajería',
     'favicon'                           => 'Icono del navegador',
     'footer_menu'                       => 'Navegación del pie de página',
     'front_default_language'            => 'Idioma predeterminado de la interfaz',

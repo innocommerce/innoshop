@@ -104,4 +104,28 @@ class ProductController extends BaseController
             return json_fail($e->getMessage());
         }
     }
+
+    /**
+     * @param  Request  $request
+     * @param  string  $spuCode
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function patch(Request $request, string $spuCode): JsonResponse
+    {
+        try {
+            $data    = $request->all();
+            $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
+            if (! $product) {
+                throw new Exception('Product not found!');
+            }
+
+            $data['spu_code'] = $spuCode;
+            ProductImportService::getInstance()->patch($product, $data);
+
+            return update_json_success();
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
 }

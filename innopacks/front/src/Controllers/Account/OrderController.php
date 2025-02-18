@@ -10,9 +10,11 @@
 namespace InnoShop\Front\Controllers\Account;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
+use InnoShop\Common\Services\CartService;
+use Throwable;
 
 class OrderController extends Controller
 {
@@ -39,22 +41,6 @@ class OrderController extends Controller
     /**
      * Order detail
      *
-     * @param  Order  $order
-     * @return mixed
-     */
-    public function show(Order $order): mixed
-    {
-        $order->load(['items', 'fees']);
-        $data = [
-            'order' => $order,
-        ];
-
-        return inno_view('account.order_info', $data);
-    }
-
-    /**
-     * Order detail
-     *
      * @param  int  $number
      * @return mixed
      */
@@ -67,5 +53,25 @@ class OrderController extends Controller
         ];
 
         return inno_view('account.order_info', $data);
+    }
+
+    /**
+     * Order detail
+     *
+     * @param  int  $number
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function recart(int $number): JsonResponse
+    {
+        $order = OrderRepo::getInstance()->getOrderByNumber($number);
+        foreach ($order->items as $item) {
+            CartService::getInstance()->addCart([
+                'sku_code' => $item->product_sku,
+                'quantity' => $item->quantity,
+            ]);
+        }
+
+        return create_json_success();
     }
 }
