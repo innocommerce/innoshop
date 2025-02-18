@@ -113,7 +113,7 @@ class Sidebar extends Component
             ],
         ];
 
-        return fire_hook_filter('component.sidebar.menus', $menus);
+        return fire_hook_filter('panel.component.sidebar.menus', $menus);
     }
 
     /**
@@ -226,7 +226,7 @@ class Sidebar extends Component
             ['route' => 'order_returns.index', 'title' => __('panel/menu.order_returns')],
         ];
 
-        return fire_hook_filter('component.sidebar.order.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.order.routes', $routes);
     }
 
     /**
@@ -243,7 +243,7 @@ class Sidebar extends Component
             ['route' => 'reviews.index', 'title' => __('panel/menu.reviews')],
         ];
 
-        return fire_hook_filter('component.sidebar.product.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.product.routes', $routes);
     }
 
     /**
@@ -257,7 +257,7 @@ class Sidebar extends Component
             ['route' => 'socials.index', 'title' => __('panel/menu.sns')],
         ];
 
-        return fire_hook_filter('component.sidebar.customer.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.customer.routes', $routes);
     }
 
     /**
@@ -272,7 +272,7 @@ class Sidebar extends Component
             ['route' => 'analytics_customer', 'title' => __('panel/menu.analytics_customer')],
         ];
 
-        return fire_hook_filter('component.sidebar.analytic.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.analytic.routes', $routes);
     }
 
     /**
@@ -288,7 +288,7 @@ class Sidebar extends Component
             ['route' => 'file_manager.index', 'title' => __('panel/menu.file_manager')],
         ];
 
-        return fire_hook_filter('component.sidebar.content.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.content.routes', $routes);
     }
 
     /**
@@ -302,7 +302,7 @@ class Sidebar extends Component
             ['route' => 'theme_market.index', 'title' => __('panel/menu.theme_market')],
         ];
 
-        return fire_hook_filter('component.sidebar.design.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.design.routes', $routes);
     }
 
     /**
@@ -315,7 +315,7 @@ class Sidebar extends Component
             ['route' => 'plugin_market.index', 'title' => __('panel/menu.plugin_market')],
         ];
 
-        return fire_hook_filter('component.sidebar.plugin.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.plugin.routes', $routes);
     }
 
     /**
@@ -337,6 +337,6 @@ class Sidebar extends Component
             ['route' => 'tax_classes.index', 'title' => __('panel/menu.tax_classes')],
         ];
 
-        return fire_hook_filter('component.sidebar.setting.routes', $routes);
+        return fire_hook_filter('panel.component.sidebar.setting.routes', $routes);
     }
 }

@@ -12,6 +12,7 @@ namespace InnoShop\Front\Controllers;
 use Illuminate\Http\JsonResponse;
 use InnoShop\Front\Requests\UploadFileRequest;
 use InnoShop\Front\Requests\UploadImageRequest;
+use InnoShop\RestAPI\Services\UploadService;
 
 class UploadController
 {
@@ -23,15 +24,7 @@ class UploadController
      */
     public function images(UploadImageRequest $request): JsonResponse
     {
-        $image    = $request->file('image');
-        $type     = $request->file('type', 'common');
-        $filePath = $image->store("/{$type}", 'upload');
-        $realPath = "upload/$filePath";
-
-        $data = [
-            'url'   => asset($realPath),
-            'value' => $realPath,
-        ];
+        $data = UploadService::getInstance()->images($request);
 
         return json_success('上传成功', $data);
     }
@@ -44,15 +37,7 @@ class UploadController
      */
     public function files(UploadFileRequest $request): JsonResponse
     {
-        $file     = $request->file('file');
-        $type     = $request->file('type', 'files');
-        $filePath = $file->store("/{$type}", 'upload');
-        $realPath = "upload/$filePath";
-
-        $data = [
-            'url'   => asset($realPath),
-            'value' => $realPath,
-        ];
+        $data = UploadService::getInstance()->files($request);
 
         return json_success('上传成功', $data);
     }
