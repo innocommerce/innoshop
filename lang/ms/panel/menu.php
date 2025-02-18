@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'Analisis Produk',
     'articles'           => 'Pengurusan Artikel',
     'attribute_groups'   => 'Kumpulan Atribut',
+    'attribute_values'   => 'Nilai atribut',
     'attributes'         => 'Atribut',
     'brands'             => 'Jenama Produk',
     'catalogs'           => 'Kategori Artikel',
@@ -43,6 +44,7 @@ return [
     'roles'              => 'Peranan Admin',
     'settings'           => 'Tetapan Sistem',
     'sns'                => 'Log masuk pihak ketiga',
+    'socials'            => 'Log masuk sosial',
     'states'             => 'Negeri atau Wilayah',
     'tags'               => 'Tag Artikel',
     'tax_classes'        => 'Tetapan Kelas Cukai',
@@ -59,6 +61,4 @@ return [
     'top_product'        => 'Produk',
     'top_setting'        => 'Tetapan',
     'upload'             => 'Fungsi Muat Naik',
-    'attribute_values'   => 'Nilai atribut',
-    'socials'            => 'Log masuk sosial',
 ];

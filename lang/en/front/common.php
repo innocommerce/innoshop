@@ -13,6 +13,7 @@ return [
     'add'               => 'Add',
     'all'               => 'All',
     'back_page'         => 'Go Back',
+    'brands'            => 'Brands',
     'cancel'            => 'Cancel',
     'confirm'           => 'Confirm',
     'created_at'        => 'Created at',

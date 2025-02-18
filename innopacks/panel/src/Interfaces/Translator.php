@@ -7,9 +7,13 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-return [
-    'articles'            => 'Makaleler',
-    'keyword'             => 'Lütfen bir anahtar kelime girin',
-    'news_classification' => 'Haber Sınıflandırması',
-    'search'              => 'Ara',
-];
+namespace InnoShop\Panel\Interfaces;
+
+interface Translator
+{
+    public function translate($from, $to, $text): string;
+
+    public function batchTranslate($from, $to, $texts): array;
+
+    public function mapCode($code): string;
+}

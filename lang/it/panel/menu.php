@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'Analisi prodotti',
     'articles'           => 'Gestione articoli',
     'attribute_groups'   => 'Gruppi attributi',
+    'attribute_values'   => 'Valori degli attributi',
     'attributes'         => 'Attributi',
     'brands'             => 'Marche dei prodotti',
     'catalogs'           => 'Categorie articoli',
@@ -43,6 +44,7 @@ return [
     'roles'              => 'Ruoli amministratore',
     'settings'           => 'Impostazioni di sistema',
     'sns'                => 'Accesso di terze parti',
+    'socials'            => 'Accessi sociali',
     'states'             => 'Province e stati',
     'tags'               => 'Tag articoli',
     'tax_classes'        => 'Classi fiscali',
@@ -59,6 +61,4 @@ return [
     'top_product'        => 'Prodotti',
     'top_setting'        => 'Impostazioni',
     'upload'             => 'Funzionalità di caricamento',
-    'attribute_values'   => 'Valori degli attributi',
-    'socials'            => 'Accessi sociali',
 ];

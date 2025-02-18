@@ -5,18 +5,18 @@
         <table class="table table-response align-middle table-bordered">
           <thead>
           <tr>
-            <th>{{ __('panel/menu.company_name') }}</th>
-            <th>{{ __('panel/menu.express_code') }}</th>
+            <th>{{ __('panel/setting.express_company') }}</th>    
+            <th>{{ __('panel/setting.express_code') }}</th>
             <th></th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item,index) in text" :key="index">
             <td data-title="State" class="col-5">
-              <el-input v-model="item.company" placeholder="{{ __('panel/menu.express_company') }}"/>
+              <el-input v-model="item.company" placeholder="{{ __('panel/setting.express_company') }}"/>
             </td>
             <td data-title="Remark" class="col-5">
-              <el-input v-model="item.code" placeholder="{{ __('panel/menu.express_code_hint') }}"/>
+              <el-input v-model="item.code" placeholder="{{ __('panel/setting.express_code_hint') }}"/>
             </td>
             <td data-title="Update Time" class="col-1">
               <i class="bi bi-x-circle text-danger cursor-pointer" @click="removeInput(index)"></i>

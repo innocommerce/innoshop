@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'تحليل المنتجات',
     'articles'           => 'إدارة المقالات',
     'attribute_groups'   => 'مجموعات الخصائص',
+    'attribute_values'   => 'قيم السمات',
     'attributes'         => 'الخصائص',
     'brands'             => 'العلامات التجارية',
     'catalogs'           => 'تصنيفات المقالات',
@@ -43,6 +44,7 @@ return [
     'roles'              => 'أدوار الإدارة',
     'settings'           => 'إعدادات النظام',
     'sns'                => 'Masuk melalui pihak ketiga',
+    'socials'            => 'تسجيل الدخول الاجتماعي',
     'states'             => 'المحافظات',
     'tags'               => 'العلامات',
     'tax_classes'        => 'تصنيفات الضرائب',
@@ -59,6 +61,4 @@ return [
     'top_product'        => 'المنتجات',
     'top_setting'        => 'الإعدادات',
     'upload'             => 'وظيفة التحميل',
-    'attribute_values'   => 'قيم السمات',
-    'socials'            => 'تسجيل الدخول الاجتماعي',
 ];

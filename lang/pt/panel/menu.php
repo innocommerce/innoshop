@@ -16,6 +16,7 @@ return [
     'analytics_product'  => 'Análise de Produtos',
     'articles'           => 'Gerenciamento de Artigos',
     'attribute_groups'   => 'Grupos de Atributos',
+    'attribute_values'   => 'Valores de atributos',
     'attributes'         => 'Atributos',
     'brands'             => 'Marcas de Produtos',
     'catalogs'           => 'Categorias de Artigos',
@@ -43,6 +44,7 @@ return [
     'roles'              => 'Papéis do Painel',
     'settings'           => 'Configurações do Sistema',
     'sns'                => 'Login de terceiros',
+    'socials'            => 'Logins sociais',
     'states'             => 'Estados e Províncias',
     'tags'               => 'Etiquetas de Artigos',
     'tax_classes'        => 'Configurações de Imposto',
@@ -59,6 +61,4 @@ return [
     'top_product'        => 'Produtos',
     'top_setting'        => 'Configurações',
     'upload'             => 'Funcionalidade de Upload',
-    'attribute_values'   => 'Valores de atributos',
-    'socials'            => 'Logins sociais',
 ];

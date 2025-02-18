@@ -175,9 +175,9 @@
         </div>
         <div class="tab-pane fade" id="product-description-correlation">
           <div class="row gx-3 gx-lg-4">
-            @foreach ($related as $product)
+            @foreach ($related as $relatedItem)
               <div class="col-6 col-md-4 col-lg-3">
-                @include('shared.product')
+                @include('shared.product', ['product'=>$relatedItem])
               </div>
             @endforeach
           </div>

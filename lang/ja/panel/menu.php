@@ -16,6 +16,7 @@ return [
     'analytics_product'  => '製品分析',
     'articles'           => '記事管理',
     'attribute_groups'   => '属性グループ',
+    'attribute_values'   => '属性値',
     'attributes'         => '属性',
     'brands'             => '製品ブランド',
     'catalogs'           => '記事カテゴリ',
@@ -43,6 +44,7 @@ return [
     'roles'              => '管理者ロール',
     'settings'           => 'システム設定',
     'sns'                => 'サードパーティログイン',
+    'socials'            => 'ソーシャルログイン',
     'states'             => '都道府県',
     'tags'               => '記事タグ',
     'tax_classes'        => '税区分設定',
@@ -59,6 +61,4 @@ return [
     'top_product'        => '製品',
     'top_setting'        => '設定',
     'upload'             => 'アップロード機能',
-    'attribute_values'   => '属性値',
-    'socials'            => 'ソーシャルログイン',
 ];
