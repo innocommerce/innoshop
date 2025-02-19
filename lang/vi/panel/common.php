@@ -21,6 +21,7 @@ return [
     'close'             => 'Đóng',
     'collapse'          => 'Thu gọn',
     'confirm'           => 'Xác nhận',
+    'copy'              => 'SAO chép',
     'create'            => 'Tạo mới',
     'created_at'        => 'Thời gian tạo',
     'date'              => 'Ngày',
@@ -47,6 +48,7 @@ return [
     'meta_keywords'     => 'Từ khóa Meta',
     'meta_title'        => 'Tiêu đề Meta',
     'name'              => 'Tên',
+    'no'                => 'Không',
     'no_data'           => 'Không có dữ liệu',
     'password'          => 'Mật khẩu',
     'please_choose'     => 'Vui lòng chọn',
@@ -69,5 +71,4 @@ return [
     'viewed'            => 'Lượt xem',
     'whether_enable'    => 'Có kích hoạt không',
     'yes'               => 'Có',
-    'no'                => 'Không',
 ];

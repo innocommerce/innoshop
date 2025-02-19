@@ -21,6 +21,7 @@ return [
     'close'             => 'Tutup',
     'collapse'          => 'Runtuhkan',
     'confirm'           => 'Sahkan',
+    'copy'              => 'Menyalin',
     'create'            => 'Cipta',
     'created_at'        => 'Dicipta pada',
     'date'              => 'Tarikh',
@@ -47,6 +48,7 @@ return [
     'meta_keywords'     => 'Kata kunci meta',
     'meta_title'        => 'Tajuk meta',
     'name'              => 'Nama',
+    'no'                => 'Tidak',
     'no_data'           => 'Tiada data',
     'password'          => 'Kata laluan',
     'please_choose'     => 'Sila pilih',
@@ -69,5 +71,4 @@ return [
     'viewed'            => 'Sudah Dipapar',
     'whether_enable'    => 'Aktif atau Tidak',
     'yes'               => 'ya',
-    'no'                => 'Tidak',
 ];

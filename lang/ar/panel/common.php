@@ -21,6 +21,7 @@ return [
     'close'             => 'إغلاق',
     'collapse'          => 'طي',
     'confirm'           => 'تأكيد',
+    'copy'              => 'نسخ',
     'create'            => 'إنشاء',
     'created_at'        => 'تاريخ الإنشاء',
     'date'              => 'تاريخ',

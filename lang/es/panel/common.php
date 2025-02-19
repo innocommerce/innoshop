@@ -21,6 +21,7 @@ return [
     'close'             => 'Cerrar',
     'collapse'          => 'Colapsar',
     'confirm'           => 'Confirmar',
+    'copy'              => 'copiar',
     'create'            => 'Crear',
     'created_at'        => 'Creado',
     'date'              => 'Fecha',

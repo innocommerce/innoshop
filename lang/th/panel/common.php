@@ -21,6 +21,7 @@ return [
     'close'             => 'ปิด',
     'collapse'          => 'ยุบ',
     'confirm'           => 'ยืนยัน',
+    'copy'              => 'คัดลอก',
     'create'            => 'สร้าง',
     'created_at'        => 'สร้างเมื่อ',
     'date'              => 'วันที่',
@@ -47,6 +48,7 @@ return [
     'meta_keywords'     => 'คำสำคัญ Meta',
     'meta_title'        => 'ชื่อ Meta',
     'name'              => 'ชื่อ',
+    'no'                => 'ไม่ใช่',
     'no_data'           => 'ไม่มีข้อมูล',
     'password'          => 'รหัสผ่าน',
     'please_choose'     => 'กรุณาเลือก',
@@ -69,5 +71,4 @@ return [
     'viewed'            => 'ดูแล้ว',
     'whether_enable'    => 'ใช้หรือไม่',
     'yes'               => 'ใช่',
-    'no'                => 'ไม่ใช่',
 ];

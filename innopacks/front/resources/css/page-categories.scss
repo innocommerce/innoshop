@@ -135,4 +135,18 @@ body.page-categories {
       }
     }
   }
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50%; 
+    height: 100%;
+    background: white;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1050; 
+    padding-left: 20px;
+    padding-top: 20px;
+  }
 }

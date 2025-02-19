@@ -21,6 +21,7 @@ return [
     'close'             => '閉じる',
     'collapse'          => '折りたたむ',
     'confirm'           => '確認',
+    'copy'              => '複製します',
     'create'            => '新規作成',
     'created_at'        => '作成日時',
     'date'              => '日付',
@@ -47,6 +48,7 @@ return [
     'meta_keywords'     => 'Meta キーワード',
     'meta_title'        => 'Meta タイトル',
     'name'              => 'の名前をあげる',
+    'no'                => 'いいえ',
     'no_data'           => 'データがありません',
     'password'          => 'パスワード',
     'please_choose'     => '選択してください',
@@ -69,5 +71,4 @@ return [
     'viewed'            => '閲覧回数',
     'whether_enable'    => '有効にするか',
     'yes'               => 'はい',
-    'no'                => 'いいえ',
 ];

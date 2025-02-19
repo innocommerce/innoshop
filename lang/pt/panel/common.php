@@ -21,6 +21,7 @@ return [
     'close'             => 'Fechar',
     'collapse'          => 'Diminuir',
     'confirm'           => 'Confirmar',
+    'copy'              => 'reproduzir',
     'create'            => 'Criar',
     'created_at'        => 'Data de Criação',
     'date'              => 'Data',
@@ -47,6 +48,7 @@ return [
     'meta_keywords'     => 'Meta Palavras-Chave',
     'meta_title'        => 'Meta Título',
     'name'              => 'Nome',
+    'no'                => 'Não',
     'no_data'           => 'Sem Dados',
     'password'          => 'Senha',
     'please_choose'     => 'Por Favor, Escolha',
@@ -69,5 +71,4 @@ return [
     'viewed'            => 'Visualizações',
     'whether_enable'    => 'Ativar?',
     'yes'               => 'Sim',
-    'no'                => 'Não',
 ];

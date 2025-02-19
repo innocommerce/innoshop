@@ -21,6 +21,7 @@ return [
     'close'             => '關閉',
     'collapse'          => '折叠',
     'confirm'           => '確定',
+    'copy'              => '複製',
     'create'            => '新建',
     'created_at'        => '創建時間',
     'date'              => '日期',
@@ -47,6 +48,7 @@ return [
     'meta_keywords'     => 'Meta 關鍵詞',
     'meta_title'        => 'Meta 標題',
     'name'              => '名稱',
+    'no'                => '唔係',
     'no_data'           => '冇數據',
     'password'          => '密碼',
     'please_choose'     => '請選擇',
@@ -69,5 +71,4 @@ return [
     'viewed'            => '查看次數',
     'whether_enable'    => '是否啟用',
     'yes'               => '係',
-    'no'                => '唔係',
 ];

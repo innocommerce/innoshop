@@ -21,6 +21,7 @@ return [
     'close'             => '닫기',
     'collapse'          => '접기',
     'confirm'           => '확정',
+    'copy'              => '복사',
     'create'            => '생성',
     'created_at'        => '생성 시간',
     'date'              => '날짜',
@@ -47,6 +48,7 @@ return [
     'meta_keywords'     => '메타 키워드',
     'meta_title'        => '메타 제목',
     'name'              => '이름',
+    'no'                => '아니요',
     'no_data'           => '데이터 없음',
     'password'          => '비밀번호',
     'please_choose'     => '선택해주세요',
@@ -69,5 +71,4 @@ return [
     'viewed'            => '조회 횟수',
     'whether_enable'    => '사용 여부',
     'yes'               => '예',
-    'no'                => '아니요',
 ];

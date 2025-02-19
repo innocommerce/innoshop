@@ -21,6 +21,7 @@ return [
     'close'             => 'Tutup',
     'collapse'          => 'Ciutkan',
     'confirm'           => 'Konfirmasi',
+    'copy'              => 'salin',
     'create'            => 'Buat',
     'created_at'        => 'Dibuat Pada',
     'date'              => 'Tanggal',

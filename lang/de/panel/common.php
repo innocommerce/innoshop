@@ -21,6 +21,7 @@ return [
     'close'             => 'Schließen',
     'collapse'          => 'Zuklappen',
     'confirm'           => 'Bestätigen',
+    'copy'              => 'Kopie.',
     'create'            => 'Erstellen',
     'created_at'        => 'Erstellungszeit',
     'date'              => 'Datum',
