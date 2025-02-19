@@ -11,6 +11,7 @@ return [
     'actions'           => '작업',
     'active'            => '활성화',
     'add'               => '추가',
+    'ai_generate'       => 'ai 생성',
     'available'         => '가능',
     'basic_info'        => '기본 정보',
     'batch_delete'      => '일괄 삭제',

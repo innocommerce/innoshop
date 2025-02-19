@@ -11,6 +11,7 @@ return [
     'actions'           => 'Tindakan',
     'active'            => 'Aktif',
     'add'               => 'Tambah',
+    'ai_generate'       => 'Dijana AI',
     'available'         => 'Tersedia untuk',
     'basic_info'        => 'Info asas',
     'batch_delete'      => 'Paparan penghapusan',

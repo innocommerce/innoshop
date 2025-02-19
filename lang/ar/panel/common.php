@@ -11,6 +11,7 @@ return [
     'actions'           => 'إجراءات',
     'active'            => 'نشط',
     'add'               => 'إضافة',
+    'ai_generate'       => 'المولد AI',
     'available'         => 'متاح لـ',
     'basic_info'        => 'معلومات أساسية',
     'batch_delete'      => 'حذف دفعة',

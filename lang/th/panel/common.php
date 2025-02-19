@@ -11,6 +11,7 @@ return [
     'actions'           => 'การดำเนินการ',
     'active'            => 'ใช้งาน',
     'add'               => 'เพิ่ม',
+    'ai_generate'       => 'กำลังสร้าง',
     'available'         => 'สามารถใช้',
     'basic_info'        => 'ข้อมูลพื้นฐาน',
     'batch_delete'      => 'ลบกลุ่ม',

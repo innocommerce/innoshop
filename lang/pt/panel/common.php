@@ -11,6 +11,7 @@ return [
     'actions'           => 'Ações',
     'active'            => 'Ativo',
     'add'               => 'Adicionar',
+    'ai_generate'       => 'Geração de AI',
     'available'         => 'Disponível para',
     'basic_info'        => 'Informações Básicas',
     'batch_delete'      => 'Exclusão em Lote',

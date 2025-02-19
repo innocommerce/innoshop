@@ -49,7 +49,7 @@
                 </td>
                 <td>
                   <button type="button" class="btn delete-review btn-sm btn-outline-danger"
-                          data-url="{{ account_route('reviews.destroy', $review->id) }}">{{ __('front/common.delete') }}</button>
+                          data-url="{{ panel_route('reviews.destroy', $review->id) }}">{{ __('front/common.delete') }}</button>
                 </td>
               </tr>
             @endforeach

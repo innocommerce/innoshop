@@ -11,6 +11,7 @@ return [
     'actions'           => 'Aktionen',
     'active'            => 'Aktiv',
     'add'               => 'Hinzufügen',
+    'ai_generate'       => 'AI generator.',
     'available'         => 'Verfügbar für',
     'basic_info'        => 'Grundinformationen',
     'batch_delete'      => 'Stapellöschung',

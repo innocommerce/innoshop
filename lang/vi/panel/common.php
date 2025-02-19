@@ -11,6 +11,7 @@ return [
     'actions'           => 'Hành động',
     'active'            => 'Kích hoạt',
     'add'               => 'Thêm',
+    'ai_generate'       => 'Tạo ra al',
     'available'         => 'Có sẵn',
     'basic_info'        => 'Thông tin cơ bản',
     'batch_delete'      => 'Xóa hàng loạt',

@@ -11,6 +11,7 @@ return [
     'actions'           => '操作',
     'active'            => '有効',
     'add'               => '追加',
+    'ai_generate'       => 'AI生成です',
     'available'         => '利用可能',
     'basic_info'        => '基本情報',
     'batch_delete'      => '一括削除',

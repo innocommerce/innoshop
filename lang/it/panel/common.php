@@ -11,6 +11,7 @@ return [
     'actions'           => 'Azioni',
     'active'            => 'Attivato',
     'add'               => 'Aggiungi',
+    'ai_generate'       => 'Creazione di posti di lavoro',
     'available'         => 'Disponibile per',
     'basic_info'        => 'Informazioni di base',
     'batch_delete'      => 'Eliminazione batch',

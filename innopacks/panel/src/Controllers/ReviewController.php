@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Review;
@@ -115,16 +116,16 @@ class ReviewController extends BaseController
 
     /**
      * @param  Review  $review
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function destroy(Review $review): RedirectResponse
+    public function destroy(Review $review): JsonResponse
     {
         try {
             ReviewRepo::getInstance()->destroy($review);
 
-            return back()->with('success', panel_trans('common.deleted_success'));
+            return delete_json_success();
         } catch (Exception $e) {
-            return back()->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 }
