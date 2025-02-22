@@ -229,7 +229,7 @@
           addressEdit: @json($address_list).length ? false : true,
           same_as_shipping_address: true,
           feeList: @json($fee_list),
-          totalAmount: @json(currency_format($total)),
+          totalAmount: @json(currency_format($amount)),
         })
 
         const current = reactive({

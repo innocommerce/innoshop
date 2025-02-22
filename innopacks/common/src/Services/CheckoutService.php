@@ -225,11 +225,22 @@ class CheckoutService extends BaseService
      * @return float
      * @throws Exception
      */
-    public function getTotal(): float
+    public function getAmount(): float
     {
         $feeList = $this->getFeeList();
 
         return round(collect($feeList)->sum('total'), 2);
+    }
+
+    /**
+     * @return int
+     * @throws Exception
+     */
+    public function getTotalNumber(): int
+    {
+        $cartList = $this->getCartList();
+
+        return collect($cartList)->sum('quantity');
     }
 
     /**
@@ -344,7 +355,7 @@ class CheckoutService extends BaseService
      */
     public function getCheckoutResult(): array
     {
-        $amount = $this->getTotal();
+        $amount = $this->getAmount();
 
         $result = [
             'cart_list'        => $this->getCartList(),
@@ -353,9 +364,9 @@ class CheckoutService extends BaseService
             'billing_methods'  => BillingService::getInstance()->getMethods(),
             'checkout'         => $this->getCheckoutData(),
             'fee_list'         => $this->getFeeList(),
-            'total'            => $amount,
             'amount'           => $amount,
             'amount_format'    => currency_format($amount),
+            'total_number'     => $this->getTotalNumber(),
             'is_virtual'       => $this->checkIsVirtual(),
         ];
 
@@ -395,7 +406,7 @@ class CheckoutService extends BaseService
         try {
             $checkoutData = $this->getCheckoutData();
 
-            $checkoutData['total'] = $this->getTotal();
+            $checkoutData['total'] = $this->getAmount();
 
             $order = OrderRepo::getInstance()->create($checkoutData);
 
