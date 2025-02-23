@@ -12,7 +12,11 @@
         window.fileManagerConfig = {
             multiple: urlParams.get('multiple') === '1',
             type: urlParams.get('type') || 'all',
-            callback: window.parent.fileManagerCallback
+            callback: window.parent.fileManagerCallback,
+            driver: '{{ $config["driver"] }}',
+            endpoint: '{{ $config["endpoint"] }}',
+            bucket: '{{ $config["bucket"] }}',
+            baseUrl: '{{ $config["baseUrl"] }}'
         };
     </script>
 
@@ -1804,6 +1808,7 @@
                     http.get('file_manager/files', { params })
                         .then(res => {
                             // 处理文件列表数据
+                            console.log(res)
                             this.files = res.images.map(file => ({
                                 ...file,
                                 id: file.id || file.path, // 确保每个文件都有唯一标识

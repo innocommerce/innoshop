@@ -13,7 +13,7 @@ use Exception;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class FileManagerService
+class FileManagerService implements FileManagerInterface
 {
     protected string $fileBasePath = '';
 
@@ -53,18 +53,9 @@ class FileManagerService
     }
 
     /**
-     * Fetches files and directories in a directory based on filters.
-     *
-     * @param  string  $baseFolder
-     * @param  string  $keyword
-     * @param  string  $sort
-     * @param  string  $order
-     * @param  int  $page
-     * @param  int  $perPage
-     * @return array
-     * @throws Exception
+     * Get files list
      */
-    public function getFiles(string $baseFolder, string $keyword, string $sort, string $order, int $page = 1, int $perPage = 20): array
+    public function getFiles(string $baseFolder, string $keyword = '', string $sort = 'created', string $order = 'desc', int $page = 1, int $perPage = 20): array
     {
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
 
@@ -145,16 +136,33 @@ class FileManagerService
     /**
      * Creates a new directory.
      *
-     * @param  string  $folderName
+     * @param  string  $path
+     * @return bool
      * @throws Exception
      */
-    public function createDirectory(string $folderName): void
+    public function createDirectory(string $path): bool
     {
-        $folderPath = public_path("catalog{$this->basePath}/{$folderName}");
-        if (is_dir($folderPath)) {
-            throw new Exception(trans('admin/file_manager.directory_already_exist'));
+        try {
+            $folderPath = public_path("catalog{$this->basePath}/{$path}");
+            if (is_dir($folderPath)) {
+                throw new Exception(trans('admin/file_manager.directory_already_exist'));
+            }
+
+            // 使用 create_directories 函数创建目录
+            $result = create_directories("catalog{$this->basePath}/{$path}");
+
+            if (! $result) {
+                throw new Exception(trans('admin/file_manager.create_directory_failed'));
+            }
+
+            return true;
+        } catch (Exception $e) {
+            \Log::error('Create directory failed:', [
+                'path'  => $path,
+                'error' => $e->getMessage(),
+            ]);
+            throw $e;
         }
-        create_directories("catalog{$this->basePath}/{$folderName}");
     }
 
     /**
@@ -162,47 +170,59 @@ class FileManagerService
      *
      * @param  string  $sourcePath
      * @param  string  $destPath
+     * @return bool
      * @throws Exception
      */
-    public function moveDirectory(string $sourcePath, string $destPath): void
+    public function moveDirectory(string $sourcePath, string $destPath): bool
     {
-        if (empty($sourcePath) || empty($destPath)) {
-            throw new Exception(trans('panel/file_manager.empty_path'));
-        }
+        try {
+            if (empty($sourcePath) || empty($destPath)) {
+                throw new Exception(trans('panel/file_manager.empty_path'));
+            }
 
-        $sourceDirPath = public_path("catalog/{$sourcePath}");
-        $destDirPath   = public_path("catalog/{$destPath}");
-        $folderName    = basename($sourcePath);
-        $destFullPath  = rtrim($destDirPath, '/').'/'.$folderName;
+            $sourceDirPath = public_path("catalog/{$sourcePath}");
+            $destDirPath   = public_path("catalog/{$destPath}");
+            $folderName    = basename($sourcePath);
+            $destFullPath  = rtrim($destDirPath, '/').'/'.$folderName;
 
-        // confirm origin folder
-        if (! is_dir($sourceDirPath)) {
-            throw new Exception(trans('panel/file_manager.source_dir_not_exist'));
-        }
+            // confirm origin folder
+            if (! is_dir($sourceDirPath)) {
+                throw new Exception(trans('panel/file_manager.source_dir_not_exist'));
+            }
 
-        // confirm target folder
-        if (! is_dir($destDirPath)) {
-            throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
-        }
+            // confirm target folder
+            if (! is_dir($destDirPath)) {
+                throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
+            }
 
-        if (is_dir($destFullPath)) {
-            throw new Exception(trans('panel/file_manager.target_dir_exist'));
-        }
+            if (is_dir($destFullPath)) {
+                throw new Exception(trans('panel/file_manager.target_dir_exist'));
+            }
 
-        if (strpos($destPath, $sourcePath.'/') === 0) {
-            throw new Exception(trans('panel/file_manager.cannot_move_to_subdirectory'));
-        }
+            if (strpos($destPath, $sourcePath.'/') === 0) {
+                throw new Exception(trans('panel/file_manager.cannot_move_to_subdirectory'));
+            }
 
-        \Log::info('Moving directory:', [
-            'from' => $sourceDirPath,
-            'to'   => $destFullPath,
-        ]);
-
-        if (! @rename($sourceDirPath, $destFullPath)) {
-            \Log::error('Failed to move directory:', [
-                'error' => error_get_last(),
+            \Log::info('Moving directory:', [
+                'from' => $sourceDirPath,
+                'to'   => $destFullPath,
             ]);
-            throw new Exception(trans('panel/file_manager.move_failed'));
+
+            if (! @rename($sourceDirPath, $destFullPath)) {
+                \Log::error('Failed to move directory:', [
+                    'error' => error_get_last(),
+                ]);
+                throw new Exception(trans('panel/file_manager.move_failed'));
+            }
+
+            return true;
+        } catch (Exception $e) {
+            \Log::error('Move directory failed:', [
+                'error'       => $e->getMessage(),
+                'source'      => $sourcePath,
+                'destination' => $destPath,
+            ]);
+            throw $e;
         }
     }
 
@@ -211,52 +231,64 @@ class FileManagerService
      *
      * @param  array  $files
      * @param  string  $destPath
+     * @return bool
      * @throws Exception
      */
-    public function moveFiles(array $files, string $destPath): void
+    public function moveFiles(array $files, string $destPath): bool
     {
-        if (empty($files)) {
-            throw new Exception(trans('panel/file_manager.no_files_selected'));
-        }
-
-        $destFullPath = public_path("catalog/{$destPath}");
-        if (! is_dir($destFullPath)) {
-            throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
-        }
-
-        foreach ($files as $fileName) {
-            $sourcePath   = public_path("catalog/{$fileName}");
-            $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
-
-            \Log::info('Moving file:', [
-                'source'      => $sourcePath,
-                'destination' => $destFilePath,
-                'fileName'    => $fileName,
-                'destPath'    => $destPath,
-            ]);
-
-            if (file_exists($sourcePath)) {
-                if (file_exists($destFilePath)) {
-                    @unlink($destFilePath);
-                }
-
-                if (! @rename($sourcePath, $destFilePath)) {
-                    \Log::error('Failed to move file:', [
-                        'source'      => $sourcePath,
-                        'destination' => $destFilePath,
-                        'error'       => error_get_last(),
-                    ]);
-                    throw new Exception(trans('panel/file_manager.move_failed'));
-                } else {
-                    \Log::info('File moved successfully:', [
-                        'from' => $sourcePath,
-                        'to'   => $destFilePath,
-                    ]);
-                }
-            } else {
-                \Log::warning('Source file not found:', ['path' => $sourcePath]);
-                throw new Exception(trans('panel/file_manager.source_file_not_exist'));
+        try {
+            if (empty($files)) {
+                throw new Exception(trans('panel/file_manager.no_files_selected'));
             }
+
+            $destFullPath = public_path("catalog/{$destPath}");
+            if (! is_dir($destFullPath)) {
+                throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
+            }
+
+            foreach ($files as $fileName) {
+                $sourcePath   = public_path("catalog/{$fileName}");
+                $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
+
+                \Log::info('Moving file:', [
+                    'source'      => $sourcePath,
+                    'destination' => $destFilePath,
+                    'fileName'    => $fileName,
+                    'destPath'    => $destPath,
+                ]);
+
+                if (file_exists($sourcePath)) {
+                    if (file_exists($destFilePath)) {
+                        @unlink($destFilePath);
+                    }
+
+                    if (! @rename($sourcePath, $destFilePath)) {
+                        \Log::error('Failed to move file:', [
+                            'source'      => $sourcePath,
+                            'destination' => $destFilePath,
+                            'error'       => error_get_last(),
+                        ]);
+                        throw new Exception(trans('panel/file_manager.move_failed'));
+                    } else {
+                        \Log::info('File moved successfully:', [
+                            'from' => $sourcePath,
+                            'to'   => $destFilePath,
+                        ]);
+                    }
+                } else {
+                    \Log::warning('Source file not found:', ['path' => $sourcePath]);
+                    throw new Exception(trans('panel/file_manager.source_file_not_exist'));
+                }
+            }
+
+            return true;
+        } catch (Exception $e) {
+            \Log::error('Move files failed:', [
+                'error'       => $e->getMessage(),
+                'files'       => $files,
+                'destination' => $destPath,
+            ]);
+            throw $e;
         }
     }
 
@@ -279,58 +311,105 @@ class FileManagerService
     /**
      * Deletes a file or folder.
      *
-     * @param  string  $filePath
+     * @param  string  $path
+     * @return bool
      * @throws Exception
      */
-    public function deleteDirectoryOrFile(string $filePath): void
+    public function deleteDirectoryOrFile(string $path): bool
     {
-        $fullPath = public_path("catalog{$this->basePath}/{$filePath}");
-        if (is_dir($fullPath)) {
-            $files = glob($fullPath.'/*');
-            if ($files) {
-                throw new Exception(trans('admin/file_manager.directory_not_empty'));
+        try {
+            $fullPath = public_path("catalog{$this->basePath}/{$path}");
+
+            \Log::info('Deleting path:', [
+                'path'   => $fullPath,
+                'is_dir' => is_dir($fullPath),
+            ]);
+
+            if (is_dir($fullPath)) {
+                // 检查目录是否为空
+                $files = glob($fullPath.'/*');
+                if ($files) {
+                    throw new Exception(trans('admin/file_manager.directory_not_empty'));
+                }
+
+                // 删除目录
+                if (! @rmdir($fullPath)) {
+                    \Log::error('Failed to delete directory:', [
+                        'path'  => $fullPath,
+                        'error' => error_get_last(),
+                    ]);
+                    throw new Exception(trans('panel/file_manager.delete_failed'));
+                }
+            } elseif (file_exists($fullPath)) {
+                // 删除文件
+                if (! @unlink($fullPath)) {
+                    \Log::error('Failed to delete file:', [
+                        'path'  => $fullPath,
+                        'error' => error_get_last(),
+                    ]);
+                    throw new Exception(trans('panel/file_manager.delete_failed'));
+                }
+            } else {
+                \Log::warning('Path not found:', [
+                    'path' => $fullPath,
+                ]);
+                throw new Exception(trans('panel/file_manager.file_not_exist'));
             }
-            @rmdir($fullPath);
-        } elseif (file_exists($fullPath)) {
-            @unlink($fullPath);
+
+            return true;
+        } catch (Exception $e) {
+            \Log::error('Delete path failed:', [
+                'error' => $e->getMessage(),
+                'path'  => $path,
+            ]);
+            throw $e;
         }
     }
 
     /**
-     * Deletes multiple files within a base path.
+     * Delete multiple files.
      *
      * @param  string  $basePath
      * @param  array  $files
+     * @return bool
+     * @throws Exception
      */
-    public function deleteFiles(string $basePath, array $files): void
+    public function deleteFiles(string $basePath, array $files): bool
     {
-        foreach ($files as $file) {
-            $fileName = basename($file);
-
-            $filePath = trim($basePath, '/');
-            if (! empty($filePath)) {
-                $filePath .= '/';
+        try {
+            if (empty($files)) {
+                throw new Exception(trans('panel/file_manager.no_files_selected'));
             }
-            $filePath .= $fileName;
 
-            $fullPath = public_path("catalog/{$filePath}");
+            foreach ($files as $file) {
+                $filePath = public_path("catalog/{$basePath}/{$file}");
 
-            \Log::info('Deleting file:', [
-                'file_id'   => $file,
-                'base_path' => $basePath,
-                'file_name' => $fileName,
-                'full_path' => $fullPath,
-            ]);
+                \Log::info('Deleting file:', [
+                    'path' => $filePath,
+                ]);
 
-            if (file_exists($fullPath)) {
-                if (@unlink($fullPath)) {
-                    \Log::info('File deleted successfully: '.$fullPath);
+                if (file_exists($filePath)) {
+                    if (! @unlink($filePath)) {
+                        \Log::error('Failed to delete file:', [
+                            'path'  => $filePath,
+                            'error' => error_get_last(),
+                        ]);
+                        throw new Exception(trans('panel/file_manager.delete_failed'));
+                    }
                 } else {
-                    \Log::error('Failed to delete file: '.$fullPath);
+                    \Log::warning('File not found:', [
+                        'path' => $filePath,
+                    ]);
                 }
-            } else {
-                \Log::warning('File not found: '.$fullPath);
             }
+
+            return true;
+        } catch (Exception $e) {
+            \Log::error('Delete files failed:', [
+                'error' => $e->getMessage(),
+                'files' => $files,
+            ]);
+            throw $e;
         }
     }
 
@@ -339,26 +418,43 @@ class FileManagerService
      *
      * @param  string  $originPath
      * @param  string  $newPath
+     * @return bool
      * @throws Exception
      */
-    public function updateName(string $originPath, string $newPath): void
+    public function updateName(string $originPath, string $newPath): bool
     {
-        $originFullPath = public_path("catalog{$this->basePath}{$originPath}");
-        $newFullPath    = public_path("catalog{$this->basePath}{$newPath}");
+        try {
+            $originFullPath = public_path("catalog{$this->basePath}{$originPath}");
+            $newFullPath    = public_path("catalog{$this->basePath}{$newPath}");
 
-        if (! is_dir($originFullPath) && ! file_exists($originFullPath)) {
-            throw new Exception(trans('panel/file_manager.target_not_exist'));
-        }
+            if (! is_dir($originFullPath) && ! file_exists($originFullPath)) {
+                throw new Exception(trans('panel/file_manager.target_not_exist'));
+            }
 
-        if (file_exists($newFullPath)) {
-            $dirPath     = dirname($newPath);
-            $newName     = $this->getUniqueFileName($dirPath, basename($newPath));
-            $newPath     = $dirPath === '/' ? "/{$newName}" : "{$dirPath}/{$newName}";
-            $newFullPath = public_path("catalog{$this->basePath}{$newPath}");
-        }
+            if (file_exists($newFullPath)) {
+                $dirPath     = dirname($newPath);
+                $newName     = $this->getUniqueFileName($dirPath, basename($newPath));
+                $newPath     = $dirPath === '/' ? "/{$newName}" : "{$dirPath}/{$newName}";
+                $newFullPath = public_path("catalog{$this->basePath}{$newPath}");
+            }
 
-        if (! @rename($originFullPath, $newFullPath)) {
-            throw new Exception(trans('panel/file_manager.rename_failed'));
+            if (! @rename($originFullPath, $newFullPath)) {
+                \Log::error('Failed to rename:', [
+                    'from'  => $originFullPath,
+                    'to'    => $newFullPath,
+                    'error' => error_get_last(),
+                ]);
+                throw new Exception(trans('panel/file_manager.rename_failed'));
+            }
+
+            return true;
+        } catch (Exception $e) {
+            \Log::error('Rename failed:', [
+                'error'       => $e->getMessage(),
+                'origin_path' => $originPath,
+                'new_path'    => $newPath,
+            ]);
+            throw $e;
         }
     }
 
@@ -462,51 +558,63 @@ class FileManagerService
      *
      * @param  array  $files
      * @param  string  $destPath
+     * @return bool
      * @throws Exception
      */
-    public function copyFiles(array $files, string $destPath): void
+    public function copyFiles(array $files, string $destPath): bool
     {
-        if (empty($files)) {
-            throw new Exception(trans('panel/file_manager.no_files_selected'));
-        }
-
-        $destFullPath = public_path("catalog/{$destPath}");
-        if (! is_dir($destFullPath)) {
-            throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
-        }
-
-        foreach ($files as $fileName) {
-            $sourcePath   = public_path("catalog/{$fileName}");
-            $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
-
-            \Log::info('Copying file:', [
-                'source'      => $sourcePath,
-                'destination' => $destFilePath,
-            ]);
-
-            if (file_exists($sourcePath)) {
-                if (file_exists($destFilePath)) {
-                    $newName      = $this->getUniqueFileName($destPath, basename($fileName));
-                    $destFilePath = rtrim($destFullPath, '/').'/'.$newName;
-                }
-
-                if (! @copy($sourcePath, $destFilePath)) {
-                    \Log::error('Failed to copy file:', [
-                        'source'      => $sourcePath,
-                        'destination' => $destFilePath,
-                        'error'       => error_get_last(),
-                    ]);
-                    throw new Exception(trans('panel/file_manager.copy_failed'));
-                } else {
-                    \Log::info('File copied successfully:', [
-                        'from' => $sourcePath,
-                        'to'   => $destFilePath,
-                    ]);
-                }
-            } else {
-                \Log::warning('Source file not found:', ['path' => $sourcePath]);
-                throw new Exception(trans('panel/file_manager.source_file_not_exist'));
+        try {
+            if (empty($files)) {
+                throw new Exception(trans('panel/file_manager.no_files_selected'));
             }
+
+            $destFullPath = public_path("catalog/{$destPath}");
+            if (! is_dir($destFullPath)) {
+                throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
+            }
+
+            foreach ($files as $fileName) {
+                $sourcePath   = public_path("catalog/{$fileName}");
+                $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
+
+                \Log::info('Copying file:', [
+                    'source'      => $sourcePath,
+                    'destination' => $destFilePath,
+                ]);
+
+                if (file_exists($sourcePath)) {
+                    if (file_exists($destFilePath)) {
+                        $newName      = $this->getUniqueFileName($destPath, basename($fileName));
+                        $destFilePath = rtrim($destFullPath, '/').'/'.$newName;
+                    }
+
+                    if (! @copy($sourcePath, $destFilePath)) {
+                        \Log::error('Failed to copy file:', [
+                            'source'      => $sourcePath,
+                            'destination' => $destFilePath,
+                            'error'       => error_get_last(),
+                        ]);
+                        throw new Exception(trans('panel/file_manager.copy_failed'));
+                    } else {
+                        \Log::info('File copied successfully:', [
+                            'from' => $sourcePath,
+                            'to'   => $destFilePath,
+                        ]);
+                    }
+                } else {
+                    \Log::warning('Source file not found:', ['path' => $sourcePath]);
+                    throw new Exception(trans('panel/file_manager.source_file_not_exist'));
+                }
+            }
+
+            return true;
+        } catch (Exception $e) {
+            \Log::error('Copy files failed:', [
+                'error'       => $e->getMessage(),
+                'files'       => $files,
+                'destination' => $destPath,
+            ]);
+            throw $e;
         }
     }
 }
