@@ -12,6 +12,7 @@
 
 
 <p align="center">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/tr.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/sa.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/de.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/us.svg">
