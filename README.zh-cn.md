@@ -7,7 +7,7 @@
 <p align="center">
     <a href="https://www.innoshop.com"><img src="https://img.shields.io/badge/License-OSL%203.0-green.svg" alt="Total Downloads"></a>
     <a href="https://www.php.net"><img src="https://img.shields.io/badge/Language-PHP%208.2-blue.svg" alt="Total Downloads"></a>
-    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-11-orange" alt="Total Downloads"></a>
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-12-orange" alt="Total Downloads"></a>
 </p>
 
 
@@ -35,7 +35,7 @@
 # InnoShop
 InnoShop - 创新开源电商系统
 
-Innoshop 是一个基于 Laravel 11 的开源电子商务系统，支持多语言、多货币，并集成了 OpenAI。它还具有插件机制和主题模板开发功能，以增强用户体验和系统的可扩展性。
+Innoshop 是一个基于 Laravel 12 的开源电子商务系统，支持多语言、多货币，并集成了 OpenAI。它还具有插件机制和主题模板开发功能，以增强用户体验和系统的可扩展性。
 
 ## 介绍
 - 面向全球的开源电商系统, 15年行业持续深耕集大成者。

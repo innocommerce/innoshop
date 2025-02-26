@@ -20,8 +20,8 @@ $.ajaxSetup({
   }
 });
 window.apiToken = $.apiToken = apiToken;
-if (window === window.parent) {  // 只在非 iframe 环境下输出
-  console.log('apiToken:' + apiToken);
+if (window === window.parent) {
+  //console.log('apiToken:' + apiToken);
 }
 
 $(function () {

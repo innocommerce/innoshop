@@ -28,8 +28,10 @@ use InnoShop\Common\Services\Fee\Shipping;
 use InnoShop\Common\Services\Fee\Subtotal;
 use Throwable;
 
-class CheckoutService extends BaseService
+class CheckoutService
 {
+    private static mixed $checkoutService = null;
+
     protected int $customerID;
 
     protected string $guestID;
@@ -68,6 +70,21 @@ class CheckoutService extends BaseService
         }
 
         $this->clearGuestAddresses();
+    }
+
+    /**
+     * @param  int  $customerID
+     * @param  string  $guestID
+     * @return static
+     * @throws Throwable
+     */
+    public static function getSingleton(int $customerID = 0, string $guestID = ''): static
+    {
+        if (self::$checkoutService !== null) {
+            return self::$checkoutService;
+        }
+
+        return self::$checkoutService = new static($customerID, $guestID);
     }
 
     /**

@@ -9,7 +9,7 @@ import './header';
 
 const apiToken = $('meta[name="api-token"]').attr('content');
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
-console.log('apiToken:' + apiToken);
+//console.log('apiToken:' + apiToken);
 
 $(function () {
   common.getCarts();
