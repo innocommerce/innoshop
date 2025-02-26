@@ -25,6 +25,7 @@
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/pt.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/ru.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/th.svg">
+    <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/tr.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/vn.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/cn.svg">
     <img class="flag-img" width="32px" height="24px" src="https://flagicons.lipis.dev/flags/4x3/hk.svg">
