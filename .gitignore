@@ -8,7 +8,6 @@
 /public/mix-manifest.json
 /storage/*.key
 /storage/installed
-/package-lock.json
 /vendor
 /.fleet
 /.idea
