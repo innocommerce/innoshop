@@ -10,7 +10,6 @@
 namespace Plugin\Coupon\Models;
 
 use InnoShop\Common\Models\BaseModel;
-use Plugin\Coupon\Models\User;
 use InnoShop\Common\Models\Order;
 
 class CouponRedemption extends BaseModel
@@ -30,7 +29,7 @@ class CouponRedemption extends BaseModel
         'last_used_at',
         'date_used',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     public function coupon()

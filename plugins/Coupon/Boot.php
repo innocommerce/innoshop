@@ -68,7 +68,7 @@ class Boot
                 }
             }
             $this->user = $order->customer;
-//            dd($data);
+            //            dd($data);
             $data['machines']['created']['unpaid'][] = function () {
                 $couponService = new CouponService($this->repo);
                 $couponService->redeemCoupon($this->couponCode, $this->orderId, $this->user->id);

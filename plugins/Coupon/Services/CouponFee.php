@@ -67,6 +67,7 @@ class CouponFee extends BaseService
         switch ($coupon->type) {
             case 'percentage':
                 $percentage = min($coupon->value, 100);
+
                 return $totalAmount * ($percentage / 100); //折扣禁止大于100
             case 'fixed':
                 return min($coupon->value, $totalAmount);

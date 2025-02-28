@@ -10,10 +10,10 @@
 namespace Plugin\Coupon\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Order;
-use Illuminate\Support\Carbon;
 
 class Coupon extends BaseModel
 {
@@ -37,7 +37,7 @@ class Coupon extends BaseModel
     protected $dates = ['start_at', 'end_at', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $attributes = [
-        'start_at' => 'now',  // 默认当前时间
+        'start_at'   => 'now',  // 默认当前时间
         'times_used' => 0,    // 添加这行
     ];
 

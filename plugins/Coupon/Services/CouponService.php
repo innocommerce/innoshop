@@ -2,12 +2,12 @@
 
 namespace Plugin\Coupon\Services;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Plugin\Coupon\Models\Coupon;
 use Plugin\Coupon\Models\Order;
 use Plugin\Coupon\Repositories\CouponRepo;
-use Carbon\Carbon;
 
 class CouponService
 {
@@ -93,7 +93,7 @@ class CouponService
         $coupon = $this->couponRepo->findByCode($code);
 
         // 检查优惠券是否存在并且尚未使用
-        if (!$coupon) {
+        if (! $coupon) {
             return ['success' => false, 'message' => __('Coupon::common.coupon_not_found')];
         }
 
@@ -217,9 +217,9 @@ class CouponService
     /**
      * 使用优惠券
      *
-     * @param Coupon $coupon
-     * @param int $userId
-     * @param int|null $orderId
+     * @param  Coupon  $coupon
+     * @param  int  $userId
+     * @param  int|null  $orderId
      * @return bool
      */
     public function useCoupon(Coupon $coupon, int $userId, ?int $orderId = null): bool
@@ -229,11 +229,11 @@ class CouponService
 
             // 创建优惠券使用记录
             CouponRedemption::create([
-                'coupon_id' => $coupon->id,
-                'user_id' => $userId,
-                'order_id' => $orderId,
+                'coupon_id'    => $coupon->id,
+                'user_id'      => $userId,
+                'order_id'     => $orderId,
                 'last_used_at' => now(),
-                'date_used' => now()->toDateString(),
+                'date_used'    => now()->toDateString(),
             ]);
 
             // 更新优惠券使用次数
@@ -245,10 +245,12 @@ class CouponService
             }
 
             DB::commit();
+
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('使用优惠券失败：' . $e->getMessage());
+            \Log::error('使用优惠券失败：'.$e->getMessage());
+
             return false;
         }
     }
@@ -256,9 +258,9 @@ class CouponService
     /**
      * 取消使用优惠券
      *
-     * @param Coupon $coupon
-     * @param int $userId
-     * @param int|null $orderId
+     * @param  Coupon  $coupon
+     * @param  int  $userId
+     * @param  int|null  $orderId
      * @return bool
      */
     public function cancelUseCoupon(Coupon $coupon, int $userId, ?int $orderId = null): bool
@@ -269,8 +271,8 @@ class CouponService
             // 删除优惠券使用记录
             $redemption = CouponRedemption::where([
                 'coupon_id' => $coupon->id,
-                'user_id' => $userId,
-                'order_id' => $orderId,
+                'user_id'   => $userId,
+                'order_id'  => $orderId,
             ])->first();
 
             if ($redemption) {
@@ -286,10 +288,12 @@ class CouponService
             }
 
             DB::commit();
+
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('取消使用优惠券失败：' . $e->getMessage());
+            \Log::error('取消使用优惠券失败：'.$e->getMessage());
+
             return false;
         }
     }
