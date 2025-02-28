@@ -592,7 +592,6 @@ class OSSService implements FileManagerInterface
         return strpos($mimeType, 'image/') === 0;
     }
 
-
     /**
      * 检查文件是否是图片
      */

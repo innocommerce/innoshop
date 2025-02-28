@@ -102,6 +102,7 @@ class FileManagerController extends BaseController
                 'baseUrl'  => config('app.url'),
             ],
         ];
+
         return inno_view('panel::file_manager.iframe', $data);
     }
 

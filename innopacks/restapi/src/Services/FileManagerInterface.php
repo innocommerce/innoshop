@@ -55,5 +55,4 @@ interface FileManagerInterface
      * Rename file or directory
      */
     public function updateName(string $originPath, string $newPath): bool;
-
 }
