@@ -8,12 +8,12 @@
  */
 
 return [
-    'locale_translation' => '语言包自动翻译',
-    'title'              => '语言包处理',
-    'select_module'      => '请选择：',
-    'please_select_file' => '请在左侧点击选择要翻译的语言文件',
-    'column'             => '词条 Key',
     'batch_translate'    => '批量',
-    'translate'          => '翻译',
+    'column'             => '词条 Key',
     'format'             => '格式',
+    'locale_translation' => '语言包自动翻译',
+    'please_select_file' => '请在左侧点击选择要翻译的语言文件',
+    'select_module'      => '请选择：',
+    'title'              => '语言包处理',
+    'translate'          => '翻译',
 ];

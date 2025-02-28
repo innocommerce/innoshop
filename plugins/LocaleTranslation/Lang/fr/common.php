@@ -10,8 +10,10 @@
 return [
     'batch_translate'    => 'Traduire des colonnes entières',
     'column'             => 'entrées',
+    'format'             => 'format',
     'locale_translation' => 'Language pack traduction automatique',
     'please_select_file' => 'Veuillez sélectionner le fichier de langue à traduire en cliquant sur la gauche',
     'select_module'      => 'Veuillez sélectionner:',
+    'title'              => 'Traitement des paquets de langues',
     'translate'          => 'La traduction',
 ];

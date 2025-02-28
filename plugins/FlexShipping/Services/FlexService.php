@@ -13,18 +13,17 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use InnoShop\Common\Models\Address;
+use InnoShop\Common\Entities\ShippingEntity;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Region\State;
-use InnoShop\Common\Services\CheckoutService;
 use Throwable;
 
 final class FlexService
 {
-    private CheckoutService $checkoutService;
+    private ShippingEntity $entity;
 
-    private ?Address $address;
+    private array $address;
 
     private array $cartList;
 
@@ -33,29 +32,26 @@ final class FlexService
     private ?Customer $customer;
 
     /**
-     * @param  CheckoutService  $checkoutService
-     * @throws Throwable
+     * @param  ShippingEntity  $entity
      */
-    public function __construct(CheckoutService $checkoutService)
+    public function __construct(ShippingEntity $entity)
     {
-        $checkout = $checkoutService->getCheckout();
-
-        $this->checkoutService = $checkoutService;
-        $this->address         = $checkout->shippingAddress ?? null;
-        $this->cartList        = $checkoutService->getCartList();
-        $this->customer        = $checkout->customer ?? null;
+        $this->entity   = $entity;
+        $this->address  = $entity->getDestAddress();
+        $this->cartList = $entity->getProducts();
+        $this->customer = $entity->customer ?? null;
     }
 
     /**
      * 获取 FlexService 对象实例
      *
-     * @param  CheckoutService  $checkoutService
+     * @param  ShippingEntity  $entity
      * @return FlexService
      * @throws Throwable
      */
-    public static function getInstance(CheckoutService $checkoutService): self
+    public static function getInstance(ShippingEntity $entity): self
     {
-        return new self($checkoutService);
+        return new self($entity);
     }
 
     /**
@@ -972,7 +968,7 @@ final class FlexService
      */
     private function getCartWeight(): mixed
     {
-        return $this->checkoutService->getCartWeight();
+        return $this->entity->getWeight();
     }
 
     /**

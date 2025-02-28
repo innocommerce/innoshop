@@ -1,0 +1,18 @@
+{
+    "code": "auto_currency_rate",
+    "name": {
+        "zh_cn": "自动更新汇率",
+        "en": "Auto update currency rates"
+    },
+    "description": {
+        "zh_cn": "自动更新系统中的汇率",
+        "en": "Automatically update exchange rates in the system"
+    },
+    "type": "feature",
+    "version": "v1.0.3",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "code": "stripe",
+    "name": {
+        "zh_cn": "Stripe 支付",
+        "en": "Stripe"
+    },
+    "description": {
+        "zh_cn": "Stripe 支付",
+        "en": "Stripe Payment"
+    },
+    "type": "billing",
+    "version": "v1.0.0",
+    "icon": "/image/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}

@@ -26,7 +26,7 @@ class Boot extends BaseBoot
      */
     private function addPanelMenus(): void
     {
-        listen_hook_filter('component.sidebar.design.routes', function ($data) {
+        listen_hook_filter('panel.component.sidebar.design.routes', function ($data) {
             $data[] = [
                 'route' => 'web_builder.index',
                 'title' => trans('WebBuilder::route.title'),

@@ -12,7 +12,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="api-token" content="{{ session('api_token') }}">
     <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('vendor/element-plus/index.css') }}">
     <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
@@ -46,9 +45,6 @@
     <link rel="stylesheet" href="{{ plugin_asset('web_builder', 'css/web-builder.css') }}">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
-        const apiToken = "{{ session('panel_api_token') }}";
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
-        console.log('apiToken:'+apiToken);
         //获取语言信息
         const $languages = @json(locales());
         //获取当前语言
@@ -713,33 +709,20 @@
             },
 
             tabsValueProductData() {
-                if (!this.form.products || !this.form.products.length) {
-                    this.productData = [];
-                    return;
-                }
+                var that = this;
 
+                if (!this.form.products.length) return;
                 this.loading = true;
-                var productIds = this.form.products.map(function(product) {
-                    return typeof product === 'object' ? product.id : product;
-                }).join(',');
 
-                axios.get('api/panel/products/names', {
-                    params: {
-                        ids: productIds
-                    }
-                }).then(response => {
-                    this.productData = response.data.map(item => {
-                        return {
-                            id: item.id,
-                            name: item.name,
-                            image: item.image_big
-                        };
-                    });
+                axios.get('api/panel/products/names?product_ids=' + this.form.products.map(e => e.id).join(','), {
+                    headers: {
+                        'Authorization': 'Bearer ' + apiToken
+                    },
+                    hload: true
+                }).then((res) => {
                     this.loading = false;
-                }).catch(error => {
-                    console.error('Error loading products:', error);
-                    this.loading = false;
-                });
+                    that.productData = res.data;
+                })
             },
 
             querySearch(keyword, cb) {
@@ -756,26 +739,10 @@
             },
 
             handleSelect(item) {
-                if (!this.form.products) {
-                    this.form.products = [];
+                if (!this.form.products.find(v => v == item.id)) {
+                    this.form.products.push(item);
+                    this.productData.push(item);
                 }
-
-                // Check if product already exists
-                if (!this.form.products.find(p => (p.id || p) === item.id)) {
-                    // Add to both arrays
-                    this.productData.push({
-                        id: item.id,
-                        name: item.name,
-                        image: item.image_big
-                    });
-
-                    this.form.products.push({
-                        id: item.id,
-                        name: item.name,
-                        image_big: item.image_big
-                    });
-                }
-
                 this.keyword = "";
             },
 
@@ -1272,7 +1239,7 @@
                  @click="selectorContentShow = !selectorContentShow">选择链接
             </div>
             <div class="title" @click="selectorContentShow = !selectorContentShow" v-else :title="name"
-                 v-loading="nameLoading">@{{ selectorTitle }}: @{{ Array.isArray(name) ? name[0]?.name : name }}
+                 v-loading="nameLoading">@{{ selectorTitle }}: @{{ name[0]?.name ?? '' }}
             </div>
             <div :class="'selector-content ' + (selectorContentShow ? 'active' : '')">
                 <div @click="selectorType()">无</div>
@@ -1348,7 +1315,7 @@
                           <span
                               :class="'checkbox-plus ' + (link.value == product.id ? 'active':'') + (!product.active ? 'no-status':'')"></span>
                                         <img :src="product.image_small" v-if="product.image" class="img-responsive">
-                                        <div>@{{ product.name ? product.name: product.slug  }}</div>
+                                        <div>@{{ product.name }}</div>
                                     </div>
                                     <div :class="'right ' + (product.active ? 'ok' : 'no')">
                                         <template v-if="product.active">启用</template>
@@ -2097,7 +2064,7 @@
                                          class="item">
                                         <div>
                                             <i class="el-icon-s-unfold"></i>
-                                            <span>@{{ item.name }}</span>
+                                            <span>${ item.name }</span>
                                         </div>
                                         <i class="el-icon-delete right"
                                            @click="removeArticle(index)"></i>

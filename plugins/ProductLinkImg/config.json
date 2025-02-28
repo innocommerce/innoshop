@@ -1,0 +1,18 @@
+{
+    "code": "product_link_img",
+    "name": {
+        "zh_cn": "商品链接图片",
+        "en": "Product link image"
+    },
+    "description": {
+        "zh_cn": "编辑商品图片可以直接使用链接图片",
+        "en": "You can directly use link pictures to edit product pictures"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

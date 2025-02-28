@@ -1,0 +1,18 @@
+{
+    "code": "tiered_pricing",
+    "name": {
+        "zh_cn": "阶梯计价(批发价)",
+        "en": "Ladder pricing (wholesale price)"
+    },
+    "description": {
+        "zh_cn": "可实现用户下单不同数量使用不同的单价，用于批发等场景",
+        "en": "Can enable users to place orders with different quantities and use different unit prices for wholesale and other scenarios"
+    },
+    "type": "feature",
+    "version": "v1.1.0",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

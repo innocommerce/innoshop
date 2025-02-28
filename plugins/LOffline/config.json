@@ -1,0 +1,18 @@
+{
+    "code": "l_offline",
+    "name": {
+        "zh_cn": "线下支付",
+        "en": "Offline Payment"
+    },
+    "description": {
+        "zh_cn": "",
+        "en": ""
+    },
+    "type": "billing",
+    "version": "v1.0.0",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "code": "register_captcha",
+    "name": {
+        "zh_cn": "邮件验证码注册",
+        "en": "Email Captcha Registration"
+    },
+    "description": {
+        "zh_cn": "邮箱注册时，点击注册后,先弹图形人机验证，验证成功才能真正注册",
+        "en": "When registering your mailbox, click on the registration button and click on the graphics for man-machine verification. Only when the verification is successful can you really register."
+    },
+    "type": "feature",
+    "version": "v1.0.3",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

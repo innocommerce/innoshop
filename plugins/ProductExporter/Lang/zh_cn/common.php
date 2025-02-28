@@ -8,7 +8,7 @@
  */
 
 return [
-    'title'  => '批量导入',
     'export' => '导出 Excel',
     'import' => '导入 Excel',
+    'title'  => '批量导入',
 ];

@@ -1,0 +1,18 @@
+{
+    "code": "kuaidi_niao",
+    "name": {
+        "zh_cn": "快递鸟物流跟踪",
+        "en": "快递鸟物流跟踪"
+    },
+    "description": {
+        "zh_cn": "快递鸟物流跟踪查询",
+        "en": "快递鸟物流跟踪查询"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

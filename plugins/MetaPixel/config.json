@@ -1,0 +1,18 @@
+{
+    "code": "meta_pixel",
+    "name": {
+        "zh_cn": "Meta Pixel 广告追踪",
+        "en": "Meta Pixel AD Tracker"
+    },
+    "description": {
+        "zh_cn": "Meta Pixel 广告追踪",
+        "en": "Meta Pixel AD Tracker"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

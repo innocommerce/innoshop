@@ -10,8 +10,10 @@
 return [
     'batch_translate'    => 'Traducir columnas completas',
     'column'             => 'encabezamiento',
+    'format'             => 'formato',
     'locale_translation' => 'Paquetes de idiomas traducidos automáticamente',
     'please_select_file' => 'Seleccione el archivo de idioma que desea traducir haciendo clic a la izquierda',
     'select_module'      => 'Por favor seleccione:',
+    'title'              => 'Procesamiento de paquetes de idiomas',
     'translate'          => 'traducción',
 ];

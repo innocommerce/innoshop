@@ -10,8 +10,10 @@
 return [
     'batch_translate'    => 'Traduzioni intere',
     'column'             => 'voce',
+    'format'             => 'formato',
     'locale_translation' => 'I pacchetti linguistici sono tradotti automaticamente',
     'please_select_file' => 'Cliccare a sinistra per selezionare i documenti nella lingua da tradurre',
     'select_module'      => 'Scegliere:',
+    'title'              => 'Trattamento dei pacchetti linguistici',
     'translate'          => 'traduzione',
 ];

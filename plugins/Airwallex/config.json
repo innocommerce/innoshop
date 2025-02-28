@@ -1,0 +1,18 @@
+{
+    "code": "airwallex",
+    "name": {
+        "zh_cn": "空中云汇",
+        "en": "Airwallex"
+    },
+    "description": {
+        "zh_cn": "空中云汇",
+        "en": "Airwallex"
+    },
+    "type": "billing",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

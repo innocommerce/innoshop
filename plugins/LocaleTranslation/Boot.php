@@ -13,7 +13,7 @@ class Boot
 {
     public function init(): void
     {
-        listen_hook_filter('component.sidebar.setting.routes', function ($data) {
+        listen_hook_filter('panel.component.sidebar.setting.routes', function ($data) {
             $data[] = [
                 'route' => 'locale_translations.index',
                 'title' => trans('LocaleTranslation::common.title'),

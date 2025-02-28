@@ -13,14 +13,15 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use InnoShop\Panel\Services\TranslationService;
+use InnoShop\Panel\Services\TranslatorService;
 use InnoShop\Plugin\Resources\PluginResource;
 use Plugin\LocaleTranslation\Services\LocaleService;
 
 class TranslationController extends Controller
 {
     /**
-     * 获取语言包文件列表
+     * Get locale list.
+     *
      * @throws Exception
      */
     public function index(Request $request): mixed
@@ -45,7 +46,7 @@ class TranslationController extends Controller
                 'plugins'     => $pluginItems,
                 'locales'     => $service->getLocaleItems(),
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $data = [
                 'file_path'   => $filePath,
                 'plugin_code' => $pluginCode,
@@ -61,7 +62,7 @@ class TranslationController extends Controller
     }
 
     /**
-     * 获取语言包数据
+     * Get locale data
      *
      * @throws Exception
      */
@@ -87,6 +88,8 @@ class TranslationController extends Controller
     }
 
     /**
+     * Format locale package.
+     *
      * @param  Request  $request
      * @return JsonResponse
      */
@@ -110,6 +113,8 @@ class TranslationController extends Controller
     }
 
     /**
+     * Translate Text.
+     *
      * @param  Request  $request
      * @return JsonResponse
      */
@@ -138,7 +143,7 @@ class TranslationController extends Controller
                 foreach ($keys as $key) {
                     $text = $baseValue['values'][$key] ?? '';
                     if ($text) {
-                        $response   = TranslationService::getInstance()->translate($from, $target, $text);
+                        $response   = TranslatorService::getInstance()->translate($from, $target, $text);
                         $localeItem = collect($response)->where('locale', $target)->first();
                         $itemResult = $localeItem['result'] ?? '';
                         if ($itemResult) {

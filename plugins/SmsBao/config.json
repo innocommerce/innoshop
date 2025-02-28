@@ -1,0 +1,18 @@
+{
+    "code": "sms_bao",
+    "name": {
+        "zh_cn": "短信登录",
+        "en": "Sms login"
+    },
+    "description": {
+        "zh_cn": "",
+        "en": ""
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

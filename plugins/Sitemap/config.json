@@ -1,0 +1,18 @@
+{
+    "code": "site_map",
+    "name": {
+        "zh_cn": "SEO优化工具",
+        "en": "SEO optimization tool"
+    },
+    "description": {
+        "zh_cn": "两大功能点：1.设置商品详情，商品分类，品牌，文章分类，文章详情的网址别名url，实现通过网址访问，2.一键生成sitemap",
+        "en": "Three major function points: 1. Set up product details, commodity classification, brand, article classification, article details of the URL alias url, through the URL access, 2. Generate sitemap"
+    },
+    "type": "feature",
+    "version": "v1.0.8",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

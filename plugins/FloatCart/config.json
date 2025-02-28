@@ -1,0 +1,18 @@
+{
+    "code": "float_cart",
+    "name": {
+        "zh_cn": "悬浮购物车",
+        "en": "Float Cart"
+    },
+    "description": {
+        "zh_cn": "悬浮购物车",
+        "en": "Float Cart"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

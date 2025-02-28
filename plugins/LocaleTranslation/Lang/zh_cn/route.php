@@ -8,9 +8,9 @@
  */
 
 return [
-    'title'                         => '语言包处理',
-    'locale_translations_index'     => '语言包处理',
-    'locale_translations_values'    => '获取语言包',
     'locale_translations_format'    => '格式化',
+    'locale_translations_index'     => '语言包处理',
     'locale_translations_translate' => '翻译',
+    'locale_translations_values'    => '获取语言包',
+    'title'                         => '语言包处理',
 ];

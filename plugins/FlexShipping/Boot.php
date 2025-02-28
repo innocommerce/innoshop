@@ -9,8 +9,7 @@
 
 namespace Plugin\FlexShipping;
 
-use Exception;
-use InnoShop\Common\Services\CheckoutService;
+use InnoShop\Common\Entities\ShippingEntity;
 use InnoShop\Plugin\Core\BaseBoot;
 use Plugin\FlexShipping\Services\FlexService;
 use Throwable;
@@ -22,11 +21,11 @@ class Boot extends BaseBoot
     /**
      * Get quotes.
      *
-     * @param  CheckoutService  $checkoutService
+     * @param  ShippingEntity  $entity
      * @return array
-     * @throws Exception|Throwable
+     * @throws Throwable
      */
-    public function getQuotes(CheckoutService $checkoutService): array
+    public function getQuotes(ShippingEntity $entity): array
     {
         $quoteData = json_decode(file_get_contents(plugin_path('FlexShipping/Storage/demo.json')), true);
         if (! $quoteData['active']) {
@@ -34,7 +33,7 @@ class Boot extends BaseBoot
         }
 
         $shippingQuotes = [];
-        $flexShipping   = FlexService::getInstance($checkoutService);
+        $flexShipping   = FlexService::getInstance($entity);
         foreach ($quoteData['quotes'] as $index => $quoteSetting) {
             $quote = $flexShipping->getQuote($quoteSetting);
             if (empty($quote)) {

@@ -1,0 +1,18 @@
+{
+    "code": "inno_chat",
+    "name": {
+        "zh_cn": "AI 助手",
+        "en": "AI 聊天助手"
+    },
+    "description": {
+        "zh_cn": "InnoChat 聊天助手",
+        "en": "AI Chat Assistant"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "6698475@qq.com"
+    }
+}

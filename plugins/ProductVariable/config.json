@@ -1,0 +1,18 @@
+{
+    "code": "product_variable",
+    "name": {
+        "zh_cn": "自定义sku",
+        "en": "Custom sku"
+    },
+    "description": {
+        "zh_cn": "可设置为可输入定制内容的sku，数据量过大时，设置为下拉选择等功能",
+        "en": "It can be set to sku where customized content can be input. When the amount of data is too large, it can be set to drop-down selection and other functions"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

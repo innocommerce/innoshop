@@ -9,9 +9,11 @@
 
 return [
     'batch_translate'    => 'Terjemahkan seluruh kolom',
-    'column'             => '\"Laporan',
+    'column'             => 'Laporan',
+    'format'             => 'format',
     'locale_translation' => 'Paket bahasa diterjemahkan secara otomatis',
     'please_select_file' => 'Silakan klik di sebelah kiri untuk memilih berkas bahasa yang akan diterjemahkan',
     'select_module'      => 'Silahkan pilih:',
+    'title'              => 'Penanganan paket bahasa',
     'translate'          => 'penerjemahan',
 ];

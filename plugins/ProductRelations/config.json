@@ -1,0 +1,18 @@
+{
+    "code": "product_relations",
+    "name": {
+        "zh_cn": "自动关联商品",
+        "en": "Auto Product Related"
+    },
+    "description": {
+        "zh_cn": "商品详情中的关联商品，不用设定，可自动关联",
+        "en": "Associated commodities in commodity details can be automatically associated without setting."
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

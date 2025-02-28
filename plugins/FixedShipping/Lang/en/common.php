@@ -8,8 +8,8 @@
  */
 
 return [
-    'type'    => 'Type',
     'fixed'   => 'Fixed',
     'percent' => 'Percent',
+    'type'    => 'Type',
     'value'   => 'Value',
 ];

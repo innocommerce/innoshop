@@ -1,0 +1,18 @@
+{
+    "code": "order_email",
+    "name": {
+        "zh_cn": "下单邮件通知店主",
+        "en": "Email notifying the shop owner of the order"
+    },
+    "description": {
+        "zh_cn": "当有客户下单后,系统会第一时间发邮件通知店主，以防漏单",
+        "en": "When a customer places an order, the system will send an email to inform the shop owner as soon as possible to prevent missing the order."
+    },
+    "type": "feature",
+    "version": "v1.1.2",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

@@ -63,7 +63,7 @@
                 let captureStatus = orderData.status
                 if (captureStatus === 'COMPLETED') {
                     @if (current_customer())
-                        window.location.href = "{{ account_route('orders.show', $order->number) }}"
+                        window.location.href = "{{ account_route('orders.number_show', $order->number) }}"
                     @else
                         window.location.href = "{{ front_route('checkout.success', ['order_number' => $order->number]) }}"
                     @endif

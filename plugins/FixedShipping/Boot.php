@@ -9,7 +9,7 @@
 
 namespace Plugin\FixedShipping;
 
-use InnoShop\Common\Services\CheckoutService;
+use InnoShop\Common\Entities\ShippingEntity;
 use InnoShop\Plugin\Core\BaseBoot;
 
 class Boot extends BaseBoot
@@ -19,14 +19,14 @@ class Boot extends BaseBoot
     /**
      * Get quotes.
      *
-     * @param  CheckoutService  $checkoutService
+     * @param  ShippingEntity  $entity
      * @return array
      */
-    public function getQuotes(CheckoutService $checkoutService): array
+    public function getQuotes(ShippingEntity $entity): array
     {
         $code     = $this->plugin->getCode();
         $resource = $this->pluginResource->jsonSerialize();
-        $cost     = $this->getShippingFee($checkoutService);
+        $cost     = $this->getShippingFee($entity);
         $quotes[] = [
             'type'        => 'shipping',
             'code'        => "{$code}.0",
@@ -43,12 +43,12 @@ class Boot extends BaseBoot
     /**
      * Calculate shipping fee.
      *
-     * @param  CheckoutService  $checkoutService
+     * @param  ShippingEntity  $entity
      * @return float|int
      */
-    public function getShippingFee(CheckoutService $checkoutService): float|int
+    public function getShippingFee(ShippingEntity $entity): float|int
     {
-        $subtotal      = $checkoutService->getSubTotal();
+        $subtotal      = $entity->getSubtotal();
         $shippingType  = plugin_setting('fixed_shipping', 'type', 'fixed');
         $shippingValue = plugin_setting('fixed_shipping', 'value', 0);
         if ($shippingType == 'fixed') {

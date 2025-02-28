@@ -24,7 +24,7 @@ class Boot
      */
     private function addPanelMenu(): void
     {
-        listen_hook_filter('component.sidebar.product.routes', function ($menus) {
+        listen_hook_filter('panel.component.sidebar.product.routes', function ($menus) {
             $menus[] = [
                 'title' => '批量导入',
                 'route' => 'exporter.index',

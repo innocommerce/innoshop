@@ -1,0 +1,18 @@
+{
+  "code": "sub_news",
+  "name": {
+    "zh_cn": "邮件订阅",
+    "en": "Subscribe Newsletter"
+  },
+  "description": {
+    "zh_cn": "前台展示订阅框, 后台展示订阅邮件",
+    "en": "Front-end displays subscription box, back-end manages subscriber emails"
+  },
+  "type": "feature",
+  "version": "v1.0.0",
+  "icon": "/images/logo.png",
+  "author": {
+    "name": "InnoShop",
+    "email": "edward@innoshop.com"
+  }
+}

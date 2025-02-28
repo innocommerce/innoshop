@@ -9,10 +9,11 @@
 
 return [
     'batch_translate'    => 'Translate',
-    'title'              => 'Locale Translation',
     'column'             => 'Glossary',
+    'format'             => 'format',
     'locale_translation' => 'Language package automatic translation',
     'please_select_file' => 'Click on the left to select the language file you want to translate',
     'select_module'      => 'Please select:',
+    'title'              => 'Locale Translation',
     'translate'          => 'Translate',
 ];

@@ -1,0 +1,18 @@
+{
+    "code": "l_question_answer",
+    "name": {
+        "zh_cn": "问答",
+        "en": "Question & Answer"
+    },
+    "description": {
+        "zh_cn": "商品详情页面的问答",
+        "en": "Question and answer on the product details page"
+    },
+    "type": "feature",
+    "version": "v1.0.1",
+    "icon": "/logo.png",
+    "author": {
+        "name": "撸串青年",
+        "email": "2909110833@qq.com"
+    }
+}

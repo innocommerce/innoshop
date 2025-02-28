@@ -1,0 +1,18 @@
+{
+    "code": "schema_mark",
+    "name": {
+        "zh_cn": "Schema Mark 结构化数据",
+        "en": "Schema Mark for Structured Data"
+    },
+    "description": {
+        "zh_cn": "Schema Mark 结构化数据",
+        "en": "Schema Mark for Structured Data"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

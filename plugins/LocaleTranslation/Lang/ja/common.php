@@ -10,8 +10,10 @@
 return [
     'batch_translate'    => '全列を翻訳します。',
     'column'             => '項目',
+    'format'             => 'フォーマットです',
     'locale_translation' => '言語パッケージ自動翻訳です',
     'please_select_file' => '翻訳する言語のファイルを左をクリックして選択します。',
     'select_module'      => '選択します。',
+    'title'              => '言語パッケージ処理です',
     'translate'          => '翻訳',
 ];
