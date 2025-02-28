@@ -11,6 +11,7 @@ return [
     'actions'           => 'Actions',
     'active'            => 'Active',
     'add'               => 'Add',
+    'ai_generate'       => 'AI Generate',
     'available'         => 'Available',
     'basic_info'        => 'Basic Information',
     'batch_delete'      => 'Batch Delete',

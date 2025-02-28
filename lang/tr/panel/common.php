@@ -11,6 +11,7 @@ return [
     'actions'           => 'Eylemler',
     'active'            => 'Aktif',
     'add'               => 'Ekle',
+    'ai_generate'       => 'AI generation',
     'available'         => 'Mevcut',
     'basic_info'        => 'Temel Bilgiler',
     'batch_delete'      => 'Toplu Silme',

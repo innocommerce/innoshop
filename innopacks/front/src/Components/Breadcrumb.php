@@ -17,6 +17,8 @@ class Breadcrumb extends Component
 {
     public array $breadcrumbs;
 
+    public bool $showFilter = false;
+
     /**
      * @param  $type
      * @param  $value
@@ -55,6 +57,10 @@ class Breadcrumb extends Component
         }
 
         $this->breadcrumbs[] = $breadcrumbLib->getTrail($type, $value, $title);
+
+        if (equal_route_name('front.categories.slug_show') || equal_route_name('front.categories.slug_show') || equal_route_name('front.products.index')) {
+            $this->showFilter = true;
+        }
     }
 
     /**

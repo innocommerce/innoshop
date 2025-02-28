@@ -92,13 +92,24 @@ class CheckoutController extends Controller
      *
      * @param  Request  $request
      * @return mixed
+     * @throws Exception
      */
     public function success(Request $request): mixed
     {
         $orderNumber = $request->get('order_number');
-        $data        = [
-            'order' => OrderRepo::getInstance()->builder(['number' => $orderNumber])->firstOrFail(),
-        ];
+        if (empty($orderNumber)) {
+            $orderNumber = session('order_number');
+        }
+
+        if ($orderNumber) {
+            $order = OrderRepo::getInstance()->builder(['number' => $orderNumber])->firstOrFail();
+        }
+
+        if (empty($order)) {
+            return redirect(front_route('home.index'));
+        }
+
+        $data['order'] = $order;
 
         return inno_view('checkout.success', $data);
     }

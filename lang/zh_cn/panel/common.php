@@ -11,6 +11,7 @@ return [
     'actions'           => '操作',
     'active'            => '启用',
     'add'               => '添加',
+    'ai_generate'       => 'AI 生成',
     'available'         => '可用于',
     'basic_info'        => '基本信息',
     'batch_delete'      => '批量删除',

@@ -5,6 +5,18 @@ body.page-cart {
       align-items: center;
     }
 
+    .product-name {
+      color: #222;
+      a {
+        color: inherit;
+
+        &:hover {
+          text-decoration: underline;
+          color: $primary;
+        }
+      }
+    }
+
     .td-image {
       width: 100px;
       padding: 0;

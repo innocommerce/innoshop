@@ -103,12 +103,19 @@
               </div>
 
               <div class="product-info-btns">
-                <button class="btn btn-primary add-cart">{{ __('front/product.add_to_cart') }}</button>
-                <button class="btn buy-now ms-2">{{ __('front/product.buy_now') }}</button>
+                <button class="btn btn-primary add-cart" data-id="{{ $product->id }}"
+                        data-price="{{ $product->masterSku->price }}">
+                  {{ __('front/product.add_to_cart') }}
+                </button>
+                <button class="btn buy-now ms-2" data-id="{{ $product->id }}"
+                        data-price="{{ $product->masterSku->price }}">
+                  {{ __('front/product.buy_now') }}
+                </button>
                 @hookinsert('product.detail.cart.after')
               </div>
             </div>
-            <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}">
+            <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"
+                 data-price="{{ $product->masterSku->price }}">
               <i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
             </div>
             @hookinsert('product.detail.after')

@@ -28,8 +28,10 @@ use InnoShop\Common\Services\Fee\Shipping;
 use InnoShop\Common\Services\Fee\Subtotal;
 use Throwable;
 
-class CheckoutService extends BaseService
+class CheckoutService
 {
+    private static mixed $checkoutService = null;
+
     protected int $customerID;
 
     protected string $guestID;
@@ -68,6 +70,21 @@ class CheckoutService extends BaseService
         }
 
         $this->clearGuestAddresses();
+    }
+
+    /**
+     * @param  int  $customerID
+     * @param  string  $guestID
+     * @return static
+     * @throws Throwable
+     */
+    public static function getSingleton(int $customerID = 0, string $guestID = ''): static
+    {
+        if (self::$checkoutService !== null) {
+            return self::$checkoutService;
+        }
+
+        return self::$checkoutService = new static($customerID, $guestID);
     }
 
     /**
@@ -225,11 +242,22 @@ class CheckoutService extends BaseService
      * @return float
      * @throws Exception
      */
-    public function getTotal(): float
+    public function getAmount(): float
     {
         $feeList = $this->getFeeList();
 
         return round(collect($feeList)->sum('total'), 2);
+    }
+
+    /**
+     * @return int
+     * @throws Exception
+     */
+    public function getTotalNumber(): int
+    {
+        $cartList = $this->getCartList();
+
+        return collect($cartList)->sum('quantity');
     }
 
     /**
@@ -344,7 +372,7 @@ class CheckoutService extends BaseService
      */
     public function getCheckoutResult(): array
     {
-        $amount = $this->getTotal();
+        $amount = $this->getAmount();
 
         $result = [
             'cart_list'        => $this->getCartList(),
@@ -353,9 +381,9 @@ class CheckoutService extends BaseService
             'billing_methods'  => BillingService::getInstance()->getMethods(),
             'checkout'         => $this->getCheckoutData(),
             'fee_list'         => $this->getFeeList(),
-            'total'            => $amount,
             'amount'           => $amount,
             'amount_format'    => currency_format($amount),
+            'total_number'     => $this->getTotalNumber(),
             'is_virtual'       => $this->checkIsVirtual(),
         ];
 
@@ -395,7 +423,7 @@ class CheckoutService extends BaseService
         try {
             $checkoutData = $this->getCheckoutData();
 
-            $checkoutData['total'] = $this->getTotal();
+            $checkoutData['total'] = $this->getAmount();
 
             $order = OrderRepo::getInstance()->create($checkoutData);
 

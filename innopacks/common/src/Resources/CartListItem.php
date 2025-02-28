@@ -46,6 +46,7 @@ class CartListItem extends JsonResource
                 'subtotal'            => $subtotal,
                 'subtotal_format'     => currency_format($subtotal),
                 'image'               => image_resize($sku->image->path ?? ($product->image->path ?? '')),
+                'url'                 => $product->url,
                 'selected'            => (bool) $this->selected,
             ],
             'cart' => $this,

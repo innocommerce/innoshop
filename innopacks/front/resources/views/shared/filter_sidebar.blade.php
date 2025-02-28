@@ -1,4 +1,4 @@
-<div class="filter-sidebar">
+<div class="filter-sidebar" id="filterSidebar">
   <div class="filter-sidebar-item">
     <div class="title">{{ __('front/category.category') }}</div>
     <div class="content">
@@ -51,16 +51,60 @@
   </div>
 </div>
 
+<div class="overlay" id="overlay" style="display: none;"></div>
+
 @push('footer')
 <script>
-$('#filter-category a').each(function() {
-  if ($(this).attr('href') === window.location.href) {
-    $(this).addClass('text-primary');
-    $(this).parents('.accordion-item').each(function() {
-      $(this).find('.accordion-button').attr('aria-expanded', true).siblings('a').addClass('text-primary');
-      $(this).find('.accordion-collapse').addClass('show');
-    });
+  function toggleSidebar() {
+    if ($(window).width() < 768) {
+      $('#filterSidebar').css('transform', 'translateX(0)');
+      $('#overlay').show();
+    }
   }
-});
+
+  $(document).ready(function() {
+    $('#toggleFilterSidebar').on('click', function() {
+      $('#filterSidebar').css('transform', 'translateX(0)');
+      $('#overlay').show();
+    });
+
+    $('#overlay').on('click', function() {
+      $('#filterSidebar').css('transform', 'translateX(100%)');
+      $(this).hide();
+    });
+
+    $(document).on('click', function(event) {
+      if ($(window).width() < 768 && !$(event.target).closest('#filterSidebar, #toggleFilterSidebar').length) {
+        $('#filterSidebar').css('transform', 'translateX(100%)');
+        $('#overlay').hide();
+      }
+    });
+
+    $('#filter-category a').each(function() {
+      if ($(this).attr('href') === window.location.href) {
+        $(this).addClass('text-primary');
+        $(this).parents('.accordion-item').each(function() {
+          $(this).find('.accordion-button').attr('aria-expanded', true).siblings('a').addClass('text-primary');
+          $(this).find('.accordion-collapse').addClass('show');
+        });
+      }
+    });
+  });
+
+  $(window).resize(function() {
+    if ($(window).width() >= 768) {
+      $('#filterSidebar').css('transform', 'translateX(0)'); 
+      $('#overlay').hide(); 
+    } else {
+      $('#filterSidebar').css('transform', 'translateX(100%)'); 
+      $('#overlay').hide(); 
+    }
+  });
+
+  $(window).on('resize', function() {
+    if ($(window).width() === 768) {
+      $('#filterSidebar').css('transform', 'translateX(0)');
+    }
+  });
 </script>
 @endpush

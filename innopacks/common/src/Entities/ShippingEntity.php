@@ -43,7 +43,7 @@ class ShippingEntity
     {
         $this->setProducts($checkoutService->getCartList());
         $this->setSubtotal($checkoutService->getSubTotal());
-        $this->setAmount($checkoutService->getTotal());
+        $this->setAmount($checkoutService->getAmount());
         $this->setWeight($checkoutService->getCartWeight());
         $this->setOrigAddress([]);
         $this->setDestAddress($checkoutService->getShippingAddress());

@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Services\Checkout;
 
+use Exception;
 use InnoShop\Plugin\Repositories\PluginRepo;
 use InnoShop\Plugin\Resources\Checkout\PaymentMethodItem;
 
@@ -23,12 +24,14 @@ class BillingService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMethods(): array
     {
         $billingPlugins = PluginRepo::getInstance()->getBillingMethods();
 
-        return PaymentMethodItem::collection($billingPlugins)->jsonSerialize();
+        $methods = PaymentMethodItem::collection($billingPlugins)->jsonSerialize();
+
+        return fire_hook_filter('service.checkout.billing.methods', $methods);
     }
 }
