@@ -356,12 +356,12 @@ class ProductRepo extends BaseRepo
                 'product_image_id' => $imageID,
                 'variants'         => $variants,
                 'code'             => $code,
-                'model'            => $sku['model']        ?? $code,
-                'price'            => $sku['price']        ?? 0,
-                'origin_price'     => $sku['origin_price'] ?? 0,
-                'quantity'         => $sku['quantity']     ?? 0,
-                'is_default'       => $isDefault,
-                'position'         => $sku['position'] ?? 0,
+                'model'            => $sku['model'] ?? $code,
+                'price'            => (float) ($sku['price'] ?? 0),
+                'origin_price'     => (float) ($sku['origin_price'] ?? 0),
+                'quantity'         => (int) ($sku['quantity'] ?? 0),
+                'is_default'       => (bool) $isDefault,
+                'position'         => (int) ($sku['position'] ?? 0),
             ];
         }
 
