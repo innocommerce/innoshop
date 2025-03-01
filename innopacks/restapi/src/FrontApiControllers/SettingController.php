@@ -18,6 +18,10 @@ class SettingController extends BaseController
      */
     public function index(): JsonResponse
     {
-        return read_json_success(setting('system'));
+        $settings = setting('system');
+
+        $settings['currencies'] = currencies()->select(['id', 'name', 'code']);
+
+        return read_json_success($settings);
     }
 }
