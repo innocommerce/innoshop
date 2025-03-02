@@ -121,7 +121,7 @@
             <a href="{{ account_route('favorites.index') }}"><img src="{{ asset('icon/love.svg') }}" class="img-fluid"><span class="icon-quantity">{{ $fav_total }}</span></a>
           </div>
           <div class="item">
-            <a href="{{ front_route('carts.index') }}" class="header-cart-icon"><img src="{{ asset('icon/cart.svg') }}" class="img-fluid"><span class="icon-quantity">0</span></a>
+            <a href="javascript:void(0)" class="header-cart-icon" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas"><img src="{{ asset('icon/cart.svg') }}" class="img-fluid"><span class="icon-quantity">0</span></a>
           </div>
           @hookinsert('layouts.header.cart.after')
         </div>
@@ -139,7 +139,7 @@
       </a>
     </div>
 
-    <a href="{{ front_route('carts.index') }}" class="header-cart-icon"><img src="{{ asset('icon/cart.svg') }}" class="img-fluid"><span class="icon-quantity">12</span></a>
+    <a href="{{ front_route('carts.index') }}" class="header-cart-icon"><img src="{{ asset('icon/cart.svg') }}" class="img-fluid"><span class="icon-quantity">0</span></a>
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="mobile-menu-offcanvas">
       <div class="offcanvas-header">
