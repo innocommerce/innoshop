@@ -28,22 +28,29 @@ class FileManagerController extends BaseController
 
     private function getService(): FileManagerInterface
     {
-        // 根据驱动类型创建对应的服务
         try {
-            if (config('filesystems.file_manager.driver') === 'oss') {
+            $driver = plugin_setting('file_manager', 'driver');
+            \Log::info('Getting file manager service:', [
+                'driver'     => $driver,
+                'key_exists' => ! empty(plugin_setting('file_manager', 'key')),
+                'endpoint'   => plugin_setting('file_manager', 'endpoint'),
+                'bucket'     => plugin_setting('file_manager', 'bucket'),
+            ]);
+
+            if ($driver === 'oss') {
                 $service = new OSSService;
                 \Log::info('Created OSS service');
 
                 return fire_hook_filter('file_manager.service', $service);
             }
         } catch (Exception $e) {
-            // 如果 OSS 配置验证失败，记录日志
             \Log::warning('Failed to initialize OSS service, falling back to local:', [
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
         }
 
-        // 默认使用本地存储服务
+        // default local file service
         \Log::info('Created local file service');
 
         return fire_hook_filter('file_manager.service', new FileManagerService);
@@ -60,24 +67,23 @@ class FileManagerController extends BaseController
             'isIframe'    => request()->header('X-Iframe') === '1',
             'multiple'    => request()->query('multiple')  === '1',
             'type'        => request()->query('type', 'all'),
-            'base_folder' => '/',  // 设置默认根目录
-            'driver'      => config('filesystems.file_manager.driver'),  // 添加驱动类型
-            'title'       => config('filesystems.file_manager.driver') === 'oss' ? 'OSS 文件管理' : '图片空间',
+            'base_folder' => '/',
+            'driver'      => plugin_setting('file_manager', 'driver', 'local'),
+            'title'       => plugin_setting('file_manager', 'driver') === 'oss' ? 'OSS 文件管理' : '图片空间',
             'config'      => [
-                'driver'   => config('filesystems.file_manager.driver'),
-                'endpoint' => config('filesystems.disks.s3.endpoint'),
-                'bucket'   => config('filesystems.disks.s3.bucket'),
+                'driver'   => plugin_setting('file_manager', 'driver', 'local'),
+                'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
+                'bucket'   => plugin_setting('file_manager', 'bucket', ''),
                 'baseUrl'  => config('app.url'),
             ],
         ];
 
-        // 添加调试日志
         \Log::info('File manager index:', [
             'data'   => $data,
             'config' => [
-                'driver'   => config('filesystems.file_manager.driver'),
-                'bucket'   => config('filesystems.disks.s3.bucket'),
-                'endpoint' => config('filesystems.disks.s3.endpoint'),
+                'driver'   => plugin_setting('file_manager', 'driver'),
+                'bucket'   => plugin_setting('file_manager', 'bucket'),
+                'endpoint' => plugin_setting('file_manager', 'endpoint'),
             ],
         ]);
 
@@ -96,9 +102,9 @@ class FileManagerController extends BaseController
             'multiple' => request()->query('multiple') === '1',
             'type'     => request()->query('type', 'all'),
             'config'   => [
-                'driver'   => config('filesystems.file_manager.driver'),
-                'endpoint' => config('filesystems.disks.s3.endpoint'),
-                'bucket'   => config('filesystems.disks.s3.bucket'),
+                'driver'   => plugin_setting('file_manager', 'driver', 'local'),
+                'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
+                'bucket'   => plugin_setting('file_manager', 'bucket', ''),
                 'baseUrl'  => config('app.url'),
             ],
         ];
@@ -394,6 +400,127 @@ class FileManagerController extends BaseController
             ]);
 
             return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Get storage configs
+     *
+     * @return JsonResponse
+     */
+    public function getStorageConfig()
+    {
+        try {
+            $config = [
+                'driver'     => plugin_setting('file_manager', 'driver', 'local'),
+                'key'        => plugin_setting('file_manager', 'key', ''),
+                'secret'     => plugin_setting('file_manager', 'secret', ''),
+                'endpoint'   => plugin_setting('file_manager', 'endpoint', ''),
+                'bucket'     => plugin_setting('file_manager', 'bucket', ''),
+                'region'     => plugin_setting('file_manager', 'region', ''),
+                'cdn_domain' => plugin_setting('file_manager', 'cdn_domain', ''),
+            ];
+
+            \Log::info('Get storage configs:', [
+                'config'   => array_merge($config, ['secret' => '***']),
+                'settings' => [
+                    'driver'     => plugin_setting('file_manager', 'driver'),
+                    'key'        => plugin_setting('file_manager', 'key'),
+                    'endpoint'   => plugin_setting('file_manager', 'endpoint'),
+                    'bucket'     => plugin_setting('file_manager', 'bucket'),
+                    'region'     => plugin_setting('file_manager', 'region'),
+                    'cdn_domain' => plugin_setting('file_manager', 'cdn_domain'),
+                ],
+            ]);
+
+            return json_success('获取存储配置成功', $config);
+        } catch (\Exception $e) {
+            \Log::error('获取存储配置失败:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return json_error('获取存储配置失败: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Save storage configs
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     * @throws \Throwable
+     */
+    public function saveStorageConfig(Request $request): JsonResponse
+    {
+        try {
+            $driver     = $request->input('driver', 'local');
+            $key        = $request->input('key', '');
+            $secret     = $request->input('secret', '');
+            $endpoint   = $request->input('endpoint', '');
+            $bucket     = $request->input('bucket', '');
+            $region     = $request->input('region', '');
+            $cdn_domain = $request->input('cdn_domain', '');
+
+            \Log::info('Save storage configs:', [
+                'request' => [
+                    'driver'     => $driver,
+                    'key'        => $key,
+                    'secret'     => '***',
+                    'endpoint'   => $endpoint,
+                    'bucket'     => $bucket,
+                    'region'     => $region,
+                    'cdn_domain' => $cdn_domain,
+                ],
+            ]);
+
+            $settingRepo = \InnoShop\Common\Repositories\SettingRepo::getInstance();
+            $settingRepo->updatePluginValue('file_manager', 'driver', $driver);
+            $settingRepo->updatePluginValue('file_manager', 'key', $key);
+            $settingRepo->updatePluginValue('file_manager', 'secret', $secret);
+            $settingRepo->updatePluginValue('file_manager', 'endpoint', $endpoint);
+            $settingRepo->updatePluginValue('file_manager', 'bucket', $bucket);
+            $settingRepo->updatePluginValue('file_manager', 'region', $region);
+            $settingRepo->updatePluginValue('file_manager', 'cdn_domain', $cdn_domain);
+
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+
+            load_settings();
+
+            config([
+                'filesystems.file_manager.driver' => $driver,
+            ]);
+
+            // 是OSS
+            if ($driver == 'oss') {
+                config([
+                    'filesystems.disks.s3.key'        => $key,
+                    'filesystems.disks.s3.secret'     => $secret,
+                    'filesystems.disks.s3.region'     => $region,
+                    'filesystems.disks.s3.bucket'     => $bucket,
+                    'filesystems.disks.s3.endpoint'   => $endpoint,
+                    'filesystems.disks.s3.cdn_domain' => $cdn_domain,
+                ]);
+            }
+
+            $configData = [
+                'driver'     => $driver,
+                'key'        => $key,
+                'secret'     => $secret,
+                'endpoint'   => $endpoint,
+                'bucket'     => $bucket,
+                'region'     => $region,
+                'cdn_domain' => $cdn_domain,
+            ];
+
+            return json_success('存储配置保存成功', $configData);
+        } catch (\Exception $e) {
+            \Log::error('存储配置保存失败:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return json_error('存储配置保存失败: '.$e->getMessage());
         }
     }
 }

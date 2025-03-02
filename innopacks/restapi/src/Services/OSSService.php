@@ -15,26 +15,50 @@ class OSSService implements FileManagerInterface
 
     public function __construct()
     {
+        $this->refreshConfig();
         $this->validateConfig();
         $this->initializeS3Client();
-        $this->bucket    = config('filesystems.disks.s3.bucket');
-        $this->cdnDomain = config('filesystems.disks.s3.cdn_domain', '');
+        $this->bucket    = plugin_setting('file_manager', 'bucket', '');
+        $this->cdnDomain = plugin_setting('file_manager', 'cdn_domain', '');
+
+        \Log::info('OSS Service initialized with:', [
+            'bucket'    => $this->bucket,
+            'cdnDomain' => $this->cdnDomain,
+            'endpoint'  => plugin_setting('file_manager', 'endpoint', ''),
+        ]);
+    }
+
+    /**
+     * Refresh config
+     */
+    protected function refreshConfig(): void
+    {
+        config([
+            'filesystems.file_manager.driver' => plugin_setting('file_manager', 'driver', 'local'),
+            'filesystems.disks.s3.key'        => plugin_setting('file_manager', 'key', ''),
+            'filesystems.disks.s3.secret'     => plugin_setting('file_manager', 'secret', ''),
+            'filesystems.disks.s3.endpoint'   => plugin_setting('file_manager', 'endpoint', ''),
+            'filesystems.disks.s3.bucket'     => plugin_setting('file_manager', 'bucket', ''),
+            'filesystems.disks.s3.region'     => plugin_setting('file_manager', 'region', ''),
+            'filesystems.disks.s3.cdn_domain' => plugin_setting('file_manager', 'cdn_domain', ''),
+        ]);
     }
 
     protected function validateConfig(): void
     {
         $required = [
-            'filesystems.disks.s3.key'      => 'AWS_ACCESS_KEY_ID',
-            'filesystems.disks.s3.secret'   => 'AWS_SECRET_ACCESS_KEY',
-            'filesystems.disks.s3.region'   => 'AWS_DEFAULT_REGION',
-            'filesystems.disks.s3.bucket'   => 'AWS_BUCKET',
-            'filesystems.disks.s3.endpoint' => 'AWS_ENDPOINT',
+            'key'      => 'Access Key',
+            'secret'   => 'Secret Key',
+            'region'   => 'Region',
+            'bucket'   => 'Bucket',
+            'endpoint' => 'Endpoint',
         ];
 
         $missing = [];
-        foreach ($required as $config => $env) {
-            if (empty(config($config))) {
-                $missing[] = $env;
+        foreach ($required as $field => $label) {
+            $value = plugin_setting('file_manager', $field, '');
+            if (empty($value)) {
+                $missing[] = $label;
             }
         }
 
@@ -49,14 +73,20 @@ class OSSService implements FileManagerInterface
     {
         $this->s3Client = new S3Client([
             'version'     => 'latest',
-            'region'      => config('filesystems.disks.s3.region'),
+            'region'      => plugin_setting('file_manager', 'region', ''),
             'credentials' => [
-                'key'    => config('filesystems.disks.s3.key'),
-                'secret' => config('filesystems.disks.s3.secret'),
+                'key'    => plugin_setting('file_manager', 'key', ''),
+                'secret' => plugin_setting('file_manager', 'secret', ''),
             ],
-            'endpoint'                => config('filesystems.disks.s3.endpoint'),
+            'endpoint'                => plugin_setting('file_manager', 'endpoint', ''),
             'use_path_style_endpoint' => false,
             'bucket_endpoint'         => true,
+        ]);
+
+        \Log::info('S3 Client initialized with:', [
+            'region'   => plugin_setting('file_manager', 'region', ''),
+            'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
+            'key'      => plugin_setting('file_manager', 'key', '') ? '(set)' : '(not set)',
         ]);
     }
 
