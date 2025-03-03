@@ -87,8 +87,12 @@ class CategoryController extends BaseController
      */
     public function form(Category $category): mixed
     {
-        $childIDs   = $category->children->pluck('id')->toArray();
-        $excludeIDs = array_unique(array_merge($childIDs, [$category->id]));
+        $childIDs = $category->children->pluck('id')->toArray();
+        if ($category->id) {
+            $childIDs = array_merge($childIDs, [$category->id]);
+        }
+
+        $excludeIDs = array_unique($childIDs);
         $filters    = [
             'active'      => 1,
             'exclude_ids' => $excludeIDs,

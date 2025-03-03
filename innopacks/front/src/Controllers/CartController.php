@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\CartItem;
@@ -39,7 +40,7 @@ class CartController extends Controller
             $currentCart = CartService::getInstance()->handleResponse();
 
             return json_success(front_trans('common.read_success'), $currentCart);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -57,7 +58,7 @@ class CartController extends Controller
             $cartData = CartService::getInstance()->addCart($request->all());
 
             return json_success(front_trans('common.saved_success'), $cartData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -73,7 +74,7 @@ class CartController extends Controller
             $cartData = CartService::getInstance()->updateCart($cart, $request->all());
 
             return json_success(front_trans('common.updated_success'), $cartData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -89,7 +90,7 @@ class CartController extends Controller
             $cartData = CartService::getInstance()->select($cartIds);
 
             return json_success(front_trans('common.updated_success'), $cartData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -105,7 +106,7 @@ class CartController extends Controller
             $cartData = CartService::getInstance()->unselect($cartIds);
 
             return json_success(front_trans('common.updated_success'), $cartData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -118,10 +119,10 @@ class CartController extends Controller
     {
         try {
             $cart->delete();
-            $cartData = CartService::getInstance()->getCartList();
+            $cartData = CartService::getInstance()->handleResponse();
 
             return json_success(front_trans('common.deleted_success'), $cartData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

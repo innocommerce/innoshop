@@ -9,15 +9,22 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class SettingController extends BaseController
 {
     /**
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(): JsonResponse
     {
-        return read_json_success(setting('system'));
+        $settings = setting('system');
+
+        $settings['locales']    = locales()->select(['name', 'code']);
+        $settings['currencies'] = currencies()->select(['name', 'code']);
+
+        return read_json_success($settings);
     }
 }
