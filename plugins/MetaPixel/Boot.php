@@ -33,7 +33,7 @@ class Boot extends BaseBoot
      */
     private function addSchemaMark(): void
     {
-        $pixelID = plugin_setting('meta_pixel', 'pixel_id');
+        $pixelID = plugin_setting('meta_pixel', 'meta_pixel_id');
         if (empty($pixelID)) {
             return;
         }

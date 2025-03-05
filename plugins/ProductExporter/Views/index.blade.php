@@ -14,7 +14,7 @@
         <div class="row">
           <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label class="form-label" for="product-excel-file">请选择Excel文件</label>
+              <label class="form-label" for="product-excel-file">{{ __('ProductExporter::common.select_file') }}</label>
               <input type="file" name="product_excel_file" id="product-excel-file" class="form-control">
             </div>
           </div>
@@ -22,13 +22,13 @@
             <div class="form-check">
               <input class="form-check-input" name="clear-data" type="checkbox" value="1" id="flexCheckDefault">
               <label class="form-check-label" for="flexCheckDefault">
-                清空原有数据
+                {{ __('ProductExporter::common.clear_data') }}
               </label>
             </div>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">导入</button>
+        <button type="submit" class="btn btn-primary">{{ __('ProductExporter::common.import') }}</button>
       </form>
     </div>
   </div>
@@ -42,15 +42,15 @@
         @csrf
         <div class="row">
           <div class="col-md-3">
-            <x-common-form-input name="name" title="名称筛选" value="{{ old('name') }}"
-                                 placeholder="产品名称"/>
+            <x-common-form-input name="name" title="{{ __('ProductExporter::common.name_filtering') }}" value="{{ old('name') }}"
+                                 placeholder="{{ __('ProductExporter::common.product_name') }}"/>
           </div>
           <div class="col-md-3">
-            <x-common-form-input name="quantity" title="导出数量" value="{{ old('quantity') }}"
-                                 placeholder="导出数量"/>
+            <x-common-form-input name="quantity" title="{{ __('ProductExporter::common.export_quantity') }}" value="{{ old('quantity') }}"
+                                 placeholder="{{ __('ProductExporter::common.export_quantity') }}"/>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">导出</button>
+        <button type="submit" class="btn btn-primary">{{ __('ProductExporter::common.export') }}</button>
       </form>
     </div>
   </div>

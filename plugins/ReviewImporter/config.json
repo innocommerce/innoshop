@@ -1,0 +1,18 @@
+{
+    "code": "review_importer",
+    "name": {
+        "zh_cn": "评论批量导入",
+        "en": "Review Importer"
+    },
+    "description": {
+        "zh_cn": "可以批量导入评论, 提升产品信任度",
+        "en": "Import reviews in batches to enhance product credibility"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

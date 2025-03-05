@@ -9,8 +9,8 @@
 
 return [
     [
-        'name'     => 'pixel_id',
-        'label'    => 'Pixel ID',
+        'name'     => 'meta_pixel_id',
+        'label'    => 'Meta Pixel ID',
         'type'     => 'string',
         'required' => true,
         'rules'    => 'required',

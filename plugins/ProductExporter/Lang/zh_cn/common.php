@@ -8,7 +8,13 @@
  */
 
 return [
-    'export' => '导出 Excel',
-    'import' => '导入 Excel',
-    'title'  => '批量导入',
+    'clear_data'      => '清空原有数据',
+    'derivation'      => '导出',
+    'export'          => '导出 Excel',
+    'export_quantity' => '导出数量',
+    'import'          => '导入',
+    'name_filtering'  => '名称筛选',
+    'product_name'    => '产品名称',
+    'select_file'     => '请选择Excel文件',
+    'title'           => '批量导入',
 ];

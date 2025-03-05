@@ -33,7 +33,7 @@
                 @endif
               </td>
               <td>{{ $quote->based_format }}</td>
-              <td>{{ $quote->customer->name }}</td>
+              <td>{{ $quote->customer->name ?? '-' }}</td>
               <td>{{ $quote->total_format }}</td>
               <td>{{ $quote->status_format }}</td>
               <td>{{ $quote->created_at->format('Y-m-d H:i') }}</td>

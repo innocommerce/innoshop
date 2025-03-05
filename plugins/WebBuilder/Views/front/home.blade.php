@@ -11,11 +11,11 @@
   @hookinsert('home.content.top')
 
   <section class="module-content">
-    @if(isset($modules) && $modules)
-      @foreach($modules as $module)
+    @if (isset($modules) && $modules)
+      @foreach ($modules as $module)
         @include("WebBuilder::modules.{$module['code']}", [
-          'content' => $module['content'],
-          'module_id' => $loop->index
+            'content' => $module['content'],
+            'module_id' => $loop->index,
         ])
       @endforeach
     @endif

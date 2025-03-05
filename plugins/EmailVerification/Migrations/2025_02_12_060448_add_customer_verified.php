@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->boolean('verified')->default(0)->after('active')->comment('Email Verified');
-            $table->string('verify_code')->default('')->after('active')->comment('Email Verification Code');
-        });
+        if (! Schema::hasColumn('customers', 'verified')) {
+            Schema::table('customers', function (Blueprint $table) {
+                $table->boolean('verified')->default(0)->after('active')->comment('Email Verified');
+                $table->string('verify_code')->default('')->after('active')->comment('Email Verification Code');
+            });
+        }
     }
 
     /**

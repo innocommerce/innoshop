@@ -1,7 +1,7 @@
 @if (!empty($content['images']))
   <section class="module-line">
     <div class="swiper" id="module-swiper-{{ $module_id }}">
-      <div class="swiper-wrapper">
+      <div class="swiper-wrapper module-swiper">
         @foreach ($content['images'] as $image)
           <div class="swiper-slide">
             <a href="{{ $image['link']['link'] ?? 'javascript:void(0)' }}">
