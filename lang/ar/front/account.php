@@ -22,7 +22,7 @@ return [
     'password'          => 'تغيير كلمة المرور',
     'register'          => 'تسجيل',
     'reviews'           => 'التعليقات',
-    'update'            => 'تحديث',
+    'transactions'      => 'الرصيد الخاص بي',
     'verify_code_error' => 'خطأ في الرمز التحقق',
     'view_all'          => 'عرض الكل',
 ];

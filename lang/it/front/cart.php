@@ -20,4 +20,5 @@ return [
     'selected'    => 'Selezionato',
     'subtotal'    => 'Subtotale',
     'total'       => 'Totale',
+    'view_cart'   => 'Entra nel carrello della spesa',
 ];

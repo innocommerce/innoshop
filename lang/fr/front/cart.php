@@ -20,4 +20,5 @@ return [
     'selected'    => 'Sélectionné',
     'subtotal'    => 'Sous-total',
     'total'       => 'Total',
+    'view_cart'   => 'Aller au panier',
 ];

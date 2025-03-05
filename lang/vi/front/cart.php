@@ -20,4 +20,5 @@ return [
     'selected'    => 'Đã chọn',
     'subtotal'    => 'Tổng phụ',
     'total'       => 'Tổng cộng',
+    'view_cart'   => 'Vào trong giỏ hàng',
 ];

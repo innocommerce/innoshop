@@ -28,6 +28,7 @@ return [
     'customer_groups'    => 'nhóm khách hàng',
     'customers'          => 'quản lý khách hàng',
     'dashboard'          => 'tổng quan',
+    'file_manager'       => 'Quản lý tập tin',
     'locale'             => 'quản lý ngôn ngữ',
     'locales'            => 'thiết lập ngôn ngữ',
     'localization'       => 'địa phương hóa',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => 'plugin',
     'top_product'        => 'sản phẩm',
     'top_setting'        => 'thiết lập',
+    'transactions'       => 'Số dư khách hàng',
     'upload'             => 'chức năng tải lên',
 ];

@@ -28,6 +28,7 @@ return [
     'customer_groups'    => 'Grupos de Clientes',
     'customers'          => 'Gerenciamento de Clientes',
     'dashboard'          => 'Resumo',
+    'file_manager'       => 'Gerenciador de arquivos',
     'locale'             => 'Gerenciamento de Idiomas',
     'locales'            => 'Configurações de Idioma',
     'localization'       => 'Localização',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => 'Plugins',
     'top_product'        => 'Produtos',
     'top_setting'        => 'Configurações',
+    'transactions'       => 'Saldo do cliente',
     'upload'             => 'Funcionalidade de Upload',
 ];

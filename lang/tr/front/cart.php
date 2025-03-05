@@ -20,4 +20,5 @@ return [
     'selected'    => 'Seçili',
     'subtotal'    => 'Ara Toplam',
     'total'       => 'Toplam',
+    'view_cart'   => 'Enter shopping cart',
 ];

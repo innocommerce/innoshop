@@ -61,5 +61,6 @@ return [
     'top_plugin'         => '插件',
     'top_product'        => '產品',
     'top_setting'        => '設置',
+    'transactions'       => '客戶餘額',
     'upload'             => '上傳功能',
 ];

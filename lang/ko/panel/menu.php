@@ -28,6 +28,7 @@ return [
     'customer_groups'    => '고객 그룹',
     'customers'          => '고객 관리',
     'dashboard'          => '대시보드',
+    'file_manager'       => '파일 관리자',
     'locale'             => '언어 관리',
     'locales'            => '언어 설정',
     'localization'       => '로컬라이제이션',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => '플러그인',
     'top_product'        => '상품',
     'top_setting'        => '설정',
+    'transactions'       => '고객 잔고',
     'upload'             => '업로드 기능',
 ];

@@ -8,6 +8,7 @@
  */
 
 return [
+    'transactions'       => '客户余额',
     'account'            => '个人信息',
     'admins'             => '后台用户',
     'analytics'          => '整站数据',

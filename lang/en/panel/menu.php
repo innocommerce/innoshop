@@ -61,5 +61,6 @@ return [
     'top_plugin'         => 'Plugin',
     'top_product'        => 'Product',
     'top_setting'        => 'Setting',
+    'transactions'       => 'Customer balance',
     'upload'             => 'Upload',
 ];
