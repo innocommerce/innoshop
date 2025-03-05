@@ -11,7 +11,6 @@ namespace InnoShop\Panel\Controllers;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Currency;
 use InnoShop\Common\Repositories\CurrencyRepo;
@@ -116,9 +115,9 @@ class CurrencyController extends BaseController
 
     /**
      * @param  Currency  $currency
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function destroy(Currency $currency): RedirectResponse
+    public function destroy(Currency $currency): JsonResponse
     {
         try {
             if ($currency->code == system_setting('currency')) {
@@ -126,11 +125,9 @@ class CurrencyController extends BaseController
             }
             CurrencyRepo::getInstance()->destroy($currency);
 
-            return redirect(panel_route('currencies.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+            return json_success(panel_trans('common.deleted_success'));
         } catch (Exception $e) {
-            return redirect(panel_route('currencies.index'))
-                ->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 

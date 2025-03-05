@@ -235,6 +235,10 @@ const tinymceInit = () => {
           });
         }
       });
+      ed.on('input', function () {
+        tinymce.triggerSave();
+        // console.log('Current content:', ed.getContent());
+      });
     }
   });
 }

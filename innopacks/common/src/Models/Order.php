@@ -19,7 +19,9 @@ use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Order\Shipment;
 use InnoShop\Common\Notifications\OrderNewNotification;
 use InnoShop\Common\Notifications\OrderUpdateNotification;
+use InnoShop\Common\Services\CartService;
 use InnoShop\Common\Services\StateMachineService;
+use Throwable;
 
 class Order extends BaseModel
 {
@@ -141,6 +143,15 @@ class Order extends BaseModel
         $statusMap = array_column(StateMachineService::getAllStatuses(), 'name', 'status');
 
         return $statusMap[$statusCode] ?? '';
+    }
+
+    /**
+     * @return void
+     * @throws Throwable
+     */
+    public function reorder(): void
+    {
+        CartService::getInstance($this->customer_id)->reorder($this);
     }
 
     /**

@@ -65,8 +65,8 @@ class Sku extends BaseModel
         $localeCode = front_locale_code();
         foreach ($this->variants as $key => $value) {
             $labels[] = [
-                'name'  => $variables[$key]['name'][$localeCode],
-                'value' => $variables[$key]['values'][$value]['name'][$localeCode],
+                'name'  => $variables[$key]['name'][$localeCode]                   ?? '',
+                'value' => $variables[$key]['values'][$value]['name'][$localeCode] ?? '',
             ];
         }
 

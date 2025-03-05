@@ -1,4 +1,4 @@
-<x-panel::form.row :title="$title" :required="$required" :column="$column" :generate="$generate">
+<x-panel::form.row :title="$title" :required="$required" :column="$column" :generate="$generate" :translate="$translate">
   @if (!$multiple)
   <div>
     <textarea rows="4" type="text" name="{{ $name }}" class="form-control" @if ($required) required @endif placeholder="{{ $title }}">{{ $value }}</textarea>

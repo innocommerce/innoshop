@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models\Customer;
 
+use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\BaseModel;
@@ -32,7 +33,7 @@ class Group extends BaseModel
 
     /**
      * @return HasOne
-     * @throws \Exception
+     * @throws Exception
      */
     public function translation(): HasOne
     {

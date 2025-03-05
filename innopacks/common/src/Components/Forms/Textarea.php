@@ -27,19 +27,23 @@ class Textarea extends Component
 
     public bool $generate;
 
-    public function __construct(string $name, string $title, $value = null, bool $required = false, bool $multiple = false, string $column = '', bool $generate = false)
+    public bool $translate;
+
+    public function __construct(string $name, string $title, $value = null, bool $required = false, bool $multiple = false,
+        string $column = '', bool $generate = false, bool $translate = false)
     {
         if (! $multiple) {
             $value = html_entity_decode($value, ENT_QUOTES);
         }
 
-        $this->name     = $name;
-        $this->title    = $title;
-        $this->value    = $value;
-        $this->required = $required;
-        $this->multiple = $multiple;
-        $this->column   = $column;
-        $this->generate = $generate;
+        $this->name      = $name;
+        $this->title     = $title;
+        $this->value     = $value;
+        $this->required  = $required;
+        $this->multiple  = $multiple;
+        $this->column    = $column;
+        $this->generate  = $generate;
+        $this->translate = $translate;
     }
 
     /**

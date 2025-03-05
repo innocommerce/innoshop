@@ -7,7 +7,7 @@
     <script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
   @endpush
 
-  <x-front-breadcrumb type="route" value="checkout.index" title="{{ __('front/checkout.checkout') }}"/>
+  <x-front-breadcrumb type="route" value="checkout.index" title="{{ __('front/checkout.checkout') }}" />
 
   @hookinsert('checkout.top')
 
@@ -30,26 +30,26 @@
                         {{ __('front/checkout.same_shipping_address') }}
                       </label>
                       <span class="cursor-pointer" v-if="!source.addressEdit" @click="addressEdit(true)"><i
-                            class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
+                          class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
                     </div>
                   </div>
-                  <div class="checkout-select-wrap address-select"
-                       v-if="source.addresses.length && !source.addressEdit">
+                  <div class="checkout-select-wrap address-select" v-if="source.addresses.length && !source.addressEdit">
                     <div :class="['select-item', current.shipping_address_id == address.id ? 'active' : '']"
-                         v-for="address, index in source.addresses" :key="address.id"
-                         @click="updateCheckout('shipping_address_id', address.id)">
+                      v-for="address, index in source.addresses" :key="address.id"
+                      @click="updateCheckout('shipping_address_id', address.id)">
                       <div class="left">
                         <i class="bi bi-circle"></i>
                         <div class="select-title">
-                          <div class="address-name mb-1">@{{ address.name }} @{{ address.phone }} @{{ address.zipcode
-                            }}
+                          <div class="address-name mb-1">@{{ address.name }} @{{ address.phone }}
+                            @{{ address.zipcode }}
                           </div>
-                          <div class="address-info">@{{ address.address_1 }} @{{ address.address_2 }} @{{ address.city }} @{{ address.state }} @{{ address.country_name }}
+                          <div class="address-info">@{{ address.address_1 }} @{{ address.address_2 }} @{{ address.city }}
+                            @{{ address.state }} @{{ address.country_name }}
                           </div>
                         </div>
                       </div>
-                      <div class="edit-address text-decoration-underline text-secondary"
-                           @click.stop="editAddress(index)"> {{ __('front/common.edit') }}
+                      <div class="edit-address text-decoration-underline text-secondary" @click.stop="editAddress(index)">
+                        {{ __('front/common.edit') }}
                       </div>
                     </div>
                   </div>
@@ -62,24 +62,23 @@
                   <div class="title-wrap">
                     <div class="title">{{ __('front/checkout.billing_address') }}</div>
                     <span class="cursor-pointer" v-if="!source.addressEdit" @click="addressEdit(true)"><i
-                          class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
+                        class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
                     <span class="cursor-pointer" v-else @click="addressEdit(false)">
                       <i class="bi bi-plus-lg"></i>{{ __('front/checkout.cancel_create') }}
                     </span>
                   </div>
-                  <div class="checkout-select-wrap address-select"
-                       v-if="source.addresses.length && !source.addressEdit">
-                    <div :class="['select-item', current.billing_address_id  == address.id ? 'active' : '']"
-                         v-for="address, index in source.addresses" :key="address.id"
-                         @click="updateCheckout('billing_address_id', address.id)">
+                  <div class="checkout-select-wrap address-select" v-if="source.addresses.length && !source.addressEdit">
+                    <div :class="['select-item', current.billing_address_id == address.id ? 'active' : '']"
+                      v-for="address, index in source.addresses" :key="address.id"
+                      @click="updateCheckout('billing_address_id', address.id)">
                       <div class="left">
                         <i class="bi bi-circle"></i>
                         <div class="select-title">
-                          <div class="address-name mb-1">@{{ address.name }} @{{ address.phone }} @{{ address.zipcode
-                            }}
+                          <div class="address-name mb-1">@{{ address.name }} @{{ address.phone }}
+                            @{{ address.zipcode }}
                           </div>
-                          <div class="address-info">@{{ address.address_1 }} @{{ address.address_2 }} @{{ address.state
-                            }} @{{ address.city }} @{{ address.country_id }}
+                          <div class="address-info">@{{ address.address_1 }} @{{ address.address_2 }}
+                            @{{ address.state }} @{{ address.city }} @{{ address.country_id }}
                           </div>
                         </div>
                       </div>
@@ -97,11 +96,11 @@
                 <div class="title-wrap">
                   <div class="title">{{ __('front/checkout.create_address') }}</div>
                   @if (!current_customer())
-                  <span class="cursor-pointer btn btn-sm btn-outline-primary" @click="login"><i
+                    <span class="cursor-pointer btn btn-sm btn-outline-primary" @click="login"><i
                         class="bi bi-box-arrow-in-right"></i> {{ __('front/common.login') }}</span>
                   @endif
                   <span class="cursor-pointer" v-if="source.addresses.length" @click="addressEdit(false)"><i
-                        class="bi bi-plus-lg"></i> {{ __('front/checkout.cancel_create') }}</span>
+                      class="bi bi-plus-lg"></i> {{ __('front/checkout.cancel_create') }}</span>
                 </div>
                 @include('shared.address-form')
               </div>
@@ -114,8 +113,9 @@
             </div>
             <div class="checkout-select-wrap">
               <div v-for="item in source.shippingMethods" :key="item.code">
-                <div v-for="quote in item.quotes" :key="quote.code" @click="updateCheckout('shipping_method_code', quote.code)"
-                     :class="['select-item', current.shipping_method_code  == quote.code ? 'active' : '']">
+                <div v-for="quote in item.quotes" :key="quote.code"
+                  @click="updateCheckout('shipping_method_code', quote.code)"
+                  :class="['select-item', current.shipping_method_code == quote.code ? 'active' : '']">
                   <div class="left">
                     <i class="bi bi-circle"></i>
                     <div class="select-title">
@@ -127,7 +127,8 @@
                 </div>
               </div>
               <div v-if="!source.shippingMethods.length" class="alert alert-warning">
-                <i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_shipping_methods') }}</div>
+                <i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_shipping_methods') }}
+              </div>
             </div>
           </div>
 
@@ -136,16 +137,17 @@
               <div class="title">{{ __('front/checkout.billing_methods') }}</div>
             </div>
             <div class="checkout-select-wrap">
-              <div :class="['select-item', current.billing_method_code  == item.code ? 'active' : '']"
-                   v-for="item in source.billingMethods" :key="item.code"
-                   @click="updateCheckout('billing_method_code', item.code)">
+              <div :class="['select-item', current.billing_method_code == item.code ? 'active' : '']"
+                v-for="item in source.billingMethods" :key="item.code"
+                @click="updateCheckout('billing_method_code', item.code)">
                 <div class="left">
                   <i class="bi bi-circle"></i>
                   <div class="select-title">@{{ item.name }}</div>
                 </div>
                 <div class="icon"><img :src="item.icon" class="img-fluid"></div>
               </div>
-              <div v-if="!source.billingMethods.length" class="alert alert-warning"><i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_billing_methods') }}</div>
+              <div v-if="!source.billingMethods.length" class="alert alert-warning"><i
+                  class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_billing_methods') }}</div>
             </div>
           </div>
 
@@ -154,7 +156,8 @@
               <div class="title">{{ __('front/checkout.order_comment') }}</div>
             </div>
             <div class="checkout-select">
-              <textarea class="form-control" rows="4" v-model="current.comment" placeholder="{{ __('front/checkout.order_comment') }}"></textarea>
+              <textarea class="form-control" rows="4" v-model="current.comment"
+                placeholder="{{ __('front/checkout.order_comment') }}"></textarea>
             </div>
           </div>
         </div>
@@ -167,18 +170,20 @@
               <div class="title">{{ __('front/checkout.my_order') }}</div>
             </div>
             <div class="products-table">
-              <div class="products-table-title"><span>{{ __('front/cart.product') }}</span><span class="text-end">{{ __('front/cart.price') }}</span></div>
+              <div class="products-table-title"><span>{{ __('front/cart.product') }}</span><span
+                  class="text-end">{{ __('front/cart.price') }}</span></div>
               <div class="products-table-wrap">
                 @foreach ($cart_list as $product)
                   <div class="products-table-list">
                     <div>
                       <div class="product-item">
-                        <div class="product-image"><img
-                              src="{{ $product['image'] }}" class="img-fluid"></div>
+                        <div class="product-image"><img src="{{ $product['image'] }}" class="img-fluid"></div>
                         <div class="product-info">
                           <div class="name">{{ $product['product_name'] }}</div>
                           <div class="sku mt-2 text-secondary">{{ $product['sku_code'] }}
-                            @if ($product['variant_label']) - {{ $product['variant_label'] }} @endif
+                            @if ($product['variant_label'])
+                              - {{ $product['variant_label'] }}
+                            @endif
                             x {{ $product['quantity'] }}
                           </div>
                         </div>
@@ -198,8 +203,8 @@
             </ul>
 
             @hookinsert('checkout.confirm.before')
-            <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :disabled="isCheckout"
-                    type="button" @click="submitCheckout">{{ __('front/checkout.place_order') }}
+            <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :disabled="isCheckout" type="button"
+              @click="submitCheckout">{{ __('front/checkout.place_order') }}
             </button>
           </div>
         </div>
@@ -213,7 +218,13 @@
 
 @push('footer')
   <script>
-    const {createApp, ref, reactive, onMounted, computed} = Vue
+    const {
+      createApp,
+      ref,
+      reactive,
+      onMounted,
+      computed
+    } = Vue
     const api = {
       address: @json(front_route('addresses.store')),
       checkout: @json(front_route('checkout.index')),
@@ -241,25 +252,26 @@
         })
 
         const isCheckout = computed(() => {
-          return !current.shipping_address_id || !current.billing_address_id || !current.shipping_method_code || !current.billing_method_code
+          return !current.shipping_address_id || !current.billing_address_id || !current.shipping_method_code || !
+            current.billing_method_code
         })
 
         editAddress = (index) => {
           source.addressEdit = true
           const address = source.addresses[index]
 
-          getZones(address.country_code, function () {
-            $('.address-form').find('input, select').each(function () {
+          getZones(address.country_code, function() {
+            $('.address-form').find('input, select').each(function() {
               $(this).val(address[$(this).attr('name')])
             })
           })
         }
 
-        const updataAddress = (params) => {
+        const updateAddress = (params) => {
           const id = new URLSearchParams(params).get('id');
           const url = id ? api.address + '/' + id : api.address
           const method = id ? 'put' : 'post'
-          axios[method](url, params).then(function (res) {
+          axios[method](url, params).then(function(res) {
             if (res.success) {
               inno.msg(res.message)
               if (id) {
@@ -292,7 +304,7 @@
             current.billing_address_id = value
           }
 
-          axios.put(api.checkout, current).then(function (res) {
+          axios.put(api.checkout, current).then(function(res) {
             if (res.success) {
               source.feeList = res.data.fee_list
               source.totalAmount = res.data.amount_format
@@ -302,15 +314,19 @@
         }
 
         const submitCheckout = () => {
-          layer.load(2, {shade: [0.3, '#fff']})
-          axios.post(api.checkoutConfirm, current).then(function (res) {
+          layer.load(2, {
+            shade: [0.3, '#fff']
+          })
+          axios.post(api.checkoutConfirm, current).then(function(res) {
             if (res.success) {
-              layer.msg(res.message, {time: 1000}, function () {
+              layer.msg(res.message, {
+                time: 1000
+              }, function() {
                 // location.href = '{{ front_route('checkout.success') }}?order_number=' + res.data.number;
                 location.href = inno.getBase() + '/orders/' + res.data.number + '/pay'
               })
             }
-          }).finally(function () {
+          }).finally(function() {
             layer.closeAll('loading')
           });
         }
@@ -327,14 +343,14 @@
           updateCheckout,
           addressEdit,
           isCheckout,
-          updataAddress,
+          updateAddress,
           submitCheckout,
         }
       }
     }).mount('#app-checkout')
 
-    function updataAddress(params) {
-      addressApp.updataAddress(params)
+    function updateAddress(params) {
+      addressApp.updateAddress(params)
     }
   </script>
 @endpush

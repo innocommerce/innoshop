@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use InnoShop\Common\Middleware\ContentFilterHook;
 use InnoShop\Common\Middleware\EventActionHook;
+use InnoShop\RestAPI\Middleware\SetAPICurrency;
 use InnoShop\RestAPI\Middleware\SetAPILocale;
 
 class RestAPIServiceProvider extends ServiceProvider
 {
     private array $middlewares = [
         SetAPILocale::class,
+        SetAPICurrency::class,
         EventActionHook::class,
         ContentFilterHook::class,
     ];

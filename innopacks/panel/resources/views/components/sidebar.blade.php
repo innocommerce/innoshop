@@ -22,7 +22,7 @@
             <ul class="nav flex-column">
               @foreach($menuLink['children'] as $child)
                 <li class="nav-item">
-                  <a href="{{ $child['url'] }}"
+                  <a href="{{ $child['url'] }}" @if($child['blank'] ?? false) target="_blank" @endif
                      class="nav-link {{ $child['active'] ? 'active' : '' }}">{{ $child['title'] }}</a>
                 </li>
               @endforeach

@@ -114,6 +114,10 @@ Route::prefix('account')
         Route::post('/favorites', [Account\FavoriteController::class, 'store'])->name('favorites.store');
         Route::post('/favorites/cancel', [Account\FavoriteController::class, 'cancel'])->name('favorites.cancel');
 
+        // Transactions
+        Route::get('/transactions', [Account\TransactionController::class, 'index'])->name('transactions.index');
+        Route::get('/transactions/{transaction}', [Account\TransactionController::class, 'show'])->name('transactions.show');
+
         // Reviews
         Route::get('/reviews', [Account\ReviewController::class, 'index'])->name('reviews.index');
         Route::get('/reviews/{review}', [Account\ReviewController::class, 'show'])->name('reviews.show');

@@ -138,7 +138,7 @@
       });
     });
 
-    function updataAddress(params) {
+    function updateAddress(params) {
       layer.msg('需要接口');
       return;
       const id = new URLSearchParams(params).get('id');

@@ -145,15 +145,7 @@ class OrderController extends BaseController
                 return json_fail('Unauthorized', null, 403);
             }
 
-            CartService::getInstance($customerID)->unselectAll();
-            foreach ($order->items as $item) {
-                $productSku = $item->productSku;
-                $data       = [
-                    'sku_id'   => $productSku->id,
-                    'quantity' => $item->quantity,
-                ];
-                CartService::getInstance($customerID)->addCart($data);
-            }
+            CartService::getInstance($customerID)->reorder($order);
 
             return update_json_success();
         } catch (Exception $e) {

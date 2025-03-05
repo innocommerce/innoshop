@@ -12,7 +12,7 @@
           @foreach($themes as $theme)
           <div class="col-6 col-lg-4 mb-3">
             <div class="card rounded-3 themes-item overflow-hidden shadow-sm h-100">
-              <div class="image border-bottom"><img src="{{ theme_image($theme['code'], 'images/preview.jpg', 700, 500) }}" class="img-fluid"></div>
+              <div class="image border-bottom"><img src="{{ theme_image($theme['code'], $theme['preview'], 700, 500) }}" class="img-fluid"></div>
               <div class="d-flex justify-content-between align-items-center p-3">
                 <span class="fw-bold">{{ $theme['name'] }}</span>
                 <span>@include('panel::shared.list_switch', ['value' => $theme['value'] ?? 0, 'url' => panel_route('themes.active', $theme['code']), 'reload' => true])</span>

@@ -11,9 +11,11 @@ namespace InnoShop\Common\Services;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Models\Customer\Transaction;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Order\Shipment;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Repositories\Customer\TransactionRepo;
 use InnoShop\Common\Repositories\Order\PaymentRepo;
 use Throwable;
 
@@ -75,14 +77,14 @@ class StateMachineService
      */
     public const MACHINES = [
         self::CREATED => [
-            self::UNPAID => ['updateStatus', 'addHistory', 'notifyNewOrder'],
+            self::UNPAID => ['updateStatus', 'addHistory', 'redeemBalance', 'notifyNewOrder'],
         ],
         self::UNPAID => [
             self::PAID      => ['updateStatus', 'addHistory', 'updateSales', 'subStock', 'notifyUpdateOrder'],
-            self::CANCELLED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
+            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder'],
         ],
         self::PAID => [
-            self::CANCELLED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
+            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder'],
             self::SHIPPED   => ['updateStatus', 'addHistory', 'addShipment', 'notifyUpdateOrder'],
             self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
         ],
@@ -393,6 +395,59 @@ class StateMachineService
             }
             $productSku->decrement('quantity', $orderItem->quantity);
         }
+    }
+
+    /**
+     * @param  $oldCode
+     * @param  $newCode
+     * @return void
+     * @throws Throwable
+     */
+    private function redeemBalance($oldCode, $newCode): void
+    {
+        $this->handleBalance('redeem');
+    }
+
+    /**
+     * @param  $oldCode
+     * @param  $newCode
+     * @return void
+     * @throws Throwable
+     */
+    private function revokeBalance($oldCode, $newCode): void
+    {
+        $this->handleBalance('revoke');
+    }
+
+    /**
+     * @param  $balanceType
+     * @return void
+     * @throws Throwable
+     */
+    private function handleBalance($balanceType): void
+    {
+        if (empty($this->order->customer_id)) {
+            return;
+        }
+
+        $balanceFee = $this->order->fees()->where('code', 'balance')->first();
+        if (empty($balanceFee)) {
+            return;
+        }
+
+        if ($balanceType == 'redeem') {
+            $type = Transaction::TYPE_CONSUMPTION;
+        } else {
+            $type = Transaction::TYPE_REFUND;
+        }
+
+        $data = [
+            'customer_id' => $this->order->customer_id,
+            'amount'      => $balanceFee->value,
+            'type'        => $type,
+            'comment'     => $data['comment'] ?? '',
+        ];
+        TransactionRepo::getInstance()->create($data);
     }
 
     /**

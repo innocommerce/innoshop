@@ -74,6 +74,7 @@ class CheckoutController extends Controller
         try {
             $checkout = CheckoutService::getInstance();
             $data     = $request->all();
+            unset($data['reference']);
             if ($data) {
                 $checkout->updateValues($data);
             }

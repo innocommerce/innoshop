@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Exceptions\Unauthorized;
 use InnoShop\Common\Models\Checkout;
+use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Repositories\AddressRepo;
 use InnoShop\Common\Repositories\CheckoutRepo;
 use InnoShop\Common\Repositories\Order\FeeRepo;
@@ -35,6 +36,8 @@ class CheckoutService
     protected int $customerID;
 
     protected string $guestID;
+
+    protected mixed $customer;
 
     protected array $cartList = [];
 
@@ -62,6 +65,8 @@ class CheckoutService
         if (empty($this->customerID) && system_setting('login_checkout')) {
             throw new Unauthorized('Please login first');
         }
+
+        $this->customer = Customer::query()->find($this->customerID);
 
         if ($guestID) {
             $this->guestID = $guestID;
@@ -385,6 +390,7 @@ class CheckoutService
             'amount_format'    => currency_format($amount),
             'total_number'     => $this->getTotalNumber(),
             'is_virtual'       => $this->checkIsVirtual(),
+            'balance_amount'   => $this->customer->balance ?? 0,
         ];
 
         return fire_hook_filter('service.checkout.checkout.result', $result);

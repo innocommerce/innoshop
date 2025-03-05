@@ -11,7 +11,7 @@
     </div>
     <div class="product-item-info">
       <div class="product-name">
-        <a href="{{ $product->url }}" data-toggle="tooltip" title="{{ $product->translation->name }}"
+        <a href="{{ $product->url }}" data-bs-toggle="tooltip" title="{{ $product->translation->name }}"
            data-placement="top">
           {{ $product->translation->name }}
         </a>
@@ -46,11 +46,3 @@
     </div>
   </div>
 @endif
-
-@push('footer')
-  <script>
-    $(document).ready(function () {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-  </script>
-@endpush

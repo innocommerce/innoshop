@@ -19,7 +19,7 @@
               @if ($slide['image'][front_locale_code()] ?? false)
                 <div class="swiper-slide">
                   <a href="{{ $slide['link'] ?: 'javascript:void(0)' }}"><img
-                        src="{{ image_origin($slide['image'][front_locale_code()]) }}" class="img-fluid"></a>
+                      src="{{ image_origin($slide['image'][front_locale_code()]) }}" class="img-fluid"></a>
                 </div>
               @endif
             @endforeach
@@ -63,15 +63,15 @@
           <div class="module-title-wrap">
             <div class="module-title">{{ __('front/home.feature_product') }}</div>
             <div class="module-sub-title">{{ __('front/home.feature_product_text') }}</div>
-            
+
           </div>
 
           <ul class="nav nav-tabs">
             @foreach ($tab_products as $item)
               <li class="nav-item" role="presentation">
                 <button class="nav-link {{ $loop->first ? 'active' : '' }}" data-bs-toggle="tab"
-                        data-bs-target="#module-product-tab-x-{{ $loop->iteration }}"
-                        type="button">{{ $item['tab_title'] }}</button>
+                  data-bs-target="#module-product-tab-x-{{ $loop->iteration }}"
+                  type="button">{{ $item['tab_title'] }}</button>
               </li>
             @endforeach
           </ul>
@@ -79,7 +79,7 @@
           <div class="tab-content">
             @foreach ($tab_products as $item)
               <div class="tab-pane fade show {{ $loop->first ? 'active' : '' }}"
-                   id="module-product-tab-x-{{ $loop->iteration }}">
+                id="module-product-tab-x-{{ $loop->iteration }}">
                 <div class="row gx-3 gx-lg-4">
                   @foreach ($item['products'] as $product)
                     <div class="col-6 col-md-4 col-lg-3">
@@ -115,7 +115,7 @@
           <div class="row gx-3 gx-lg-4">
             @foreach ($news as $new)
               <div class="col-6 col-md-4 col-lg-3">
-                @include('shared.blog', ['item'=>$new])
+                @include('shared.blog', ['item' => $new])
               </div>
             @endforeach
           </div>

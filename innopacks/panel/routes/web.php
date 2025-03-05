@@ -24,6 +24,8 @@ Route::middleware(['admin_auth:admin'])
         Route::post('/upload/images', [Controllers\UploadController::class, 'images'])->name('upload.images');
         Route::post('/upload/files', [Controllers\UploadController::class, 'files'])->name('upload.files');
 
+        Route::post('/translations/translate', [Controllers\TranslationController::class, 'translate'])->name('translations.translate');
+
         Route::resource('/orders', Controllers\OrderController::class);
         Route::get('/orders/{order}/printing', [Controllers\OrderController::class, 'printing'])->name('orders.printing');
         Route::put('/orders/{order}/status', [Controllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
@@ -66,6 +68,7 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/customers/{customer}/login', [Controllers\CustomerController::class, 'loginFrontend'])->name('customers.login');
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
+        Route::resource('/transactions', Controllers\TransactionController::class);
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
         Route::get('/social', [Controllers\SocialController::class, 'index'])->name('socials.index');
         Route::post('/social', [Controllers\SocialController::class, 'store'])->name('socials.store');

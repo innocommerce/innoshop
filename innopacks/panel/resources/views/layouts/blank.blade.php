@@ -11,7 +11,7 @@
   <meta name="asset" content="{{ asset('/') }}">
   <meta name="description" content="@yield('description', 'InnoShop')">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <meta name="api-token" content="{{ session('api_token') }}">
+  <meta name="api-token" content="{{ session('panel_api_token') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
 
   <!-- 基础样式和脚本 -->

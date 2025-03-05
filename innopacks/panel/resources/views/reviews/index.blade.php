@@ -2,8 +2,12 @@
 @section('body-class', '')
 
 @section('title', __('panel/menu.reviews'))
-@section('page-title-right')
 
+@section('page-title-right')
+  <a href="{{ panel_route('products.create') }}" class="btn btn-primary">
+    <i class="bi bi-plus-square"></i> {{__('panel/common.create') }}
+  </a>
+  @hookinsert('panel.reviews.list.buttons')
 @endsection
 
 @section('content')

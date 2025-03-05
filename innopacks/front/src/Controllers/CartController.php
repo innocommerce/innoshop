@@ -32,9 +32,9 @@ class CartController extends Controller
 
     /**
      * Get mini cart result.
-     * @return mixed
+     * @return JsonResponse
      */
-    public function mini(): mixed
+    public function mini(): JsonResponse
     {
         try {
             $currentCart = CartService::getInstance()->handleResponse();
