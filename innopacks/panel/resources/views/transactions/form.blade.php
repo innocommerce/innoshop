@@ -22,7 +22,7 @@
               <div>{{ __('panel/transaction.customer') }}</div>
             </div>
             <input type="text" name="customer_name" id="customer-autocomplete"
-                   value="{{ old('customer_name', $transaction->customer->name) }}" placeholder="{{ __('panel/transaction.customer_search') }}"
+                   value="{{ old('customer_name', $transaction->customer->name ?? '') }}" placeholder="{{ __('panel/transaction.customer_search') }}"
                    class="form-control">
             <input type="hidden" name="customer_id" value="{{ old('customer_id', $transaction->customer_id) }}">
             <input type="text" name="customer_id" class="d-none" value="{{ $transaction->customer_id }}">

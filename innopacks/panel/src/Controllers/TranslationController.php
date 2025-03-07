@@ -24,12 +24,16 @@ class TranslationController extends Controller
      */
     public function translate(TranslateRequest $request): JsonResponse
     {
-        $source = $request->get('source');
-        $target = $request->get('target');
-        $text   = $request->get('text');
+        try {
+            $source = $request->get('source');
+            $target = $request->get('target');
+            $text   = $request->get('text');
 
-        $response = TranslatorService::getInstance()->translate($source, $target, $text);
+            $response = TranslatorService::getInstance()->translate($source, $target, $text);
 
-        return create_json_success($response);
+            return create_json_success($response);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
     }
 }
