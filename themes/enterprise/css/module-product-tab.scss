@@ -1,0 +1,36 @@
+.module-product-tab {
+  .nav-tabs {
+    display: flex;
+    justify-content: center;
+    border: none;
+    margin-bottom: 20px;
+    margin-top: -6px;
+
+    @media (min-width: 992px) {
+      margin-bottom: 40px;
+    }
+
+    .nav-link {
+      border: none !important;
+      color: #7e7e7e;
+      border-radius: 50px;
+      margin: 0;
+      font-size: 12px;
+      font-weight: bold;
+
+      @media (min-width: 992px) {
+        margin: 0 10px;
+        font-size: 14px;
+      }
+
+      &:hover {
+        background-color: $lightorange;
+      }
+
+      &.active {
+        background-color: $lightorange;
+        color: $orange;
+      }
+    }
+  }
+}

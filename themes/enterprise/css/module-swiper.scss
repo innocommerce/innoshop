@@ -1,0 +1,17 @@
+.module-swiper {
+  .swiper-slide {
+    img {
+      width: 100%;
+    }
+  }
+
+  .swiper-pagination {
+    .swiper-pagination-bullet {
+      width: 30px;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: $primary !important;
+    }
+  }
+}

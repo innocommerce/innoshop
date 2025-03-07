@@ -1,0 +1,17 @@
+{
+    "code": "erasmart",
+    "name": {
+        "zh_cn": "Erasmart 默认模板",
+        "en": "Erasmart Theme"
+    },
+    "description": {
+        "zh_cn": "Erasmart 默认模板",
+        "en": "Erasmart Theme"
+    },
+    "version": "v1.0.0",
+    "icon": "/images/erasmart.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}
