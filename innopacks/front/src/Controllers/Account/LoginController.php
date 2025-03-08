@@ -11,7 +11,6 @@ namespace InnoShop\Front\Controllers\Account;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use InnoShop\Common\Services\CartService;
 use InnoShop\Front\Requests\LoginRequest;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
@@ -36,9 +35,9 @@ class LoginController extends Controller
      * Login request
      *
      * @param  LoginRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(LoginRequest $request): JsonResponse
+    public function store(LoginRequest $request): mixed
     {
         try {
             $oldGuestId  = current_guest_id();

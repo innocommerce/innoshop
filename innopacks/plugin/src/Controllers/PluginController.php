@@ -11,7 +11,6 @@ namespace InnoShop\Plugin\Controllers;
 
 use Exception;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\SettingRepo;
@@ -47,9 +46,9 @@ class PluginController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         try {
             $code   = $request->get('code');
@@ -64,9 +63,9 @@ class PluginController
 
     /**
      * @param  $code
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy($code): JsonResponse
+    public function destroy($code): mixed
     {
         try {
             $plugin = app('plugin')->getPluginOrFail($code);
@@ -132,9 +131,9 @@ class PluginController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function updateStatus(Request $request): JsonResponse
+    public function updateStatus(Request $request): mixed
     {
         try {
             $code    = $request->get('code');

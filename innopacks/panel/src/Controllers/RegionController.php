@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Region;
@@ -59,10 +58,10 @@ class RegionController extends BaseController
 
     /**
      * @param  RegionRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(RegionRequest $request): JsonResponse
+    public function store(RegionRequest $request): mixed
     {
         try {
             $data   = $request->all();
@@ -102,9 +101,9 @@ class RegionController extends BaseController
     /**
      * @param  RegionRequest  $request
      * @param  Region  $region
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(RegionRequest $request, Region $region): JsonResponse
+    public function update(RegionRequest $request, Region $region): mixed
     {
         try {
             $data = $request->all();

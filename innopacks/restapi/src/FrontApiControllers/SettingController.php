@@ -10,15 +10,14 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 
 class SettingController extends BaseController
 {
     /**
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function index(): JsonResponse
+    public function index(): mixed
     {
         $settings = setting('system');
 

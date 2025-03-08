@@ -11,7 +11,6 @@ namespace InnoShop\Panel\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use InnoShop\Panel\Requests\TranslateRequest;
 use InnoShop\Panel\Services\TranslatorService;
 
@@ -19,10 +18,10 @@ class TranslationController extends Controller
 {
     /**
      * @param  TranslateRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function translate(TranslateRequest $request): JsonResponse
+    public function translate(TranslateRequest $request): mixed
     {
         try {
             $source = $request->get('source');

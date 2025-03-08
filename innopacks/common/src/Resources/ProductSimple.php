@@ -40,6 +40,8 @@ class ProductSimple extends JsonResource
             'image_big'           => image_resize($sku->image->path ?? ($this->image->path ?? ''), 600, 600),
             'price_format'        => $sku->price_format,
             'origin_price_format' => $sku->origin_price_format,
+            'sales'               => $this->sales,
+            'viewed'              => $this->viewed,
             'active'              => (bool) $this->active,
         ];
     }

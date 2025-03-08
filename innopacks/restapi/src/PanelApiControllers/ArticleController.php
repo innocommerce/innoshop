@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Article;
@@ -47,10 +46,10 @@ class ArticleController extends BaseController
 
     /**
      * @param  ArticleRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(ArticleRequest $request): JsonResponse
+    public function store(ArticleRequest $request): mixed
     {
         try {
             $data    = $request->all();
@@ -65,9 +64,9 @@ class ArticleController extends BaseController
     /**
      * @param  ArticleRequest  $request
      * @param  Article  $article
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(ArticleRequest $request, Article $article): JsonResponse
+    public function update(ArticleRequest $request, Article $article): mixed
     {
         try {
             $data = $request->all();
@@ -81,9 +80,9 @@ class ArticleController extends BaseController
 
     /**
      * @param  Article  $article
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Article $article): JsonResponse
+    public function destroy(Article $article): mixed
     {
         try {
             ArticleRepo::getInstance()->destroy($article);

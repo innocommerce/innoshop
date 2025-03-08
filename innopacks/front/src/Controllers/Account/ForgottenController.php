@@ -11,7 +11,6 @@ namespace InnoShop\Front\Controllers\Account;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use InnoShop\Front\Requests\ForgottenRequest;
 use InnoShop\Front\Requests\VerifyCodeRequest;
 use InnoShop\Front\Services\AccountService;
@@ -30,9 +29,9 @@ class ForgottenController extends Controller
      * Receive the email address, generate a verification code, and send it to the email address.
      *
      * @param  VerifyCodeRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function sendVerifyCode(VerifyCodeRequest $request): JsonResponse
+    public function sendVerifyCode(VerifyCodeRequest $request): mixed
     {
         try {
             $email = $request->get('email');
@@ -49,10 +48,10 @@ class ForgottenController extends Controller
      * and if the password matches the confirmed password, then change the password.
      *
      * @param  ForgottenRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function changePassword(ForgottenRequest $request): JsonResponse
+    public function changePassword(ForgottenRequest $request): mixed
     {
         try {
             $code     = $request->get('code');

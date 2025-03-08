@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\PanelApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -18,9 +17,9 @@ class AuthController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function login(Request $request): JsonResponse
+    public function login(Request $request): mixed
     {
         try {
             if (! Auth::guard('admin')->attempt($request->only(['email', 'password']))) {
@@ -36,9 +35,9 @@ class AuthController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function admin(Request $request): JsonResponse
+    public function admin(Request $request): mixed
     {
         $user = $request->user();
 

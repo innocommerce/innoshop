@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Page;
@@ -47,10 +46,10 @@ class PageController extends BaseController
 
     /**
      * @param  PageRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(PageRequest $request): JsonResponse
+    public function store(PageRequest $request): mixed
     {
         try {
             $data = $request->all();
@@ -65,9 +64,9 @@ class PageController extends BaseController
     /**
      * @param  PageRequest  $request
      * @param  Page  $page
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(PageRequest $request, Page $page): JsonResponse
+    public function update(PageRequest $request, Page $page): mixed
     {
         try {
             $data = $request->all();
@@ -81,9 +80,9 @@ class PageController extends BaseController
 
     /**
      * @param  Page  $page
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Page $page): JsonResponse
+    public function destroy(Page $page): mixed
     {
         try {
             PageRepo::getInstance()->destroy($page);

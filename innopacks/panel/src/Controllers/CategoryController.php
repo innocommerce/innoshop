@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Category;
@@ -131,9 +130,9 @@ class CategoryController extends BaseController
 
     /**
      * @param  Category  $category
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Category $category): JsonResponse
+    public function destroy(Category $category): mixed
     {
         try {
             if ($category->children()->count()) {

@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Models\Attribute\Group;
@@ -45,10 +44,10 @@ class AttributeGroupController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         try {
             $attributeGroup = GroupRepo::getInstance()->create($request->all());
@@ -62,10 +61,10 @@ class AttributeGroupController extends BaseController
     /**
      * @param  Request  $request
      * @param  Group  $attributeGroup
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function update(Request $request, Attribute\Group $attributeGroup): JsonResponse
+    public function update(Request $request, Attribute\Group $attributeGroup): mixed
     {
         try {
             $attributeGroup = GroupRepo::getInstance()->update($attributeGroup, $request->all());

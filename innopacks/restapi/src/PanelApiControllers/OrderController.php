@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\PanelApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Resources\OrderSimple;
@@ -19,9 +18,9 @@ class OrderController extends BaseController
     /**
      * @param  Order  $order
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function updateNote(Order $order, Request $request): JsonResponse
+    public function updateNote(Order $order, Request $request): mixed
     {
         try {
             $adminNote = $request->get('admin_note');

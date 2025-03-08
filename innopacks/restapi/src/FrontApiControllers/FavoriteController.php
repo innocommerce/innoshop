@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\Customer\FavoriteRepo;
 use InnoShop\Common\Resources\FavoriteItem;
@@ -33,9 +32,9 @@ class FavoriteController extends BaseController
      * Add to favorite list.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         try {
             $data = [
@@ -54,9 +53,9 @@ class FavoriteController extends BaseController
      * Destroy favorite item.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function cancel(Request $request): JsonResponse
+    public function cancel(Request $request): mixed
     {
         try {
             $customerID = token_customer_id();

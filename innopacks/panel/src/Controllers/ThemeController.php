@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
@@ -77,10 +76,10 @@ class ThemeController extends BaseController
     /**
      * @param  Request  $request
      * @param  string  $themeCode
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function enable(Request $request, string $themeCode): JsonResponse
+    public function enable(Request $request, string $themeCode): mixed
     {
         try {
             $status = $request->get('status');

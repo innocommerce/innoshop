@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Tag;
@@ -54,10 +53,10 @@ class TagController extends BaseController
 
     /**
      * @param  TagRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(TagRequest $request): JsonResponse
+    public function store(TagRequest $request): mixed
     {
         try {
             $data = $request->all();
@@ -72,9 +71,9 @@ class TagController extends BaseController
     /**
      * @param  TagRequest  $request
      * @param  Tag  $tag
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(TagRequest $request, Tag $tag): JsonResponse
+    public function update(TagRequest $request, Tag $tag): mixed
     {
         try {
             $data = $request->all();
@@ -88,9 +87,9 @@ class TagController extends BaseController
 
     /**
      * @param  Tag  $tag
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Tag $tag): JsonResponse
+    public function destroy(Tag $tag): mixed
     {
         try {
             TagRepo::getInstance()->destroy($tag);

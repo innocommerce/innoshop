@@ -10,7 +10,6 @@
 namespace InnoShop\Plugin\Controllers;
 
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Plugin\Services\MarketplaceService;
@@ -32,10 +31,10 @@ class MarketplaceController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function updateDomainToken(Request $request): JsonResponse
+    public function updateDomainToken(Request $request): mixed
     {
         try {
             $domainToken = $request->get('domain_token');
@@ -50,9 +49,9 @@ class MarketplaceController
     /**
      * @param  Request  $request
      * @param  int  $slug
-     * @return JsonResponse
+     * @return mixed
      */
-    public function download(Request $request, int $slug): JsonResponse
+    public function download(Request $request, int $slug): mixed
     {
         try {
             $type = $request->get('type', 'plugin');

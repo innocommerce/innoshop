@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\PanelApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\Attribute\ValueRepo;
 use InnoShop\Common\Resources\AttributeValueSimple;
@@ -18,9 +17,9 @@ class AttributeValueController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): mixed
     {
         $filters = $request->all();
         $values  = ValueRepo::getInstance()->all($filters);

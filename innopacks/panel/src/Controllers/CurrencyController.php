@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Currency;
 use InnoShop\Common\Repositories\CurrencyRepo;
@@ -57,10 +56,10 @@ class CurrencyController extends BaseController
 
     /**
      * @param  CurrencyRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(CurrencyRequest $request): JsonResponse
+    public function store(CurrencyRequest $request): mixed
     {
         try {
             $data = $request->all();
@@ -99,9 +98,9 @@ class CurrencyController extends BaseController
     /**
      * @param  CurrencyRequest  $request
      * @param  Currency  $currency
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(CurrencyRequest $request, Currency $currency): JsonResponse
+    public function update(CurrencyRequest $request, Currency $currency): mixed
     {
         try {
             $data = $request->all();
@@ -115,9 +114,9 @@ class CurrencyController extends BaseController
 
     /**
      * @param  Currency  $currency
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Currency $currency): JsonResponse
+    public function destroy(Currency $currency): mixed
     {
         try {
             if ($currency->code == system_setting('currency')) {
@@ -134,10 +133,10 @@ class CurrencyController extends BaseController
     /**
      * @param  Request  $request
      * @param  int  $id
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function active(Request $request, int $id): JsonResponse
+    public function active(Request $request, int $id): mixed
     {
         try {
             $item = Currency::query()->findOrFail($id);

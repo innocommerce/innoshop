@@ -9,7 +9,6 @@
 
 namespace InnoShop\Panel\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Attribute\Value;
 use InnoShop\Common\Repositories\Attribute\ValueRepo;
@@ -18,9 +17,9 @@ class AttributeValueController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         try {
             $data   = $request->all();
@@ -39,9 +38,9 @@ class AttributeValueController extends BaseController
     /**
      * @param  Request  $request
      * @param  Value  $attributeValue
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(Request $request, Value $attributeValue): JsonResponse
+    public function update(Request $request, Value $attributeValue): mixed
     {
         try {
             $data = $request->all();
@@ -55,9 +54,9 @@ class AttributeValueController extends BaseController
 
     /**
      * @param  Value  $attributeValue
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Value $attributeValue): JsonResponse
+    public function destroy(Value $attributeValue): mixed
     {
         try {
             $attributeValue->translations()->delete();

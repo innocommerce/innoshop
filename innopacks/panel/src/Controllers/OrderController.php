@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
@@ -105,9 +104,9 @@ class OrderController extends BaseController
     /**
      * @param  Request  $request
      * @param  Order  $order
-     * @return JsonResponse
+     * @return mixed
      */
-    public function changeStatus(Request $request, Order $order): JsonResponse
+    public function changeStatus(Request $request, Order $order): mixed
     {
         $status  = $request->get('status');
         $comment = $request->get('comment');

@@ -9,8 +9,6 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use Illuminate\Http\JsonResponse;
-
 class HomeController extends BaseController
 {
     /**
@@ -24,9 +22,9 @@ class HomeController extends BaseController
     /**
      * Home page data.
      *
-     * @return JsonResponse
+     * @return mixed
      */
-    public function index(): JsonResponse
+    public function index(): mixed
     {
         $content = file_get_contents(inno_path('restapi/src/Repositories/app_home_data.json'));
         $data    = json_decode($content, true);

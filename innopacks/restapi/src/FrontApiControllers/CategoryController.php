@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\Category\TreeRepo;
@@ -34,10 +33,10 @@ class CategoryController extends BaseController
     }
 
     /**
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function tree(): JsonResponse
+    public function tree(): mixed
     {
         $categoryTree = TreeRepo::getInstance()->getCategoryTree();
 

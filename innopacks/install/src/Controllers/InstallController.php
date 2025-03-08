@@ -11,7 +11,6 @@ namespace InnoShop\Install\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use InnoShop\Install\Libraries\Checker;
@@ -82,10 +81,10 @@ class InstallController extends Controller
 
     /**
      * @param  CompleteRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function complete(CompleteRequest $request): JsonResponse
+    public function complete(CompleteRequest $request): mixed
     {
         try {
             $data      = $request->all();

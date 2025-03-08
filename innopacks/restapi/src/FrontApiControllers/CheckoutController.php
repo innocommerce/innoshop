@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Exceptions\Unauthorized;
 use InnoShop\Common\Services\CartService;
@@ -25,10 +24,10 @@ class CheckoutController extends BaseController
     /**
      * Get checkout data and render page.
      *
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function index(): JsonResponse
+    public function index(): mixed
     {
         try {
             $checkout = CheckoutService::getInstance(token_customer_id());
@@ -44,10 +43,10 @@ class CheckoutController extends BaseController
      * Update checkout, include shipping address, shipping method, billing address, billing method
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function update(Request $request): JsonResponse
+    public function update(Request $request): mixed
     {
         try {
             $data     = $request->all();
@@ -65,10 +64,10 @@ class CheckoutController extends BaseController
      * Confirm checkout and place order
      *
      * @param  CheckoutConfirmRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function confirm(CheckoutConfirmRequest $request): JsonResponse
+    public function confirm(CheckoutConfirmRequest $request): mixed
     {
         try {
             $data     = $request->all();
@@ -87,10 +86,10 @@ class CheckoutController extends BaseController
     }
 
     /**
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function billingMethods(): JsonResponse
+    public function billingMethods(): mixed
     {
         try {
             $methods = BillingService::getInstance()->getMethods();
@@ -103,10 +102,10 @@ class CheckoutController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function quickConfirm(Request $request): JsonResponse
+    public function quickConfirm(Request $request): mixed
     {
         try {
             CartService::getInstance(token_customer_id())->addCart($request->all());

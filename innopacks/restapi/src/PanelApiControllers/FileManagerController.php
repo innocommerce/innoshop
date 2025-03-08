@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Panel\Controllers\BaseController;
 use InnoShop\Panel\Requests\UploadFileRequest;
@@ -147,9 +146,9 @@ class FileManagerController extends BaseController
      * Retrieve a list of directories.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function getDirectories(Request $request): JsonResponse
+    public function getDirectories(Request $request): mixed
     {
         $service    = $this->getService();
         $baseFolder = $request->get('base_folder', '/');
@@ -165,9 +164,9 @@ class FileManagerController extends BaseController
      * Create a new directory.
      *
      * @param  FileRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function createDirectory(FileRequest $request): JsonResponse
+    public function createDirectory(FileRequest $request): mixed
     {
         try {
             $folderName = $request->get('name');
@@ -184,9 +183,9 @@ class FileManagerController extends BaseController
      * Rename a file or folder.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function rename(Request $request): JsonResponse
+    public function rename(Request $request): mixed
     {
         try {
             $originName = $request->get('origin_name');
@@ -223,9 +222,9 @@ class FileManagerController extends BaseController
      * Delete specified files in a directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroyFiles(Request $request): JsonResponse
+    public function destroyFiles(Request $request): mixed
     {
         try {
             $requestData = json_decode($request->getContent(), true);
@@ -249,10 +248,10 @@ class FileManagerController extends BaseController
      * Delete a specified directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function destroyDirectories(Request $request): JsonResponse
+    public function destroyDirectories(Request $request): mixed
     {
         try {
             $folderName = $request->get('name');
@@ -269,9 +268,9 @@ class FileManagerController extends BaseController
      * Move a directory to a new location.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function moveDirectories(Request $request): JsonResponse
+    public function moveDirectories(Request $request): mixed
     {
         try {
             $sourcePath = $request->get('source_path');
@@ -289,9 +288,9 @@ class FileManagerController extends BaseController
      * Move multiple image files to a new directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function moveFiles(Request $request): JsonResponse
+    public function moveFiles(Request $request): mixed
     {
         try {
             $requestData = json_decode($request->getContent(), true);
@@ -371,9 +370,9 @@ class FileManagerController extends BaseController
      * Copy multiple files to a new directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function copyFiles(Request $request): JsonResponse
+    public function copyFiles(Request $request): mixed
     {
         try {
             $requestData = json_decode($request->getContent(), true);
@@ -406,7 +405,7 @@ class FileManagerController extends BaseController
     /**
      * Get storage configs
      *
-     * @return JsonResponse
+     * @return mixed
      */
     public function getStorageConfig()
     {
@@ -448,10 +447,10 @@ class FileManagerController extends BaseController
      * Save storage configs
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws \Throwable
      */
-    public function saveStorageConfig(Request $request): JsonResponse
+    public function saveStorageConfig(Request $request): mixed
     {
         try {
             $driver     = $request->input('driver', 'local');

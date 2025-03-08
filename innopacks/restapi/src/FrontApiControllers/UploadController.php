@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use InnoShop\Front\Requests\UploadFileRequest;
 use InnoShop\Front\Requests\UploadImageRequest;
 use InnoShop\RestAPI\Services\UploadService;
@@ -20,9 +19,9 @@ class UploadController
      * Upload images.
      *
      * @param  UploadImageRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function images(UploadImageRequest $request): JsonResponse
+    public function images(UploadImageRequest $request): mixed
     {
         $data = UploadService::getInstance()->images($request);
 
@@ -33,9 +32,9 @@ class UploadController
      * Upload document files
      *
      * @param  UploadFileRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function files(UploadFileRequest $request): JsonResponse
+    public function files(UploadFileRequest $request): mixed
     {
         $data = UploadService::getInstance()->files($request);
 

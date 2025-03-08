@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\RestAPI\Libraries\MiniApp\Auth;
 use Symfony\Contracts\HttpClient\Exception as HttpClientException;
@@ -20,14 +19,14 @@ class MiniappController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws HttpClientException\DecodingExceptionInterface
      * @throws HttpClientException\RedirectionExceptionInterface
      * @throws HttpClientException\ServerExceptionInterface
      * @throws HttpClientException\TransportExceptionInterface
      * @throws Throwable
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): mixed
     {
         try {
             $code = $request->get('code');

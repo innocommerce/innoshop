@@ -11,7 +11,6 @@ namespace InnoShop\Front\Controllers\Account;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use InnoShop\Common\Services\CartService;
 use InnoShop\Front\Requests\RegisterRequest;
 use InnoShop\Front\Services\AccountService;
@@ -34,10 +33,10 @@ class RegisterController extends Controller
 
     /**
      * @param  RegisterRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(RegisterRequest $request): JsonResponse
+    public function store(RegisterRequest $request): mixed
     {
         try {
             $oldGuestId  = current_guest_id();

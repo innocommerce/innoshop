@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Review;
@@ -116,9 +115,9 @@ class ReviewController extends BaseController
 
     /**
      * @param  Review  $review
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Review $review): JsonResponse
+    public function destroy(Review $review): mixed
     {
         try {
             ReviewRepo::getInstance()->destroy($review);
