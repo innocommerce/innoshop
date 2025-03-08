@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\ProductRepo;
@@ -58,10 +57,10 @@ class ProductController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function import(Request $request): JsonResponse
+    public function import(Request $request): mixed
     {
         try {
             $data = $request->all();
@@ -85,10 +84,10 @@ class ProductController extends BaseController
     /**
      * @param  Request  $request
      * @param  string  $spuCode
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function update(Request $request, string $spuCode): JsonResponse
+    public function update(Request $request, string $spuCode): mixed
     {
         try {
             $data    = $request->all();
@@ -108,10 +107,10 @@ class ProductController extends BaseController
     /**
      * @param  Request  $request
      * @param  string  $spuCode
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function patch(Request $request, string $spuCode): JsonResponse
+    public function patch(Request $request, string $spuCode): mixed
     {
         try {
             $data    = $request->all();

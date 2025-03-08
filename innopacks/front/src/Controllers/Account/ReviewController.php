@@ -10,7 +10,6 @@
 namespace InnoShop\Front\Controllers\Account;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product;
@@ -55,7 +54,7 @@ class ReviewController extends BaseController
             }
 
             if (empty($product)) {
-                throw new \Exception('invalid product.');
+                throw new Exception('invalid product.');
             }
 
             $data = $request->all();
@@ -74,9 +73,9 @@ class ReviewController extends BaseController
 
     /**
      * @param  Review  $review
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Review $review): JsonResponse
+    public function destroy(Review $review): mixed
     {
         try {
             $review->delete();

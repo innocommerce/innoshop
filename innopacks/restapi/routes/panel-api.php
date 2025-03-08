@@ -91,4 +91,6 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/file_manager/export', [PanelApiControllers\FileManagerController::class, 'exportZip'])->name('file_manager.export');
     Route::post('/file_manager/copy_files', [PanelApiControllers\FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
 
+    Route::get('/file_manager/storage_config', [\InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'getStorageConfig']);
+    Route::post('/file_manager/storage_config', [\InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'saveStorageConfig']);
 });

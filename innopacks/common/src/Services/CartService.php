@@ -11,6 +11,7 @@ namespace InnoShop\Common\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\CartItemRepo;
 use InnoShop\Common\Resources\CartListItem;
 use Throwable;
@@ -207,6 +208,24 @@ class CartService
         ];
 
         return fire_hook_filter('service.cart.response', $data);
+    }
+
+    /**
+     * @param  Order  $order
+     * @return void
+     * @throws Throwable
+     */
+    public function reorder(Order $order): void
+    {
+        $this->unselectAll();
+        foreach ($order->items as $item) {
+            $productSku = $item->productSku;
+            $data       = [
+                'sku_id'   => $productSku->id,
+                'quantity' => $item->quantity,
+            ];
+            $this->addCart($data);
+        }
     }
 
     /**

@@ -17,9 +17,11 @@ use Illuminate\Notifications\Notifiable;
 use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Customer\Group;
 use InnoShop\Common\Models\Customer\Social;
+use InnoShop\Common\Models\Customer\Transaction;
 use InnoShop\Common\Notifications\ForgottenNotification;
 use InnoShop\Common\Notifications\RegistrationNotification;
 use Laravel\Sanctum\HasApiTokens;
+use Throwable;
 
 class Customer extends AuthUser
 {
@@ -46,6 +48,14 @@ class Customer extends AuthUser
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'customer_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'customer_id');
     }
 
     /**
@@ -81,6 +91,16 @@ class Customer extends AuthUser
     public function verifyPassword(string $password): bool
     {
         return password_verify($password, $this->password);
+    }
+
+    /**
+     * @return void
+     * @throws Throwable
+     */
+    public function syncBalance(): void
+    {
+        $this->balance = $this->transactions->sum('amount');
+        $this->saveOrFail();
     }
 
     /**

@@ -10,7 +10,6 @@
 namespace InnoShop\Front\Controllers\Account;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\CartService;
@@ -59,10 +58,10 @@ class OrderController extends Controller
      * Order detail
      *
      * @param  int  $number
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function recart(int $number): JsonResponse
+    public function recart(int $number): mixed
     {
         $order = OrderRepo::getInstance()->getOrderByNumber($number);
         foreach ($order->items as $item) {

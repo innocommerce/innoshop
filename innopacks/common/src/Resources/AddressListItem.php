@@ -50,6 +50,7 @@ class AddressListItem extends JsonResource
             'address_1'    => $this->address_1,
             'address_2'    => $this->address_2,
             'default'      => $this->default,
+            'created_at'   => $this->created_at,
         ];
     }
 }

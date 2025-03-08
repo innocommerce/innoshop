@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use InnoShop\Front\Requests\RegisterRequest;
@@ -21,10 +20,10 @@ class AuthController extends BaseController
 {
     /**
      * @param  RegisterRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function register(RegisterRequest $request): JsonResponse
+    public function register(RegisterRequest $request): mixed
     {
         try {
             $credentials = $request->only('email', 'password');
@@ -41,9 +40,9 @@ class AuthController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function login(Request $request): JsonResponse
+    public function login(Request $request): mixed
     {
         try {
             $credentials = $request->only('email', 'password');

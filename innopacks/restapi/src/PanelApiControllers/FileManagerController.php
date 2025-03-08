@@ -10,28 +10,48 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Panel\Controllers\BaseController;
 use InnoShop\Panel\Requests\UploadFileRequest;
 use InnoShop\RestAPI\Requests\FileRequest;
+use InnoShop\RestAPI\Services\FileManagerInterface;
 use InnoShop\RestAPI\Services\FileManagerService;
+use InnoShop\RestAPI\Services\OSSService;
 
 class FileManagerController extends BaseController
 {
-    protected mixed $fileManagerService;
-
     public function __construct()
     {
         parent::__construct();
-        $this->fileManagerService = $this->getService();
     }
 
-    /**
-     * @return FileManagerService
-     */
-    private function getService(): mixed
+    private function getService(): FileManagerInterface
     {
+        try {
+            $driver = plugin_setting('file_manager', 'driver');
+            \Log::info('Getting file manager service:', [
+                'driver'     => $driver,
+                'key_exists' => ! empty(plugin_setting('file_manager', 'key')),
+                'endpoint'   => plugin_setting('file_manager', 'endpoint'),
+                'bucket'     => plugin_setting('file_manager', 'bucket'),
+            ]);
+
+            if ($driver === 'oss') {
+                $service = new OSSService;
+                \Log::info('Created OSS service');
+
+                return fire_hook_filter('file_manager.service', $service);
+            }
+        } catch (Exception $e) {
+            \Log::warning('Failed to initialize OSS service, falling back to local:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
+
+        // default local file service
+        \Log::info('Created local file service');
+
         return fire_hook_filter('file_manager.service', new FileManagerService);
     }
 
@@ -43,10 +63,28 @@ class FileManagerController extends BaseController
     public function index(): mixed
     {
         $data = [
-            'isIframe' => request()->header('X-Iframe') === '1',
-            'multiple' => request()->query('multiple')  === '1',
-            'type'     => request()->query('type', 'all'),
+            'isIframe'    => request()->header('X-Iframe') === '1',
+            'multiple'    => request()->query('multiple')  === '1',
+            'type'        => request()->query('type', 'all'),
+            'base_folder' => '/',
+            'driver'      => plugin_setting('file_manager', 'driver', 'local'),
+            'title'       => plugin_setting('file_manager', 'driver') === 'oss' ? 'OSS 文件管理' : '图片空间',
+            'config'      => [
+                'driver'   => plugin_setting('file_manager', 'driver', 'local'),
+                'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
+                'bucket'   => plugin_setting('file_manager', 'bucket', ''),
+                'baseUrl'  => config('app.url'),
+            ],
         ];
+
+        \Log::info('File manager index:', [
+            'data'   => $data,
+            'config' => [
+                'driver'   => plugin_setting('file_manager', 'driver'),
+                'bucket'   => plugin_setting('file_manager', 'bucket'),
+                'endpoint' => plugin_setting('file_manager', 'endpoint'),
+            ],
+        ]);
 
         return inno_view('panel::file_manager.index', $data);
     }
@@ -62,6 +100,12 @@ class FileManagerController extends BaseController
             'isIframe' => true,
             'multiple' => request()->query('multiple') === '1',
             'type'     => request()->query('type', 'all'),
+            'config'   => [
+                'driver'   => plugin_setting('file_manager', 'driver', 'local'),
+                'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
+                'bucket'   => plugin_setting('file_manager', 'bucket', ''),
+                'baseUrl'  => config('app.url'),
+            ],
         ];
 
         return inno_view('panel::file_manager.iframe', $data);
@@ -76,28 +120,39 @@ class FileManagerController extends BaseController
      */
     public function getFiles(Request $request): mixed
     {
-        $baseFolder = $request->get('base_folder', '');
-        $keyword    = $request->get('keyword', '');
-        $sort       = $request->get('sort', 'created');
-        $order      = $request->get('order', 'desc');
-        $page       = (int) $request->get('page');
-        $perPage    = (int) $request->get('per_page');
+        try {
+            $baseFolder = (string) $request->input('base_folder', '/');
+            $page       = (int) $request->input('page', 1);
+            $perPage    = (int) $request->input('per_page', 20);
+            $keyword    = (string) $request->input('keyword', '');
+            $sort       = (string) $request->input('sort', 'name');
+            $order      = (string) $request->input('order', 'asc');
 
-        $data = $this->fileManagerService->getFiles($baseFolder, $keyword, $sort, $order, $page, $perPage);
+            $service = $this->getService();
 
-        return fire_hook_filter('admin.file_manager.files.data', $data);
+            return $service->getFiles($baseFolder, $keyword, $sort, $order, $page, $perPage);
+
+        } catch (Exception $e) {
+            \Log::error('Get files failed:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return json_fail($e->getMessage());
+        }
     }
 
     /**
      * Retrieve a list of directories.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function getDirectories(Request $request): JsonResponse
+    public function getDirectories(Request $request): mixed
     {
+        $service    = $this->getService();
         $baseFolder = $request->get('base_folder', '/');
-        $data       = $this->fileManagerService->getDirectories($baseFolder);
+        $data       = $service->getDirectories($baseFolder);
 
         return response()->json([
             'success' => true,
@@ -109,13 +164,14 @@ class FileManagerController extends BaseController
      * Create a new directory.
      *
      * @param  FileRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function createDirectory(FileRequest $request): JsonResponse
+    public function createDirectory(FileRequest $request): mixed
     {
         try {
             $folderName = $request->get('name');
-            $this->fileManagerService->createDirectory($folderName);
+            $service    = $this->getService();
+            $service->createDirectory($folderName);
 
             return create_json_success();
         } catch (Exception $e) {
@@ -127,9 +183,9 @@ class FileManagerController extends BaseController
      * Rename a file or folder.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function rename(Request $request): JsonResponse
+    public function rename(Request $request): mixed
     {
         try {
             $originName = $request->get('origin_name');
@@ -140,7 +196,8 @@ class FileManagerController extends BaseController
             $dirPath = dirname($originName);
             $newPath = $dirPath === '/' ? "/{$newName}" : "{$dirPath}/{$newName}";
 
-            $this->fileManagerService->updateName($originName, $newPath);
+            $service = $this->getService();
+            $service->updateName($originName, $newPath);
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
@@ -165,9 +222,9 @@ class FileManagerController extends BaseController
      * Delete specified files in a directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroyFiles(Request $request): JsonResponse
+    public function destroyFiles(Request $request): mixed
     {
         try {
             $requestData = json_decode($request->getContent(), true);
@@ -178,7 +235,8 @@ class FileManagerController extends BaseController
                 throw new Exception(trans('panel::file_manager.no_files_selected'));
             }
 
-            $this->fileManagerService->deleteFiles($basePath, $files);
+            $service = $this->getService();
+            $service->deleteFiles($basePath, $files);
 
             return json_success(trans('common.deleted_success'));
         } catch (Exception $e) {
@@ -190,14 +248,15 @@ class FileManagerController extends BaseController
      * Delete a specified directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function destroyDirectories(Request $request): JsonResponse
+    public function destroyDirectories(Request $request): mixed
     {
         try {
             $folderName = $request->get('name');
-            $this->fileManagerService->deleteDirectoryOrFile($folderName);
+            $service    = $this->getService();
+            $service->deleteDirectoryOrFile($folderName);
 
             return json_success(trans('common.deleted_success'));
         } catch (Exception $e) {
@@ -209,14 +268,15 @@ class FileManagerController extends BaseController
      * Move a directory to a new location.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function moveDirectories(Request $request): JsonResponse
+    public function moveDirectories(Request $request): mixed
     {
         try {
             $sourcePath = $request->get('source_path');
             $destPath   = $request->get('dest_path');
-            $this->fileManagerService->moveDirectory($sourcePath, $destPath);
+            $service    = $this->getService();
+            $service->moveDirectory($sourcePath, $destPath);
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
@@ -228,9 +288,9 @@ class FileManagerController extends BaseController
      * Move multiple image files to a new directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function moveFiles(Request $request): JsonResponse
+    public function moveFiles(Request $request): mixed
     {
         try {
             $requestData = json_decode($request->getContent(), true);
@@ -246,7 +306,8 @@ class FileManagerController extends BaseController
                 'destPath' => $destPath,
             ]);
 
-            $this->fileManagerService->moveFiles($files, $destPath);
+            $service = $this->getService();
+            $service->moveFiles($files, $destPath);
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
@@ -268,7 +329,8 @@ class FileManagerController extends BaseController
     {
         try {
             $imagePath = $request->get('path');
-            $zipFile   = $this->fileManagerService->zipFolder($imagePath);
+            $service   = $this->getService();
+            $zipFile   = $service->zipFolder($imagePath);
 
             header('Content-Type: application/zip');
             header('Content-Disposition: attachment; filename="'.basename($zipFile).'"');
@@ -289,11 +351,12 @@ class FileManagerController extends BaseController
      */
     public function uploadFiles(UploadFileRequest $request): mixed
     {
+        $service  = $this->getService();
         $file     = $request->file('file');
         $savePath = $request->get('path');
 
         $originName = $file->getClientOriginalName();
-        $fileUrl    = $this->fileManagerService->uploadFile($file, $savePath, $originName);
+        $fileUrl    = $service->uploadFile($file, $savePath, $originName);
 
         $data = [
             'name' => $originName,
@@ -307,9 +370,9 @@ class FileManagerController extends BaseController
      * Copy multiple files to a new directory.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function copyFiles(Request $request): JsonResponse
+    public function copyFiles(Request $request): mixed
     {
         try {
             $requestData = json_decode($request->getContent(), true);
@@ -325,7 +388,8 @@ class FileManagerController extends BaseController
                 'destPath' => $destPath,
             ]);
 
-            $this->fileManagerService->copyFiles($files, $destPath);
+            $service = $this->getService();
+            $service->copyFiles($files, $destPath);
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
@@ -335,6 +399,127 @@ class FileManagerController extends BaseController
             ]);
 
             return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Get storage configs
+     *
+     * @return mixed
+     */
+    public function getStorageConfig()
+    {
+        try {
+            $config = [
+                'driver'     => plugin_setting('file_manager', 'driver', 'local'),
+                'key'        => plugin_setting('file_manager', 'key', ''),
+                'secret'     => plugin_setting('file_manager', 'secret', ''),
+                'endpoint'   => plugin_setting('file_manager', 'endpoint', ''),
+                'bucket'     => plugin_setting('file_manager', 'bucket', ''),
+                'region'     => plugin_setting('file_manager', 'region', ''),
+                'cdn_domain' => plugin_setting('file_manager', 'cdn_domain', ''),
+            ];
+
+            \Log::info('Get storage configs:', [
+                'config'   => array_merge($config, ['secret' => '***']),
+                'settings' => [
+                    'driver'     => plugin_setting('file_manager', 'driver'),
+                    'key'        => plugin_setting('file_manager', 'key'),
+                    'endpoint'   => plugin_setting('file_manager', 'endpoint'),
+                    'bucket'     => plugin_setting('file_manager', 'bucket'),
+                    'region'     => plugin_setting('file_manager', 'region'),
+                    'cdn_domain' => plugin_setting('file_manager', 'cdn_domain'),
+                ],
+            ]);
+
+            return json_success('获取存储配置成功', $config);
+        } catch (\Exception $e) {
+            \Log::error('获取存储配置失败:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return json_error('获取存储配置失败: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Save storage configs
+     *
+     * @param  Request  $request
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function saveStorageConfig(Request $request): mixed
+    {
+        try {
+            $driver     = $request->input('driver', 'local');
+            $key        = $request->input('key', '');
+            $secret     = $request->input('secret', '');
+            $endpoint   = $request->input('endpoint', '');
+            $bucket     = $request->input('bucket', '');
+            $region     = $request->input('region', '');
+            $cdn_domain = $request->input('cdn_domain', '');
+
+            \Log::info('Save storage configs:', [
+                'request' => [
+                    'driver'     => $driver,
+                    'key'        => $key,
+                    'secret'     => '***',
+                    'endpoint'   => $endpoint,
+                    'bucket'     => $bucket,
+                    'region'     => $region,
+                    'cdn_domain' => $cdn_domain,
+                ],
+            ]);
+
+            $settingRepo = \InnoShop\Common\Repositories\SettingRepo::getInstance();
+            $settingRepo->updatePluginValue('file_manager', 'driver', $driver);
+            $settingRepo->updatePluginValue('file_manager', 'key', $key);
+            $settingRepo->updatePluginValue('file_manager', 'secret', $secret);
+            $settingRepo->updatePluginValue('file_manager', 'endpoint', $endpoint);
+            $settingRepo->updatePluginValue('file_manager', 'bucket', $bucket);
+            $settingRepo->updatePluginValue('file_manager', 'region', $region);
+            $settingRepo->updatePluginValue('file_manager', 'cdn_domain', $cdn_domain);
+
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+
+            load_settings();
+
+            config([
+                'filesystems.file_manager.driver' => $driver,
+            ]);
+
+            // 是OSS
+            if ($driver == 'oss') {
+                config([
+                    'filesystems.disks.s3.key'        => $key,
+                    'filesystems.disks.s3.secret'     => $secret,
+                    'filesystems.disks.s3.region'     => $region,
+                    'filesystems.disks.s3.bucket'     => $bucket,
+                    'filesystems.disks.s3.endpoint'   => $endpoint,
+                    'filesystems.disks.s3.cdn_domain' => $cdn_domain,
+                ]);
+            }
+
+            $configData = [
+                'driver'     => $driver,
+                'key'        => $key,
+                'secret'     => $secret,
+                'endpoint'   => $endpoint,
+                'bucket'     => $bucket,
+                'region'     => $region,
+                'cdn_domain' => $cdn_domain,
+            ];
+
+            return json_success('存储配置保存成功', $configData);
+        } catch (\Exception $e) {
+            \Log::error('存储配置保存失败:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return json_error('存储配置保存失败: '.$e->getMessage());
         }
     }
 }

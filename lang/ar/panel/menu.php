@@ -28,6 +28,7 @@ return [
     'customer_groups'    => 'grupper العملاء',
     'customers'          => 'إدارة العملاء',
     'dashboard'          => 'لوحة التحكم',
+    'file_manager'       => 'مدير الملفات',
     'locale'             => 'إدارة اللغة',
     'locales'            => 'إعدادات اللغة',
     'localization'       => 'التوطين',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => 'الاضافات',
     'top_product'        => 'المنتجات',
     'top_setting'        => 'الإعدادات',
+    'transactions'       => 'رصيد العميل',
     'upload'             => 'وظيفة التحميل',
 ];

@@ -24,6 +24,8 @@
       upload_images: '{{ front_root_route('upload.images') }}',
       cart_add: '{{ front_route('carts.store') }}',
       cart_mini: '{{ front_route('carts.mini') }}',
+      cart: '{{ front_route('carts.index') }}',
+      checkout: '{{ front_route('checkout.index') }}',
       login: '{{ front_route('login.index') }}',
       favorites: '{{ account_route('favorites.index') }}',
       favorite_cancel: '{{ account_route('favorites.cancel') }}',
@@ -32,7 +34,18 @@
     let config = {
       isLogin: !!{{ current_customer()->id ?? 'null' }},
     }
+
+    let translations = {
+      empty_cart: '{{ __('front/cart.empty_cart') }}',
+      continue: '{{ __('front/cart.continue') }}',
+      total: '{{ __('front/cart.total') }}',
+      go_checkout: '{{ __('front/cart.go_checkout') }}',
+      view_cart: '{{ __('front/cart.view_cart') }}',
+    }
+
+    let asset_url = '{{ asset('') }}';
   </script>
+  <script src="{{ asset('js/cart.js') }}"></script>
   @stack('header')
   @hookinsert('front.layout.app.head.bottom')
 </head>
@@ -48,6 +61,16 @@
 
   @if (!request('iframe'))
     @include('layouts.footer')
+  @endif
+
+  <!-- Cart Offcanvas (Desktop only) -->
+  @if (!request('iframe'))
+    @php
+      $cartData = \InnoShop\Common\Services\CartService::getInstance()->getCartList();
+      $list = $cartData['list'] ?? [];
+      $amount_format = $cartData['amount_format'] ?? '0.00';
+    @endphp
+    @include('components.cart-offcanvas', ['list' => $list, 'amount_format' => $amount_format])
   @endif
 
   @stack('footer')

@@ -117,7 +117,7 @@
       });
     });
 
-    function updataAddress(params) {
+    function updateAddress(params) {
       const id = new URLSearchParams(params).get('id');
       const href = @json(account_route('addresses.index'));
       const method = id ? 'put' : 'post'

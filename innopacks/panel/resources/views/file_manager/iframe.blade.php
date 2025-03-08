@@ -4,6 +4,17 @@
 
 @prepend('header')
     <meta name="api-token" content="{{ auth()->user()->api_token }}">
+    <script>
+        window.fileManagerConfig = Object.freeze({
+            driver: '{{ $config["driver"] }}',
+            endpoint: '{{ $config["endpoint"] }}',
+            bucket: '{{ $config["bucket"] }}',
+            baseUrl: '{{ $config["baseUrl"] }}',
+            multiple: {{ $multiple ? 'true' : 'false' }},
+            type: '{{ $type }}'
+        });
+        console.log('File manager config initialized in iframe:', window.fileManagerConfig);
+    </script>
 @endprepend
 
 @push('header')
@@ -83,6 +94,13 @@
             }
         }
     });
+
+    // 从父窗口获取 token
+    window.getApiToken = () => {
+        const token = window.parent?.document.querySelector('meta[name="api-token"]')?.getAttribute('content');
+        console.log('Parent token:', token);
+        return token;
+    };
 </script>
 @endpush
 

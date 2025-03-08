@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
@@ -24,9 +23,9 @@ class OrderController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): mixed
     {
         $filters = $request->all();
 
@@ -41,9 +40,9 @@ class OrderController extends BaseController
      * Order detail
      *
      * @param  Order  $order
-     * @return JsonResponse
+     * @return mixed
      */
-    public function show(Order $order): JsonResponse
+    public function show(Order $order): mixed
     {
         if ($order->customer_id != token_customer_id()) {
             return json_fail('Unauthorized', null, 403);
@@ -58,9 +57,9 @@ class OrderController extends BaseController
      * Order detail
      *
      * @param  int  $number
-     * @return JsonResponse
+     * @return mixed
      */
-    public function numberShow(int $number): JsonResponse
+    public function numberShow(int $number): mixed
     {
         $order = OrderRepo::getInstance()->getOrderByNumber($number);
         if ($order->customer_id != token_customer_id()) {
@@ -93,9 +92,9 @@ class OrderController extends BaseController
 
     /**
      * @param  int  $number
-     * @return JsonResponse
+     * @return mixed
      */
-    public function cancel(int $number): JsonResponse
+    public function cancel(int $number): mixed
     {
         try {
             $order = OrderRepo::getInstance()->getOrderByNumber($number);
@@ -113,9 +112,9 @@ class OrderController extends BaseController
 
     /**
      * @param  int  $number
-     * @return JsonResponse
+     * @return mixed
      */
-    public function complete(int $number): JsonResponse
+    public function complete(int $number): mixed
     {
         try {
             $order = OrderRepo::getInstance()->getOrderByNumber($number);
@@ -133,10 +132,10 @@ class OrderController extends BaseController
 
     /**
      * @param  int  $number
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function reorder(int $number): JsonResponse
+    public function reorder(int $number): mixed
     {
         try {
             $customerID = token_customer_id();
@@ -145,15 +144,7 @@ class OrderController extends BaseController
                 return json_fail('Unauthorized', null, 403);
             }
 
-            CartService::getInstance($customerID)->unselectAll();
-            foreach ($order->items as $item) {
-                $productSku = $item->productSku;
-                $data       = [
-                    'sku_id'   => $productSku->id,
-                    'quantity' => $item->quantity,
-                ];
-                CartService::getInstance($customerID)->addCart($data);
-            }
+            CartService::getInstance($customerID)->reorder($order);
 
             return update_json_success();
         } catch (Exception $e) {

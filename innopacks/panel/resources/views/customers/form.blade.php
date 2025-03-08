@@ -2,81 +2,110 @@
 
 @section('title', __('panel/menu.customers'))
 
-<x-panel::form.right-btns/>
+@section('page-title-right')
+<div class="title-right-btns">
+  <a href="{{ panel_route('customers.login', [$customer->id]) }}" target="_blank" class="btn btn-primary">
+    {{ __('panel/customer.login_frontend')}}
+  </a>
+  <button type="button" class="btn btn-outline-secondary ms-2 btn-back" onclick="window.history.back()">{{
+    __('panel/common.btn_back') }}</button>
+</div>
+@endsection
 
 @section('content')
   <div class="row">
-    <div class="col-6">
+    <div class="col-12">
       <div class="card">
-        <div class="card-header">
-          <h5 class="card-title mb-0">{{ __('panel/menu.customers') }}</h5>
-        </div>
         <div class="card-body">
-          <form class="needs-validation" novalidate id="app-form"
-                action="{{ $customer->id ? panel_route('customers.update', [$customer->id]) : panel_route('customers.store') }}"
-                method="POST">
-            @csrf
-            @method($customer->id ? 'PUT' : 'POST')
+          <ul class="nav nav-tabs mb-3" id="customerTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info-tab-pane" type="button" role="tab">{{ __('panel/customer.basic_info') }}</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address-tab-pane" type="button" role="tab">{{ __('panel/customer.address_manage') }}</button>
+            </li>
+          </ul>
 
-            <x-common-form-image title="头像" name="avatar" value="{{ old('avatar', $customer->avatar) }}" required/>
+          <div class="tab-content" id="customerTabContent">
+            <div class="tab-pane fade show active" id="info-tab-pane" role="tabpanel" tabindex="0">
+              <form class="needs-validation" novalidate id="app-form"
+                    action="{{ $customer->id ? panel_route('customers.update', [$customer->id]) : panel_route('customers.store') }}"
+                    method="POST">
+                @csrf
+                @method($customer->id ? 'PUT' : 'POST')
 
-            <x-common-form-input title="Email" name="email" value="{{ old('email', $customer->email) }}" required
-                                 placeholder="Email"/>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <x-common-form-image title="{{ __('panel/customer.avatar') }}" name="avatar" value="{{ old('avatar', $customer->avatar) }}" required/>
+                    </div>
+                    <div class="mb-3">
+                      <x-common-form-input title="{{ __('panel/customer.from') }}" name="from" value="{{ old('from', $customer->from) }}" placeholder="{{ __('panel/customer.from') }}"/>
+                    </div>
+                    <div class="mb-3">
+                      <x-common-form-input title="{{ __('panel/customer.name') }}" name="name" value="{{ old('name', $customer->name) }}" required placeholder="{{ __('panel/customer.name') }}"/>
+                    </div>
+                    <div class="mb-3">
+                      <x-common-form-input title="{{ __('panel/customer.password') }}" name="password" value="" placeholder="{{ __('panel/customer.password') }}"/>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <x-common-form-input title="{{ __('panel/customer.email') }}" name="email" value="{{ old('email', $customer->email) }}" required placeholder="{{ __('panel/customer.email') }}"/>
+                    </div>
+                    <div class="mb-3 customersmt">
+                      <x-common-form-select title="{{ __('panel/customer.group') }}" name="customer_group_id" :options="$groups" key="id" label="name" value="{{ old('customer_group_id', $customer->customer_group_id) }}"/>
+                    </div>
+                    @hookinsert('panel.customer.form.group.after')
+                    <div class="mb-3">
+                      <x-common-form-select title="{{ __('panel/customer.locale') }}" name="locale" :options="$locales" key="code" label="name" value="{{ old('locale', $customer->locale) }}"/>
+                    </div>
+                    <div class="mb-3">
+                      <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $page->active ?? true)" placeholder="{{ __('panel/common.whether_enable') }}"/>
+                    </div>
+                  </div>
+                </div>
 
-            <x-common-form-input title="名字" name="name" value="{{ old('name', $customer->name) }}" required
-                                 placeholder="名字"/>
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-primary">{{ __('提交') }}</button>
+                </div>
+              </form>
+            </div>
 
-            <x-common-form-input title="密码" name="password" value="" placeholder="密码"/>
+            <div class="tab-pane fade" id="address-tab-pane" role="tabpanel" tabindex="0">
+              <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-sm add-address btn-outline-primary">{{ __('panel/common.add') }}</button>
+              </div>
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th>{{ __('panel/common.id') }}</th>
+                  <th>{{ __('common/address.name') }}</th>
+                  <th>{{ __('common/address.address') }}</th>
+                  <th>{{ __('common/address.phone') }}</th>
+                  <th>{{ __('panel/common.created_at') }}</th>
+                  <th class="text-end"></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach ($addresses as $address)
+                  <tr data-id="{{ $address['id'] }}">
+                    <td>{{ $address['id'] }}</td>
+                    <td>{{ $address['name'] }}</td>
+                    <td>{{ $address['address_1'] }}</td>
+                    <td>{{ $address['phone'] }}</td>
+                    <td>{{ $address['created_at'] }}</td>
+                    <td class="text-end">
+                      <button type="button" class="btn btn-sm edit-address btn-outline-primary">{{ __('panel/common.edit') }}</button>
+                      <button type="button" class="btn btn-sm btn-outline-danger delete-address">{{ __('panel/common.delete') }}</button>
+                    </td>
+                  </tr>
+                @endforeach
+                </tbody>
+              </table>
+            </div>
 
-            <x-common-form-input title="来源" name="from" value="{{ old('from', $customer->from) }}"
-                                 placeholder="来源"/>
-
-            <x-common-form-select title="用户组" name="customer_group_id" :options="$groups" key="id" label="name"
-                                  value="{{ old('customer_group_id', $customer->customer_group_id) }}"/>
-            @hookinsert('panel.customer.form.group.after')
-
-            <x-common-form-select title="语言" name="locale" :options="$locales" key="code" label="name"
-                                  value="{{ old('locale', $customer->locale) }}"/>
-
-            <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $page->active ?? true)"
-                                        placeholder="{{ __('panel/common.whether_enable') }}"/>
-
-            <button type="submit" class="d-none"></button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">{{ __('panel/customer.address') }}</h5>
-          <button class="btn btn-sm add-address btn-outline-primary">{{ __('panel/common.add') }}</button>
-        </div>
-        <div class="card-body">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>{{ __('common/address.name') }}</th>
-              <th>{{ __('common/address.address') }}</th>
-              <th>{{ __('common/address.phone') }}</th>
-              <th class="text-end"></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($addresses as $address)
-              <tr data-id="{{ $address['id'] }}">
-                <td>{{ $address['name'] }}</td>
-                <td>{{ $address['address_1'] }}</td>
-                <td>{{ $address['phone'] }}</td>
-                <td class="text-end">
-                  <button type="button"
-                          class="btn btn-sm edit-address btn-outline-primary">{{ __('panel/common.edit') }}</button>
-                  <button type="button" class="btn btn-sm btn-outline-danger">{{ __('panel/common.delete') }}</button>
-                </td>
-              </tr>
-            @endforeach
-            </tbody>
-          </table>
+          </div>
         </div>
       </div>
     </div>
@@ -138,9 +167,7 @@
       });
     });
 
-    function updataAddress(params) {
-      layer.msg('需要接口');
-      return;
+    function updateAddress(params) {
       const id = new URLSearchParams(params).get('id');
       const href = @json(account_route('addresses.index'));
       const method = id ? 'put' : 'post'

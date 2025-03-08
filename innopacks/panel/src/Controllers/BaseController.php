@@ -11,7 +11,6 @@ namespace InnoShop\Panel\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BaseController extends Controller
@@ -53,7 +52,7 @@ class BaseController extends Controller
     /**
      * @throws Exception
      */
-    public function active(Request $request, int $id): JsonResponse
+    public function active(Request $request, int $id): mixed
     {
         try {
             $this->checkModel();

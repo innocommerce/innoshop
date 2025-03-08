@@ -28,6 +28,7 @@ return [
     'customer_groups'    => 'Kumpulan Pelanggan',
     'customers'          => 'Pengurusan Pelanggan',
     'dashboard'          => 'Paparan Utama',
+    'file_manager'       => 'Pengurus fail',
     'locale'             => 'Pengurusan Bahasa',
     'locales'            => 'Tetapan Bahasa',
     'localization'       => 'Pengelokalan',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => 'Plugin',
     'top_product'        => 'Produk',
     'top_setting'        => 'Tetapan',
+    'transactions'       => 'Baki pelanggan',
     'upload'             => 'Fungsi Muat Naik',
 ];

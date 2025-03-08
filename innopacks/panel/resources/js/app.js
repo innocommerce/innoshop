@@ -24,6 +24,32 @@ if (window === window.parent) {
   //console.log('apiToken:' + apiToken);
 }
 
+const processFileManagerUrl = (file, config) => {
+  const isOss = config?.driver === 'oss';
+
+  // 优先使用文件的完整 URL
+  if (file.url && file.url.startsWith('http')) {
+    console.log('Using original URL:', file.url);
+    return file.url;
+  }
+
+  // 使用 path 构建 URL
+  const filePath = file.path || file.url;
+
+  if (isOss) {
+    const endpoint = config.endpoint;
+    // 确保 endpoint 不包含协议前缀
+    const cleanEndpoint = endpoint.replace(/^https?:\/\//, '');
+    const newUrl = `https://${cleanEndpoint}/${filePath.replace(/^\//, '')}`;
+    console.log('Generated OSS URL:', newUrl);
+    return newUrl;
+  } else {
+    const newUrl = config.baseUrl + '/' + filePath.replace(/^\//, '');
+    console.log('Generated local URL:', newUrl);
+    return newUrl;
+  }
+};
+
 $(function () {
   tinymceInit();
 
@@ -103,10 +129,58 @@ $(function () {
     const finalOptions = { ...defaultOptions, ...options };
 
     // 设置回调函数
-    window.fileManagerCallback = function (files) {
-      if (typeof callback === 'function') {
-        callback(files);
+    window.fileManagerCallback = function (file) {
+      // 获取配置 - 从当前 iframe 或父窗口获取
+      let config;
+
+      // 如果是在 iframe 中
+      if (window !== window.parent) {
+        config = window.fileManagerConfig;
+      } else {
+        // 如果是在父窗口中，尝试从打开的 iframe 获取配置
+        const iframe = document.querySelector('.layui-layer-iframe iframe');
+        if (iframe) {
+          try {
+            config = iframe.contentWindow.fileManagerConfig;
+          } catch (e) {
+            console.error('Failed to get config from iframe:', e);
+          }
+        }
       }
+
+      console.log('Current window is:', window === window.parent ? 'parent' : 'iframe');
+      console.log('File manager config:', config);
+
+      // 如果没有配置，记录错误并返回原始文件
+      if (!config) {
+        console.error('No file manager config found!');
+        return file;
+      }
+
+      // 如果是数组（多选模式）
+      if (Array.isArray(file)) {
+        const processedFiles = file.map(f => ({
+          ...f,
+          url: processFileManagerUrl(f, config)
+        }));
+
+        if (typeof callback === 'function') {
+          callback(processedFiles);
+        }
+        return processedFiles;
+      }
+
+      // 单个文件处理
+      const processedFile = {
+        ...file,
+        url: processFileManagerUrl(file, config)
+      };
+
+      // 调用原始回调函数并返回处理后的文件
+      if (typeof callback === 'function') {
+        callback(processedFile);
+      }
+      return processedFile;
     };
 
     // 打开文件管理器
@@ -160,6 +234,10 @@ const tinymceInit = () => {
             multiple: false
           });
         }
+      });
+      ed.on('input', function () {
+        tinymce.triggerSave();
+        // console.log('Current content:', ed.getContent());
       });
     }
   });

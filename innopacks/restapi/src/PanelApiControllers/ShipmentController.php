@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Services\ShippingTraceService;
 use InnoShop\RestAPI\Requests\ShipmentRequest;
@@ -20,9 +19,9 @@ class ShipmentController extends BaseController
     /**
      * @param  Order  $order
      * @param  ShipmentRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(Order $order, ShipmentRequest $request): JsonResponse
+    public function store(Order $order, ShipmentRequest $request): mixed
     {
         try {
             $shipment = $order->shipments()->create($request->all());
@@ -35,9 +34,9 @@ class ShipmentController extends BaseController
 
     /**
      * @param  Order\Shipment  $shipment
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Order\Shipment $shipment): JsonResponse
+    public function destroy(Order\Shipment $shipment): mixed
     {
         try {
             $shipment->delete();
@@ -50,9 +49,9 @@ class ShipmentController extends BaseController
 
     /**
      * @param  Order\Shipment  $shipment
-     * @return JsonResponse
+     * @return mixed
      */
-    public function getTraces(Order\Shipment $shipment): JsonResponse
+    public function getTraces(Order\Shipment $shipment): mixed
     {
         try {
             $traces = ShippingTraceService::getInstance($shipment)->getTraces();

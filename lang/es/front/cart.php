@@ -20,4 +20,5 @@ return [
     'selected'    => 'Seleccionado',
     'subtotal'    => 'Subtotal',
     'total'       => 'Total',
+    'view_cart'   => 'Ir al carrito',
 ];

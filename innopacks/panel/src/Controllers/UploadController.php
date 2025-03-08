@@ -9,7 +9,6 @@
 
 namespace InnoShop\Panel\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use InnoShop\Panel\Requests\UploadFileRequest;
 use InnoShop\Panel\Requests\UploadImageRequest;
 
@@ -19,9 +18,9 @@ class UploadController
      * Upload images.
      *
      * @param  UploadImageRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function images(UploadImageRequest $request): JsonResponse
+    public function images(UploadImageRequest $request): mixed
     {
         $image    = $request->file('image');
         $type     = $request->file('type', 'common');
@@ -40,9 +39,9 @@ class UploadController
      * Upload document files
      *
      * @param  UploadFileRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function files(UploadFileRequest $request): JsonResponse
+    public function files(UploadFileRequest $request): mixed
     {
         $file     = $request->file('file');
         $type     = $request->file('type', 'files');

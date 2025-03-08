@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\CartItem;
 use InnoShop\Common\Services\CartService;
@@ -18,9 +17,9 @@ use Throwable;
 class CartController extends BaseController
 {
     /**
-     * @return JsonResponse
+     * @return mixed
      */
-    public function index(): JsonResponse
+    public function index(): mixed
     {
         $cartList = CartService::getInstance(token_customer_id())->handleResponse();
 
@@ -31,10 +30,10 @@ class CartController extends BaseController
      * Add product sku to cart.
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         try {
             $cartData = CartService::getInstance(token_customer_id())->addCart($request->all());
@@ -48,9 +47,9 @@ class CartController extends BaseController
     /**
      * @param  Request  $request
      * @param  CartItem  $cart
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(Request $request, CartItem $cart): JsonResponse
+    public function update(Request $request, CartItem $cart): mixed
     {
         try {
             $cartData = CartService::getInstance(token_customer_id())->updateCart($cart, $request->all());
@@ -63,9 +62,9 @@ class CartController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function select(Request $request): JsonResponse
+    public function select(Request $request): mixed
     {
         try {
             $cartIds  = $request->get('cart_ids');
@@ -79,9 +78,9 @@ class CartController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function unselect(Request $request): JsonResponse
+    public function unselect(Request $request): mixed
     {
         try {
             $cartIds  = $request->get('cart_ids');
@@ -94,9 +93,9 @@ class CartController extends BaseController
     }
 
     /**
-     * @return JsonResponse
+     * @return mixed
      */
-    public function selectAll(): JsonResponse
+    public function selectAll(): mixed
     {
         try {
             $cartData = CartService::getInstance(token_customer_id())->selectAll();
@@ -108,9 +107,9 @@ class CartController extends BaseController
     }
 
     /**
-     * @return JsonResponse
+     * @return mixed
      */
-    public function unselectAll(): JsonResponse
+    public function unselectAll(): mixed
     {
         try {
             $cartData = CartService::getInstance(token_customer_id())->unselectAll();
@@ -123,9 +122,9 @@ class CartController extends BaseController
 
     /**
      * @param  CartItem  $cart
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(CartItem $cart): JsonResponse
+    public function destroy(CartItem $cart): mixed
     {
         try {
             if ($cart->customer_id != token_customer_id()) {

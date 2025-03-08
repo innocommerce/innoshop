@@ -104,6 +104,10 @@ class CheckoutRepo extends BaseRepo
             $item->billing_method_code = $data['billing_method_code'];
         }
 
+        if (isset($data['reference'])) {
+            $item->reference = $data['reference'];
+        }
+
         if (isset($data['comment'])) {
             $item->comment = $data['comment'];
         }

@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Customer;
@@ -53,10 +52,10 @@ class CustomerController extends BaseController
 
     /**
      * @param  CustomerRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(CustomerRequest $request): JsonResponse
+    public function store(CustomerRequest $request): mixed
     {
         try {
             $data     = $request->all();
@@ -71,9 +70,9 @@ class CustomerController extends BaseController
     /**
      * @param  CustomerRequest  $request
      * @param  Customer  $customer
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(CustomerRequest $request, Customer $customer): JsonResponse
+    public function update(CustomerRequest $request, Customer $customer): mixed
     {
         try {
             $data = $request->all();
@@ -87,9 +86,9 @@ class CustomerController extends BaseController
 
     /**
      * @param  Customer  $customer
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Customer $customer): JsonResponse
+    public function destroy(Customer $customer): mixed
     {
         try {
             CustomerRepo::getInstance()->destroy($customer);

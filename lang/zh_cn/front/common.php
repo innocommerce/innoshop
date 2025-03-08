@@ -35,6 +35,7 @@ return [
     'out_of_stock'      => '缺货',
     'page_total_show'   => '显示第 :first 到第 :last 项，共 :total 项',
     'pages'             => '单页',
+    'password'          => '密码',
     'please_choose'     => '请选择',
     'products'          => '商品',
     'read_success'      => '获取成功',
@@ -43,6 +44,7 @@ return [
     'search'            => '搜索',
     'show'              => '数量',
     'sort'              => '排序',
+    'specials'          => '链接',
     'status'            => '状态',
     'submit'            => '提交',
     'submitted_success' => '提交成功',
@@ -51,5 +53,4 @@ return [
     'updated_success'   => '更新成功',
     'view'              => '查看',
     'yes'               => '是',
-    'specials'          => '链接',
 ];

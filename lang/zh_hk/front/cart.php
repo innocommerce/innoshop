@@ -20,4 +20,5 @@ return [
     'selected'    => '已選',
     'subtotal'    => '小計',
     'total'       => '總計',
+    'view_cart'   => '進入購物車',
 ];

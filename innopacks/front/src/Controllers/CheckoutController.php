@@ -11,7 +11,6 @@ namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Exceptions\Unauthorized;
 use InnoShop\Common\Repositories\OrderRepo;
@@ -49,10 +48,10 @@ class CheckoutController extends Controller
      * Update checkout, include shipping address, shipping method, billing address, billing method
      *
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function update(Request $request): JsonResponse
+    public function update(Request $request): mixed
     {
         $data     = $request->all();
         $checkout = CheckoutService::getInstance();
@@ -66,14 +65,15 @@ class CheckoutController extends Controller
      * Confirm checkout and place order
      *
      * @param  CheckoutConfirmRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function confirm(CheckoutConfirmRequest $request): JsonResponse
+    public function confirm(CheckoutConfirmRequest $request): mixed
     {
         try {
             $checkout = CheckoutService::getInstance();
             $data     = $request->all();
+            unset($data['reference']);
             if ($data) {
                 $checkout->updateValues($data);
             }

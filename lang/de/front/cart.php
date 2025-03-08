@@ -20,4 +20,5 @@ return [
     'selected'    => 'Ausgewählt',
     'subtotal'    => 'Zwischensumme',
     'total'       => 'Gesamt',
+    'view_cart'   => 'In den einkaufswagen',
 ];

@@ -9,15 +9,14 @@
 
 namespace InnoShop\RestAPI\PanelApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends BaseController
 {
     /**
-     * @return JsonResponse
+     * @return mixed
      */
-    public function index(): JsonResponse
+    public function index(): mixed
     {
         return read_json_success(Auth::guard('admin')->user());
     }

@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -18,9 +17,9 @@ class ContentAIController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function generate(Request $request): JsonResponse
+    public function generate(Request $request): mixed
     {
         try {
             $aiModel = system_setting('ai_model');

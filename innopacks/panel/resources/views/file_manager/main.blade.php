@@ -12,7 +12,11 @@
         window.fileManagerConfig = {
             multiple: urlParams.get('multiple') === '1',
             type: urlParams.get('type') || 'all',
-            callback: window.parent.fileManagerCallback
+            callback: window.parent.fileManagerCallback,
+            driver: '{{ $config["driver"] }}',
+            endpoint: '{{ $config["endpoint"] }}',
+            bucket: '{{ $config["bucket"] }}',
+            baseUrl: '{{ $config["baseUrl"] }}'
         };
     </script>
 
@@ -1277,6 +1281,9 @@
                             <el-button size="small" @click="createFolder">
                                 <i class="el-icon-folder-add"></i> 新建文件夹
                             </el-button>
+                            <el-button size="small" data-bs-toggle="modal" data-bs-target="#storageConfigModal">
+                                <i class="el-icon-setting"></i> {{ __('panel/file_manager.storage_config') }}
+                            </el-button>
                         </el-button-group>
                     </el-col>
                     <el-col :span="12" style="text-align: right">
@@ -1594,6 +1601,76 @@
         <el-button type="primary" @click="submitFolderMove">确 定</el-button>
       </span>
         </el-dialog>
+
+        <!-- 存储配置 Modal -->
+        <div class="modal fade" id="storageConfigModal" tabindex="-1" aria-labelledby="storageConfigModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="storageConfigModalLabel">{{ __('panel/file_manager.storage_config') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('panel/file_manager.storage_type') }}</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="storageType" id="storageTypeLocal" value="local" v-model="storageConfig.driver">
+                                    <label class="form-check-label" for="storageTypeLocal">
+                                        {{ __('panel/file_manager.local_storage') }}
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="storageType" id="storageTypeOSS" value="oss" v-model="storageConfig.driver">
+                                    <label class="form-check-label" for="storageTypeOSS">
+                                        {{ __('panel/file_manager.alibaba_oss') }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div v-if="storageConfig.driver === 'oss'">
+                                <div class="mb-3">
+                                    <label for="ossKey" class="form-label">{{ __('panel/file_manager.access_key') }}</label>
+                                    <input type="text" class="form-control" id="ossKey" v-model="storageConfig.key">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ossSecret" class="form-label">{{ __('panel/file_manager.secret_key') }}</label>
+                                    <input type="password" class="form-control" id="ossSecret" v-model="storageConfig.secret">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ossEndpoint" class="form-label">{{ __('panel/file_manager.endpoint') }}</label>
+                                    <input type="text" class="form-control" id="ossEndpoint" v-model="storageConfig.endpoint"
+                                           placeholder="例如: https://innoshop.oss-cn-hangzhou.aliyuncs.com">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ossBucket" class="form-label">{{ __('panel/file_manager.bucket') }}</label>
+                                    <input type="text" class="form-control" id="ossBucket" v-model="storageConfig.bucket">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ossRegion" class="form-label">{{ __('panel/file_manager.region') }}</label>
+                                    <input type="text" class="form-control" id="ossRegion" v-model="storageConfig.region"
+                                           placeholder="例如: cn-hangzhou">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ossCdnDomain" class="form-label">{{ __('panel/file_manager.cdn_domain') }} <small class="text-muted">({{ __('panel/file_manager.optional') }})</small></label>
+                                    <input type="text" class="form-control" id="ossCdnDomain" v-model="storageConfig.cdn_domain"
+                                           placeholder="例如: https://cdn.example.com">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.cancel') }}</button>
+                        <button type="button" class="btn btn-primary" @click="saveStorageConfig">{{ __('panel/common.btn_save') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -1604,8 +1681,11 @@
             created() {
             },
             mounted() {
-                this.loadFolders();
                 this.loadFiles();
+                this.loadFolders();
+
+                // 获取当前存储配置
+                this.getStorageConfig();
             },
             data() {
                 return {
@@ -1703,6 +1783,15 @@
                     isDragging: false,
                     isIframeMode: {{ json_encode($isIframe) }},
                     fileType: '{{ $type }}',
+                    storageConfig: {
+                        driver: 'local',
+                        key: '',
+                        secret: '',
+                        endpoint: '',
+                        bucket: '',
+                        region: '',
+                        cdn_domain: ''
+                    },
                 }
             },
             methods: {
@@ -1804,6 +1893,7 @@
                     http.get('file_manager/files', { params })
                         .then(res => {
                             // 处理文件列表数据
+                            console.log(res)
                             this.files = res.images.map(file => ({
                                 ...file,
                                 id: file.id || file.path, // 确保每个文件都有唯一标识
@@ -2783,7 +2873,73 @@
                         }
                         parent.layer.closeAll();
                     }
-                }
+                },
+                saveStorageConfig() {
+                    console.log('开始保存存储配置:', this.storageConfig);
+
+                    axios.post('/api/panel/file_manager/storage_config', this.storageConfig)
+                        .then(response => {
+                            console.log('保存存储配置响应:', response);
+                            if (response.data && response.success) {
+                                layer.msg(response.message, {icon: 1});
+
+                                // 获取modal实例并关闭
+                                const modal = bootstrap.Modal.getInstance(document.getElementById('storageConfigModal'));
+                                if (modal) {
+                                    modal.hide();
+                                }
+
+                                // 刷新页面以应用新配置
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1500);
+                            } else {
+                                layer.msg(response.data ? response.message : '保存失败', {icon: 2});
+                            }
+                        })
+                        .catch(error => {
+                            console.error('保存存储配置失败:', error);
+                            layer.msg(error.response?.message || '保存失败', {icon: 2});
+                        });
+                },
+
+                // 获取存储配置
+                getStorageConfig() {
+                    console.log('开始获取存储配置...');
+                    axios.get('/api/panel/file_manager/storage_config')
+                        .then(response => {
+                            console.log('存储配置API响应:', response);
+                            if (response.data && response.success) {
+                                this.storageConfig = response.data;
+                                console.log('获取到的存储配置:', this.storageConfig);
+                            } else {
+                                console.error('获取存储配置失败:', response.data ? response.message : '未知错误');
+                                // 设置默认值
+                                this.storageConfig = {
+                                    driver: 'local',
+                                    key: '',
+                                    secret: '',
+                                    endpoint: '',
+                                    bucket: '',
+                                    region: '',
+                                    cdn_domain: ''
+                                };
+                            }
+                        })
+                        .catch(error => {
+                            console.error('获取存储配置请求失败:', error);
+                            // 设置默认值
+                            this.storageConfig = {
+                                driver: 'local',
+                                key: '',
+                                secret: '',
+                                endpoint: '',
+                                bucket: '',
+                                region: '',
+                                cdn_domain: ''
+                            };
+                        });
+                },
             },
             beforeDestroy() {
                 document.removeEventListener('click', this.hideContextMenu);

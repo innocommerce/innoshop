@@ -11,7 +11,6 @@ namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\CartItem;
 use InnoShop\Common\Services\CartService;
@@ -49,10 +48,10 @@ class CartController extends Controller
      * Add product sku to cart.
      *
      * @param  CartRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(CartRequest $request): JsonResponse
+    public function store(CartRequest $request): mixed
     {
         try {
             $cartData = CartService::getInstance()->addCart($request->all());
@@ -66,9 +65,9 @@ class CartController extends Controller
     /**
      * @param  CartRequest  $request
      * @param  CartItem  $cart
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(CartRequest $request, CartItem $cart): JsonResponse
+    public function update(CartRequest $request, CartItem $cart): mixed
     {
         try {
             $cartData = CartService::getInstance()->updateCart($cart, $request->all());
@@ -81,9 +80,9 @@ class CartController extends Controller
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function select(Request $request): JsonResponse
+    public function select(Request $request): mixed
     {
         try {
             $cartIds  = $request->get('cart_ids');
@@ -97,9 +96,9 @@ class CartController extends Controller
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function unselect(Request $request): JsonResponse
+    public function unselect(Request $request): mixed
     {
         try {
             $cartIds  = $request->get('cart_ids');
@@ -113,9 +112,9 @@ class CartController extends Controller
 
     /**
      * @param  CartItem  $cart
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(CartItem $cart): JsonResponse
+    public function destroy(CartItem $cart): mixed
     {
         try {
             $cart->delete();

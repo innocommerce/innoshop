@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -106,9 +105,9 @@ class LocaleController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function uninstall(Request $request): JsonResponse
+    public function uninstall(Request $request): mixed
     {
         try {
             $code   = $request->code;
@@ -128,7 +127,7 @@ class LocaleController extends BaseController
     /**
      * @throws Exception|Throwable
      */
-    public function active(Request $request, int $id): JsonResponse
+    public function active(Request $request, int $id): mixed
     {
         try {
             $item = Locale::query()->findOrFail($id);

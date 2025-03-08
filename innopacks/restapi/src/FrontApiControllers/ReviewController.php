@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Review;
@@ -35,10 +34,10 @@ class ReviewController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         try {
             $data = $request->all();
@@ -55,9 +54,9 @@ class ReviewController extends BaseController
 
     /**
      * @param  Review  $review
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Review $review): JsonResponse
+    public function destroy(Review $review): mixed
     {
         $review->delete();
 

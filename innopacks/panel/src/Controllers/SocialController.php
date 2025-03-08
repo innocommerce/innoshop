@@ -9,7 +9,6 @@
 
 namespace InnoShop\Panel\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\Customer\SocialRepo;
 use InnoShop\Common\Repositories\SettingRepo;
@@ -29,10 +28,10 @@ class SocialController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         try {
             $data = $request->all();

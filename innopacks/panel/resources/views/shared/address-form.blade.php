@@ -64,8 +64,8 @@
   const settingStateCode = @json(system_setting('state_code') ?? '');
 
   inno.validateAndSubmitForm('.address-form', function(data) {
-    if (typeof updataAddress === 'function') {
-      updataAddress(data);
+    if (typeof updateAddress === 'function') {
+      updateAddress(data);
     }
   })
 

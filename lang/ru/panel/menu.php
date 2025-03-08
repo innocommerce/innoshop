@@ -28,6 +28,7 @@ return [
     'customer_groups'    => 'Группы клиентов',
     'customers'          => 'Управление клиентами',
     'dashboard'          => 'Обзор',
+    'file_manager'       => 'Файловой администратор',
     'locale'             => 'Управление языками',
     'locales'            => 'Настройки языков',
     'localization'       => 'Локализация',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => 'Плагины',
     'top_product'        => 'Товары',
     'top_setting'        => 'Настройки',
+    'transactions'       => 'Баланс клиента',
     'upload'             => 'Функции загрузки',
 ];

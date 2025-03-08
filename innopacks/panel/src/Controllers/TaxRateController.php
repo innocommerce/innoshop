@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\TaxRate;
@@ -62,9 +61,9 @@ class TaxRateController extends BaseController
 
     /**
      * @param  TaxRateRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function store(TaxRateRequest $request): JsonResponse
+    public function store(TaxRateRequest $request): mixed
     {
         try {
             $data    = $request->all();
@@ -105,9 +104,9 @@ class TaxRateController extends BaseController
     /**
      * @param  TaxRateRequest  $request
      * @param  TaxRate  $taxRate
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(TaxRateRequest $request, TaxRate $taxRate): JsonResponse
+    public function update(TaxRateRequest $request, TaxRate $taxRate): mixed
     {
         try {
             $data    = $request->all();

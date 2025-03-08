@@ -28,6 +28,7 @@ return [
     'customer_groups'    => 'Grupos de clientes',
     'customers'          => 'Clientes',
     'dashboard'          => 'Panel de control',
+    'file_manager'       => 'Gestor de archivos',
     'locale'             => 'Gestión de idiomas',
     'locales'            => 'Idiomas',
     'localization'       => 'Localización',
@@ -37,7 +38,6 @@ return [
     'pages'              => 'Páginas',
     'plugin_market'      => 'Mercado de complementos',
     'plugins'            => 'Complementos',
-    'plugins_market'     => 'Mercado de complementos',
     'product'            => 'Producto',
     'products'           => 'Productos',
     'regions'            => 'Regiones',
@@ -61,5 +61,6 @@ return [
     'top_plugin'         => 'Complementos',
     'top_product'        => 'Producto',
     'top_setting'        => 'Ajuste',
+    'transactions'       => 'Saldo del cliente',
     'upload'             => 'Función de carga',
 ];

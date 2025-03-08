@@ -6,12 +6,14 @@
  * @author     InnoShop <team@innoshop.com>
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
+
 return [
     'about_us'          => 'Hakkımızda',
     'action'            => 'İşlem',
     'add'               => 'Ekle',
     'all'               => 'Tümü',
     'back_page'         => 'Geri Git',
+    'brands'            => 'brand',
     'cancel'            => 'İptal',
     'confirm'           => 'Onayla',
     'created_at'        => 'Oluşturulma Tarihi',
@@ -33,6 +35,7 @@ return [
     'out_of_stock'      => 'Stokta Yok',
     'page_total_show'   => ':first ile :last arasında :total öğe gösteriliyor',
     'pages'             => 'Sayfalar',
+    'password'          => 'cipher',
     'please_choose'     => 'Lütfen Seçiniz',
     'products'          => 'Ürünler',
     'read_success'      => 'Başarıyla alındı',
@@ -41,6 +44,7 @@ return [
     'search'            => 'Ara',
     'show'              => 'Göster',
     'sort'              => 'Sırala',
+    'specials'          => 'Özel İndirimler',
     'status'            => 'Durum',
     'submit'            => 'Gönder',
     'submitted_success' => 'Başarıyla gönderildi',
@@ -49,5 +53,4 @@ return [
     'updated_success'   => 'Başarıyla güncellendi',
     'view'              => 'Görüntüle',
     'yes'               => 'Evet',
-    'specials'          => 'Özel İndirimler',
 ];

@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\TaxClass;
@@ -67,10 +66,10 @@ class TaxClassController extends BaseController
 
     /**
      * @param  TaxClassRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(TaxClassRequest $request): JsonResponse
+    public function store(TaxClassRequest $request): mixed
     {
         try {
             $data     = $request->all();
@@ -113,9 +112,9 @@ class TaxClassController extends BaseController
     /**
      * @param  TaxClassRequest  $request
      * @param  TaxClass  $taxClass
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(TaxClassRequest $request, TaxClass $taxClass): JsonResponse
+    public function update(TaxClassRequest $request, TaxClass $taxClass): mixed
     {
         try {
             $data     = $request->all();

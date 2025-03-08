@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Catalog;
@@ -47,10 +46,10 @@ class CatalogController extends BaseController
 
     /**
      * @param  CatalogRequest  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(CatalogRequest $request): JsonResponse
+    public function store(CatalogRequest $request): mixed
     {
         try {
             $data    = $request->all();
@@ -65,9 +64,9 @@ class CatalogController extends BaseController
     /**
      * @param  CatalogRequest  $request
      * @param  Catalog  $catalog
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(CatalogRequest $request, Catalog $catalog): JsonResponse
+    public function update(CatalogRequest $request, Catalog $catalog): mixed
     {
         try {
             $data = $request->all();
@@ -81,9 +80,9 @@ class CatalogController extends BaseController
 
     /**
      * @param  Catalog  $catalog
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Catalog $catalog): JsonResponse
+    public function destroy(Catalog $catalog): mixed
     {
         try {
             CatalogRepo::getInstance()->destroy($catalog);

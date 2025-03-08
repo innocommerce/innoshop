@@ -10,7 +10,6 @@
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -464,9 +463,9 @@ if (! function_exists('debug_view')) {
 if (! function_exists('create_json_success')) {
     /**
      * @param  null  $data
-     * @return JsonResponse
+     * @return mixed
      */
-    function create_json_success($data = null): JsonResponse
+    function create_json_success($data = null): mixed
     {
         $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
         if ($hook) {
@@ -480,9 +479,9 @@ if (! function_exists('create_json_success')) {
 if (! function_exists('read_json_success')) {
     /**
      * @param  null  $data
-     * @return JsonResponse
+     * @return mixed
      */
-    function read_json_success($data = null): JsonResponse
+    function read_json_success($data = null): mixed
     {
         $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
         if ($hook) {
@@ -496,9 +495,9 @@ if (! function_exists('read_json_success')) {
 if (! function_exists('update_json_success')) {
     /**
      * @param  null  $data
-     * @return JsonResponse
+     * @return mixed
      */
-    function update_json_success($data = null): JsonResponse
+    function update_json_success($data = null): mixed
     {
         $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
         if ($hook) {
@@ -512,9 +511,9 @@ if (! function_exists('update_json_success')) {
 if (! function_exists('delete_json_success')) {
     /**
      * @param  null  $data
-     * @return JsonResponse
+     * @return mixed
      */
-    function delete_json_success($data = null): JsonResponse
+    function delete_json_success($data = null): mixed
     {
         $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
         if ($hook) {
@@ -528,9 +527,9 @@ if (! function_exists('delete_json_success')) {
 if (! function_exists('submit_json_success')) {
     /**
      * @param  null  $data
-     * @return JsonResponse
+     * @return mixed
      */
-    function submit_json_success($data = null): JsonResponse
+    function submit_json_success($data = null): mixed
     {
         $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
         if ($hook) {
@@ -545,9 +544,9 @@ if (! function_exists('json_success')) {
     /**
      * @param  $message
      * @param  $data
-     * @return JsonResponse
+     * @return mixed
      */
-    function json_success($message, $data = null): JsonResponse
+    function json_success($message, $data = null): mixed
     {
         if ($data instanceof Model) {
             $data = $data->toArray();
@@ -559,6 +558,11 @@ if (! function_exists('json_success')) {
             'data'    => $data,
         ];
 
+        $debugBar = request()->has('bar');
+        if ($debugBar) {
+            return view('panel::debugbar', ['data' => $json]);
+        }
+
         return response()->json($json);
     }
 }
@@ -568,9 +572,9 @@ if (! function_exists('json_fail')) {
      * @param  $message
      * @param  $data
      * @param  int  $code
-     * @return JsonResponse
+     * @return mixed
      */
-    function json_fail($message, $data = null, int $code = 422): JsonResponse
+    function json_fail($message, $data = null, int $code = 422): mixed
     {
         if ($data instanceof Model) {
             $data = $data->toArray();
@@ -581,6 +585,11 @@ if (! function_exists('json_fail')) {
             'message' => $message,
             'data'    => $data,
         ];
+
+        $debugBar = request()->has('bar');
+        if ($debugBar) {
+            return view('panel::debugbar', ['data' => $json]);
+        }
 
         return response()->json($json, $code);
     }

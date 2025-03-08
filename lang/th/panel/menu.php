@@ -28,6 +28,7 @@ return [
     'customer_groups'    => 'กลุ่มลูกค้า',
     'customers'          => 'การจัดการลูกค้า',
     'dashboard'          => 'ภาพรวม',
+    'file_manager'       => 'ตัวจัดการแฟ้ม',
     'locale'             => 'การจัดการภาษา',
     'locales'            => 'การตั้งค่าภาษา',
     'localization'       => 'การแปลและปรับท้องถิ่น',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => 'ปลั๊กอิน',
     'top_product'        => 'สินค้า',
     'top_setting'        => 'การตั้งค่า',
+    'transactions'       => 'ความสมดุลของลูกค้า',
     'upload'             => 'ฟังก์ชันการอัปโหลด',
 ];

@@ -9,7 +9,6 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Address;
 use InnoShop\Common\Repositories\AddressRepo;
@@ -19,9 +18,9 @@ use Throwable;
 class AddressController extends BaseController
 {
     /**
-     * @return JsonResponse
+     * @return mixed
      */
-    public function index(): JsonResponse
+    public function index(): mixed
     {
         $filters = [
             'customer_id' => token_customer_id(),
@@ -35,10 +34,10 @@ class AddressController extends BaseController
 
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      * @throws Throwable
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): mixed
     {
         $data = $request->all();
 
@@ -52,9 +51,9 @@ class AddressController extends BaseController
 
     /**
      * @param  Address  $address
-     * @return JsonResponse
+     * @return mixed
      */
-    public function show(Address $address): JsonResponse
+    public function show(Address $address): mixed
     {
         $customerID = token_customer_id();
         if ($customerID != $address->customer_id) {
@@ -69,9 +68,9 @@ class AddressController extends BaseController
     /**
      * @param  Request  $request
      * @param  Address  $address
-     * @return JsonResponse
+     * @return mixed
      */
-    public function update(Request $request, Address $address): JsonResponse
+    public function update(Request $request, Address $address): mixed
     {
         $customerID = token_customer_id();
         if ($customerID != $address->customer_id) {
@@ -90,9 +89,9 @@ class AddressController extends BaseController
 
     /**
      * @param  Address  $address
-     * @return JsonResponse
+     * @return mixed
      */
-    public function destroy(Address $address): JsonResponse
+    public function destroy(Address $address): mixed
     {
         $customerID = token_customer_id();
         if ($customerID != $address->customer_id) {

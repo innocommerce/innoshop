@@ -4,7 +4,7 @@
 
 <x-panel::form.row :title="$title" :required="$required" width="1000">
   @if (!$multiple)
-    <textarea rows="4" type="text" name="{{ $name }}" class="tinymce" placeholder="{{ $title }}">{{ $value }}</textarea>
+    <textarea rows="4" type="text" name="{{ $name }}" class="tinymce" placeholder="{{ $title }}" @if($elID) id="{{ $elID }}" @endif>{{ $value }}</textarea>
     {{ $slot }}
   @else
     <ul class="nav nav-tabs w-max-1000 mb-2" id="myTab" role="tablist">

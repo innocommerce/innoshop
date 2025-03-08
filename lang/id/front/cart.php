@@ -20,4 +20,5 @@ return [
     'selected'    => 'Terpilih',
     'subtotal'    => 'Subtotal',
     'total'       => 'Total',
+    'view_cart'   => 'Ke kereta belanja',
 ];

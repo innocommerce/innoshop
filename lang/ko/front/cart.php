@@ -20,4 +20,5 @@ return [
     'selected'    => '선택됨',
     'subtotal'    => '소계',
     'total'       => '총액',
+    'view_cart'   => '쇼핑 카트로 들어가다',
 ];

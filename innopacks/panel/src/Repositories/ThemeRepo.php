@@ -48,9 +48,10 @@ class ThemeRepo
         foreach ($themePaths as $themePath) {
             $theme    = trim(str_replace($path, '', $themePath), '/');
             $themes[] = [
-                'code'  => $theme,
-                'name'  => Str::studly($theme),
-                'value' => system_setting('theme') == $theme,
+                'code'    => $theme,
+                'name'    => Str::studly($theme),
+                'value'   => system_setting('theme') == $theme,
+                'preview' => $this->getPreviewPath($theme),
             ];
         }
 
@@ -68,5 +69,24 @@ class ThemeRepo
             $settings[$key] = $settings[$key] ?? [];
         }
         SettingRepo::getInstance()->updateValues($settings);
+    }
+
+    /**
+     * @param  string  $themeCode
+     * @return string
+     */
+    private function getPreviewPath(string $themeCode): string
+    {
+        $path = theme_path($themeCode.'/public/images/preview.png');
+        if (file_exists($path)) {
+            return 'images/preview.png';
+        }
+
+        $path = theme_path($themeCode.'/public/images/preview.jpg');
+        if (file_exists($path)) {
+            return 'images/preview.jpg';
+        }
+
+        return '';
     }
 }

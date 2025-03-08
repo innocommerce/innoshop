@@ -10,10 +10,9 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\CustomerRepo;
-use InnoShop\Common\Resources\CustomerSimple;
+use InnoShop\Common\Resources\CustomerDetail;
 use InnoShop\Front\Requests\PasswordRequest;
 use InnoShop\Front\Requests\SetPasswordRequest;
 
@@ -21,12 +20,12 @@ class AccountController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function me(Request $request): JsonResponse
+    public function me(Request $request): mixed
     {
         $user   = $request->user();
-        $result = new CustomerSimple($user);
+        $result = new CustomerDetail($user);
 
         return read_json_success($result);
     }
@@ -43,7 +42,7 @@ class AccountController extends BaseController
             $requestData = $request->only(['avatar', 'name', 'email']);
             CustomerRepo::getInstance()->update($customer, $requestData);
 
-            $result = new CustomerSimple($customer);
+            $result = new CustomerDetail($customer);
 
             return update_json_success($result);
 
@@ -56,14 +55,14 @@ class AccountController extends BaseController
      * Request to change password.
      *
      * @param  PasswordRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function updatePassword(PasswordRequest $request): JsonResponse
+    public function updatePassword(PasswordRequest $request): mixed
     {
         try {
             $customer = $request->user();
             CustomerRepo::getInstance()->updatePassword($customer, $request->all());
-            $result = new CustomerSimple($customer);
+            $result = new CustomerDetail($customer);
 
             return update_json_success($result);
         } catch (Exception $e) {
@@ -75,9 +74,9 @@ class AccountController extends BaseController
      * Request to change password.
      *
      * @param  SetPasswordRequest  $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function setPassword(SetPasswordRequest $request): JsonResponse
+    public function setPassword(SetPasswordRequest $request): mixed
     {
         try {
             $customer = $request->user();
@@ -86,7 +85,7 @@ class AccountController extends BaseController
             }
 
             CustomerRepo::getInstance()->forceUpdatePassword($customer, $request->get('new_password'));
-            $result = new CustomerSimple($customer);
+            $result = new CustomerDetail($customer);
 
             return update_json_success($result);
         } catch (Exception $e) {

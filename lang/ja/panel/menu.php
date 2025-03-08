@@ -28,6 +28,7 @@ return [
     'customer_groups'    => '顧客グループ',
     'customers'          => '顧客管理',
     'dashboard'          => 'ダッシュボード',
+    'file_manager'       => 'ファイルマネージャです',
     'locale'             => '言語管理',
     'locales'            => '言語設定',
     'localization'       => 'ローカリゼーション',
@@ -60,5 +61,6 @@ return [
     'top_plugin'         => 'プラグイン',
     'top_product'        => '製品',
     'top_setting'        => '設定',
+    'transactions'       => 'お客様残高です',
     'upload'             => 'アップロード機能',
 ];

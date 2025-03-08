@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('guest_id')->default('')->comment('Guest ID, like session id');
             $table->string('name')->comment('Customer Name');
             $table->string('email')->nullable()->comment('Email');
-            $table->string('phone')->default('')->comment('Telephone');
+            $table->string('phone')->nullable()->comment('Telephone');
             $table->unsignedInteger('country_id')->index('country_id')->comment('Country ID');
             $table->unsignedInteger('state_id')->index('state_id')->comment('state ID');
             $table->string('state')->comment('state Name');

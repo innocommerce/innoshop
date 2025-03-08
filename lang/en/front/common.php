@@ -35,6 +35,7 @@ return [
     'out_of_stock'      => 'Out of Stock',
     'page_total_show'   => 'Showing :first to :last of :total items',
     'pages'             => 'Pages',
+    'password'          => 'cipher',
     'please_choose'     => 'Please Choose',
     'products'          => 'Products',
     'read_success'      => 'Get successfully',
@@ -43,6 +44,7 @@ return [
     'search'            => 'Search',
     'show'              => 'Show',
     'sort'              => 'Sort',
+    'specials'          => 'Specials',
     'status'            => 'Status',
     'submit'            => 'Submit',
     'submitted_success' => 'Submitted successfully',
@@ -51,5 +53,4 @@ return [
     'updated_success'   => 'Updated successfully',
     'view'              => 'View',
     'yes'               => 'yes',
-    'specials'          => 'Specials',
 ];

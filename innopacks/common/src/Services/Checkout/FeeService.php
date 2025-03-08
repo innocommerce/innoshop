@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Services\Checkout;
 
+use InnoShop\Common\Services\Fee\BalanceService;
 use InnoShop\Common\Services\Fee\Shipping;
 use InnoShop\Common\Services\Fee\Subtotal;
 use InnoShop\Common\Services\Fee\Tax;
@@ -36,6 +37,7 @@ class FeeService extends BaseService
             Subtotal::class,
             Tax::class,
             Shipping::class,
+            BalanceService::class,
         ];
 
         return fire_hook_filter('service.checkout.fee.methods', $classes);

@@ -10,7 +10,6 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Product;
@@ -33,8 +32,25 @@ class ProductController extends BaseController
         $filters = $request->all();
         $perPage = $request->get('per_page', 15);
 
-        $builder  = ProductRepo::getInstance()->withActive()->builder($filters);
-        $products = $builder->paginate($perPage);
+        $sort  = $filters['sort']  ?? 'id';
+        $order = $filters['order'] ?? 'desc';
+
+        $builder = ProductRepo::getInstance()->withActive()->builder($filters);
+
+        $productBuilder = clone $builder;
+
+        if ($sort == 'price') {
+            $productBuilder->select(['products.*', 'ps.price']);
+            $productBuilder->join('product_skus as ps', function ($query) {
+                $query->on('ps.product_id', '=', 'products.id')
+                    ->where('is_default', true);
+            });
+            $productBuilder->orderBy('ps.price', $order);
+        } elseif (in_array($sort, ['id', 'sales', 'viewed'])) {
+            $productBuilder->orderBy($sort, $order);
+        }
+
+        $products = $productBuilder->paginate($perPage);
 
         return ProductSimple::collection($products)->additional([
             'filters' => FilterRepo::getInstance($builder)->getCurrentFilters(),
@@ -43,9 +59,9 @@ class ProductController extends BaseController
 
     /**
      * @param  Product  $product
-     * @return JsonResponse
+     * @return mixed
      */
-    public function show(Product $product): JsonResponse
+    public function show(Product $product): mixed
     {
         $single = new ProductDetail($product);
 
