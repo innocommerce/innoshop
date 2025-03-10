@@ -5,8 +5,8 @@
     "en": "TikTok Pixel"
   },
   "description": {
-    "zh_cn": "集成 TikTok Pixel 广告追踪功能，支持事件上报与商品同步",
-    "en": "Integrate TikTok Pixel for ad tracking and product sync"
+    "zh_cn": "集成 TikTok Pixel 广告追踪功能，支持事件上报",
+    "en": "Integrate TikTok Pixel for ad tracking"
   },
   "type": "feature",
   "version": "v1.0.0",

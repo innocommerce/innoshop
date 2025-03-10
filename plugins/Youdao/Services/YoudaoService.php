@@ -75,6 +75,7 @@ class YoudaoService implements Translator
             'pt'    => 'pt',
             'ru'    => 'ru',
             'th'    => 'th',
+            'tr'    => 'tr',
             'vi'    => 'vi',
             'zh_cn' => 'zh-CHS',
             'zh_hk' => 'zh-CHT',

@@ -5,7 +5,7 @@
         "en": "Float Cart"
     },
     "description": {
-        "zh_cn": "悬浮购物车",
+        "zh_cn": "产品详情页底部显示固定购物车",
         "en": "Float Cart"
     },
     "type": "feature",

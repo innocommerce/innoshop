@@ -25,7 +25,7 @@
     @hookinsert('front.account.sidebar.favorites.after')
     
     <li class="{{ equal_route_name('front.account.transactions.index') ? 'active' : '' }}">
-      <a href="{{ account_route('transactions.index') }}"><i class="bi bi-coin"></i>{{ front_trans('account.transactions') }}
+      <a href="{{ account_route('transactions.index') }}"><i class="bi bi-wallet"></i>{{ front_trans('account.transactions') }}
       </a>
     </li>
     @hookinsert('front.account.sidebar.transactions.after')

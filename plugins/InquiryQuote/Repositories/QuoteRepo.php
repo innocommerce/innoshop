@@ -174,6 +174,7 @@ class QuoteRepo extends BaseRepo
     public function builder(array $filters = []): Builder
     {
         $builder = InquiryQuote::query();
+        $builder->with('items');
 
         $number = $filters['number'] ?? '';
         if ($number) {

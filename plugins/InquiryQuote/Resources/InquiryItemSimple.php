@@ -32,6 +32,7 @@ class InquiryItemSimple extends JsonResource
             'inquiry_quote_id'     => $this->inquiry_quote_id,
             'product_id'           => $product->id,
             'product_name'         => $product->translation->name ?? '',
+            'image'                => image_resize($sku->image->path ?? ($product->image->path ?? '')),
             'variant_label'        => $sku->variant_label,
             'sku_id'               => $sku->id,
             'sku_code'             => $sku->code,

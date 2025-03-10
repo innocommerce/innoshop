@@ -235,10 +235,15 @@ class OrderRepo extends BaseRepo
 
     /**
      * @param  $orderNumber
+     * @param  bool  $force
      * @return mixed
      */
-    public function getOrderByNumber($orderNumber): mixed
+    public function getOrderByNumber($orderNumber, bool $force = false): mixed
     {
+        if ($force) {
+            return $this->builder(['number' => $orderNumber])->firstOrFail();
+        }
+
         return $this->builder(['number' => $orderNumber])->first();
     }
 

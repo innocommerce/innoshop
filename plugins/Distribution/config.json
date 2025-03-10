@@ -1,0 +1,18 @@
+{
+    "code": "distribution",
+    "name": {
+        "zh_cn": "客户分销",
+        "en": "Distribution"
+    },
+    "description": {
+        "zh_cn": "通过客户分享链接分销产品",
+        "en": "Distribute products through customer-shared links."
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

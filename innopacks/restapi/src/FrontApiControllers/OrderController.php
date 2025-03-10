@@ -61,15 +61,19 @@ class OrderController extends BaseController
      */
     public function numberShow(int $number): mixed
     {
-        $order = OrderRepo::getInstance()->getOrderByNumber($number);
-        if ($order->customer_id != token_customer_id()) {
-            return json_fail('Unauthorized', null, 403);
+        try {
+            $order = OrderRepo::getInstance()->getOrderByNumber($number, true);
+            if ($order->customer_id != token_customer_id()) {
+                return json_fail('Unauthorized', null, 403);
+            }
+
+            $order->load(['items.review', 'fees']);
+            $result = new OrderDetail($order);
+
+            return read_json_success($result);
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
         }
-
-        $order->load(['items.review', 'fees']);
-        $result = new OrderDetail($order);
-
-        return read_json_success($result);
     }
 
     /**

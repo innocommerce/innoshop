@@ -25,9 +25,9 @@
               <div class="left">
                 <div class="icon drag-variants-handle"><i class="bi bi-grip-vertical"></i></div>
                 <div class="info">
-                  <div class="title">@{{ variant.name[defaultLocale] }}</div>
+                  <div class="title">@{{ variant.name[defaultLocale] || getFirstAvailableLocaleValue(variant.name) }}</div>
                   <div class="values">
-                    <span v-for="(value, i) in variant.values" :key="i">@{{ value.name[defaultLocale] }}</span>
+                    <span v-for="(value, i) in variant.values" :key="i">@{{ value.name[defaultLocale] || getFirstAvailableLocaleValue(value.name) }}</span>
                   </div>
                 </div>
               </div>
@@ -402,6 +402,25 @@
         localStorage.setItem('variants', JSON.stringify(variants.value))
       }
 
+      // Function to get first available locale value as fallback
+      const getFirstAvailableLocaleValue = (localeObject) => {
+        if (!localeObject) return '';
+
+        // First try the default system locale
+        const systemDefaultLocale = @json(setting_locale_code());
+        if (localeObject[systemDefaultLocale]) return localeObject[systemDefaultLocale];
+
+        // Otherwise get the first non-empty value
+        for (const locale of locales) {
+          if (localeObject[locale.code] && localeObject[locale.code].trim() !== '') {
+            return localeObject[locale.code];
+          }
+        }
+
+        // If still nothing, return empty string
+        return '';
+      };
+
       // 生成 sku 组合
       const generateSku = () => {
         if (variants.value.length === 0) {
@@ -434,7 +453,9 @@
 
           for (let j = 0; j < skuVariantsLength; j++) {
             skuItem.variants.push(skuVariantsIndex[j])
-            skuItem.text += ' ' + tempVariants[j].values[skuVariantsIndex[j]].name[defaultLocale] + ' /'
+            const valueName = tempVariants[j].values[skuVariantsIndex[j]].name[defaultLocale] ||
+                              getFirstAvailableLocaleValue(tempVariants[j].values[skuVariantsIndex[j]].name)
+            skuItem.text += ' ' + valueName + ' /'
           }
 
           skuItem.text = skuItem.text.slice(0, -1)
@@ -703,6 +724,7 @@
         batchData,
         batchFillSkuCode,
         batchFillColumn,
+        getFirstAvailableLocaleValue,
       }
     }
   }).mount('#variants-box');

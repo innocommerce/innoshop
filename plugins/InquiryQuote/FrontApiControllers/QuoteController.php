@@ -17,7 +17,7 @@ use InnoShop\RestAPI\FrontApiControllers\BaseController;
 use Plugin\InquiryQuote\Models\InquiryQuote;
 use Plugin\InquiryQuote\Repositories\QuoteRepo;
 use Plugin\InquiryQuote\Requests\QuoteRequest;
-use Plugin\InquiryQuote\Resources\QuoteSimple;
+use Plugin\InquiryQuote\Resources\QuoteDetail;
 use Plugin\InquiryQuote\Services\CommentService;
 use Plugin\InquiryQuote\Services\QuoteService;
 use Plugin\InquiryQuote\Services\SplittingService;
@@ -32,9 +32,12 @@ class QuoteController extends BaseController
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $filters = $request->all();
+        $customerID = token_customer_id();
+        $filters    = $request->all();
 
-        return QuoteSimple::collection(QuoteRepo::getInstance()->list($filters));
+        $filters['customer_id'] = $customerID;
+
+        return QuoteDetail::collection(QuoteRepo::getInstance()->list($filters));
     }
 
     /**
