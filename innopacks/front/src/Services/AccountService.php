@@ -38,6 +38,8 @@ class AccountService extends BaseService
         $customer = CustomerRepo::getInstance()->create($customerData);
         $customer->notifyRegistration();
 
+        fire_hook_action('front.service.account.register', $customer);
+
         return $customer;
     }
 

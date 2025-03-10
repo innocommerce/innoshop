@@ -1,7 +1,8 @@
 export default {
   randomString(length = 32) {
-    let str = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let str = "";
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (let i = 0; i < length; i++) {
       str += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -9,42 +10,45 @@ export default {
   },
 
   msg(params = {}, callback = null) {
-    let msg = typeof params === 'string' ? params : params.msg || '';
+    let msg = typeof params === "string" ? params : params.msg || "";
     let time = params.time || 2000;
-    layer.msg(msg, {time}, callback);
+    layer.msg(msg, { time }, callback);
   },
 
   alert(params = {}, callback = null) {
     let top = 70;
     let id = Math.random().toString(36).substring(7);
-    let msg = typeof params === 'string' ? params : params.msg || '';
-    let type = params.type || 'success';
-    let icon = 'bi-check-circle-fill';
-    if (type != 'success') {
-      icon = 'bi-exclamation-circle-fill';
+    let msg = typeof params === "string" ? params : params.msg || "";
+    let type = params.type || "success";
+    let icon = "bi-check-circle-fill";
+    if (type != "success") {
+      icon = "bi-exclamation-circle-fill";
     }
 
-    $('.is-alert').each(function () {
+    $(".is-alert").each(function () {
       top += $(this).outerHeight() + 10;
     });
 
-    let html = '';
+    let html = "";
     html += ` <div id="alert-${id}" class="alert alert-${type} alert-dismissible is-alert position-fixed me-4 z-3">`;
     html += `   <i class="bi ${icon}"></i>`;
-    html += '   ' + msg;
-    html += '   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
-    html += ' </div>';
+    html += "   " + msg;
+    html +=
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+    html += " </div>";
 
-    $('body').append(html);
+    $("body").append(html);
 
-    $('#alert-' + id).css({right: '-100%',top}).animate({right: '0'}, 200);
+    $("#alert-" + id)
+      .css({ right: "-100%", top })
+      .animate({ right: "0" }, 200);
 
     window.setTimeout(function () {
-      $('#alert-' + id).animate({right: '-100%'}, 200, function () {
+      $("#alert-" + id).animate({ right: "-100%" }, 200, function () {
         $(this).remove();
         top = 40;
-        $('.is-alert').each(function () {
-          $(this).animate({top}, 100);
+        $(".is-alert").each(function () {
+          $(this).animate({ top }, 100);
           top += $(this).outerHeight() + 10;
         });
 
@@ -56,44 +60,48 @@ export default {
   },
 
   imgUploadAjax(file, _self, callback = null) {
-    if (file.type.indexOf('image') === -1) {
-        alert('请上传图片文件');
-        return;
+    if (file.type.indexOf("image") === -1) {
+      alert("请上传图片文件");
+      return;
     }
 
     let formData = new FormData();
-    formData.append('image', file);
-    formData.append('type', _self.parents('.is-up-file').data('type'));
-    _self.find('.img-loading').removeClass('d-none');
-    axios.post(urls.upload_images, formData, {}).then(function (res) {
-      callback(res);
-    }).catch(function (err) {
-      inno.msg(err.response.data.message);
-    }).finally(function () {
-      _self.find('.img-loading').addClass('d-none');
-    });
+    formData.append("image", file);
+    formData.append("type", _self.parents(".is-up-file").data("type"));
+    _self.find(".img-loading").removeClass("d-none");
+    axios
+      .post(urls.upload_images, formData, {})
+      .then(function (res) {
+        callback(res);
+      })
+      .catch(function (err) {
+        inno.msg(err.response.data.message);
+      })
+      .finally(function () {
+        _self.find(".img-loading").addClass("d-none");
+      });
   },
 
   // bootstrap 表单验证, js 验证
   validateAndSubmitForm(form, callback) {
-    $(document).on('click', `${form} .form-submit`, function(event) {
+    $(document).on("click", `${form} .form-submit`, function (event) {
       if ($(form)[0].checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
       }
 
-      $(form).addClass('was-validated');
+      $(form).addClass("was-validated");
 
       if ($(form)[0].checkValidity() === true) {
         callback($(form).serialize());
       }
-    })
+    });
 
-    $(document).on('keypress', `${form} input`, function(event) {
+    $(document).on("keypress", `${form} input`, function (event) {
       if (event.keyCode === 13) {
-        $(`${form} .form-submit`).trigger('click');
+        $(`${form} .form-submit`).trigger("click");
       }
-    })
+    });
   },
 
   /**
@@ -105,22 +113,37 @@ export default {
    */
   confirmDelete(api, handleResponseInternally = true) {
     return new Promise((resolve, reject) => {
-      layer.confirm(lang.delete_confirm, {icon: 3, title: lang.hint, btn: [lang.confirm, lang.cancel]}, function(index) {
-        layer.close(index);
-        layer.load(2, {shade: [0.3,'#fff'] })
-        axios.delete(api).then((res) => {
-          if (handleResponseInternally) {
-            inno.msg(res.message)
-            location.reload();
-          }
-          resolve(res);
-        }).catch((err) => {
-          reject(err);
-          inno.msg(err.response.data.message)
-        }).finally(() => {
-          layer.closeAll('loading');
-        });
-      });
+      layer.confirm(
+        lang.delete_confirm,
+        { icon: 3, title: lang.hint, btn: [lang.confirm, lang.cancel] },
+        function (index) {
+          layer.close(index);
+          layer.load(2, { shade: [0.3, "#fff"] });
+          axios
+            .delete(api)
+            .then((res) => {
+              if (handleResponseInternally) {
+                inno.msg(res.message);
+                location.reload();
+              }
+              resolve(res);
+            })
+            .catch((err) => {
+              reject(err);
+              inno.msg(err.response.data.message);
+            })
+            .finally(() => {
+              layer.closeAll("loading");
+            });
+        }
+      );
     });
+  },
+  // 获取url中的参数, url 传入的url，name 要获取的参数名
+  getQueryString(name, url = window.location.href) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = url.split("?")[1] ? url.split("?")[1].match(reg) : null;
+    if (r != null) return unescape(r[2]);
+    return null;
   },
 };

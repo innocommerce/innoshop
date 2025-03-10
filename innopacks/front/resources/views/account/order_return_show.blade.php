@@ -26,7 +26,7 @@
           </div>
 
           <table class="table table-bordered">
-            <tbody>
+            <tbody>           
             <tr>
               <td class="order_return">{{ __('front/return.number') }}:</td>
               <td class="order_return">{{ $order_return->number }}</td>

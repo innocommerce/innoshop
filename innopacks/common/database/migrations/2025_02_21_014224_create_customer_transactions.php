@@ -17,14 +17,16 @@ return new class extends Migration
             });
         }
 
-        Schema::create('customer_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->integer('customer_id')->index('customer_id')->comment('Customer ID');
-            $table->decimal('amount')->comment('Amount');
-            $table->string('type')->comment('Transaction Type');
-            $table->text('comment')->nullable()->comment('Comment');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('customer_transactions')) {
+            Schema::create('customer_transactions', function (Blueprint $table) {
+                $table->id();
+                $table->integer('customer_id')->index('customer_id')->comment('Customer ID');
+                $table->decimal('amount')->comment('Amount');
+                $table->string('type')->comment('Transaction Type');
+                $table->text('comment')->nullable()->comment('Comment');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

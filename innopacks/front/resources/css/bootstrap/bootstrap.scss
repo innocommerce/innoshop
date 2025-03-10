@@ -59,6 +59,11 @@ $pagination-focus-color: #606266;
     }
   }
 }
+ 
+.accordion-button:not(.collapsed) {
+  background-color:$primary; 
+  color: rgb(12, 11, 11); 
+}
 
 $form-validation-states: (
   "invalid": (

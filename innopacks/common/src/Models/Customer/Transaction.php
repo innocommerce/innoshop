@@ -21,10 +21,6 @@ class Transaction extends BaseModel
         'customer_id', 'amount', 'type', 'comment',
     ];
 
-    const TYPES = [
-        'recharge', 'withdraw', 'refund', 'consumption',
-    ];
-
     const TYPE_RECHARGE = 'recharge';
 
     const TYPE_WITHDRAW = 'withdraw';
@@ -32,6 +28,16 @@ class Transaction extends BaseModel
     const TYPE_REFUND = 'refund';
 
     const TYPE_CONSUMPTION = 'consumption';
+
+    const TYPE_COMMISSION = 'commission';
+
+    const TYPES = [
+        self::TYPE_RECHARGE,
+        self::TYPE_WITHDRAW,
+        self::TYPE_REFUND,
+        self::TYPE_CONSUMPTION,
+        self::TYPE_COMMISSION,
+    ];
 
     /**
      * @return BelongsTo

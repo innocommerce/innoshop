@@ -24,6 +24,7 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address-tab-pane" type="button" role="tab">{{ __('panel/customer.address_manage') }}</button>
             </li>
+            @hookinsert('panel.customer.edit.tab.nav.bottom')
           </ul>
 
           <div class="tab-content" id="customerTabContent">
@@ -105,6 +106,8 @@
               </table>
             </div>
 
+            @hookinsert('panel.customer.edit.tab.pane.bottom')
+            
           </div>
         </div>
       </div>

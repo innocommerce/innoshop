@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Traits;
 
+use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait Translatable
@@ -38,7 +39,7 @@ trait Translatable
      * Locale translation object
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function translation(): mixed
     {
