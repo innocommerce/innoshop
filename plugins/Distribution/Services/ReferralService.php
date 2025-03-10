@@ -80,13 +80,12 @@ class ReferralService extends BaseService
         $commissionAmount = CommissionRepo::getInstance()->getCommissionTotalByReferral($referralID);
         $orderAmount      = CommissionRepo::getInstance()->getAmountTotalByReferral($referralID);
         $orderTotal       = CommissionRepo::getInstance()->getOrderTotalByReferral($referralID);
-        $currencyCode     = system_setting('currency');
 
         return [
             'member_total'      => $memberTotal,
-            'commission_amount' => currency_format($commissionAmount, $currencyCode),
+            'commission_amount' => currency_format($commissionAmount),
             'order_total'       => $orderTotal,
-            'order_amount'      => currency_format($orderAmount, $currencyCode),
+            'order_amount'      => currency_format($orderAmount),
         ];
     }
 
@@ -121,7 +120,7 @@ class ReferralService extends BaseService
             $commission->save();
 
             $transaction = [
-                'customer_id' => $order->customer_id,
+                'customer_id' => $order->referrer_id,
                 'amount'      => $commission->commission_amount,
                 'type'        => Customer\Transaction::TYPE_COMMISSION,
                 'comment'     => "Order($order->number), Referrer($order->referrer_id)",

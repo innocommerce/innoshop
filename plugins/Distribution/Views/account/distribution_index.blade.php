@@ -60,7 +60,9 @@
             <div class="fw-bold my-2 fs-5">
               {{ __('Distribution::common.share_link') }}
             </div>
-            <div class="fs-6 my-2"> {{ __('Distribution::common.share_link_description') }}</div>
+            <div class="fs-6 my-2"> 
+              {{ __('Distribution::common.share_link_description', ['rate' => plugin_setting('distribution.rate')]) }}
+            </div>
             <div class="mb-3">
               <div class="input-group">
                 <input type="text" class="form-control" id="shareLink"

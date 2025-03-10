@@ -13,7 +13,7 @@ return [
     'empty_path'                  => '地址为空',
     'source_dir_not_exist'        => '源目录不存在',
     'target_dir_not_exist'        => '目标目录不存在',
-    'target_dir_exist'            => '',
+    'target_dir_exist'            => '目标目录已存在',
     'cannot_move_to_subdirectory' => '无法移动到子目录',
     'move_failed'                 => '移动失败',
     'no_files_selected'           => '没有选择任何文件',

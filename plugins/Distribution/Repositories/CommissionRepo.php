@@ -36,16 +36,29 @@ class CommissionRepo extends BaseRepo
             return;
         }
 
+        $rate = $this->getCommissionRate();
+        if (empty($rate)) {
+            return;
+        }
+
         $data = [
             'order_id'          => $order->id,
             'customer_id'       => $order->customer_id,
             'referrer_id'       => $order->referrer_id,
-            'commission_amount' => round($order->total * 0.02, 2),
+            'commission_amount' => round($order->total * $rate, 2),
             'status'            => 'pending',
         ];
         $commission = new Commission($data);
 
         $commission->saveOrFail();
+    }
+
+    /**
+     * @return float
+     */
+    private function getCommissionRate(): float
+    {
+        return (float) (plugin_setting('distribution', 'rate', 0) / 100);
     }
 
     public function builder($filters = []): Builder

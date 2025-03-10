@@ -390,10 +390,20 @@ class CheckoutService
             'amount_format'    => currency_format($amount),
             'total_number'     => $this->getTotalNumber(),
             'is_virtual'       => $this->checkIsVirtual(),
-            'balance_amount'   => $this->customer->balance ?? 0,
+            'balance_amount'   => $this->getBalanceAmount(),
         ];
 
         return fire_hook_filter('service.checkout.checkout.result', $result);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBalanceAmount(): string
+    {
+        $balance = $this->customer->balance ?? 0;
+
+        return currency_format($balance, '', 0, false);
     }
 
     /**

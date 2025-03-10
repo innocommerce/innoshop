@@ -21,7 +21,7 @@ return [
     'recommend_customer'      => 'Müşterileri yönlendirin',
     'recommend_order_number'  => 'Önerilen sipariş sayısı',
     'share_link'              => 'Bağlantıyı paylaşın',
-    'share_link_description'  => '🎁 Para kazanmak için paylaşın, kolayca %2 komisyon kazanın!',
+    'share_link_description'  => '🎁 Para kazanmak için paylaşın, kolayca :rate% komisyon kazanın!',
     'share_to_friends'        => 'Arkadaşlarınızla paylaşın, sipariş verirler ve kazanırsınız!',
     'share_to_qq_zone'        => 'Gelin ve deneyin, ne kadar çok paylaşırsanız o kadar çok kazanırsınız!',
     'share_to_wechat'         => 'Facebook, Twitter, Instagram, seçim sizin!',

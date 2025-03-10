@@ -1,0 +1,18 @@
+{
+    "code": "frequent_question",
+    "name": {
+        "zh_cn": "FAQ 常见问题",
+        "en": "FAQ"
+    },
+    "description": {
+        "zh_cn": "FAQ 常见问题及解答",
+        "en": "FAQ"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}
