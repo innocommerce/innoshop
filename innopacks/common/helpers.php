@@ -901,6 +901,16 @@ if (! function_exists('currency_format')) {
     }
 }
 
+if (! function_exists('default_currency')) {
+    /**
+     * @return mixed
+     */
+    function default_currency(): mixed
+    {
+        return currencies()->where('code', system_setting('currency'))->first();
+    }
+}
+
 if (! function_exists('theme_path')) {
     /**
      * Generate an asset path for the application.
