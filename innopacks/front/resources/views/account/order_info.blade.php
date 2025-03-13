@@ -15,13 +15,19 @@
         <div class="account-card-box order-info-box">
           <div class="account-card-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/order.order_details') }}</span>
-            @if($order->status == 'unpaid')
-              <a href="{{ front_route('orders.pay', ['number'=>$order->number]) }}" class="btn btn-primary">{{
-            __('front/order.continue_pay') }}</a>
-            @elseif($order->status == 'completed')
-              <a href="{{ account_route('order_returns.create', ['order_number'=>$order->number]) }}"
-                 class="btn btn-primary">{{ __('front/order.create_rma') }}</a>
-            @endif
+            <div class="d-flex align-items-center gap-2">
+              <div>
+                @if($order->status == 'unpaid')
+                  <a href="{{ front_route('orders.pay', ['number'=>$order->number]) }}" class="btn btn-primary btn-sm">{{
+                    __('front/order.continue_pay') }}</a>
+                @elseif($order->status == 'completed')
+                  <a href="{{ account_route('order_returns.create', ['order_number'=>$order->number]) }}"
+                    class="btn btn-primary btn-sm">{{ __('front/order.create_rma') }}</a>
+                @elseif($order->status == 'shipped')
+                  <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">已签收</button>           
+                @endif
+              </div>
+            </div>
           </div>
           <table class="table table-bordered table-striped mb-3 table-response">
             <thead>
@@ -348,6 +354,17 @@
             });
             $('#newShipmentModal').modal('show');
           })
+      });
+      $(document).on('click', '.btn-shipped', function() {
+        const orderNumber = $(this).data('number');
+        axios.post(`${urls.api_base}/orders/${orderNumber}/complete`, {
+          number: orderNumber
+        }).then(response => {
+          inno.msg('签收成功');
+          window.location.reload();
+        }).catch(error => {
+          inno.msg('签收失败');
+        });
       });
     });
   </script>

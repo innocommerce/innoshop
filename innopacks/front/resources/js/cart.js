@@ -169,16 +169,15 @@ function updateCartOffcanvasContent(data) {
               ${product.variant_label ? '- ' + product.variant_label : ''}
             </div>
             <div class="d-flex justify-content-between align-items-center mt-2">
-              <div class="cart-item-price">${product.price_format}</div>
-              <div class="quantity-wrap small-quantity">
+              <div class="cart-item-price fs-5">${product.price_format}</div>
+              <div class="quantity-wrap small-quantity mx-3">
                 <div class="minus"><i class="bi bi-dash-lg"></i></div>
-                <input type="number" class="form-control" value="${product.quantity || 1}">
+                <input type="number" class="form-control fs-6" value="${product.quantity || 1}">
                 <div class="plus"><i class="bi bi-plus-lg"></i></div>
               </div>
+              <div class="delete-cart text-danger cursor-pointer"><i class="bi bi-x-circle-fill fs-5"></i></div>
             </div>
             <div class="d-flex justify-content-between align-items-center mt-2">
-              <div class="cart-item-subtotal">${product.subtotal_format}</div>
-              <div class="delete-cart text-danger cursor-pointer"><i class="bi bi-x-circle-fill"></i></div>
             </div>
           </div>
         </div>
@@ -191,9 +190,11 @@ function updateCartOffcanvasContent(data) {
   // Add cart summary
   cartItemsHtml += `
     <div class="cart-summary mt-4">
-      <div class="d-flex justify-content-between mb-2">
-        <span>${translations.total || 'Total'}</span>
-        <span class="total-amount">${data.amount_format}</span>
+      <div class="bg-light p-3 mb-4">
+        <div class="d-flex justify-content-between">
+          <span class="fs-5">${translations.total || 'Total'}</span>
+          <span class="fs-5 total-amount">${data.amount_format}</span>
+        </div>
       </div>
       <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout" href="${urls.checkout}">${translations.go_checkout || 'Checkout'}</a>
       <a class="btn btn-outline-secondary btn-lg fw-bold w-100 mt-2" href="${urls.cart}">${translations.view_cart || 'View Cart'}</a>

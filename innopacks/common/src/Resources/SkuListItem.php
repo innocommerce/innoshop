@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Resources;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,13 +20,14 @@ class SkuListItem extends JsonResource
      *
      * @param  Request  $request
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function toArray(Request $request): array
     {
         $imagePath      = $this->image->path ?? '';
         $imageUrl       = $imagePath ? image_resize($imagePath) : '';
         $originImageUrl = $imagePath ? image_origin($imagePath) : '';
+        $finalPrice     = $this->getFinalPrice();
 
         return [
             'id'                  => $this->id,
@@ -37,8 +39,8 @@ class SkuListItem extends JsonResource
             'variants'            => $this->variants,
             'model'               => $this->model,
             'code'                => $this->code,
-            'price'               => $this->price,
-            'price_format'        => $this->price_format,
+            'price'               => $finalPrice,
+            'price_format'        => currency_format($finalPrice),
             'origin_price'        => $this->origin_price,
             'origin_price_format' => $this->origin_price_format,
             'quantity'            => $this->quantity,

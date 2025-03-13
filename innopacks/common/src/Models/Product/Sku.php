@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Services\ProductPriceService;
 
 class Sku extends BaseModel
 {
@@ -71,6 +72,31 @@ class Sku extends BaseModel
         }
 
         return $labels;
+    }
+
+    /**
+     * Get sku final price.
+     * @return mixed
+     */
+    public function getFinalPrice(): mixed
+    {
+        $price = ProductPriceService::getInstance($this)->getFinal();
+        $data  = [
+            'sku'   => $this,
+            'price' => $price,
+        ];
+        $data = fire_hook_filter('model.sku.final_price', $data);
+
+        return $data['price'];
+    }
+
+    /**
+     * Get sku final price.
+     * @return mixed
+     */
+    public function getFinalPriceFormat(): mixed
+    {
+        return currency_format($this->getFinalPrice());
     }
 
     /**

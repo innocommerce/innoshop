@@ -16,6 +16,8 @@ use InnoShop\Common\Models\Currency;
 
 class CurrencyRepo extends BaseRepo
 {
+    private static mixed $enabledCurrencies = null;
+
     /**
      * @return array[]
      */
@@ -46,7 +48,11 @@ class CurrencyRepo extends BaseRepo
      */
     public function enabledList(): mixed
     {
-        return $this->withActive()->builder()->get();
+        if (self::$enabledCurrencies !== null) {
+            return self::$enabledCurrencies;
+        }
+
+        return self::$enabledCurrencies = $this->withActive()->builder()->get();
     }
 
     /**

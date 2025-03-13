@@ -471,6 +471,7 @@ class ProductRepo extends BaseRepo
             'masterSku',
             'translation',
             'categories.translation',
+            'favorites',
         ];
 
         $relations = array_merge($this->relations, $relations);

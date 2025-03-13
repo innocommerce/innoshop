@@ -9,7 +9,9 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use InnoShop\Common\Models\Currency;
 use InnoShop\Common\Models\Setting;
 use Throwable;
 
@@ -69,6 +71,7 @@ class SettingRepo extends BaseRepo
             if (in_array($name, ['_method', '_token'])) {
                 continue;
             }
+            $this->checkDefaultCurrencyRate($name, $value, $space);
             $this->updateValue($name, $value, $space);
         }
     }
@@ -94,6 +97,24 @@ class SettingRepo extends BaseRepo
     public function updatePluginValue($code, $name, $value): mixed
     {
         return $this->updateValue($name, $value, $code);
+    }
+
+    /**
+     * @param  $name
+     * @param  $value
+     * @param  $space
+     * @return void
+     * @throws Exception
+     */
+    private function checkDefaultCurrencyRate($name, $value, $space): void
+    {
+        if ($name != 'currency' || $space != 'system') {
+            return;
+        }
+        $currency = Currency::query()->where('code', $value)->first();
+        if ($currency->value != 1) {
+            throw new Exception(trans('panel/currency.default_currency_rate'));
+        }
     }
 
     /**
