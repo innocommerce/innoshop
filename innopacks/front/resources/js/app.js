@@ -6,6 +6,7 @@ window.inno = common;
 import './bootstrap-validation';
 import './footer';
 import './header';
+import './cart';
 
 const apiToken = $('meta[name="api-token"]').attr('content');
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;

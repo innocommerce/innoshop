@@ -79,7 +79,7 @@ return new class extends Migration
             $table->string('title')->comment('Title');
             $table->string('summary')->nullable()->comment('Summary');
             $table->string('image')->nullable()->comment('Article Image');
-            $table->text('content')->nullable()->comment('Content');
+            $table->longText('content')->nullable()->comment('Content');
             $table->string('meta_title')->nullable()->comment('Meta Title');
             $table->text('meta_description')->nullable()->comment('Meta description');
             $table->string('meta_keywords')->nullable()->comment('Meta keywords');
@@ -577,7 +577,7 @@ return new class extends Migration
             $table->integer('page_id')->index('pt_article_id')->comment('Article ID');
             $table->string('locale')->comment('Locale Code');
             $table->string('title')->comment('Title');
-            $table->text('content')->nullable()->comment('Content');
+            $table->longText('content')->nullable()->comment('Content');
             $table->text('template')->nullable()->comment('Content');
             $table->string('meta_title')->nullable()->comment('Meta Title');
             $table->text('meta_description')->nullable()->comment('Meta description');

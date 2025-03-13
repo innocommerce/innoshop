@@ -307,7 +307,8 @@
           axios.put(api.checkout, current).then(function(res) {
             if (res.success) {
               source.feeList = res.data.fee_list
-              source.totalAmount = res.data.amount_format
+              source.totalAmount = res.data.amount
+              source.totalAmountFormat = res.data.amount_format
               //window.location.href = '{{ front_route('checkout.index') }}'
             }
           })

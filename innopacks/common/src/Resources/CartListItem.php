@@ -23,9 +23,10 @@ class CartListItem extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $sku      = $this->productSku;
-        $product  = $this->product;
-        $subtotal = $this->subtotal;
+        $sku        = $this->productSku;
+        $product    = $this->product;
+        $subtotal   = $this->subtotal;
+        $finalPrice = $sku->getFinalPrice();
 
         $data = [
             'data' => [
@@ -39,8 +40,8 @@ class CartListItem extends JsonResource
                 'sku_code'            => $sku->code,
                 'is_virtual'          => $product->is_virtual,
                 'weight'              => $product->weight,
-                'price'               => $sku->price,
-                'price_format'        => $sku->price_format,
+                'price'               => $finalPrice,
+                'price_format'        => currency_format($finalPrice),
                 'origin_price'        => $sku->origin_price,
                 'origin_price_format' => $sku->origin_price_format,
                 'subtotal'            => $subtotal,

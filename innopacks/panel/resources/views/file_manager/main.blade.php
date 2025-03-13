@@ -1483,7 +1483,7 @@
                       <div class="file-thumb">
                         <template v-if="file.is_dir">
                           <div class="folder-icon">
-                            <img :src="file.thumb" alt="folder" class="folder-image">
+                            <img :src="file.thumb" alt="folder" class="folder-image"></img>
                           </div>
                         </template>
                         <template v-else>

@@ -33,7 +33,11 @@
             <div class="newes-author"><i class="bi bi-eye"></i> {{ $article->viewed }}</div>
           </div>
           <div class="content">
+            @hookinsert('article.show.content.before')
+
             {!! $article->translation->content !!}
+
+            @hookinsert('article.show.content.after')
           </div>
         </div>
       </div>

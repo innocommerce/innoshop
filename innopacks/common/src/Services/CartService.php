@@ -75,6 +75,8 @@ class CartService
                 $item->delete();
             }
 
+            fire_hook_action('service.cart.items.item', $item);
+
             return $item->product && $item->productSku;
         });
     }

@@ -54,6 +54,9 @@ const processFileManagerUrl = (file, config) => {
 
 $(function () {
   tinymceInit();
+
+  $('[data-bs-toggle="tooltip"]').tooltip();
+
   $("button[data-bs-target]").on("click", function () {
     const dataBsTarget = $(this).attr("data-bs-target");
     const url = new URL(window.location.href);

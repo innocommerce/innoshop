@@ -16,7 +16,7 @@ class Promotion extends Base
      */
     public function init(): void
     {
-        $this->addPanelPromotionMenu();
+        //$this->addPanelPromotionMenu();
     }
 
     /**

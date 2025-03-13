@@ -244,7 +244,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($order->histories as $history)
+        @foreach($order->histories->sortByDesc('id') as $history)
           <tr>
             <td>{{ $history->status }}</td>
             <td>{{ $history->comment }}</td>
@@ -271,7 +271,7 @@
               </tr>
             </tbody>
             <tbody>
-            </tbody>    
+            </tbody>
           </table>
         </div>
         <div class="modal-footer">
@@ -322,7 +322,7 @@
     });
 
     $(document).ready(function () {
-        
+
       $('.admin-comment-input').on('keydown', function (event) {
         if (event.keyCode === 13) {
           event.preventDefault();
@@ -363,7 +363,7 @@
                     });
                     var newShipmentModal = new bootstrap.Modal(document.getElementById('newShipmentModal'));
                     newShipmentModal.show();
-                } 
+                }
             })
             .catch(function(error) {
                 inno.msg('{{ __('panel/order.no_logistics_information') }}');

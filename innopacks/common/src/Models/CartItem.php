@@ -39,8 +39,9 @@ class CartItem extends BaseModel
 
     public function getSubtotalAttribute(): float
     {
-        $sku = $this->productSku;
+        $sku   = $this->productSku;
+        $price = $sku->getFinalPrice();
 
-        return round($sku->price * $this->quantity, 2);
+        return round($price * $this->quantity, 2);
     }
 }

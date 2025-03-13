@@ -1,5 +1,3 @@
-import Log from "laravel-mix/src/Log";
-
 export default {
   randomString(length = 32) {
     let str = "";

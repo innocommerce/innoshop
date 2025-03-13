@@ -46,7 +46,6 @@
 
     let asset_url = '{{ asset('') }}';
   </script>
-  <script src="{{ asset('js/cart.js') }}"></script>
   @stack('header')
   @hookinsert('front.layout.app.head.bottom')
 </head>

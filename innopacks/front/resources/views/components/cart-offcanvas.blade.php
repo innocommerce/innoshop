@@ -83,7 +83,7 @@
   }
 
   .small-quantity {
-    max-width: 100px;
+    max-width: 120px;
   }
 
   .w-max-200 {

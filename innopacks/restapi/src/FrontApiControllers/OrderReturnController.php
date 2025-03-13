@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Front\Controllers\Account;
+namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
@@ -24,25 +24,27 @@ class OrderReturnController extends BaseController
     {
         $filters = $request->all();
 
-        $filters['customer_id'] = current_customer_id();
+        $filters['customer_id'] = token_customer_id();
 
-        $data = [
-            'order_returns' => OrderReturnRepo::getInstance()->list($filters),
-        ];
+        $orderReturns = OrderReturnRepo::getInstance()->list($filters);
 
-        return inno_view('account.order_return_index', $data);
+        return read_json_success($orderReturns);
     }
 
     /**
      * @param  Request  $request
      * @return mixed
      */
-    public function create(Request $request): mixed
+    public function orderInfo(Request $request): mixed
     {
-        $number  = $request->get('order_number');
+        $number = $request->get('order_number');
+        if (empty($number)) {
+            return read_json_success([]);
+        }
+
         $filters = [
             'number'      => $number,
-            'customer_id' => current_customer_id(),
+            'customer_id' => token_customer_id(),
         ];
         $order   = OrderRepo::getInstance()->builder($filters)->firstOrFail();
         $options = ItemRepo::getInstance()->getOptions($order);
@@ -53,7 +55,7 @@ class OrderReturnController extends BaseController
             'options' => $options,
         ];
 
-        return inno_view('account.order_return_create', $data);
+        return read_json_success($data);
     }
 
     /**
@@ -65,13 +67,12 @@ class OrderReturnController extends BaseController
     {
         $data = $request->all();
         try {
-            $data['customer_id'] = current_customer_id();
+            $data['customer_id'] = token_customer_id();
             $orderReturn         = OrderReturnRepo::getInstance()->create($data);
 
-            return redirect(account_route('order_returns.index'))
-                ->with('instance', $orderReturn);
+            return create_json_success($orderReturn);
         } catch (Exception $e) {
-            return back()->withInput()->withErrors(['errors' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 
@@ -86,7 +87,7 @@ class OrderReturnController extends BaseController
             'histories'    => $orderReturn->histories()->orderByDesc('id')->get(),
         ];
 
-        return inno_view('account.order_return_show', $data);
+        return read_json_success($data);
     }
 
     /**
@@ -98,6 +99,6 @@ class OrderReturnController extends BaseController
     {
         $order_return->delete();
 
-        return redirect(account_route('order_returns.index'));
+        return delete_json_success();
     }
 }

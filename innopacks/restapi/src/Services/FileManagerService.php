@@ -145,15 +145,10 @@ class FileManagerService implements FileManagerInterface
         try {
             $folderPath = public_path("catalog{$this->basePath}/{$path}");
             if (is_dir($folderPath)) {
-                throw new Exception(trans('admin/file_manager.directory_already_exist'));
+                throw new Exception(trans('panel/file_manager.directory_already_exist'));
             }
 
-            // 使用 create_directories 函数创建目录
-            $result = create_directories("catalog{$this->basePath}/{$path}");
-
-            if (! $result) {
-                throw new Exception(trans('admin/file_manager.create_directory_failed'));
-            }
+            create_directories("catalog{$this->basePath}/{$path}");
 
             return true;
         } catch (Exception $e) {
@@ -329,7 +324,7 @@ class FileManagerService implements FileManagerInterface
                 // 检查目录是否为空
                 $files = glob($fullPath.'/*');
                 if ($files) {
-                    throw new Exception(trans('admin/file_manager.directory_not_empty'));
+                    throw new Exception(trans('panel/file_manager.directory_not_empty'));
                 }
 
                 // 删除目录

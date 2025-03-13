@@ -36,12 +36,12 @@
               <div class="d-flex align-items-center justify-content-center wh-50 border">
                 <a href="{{ $product->url }}" target="_blank">
                   <img src="{{ image_resize($product->images->first()->path ?? '') }}" class="img-fluid"
-                    alt="{{ $product->translation->name ?? '' }}">
+                    alt="{{ $product->fallbackName() }}">
                 </a>
               </div>
             </td>
             <td><a href="{{ $product->url }}" class="text-decoration-none" target="_blank">{{
-                $product->translation->name ?? '' }}</a>
+                $product->fallbackName() }}</a>
               @if($product->isMultiple()) &nbsp;<span class="text-bg-success px-1">M</span>@endif
             </td>
             <td>{{ currency_format($product->masterSku->price ?? 0) }}</td>
@@ -94,7 +94,7 @@
 
      const app = createApp({
      setup() {
-     const deleteForm = ref(null); 
+     const deleteForm = ref(null);
 
      const open = (index) => {
      ElMessageBox.confirm(
@@ -109,13 +109,13 @@
      .then(() => {
       const deleteUrl =urls.base_url+'/products/'+index;
       deleteForm.value.action=deleteUrl;
-      deleteForm.value.submit(); 
+      deleteForm.value.submit();
       })
      .catch(() => {
      });
      };
 
-     return { open, deleteForm }; 
+     return { open, deleteForm };
        }
         });
 
