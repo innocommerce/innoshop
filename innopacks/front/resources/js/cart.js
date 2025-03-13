@@ -193,7 +193,7 @@ function updateCartOffcanvasContent(data) {
       <div class="bg-light p-3 mb-4">
         <div class="d-flex justify-content-between">
           <span class="fs-5">${translations.total || 'Total'}</span>
-          <span class="fs-5">${data.amount_format}</span>
+          <span class="fs-5 total-amount">${data.amount_format}</span>
         </div>
       </div>
       <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout" href="${urls.checkout}">${translations.go_checkout || 'Checkout'}</a>

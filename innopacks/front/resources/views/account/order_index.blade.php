@@ -60,8 +60,11 @@
                   </td>
                   <td data-title="Total">{{ $order->total_format }}</td>
                   <td data-title="Actions">
-                    <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary">{{ __('front/common.view') }}</a>
-                  </td>
+                    <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary btn-sm" role="button">{{ __('front/common.view') }}</a>
+                    @if($order->status == 'shipped')
+                      <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">已签收</button>
+                    @endif  
+                </td>
                 </tr>
               @endforeach
               </tbody>
@@ -79,3 +82,25 @@
   @hookinsert('account.order_index.bottom')
 
 @endsection
+@push('footer')
+<script>
+  $(document).ready(function() {
+    $('.btn-shipped').click(function() {
+      var button = $(this);
+      var number = $(this).data('number');
+      
+      axios.post(`${urls.api_base}/orders/${number}/complete`, {
+        number: number
+      }).then(function (response) {
+        inno.msg('签收成功');
+        button.fadeOut(300, function() {
+          $(this).remove(); 
+        });
+        window.location.reload();
+      }).catch(function (error) {
+        inno.msg('签收失败');
+      });
+    });
+  });
+</script>
+@endpush

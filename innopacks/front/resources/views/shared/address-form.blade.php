@@ -3,7 +3,10 @@
 
   @if(current_customer_id())
   <div class="form-group mb-4">
-    <label class="form-label" for="name">{{ __('common/address.name') }}</label>
+    <label class="form-label" for="name">
+        <span class="text-danger">*</span>
+        {{ __('common/address.name') }}
+    </label>
     <input type="text" class="form-control" name="name" value="" required
       placeholder="{{ __('common/address.name') }}" />
     <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
@@ -13,7 +16,10 @@
   <div class="row gx-2">
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="name">{{ __('common/address.name') }}</label>
+        <label class="form-label" for="name">
+            <span class="text-danger">*</span>
+            {{ __('common/address.name') }}
+        </label>
         <input type="text" class="form-control" name="name" value="" required
           placeholder="{{ __('common/address.name') }}" />
         <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
@@ -22,7 +28,10 @@
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="email">{{ __('common/address.email') }}</label>
+        <label class="form-label" for="email">
+            <span class="text-danger">*</span>
+            {{ __('common/address.email') }}
+        </label>
         <input type="text" class="form-control" name="email" value="" required
           placeholder="{{ __('common/address.email') }}" />
         <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
@@ -33,7 +42,9 @@
   @endif
 
   <div class="form-group mb-4">
-    <label class="form-label" for="email">{{ __('common/address.address_1') }}</label>
+    <label class="form-label" for="email">
+        <span class="text-danger">*</span>
+        {{ __('common/address.address_1') }}</label>
     <input type="text" class="form-control" name="address_1" value="" required
       placeholder="{{ __('common/address.address_1') }}" />
     <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
@@ -49,7 +60,10 @@
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="zipcode">{{ __('common/address.zipcode') }}</label>
+        <label class="form-label" for="zipcode">
+          <span class="text-danger">*</span>
+          {{ __('common/address.zipcode') }}
+        </label>
         <input type="text" class="form-control" name="zipcode" value="" required
           placeholder="{{ __('common/address.zipcode') }}" />
         <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
@@ -58,15 +72,22 @@
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="city">{{ __('common/address.city') }}</label>
+        <label class="form-label" for="city">
+          <span class="text-danger">*</span>
+          {{ __('common/address.city') }}
+        </label>
         <input type="text" class="form-control" name="city" value="" required placeholder="City" />
-        <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
-          __('common/address.city')]) }}</span>
+        <span class="invalid-feedback" role="alert">
+          {{ __('front/common.error_required', ['name' => __('common/address.city')]) }}
+        </span>
       </div>
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="country_code">{{ __('common/address.country') }}</label>
+        <label class="form-label" for="country_code">
+            <span class="text-danger">*</span>
+            {{ __('common/address.country') }}
+        </label>
         <select class="form-select" name="country_code" required></select>
         <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
           __('common/address.country')]) }}</span>
@@ -74,7 +95,10 @@
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="state">{{ __('common/address.state') }}</label>
+        <label class="form-label" for="state">
+            <span class="text-danger">*</span>
+            {{ __('common/address.state') }}
+        </label>
         <select class="form-select" name="state_code" required disabled></select>
         <span class="invalid-feedback" role="alert">{{ __('front/common.error_required', ['name' =>
           __('common/address.state')]) }}</span>
@@ -82,7 +106,10 @@
     </div>
     <div class="col-6">
       <div class="form-group mb-4">
-        <label class="form-label" for="phone">{{ __('common/address.phone') }}</label>
+        <label class="form-label" for="phone">
+            <span class="text-danger">*</span>
+            {{ __('common/address.phone') }}
+        </label>
         <input type="text" class="form-control" name="phone" value="" placeholder="{{ __('common/address.phone') }}" />
       </div>
     </div>

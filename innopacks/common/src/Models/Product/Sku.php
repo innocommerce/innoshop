@@ -91,6 +91,15 @@ class Sku extends BaseModel
     }
 
     /**
+     * Get sku final price.
+     * @return mixed
+     */
+    public function getFinalPriceFormat(): mixed
+    {
+        return currency_format($this->getFinalPrice());
+    }
+
+    /**
      * @return string
      */
     public function getPriceFormatAttribute(): string
