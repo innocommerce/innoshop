@@ -17,4 +17,5 @@ return [
     'symbol_left'                     => '前缀',
     'symbol_right'                    => '后缀',
     'value'                           => '汇率',
+    'default_currency_rate'           => '默认货币的汇率必须为1',
 ];
