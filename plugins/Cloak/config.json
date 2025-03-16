@@ -1,0 +1,20 @@
+{
+    "code": "cloak",
+    "name": {
+        "zh_cn": "斗篷 Cloak",
+        "en": "Cloak"
+    },
+    "description": {
+        "zh_cn": "一款高效的网站内容保护工具，能够根据访问者的特征（IP地址、用户代理、地理位置等）智能显示不同的内容。适用于广告投放合规、针对Bot展示不同内容、屏蔽竞争对手访问等场景。",
+        "en": "An efficient website content protection tool that intelligently displays different content based on visitor characteristics (IP address, user agent, geographic location, etc.). Ideal for ad compliance, showing different content to bots, blocking competitor access, and more.",
+        "jp": "訪問者の特性（IPアドレス、ユーザーエージェント、地理的位置など）に基づいて異なるコンテンツを表示する効率的なウェブサイト保護ツールです。広告のコンプライアンス、ボットへの異なるコンテンツ表示、競合他社のアクセスブロックなどに最適です。",
+        "es": "Una herramienta eficiente de protección de contenido web que muestra inteligentemente diferentes contenidos según las características del visitante (dirección IP, agente de usuario, ubicación geográfica, etc.). Ideal para cumplimiento publicitario, mostrar contenido diferente a los bots, bloquear el acceso de competidores y más."
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/cloak_logo.png",
+    "author": {
+        "name": "XING GUI YU",
+        "email": "xingguiyu@foxmail.com"
+    }
+}
