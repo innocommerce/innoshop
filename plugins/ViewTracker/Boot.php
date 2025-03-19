@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+namespace Plugin\ViewTracker;
+
+class Boot
+{
+    public function init(): void
+    {
+        listen_hook_filter('panel.component.sidebar.plugin.routes', function ($data) {
+            $data[] = [
+                'route' => 'view_logs.index',
+                'title' => __('ViewTracker::panel.access_record'),
+            ];
+
+            return $data;
+        });
+    }
+}

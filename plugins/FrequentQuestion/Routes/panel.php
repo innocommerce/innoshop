@@ -8,12 +8,8 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use Plugin\FrequentQuestion\Controllers\Panel\FaqCategoryController;
 use Plugin\FrequentQuestion\Controllers\Panel\FaqController;
 
-Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
-Route::post('/faqs', [FaqController::class, 'store'])->name('faqs.store');
-Route::get('/faqs/create', [FaqController::class, 'create'])->name('faqs.create');
-Route::get('/faqs/{faq}/edit', [FaqController::class, 'edit'])->name('faqs.edit');
-Route::put('/faqs/{faq}/update', [FaqController::class, 'update'])->name('faqs.update');
-Route::delete('/faqs/{faq}', [FaqController::class, 'destroy'])->name('faqs.destroy');
-Route::put('/faqs/{faq}/active', [FaqController::class, 'active'])->name('faqs.active');
+Route::resource('faqs', FaqController::class)->except(['show']);
+Route::resource('faq_categories', FaqCategoryController::class)->except(['show']);

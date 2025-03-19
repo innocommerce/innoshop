@@ -66,7 +66,7 @@ return [
     'status'            => 'Status',
     'submitted_success' => 'Berhasil dikirim',
     'uninstall'         => 'Uninstall',
-    'up_image_text'     => 'Klik untuk meng-upload, atau seret file kesini',
+    'up_image_text'     => 'Klik upload, atau tarik file sampai ke sini, sarankan ukuran persegi, seperti 800*800',
     'updated_at'        => 'Waktu Pembaruan',
     'updated_success'   => 'Berhasil Diperbarui',
     'verify_required'   => 'Silakan isi',

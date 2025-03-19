@@ -29,14 +29,8 @@ class ProductRepo extends BaseRepo
     {
         return [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
-            ['name'     => 'price', 'type' => 'range', 'label' => trans('panel/product.price'),
-                'start' => ['name' => 'price_start'],
-                'end'   => ['name' => 'price_end'],
-            ],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
+            ['name' => 'price', 'type' => 'range', 'label' => trans('panel/product.price')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
     }
 
@@ -125,6 +119,8 @@ class ProductRepo extends BaseRepo
      */
     public function destroy(mixed $item): void
     {
+        fire_hook_action('common.repo.product.destroy.before', $item);
+
         $item->productAttributes()->delete();
         $item->categories()->sync([]);
         $item->images()->delete();
@@ -553,12 +549,12 @@ class ProductRepo extends BaseRepo
             $builder->where('products.active', (bool) $filters['active']);
         }
 
-        $createdStart = $filters['created_start'] ?? '';
+        $createdStart = $filters['created_at_start'] ?? '';
         if ($createdStart) {
             $builder->where('created_at', '>', $createdStart);
         }
 
-        $createdEnd = $filters['created_end'] ?? '';
+        $createdEnd = $filters['created_at_end'] ?? '';
         if ($createdEnd) {
             $builder->where('created_at', '<', $createdEnd);
         }

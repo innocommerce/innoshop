@@ -8,18 +8,15 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\WebBuilder\PanelControllers\WebBuilderController;
+use Plugin\WebBuilder\Controllers\Panel\HomeBuilderController;
+use Plugin\WebBuilder\Controllers\Panel\PageBuilderController;
 
-Route::group(['prefix' => 'web_builder'], function () {
-    // 设计器主页面
-    Route::get('/', [WebBuilderController::class, 'index'])->name('web_builder.index');
+// Home Builder
+Route::get('/web_builder', [HomeBuilderController::class, 'index'])->name('web_builder.index');
+Route::get('/web_builder/design', [HomeBuilderController::class, 'getDesign'])->name('web_builder.design');
+Route::put('/web_builder/design', [HomeBuilderController::class, 'saveDesign'])->name('web_builder.design.update');
 
-    // 上传图片
-    Route::post('upload/images', [WebBuilderController::class, 'uploadImages'])->name('web_builder.upload.images');
-
-    // 获取设计数据
-    Route::get('design', [WebBuilderController::class, 'getDesign'])->name('web_builder.design');
-
-    // 保存设计数据
-    Route::put('design', [WebBuilderController::class, 'saveDesign'])->name('web_builder.design.update');
-});
+// Single Page Builder
+Route::get('/page_builder/{page}', [PageBuilderController::class, 'index'])->name('page_builder.index');
+Route::get('/page_builder/{page}/design', [PageBuilderController::class, 'getDesign'])->name('page_builder.design');
+Route::put('/page_builder/{page}/design', [PageBuilderController::class, 'saveDesign'])->name('page_builder.design.update');

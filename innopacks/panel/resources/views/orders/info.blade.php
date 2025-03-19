@@ -131,10 +131,15 @@
               <h5 class="address-card-title">{{ __('panel/order.shipping_address') }}</h5>
             </div>
             <div class="address-card-body">
-              <p>{{ $order->shipping_customer_name }}</p>
-              <p>{{ $order->shipping_telephone }} {{ $order->shipping_zipcode }}</p>
-              <p>{{ $order->shipping_address_1 }} {{ $order->shipping_address_2 }} </p>
-              <p>{{ $order->shipping_city }} {{ $order->shipping_state }} {{ $order->shipping_country }}</p>
+              <p>{{ __('common/address.name') }}: {{ $order->shipping_customer_name }}</p>
+              <p>{{ __('common/address.phone') }}: {{ $order->shipping_telephone }}</p>
+              <p>{{ __('common/address.zipcode') }}: {{ $order->shipping_zipcode }}</p>
+              <p>{{ __('common/address.address_1') }}: {{ $order->shipping_address_1 }}</p>
+              @if($order->shipping_address_2)
+                <p>{{ __('common/address.address_2') }}: {{ $order->shipping_address_2 }}</p>
+              @endif
+              <p>{{ __('common/address.region') }}: {{ $order->shipping_city }}, {{ $order->shipping_state }}
+                , {{ $order->shipping_country }}</p>
             </div>
           </div>
         </div>
@@ -144,10 +149,15 @@
               <h5 class="address-card-title">{{ __('panel/order.billing_address') }}</h5>
             </div>
             <div class="address-card-body">
-              <p>{{ $order->billing_customer_name }}</p>
-              <p>{{ $order->billing_telephone }} {{ $order->billing_zipcode }}</p>
-              <p>{{ $order->billing_address_1 }} {{ $order->billing_address_2 }} </p>
-              <p>{{ $order->billing_city }} {{ $order->billing_state }} {{ $order->billing_country }}</p>
+              <p>{{ __('common/address.name') }}: {{ $order->billing_customer_name }}</p>
+              <p>{{ __('common/address.phone') }}: {{ $order->billing_telephone }}</p>
+              <p>{{ __('common/address.zipcode') }}: {{ $order->billing_zipcode }}</p>
+              <p>{{ __('common/address.address_1') }}: {{ $order->billing_address_1 }}</p>
+              @if($order->billing_address_2)
+                <p>{{ __('common/address.address_2') }}: {{ $order->billing_address_2 }} </p>
+              @endif
+              <p>{{ __('common/address.region') }}: {{ $order->billing_city }}, {{ $order->billing_state }}
+                , {{ $order->billing_country }}</p>
             </div>
           </div>
         </div>
@@ -169,7 +179,7 @@
           <div class="col-12 col-md-6 mb-3">
             <h6 class="fs-5">{{ __('panel/order.administrator_remarks') }}</h6>
             <p class="mb-0">{{ $order->admin_note }}</p>
-            <button class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#admin_note">
+            <button class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal">
               {{ __('panel/common.edit') }}
             </button>
 
@@ -206,7 +216,7 @@
       <table class="table table-response align-middle table-bordered" id="logisticsTable">
         <thead>
         <tr>
-            <td>ID</td>
+          <td>ID</td>
           <th>{{ __('panel/order.express_company') }}</th>
           <th>{{ __('panel/order.express_number') }}</th>
           <th>{{ __('panel/order.create_time') }}</th>
@@ -221,8 +231,10 @@
             <td data-title="express_number">{{ $shipment->express_number }}</td>
             <td data-title="created_at">{{ $shipment->created_at }}</td>
             <td>
-              <button class="btn btn-sm btn-primary deleteRow" onclick="deleteShipment('{{ $shipment->id }}')">{{ __('panel/order.delete') }}</button>
-              <button class="btn btn-sm btn-primary viewRow" onclick="viewShipmentDetails('{{ $shipment->id }}')">{{ __('panel/order.view') }}</button>
+              <button class="btn btn-sm btn-primary deleteRow"
+                      onclick="deleteShipment('{{ $shipment->id }}')">{{ __('panel/order.delete') }}</button>
+              <button class="btn btn-sm btn-primary viewRow"
+                      onclick="viewShipmentDetails('{{ $shipment->id }}')">{{ __('panel/order.view') }}</button>
             </td>
           </tr>
         @endforeach
@@ -255,7 +267,8 @@
       </table>
     </div>
   </div>
-  <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel" aria-hidden="true">
+  <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel"
+       aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -265,10 +278,10 @@
         <div class="modal-body">
           <table class="table">
             <tbody>
-              <tr>
-                <th class="col-3">{{ __('panel/order.time') }}</th>
-                <th class="col-9">{{ __('panel/order.logistics_information') }}</th>
-              </tr>
+            <tr>
+              <th class="col-3">{{ __('panel/order.time') }}</th>
+              <th class="col-9">{{ __('panel/order.logistics_information') }}</th>
+            </tr>
             </tbody>
             <tbody>
             </tbody>
@@ -305,8 +318,10 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
-          <button type="button" class="btn btn-primary" onclick="submitEdit()">{{ __('panel/order.save_changes') }}</button>
+          <button type="button" class="btn btn-outline-secondary"
+                  data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
+          <button type="button" class="btn btn-primary"
+                  onclick="submitEdit()">{{ __('panel/order.save_changes') }}</button>
         </div>
       </div>
     </div>
@@ -340,41 +355,42 @@
         }
       });
 
-      $('#addRow').click(function() {
+      $('#addRow').click(function () {
         $('#editModal').modal('show');
       });
 
-      $(document).on('click', '.deleteRow', function() {
+      $(document).on('click', '.deleteRow', function () {
         $(this).closest('tr').remove();
       });
 
-      window.viewShipmentDetails = function(shipmentId) {
+      window.viewShipmentDetails = function (shipmentId) {
         axios.get(`${urls.api_base}/shipments/${shipmentId}/traces`)
-            .then(function(response) {
-                if (response.data && response.data.traces) {
-                    const tbody = $('#newShipmentModal .modal-body table tbody').last();
-                    tbody.empty();
-                    response.data.traces.forEach(trace => {
-                        const row = `<tr>
+          .then(function (response) {
+            if (response.data && response.data.traces) {
+              const tbody = $('#newShipmentModal .modal-body table tbody').last();
+              tbody.empty();
+              response.data.traces.forEach(trace => {
+                const row = `<tr>
                             <td>${trace.time}</td>
                             <td>${trace.station}</td>
                          </tr>`;
-                        tbody.append(row);
-                    });
-                    var newShipmentModal = new bootstrap.Modal(document.getElementById('newShipmentModal'));
-                    newShipmentModal.show();
-                }
-            })
-            .catch(function(error) {
-                inno.msg('{{ __('panel/order.no_logistics_information') }}');
-            });
+                tbody.append(row);
+              });
+              var newShipmentModal = new bootstrap.Modal(document.getElementById('newShipmentModal'));
+              newShipmentModal.show();
+            }
+          })
+          .catch(function (error) {
+            inno.msg('{{ __('panel/order.no_logistics_information') }}');
+          });
       }
     });
 
     function submitComment() {
-      var comment = $('.admin-comment-input').val();
-      var orderId = $('.admin-comment-input').data('order-id');
-      var apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
+      let elment = $('.admin-comment-input');
+      let comment = elment.val();
+      let orderId = elment.data('order-id');
+      let apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
       axios.post(apiUrl, {
         admin_note: comment,
       })
@@ -398,20 +414,19 @@
         express_code: logisticsCompany,
         express_company: selectedCompanyName,
         express_number: trackingNumber,
-      })
-        .then(function(response) {
-          inno.msg('{{ __('panel/order.add_successfully') }}');
-          $('#editModal').modal('hide');
-          window.location.reload();
-        }).catch(function(res) {
-          inno.msg('{{ __('panel/order.add_failed!') }}');
-        });
+      }).then(function (response) {
+        inno.msg('{{ __('panel/order.add_successfully') }}');
+        $('#editModal').modal('hide');
+        window.location.reload();
+      }).catch(function (res) {
+        inno.msg('{{ __('panel/order.add_failed!') }}');
+      });
     }
 
     function deleteShipment(shipmentId) {
       const apiUrl = `${urls.api_base}/shipments/${shipmentId}`;
       axios.delete(apiUrl)
-        .then(function(response) {
+        .then(function (response) {
           inno.msg('{{ __('panel/order.delete_successfully') }}');
           window.location.reload();
         })

@@ -18,6 +18,7 @@ return [
     'email'            => 'Correo electrónico',
     'name'             => 'Nombre',
     'phone'            => 'Teléfono',
+    'region'           => 'regional',
     'shipping_address' => 'Dirección de envío',
     'state'            => 'Estado',
     'zipcode'          => 'Código postal',

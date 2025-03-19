@@ -18,4 +18,5 @@ Route::prefix('account')
         Route::get('/distributions/members', [DistributionController::class, 'members'])->name('distributions.members');
         Route::get('/distributions/commissions', [DistributionController::class, 'commissions'])->name('distributions.commissions');
         Route::get('/distributions/orders', [DistributionController::class, 'orders'])->name('distributions.orders');
+        // Route::get('/distributions/rate', [DistributionController::class, 'rate'])->name('distributions.rate');
     });

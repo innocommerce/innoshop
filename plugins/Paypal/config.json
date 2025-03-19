@@ -9,7 +9,7 @@
         "en": "PayPal Payment Gateway"
     },
     "type": "billing",
-    "version": "v1.1.0",
+    "version": "v1.1.1",
     "icon": "/images/logo.png",
     "author": {
         "name": "InnoShop",

@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => '문의 편집',
     'quotes_index' => '문의 목록',
+    'quotes_split' => '문의서',
     'title'        => '견적 문의',
 ];

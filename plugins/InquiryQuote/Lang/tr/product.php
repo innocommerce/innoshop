@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'Ürün başarıyla eklendi',
     'amount'            => 'quantity',
+    'continue_shopping' => 'Alışverişe devam edin',
     'delivered'         => 'Target is closed.',
     'describe'          => 'Description',
     'describe_inputs'   => 'Please enter a description',
+    'go_to_inquiry'     => 'Git ve bir soruşturma gönder',
     'inquiry'           => 'inquiry',
+    'inquiry_list'      => 'Teklif listesi talebi',
     'nonnegative'       => 'The price must be non-negative.',
     'number_inputs'     => 'Please enter quantity',
     'pending'           => 'To be processed',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'Achieved',
     'submit'            => 'submit',
     'success'           => 'Data submission successful',
+    'successed'         => 'Başarılı',
+    'to'                => 'varmak',
 ];

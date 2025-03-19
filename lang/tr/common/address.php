@@ -18,6 +18,7 @@ return [
     'email'            => 'E-posta',
     'name'             => 'İsim',
     'phone'            => 'Telefon',
+    'region'           => 'bölge',
     'shipping_address' => 'Teslimat adresi',
     'state'            => 'Eyalet/Bölge',
     'zipcode'          => 'Posta Kodu',

@@ -9,7 +9,7 @@
         "en": "Can enable users to place orders with different quantities and use different unit prices for wholesale and other scenarios"
     },
     "type": "feature",
-    "version": "v1.1.0",
+    "version": "v1.1.2",
     "icon": "/logo.png",
     "author": {
         "name": "撸串青年",

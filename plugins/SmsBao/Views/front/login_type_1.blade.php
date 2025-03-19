@@ -194,7 +194,7 @@
                 telephone_code: telephone_code
             }).then((res) => {
                 //console.log(res);
-                if (res.code == 0) {
+                if (res.success) {
                     layer.msg("{{__('common.success')}}");
 
                     //开始倒计时
@@ -219,7 +219,7 @@
                     }
                     $("#sendRegCode").html("{{ __('RegisterCaptcha::login.code') }}");
                     $("#sendRegCode").attr("disabled", false);
-                    layer.msg(res.msg)
+                    layer.msg(res.message)
                 }
                 layer.closeAll('loading')
             })

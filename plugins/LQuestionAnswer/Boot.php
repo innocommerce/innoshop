@@ -2,16 +2,22 @@
 
 namespace Plugin\LQuestionAnswer;
 
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Plugin\LQuestionAnswer\Models\AskAnswer;
+use Plugin\LQuestionAnswer\Repositories\AskAnswerRepo;
 use Plugin\LQuestionAnswer\Resources\AskAnswerResource;
 
 class Boot
 {
     public function init(): void
     {
+        listen_hook_filter('component.sidebar.product.routes', function ($data) {
+            $data[] = [
+                'route' => 'full_reduction.index',
+                'title' => '满减活动',
+            ];
 
+            return $data;
+        });
         //加入后台管理菜单
         listen_hook_filter('panel.component.sidebar.product.routes', function ($data) {
             $data[] = [
@@ -24,7 +30,7 @@ class Boot
 
         listen_blade_insert('product.detail.tab.link.after', function ($data) {
 
-            $ask_answers_count         = $this->getAskAnswersCount($data['product']['id']);
+            $ask_answers_count         = AskAnswerRepo::getInstance()->getAskAnswersCount($data['product']['id']);
             $data['ask_answers_count'] = $ask_answers_count;
             $view                      = view('LQuestionAnswer::front.tab_link', $data)->render();
 
@@ -42,7 +48,7 @@ class Boot
             $customer            = current_customer();
             $data['customer']    = $customer;
 
-            $ask_answers_count         = $this->getAskAnswersCount($data['product']['id']);
+            $ask_answers_count         = AskAnswerRepo::getInstance()->getAskAnswersCount($data['product']['id']);
             $data['ask_answers_count'] = $ask_answers_count;
 
             $data['can_add_ask_answer'] = true;
@@ -54,21 +60,7 @@ class Boot
             $view = view('LQuestionAnswer::front.tab_pane', $data)->render();
 
             return $view;
-        }, 3000096);
+        }, 3000097);
 
-    }
-
-    private function getAskAnswersCount($product_id)
-    {
-        $key               = 'ask_answers_count_'.$product_id;
-        $ask_answers_count = Cache::get($key);
-        if ($ask_answers_count == null) {
-            $ask_answers_count = AskAnswer::query()->where('product_id', $product_id)->where(function ($query) {
-                $query->where('status', 2)->orWhere('session_id', session()->getId());
-            })->count();
-            Cache::put($key, $ask_answers_count, Carbon::now()->addSeconds(2));
-        }
-
-        return $ask_answers_count;
     }
 }

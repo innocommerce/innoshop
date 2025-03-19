@@ -18,6 +18,7 @@ return [
     'email'            => 'Email',
     'name'             => 'Nama',
     'phone'            => 'Nomor Telepon',
+    'region'           => 'Area.',
     'shipping_address' => 'Alamat Pengiriman',
     'state'            => 'Provinsi',
     'zipcode'          => 'Kode Pos',

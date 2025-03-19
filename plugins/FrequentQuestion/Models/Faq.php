@@ -9,6 +9,7 @@
 
 namespace Plugin\FrequentQuestion\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Traits\Translatable;
 
@@ -18,5 +19,13 @@ class Faq extends BaseModel
 
     protected $table = 'faqs';
 
-    protected $fillable = ['active'];
+    protected $fillable = ['faq_category_id', 'active'];
+
+    /**
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(FaqCategory::class, 'faq_category_id');
+    }
 }

@@ -55,7 +55,7 @@ return [
     'entry_product_include'         => '购物车有以下任一选定的商品即可',
     'entry_product_only'            => '购物车只能有以下选定的商品',
     'entry_sort_order'              => '排序',
-    'entry_status'                  => '状态',
+    'entry_active'                  => '状态',
     'entry_store'                   => '商店',
     'entry_store_all'               => '所有商店',
     'entry_store_selected'          => '指定商店',

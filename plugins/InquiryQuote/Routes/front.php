@@ -8,7 +8,7 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\InquiryQuote\FrontControllers\QuoteController;
+use Plugin\InquiryQuote\Controllers\Front\QuoteController;
 
 Route::middleware('customer_auth:customer')->group(function () {
     Route::get('/quote', [QuoteController::class, 'current'])->name('quotes.current');

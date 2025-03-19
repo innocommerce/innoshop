@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => 'Sunting Pertanyaan',
     'quotes_index' => 'Senarai Pertanyaan',
+    'quotes_split' => 'Pertanyaan dan pemisahan pesanan',
     'title'        => 'Pertanyaan Sebut Harga',
 ];

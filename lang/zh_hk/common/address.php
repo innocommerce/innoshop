@@ -18,6 +18,7 @@ return [
     'email'            => '電子郵箱',
     'name'             => '姓名',
     'phone'            => '電話號碼',
+    'region'           => '區域',
     'shipping_address' => '配送地址',
     'state'            => '省份',
     'zipcode'          => '郵編',

@@ -31,7 +31,7 @@ class FaqRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'translations.*.question' => 'string|required|max:32',
+            'translations.*.question' => 'string|required|max:256',
             'translations.*.answer'   => 'string|required',
             'active'                  => 'bool',
         ];

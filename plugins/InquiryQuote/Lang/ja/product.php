@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => '商品の追加に成功しました',
     'amount'            => '数量',
+    'continue_shopping' => '買い物の続きです',
     'delivered'         => '閉鎖されました',
     'describe'          => '説明',
     'describe_inputs'   => '説明を入力してください',
+    'go_to_inquiry'     => '引合いを提出します。',
     'inquiry'           => '問い合わせ',
+    'inquiry_list'      => '引合いリストです',
     'nonnegative'       => '価格は非負の数字でなければなりません。',
     'number_inputs'     => '数量を入力してください',
     'pending'           => '処理を待ちます',
@@ -24,4 +28,6 @@ return [
     'shipped'           => '達成しました',
     'submit'            => '送信',
     'success'           => 'データの提出は成功です',
+    'successed'         => '成功です',
+    'to'                => '着きました',
 ];

@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Panel\Controllers\BaseController;
 use Plugin\FrequentQuestion\Models\Faq;
+use Plugin\FrequentQuestion\Repositories\FaqCategoryRepo;
 use Plugin\FrequentQuestion\Repositories\FaqRepo;
 use Plugin\FrequentQuestion\Requests\FaqRequest;
 use Throwable;
@@ -98,7 +99,8 @@ class FaqController extends BaseController
     public function form($faq): mixed
     {
         $data = [
-            'faq' => $faq,
+            'faq'        => $faq,
+            'categories' => FaqCategoryRepo::getInstance()->all()->toArray(),
         ];
 
         return inno_view('FrequentQuestion::panel.faq_form', $data);

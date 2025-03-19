@@ -39,13 +39,15 @@
                     <div class="accordion-body">
                       <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
 
-                      <x-common-form-input title="{{ __('FrequentQuestion::common.question') }}" name="translations[{{$localeCode}}][question]" required
+                      <x-common-form-input title="{{ __('FrequentQuestion::common.question') }}"
+                                           name="translations[{{$localeCode}}][question]" required
                                            value="{{ old('translations.' . $localeCode . '.question', $faq->translate($localeCode, 'question')) }}"/>
 
                       <x-panel::form.row title="{{ __('FrequentQuestion::common.answer') }}" required>
                         <div class="tab-content">
                           <div class="tab-pane fade show active" id="tab-answer-{{ $localeCode }}">
-                            <textarea rows="4" type="text" name="translations[{{$localeCode}}][answer]" class="form-control"
+                            <textarea rows="4" type="text" name="translations[{{$localeCode}}][answer]"
+                                      class="form-control"
                                       placeholder="{{ __('FrequentQuestion::common.content') }}">{{ old('translations.' . $localeCode . '.answer', $faq->translate($localeCode, 'answer')) }}</textarea>
                           </div>
                         </div>
@@ -63,6 +65,10 @@
       <div class="col-12 col-md-3 ps-md-0">
         <div class="card">
           <div class="card-body">
+            <x-common-form-select title="FAQ分类" name="faq_category_id"  :emptyOption="false"
+                                  :value="old('faq_category_id', $product->faq_category_id ?? 0)" :options="$categories"
+                                  key="id" label="title"/>
+
             <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active"
                                         :value="old('active', $faq->active ?? true)"
                                         placeholder="{{ __('panel/common.whether_enable') }}"/>

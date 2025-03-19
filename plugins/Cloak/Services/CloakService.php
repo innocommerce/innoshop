@@ -2,9 +2,7 @@
 
 namespace Plugin\Cloak\Services;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
 use Plugin\Cloak\Models\Cloak;
@@ -23,7 +21,7 @@ class CloakService
         'SkypeUriPreview', 'nuzzel', 'Discordbot', 'Google Page Speed', 'Qwantify',
         'pinterestbot', 'Bitrix link preview', 'XING-contenttabreceiver', 'Chrome-Lighthouse',
         'TelegramBot', 'Google-AdSense-Snapshot', 'Googlebot-Image', 'PhantomJS', 'Safari',
-        'headless', 'Chrome', 'Firefox', 'Browser', 'android'
+        'headless', 'Chrome', 'Firefox', 'Browser', 'android',
     ];
 
     // IP ranges for common ad networks and bots
@@ -42,8 +40,8 @@ class CloakService
     /**
      * Get cloaks filtered by status
      *
-     * @param string|null $status
-     * @param int $paginate
+     * @param  string|null  $status
+     * @param  int  $paginate
      * @return mixed
      */
     public function getCloaksFiltered(?string $status, $paginate = 20): mixed
@@ -54,7 +52,7 @@ class CloakService
     /**
      * Create a new cloak
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Cloak
      */
     public function createCloak(Request $request): Cloak
@@ -65,20 +63,21 @@ class CloakService
     /**
      * Update an existing cloak
      *
-     * @param Request $request
-     * @param int $id
+     * @param  Request  $request
+     * @param  int  $id
      * @return Cloak
      */
     public function updateCloak(Request $request, int $id): Cloak
     {
         $cloak = $this->findById($id);
+
         return $this->cloakRepo->update($cloak, $request->all());
     }
 
     /**
      * Find cloak by ID
      *
-     * @param int $id
+     * @param  int  $id
      * @return Cloak|null
      */
     public function findById(int $id): ?Cloak
@@ -89,8 +88,8 @@ class CloakService
     /**
      * Get URL to redirect to based on request analysis
      *
-     * @param Cloak $cloak
-     * @param Request $request
+     * @param  Cloak  $cloak
+     * @param  Request  $request
      * @return string
      */
     public function getRedirectUrl(Cloak $cloak, Request $request): string
@@ -117,8 +116,8 @@ class CloakService
     /**
      * Check if the visitor should see the safe page
      *
-     * @param Cloak $cloak
-     * @param Request $request
+     * @param  Cloak  $cloak
+     * @param  Request  $request
      * @return bool
      */
     public function shouldShowSafePage(Cloak $cloak, Request $request): bool
@@ -134,22 +133,22 @@ class CloakService
         }
 
         // 3. Check IP filters
-        if (!empty($cloak->ip_filters) && $this->matchesIpFilter($request->ip(), $cloak->ip_filters)) {
+        if (! empty($cloak->ip_filters) && $this->matchesIpFilter($request->ip(), $cloak->ip_filters)) {
             return true;
         }
 
         // 4. Check country filters
-        if (!empty($cloak->country_filters) && $this->matchesCountryFilter($request->ip(), $cloak->country_filters)) {
+        if (! empty($cloak->country_filters) && $this->matchesCountryFilter($request->ip(), $cloak->country_filters)) {
             return true;
         }
 
         // 5. Check user agent filters
-        if (!empty($cloak->user_agent_filters) && $this->matchesUserAgentFilter($request->userAgent(), $cloak->user_agent_filters)) {
+        if (! empty($cloak->user_agent_filters) && $this->matchesUserAgentFilter($request->userAgent(), $cloak->user_agent_filters)) {
             return true;
         }
 
         // 6. Check referrer filters
-        if (!empty($cloak->referrer_filters) && $this->matchesReferrerFilter($request->header('referer'), $cloak->referrer_filters)) {
+        if (! empty($cloak->referrer_filters) && $this->matchesReferrerFilter($request->header('referer'), $cloak->referrer_filters)) {
             return true;
         }
 
@@ -164,29 +163,29 @@ class CloakService
     /**
      * Check if the visitor has visited before (for one-time redirect)
      *
-     * @param int $cloakId
+     * @param  int  $cloakId
      * @return bool
      */
     protected function hasVisitedBefore(int $cloakId): bool
     {
-        return Cookie::has('cloak_visited_' . $cloakId);
+        return Cookie::has('cloak_visited_'.$cloakId);
     }
 
     /**
      * Set cookie to mark visitor has visited
      *
-     * @param int $cloakId
+     * @param  int  $cloakId
      * @return void
      */
     public function setVisitedCookie(int $cloakId): void
     {
-        Cookie::queue('cloak_visited_' . $cloakId, '1', 43200); // 30 days
+        Cookie::queue('cloak_visited_'.$cloakId, '1', 43200); // 30 days
     }
 
     /**
      * Check if the request is from a bot
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return bool
      */
     protected function isBot(Request $request): bool
@@ -218,19 +217,20 @@ class CloakService
     /**
      * Check if IP is in a CIDR range
      *
-     * @param string $ip
-     * @param string $range
+     * @param  string  $ip
+     * @param  string  $range
      * @return bool
      */
     protected function ipInRange(string $ip, string $range): bool
     {
         if (strpos($range, '/') !== false) {
             // CIDR notation
-            list($subnet, $bits) = explode('/', $range);
-            $ip = ip2long($ip);
-            $subnet = ip2long($subnet);
-            $mask = -1 << (32 - $bits);
+            [$subnet, $bits] = explode('/', $range);
+            $ip              = ip2long($ip);
+            $subnet          = ip2long($subnet);
+            $mask            = -1 << (32 - $bits);
             $subnet &= $mask;
+
             return ($ip & $mask) == $subnet;
         } else {
             // Single IP
@@ -241,8 +241,8 @@ class CloakService
     /**
      * Check if IP matches any filter
      *
-     * @param string $ip
-     * @param array $filters
+     * @param  string  $ip
+     * @param  array  $filters
      * @return bool
      */
     protected function matchesIpFilter(string $ip, array $filters): bool
@@ -259,8 +259,8 @@ class CloakService
     /**
      * Check if country matches any filter
      *
-     * @param string $ip
-     * @param array $countries
+     * @param  string  $ip
+     * @param  array  $countries
      * @return bool
      */
     protected function matchesCountryFilter(string $ip, array $countries): bool
@@ -269,7 +269,7 @@ class CloakService
             // Get country from IP (using a third-party service)
             $response = Http::get("http://ip-api.com/json/{$ip}");
             if ($response->successful()) {
-                $data = $response->json();
+                $data    = $response->json();
                 $country = $data['countryCode'] ?? '';
 
                 return in_array($country, $countries);
@@ -284,8 +284,8 @@ class CloakService
     /**
      * Check if user agent matches any filter
      *
-     * @param string|null $userAgent
-     * @param array $filters
+     * @param  string|null  $userAgent
+     * @param  array  $filters
      * @return bool
      */
     protected function matchesUserAgentFilter(?string $userAgent, array $filters): bool
@@ -308,8 +308,8 @@ class CloakService
     /**
      * Check if referrer matches any filter
      *
-     * @param string|null $referrer
-     * @param array $filters
+     * @param  string|null  $referrer
+     * @param  array  $filters
      * @return bool
      */
     protected function matchesReferrerFilter(?string $referrer, array $filters): bool
@@ -332,8 +332,8 @@ class CloakService
     /**
      * Check if UTM parameters match
      *
-     * @param Cloak $cloak
-     * @param Request $request
+     * @param  Cloak  $cloak
+     * @param  Request  $request
      * @return bool
      */
     protected function hasUtmMismatch(Cloak $cloak, Request $request): bool
@@ -341,15 +341,15 @@ class CloakService
         // If UTM parameters are specified in the cloak configuration,
         // check if they match the request
 
-        if (!empty($cloak->utm_source) && $request->query('utm_source') !== $cloak->utm_source) {
+        if (! empty($cloak->utm_source) && $request->query('utm_source') !== $cloak->utm_source) {
             return true;
         }
 
-        if (!empty($cloak->utm_medium) && $request->query('utm_medium') !== $cloak->utm_medium) {
+        if (! empty($cloak->utm_medium) && $request->query('utm_medium') !== $cloak->utm_medium) {
             return true;
         }
 
-        if (!empty($cloak->utm_campaign) && $request->query('utm_campaign') !== $cloak->utm_campaign) {
+        if (! empty($cloak->utm_campaign) && $request->query('utm_campaign') !== $cloak->utm_campaign) {
             return true;
         }
 

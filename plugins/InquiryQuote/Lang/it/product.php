@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'Aggiunta riuscita di prodotti',
     'amount'            => 'Quantità',
+    'continue_shopping' => 'Continuare a fare acquisti',
     'delivered'         => 'chiuso',
     'describe'          => 'Descrizione',
     'describe_inputs'   => 'Inserisci una descrizione',
+    'go_to_inquiry'     => 'La invito a sottoporre la questione all\'ufficio di presidenza',
     'inquiry'           => 'Richiesta di informazioni',
+    'inquiry_list'      => 'Elenco delle indagini',
     'nonnegative'       => 'Il prezzo deve essere un numero non negativo.',
     'number_inputs'     => 'Inserisci la quantità',
     'pending'           => 'Da trattare',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'È stato raggiunto un accordo',
     'submit'            => 'Invia',
     'success'           => 'Presentazione dei dati',
+    'successed'         => 'Il successo',
+    'to'                => 'a',
 ];

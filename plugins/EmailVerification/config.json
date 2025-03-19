@@ -5,7 +5,7 @@
         "en": "Email Verification"
     },
     "description": {
-        "zh_cn": "邮箱验证",
+        "zh_cn": "客户注册时系统发验证码至邮箱，验证通过后可登录，此功能需开启系统邮件服务。",
         "en": "Email Verification"
     },
     "type": "feature",

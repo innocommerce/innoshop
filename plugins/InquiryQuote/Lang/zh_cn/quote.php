@@ -22,6 +22,7 @@ return [
     'approved_action'         => '达成',
     'customer_updated_action' => '客户修改',
     'customer_closed_action'  => '客户关闭',
+    'completed_action'        => '完成',
 
     'seller'   => '商家',
     'salesman' => '业务员',

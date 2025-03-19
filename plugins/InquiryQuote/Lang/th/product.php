@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'เพิ่มรายการเรียบร้อยแล้ว',
     'amount'            => 'Số lượng',
+    'continue_shopping' => 'ซื้อต่อไป',
     'delivered'         => 'ปิดแล้ว',
     'describe'          => 'Mô tả',
     'describe_inputs'   => 'Vui lòng nhập mô tả',
+    'go_to_inquiry'     => 'ไปยื่นข้อเสนอ',
     'inquiry'           => 'Yêu cầu báo giá',
+    'inquiry_list'      => 'รายการข้อมูล',
     'nonnegative'       => 'Giá phải là số không âm.',
     'number_inputs'     => 'Vui lòng nhập số lượng',
     'pending'           => 'จัดการ',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'เรียบร้อยแล้ว',
     'submit'            => 'ส่ง',
     'success'           => 'การส่งข้อมูลสำเร็จแล้ว',
+    'successed'         => 'สำเร็จ',
+    'to'                => 'ถึง',
 ];

@@ -2,8 +2,6 @@
 
 namespace Plugin\LOffline;
 
-use Illuminate\Http\Response;
-use InnoShop\Common\Libraries\Dom;
 use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Seller\Services\OrderSplitService;
 use Plugin\LOffline\Models\OfflinePaymentConfigDescriptions;
@@ -58,26 +56,17 @@ class Boot
             return $data;
         });
 
-        listen_hook_filter('panel.order.show.response', function (Response $response) {
-
-            if (is_string($response->getOriginalContent())) {
-                return $response;
-            }
-            $data = $response->getOriginalContent()->getData();
-
+        listen_blade_insert('panel.orders.info.print.after', function ($data) {
             $order = $data['order'];
-
-            if ($order['billing_method_code'] != 'l_offline') {
-                return $response;
+            if ($order->status != 'l_offline') {
+                return '';
             }
             $offlineP = OfflinePaymentOrder::query()->where('order_id', $order->id)->first();
             if (empty($offlineP)) {
-                return $response;
+                return '';
             }
 
-            $view = view('LOffline::panel.show_certificate_btn', ['order_id' => $data['order']->id])->render();
-
-            return Dom::getInstance($response->getContent())->insertAfter('#status-app', $view);
+            return view('LOffline::panel.show_certificate_btn', ['order_id' => $data['order']->id])->render();
         });
 
         listen_hook_filter('panel.component.sidebar.setting.routes', function ($data) {

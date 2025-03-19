@@ -99,7 +99,6 @@ class Boot
                     $sku1['init_min_quantity'] = $init_min_quantity;
                 }
             }
-            //print_r(json_encode($skus));exit;
             $data['skus'] = $skus;
             $data['sku']  = $sku1;
 
@@ -123,7 +122,7 @@ class Boot
             } else {
                 return $output;
             }
-        });
+        }, 200001);
 
         //加入购物车数量检测
         listen_hook_action('front.cart.store.before', function ($data) {

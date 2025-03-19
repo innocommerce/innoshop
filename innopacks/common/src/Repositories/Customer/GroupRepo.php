@@ -27,10 +27,7 @@ class GroupRepo extends BaseRepo
             ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
             ['name' => 'level', 'type' => 'input', 'label' => trans('panel/customer.level')],
             ['name' => 'discount_rate', 'type' => 'input', 'label' => trans('panel/customer.discount_rate')],
-            ['name'     => 'mini_cost', 'type' => 'range', 'label' => trans('panel/customer.mini_cost'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
+            ['name' => 'mini_cost', 'type' => 'range', 'label' => trans('panel/customer.mini_cost')],
         ];
     }
 

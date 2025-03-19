@@ -77,7 +77,11 @@
         let masterSkuTieredPrice = @json($sku);
         let init_min_quantity = @json($init_min_quantity);
         $(function () {
-            initData(masterSkuTieredPrice.variants[0], masterSkuTieredPrice.variants[1]);
+            if(masterSkuTieredPrice.variants.length > 1){
+                initData(masterSkuTieredPrice.variants[0], masterSkuTieredPrice.variants[1]);
+            }else{
+                initData(masterSkuTieredPrice.variants[0], masterSkuTieredPrice.variants[0]);
+            }
         })
 
         $('.product-variant-box .variant-value-name').click(function () {
@@ -113,7 +117,6 @@
             variants[variant] = value;
             masterSkuTieredPrice = skus.find(sku => sku.variants.toString() === variants.toString());
 
-            console.log("============");
             if (masterSkuTieredPrice) {
                 tiereds = masterSkuTieredPrice.tiereds;
             } else {
@@ -146,7 +149,7 @@
                 $values.append(
                     $('<div>', {
                         class: 'tiered-price-cell',
-                        text: '$' + parseFloat(tier.price).toFixed(2)
+                        text: tier.price_format
                     })
                 );
             });
@@ -155,7 +158,7 @@
 
         function updatePrice() {
             if (tiereds.length == 0) {
-                console.log("default=====")
+                console.log("default=====",masterSkuTieredPrice)
                 $("#price_format").text(masterSkuTieredPrice.price_format)
                 if (masterSkuTieredPrice.price_format != masterSkuTieredPrice.origin_price_format) {
                     $("#origin_price_format").show();

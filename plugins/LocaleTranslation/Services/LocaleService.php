@@ -196,6 +196,7 @@ class LocaleService
             foreach ($originValues as $index => $originValue) {
                 if (is_string($originValue)) {
                     $originValue = addslashes($originValue);
+                    $originValue = preg_replace('/\\\+("|\')/', '\\\$1', $originValue);
                 } else {
                     throw new Exception('该文件包含二级词条,不能自动格式化');
                 }

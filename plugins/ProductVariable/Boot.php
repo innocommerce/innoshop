@@ -132,7 +132,7 @@ class Boot
             }
 
             foreach ($items as $item) {
-                $item->custom_sku = $tmpCustomSkus[$item->id];
+                $item->custom_sku = $tmpCustomSkus[$item->id] ?? '';
             }
 
             return $data;

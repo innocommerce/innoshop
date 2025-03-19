@@ -8,6 +8,6 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\SubNews\PanelControllers\SubMailController;
+use Plugin\SubNews\Controllers\Panel\SubMailController;
 
 Route::get('sub_mails', [SubMailController::class, 'index'])->name('sub_mails.index');

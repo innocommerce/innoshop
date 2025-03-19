@@ -15,6 +15,7 @@ return [
     'approved'                => 'Have been approved',
     'approved_action'         => 'Achieved',
     'completed'               => 'completed',
+    'completed_action'        => 'bitirmek',
     'customer_closed'         => 'Customer closed',
     'customer_closed_action'  => 'Customer closure',
     'customer_created'        => 'Customer created',

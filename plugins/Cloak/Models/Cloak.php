@@ -36,15 +36,15 @@ class Cloak extends BaseModel
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
-        'detect_bots' => 'boolean',
-        'one_time_redirect' => 'boolean',
-        'ip_filters' => 'array',
-        'country_filters' => 'array',
+        'is_active'          => 'boolean',
+        'detect_bots'        => 'boolean',
+        'one_time_redirect'  => 'boolean',
+        'ip_filters'         => 'array',
+        'country_filters'    => 'array',
         'user_agent_filters' => 'array',
-        'referrer_filters' => 'array',
-        'visits_count' => 'integer',
-        'redirects_count' => 'integer',
+        'referrer_filters'   => 'array',
+        'visits_count'       => 'integer',
+        'redirects_count'    => 'integer',
     ];
 
     public static function boot()

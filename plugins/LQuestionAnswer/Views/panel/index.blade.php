@@ -184,7 +184,7 @@
               {min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur'}
             ],
             content_text: [
-              {required: true, message: '请输入作者', trigger: 'change'},
+              {required: true, message: '请输入内容', trigger: 'change'},
               {min: 10, max: 350, message: '长度在 10 到 350 个字符', trigger: 'blur'}
             ],
           }

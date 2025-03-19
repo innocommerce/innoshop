@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('body-class', 'page-checkout')
+@section('body-class', 'page-cart')
 
 @push('header')
   <script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>

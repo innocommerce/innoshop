@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'Item adicionado com sucesso',
     'amount'            => 'Quantidade',
+    'continue_shopping' => 'Continuar a comprar',
     'delivered'         => 'Já está fechado',
     'describe'          => 'Descrição',
     'describe_inputs'   => 'Por favor, insira uma descrição',
+    'go_to_inquiry'     => 'Ir para enviar inquérito',
     'inquiry'           => 'Consulta',
+    'inquiry_list'      => 'Lista de inquérito',
     'nonnegative'       => 'O preço deve ser um número não negativo.',
     'number_inputs'     => 'Por favor, insira a quantidade',
     'pending'           => 'Para ser processado',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'Tenha sido alcançado',
     'submit'            => 'Enviar',
     'success'           => 'Dados enviados com sucesso',
+    'successed'         => 'sucesso',
+    'to'                => 'para',
 ];

@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'Produk telah berjaya ditambah',
     'amount'            => 'Kuantiti',
+    'continue_shopping' => 'Teruskan membeli-belah',
     'delivered'         => 'Ditutup',
     'describe'          => 'Perihalan',
     'describe_inputs'   => 'Sila masukkan perihalan',
+    'go_to_inquiry'     => 'Pergi dan serahkan pertanyaan',
     'inquiry'           => 'Permintaan maklumat',
+    'inquiry_list'      => 'Permintaan untuk senarai sebut harga',
     'nonnegative'       => 'Harga mesti menjadi nombor bukan negatif.',
     'number_inputs'     => 'Sila masukkan kuantiti',
     'pending'           => 'Belum selesai',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'Dicapai',
     'submit'            => 'Hantar',
     'success'           => 'Data telah berjaya diserahkan',
+    'successed'         => 'Berjaya',
+    'to'                => 'Tiba',
 ];

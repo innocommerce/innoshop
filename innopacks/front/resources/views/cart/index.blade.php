@@ -132,7 +132,7 @@
     });
 
     $('.product-item-check').on('change', function() {
-      if ($('.product-item-check:checked').length == $('.product-item-check').length) {
+      if ($('.product-item-check:checked').length === $('.product-item-check').length) {
         $('.product-all-check').prop('checked', true);
       } else {
         $('.product-all-check').prop('checked', false);

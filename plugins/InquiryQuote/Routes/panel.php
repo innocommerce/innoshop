@@ -8,7 +8,7 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\InquiryQuote\PanelControllers\QuoteController;
+use Plugin\InquiryQuote\Controllers\Panel\QuoteController;
 
 Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
 Route::get('/quotes/{quote}/edit', [QuoteController::class, 'edit'])->name('quotes.edit');

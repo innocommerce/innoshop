@@ -15,6 +15,7 @@ return [
     'approved'                => 'تم الموافقة',
     'approved_action'         => 'تم التوصل إليه',
     'completed'               => 'اكتمل',
+    'completed_action'        => 'إنجاز',
     'customer_closed'         => 'تم إغلاق العميل',
     'customer_closed_action'  => 'العميل مغلق',
     'customer_created'        => 'تم إنشاء العميل',

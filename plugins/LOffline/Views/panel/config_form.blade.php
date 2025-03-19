@@ -4,7 +4,10 @@
 @section('title', __('LOffline::common.payment_name'))
 @push('header')
     <script src="{{ asset('vendor/tinymce/5.9.1/tinymce.min.js') }}"></script>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="{{ plugin_asset('l_offline','/element-ui/fonts/element-icons.woff') }}">
+    <link rel="stylesheet" href="{{ plugin_asset('l_offline','/element-ui/fonts/element-icons.ttf') }}">
+    <link rel="stylesheet" href="{{ plugin_asset('l_offline','/element-ui/index.css') }}">
+
 @endpush
 
 @section('content')
@@ -30,10 +33,9 @@
 @endsection
 
 @push('footer')
-    <!-- import Vue before Element -->
-    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-    <!-- import JavaScript -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <script src="{{ plugin_asset('l_offline','/element-ui/vue.js') }}"></script>
+    <script src="{{ plugin_asset('l_offline','/element-ui/index.js') }}"></script>
     <script>
         let app = new Vue({
             el: '#app',

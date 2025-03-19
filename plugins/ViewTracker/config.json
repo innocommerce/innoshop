@@ -1,0 +1,18 @@
+{
+    "code": "view_tracker",
+    "name": {
+        "zh_cn": "前台访问记录跟踪",
+        "en": "View Tracker"
+    },
+    "description": {
+        "zh_cn": "记录前台所有访问记录",
+        "en": "View Tracker"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

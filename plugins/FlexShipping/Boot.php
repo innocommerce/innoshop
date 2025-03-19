@@ -9,6 +9,7 @@
 
 namespace Plugin\FlexShipping;
 
+use Exception;
 use InnoShop\Common\Entities\ShippingEntity;
 use InnoShop\Plugin\Core\BaseBoot;
 use Plugin\FlexShipping\Services\FlexService;
@@ -27,22 +28,28 @@ class Boot extends BaseBoot
      */
     public function getQuotes(ShippingEntity $entity): array
     {
-        $quoteData = json_decode(file_get_contents(plugin_path('FlexShipping/Storage/demo.json')), true);
-        if (! $quoteData['active']) {
+        try {
+            //$quoteData = json_decode(file_get_contents(plugin_path('FlexShipping/Storage/demo.json')), true);
+            $quoteData = plugin_setting('flex_shipping', 'setting');
+
+            if (! plugin_setting('flex_shipping', 'active')) {
+                return [];
+            }
+
+            $shippingQuotes = [];
+            $flexShipping   = FlexService::getInstance($entity);
+            foreach ($quoteData['quotes'] as $index => $quoteSetting) {
+                $quote = $flexShipping->getQuote($quoteSetting);
+                if (empty($quote)) {
+                    continue;
+                }
+                $quote['code']    = 'flex_shipping.'.$index;
+                $shippingQuotes[] = $quote;
+            }
+
+            return $shippingQuotes;
+        } catch (Exception $e) {
             return [];
         }
-
-        $shippingQuotes = [];
-        $flexShipping   = FlexService::getInstance($entity);
-        foreach ($quoteData['quotes'] as $index => $quoteSetting) {
-            $quote = $flexShipping->getQuote($quoteSetting);
-            if (empty($quote)) {
-                continue;
-            }
-            $quote['code']    = 'flex_shipping.'.$index;
-            $shippingQuotes[] = $quote;
-        }
-
-        return $shippingQuotes;
     }
 }

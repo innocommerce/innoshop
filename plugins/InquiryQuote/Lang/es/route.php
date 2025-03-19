@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => 'Editar Consulta',
     'quotes_index' => 'Lista de Consultas',
+    'quotes_split' => 'Solicitud de información',
     'title'        => 'Consulta de Cotización',
 ];

@@ -76,7 +76,7 @@ class CloakController extends BaseController
     }
 
     /**
-     * @param  Cloak $cloak
+     * @param  Cloak  $cloak
      * @param  Request  $request
      * @return mixed
      */
@@ -102,8 +102,8 @@ class CloakController extends BaseController
     /**
      * Process the cloaking request
      *
-     * @param Request $request
-     * @param int $id
+     * @param  Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function process(Request $request, int $id)
@@ -111,10 +111,10 @@ class CloakController extends BaseController
         try {
             $cloak = $this->cloakService->findById($id);
 
-            if (!$cloak || !$cloak->is_active) {
+            if (! $cloak || ! $cloak->is_active) {
                 return view('Cloak::front.error', [
-                    'title' => __('Cloak::front.error_404'),
-                    'message' => __('Cloak::front.error_404_message')
+                    'title'   => __('Cloak::front.error_404'),
+                    'message' => __('Cloak::front.error_404_message'),
                 ]);
             }
 
@@ -123,7 +123,7 @@ class CloakController extends BaseController
                 // 测试模式 - 直接显示安全页面
                 if (view()->exists('Cloak::front.safe')) {
                     return view('Cloak::front.safe', ['cloak' => $cloak]);
-                } else if (!empty($cloak->safe_url)) {
+                } elseif (! empty($cloak->safe_url)) {
                     return redirect($cloak->safe_url);
                 }
             }
@@ -134,6 +134,7 @@ class CloakController extends BaseController
                 if (empty($cloak->safe_url) && view()->exists('Cloak::front.safe')) {
                     return view('Cloak::front.safe', ['cloak' => $cloak]);
                 }
+
                 // 否则重定向到指定的safe_url
                 return redirect($cloak->safe_url);
             }
@@ -149,8 +150,8 @@ class CloakController extends BaseController
             return redirect($cloak->target_url);
         } catch (\Exception $e) {
             return view('Cloak::front.error', [
-                'title' => __('Cloak::front.error_generic'),
-                'message' => $e->getMessage()
+                'title'   => __('Cloak::front.error_generic'),
+                'message' => $e->getMessage(),
             ]);
         }
     }

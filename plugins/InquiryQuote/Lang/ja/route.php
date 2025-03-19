@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => '問い合わせ編集',
     'quotes_index' => '問い合わせ一覧',
+    'quotes_split' => '引出しです',
     'title'        => '見積もり問い合わせ',
 ];

@@ -66,7 +66,7 @@ return [
     'status'            => 'ステータス',
     'submitted_success' => '送信に成功しました',
     'uninstall'         => 'アンインストール',
-    'up_image_text'     => 'クリックしてアップロードするか、ファイルをドラッグ＆ドロップしてください',
+    'up_image_text'     => 'アップロードをクリックするか、ファイルをここまでドラッグします。800*800のような四角いサイズをお勧めします。',
     'updated_at'        => '更新日時',
     'updated_success'   => '更新に成功しました',
     'verify_required'   => '入力してください',

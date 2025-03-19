@@ -66,7 +66,7 @@ return [
     'status'            => '상태',
     'submitted_success' => '성공적으로 제출됨',
     'uninstall'         => '제거',
-    'up_image_text'     => '클릭하여 업로드하거나 파일을 여기로 끌어다 놓으세요',
+    'up_image_text'     => '클릭해서 업로드하거나 이쪽으로 드래그하십시오. 권장 크기는 800*800 같은 정사각형입니다',
     'updated_at'        => '업데이트 시간',
     'updated_success'   => '업데이트 성공',
     'verify_required'   => '채우기',

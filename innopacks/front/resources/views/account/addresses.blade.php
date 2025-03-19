@@ -23,7 +23,7 @@
               <div class="col-12 col-md-6">
                 <div class="address-card" data-id="{{ $address['id'] }}">
                   <div class="address-card-header">
-                    <h5 class="address-card-title">{{ $address['name'] }}</h5>
+                    <h5 class="address-card-title">{{ sub_string($address['name']) }}</h5>
                     <div class="address-card-actions">
                       @if($address['default'])
                         <div class="bg-success text-white p-1 required rounded">
@@ -35,11 +35,15 @@
                     </div>
                   </div>
                   <div class="address-card-body">
-                    <p>{{ $address['name'] }}</p>
-                    <p>{{ $address['address_1'] }} {{ $address['address_2'] }}</p>
-                    <p>{{ $address['city'] }}</p>
-                    <p>{{ $address['state'] }}, {{ $address['country_name'] }}</p>
+                    <p>{{ __('common/address.name') }}: {{ $address['name'] }}</p>
                     <p>{{ __('common/address.phone') }}: {{ $address['phone'] }}</p>
+                    <p>{{ __('common/address.zipcode') }}: {{ $address['zipcode'] }}</p>
+                    <p>{{ __('common/address.address_1') }}: {{ $address['address_1'] }}</p>
+                    @if($address['address_2'])
+                      <p>{{ __('common/address.address_2') }}: {{ $address['address_2'] }}</p>
+                    @endif
+                    <p>{{ __('common/address.region') }}: {{ $address['city'] }}, {{ $address['state'] }}
+                      , {{ $address['country_name'] }}</p>
                   </div>
                 </div>
               </div>

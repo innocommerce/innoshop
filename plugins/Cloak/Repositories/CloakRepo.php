@@ -17,8 +17,8 @@ class CloakRepo extends BaseRepo
         foreach ($jsonFields as $field) {
             if (isset($data[$field]) && is_array($data[$field])) {
                 // Filter out empty values
-                $data[$field] = array_filter($data[$field], function($value) {
-                    return !empty($value);
+                $data[$field] = array_filter($data[$field], function ($value) {
+                    return ! empty($value);
                 });
             }
         }
@@ -27,7 +27,7 @@ class CloakRepo extends BaseRepo
         $booleanFields = ['is_active', 'detect_bots', 'one_time_redirect'];
         foreach ($booleanFields as $field) {
             // 确保布尔字段即使未提交也有默认值false
-            $data[$field] = isset($data[$field]) ? (bool)$data[$field] : false;
+            $data[$field] = isset($data[$field]) ? (bool) $data[$field] : false;
         }
 
         return $data;

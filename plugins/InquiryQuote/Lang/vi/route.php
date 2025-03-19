@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => 'Chỉnh sửa yêu cầu',
     'quotes_index' => 'Danh sách yêu cầu',
+    'quotes_split' => 'Đơn đặt hàng điều tra',
     'title'        => 'Báo giá yêu cầu',
 ];

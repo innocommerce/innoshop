@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'إضافة السلع بنجاح',
     'amount'            => 'الكمية',
+    'continue_shopping' => 'مواصلة التسوق',
     'delivered'         => 'مغلق',
     'describe'          => 'وصف',
     'describe_inputs'   => 'أدخل الوصف',
+    'go_to_inquiry'     => 'لتقديم طلب عروض الأسعار',
     'inquiry'           => 'استفسار',
+    'inquiry_list'      => 'قائمة طلب عروض الأسعار',
     'nonnegative'       => 'يجب أن يكون السعر رقماً غير سالب.',
     'number_inputs'     => 'أدخل الكمية',
     'pending'           => 'تنتظر',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'تم',
     'submit'            => 'إرسال',
     'success'           => 'تم تقديم البيانات بنجاح',
+    'successed'         => 'النجاح',
+    'to'                => 'إلى',
 ];

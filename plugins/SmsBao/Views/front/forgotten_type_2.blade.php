@@ -167,14 +167,14 @@
               return;
             }
 
-            let _data = that.forgottenForm, url = "{{shop_route('loginBySms.forgotten_update')}}"
+            let _data = that.forgottenForm, url = "{{front_route('loginBySms.forgotten_update')}}"
             $http.post(url, _data).then((res) => {
               layer.msg(res.message)
-              if (res.code == 0) {
+              if (res.success) {
                 if (that.interVal != null) {
                   clearInterval(that.interVal);
                 }
-                location = "{{ shop_route('login.index') }}"
+                location = "{{ front_route('login.index') }}"
 
 
               }

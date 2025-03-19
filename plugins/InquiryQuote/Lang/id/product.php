@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'Berhasil menambahkan barang',
     'amount'            => 'Jumlah',
+    'continue_shopping' => 'Terus belanja',
     'delivered'         => 'Telah ditutup',
     'describe'          => 'Deskripsi',
     'describe_inputs'   => 'Masukkan deskripsi',
+    'go_to_inquiry'     => 'Pergi dan mengajukan pertanyaan',
     'inquiry'           => 'Penawaran',
+    'inquiry_list'      => 'Daftar permintaan',
     'nonnegative'       => 'Harga harus berupa angka non-negatif.',
     'number_inputs'     => 'Masukkan jumlah',
     'pending'           => 'Untuk ditangani',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'Telah tercapai',
     'submit'            => 'Kirim',
     'success'           => 'Pengiriman data berhasil',
+    'successed'         => 'berhasil',
+    'to'                => 'ke',
 ];

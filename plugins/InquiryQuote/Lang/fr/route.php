@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => 'Modifier la Demande',
     'quotes_index' => 'Liste des Demandes',
+    'quotes_split' => 'Formulaire de demande',
     'title'        => 'Demande de Devis',
 ];

@@ -51,6 +51,7 @@ class AdminOfflineController
     {
         $order_id = $request->order_id;
         $order    = Order::query()->where('id', $order_id)->first();
+
         if ($order->billing_method_code != 'l_offline') {
             exit('无数据');
         }

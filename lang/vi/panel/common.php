@@ -66,7 +66,7 @@ return [
     'status'            => 'Trạng thái',
     'submitted_success' => 'Đã gửi thành công',
     'uninstall'         => 'Gỡ cài đặt',
-    'up_image_text'     => 'Nhấp để tải lên hoặc kéo tệp vào đây',
+    'up_image_text'     => 'Nhấp vào để tải lên, hoặc kéo một tập tin đến đây với kích thước hình vuông, như 800 x 800',
     'updated_at'        => 'Thời gian cập nhật',
     'updated_success'   => 'Đã cập nhật thành công',
     'verify_required'   => 'Vui lòng nhập',

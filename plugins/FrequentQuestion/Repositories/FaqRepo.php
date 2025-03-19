@@ -25,7 +25,7 @@ class FaqRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $faq = new Faq(['active' => $data['active']]);
+        $faq = new Faq($data);
         $faq->saveOrFail();
 
         $faq->translations()->createMany($data['translations']);
@@ -55,6 +55,12 @@ class FaqRepo extends BaseRepo
     public function builder(array $filters = []): Builder
     {
         $builder = Faq::query();
+
+        $faqCategoryID = $filters['faq_category_id'] ?? 0;
+        if ($faqCategoryID) {
+            $builder->where('faq_category_id', $faqCategoryID);
+        }
+
         if (isset($filters['active'])) {
             $builder->where('active', (bool) $filters['active']);
         }

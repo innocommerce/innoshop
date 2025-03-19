@@ -8,8 +8,9 @@
  */
 
 return [
-    'answer'   => '解答',
-    'content'  => '内容',
-    'faq'      => '常见问题',
-    'question' => '问题',
+    'answer'       => '解答',
+    'content'      => '内容',
+    'faq'          => '常见问题',
+    'question'     => '问题',
+    'faq_category' => '常见问题分类',
 ];

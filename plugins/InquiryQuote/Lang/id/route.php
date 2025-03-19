@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => 'Edit Permintaan',
     'quotes_index' => 'Daftar Permintaan',
+    'quotes_split' => 'Penyelidikan pembongkaran',
     'title'        => 'Permintaan Penawaran',
 ];

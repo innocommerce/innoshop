@@ -23,6 +23,6 @@ return [
     'same_shipping_address' => '账单地址同收货地址',
     'shipping_address'      => '收货地址',
     'shipping_methods'      => '配送方式',
-    'shipping_quote_error'  => '请在插件 :classname 实现方法: public function getQuotes($checkoutService)\\\"',
+    'shipping_quote_error'  => '请在插件 :classname 实现方法: public function getQuotes($checkoutService)\"',
     'throttle'              => '您尝试的登录次数过多，请 :seconds 秒后再试。',
 ];

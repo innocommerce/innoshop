@@ -8,9 +8,9 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\InquiryQuote\FrontApiControllers\HistoryController;
-use Plugin\InquiryQuote\FrontApiControllers\InquiryController;
-use Plugin\InquiryQuote\FrontApiControllers\QuoteController;
+use Plugin\InquiryQuote\Controllers\FrontApi\HistoryController;
+use Plugin\InquiryQuote\Controllers\FrontApi\InquiryController;
+use Plugin\InquiryQuote\Controllers\FrontApi\QuoteController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/inquiries', [InquiryController::class, 'store'])->name('inquiries.store');

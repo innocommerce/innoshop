@@ -8,6 +8,6 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\WebBuilder\FrontControllers\HomeController;
+use Plugin\WebBuilder\Controllers\Front\HomeController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');

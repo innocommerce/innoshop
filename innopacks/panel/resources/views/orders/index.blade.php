@@ -41,8 +41,8 @@
                 </div>
               </td>
               <td>{{ $item->customer_name }}</td>
-              <td>{{ $item->shipping_method_code }}</td>
-              <td>{{ $item->billing_method_code }}</td>
+              <td>{{ $item->shipping_method_name }}</td>
+              <td>{{ $item->billing_method_name }}</td>
               <td>{{ $item->status_format }}</td>
               <td>{{ $item->total_format }}</td>
               <td>{{ $item->created_at }}</td>

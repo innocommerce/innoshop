@@ -4,36 +4,19 @@ namespace Plugin\LOffline\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use InnoShop\Common\Models\Order;
-use InnoShop\Common\Services\StateMachineService;
-use Plugin\LOffline\Models\OfflinePaymentOrder;
+use Plugin\LOffline\Repositories\OfflinePaymentOrderRepo;
 
 class OfflineController
 {
     public function imgUpload(Request $request)
     {
-        // 判断上传的文件是否存在
-        if ($request->hasFile('file')) {
 
-            // 获取上传的文件
-            $file = $request->file('file');
-            // 判断文件是否上传成功
-            if ($file->isValid()) {
-                $upload_path = public_path('plugins/loffline/uploads');
-                // 获取文件扩展名
-                $ext = $file->getClientOriginalExtension();
-                // 生成新的文件名
-                $newName = md5(time().rand(0, 10000)).'.'.$ext;
-                // 将文件移动到指定目录
-                $file->move($upload_path, $newName);
+        try {
+            $rs = OfflinePaymentOrderRepo::getInstance()->img_upload($request);
 
-                // 返回文件路径
-                return [
-                    'url'  => asset('/plugins/loffline/uploads/'.$newName),
-                    'path' => $newName,
-                ];
-            }
-
+            return submit_json_success($rs);
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
         }
 
     }
@@ -46,39 +29,13 @@ class OfflineController
      */
     public function pay_result(Request $request)
     {
+        try {
+            $rs = OfflinePaymentOrderRepo::getInstance()->pay_result($request);
 
-        $imgs = $request->imgs;
-
-        if (empty($imgs)) {
-            return response()->json([
-                'code' => -1,
-                'msg'  => trans('LOffline::common.certificate_empty'),
-            ]);
-        }
-        $order = Order::query()->where('number', $request->order_no)->first();
-        if ($order && $order->status == StateMachineService::UNPAID) {
-
-            OfflinePaymentOrder::query()->insert([
-                'order_id' => $order->id,
-                'imgs'     => json_encode($imgs, true),
-            ]);
-
-            //OrderPaymentRepo::createOrUpdatePayment($order->id, ['response' => $result]);
-            StateMachineService::getInstance($order)->changeStatus(StateMachineService::PAID);
-            //再修改为
-            $order->status = 'l_offline';
-            $order->update();
-
-            return response()->json([
-                'code'     => 0,
-                'msg'      => '',
-                'callback' => front_route('checkout.success', ['order_number' => $order->number]),
-            ]);
+            return submit_json_success(['callback' => $rs]);
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
         }
 
-        return response()->json([
-            'code' => -1,
-            'msg'  => '订单号错误',
-        ]);
     }
 }

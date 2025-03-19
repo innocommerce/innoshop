@@ -8,7 +8,7 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\InquiryQuote\SellerController\QuoteController;
+use Plugin\InquiryQuote\Controllers\Seller\QuoteController;
 
 Route::prefix('seller')
     ->middleware(['front', 'customer_auth:customer', 'seller_auth:customer'])

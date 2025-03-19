@@ -16,6 +16,7 @@ use InnoShop\Common\Repositories\BaseRepo;
 use InnoShop\Seller\Repositories\CartItemRepo;
 use Plugin\InquiryQuote\Models\InquiryQuote;
 use Plugin\InquiryQuote\Resources\QuoteFeeSimple;
+use Plugin\InquiryQuote\Resources\QuoteHistory;
 use Plugin\InquiryQuote\Resources\QuoteSimple;
 use Plugin\InquiryQuote\Services\StateService;
 use Spatie\Permission\Models\Role;
@@ -41,14 +42,8 @@ class QuoteRepo extends BaseRepo
             ['name' => 'shipping_method_name', 'type' => 'input', 'label' => trans('panel/order.shipping_method_name')],
             ['name' => 'billing_method_name', 'type' => 'input', 'label' => trans('panel/order.billing_method_name')],
             ['name' => 'status', 'type' => 'select', 'label' => trans('panel/order.status'), 'options' => $statuses, 'options_key' => 'status', 'options_label' => 'name'],
-            ['name'     => 'total', 'type' => 'range', 'label' => trans('panel/order.total'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/order.created_at'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
+            ['name' => 'total', 'type' => 'range', 'label' => trans('panel/order.total')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/order.created_at')],
         ];
     }
 
@@ -134,16 +129,20 @@ class QuoteRepo extends BaseRepo
      */
     public function update(mixed $item, $data): mixed
     {
-        $based = $data['based'] ?? '';
-        if (empty($based)) {
-            throw new Exception('Empty Based, should be seller or salesman');
-        } elseif (! in_array($based, ['seller', 'salesman'])) {
-            throw new Exception('Based should be seller or salesman');
+        if (empty($item->based)) {
+            $based = $data['based'] ?? '';
+            if (empty($based)) {
+                throw new Exception('Empty Based, should be seller or salesman');
+            } elseif (! in_array($based, ['seller', 'salesman'])) {
+                throw new Exception('Based should be seller or salesman');
+            }
+        } else {
+            $based = $item->based;
         }
 
         $quoteData = [
-            'shipping_address_id'  => $data['shipping_address_id'],
-            'shipping_method_code' => $data['shipping_method_code'],
+            'shipping_address_id'  => $data['shipping_address_id']  ?? $item->shipping_address_id,
+            'shipping_method_code' => $data['shipping_method_code'] ?? $item->shipping_method_code,
             'based'                => $based,
             'comment'              => $data['comment'] ?? '',
         ];
@@ -189,6 +188,26 @@ class QuoteRepo extends BaseRepo
         $status = $filters['status'] ?? '';
         if ($status) {
             $builder->where('status', $status);
+        }
+
+        $createdStart = $filters['created_at_start'] ?? '';
+        if ($createdStart) {
+            $builder->where('created_at', '>', $createdStart);
+        }
+
+        $createdEnd = $filters['created_at_end'] ?? '';
+        if ($createdEnd) {
+            $builder->where('created_at', '<', $createdEnd);
+        }
+
+        $totalStart = $filters['total_start'] ?? '';
+        if ($totalStart) {
+            $builder->where('total', '>', $totalStart);
+        }
+
+        $totalEnd = $filters['total_end'] ?? '';
+        if ($totalEnd) {
+            $builder->where('total', '<', $totalEnd);
         }
 
         if (is_admin()) {
@@ -265,6 +284,7 @@ class QuoteRepo extends BaseRepo
             'subtotal'        => $inquirySubtotal,
             'subtotal_format' => currency_format($inquirySubtotal),
             'quote_fees'      => (QuoteFeeSimple::collection($quote->fees))->jsonSerialize(),
+            'histories'       => (QuoteHistory::collection($quote->histories))->jsonSerialize(),
         ];
     }
 

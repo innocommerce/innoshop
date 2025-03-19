@@ -8,11 +8,15 @@
  */
 
 return [
+    'add_product'       => 'Thành công thêm hàng hóa',
     'amount'            => 'Số lượng',
+    'continue_shopping' => 'Tiếp tục mua sắm',
     'delivered'         => 'Đóng cửa',
     'describe'          => 'Mô tả',
     'describe_inputs'   => 'Vui lòng nhập mô tả',
+    'go_to_inquiry'     => 'Để gửi yêu cầu điều tra',
     'inquiry'           => 'Yêu cầu báo giá',
+    'inquiry_list'      => 'Danh sách điều tra',
     'nonnegative'       => 'Giá phải là số không âm.',
     'number_inputs'     => 'Vui lòng nhập số lượng',
     'pending'           => 'Để xử lý',
@@ -24,4 +28,6 @@ return [
     'shipped'           => 'Đã đạt được',
     'submit'            => 'Gửi',
     'success'           => 'Dữ liệu được gửi thành công',
+    'successed'         => 'Thành công',
+    'to'                => 'đến',
 ];

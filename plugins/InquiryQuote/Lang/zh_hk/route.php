@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => '編輯報價',
     'quotes_index' => '報價列表',
+    'quotes_split' => '詢盤拆單',
     'title'        => '報價查詢',
 ];

@@ -10,5 +10,6 @@
 return [
     'quotes_edit'  => 'Anfrage bearbeiten',
     'quotes_index' => 'Anfrageliste',
+    'quotes_split' => 'Überlegen sie, wieviel sie Essen',
     'title'        => 'Anfrageangebot',
 ];

@@ -66,7 +66,7 @@ return [
     'status'            => 'Status',
     'submitted_success' => 'Erfolgreich eingereicht',
     'uninstall'         => 'Deinstallieren',
-    'up_image_text'     => 'Zum Hochladen hier klicken oder eine Datei hier ablegen',
+    'up_image_text'     => 'Klicken sie zum hochladen Oder ziehen sie eine datei in die gewünschte größe ein, zum beispiel 800*800',
     'updated_at'        => 'Aktualisierungszeit',
     'updated_success'   => 'Erfolgreich aktualisiert',
     'verify_required'   => 'Bitte ausfüllen',

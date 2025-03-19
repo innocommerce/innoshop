@@ -30,8 +30,8 @@
     </div>
 
     <div class="col-xxl-20 col-xl-3 col-lg-4 col-md-4 d-flex align-items-center">
-     <label class="text-nowrap me-2">{{ __('FlexShipping::setting.entry_status') }}</label>
-     <select v-model.number="status" class="form-control wp-200">
+     <label class="text-nowrap me-2">{{ __('FlexShipping::setting.entry_active') }}</label>
+     <select v-model.number="active" class="form-control wp-200">
       <option value="0">{{ __('FlexShipping::setting.text_disabled') }}</option>
       <option value="1">{{ __('FlexShipping::setting.text_enabled') }}</option>
      </select>
@@ -44,7 +44,6 @@
        <option value="0">{{ __('FlexShipping::setting.text_disabled') }}</option>
        <option value="1">{{ __('FlexShipping::setting.text_enabled') }}</option>
       </select>
-      <div class="text-muted mt-2" v-if="debug">{{ __('FlexShipping::setting.help_debug') }}</div>
      </div>
     </div>
    </div>
@@ -120,9 +119,9 @@
          </div>
          <div class="row g-3 mb-3">
           <label class="wp-100 col-form-label text-end"
-           for="input-status">{{ __('FlexShipping::setting.entry_status') }}</label>
+           for="input-active">{{ __('FlexShipping::setting.entry_active') }}</label>
           <div class="col-auto wp-100-">
-           <select id="input-status" class="form-control wp-400" v-model.number="quote.status">
+           <select id="input-active" class="form-control wp-400" v-model.number="quote.active">
             <option value="0">{{ __('FlexShipping::setting.text_disabled') }}</option>
             <option value="1">{{ __('FlexShipping::setting.text_enabled') }}</option>
            </select>
@@ -506,7 +505,7 @@
     description: {},
     sort_order: 0,
     tax_class_id: 0,
-    status: 0,
+    active: 0,
     rules: {
      store: {
       type: 'all',
@@ -588,7 +587,7 @@
     VueInputLang,
    },
    setup() {
-    const status = ref(@json($plugin->getSetting('setting.status') ?? 1));
+    const active = ref(@json($plugin->getSetting('setting.active') ?? 1));
     const debug = ref(@json($plugin->getSetting('setting.debug') ?? 0));
     const sort_order = ref(@json($plugin->getSetting('setting.sort_order') ?? 0));
     const quotes = reactive(@json($plugin->getSetting('setting.quotes') ?? []));
@@ -597,7 +596,7 @@
 
     const submit = function() {
      const postData = {
-      status: this.status,
+      active: this.active,
       sort_order: this.sort_order,
       debug: this.debug,
       quotes: quotes
@@ -639,7 +638,7 @@
     };
 
     return {
-     status,
+     active,
      debug,
      sort_order,
      quotes,

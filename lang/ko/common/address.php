@@ -18,6 +18,7 @@ return [
     'email'            => '이메일',
     'name'             => '이름',
     'phone'            => '전화번호',
+    'region'           => '구역',
     'shipping_address' => '배송 주소',
     'state'            => '주',
     'zipcode'          => '우편번호',

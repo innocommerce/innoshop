@@ -12,7 +12,6 @@ namespace Plugin\InquiryQuote\Resources;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 
 class QuoteDetail extends JsonResource
 {
@@ -34,7 +33,7 @@ class QuoteDetail extends JsonResource
             'billing_address_id'   => $this->billing_address_id,
             'billing_method_code'  => $this->billing_method_code,
             'status'               => $this->status,
-            'status_format'        => Str::studly($this->status),
+            'status_format'        => $this->status_format,
             'created_at'           => $this->created_at,
             'total'                => $this->total,
             'total_format'         => currency_format($this->total),

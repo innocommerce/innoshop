@@ -40,10 +40,10 @@
   </script>
   <script src="{{ asset('vendor/vue/2.7/vue.min.js') }}"></script>
   <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
-  <script src="{{ plugin_asset('web_builder', 'js/vuedraggable.js') }}"></script>
-  <link rel="stylesheet" type="text/css" href="{{ plugin_asset('web_builder', 'css/design.css') }}">
+  <script src="{{ plugin_asset('WebBuilder', 'js/vuedraggable.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="{{ plugin_asset('WebBuilder', 'css/design.css') }}">
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-  <link rel="stylesheet" href="{{ plugin_asset('web_builder', 'css/web-builder.css') }}">
+  <link rel="stylesheet" href="{{ plugin_asset('WebBuilder', 'css/web-builder.css') }}">
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script>
     //获取语言信息
@@ -56,7 +56,7 @@
       //定义默认缩略图
       Vue.prototype.thumbnail = function thumbnail(image) {
         if (!image) {
-          return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+          return "{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}";
         }
 
         if (typeof image === 'string' && image.indexOf('http') === 0) {
@@ -65,7 +65,7 @@
         if (typeof image === 'object') {
           const locale = this.source.locale;
           return image[locale] || image['zh_cn'] || Object.values(image)[0] ||
-            "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+            "{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}";
         }
         return asset + image;
       };
@@ -90,13 +90,29 @@
       <div class="module-wrap" :class="{ 'collapsed': isCollapsed }">
         {{-- 返回和保存按钮 --}}
         <div class="d-flex w-100 gap-2 p-2">
-          <button type="button" class="btn btn-secondary flex-fill" onclick="history.back()">
-            <i class="bi bi-arrow-left"></i> {{ __('WebBuilder::common.back') }}
-          </button>
+          <div class="dropdown">
+            <select class="form-select" id="builder-type">
+              <option value="{{ panel_route('web_builder.index') }}" {{ equal_url(panel_route('web_builder.index')) ? 'selected' : '' }}>首页</option>
+              @foreach($pages as $page)
+                <option value="{{ panel_route('page_builder.index', ['page'=>$page->id]) }}" @if(request('page')==$page->id) selected="selected" @endif>
+                  {{ $page->translation->title }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+          <script>
+            $(function() {
+              $('#builder-type').change(function() {
+                window.location.href = $(this).val();
+              });
+            });
+          </script>
+
           <button type="button" class="btn btn-primary flex-fill" id="saveBtn">
             <i class="bi bi-save"></i> {{ __('WebBuilder::common.save') }}
           </button>
         </div>
+
         <!-- tab切换 -->
         <div class="module-tabs">
           <div class="tab-item" :class="{ 'active': !showPropertyPanel }" @click="showPropertyPanel = false">
@@ -220,7 +236,7 @@
                       <div class="product-grid-item">
                         <div class="image">
                           <img
-                            :src="item.image_big || '{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}'"
+                            :src="item.image_big || '{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}'"
                             class="img-fluid">
                         </div>
                         <div class="product-item-info">
@@ -256,7 +272,7 @@
                       <div v-for="item in module.content.images" :key="item.id" class="image-item">
                         <img
                           :src="item.image && (item.image[source.locale] || item.image['zh_cn'] || Object.values(item.image)[
-                              0]) || '{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}'"
+                              0]) || '{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}'"
                           class="img-fluid">
                         <div v-if="item.description && item.description[source.locale]" class="image-description">
                           @{{ item.description[source.locale] }}
@@ -289,7 +305,7 @@
                             <img
                               :src="module.content.images[0].image[source.locale] || module.content.images[0].image[
                                       'zh_cn'] || Object.values(module.content.images[0].image)[0] ||
-                                  '{{ plugin_asset('web_builder', 'images/demo/product/1-500x400.png') }}'"
+                                  '{{ plugin_asset('WebBuilder', 'images/demo/product/1-500x400.png') }}'"
                               class="img-fluid rounded image-large h-100">
                           </a>
                         </div>
@@ -305,7 +321,7 @@
                                 <img
                                   :src="module.content.images[1].image[source.locale] || module.content.images[1].image[
                                           'zh_cn'] || Object.values(module.content.images[1].image)[0] ||
-                                      '{{ plugin_asset('web_builder', 'images/demo/product/2-200x150.png') }}'"
+                                      '{{ plugin_asset('WebBuilder', 'images/demo/product/2-200x150.png') }}'"
                                   class="img-fluid rounded image-small w-100" style="object-fit: contain">
                               </a>
                             </div>
@@ -318,7 +334,7 @@
                                 <img
                                   :src="module.content.images[2].image[source.locale] || module.content.images[2].image[
                                           'zh_cn'] || Object.values(module.content.images[2].image)[0] ||
-                                      '{{ plugin_asset('web_builder', 'images/demo/product/3-200x150.png') }}'"
+                                      '{{ plugin_asset('WebBuilder', 'images/demo/product/3-200x150.png') }}'"
                                   class="img-fluid rounded image-small w-100" style="object-fit: contain">
                               </a>
                             </div>
@@ -333,7 +349,7 @@
                                 <img
                                   :src="module.content.images[3].image[source.locale] || module.content.images[3].image[
                                           'zh_cn'] || Object.values(module.content.images[3].image)[0] ||
-                                      '{{ plugin_asset('web_builder', 'images/demo/product/4-500x200.png') }}'"
+                                      '{{ plugin_asset('WebBuilder', 'images/demo/product/4-500x200.png') }}'"
                                   class="img-fluid rounded image-wide">
                               </a>
                             </div>
@@ -401,7 +417,7 @@
                       <div class="product-grid-item">
                         <div class="image">
                           <img
-                            :src="item.image_big || '{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}'"
+                            :src="item.image_big || '{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}'"
                             class="img-fluid">
                         </div>
                         <div class="product-item-info">
@@ -438,7 +454,7 @@
                       <div class="product-grid-item">
                         <div class="image">
                           <img
-                            :src="item.image_big || '{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}'"
+                            :src="item.image_big || '{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}'"
                             class="img-fluid">
                         </div>
                         <div class="product-item-info">
@@ -751,7 +767,6 @@
       }
     });
   </script>
-
   {{-- 分类商品编辑模块 --}}
   <template id="module-editor-category-template">
     <div class="module-editor-category-template">
@@ -1312,7 +1327,7 @@
                 <div class="icon"><svg t="1731182073387" class="icon" viewBox="0 0 1127 1024" version="1.1"
                     xmlns="http://www.w3.org/2000/svg" p-id="1728" width="81" height="81">
                     <path
-                      d="M917.28125 562.244375L802.593125 376.559375c-2.184375-4.36875-6.0075-7.100625-10.37625-7.100625h-474.590625c-4.36875 0-8.1909375 2.184375-10.37625 7.100625L192.5628125 562.244375c-1.093125 1.0921875-1.093125 2.184375-1.093125 4.36875v227.191875c0 7.0996875 4.36875 11.4684375 11.469375 11.4684375h704.5125c7.09875 0 11.4684375-4.36875 11.4684375-11.4684375V566.613125c-0.5465625-1.6378125-0.5465625-2.73-1.63875-4.36875zM324.726875 392.943125h460.9359375l103.21875 162.7471875H635.4771875c-7.0996875 0-11.4684375 4.36875-11.4684375 11.469375 0 37.6828125-31.1296875 68.8125-68.8125 68.8125-37.68375 0-68.8125-31.1296875-68.8125-68.8125 0-7.0996875-4.3696875-11.469375-11.469375-11.469375H220.9615625l103.7653125-162.7471875zM895.435625 782.88125h-681.028125V578.628125h250.1296875c6.0075 44.7825 44.7825 80.2809375 90.658125 80.2809375s85.19625-35.4984375 90.658125-80.281875H895.98125v204.253125zM138.4953125 674.748125v-12.5615625c0-3.2765625-2.7309375-6.0075-6.0075-6.0075-3.2765625 0-6.0075 2.7309375-6.0075 6.0075v12.5615625H113.91875c-3.2765625 0-6.0075 2.73-6.0075 6.0075 0 3.2765625 2.7309375 6.0075 6.0075 6.0075H126.48125v12.560625c0 3.2765625 2.7309375 6.0075 6.0075 6.0075 3.2765625 0 6.0075-2.7309375 6.0075-6.0075v-12.560625h12.560625c3.2775 0 6.0075-2.7309375 6.0075-6.0075 0-3.2775-2.73-6.0075-6.0075-6.0075H138.4953125zM962.0646875 426.25625h19.1146875c4.914375 0 9.2840625 4.36875 9.2840625 9.2840625 0 5.461875-3.823125 9.2840625-9.2840625 9.2840625h-19.115625v19.115625c0 4.914375-4.36875 9.2840625-9.2840625 9.2840625s-9.2840625-3.823125-9.2840625-9.285v-19.1146875h-19.1146875c-4.9153125 0-9.2840625-4.36875-9.2840625-9.2840625 0-5.4609375 3.823125-9.2840625 9.2840625-9.2840625h19.115625v-19.115625c0-4.914375 4.36875-9.283125 9.283125-9.283125 5.461875 0 9.285 3.8221875 9.285 9.2840625v19.1146875z m67.17375 81.3740625h12.015c3.2765625 0 6.0075 2.73 6.0075 6.0075 0 3.2765625-2.7309375 6.0075-6.0075 6.0075h-12.015v12.015c0 3.2765625-2.73 6.0065625-6.0075 6.0065625-3.2765625 0-6.0075-2.73-6.0075-5.4609375v-12.015H1005.209375c-3.2765625 0-6.0075-2.7309375-6.0075-6.0075 0-3.2765625 2.7309375-6.0075 6.0075-6.0075h12.015v-12.560625c0-3.2775 2.7309375-6.0075 6.0075-6.0075 3.2775 0 6.0075 2.73 6.0075 6.0075v12.015zM154.334375 410.965625v-19.115625c0-5.4609375-4.36875-9.2840625-9.285-9.2840625-5.4609375 0-9.2840625 4.36875-9.2840625 9.285v18.568125H117.19625c-5.461875 0-9.285 4.36875-9.285 9.2840625 0 5.461875 4.36875 9.285 9.285 9.285h18.568125v18.568125c0 5.4609375 4.36875 9.2840625 9.2840625 9.2840625 5.461875 0 9.285-4.36875 9.285-9.2840625v-18.568125h18.568125c5.4609375 0 9.2840625-4.36875 9.2840625-9.285 0-5.4609375-4.36875-9.2840625-9.2840625-9.2840625 0 0.5465625-18.568125 0.5465625-18.568125 0.5465625z m-84.650625 186.2315625c-20.7534375 0-37.68375-16.93125-37.68375-37.68375s16.9303125-37.6828125 37.68375-37.6828125c20.7525 0 37.6828125 16.9303125 37.6828125 37.6828125 0 21.3-16.9303125 37.68375-37.6828125 37.68375z m0-18.5690625c10.37625 0 18.568125-8.191875 18.568125-18.568125s-8.191875-18.5690625-18.568125-18.5690625-18.5690625 8.191875-18.5690625 18.5690625 8.191875 18.568125 18.5690625 18.568125zM1071.8375 474.3171875c-9.285 0-17.476875-7.64625-17.476875-17.476875s7.64625-17.4759375 17.476875-17.4759375c9.2840625 0 17.475 7.6453125 17.475 17.475 17.4759375 0 9.830625-7.6453125 17.476875-17.475 17.476875z m0-8.1928125c4.914375 0 8.7375-3.8221875 8.7375-8.7375s-3.823125-8.7375-8.7375-8.7375c-4.9153125 0-8.7384375 3.8221875-8.7384375 8.7375s4.36875 8.7375 8.7375 8.7375zM312.1653125 191.42c7.64625-7.64625 20.206875-7.64625 27.853125 0l69.9046875 69.3590625c7.64625 7.6453125 7.64625 20.206875 0 27.853125-7.6453125 7.6453125-7.6453125-7.6453125-7.6453125-20.206875-7.6453125-27.853125 0l-69.9046875-69.36c-7.6453125-7.6453125-7.6453125-20.206875 0-27.853125z m243.03-34.9528125c10.921875 0 19.6603125 8.7375 19.6603125 19.66125v98.3034375c0 10.9228125-8.7375 19.66125-19.6603125 19.66125s-19.66125-8.7384375-19.66125-19.66125V176.1284375c-0.545625-10.3771875 8.7375-19.66125 19.66125-19.66125-0.5465625 0 0 0 0 0z m243.5746875 30.0375c7.64625 7.6453125 7.64625 20.206875 0 27.853125l-69.358125 69.358125c-7.64625 7.64625-20.2078125 7.64625-27.853125 0-7.64625-7.6453125-7.64625-20.206875 0-27.853125l69.3590625-69.358125c7.6453125-7.64625 20.206875-7.64625 27.853125 0z"
+                      d="M917.28125 562.244375L802.593125 376.559375c-2.184375-4.36875-6.0075-7.100625-10.37625-7.100625h-474.590625c-4.36875 0-8.1909375 2.184375-10.37625 7.100625L192.5628125 562.244375c-1.093125 1.0921875-1.093125 2.184375-1.093125 4.36875v227.191875c0 7.0996875 4.36875 11.4684375 11.469375 11.4684375h704.5125c7.09875 0 11.4684375-4.36875 11.4684375-11.4684375V566.613125c-0.5465625-1.6378125-0.5465625-2.73-1.63875-4.36875zM324.726875 392.943125h460.9359375l103.21875 162.7471875H635.4771875c-7.0996875 0-11.4684375 4.36875-11.4684375 11.469375 0 37.6828125-31.1296875 68.8125-68.8125 68.8125-37.68375 0-68.8125-31.1296875-68.8125-68.8125 0-7.0996875-4.3696875-11.469375-11.469375-11.469375H220.9615625l103.7653125-162.7471875zM895.435625 782.88125h-681.028125V578.628125h250.1296875c6.0075 44.7825 44.7825 80.2809375 90.658125 80.2809375s85.19625-35.4984375 90.658125-80.281875H895.98125v204.253125zM138.4953125 674.748125v-12.5615625c0-3.2765625-2.7309375-6.0075-6.0075-6.0075-3.2765625 0-6.0075 2.7309375-6.0075 6.0075v12.5615625H113.91875c-3.2765625 0-6.0075 2.73-6.0075 6.0075 0 3.2765625 2.7309375 6.0075 6.0075 6.0075H126.48125v12.560625c0 3.2765625 2.7309375 6.0075 6.0075 6.0075 3.2765625 0 6.0075-2.73 6.0075-6.0075v-12.560625h12.560625c3.2775 0 6.0075-2.7309375 6.0075-6.0075 0-3.2775-2.73-6.0075-6.0075-6.0075H138.4953125zM962.0646875 426.25625h19.1146875c4.914375 0 9.2840625 4.36875 9.2840625 9.2840625 0 5.461875-3.823125 9.2840625-9.2840625 9.2840625h-19.115625v19.115625c0 4.914375-4.36875 9.2840625-9.2840625 9.2840625s-9.2840625-3.823125-9.2840625-9.285v-19.1146875h-19.1146875c-4.9153125 0-9.2840625-4.36875-9.2840625-9.2840625 0-5.4609375 3.823125-9.2840625 9.2840625-9.2840625h19.115625v-19.115625c0-4.914375 4.36875-9.283125 9.283125-9.283125 5.461875 0 9.285 3.8221875 9.285 9.2840625v19.1146875z m67.17375 81.3740625h12.015c3.2765625 0 6.0075 2.73 6.0075 6.0075 0 3.2765625-2.7309375 6.0075-6.0075 6.0075h-12.015v12.015c0 3.2765625-2.73 6.0065625-6.0075 6.0065625-3.2765625 0-6.0075-2.73-6.0075-5.4609375v-12.015H1005.209375c-3.2765625 0-6.0075-2.7309375-6.0075-6.0075 0-3.2765625 2.7309375-6.0075 6.0075-6.0075h12.015v-12.560625c0-3.2775 2.7309375-6.0075 6.0075-6.0075 3.2775 0 6.0075 2.73 6.0075 6.0075v12.015zM154.334375 410.965625v-19.115625c0-5.4609375-4.36875-9.2840625-9.285-9.2840625-5.4609375 0-9.2840625 4.36875-9.2840625 9.285v18.568125H117.19625c-5.461875 0-9.285 4.36875-9.285 9.2840625 0 5.461875 4.36875 9.285 9.285 9.285h18.568125v18.568125c0 5.4609375 4.36875 9.2840625 9.2840625 9.2840625 5.461875 0 9.285-4.36875 9.285-9.2840625v-18.568125h18.568125c5.4609375 0 9.2840625-4.36875 9.2840625-9.285 0-5.4609375-4.36875-9.2840625-9.2840625-9.2840625 0 0.5465625-18.568125 0.5465625-18.568125 0.5465625z m-84.650625 186.2315625c-20.7534375 0-37.68375-16.93125-37.68375-37.68375s16.9303125-37.6828125 37.68375-37.6828125c20.7525 0 37.6828125 16.9303125 37.6828125 37.6828125 0 21.3-16.9303125 37.68375-37.6828125 37.68375z m0-18.5690625c10.37625 0 18.568125-8.191875 18.568125-18.568125s-8.191875-18.5690625-18.568125-18.5690625-18.5690625 8.191875-18.5690625 18.5690625 8.191875 18.568125 18.5690625 18.568125zM1071.8375 474.3171875c-9.285 0-17.476875-7.64625-17.476875-17.476875s7.64625-17.4759375 17.476875-17.4759375c9.2840625 0 17.475 7.6453125 17.475 17.475 17.4759375 0 9.830625-7.6453125 17.476875-17.475 17.476875z m0-8.1928125c4.914375 0 8.7375-3.8221875 8.7375-8.7375s-3.823125-8.7375-8.7375-8.7375c-4.9153125 0-8.7384375 3.8221875-8.7384375 8.7375s4.36875 8.7375 8.7375 8.7375zM312.1653125 191.42c7.64625-7.64625 20.206875-7.64625 27.853125 0l69.9046875 69.3590625c7.64625 7.6453125 7.64625 20.206875 0 27.853125-7.6453125 7.6453125-7.6453125-7.6453125-7.6453125-20.206875-7.6453125-27.853125 0l-69.9046875-69.36c-7.6453125-7.6453125-7.6453125-20.206875 0-27.853125z m243.03-34.9528125c10.921875 0 19.6603125 8.7375 19.6603125 19.66125v98.3034375c0 10.9228125-8.7375 19.66125-19.6603125 19.66125s-19.66125-8.7384375-19.66125-19.66125V176.1284375c-0.545625-10.3771875 8.7375-19.66125 19.66125-19.66125-0.5465625 0 0 0 0 0z m243.5746875 30.0375c7.64625 7.6453125 7.64625 20.206875 0 27.853125l-69.358125 69.358125c-7.64625 7.64625-20.2078125 7.64625-27.853125 0-7.64625-7.6453125-7.64625-20.206875 0-27.853125l69.3590625-69.358125c7.6453125-7.64625 20.206875-7.64625 27.853125 0z"
                       fill="#bbbbbb" p-id="1729"></path>
                   </svg></div>
                 <div class="no-text">数据不存在或已被删除, <a :href="linkTypeAdmin"
@@ -1490,11 +1505,19 @@
         linkDialogConfirm() {
           this.isUpdate = false;
           if (this.link.type == 'custom') {
-            this.name = this.link.value;
+            this.name = [{
+              name: this.link.value
+            }];
           } else if (this.link.type == 'static') {
-            this.name = this.static.find(e => e.value == this.link.value).name;
+            const staticItem = this.static.find(e => e.value == this.link.value);
+            this.name = [{
+              name: staticItem.name
+            }]
           } else {
-            this.name = this.linkDialog.data.find(e => e.id == this.link.value).name;
+            const selectedItem = this.linkDialog.data.find(e => e.id == this.link.value);
+            this.name = [{
+              name: selectedItem.name
+            }]
           }
 
           let links = JSON.parse(JSON.stringify(this.link)); // type 类型切换时，不需要更新视图
@@ -1631,19 +1654,19 @@
 
           switch (this.link.type) {
             case 'product':
-              url = `api/panel/products/names?product_ids=${this.link.value}`;
+              url = `api/panel/products/names?ids=${this.link.value}`;
               break;
             case 'category':
-              url = `api/panel/categories/names?category_ids=${this.link.value}`;
+              url = `api/panel/categories/names?ids=${this.link.value}`;
               break;
             case 'brand':
-              url = `api/panel/brands/names?brand_ids=${this.link.value}`;
+              url = `api/panel/brands/names?ids=${this.link.value}`;
               break;
             case 'page':
-              url = `api/panel/pages/names?page_ids=${this.link.value}`;
+              url = `api/panel/pages/names?ids=${this.link.value}`;
               break;
             case 'catalog':
-              url = `api/panel/catalogs/name?catalog_ids=${this.link.value}`;
+              url = `api/panel/catalogs/name?ids=${this.link.value}`;
               break;
             default:
               null;
@@ -1887,7 +1910,7 @@
       methods: {
         thumbnail(image) {
           if (!image) {
-            return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+            return "{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}";
           }
           if (typeof image === 'string' && image.indexOf('http') === 0) {
             return image;
@@ -1895,7 +1918,7 @@
           if (typeof image === 'object') {
             const locale = this.source.locale;
             return image[locale] || image['zh_cn'] || Object.values(image)[0] ||
-              "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+              "{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}";
           }
           return asset + image;
         },
@@ -2014,7 +2037,7 @@
       methods: {
         thumbnail(image) {
           if (!image) {
-            return "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+            return "{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}";
           }
           if (typeof image === 'string' && image.indexOf('http') === 0) {
             return image;
@@ -2022,7 +2045,7 @@
           if (typeof image === 'object') {
             const locale = this.source.locale;
             return image[locale] || image['zh_cn'] || Object.values(image)[0] ||
-              "{{ plugin_asset('mobile_builder', 'images/placeholder.png') }}";
+              "{{ plugin_asset('WebBuilder', 'images/placeholder.png') }}";
           }
           return asset + image;
         },
@@ -2577,7 +2600,8 @@
         },
 
         getDesignData() {
-          axios.get('{{ panel_route('web_builder.design') }}').then(res => {
+          let builder_url = $('#builder-type').val();
+          axios.get(builder_url + '/design').then(res => {
             if (res.success) {
               this.form.modules = res.data.modules ? res.data.modules.filter(module => module != null) : [];
               layer.msg(res.message);
@@ -2593,9 +2617,9 @@
             this.$message.error('获取数据失败：' + err.message);
           });
         },
-
         saveButtonClicked() {
-          axios.put('{{ panel_route('web_builder.design.update') }}', this.form).then((res) => {
+          let builder_url = $('#builder-type').val();
+          axios.put(builder_url + '/design', this.form).then((res) => {
             if (res.success) {
               this.$message.success('保存成功');
             } else {
@@ -2624,8 +2648,8 @@
               "content": {
                 "images": [{
                   "image": {
-                    "zh_cn": "{{ plugin_asset('MobileBuilder', 'images/demo/banner/banner-1-cn.jpg') }}",
-                    "en": "{{ plugin_asset('MobileBuilder', 'images/demo/banner/banner-1-en.jpg') }}"
+                    "zh_cn": "{{ plugin_asset('WebBuilder', 'images/demo/banner/banner-1-cn.jpg') }}",
+                    "en": "{{ plugin_asset('WebBuilder', 'images/demo/banner/banner-1-en.jpg') }}"
                   },
                   "show": false,
                   "link": {
@@ -2635,8 +2659,8 @@
                   }
                 }, {
                   "image": {
-                    "zh_cn": "{{ plugin_asset('MobileBuilder', 'images/demo/banner/banner-2-cn.jpg') }}",
-                    "en": "{{ plugin_asset('MobileBuilder', 'images/demo/banner/banner-2-en.jpg') }}"
+                    "zh_cn": "{{ plugin_asset('WebBuilder', 'images/demo/banner/banner-2-cn.jpg') }}",
+                    "en": "{{ plugin_asset('WebBuilder', 'images/demo/banner/banner-2-en.jpg') }}"
                   },
                   "show": true,
                   "link": {
@@ -2682,28 +2706,28 @@
                 "products": [{
                   "id": 1,
                   "name": "都市精英风尚西装外套经典剪裁",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/1-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/1-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 2,
                   "name": "银河流光璀璨晚礼服闪耀全场",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/2-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/2-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 3,
                   "name": "晨曦漫步轻盈薄款风衣春意盎然",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/3-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/3-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 4,
                   "name": "极简风格主义经典衬衫简约不简单",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/4-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/4-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
@@ -2733,28 +2757,28 @@
                 "products": [{
                   "id": 1,
                   "name": "摩登复风高腰牛仔裤经典再现",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/5-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/5-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 2,
                   "name": "幻彩流苏时尚个性围巾绚丽多彩",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/6-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/6-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 3,
                   "name": "男士白色卫衣套装",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/7-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/7-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 4,
                   "name": "优雅蕾丝边透视性感上衣女性魅力",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/8-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/8-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
@@ -2780,28 +2804,28 @@
                 "products": [{
                   "id": 1,
                   "name": "都市精英风尚西装外套经典剪裁",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/1-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/1-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 2,
                   "name": "银河流光璀璨晚礼服闪耀全场",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/2-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/2-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 3,
                   "name": "晨曦漫步轻盈薄款风衣春意盎然",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/3-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/3-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
                 }, {
                   "id": 4,
                   "name": "极简风格主义经典衬衫简约不简单",
-                  "image_big": "{{ plugin_asset('MobileBuilder', 'images/demo/product/4-600x600.png') }}",
+                  "image_big": "{{ plugin_asset('WebBuilder', 'images/demo/product/4-600x600.png') }}",
                   "image_format": "",
                   "price_format": "$123.50",
                   "active": true
@@ -2948,7 +2972,7 @@
           background_color: ''
         },
         images: [{
-          image: languagesFill("{{ plugin_asset('MobileBuilder', 'images/demo/banner/banner-2-en.jpg') }}"),
+          image: languagesFill("{{ plugin_asset('WebBuilder', 'images/demo/banner/banner-2-en.jpg') }}"),
           show: true,
           link: {
             type: 'product',

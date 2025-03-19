@@ -87,7 +87,8 @@ class ProductController extends Controller
         }
 
         $product->increment('viewed');
-        $reviews = ReviewRepo::getInstance()->getListByProduct($product);
+        $reviews    = ReviewRepo::getInstance()->getListByProduct($product);
+        $customerID = current_customer_id();
 
         $data = [
             'product'    => $product,
@@ -96,6 +97,7 @@ class ProductController extends Controller
             'variants'   => $product->variables,
             'attributes' => $product->groupedAttributes(),
             'reviews'    => ReviewListItem::collection($reviews)->jsonSerialize(),
+            'reviewed'   => ReviewRepo::productReviewed($customerID, $product->id),
             'related'    => $product->relationProducts,
         ];
 

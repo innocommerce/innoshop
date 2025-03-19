@@ -8,9 +8,9 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugin\InquiryQuote\PanelApiControllers\HistoryController;
-use Plugin\InquiryQuote\PanelApiControllers\InquiryController;
-use Plugin\InquiryQuote\PanelApiControllers\QuoteController;
+use Plugin\InquiryQuote\Controllers\PanelApi\HistoryController;
+use Plugin\InquiryQuote\Controllers\PanelApi\InquiryController;
+use Plugin\InquiryQuote\Controllers\PanelApi\QuoteController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/inquiries/{inquiry}', [InquiryController::class, 'update'])->name('inquiries.update');

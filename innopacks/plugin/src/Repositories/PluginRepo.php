@@ -168,4 +168,42 @@ class PluginRepo
             return $plugin && $plugin->getEnabled() && $flag;
         });
     }
+
+    /**
+     * @return array
+     */
+    public function shippingMethodOptions(): array
+    {
+        $methodItems     = [];
+        $shippingMethods = $this->getShippingMethods();
+        foreach ($shippingMethods as $method) {
+            $plugin = $method->plugin;
+
+            $methodItems[] = [
+                'code' => $plugin->getCode(),
+                'name' => $plugin->getLocaleName(),
+            ];
+        }
+
+        return $methodItems;
+    }
+
+    /**
+     * @return array
+     */
+    public function billingMethodOptions(): array
+    {
+        $methodItems    = [];
+        $billingMethods = $this->getBillingMethods();
+        foreach ($billingMethods as $method) {
+            $plugin = $method->plugin;
+
+            $methodItems[] = [
+                'code' => $plugin->getCode(),
+                'name' => $plugin->getLocaleName(),
+            ];
+        }
+
+        return $methodItems;
+    }
 }

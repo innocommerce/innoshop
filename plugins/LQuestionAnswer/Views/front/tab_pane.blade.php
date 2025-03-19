@@ -55,7 +55,7 @@
             <div class="comm" v-if="source.ask_answers.length > 0">
                 <div class="su com-rep"></div>
                 <div class="com-rep com-title">
-                    {{__("LQuestionAnswer::common.question")}}<span class="com-span">({{$ask_answers_count}})</span>
+                    {{__("LQuestionAnswer::common.question")}}<span class="com-span">(<span id="ask_answer_count2">{{$ask_answers_count}}</span>)</span>
                 </div>
             </div>
 
@@ -354,12 +354,15 @@
             };
 
             app.getAskAnswers = function () {
-                axios.get('{{front_route('ask_answer.list')}}', app.source.ask_answers_page).then((res) => {
+                axios.get('{{front_route('ask_answer.list')}}', {params:app.source.ask_answers_page}).then((res) => {
                     console.log(res);
-                    app.source.ask_answers = res.ask_answers.data;
-                    app.source.ask_answers_page.page = res.ask_answers.current_page;
-                    app.source.ask_answers_page.pageSize = res.ask_answers.per_page;
-                    app.source.ask_answers_page.total = res.ask_answers.total;
+                    app.source.ask_answers = res.data.ask_answers.data;
+                    console.log(res.data.ask_answers);
+                    app.source.ask_answers_page.page = res.data.ask_answers.current_page;
+                    app.source.ask_answers_page.pageSize = res.data.ask_answers.per_page;
+                    app.source.ask_answers_page.total = res.data.ask_answers.total;
+                    $("#ask_answer_count").text(res.data.ask_answers_count);
+                    $("#ask_answer_count2").text(res.data.ask_answers_count);
                 })
             };
 
@@ -414,10 +417,10 @@
                 }
 
                 axios.post('{{front_route("ask_answer.add")}}', app.source.ask_answer_obj).then((res) => {
-                    layer.msg(res.msg);
-                    if (res.code == 0) {
+                    layer.msg(res.message);
+                    if (res.success) {
                         app.source.reply_id = '-1';
-                        //app.getAskAnswers();
+                        app.getAskAnswers();
                     }
                 })
 
@@ -426,8 +429,8 @@
             app.submitAgree = function (id, type) {
 
                 axios.post('{{front_route("ask_answer.agree")}}', {type: type, id: id}).then((res) => {
-                    layer.msg(res.msg);
-                    if (res.code == 0) {
+                    layer.msg(res.message);
+                    if (res.success) {
                         app.getAskAnswers();
                     }
                 })
