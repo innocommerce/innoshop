@@ -83,9 +83,9 @@
             </table>
           @else
             <div class="no-order alert">
-              <a href="{{ front_route('home.index') }}">
+              <a href="{{ front_route('products.index') }}">
                 <i class="bi bi-check-lg"></i>
-                {!! __('front/account.no_order') !!}
+                {{ __('front/account.no_order') }}
               </a>
             </div>
           @endif

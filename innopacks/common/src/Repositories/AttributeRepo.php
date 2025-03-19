@@ -25,10 +25,7 @@ class AttributeRepo extends BaseRepo
     {
         return [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
     }
 
@@ -102,14 +99,14 @@ class AttributeRepo extends BaseRepo
             });
         }
 
-        $start = $filters['start'] ?? '';
-        if ($start) {
-            $builder->where('created_at', '>', $start);
+        $createdStart = $filters['created_at_start'] ?? '';
+        if ($createdStart) {
+            $builder->where('created_at', '>', $createdStart);
         }
 
-        $end = $filters['end'] ?? '';
-        if ($end) {
-            $builder->where('created_at', '<', $end);
+        $createdEnd = $filters['created_at_end'] ?? '';
+        if ($createdEnd) {
+            $builder->where('created_at', '<', $createdEnd);
         }
 
         return $builder;

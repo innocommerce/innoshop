@@ -27,11 +27,11 @@ class ReviewListItem extends JsonResource
 
         return [
             'id'              => $this->id,
-            'customer_id'     => $customer->id,
+            'customer_id'     => $customer->id ?? 0,
             'product_id'      => $this->product_id,
             'order_item_id'   => $this->order_item_id,
-            'customer_name'   => $customer->name,
-            'customer_avatar' => image_resize($customer->avatar),
+            'customer_name'   => $customer->name ?? 'Unknown',
+            'customer_avatar' => image_resize($customer->avatar ?? ''),
             'rating'          => $this->rating,
             'title'           => $this->title,
             'content'         => $this->content,

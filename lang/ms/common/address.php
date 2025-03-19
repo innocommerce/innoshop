@@ -18,6 +18,7 @@ return [
     'email'            => 'Emel',
     'name'             => 'Nama',
     'phone'            => 'Nombor Telefon',
+    'region'           => 'Rantau',
     'shipping_address' => 'Alamat Penghantaran',
     'state'            => 'Negeri',
     'zipcode'          => 'Poskod',

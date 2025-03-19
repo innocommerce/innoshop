@@ -18,6 +18,7 @@ return [
     'email'            => 'Email',
     'name'             => 'Name',
     'phone'            => 'Phone',
+    'region'           => 'Region',
     'shipping_address' => 'Shipping address',
     'state'            => 'State',
     'zipcode'          => 'Zip Code',

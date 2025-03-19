@@ -14,7 +14,7 @@ return [
     'close'           => 'Close',
     'completed'       => 'Completed',
     'confirm'         => 'Confirm',
-    'continue_pay'    => 'Continue to Pay Now',
+    'continue_pay'    => 'Pay Now',
     'create_rma'      => 'Create RMA',
     'express_code'    => 'Express Code',
     'express_company' => 'Express Company',

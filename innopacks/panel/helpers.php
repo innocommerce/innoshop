@@ -10,6 +10,7 @@
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Str;
 use InnoShop\Panel\Repositories\LocaleRepo;
+use InnoShop\Panel\Services\TranslatorService;
 
 if (! function_exists('panel_name')) {
     /**
@@ -187,6 +188,22 @@ if (! function_exists('dashboard_url')) {
         $urlParams = http_build_query($params);
 
         return config('innoshop.api_url').'/install/dashboard.jpg?'.$urlParams;
+    }
+}
+
+if (! function_exists('has_translator')) {
+    /**
+     * Check if the translator is enabled.
+     *
+     * @return bool
+     */
+    function has_translator(): bool
+    {
+        try {
+            return TranslatorService::getTranslator() !== null;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }
 

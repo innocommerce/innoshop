@@ -403,6 +403,19 @@ if (! function_exists('front_lang_path_codes')) {
     }
 }
 
+if (! function_exists('pure_route_name')) {
+    /**
+     * @return string
+     * @throws Exception
+     */
+    function pure_route_name(): string
+    {
+        $name = request()->route()->getName();
+
+        return str_replace(locale_code().'.front.', '', $name);
+    }
+}
+
 if (! function_exists('front_trans')) {
     /**
      * @param  $key

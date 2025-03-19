@@ -4,7 +4,7 @@
 @section('title', __('panel/menu.reviews'))
 
 @section('page-title-right')
-  <a href="{{ panel_route('products.create') }}" class="btn btn-primary">
+  <a href="{{ panel_route('reviews.create') }}" class="btn btn-primary">
     <i class="bi bi-plus-square"></i> {{__('panel/common.create') }}
   </a>
   @hookinsert('panel.reviews.list.buttons')
@@ -13,8 +13,8 @@
 @section('content')
   <div class="card h-min-600">
     <div class="card-body">
-      
-    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('reviews.index')" />
+
+      <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('reviews.index')"/>
 
       @if ($reviews->count())
         <div class="table-responsive">
@@ -36,9 +36,12 @@
                 <td>{{ $review->id }}</td>
                 <td data-title="product" data-bs-toggle="tooltip" data-bs-placement="bottom"
                     title="{{ sub_string($review->product->translation->name ?? '', 200) }}">
-                  <img src="{{ image_resize($review->product->image->path ?? '') }}" alt="{{ $review->product->name ?? '' }}"
-                       class="img-fluid wh-30">
-                  {{ sub_string($review->product->translation->name ?? '', 10) }}
+                  <a href="{{ $review->product->url }}" target="_blank" class="text-decoration-none">
+                    <img src="{{ image_resize($review->product->image->path ?? '') }}"
+                         alt="{{ $review->product->name ?? '' }}"
+                         class="img-fluid wh-30">
+                    {{ sub_string($review->product->translation->name ?? '', 10) }}
+                  </a>
                 </td>
                 <td>
                   <x-front-review :rating="$review['rating']"/>

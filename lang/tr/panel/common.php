@@ -66,7 +66,7 @@ return [
     'status'            => 'Durum',
     'submitted_success' => 'Başarıyla gönderildi',
     'uninstall'         => 'Kaldır',
-    'up_image_text'     => 'Yüklemek için tıklayın ya da dosyayı sürükleyin',
+    'up_image_text'     => 'Yükle\'ye tıklayın veya dosyayı buraya sürükleyip bırakın, önerilen boyut 800*800 gibi kare şeklindedir',
     'updated_at'        => 'Güncellenme Tarihi',
     'updated_success'   => 'Başarıyla güncellendi',
     'verify_required'   => 'Lütfen doldurun',

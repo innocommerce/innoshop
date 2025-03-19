@@ -18,6 +18,7 @@ return [
     'email'            => 'Email',
     'name'             => 'Tên',
     'phone'            => 'Số điện thoại',
+    'region'           => 'Khu vực',
     'shipping_address' => 'Địa chỉ giao hàng',
     'state'            => 'Bang/Tỉnh',
     'zipcode'          => 'Mã bưu điện',

@@ -60,7 +60,7 @@ class TranslatorService extends BaseService
      * @return Translator|null
      * @throws Exception
      */
-    private static function getTranslator(): ?Translator
+    public static function getTranslator(): ?Translator
     {
         $translatorName = fire_hook_filter('panel.service.translator', '');
         if (empty($translatorName)) {

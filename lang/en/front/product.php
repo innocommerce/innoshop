@@ -24,9 +24,10 @@ return [
     'review'                => 'Review',
     'your_review'           => 'Your Review',
     'please_login_first'    => 'Please Login to Leave a Review',
-    'visit_order_to_review' => 'Visit Order to Leave a Review',
+    'visit_order_to_review' => 'View Order to Add a Review',
     'submit_review'         => 'Submit Review',
     'input_your_review'     => 'Input Your Review',
     'input_some_text_here'  => 'Input Review Here',
     'related_product'       => 'Related',
+    'have_reviewed'         => 'You have reviewed this product',
 ];

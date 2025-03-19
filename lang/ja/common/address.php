@@ -18,6 +18,7 @@ return [
     'email'            => 'メール',
     'name'             => '名前',
     'phone'            => '電話番号',
+    'region'           => 'エリアです',
     'shipping_address' => '配送先住所',
     'state'            => '州',
     'zipcode'          => '郵便番号',

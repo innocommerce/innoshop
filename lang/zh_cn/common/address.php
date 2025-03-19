@@ -21,4 +21,5 @@ return [
     'shipping_address' => '配送地址',
     'state'            => '省份',
     'zipcode'          => '邮编',
+    'region'           => '区域',
 ];

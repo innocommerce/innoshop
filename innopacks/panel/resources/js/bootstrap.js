@@ -25,7 +25,6 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 axios.interceptors.response.use(
   response => {
     // 在响应成功时关闭加载层

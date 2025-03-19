@@ -68,14 +68,17 @@ class OrderDetail extends JsonResource
             'billing_address_1'      => $this->billing_address_1,
             'billing_address_2'      => $this->billing_address_2,
             'billing_zipcode'        => $this->billing_zipcode,
-            'created_at'             => $this->created_at,
-            'updated_at'             => $this->updated_at,
-            'deleted_at'             => $this->deleted_at,
+            'comment'                => $this->comment,
             'total_format'           => $this->total_format,
             'status_format'          => $this->status_format,
             'quantity_total'         => $this->items->sum('quantity'),
             'items'                  => OrderItemSimple::collection($this->items),
             'fees'                   => OrderFeeSimple::collection($this->fees),
+            'histories'              => OrderHistory::collection($this->histories->sortByDesc('id')),
+            'shipments'              => OrderShipment::collection($this->shipments),
+            'created_at'             => $this->created_at,
+            'updated_at'             => $this->updated_at,
+            'deleted_at'             => $this->deleted_at,
         ];
     }
 }

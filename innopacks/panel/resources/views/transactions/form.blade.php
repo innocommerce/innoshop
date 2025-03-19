@@ -61,7 +61,7 @@
           axios.get(`${urls.api_base}/customers/autocomplete?keyword=${name}`, null, {hload: true})
             .then((res) => {
               response($.map(res.data, function (item) {
-                return {label: item['name'], value: item['id']};
+                return {label: item['name'] + '('+ item['email'] +')', value: item['id']};
               }));
             }).catch((error) => {
             console.error('请求出错:', error);

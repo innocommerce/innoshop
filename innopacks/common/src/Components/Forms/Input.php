@@ -62,7 +62,7 @@ class Input extends Component
         $this->multiple    = $multiple;
         $this->column      = $column;
         $this->generate    = $generate;
-        $this->translate   = $translate;
+        $this->translate   = $translate && has_translator();
     }
 
     /**

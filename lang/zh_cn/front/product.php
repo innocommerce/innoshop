@@ -29,4 +29,5 @@ return [
     'visit_order_to_review' => '请到个人中心留言评论',
     'your_review'           => '你的评论',
     'related_product'       => '相关商品',
+    'have_reviewed'         => '您已评论过该商品',
 ];

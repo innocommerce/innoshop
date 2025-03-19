@@ -565,9 +565,8 @@ return new class extends Migration
         Schema::create('page_modules', function (Blueprint $table) {
             $table->comment('DIY Modules');
             $table->bigIncrements('id')->comment('ID');
-            $table->string('name')->comment('Module Name');
-            $table->string('code')->comment('Module Code');
-            $table->json('data')->comment('Data');
+            $table->integer('page_id')->comment('Page ID');
+            $table->json('module_data')->comment('Page Module Data');
             $table->timestamps();
         });
 

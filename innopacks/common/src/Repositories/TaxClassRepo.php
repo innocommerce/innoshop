@@ -9,7 +9,9 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\TaxClass;
+use Throwable;
 
 class TaxClassRepo extends BaseRepo
 {
@@ -21,17 +23,14 @@ class TaxClassRepo extends BaseRepo
         return [
             ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
             ['name' => 'description', 'type' => 'input', 'label' => trans('panel/common.description')],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
     }
 
     /**
      * @param  $data
      * @return TaxClass
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): TaxClass
     {
@@ -57,5 +56,26 @@ class TaxClassRepo extends BaseRepo
         $item->taxRules()->createMany($data['tax_rules']);
 
         return $item;
+    }
+
+    /**
+     * @param  $filters
+     * @return Builder
+     */
+    public function builder($filters = []): Builder
+    {
+        $builder = TaxClass::query();
+
+        $createdStart = $filters['created_at_start'] ?? '';
+        if ($createdStart) {
+            $builder->where('created_at', '>', $createdStart);
+        }
+
+        $createdEnd = $filters['created_at_end'] ?? '';
+        if ($createdEnd) {
+            $builder->where('created_at', '<', $createdEnd);
+        }
+
+        return $builder;
     }
 }

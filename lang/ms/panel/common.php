@@ -66,7 +66,7 @@ return [
     'status'            => 'Status',
     'submitted_success' => 'Berjaya dihantar',
     'uninstall'         => 'Nyahpasang',
-    'up_image_text'     => 'Klik untuk muat naik atau seret fail ke dalam',
+    'up_image_text'     => 'Klik Muat Naik, atau seret dan lepaskan fail di sini, saiz yang disyorkan ialah segi empat sama, seperti 800*800',
     'updated_at'        => 'Masa Kemaskini',
     'updated_success'   => 'Berjaya Dikemaskini',
     'verify_required'   => 'Sila Isikan',

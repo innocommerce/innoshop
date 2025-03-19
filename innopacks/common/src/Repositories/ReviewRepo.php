@@ -26,11 +26,42 @@ class ReviewRepo extends BaseRepo
             ['name' => 'product', 'type' => 'input', 'label' => trans('panel/review.product')],
             ['name' => 'rating', 'type' => 'input', 'label' => trans('panel/review.rating')],
             ['name' => 'review_content', 'type' => 'input', 'label' => trans('panel/review.review_content')],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/review.created_at'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/review.created_at')],
         ];
+    }
+
+    /**
+     * @param  $productID
+     * @param  $customerID
+     * @return bool
+     */
+    public static function productReviewed($customerID, $productID): bool
+    {
+        if (empty($customerID) || empty($productID)) {
+            return false;
+        }
+
+        return Review::query()
+            ->where('customer_id', $customerID)
+            ->where('product_id', $productID)
+            ->exists();
+    }
+
+    /**
+     * @param  $orderItemID
+     * @param  $customerID
+     * @return bool
+     */
+    public static function orderReviewed($customerID, $orderItemID): bool
+    {
+        if (empty($customerID) || empty($orderItemID)) {
+            return false;
+        }
+
+        return Review::query()
+            ->where('customer_id', $customerID)
+            ->where('order_item_id', $orderItemID)
+            ->exists();
     }
 
     /**
@@ -127,6 +158,16 @@ class ReviewRepo extends BaseRepo
 
         if (isset($filters['active'])) {
             $builder->where('active', (bool) $filters['active']);
+        }
+
+        $createdStart = $filters['created_at_start'] ?? '';
+        if ($createdStart) {
+            $builder->where('created_at', '>', $createdStart);
+        }
+
+        $createdEnd = $filters['created_at_end'] ?? '';
+        if ($createdEnd) {
+            $builder->where('created_at', '<', $createdEnd);
         }
 
         return $builder;

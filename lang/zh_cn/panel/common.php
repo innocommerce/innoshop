@@ -66,7 +66,7 @@ return [
     'status'            => '状态',
     'submitted_success' => '提交成功',
     'uninstall'         => '卸载',
-    'up_image_text'     => '点击上传，或将文件拖拽至此',
+    'up_image_text'     => '点击上传，或将文件拖拽至此，建议尺寸为方形，比如 800*800',
     'updated_at'        => '更新时间',
     'updated_success'   => '更新成功',
     'verify_required'   => '请填写',

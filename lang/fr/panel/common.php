@@ -66,7 +66,7 @@ return [
     'status'            => 'Statut',
     'submitted_success' => 'Soumis avec succès',
     'uninstall'         => 'Désinstaller',
-    'up_image_text'     => 'Cliquez pour uploader, ou faites glisser le fichier ici',
+    'up_image_text'     => 'Cliquez sur télécharger, ou faites glisser le fichier ici. La taille recommandée est carrée, comme 800*800',
     'updated_at'        => 'Mis à jour le',
     'updated_success'   => 'Mis à jour avec succès',
     'verify_required'   => 'Veuillez remplir',

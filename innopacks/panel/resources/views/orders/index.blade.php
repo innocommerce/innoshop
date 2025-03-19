@@ -35,14 +35,14 @@
                 <div class="d-flex">
                   @foreach($item->items->take(5) as $product)
                     <div class="wh-30 overflow-hidden border border-1 me-1">
-                      <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-fluid">
+                      <img src="{{ image_resize($product->image) }}" alt="{{ $product->name }}" class="img-fluid">
                     </div>
                   @endforeach
                 </div>
               </td>
               <td>{{ $item->customer_name }}</td>
-              <td>{{ $item->shipping_method_code }}</td>
-              <td>{{ $item->billing_method_code }}</td>
+              <td>{{ $item->shipping_method_name }}</td>
+              <td>{{ $item->billing_method_name }}</td>
               <td>{{ $item->status_format }}</td>
               <td>{{ $item->total_format }}</td>
               <td>{{ $item->created_at }}</td>

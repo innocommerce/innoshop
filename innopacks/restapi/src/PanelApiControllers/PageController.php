@@ -15,6 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Page;
 use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Resources\PageName;
+use InnoShop\Common\Resources\PageSimple;
 use InnoShop\Panel\Requests\PageRequest;
 use Throwable;
 
@@ -28,8 +29,9 @@ class PageController extends BaseController
     public function index(Request $request): mixed
     {
         $filters = $request->all();
+        $pages   = PageRepo::getInstance()->list($filters);
 
-        return PageRepo::getInstance()->list($filters);
+        return PageSimple::collection($pages);
     }
 
     /**

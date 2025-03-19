@@ -17,6 +17,7 @@ use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Resources\AddressListItem;
 use InnoShop\Common\Services\StateMachineService;
+use InnoShop\Plugin\Repositories\PluginRepo;
 use Throwable;
 
 class OrderRepo extends BaseRepo
@@ -29,22 +30,28 @@ class OrderRepo extends BaseRepo
     {
         $statuses = StateMachineService::getAllStatuses();
 
+        $shippingMethods = PluginRepo::getInstance()->shippingMethodOptions();
+        $billingMethods  = PluginRepo::getInstance()->billingMethodOptions();
+
         return [
             ['name' => 'number', 'type' => 'input', 'label' => trans('panel/order.number')],
             ['name' => 'customer_name', 'type' => 'input', 'label' => trans('panel/order.customer_name')],
             ['name' => 'email', 'type' => 'input', 'label' => trans('panel/order.email')],
             ['name' => 'telephone', 'type' => 'input', 'label' => trans('panel/order.telephone')],
-            ['name' => 'shipping_method_name', 'type' => 'input', 'label' => trans('panel/order.shipping_method_name')],
-            ['name' => 'billing_method_name', 'type' => 'input', 'label' => trans('panel/order.billing_method_name')],
-            ['name' => 'status', 'type' => 'select', 'label' => trans('panel/order.status'), 'options' => $statuses, 'options_key' => 'status', 'options_label' => 'name'],
-            ['name'     => 'total', 'type' => 'range', 'label' => trans('panel/order.total'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
+            [
+                'name'    => 'shipping_method_code', 'type' => 'select', 'label' => trans('panel/order.shipping_method_name'),
+                'options' => $shippingMethods, 'options_key' => 'code', 'options_label' => 'name',
             ],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/order.created_at'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
+            [
+                'name'    => 'billing_method_code', 'type' => 'select', 'label' => trans('panel/order.billing_method_name'),
+                'options' => $billingMethods, 'options_key' => 'code', 'options_label' => 'name',
             ],
+            [
+                'name'        => 'status', 'type' => 'select', 'label' => trans('panel/order.status'), 'options' => $statuses,
+                'options_key' => 'status', 'options_label' => 'name',
+            ],
+            ['name' => 'total', 'type' => 'range', 'label' => trans('panel/order.total')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/order.created_at')],
         ];
     }
 
@@ -124,6 +131,16 @@ class OrderRepo extends BaseRepo
             $builder->where('telephone', $telephone);
         }
 
+        $shippingCode = $filters['shipping_method_code'] ?? '';
+        if ($shippingCode) {
+            $builder->where('shipping_method_code', 'like', $shippingCode.'%');
+        }
+
+        $billingCode = $filters['billing_method_code'] ?? '';
+        if ($billingCode) {
+            $builder->where('billing_method_code', $billingCode);
+        }
+
         $status = $filters['status'] ?? '';
         if ($status && in_array($status, StateMachineService::ORDER_STATUS)) {
             $builder->where('status', $status);
@@ -134,14 +151,24 @@ class OrderRepo extends BaseRepo
             $builder->whereIn('status', $statuses);
         }
 
-        $start = $filters['start'] ?? '';
-        if ($start) {
-            $builder->where('created_at', '>', $start);
+        $createdStart = $filters['created_at_start'] ?? '';
+        if ($createdStart) {
+            $builder->where('created_at', '>', $createdStart);
         }
 
-        $end = $filters['end'] ?? '';
-        if ($end) {
-            $builder->where('created_at', '<', $end);
+        $createdEnd = $filters['created_at_end'] ?? '';
+        if ($createdEnd) {
+            $builder->where('created_at', '<', $createdEnd);
+        }
+
+        $totalStart = $filters['total_start'] ?? '';
+        if ($totalStart) {
+            $builder->where('total', '>', $totalStart);
+        }
+
+        $totalEnd = $filters['total_end'] ?? '';
+        if ($totalEnd) {
+            $builder->where('total', '<', $totalEnd);
         }
 
         return fire_hook_filter('repo.order.builder', $builder);

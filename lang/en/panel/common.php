@@ -66,7 +66,7 @@ return [
     'status'            => 'Status',
     'submitted_success' => 'Submitted successfully',
     'uninstall'         => 'Uninstall',
-    'up_image_text'     => 'Click to upload, or drag the file in',
+    'up_image_text'     => 'Click Upload, or drag the file here, the recommended size is a square, such as 800*800',
     'updated_at'        => 'Updated',
     'updated_success'   => 'Updated successfully',
     'verify_required'   => 'Please fill out',

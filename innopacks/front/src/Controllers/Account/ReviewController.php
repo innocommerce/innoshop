@@ -43,6 +43,7 @@ class ReviewController extends BaseController
      */
     public function store(Request $request): mixed
     {
+        $referrerUrl = $request->header('referer');
         try {
             $productID   = $request->get('product_id');
             $orderItemID = $request->get('order_item_id');
@@ -54,7 +55,7 @@ class ReviewController extends BaseController
             }
 
             if (empty($product)) {
-                throw new Exception('invalid product.');
+                throw new Exception('Invalid product.');
             }
 
             $data = $request->all();
@@ -63,10 +64,10 @@ class ReviewController extends BaseController
 
             ReviewRepo::getInstance()->create($data);
 
-            return redirect($product->url)
+            return redirect($referrerUrl)
                 ->with('success', front_route('common.saved_success'));
         } catch (Exception $e) {
-            return redirect($product->url)
+            return redirect($referrerUrl)
                 ->withErrors(['error' => $e->getMessage()]);
         }
     }

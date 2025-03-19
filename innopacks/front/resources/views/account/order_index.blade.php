@@ -62,7 +62,8 @@
                   <td data-title="Actions">
                     <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary btn-sm" role="button">{{ __('front/common.view') }}</a>
                     @if($order->status == 'shipped')
-                      <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">已签收</button>
+                      <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">{{
+                        __('front/account.signed') }}</button>
                     @endif  
                 </td>
                 </tr>
@@ -92,13 +93,13 @@
       axios.post(`${urls.api_base}/orders/${number}/complete`, {
         number: number
       }).then(function (response) {
-        inno.msg('签收成功');
+        inno.msg(__('front/account.signed_success'));
         button.fadeOut(300, function() {
           $(this).remove(); 
         });
         window.location.reload();
       }).catch(function (error) {
-        inno.msg('签收失败');
+        inno.msg(__('front/account.signed_failed'));
       });
     });
   });

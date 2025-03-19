@@ -20,11 +20,14 @@
                 @if($order->status == 'unpaid')
                   <a href="{{ front_route('orders.pay', ['number'=>$order->number]) }}" class="btn btn-primary btn-sm">{{
                     __('front/order.continue_pay') }}</a>
+                   <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-canceled">{{
+                    __('front/account.cancel_order') }}</button>
                 @elseif($order->status == 'completed')
                   <a href="{{ account_route('order_returns.create', ['order_number'=>$order->number]) }}"
                     class="btn btn-primary btn-sm">{{ __('front/order.create_rma') }}</a>
                 @elseif($order->status == 'shipped')
-                  <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">已签收</button>           
+                  <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">{{
+                    __('front/account.signed') }}</button>
                 @endif
               </div>
             </div>
@@ -68,7 +71,9 @@
                         <img src="{{ $product['image'] }}" class="img-fluid">
                       </div>
                       <div class="product-info">
-                        <div class="name">{{ $product['name'] }}</div>
+                        <div class="name" data-bs-toggle="tooltip" title="{{ $product['name'] }}">
+                          {{ sub_string($product['name'], 64) }}
+                        </div>
                         <div class="sku mt-2 text-secondary">{{ $product['product_sku'] }}
                           @if ($product['variant_label'])
                             - {{ $product['variant_label'] }}
@@ -78,16 +83,19 @@
                     </div>
                   </td>
                   <td>
-                    <button type="button" class="btn btn-sm btn-primary add_review" data-bs-toggle="modal"
-                            data-bs-target="#addReview-Modal" data-name="{{ $product['name'] }}"
-                            data-image="{{ $product['image'] }}" data-ordernumber="{{ $product['order_number'] }}"
-                            data-label="{{ $product['variant_label'] }}" data-orderitemid="{{ $product['id'] }}"
-                            data-productsku="{{ $product['product_sku'] }}">
-                      {{ __('front/order.add_review') }}</button>
+                    @php($reviewed = \InnoShop\Common\Repositories\ReviewRepo::orderReviewed(current_customer_id(),$product['id']))
+                    @if($order->status == 'completed' && !$reviewed)
+                      <button type="button" class="btn btn-sm btn-primary add_review" data-bs-toggle="modal"
+                              data-bs-target="#addReview-Modal" data-name="{{ $product['name'] }}"
+                              data-image="{{ $product['image'] }}" data-ordernumber="{{ $product['order_number'] }}"
+                              data-label="{{ $product['variant_label'] }}" data-orderitemid="{{ $product['id'] }}"
+                              data-productsku="{{ $product['product_sku'] }}">{{ __('front/order.add_review') }}
+                      </button>
+                    @endif
                   </td>
                   <td>{{ $product['price_format'] }}</td>
                   <td>{{ $product['quantity'] }}</td>
-                  <td>{{ $product['price_format'] }}</td>
+                  <td>{{ $product['subtotal_format'] }}</td>
                 </tr>
               @endforeach
 
@@ -116,11 +124,15 @@
                   <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.shipping_address') }}</h5>
                 </div>
                 <div class="address-card-body">
-                  <p>{{ $order->shipping_customer_name }}</p>
-                  <p>{{ $order->shipping_address_1 }} {{ $order->shipping_address_2 }}</p>
-                  <p>{{ $order->shipping_city }}</p>
-                  <p>{{ $order->shipping_state }}, {{ $order->shipping_country }}</p>
+                  <p>{{ __('common/address.name') }}: {{ $order->shipping_customer_name }}</p>
                   <p>{{ __('common/address.phone') }}: {{ $order->shipping_telephone }}</p>
+                  <p>{{ __('common/address.zipcode') }}: {{ $order->shipping_zipcode }}</p>
+                  <p>{{ __('common/address.address_1') }}: {{ $order->shipping_address_1 }}</p>
+                  @if($order->shipping_address_2)
+                    <p>{{ __('common/address.address_2') }}: {{ $order->shipping_address_2 }}</p>
+                  @endif
+                  <p>{{ __('common/address.region') }}: {{ $order->shipping_city }}, {{ $order->shipping_state }}
+                    , {{ $order->shipping_country }}</p>
                 </div>
               </div>
             </div>
@@ -130,16 +142,20 @@
                   <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.billing_address') }}</h5>
                 </div>
                 <div class="address-card-body">
-                  <p>{{ $order->billing_customer_name }}</p>
-                  <p>{{ $order->billing_address_1 }} {{ $order->billing_address_2 }}</p>
-                  <p>{{ $order->billing_city }}</p>
-                  <p>{{ $order->billing_state }}, {{ $order->billing_country }}</p>
+                  <p>{{ __('common/address.name') }}: {{ $order->billing_customer_name }}</p>
                   <p>{{ __('common/address.phone') }}: {{ $order->billing_telephone }}</p>
+                  <p>{{ __('common/address.zipcode') }}: {{ $order->billing_zipcode }}</p>
+                  <p>{{ __('common/address.address_1') }}: {{ $order->billing_address_1 }}</p>
+                  @if($order->billing_address_2)
+                    <p>{{ __('common/address.address_2') }}: {{ $order->billing_address_2 }} </p>
+                  @endif
+                  <p>{{ __('common/address.region') }}: {{ $order->billing_city }}, {{ $order->billing_state }}
+                    , {{ $order->billing_country }}</p>
                 </div>
               </div>
             </div>
           </div>
-         
+
           @if($order->comment)
             <div class="account-card-sub-title d-flex justify-content-between align-items-center">
               <span class="fw-bold">{{ __('front/checkout.order_comment') }}</span>
@@ -182,7 +198,7 @@
           <div class="account-card-sub-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/order.order_history') }}</span>
           </div>
-           
+
           <div class="table-responsive">
             <table class="table table-response">
               <thead>
@@ -338,13 +354,13 @@
     $(document).ready(function() {
       $(document).on('click', '[id^="view-shipment-"]', function() {
         const shipmentId = $(this).data('id');
-        
+
         axios.get(`${urls.api_base}/panel/shipments/${shipmentId}/traces`)
           .then(response => {
             const traces = response.data.traces;
             const tbody = $('#newShipmentModal .modal-body table tbody').last();
             tbody.empty();
-            
+
             traces.forEach(trace => {
               const row = `<tr>
                              <td>${trace.time}</td>
@@ -353,17 +369,43 @@
               tbody.append(row);
             });
             $('#newShipmentModal').modal('show');
-          })
+          });
       });
+
       $(document).on('click', '.btn-shipped', function() {
         const orderNumber = $(this).data('number');
         axios.post(`${urls.api_base}/orders/${orderNumber}/complete`, {
           number: orderNumber
         }).then(response => {
-          inno.msg('签收成功');
+          inno.msg(__('front/account.signed_success'));
           window.location.reload();
         }).catch(error => {
-          inno.msg('签收失败');
+          inno.msg(__('front/account.signed_failed'));
+        });
+    });
+      $(document).on('click', '.btn-canceled', function() {
+        const orderNumber = $(this).data('number');
+
+        layer.confirm('{{ __('front/account.cancel_order_confirm') }}', {
+          icon: 3,
+          title: '{{ __('front/account.tip') }}',
+          btn: ['{{ __('front/account.cancel_order_confirm_title') }}', '{{ __('front/account.cancel_order_confirm_btn_close') }}'],
+          offset: 'auto',
+          area: ['400px', 'auto'],
+          shade: [0.3, "#fff"]
+        }, function(index) {
+          layer.close(index);
+          layer.load(2, { shade: [0.3, "#fff"] });
+          axios.post(`${urls.api_base}/orders/${orderNumber}/cancel`, {
+            number: orderNumber
+          }).then(response => {
+            inno.msg("{{ __('front/account.cancel_order_success') }}");
+            window.location.reload();
+          }).catch(error => {
+            inno.msg("{{ __('front/account.cancel_order_failed') }}");
+          }).finally(() => {
+            layer.closeAll('loading');
+          });
         });
       });
     });

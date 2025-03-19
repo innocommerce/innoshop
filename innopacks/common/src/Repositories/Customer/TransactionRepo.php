@@ -27,14 +27,8 @@ class TransactionRepo extends BaseRepo
         return [
             ['name' => 'customer_id', 'type' => 'input', 'label' => trans('panel/transaction.customer')],
             ['name' => 'type', 'type' => 'select', 'label' => trans('panel/transaction.type'), 'options' => $options, 'options_key' => 'code', 'options_label' => 'label'],
-            ['name'     => 'amount', 'type' => 'range', 'label' => trans('panel/transaction.amount'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
-            ['name'     => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at'),
-                'start' => ['name' => 'start'],
-                'end'   => ['name' => 'end'],
-            ],
+            ['name' => 'amount', 'type' => 'range', 'label' => trans('panel/transaction.amount')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
     }
 
@@ -117,6 +111,26 @@ class TransactionRepo extends BaseRepo
         $type = $filters['type'] ?? '';
         if ($type) {
             $builder->where('type', $type);
+        }
+
+        $amountStart = $filters['amount_start'] ?? '';
+        if ($amountStart) {
+            $builder->where('amount', '>', $amountStart);
+        }
+
+        $amountEnd = $filters['amount_end'] ?? '';
+        if ($amountEnd) {
+            $builder->where('amount', '<', $amountEnd);
+        }
+
+        $createdStart = $filters['created_at_start'] ?? '';
+        if ($createdStart) {
+            $builder->where('created_at', '>', $createdStart);
+        }
+
+        $createdEnd = $filters['created_at_end'] ?? '';
+        if ($createdEnd) {
+            $builder->where('created_at', '<', $createdEnd);
         }
 
         return $builder;
