@@ -20,13 +20,16 @@ class Sku extends BaseModel
     protected $table = 'product_skus';
 
     protected $fillable = [
-        'product_id', 'product_image_id', 'model', 'code', 'price', 'origin_price', 'quantity', 'is_default', 'position',
+        'product_id', 'images', 'model', 'code', 'price', 'origin_price', 'quantity', 'is_default', 'position',
         'variants',
     ];
 
     protected $casts = [
+        'images'   => 'array',
         'variants' => 'array',
     ];
+
+    protected $appends = ['image'];
 
     /**
      * @return BelongsTo
@@ -34,14 +37,6 @@ class Sku extends BaseModel
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(Image::class, 'product_image_id', 'id');
     }
 
     /**
@@ -91,6 +86,16 @@ class Sku extends BaseModel
     }
 
     /**
+     * @return string
+     */
+    public function getImageAttribute(): string
+    {
+        $images = $this->images ?? [];
+
+        return $images[0] ?? '';
+    }
+
+    /**
      * Get sku final price.
      * @return mixed
      */
@@ -120,7 +125,7 @@ class Sku extends BaseModel
      */
     public function getImagePathAttribute(): string
     {
-        return $this->image->path ?? '';
+        return $this->image ?? '';
     }
 
     /**

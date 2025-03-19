@@ -24,7 +24,7 @@ class SkuListItem extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $imagePath      = $this->image->path ?? '';
+        $imagePath      = $this->image ?? '';
         $imageUrl       = $imagePath ? image_resize($imagePath) : '';
         $originImageUrl = $imagePath ? image_origin($imagePath) : '';
         $finalPrice     = $this->getFinalPrice();

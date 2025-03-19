@@ -37,7 +37,7 @@
                 <td data-title="product" data-bs-toggle="tooltip" data-bs-placement="bottom"
                     title="{{ sub_string($review->product->translation->name ?? '', 200) }}">
                   <a href="{{ $review->product->url }}" target="_blank" class="text-decoration-none">
-                    <img src="{{ image_resize($review->product->image->path ?? '') }}"
+                    <img src="{{ image_resize($review->product->image ?? '') }}"
                          alt="{{ $review->product->name ?? '' }}"
                          class="img-fluid wh-30">
                     {{ sub_string($review->product->translation->name ?? '', 10) }}

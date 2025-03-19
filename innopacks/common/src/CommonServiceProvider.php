@@ -79,6 +79,7 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\UpdateCountries::class,
                 Commands\UpdateStates::class,
                 Commands\PublishFrontTheme::class,
+                Commands\MigrateProductImages::class,
             ]);
         }
     }

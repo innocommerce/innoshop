@@ -26,7 +26,7 @@ class FavoriteItem extends JsonResource
     {
         $product = $this->product;
         $sku     = $product->masterSku;
-        $path    = $sku->image->path ?? ($product->image->path ?? '');
+        $path    = $sku->image ?? ($product->image ?? '');
 
         return [
             'id'                  => $this->id,

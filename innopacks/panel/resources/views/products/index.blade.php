@@ -35,7 +35,7 @@
             <td>
               <div class="d-flex align-items-center justify-content-center wh-50 border">
                 <a href="{{ $product->url }}" target="_blank">
-                  <img src="{{ image_resize($product->images->first()->path ?? '') }}" class="img-fluid"
+                  <img src="{{ image_resize($product->image) }}" class="img-fluid"
                     alt="{{ $product->fallbackName() }}">
                 </a>
               </div>

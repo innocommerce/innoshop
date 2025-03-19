@@ -26,7 +26,6 @@ class CartItemRepo extends BaseRepo
     {
         $builder = CartItem::query()->with([
             'product.translation',
-            'productSku.image',
         ]);
 
         $skuCode = $filters['sku_code'] ?? '';

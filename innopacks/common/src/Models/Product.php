@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Order\Item;
-use InnoShop\Common\Models\Product\Image;
 use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Models\Product\Video;
@@ -28,13 +27,18 @@ class Product extends BaseModel
     use HasPackageFactory, Replicate, Translatable;
 
     protected $fillable = [
-        'brand_id', 'product_image_id', 'product_video_id', 'product_sku_id', 'tax_class_id', 'spu_code', 'slug',
-        'is_virtual', 'variables', 'position', 'active', 'weight', 'weight_class', 'sales', 'viewed',
+        'brand_id', 'images', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
+        'active', 'weight', 'weight_class', 'sales', 'viewed',
     ];
 
     protected $casts = [
-        'variables' => 'array',
+        'variables'  => 'array',
+        'images'     => 'array',
+        'active'     => 'boolean',
+        'is_virtual' => 'boolean',
     ];
+
+    protected $appends = ['image'];
 
     /**
      * @return BelongsTo
@@ -42,14 +46,6 @@ class Product extends BaseModel
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function image(): HasOne
-    {
-        return $this->hasOne(Image::class)->where('is_cover', 1);
     }
 
     /**
@@ -69,14 +65,6 @@ class Product extends BaseModel
     public function productAttributes(): HasMany
     {
         return $this->hasMany(\InnoShop\Common\Models\Product\Attribute::class, 'product_id');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function images(): HasMany
-    {
-        return $this->hasMany(Image::class, 'product_id');
     }
 
     /**
@@ -206,6 +194,16 @@ class Product extends BaseModel
     }
 
     /**
+     * @return string
+     */
+    public function getImageAttribute(): string
+    {
+        $images = $this->images ?? [];
+
+        return $images[0] ?? '';
+    }
+
+    /**
      * Get URL
      *
      * @return string
@@ -239,6 +237,6 @@ class Product extends BaseModel
      */
     public function getImageUrl(int $with = 600, int $height = 600): string
     {
-        return image_resize($this->image->path ?? '', $with, $height);
+        return image_resize($this->image ?? '', $with, $height);
     }
 }

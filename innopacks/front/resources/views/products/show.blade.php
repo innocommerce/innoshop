@@ -30,8 +30,8 @@
                 <div class="swiper-wrapper">
                   @foreach($product->images as $image)
                     <div class="swiper-slide">
-                      <a href="{{ image_resize($image->path, 600, 600) }}" data-pswp-width="800" data-pswp-height="800">
-                        <img src="{{ image_resize($image->path) }}" class="img-fluid">
+                      <a href="{{ image_resize($image, 600, 600) }}" data-pswp-width="800" data-pswp-height="800">
+                        <img src="{{ image_resize($image) }}" class="img-fluid">
                       </a>
                     </div>
                   @endforeach

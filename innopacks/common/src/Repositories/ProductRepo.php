@@ -16,7 +16,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
-use InnoShop\Common\Repositories\Product\ImageRepo;
 use InnoShop\Common\Repositories\Product\VariantRepo;
 use Throwable;
 
@@ -199,13 +198,7 @@ class ProductRepo extends BaseRepo
             $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
             $product->relations()->createMany($this->handleRelations($data['related_ids'] ?? []));
             $product->categories()->sync($data['categories'] ?? []);
-
-            if (isset($data['images'])) {
-                $product->images()->delete();
-                $this->syncImages($product, $data['images'] ?: []);
-            }
-
-            $product->skus()->createMany($this->handleSkus($product, $data['skus']));
+            $product->skus()->createMany($this->handleSkus($data['skus']));
 
             DB::commit();
 
@@ -263,14 +256,9 @@ class ProductRepo extends BaseRepo
                 $product->categories()->sync($data['categories']);
             }
 
-            if (isset($data['images'])) {
-                $product->images()->delete();
-                $this->syncImages($product, $data['images']);
-            }
-
             if (isset($data['skus'])) {
                 $product->skus()->delete();
-                $product->skus()->createMany($this->handleSkus($product, $data['skus']));
+                $product->skus()->createMany($this->handleSkus($data['skus']));
             }
 
             DB::commit();
@@ -294,30 +282,27 @@ class ProductRepo extends BaseRepo
         }
 
         return [
-            'spu_code'         => $data['spu_code']         ?? null,
-            'slug'             => $data['slug']             ?? null,
-            'brand_id'         => $data['brand_id']         ?? 0,
-            'product_image_id' => $data['product_image_id'] ?? 0,
-            'product_video_id' => $data['product_video_id'] ?? 0,
-            'product_sku_id'   => $data['product_sku_id']   ?? 0,
-            'tax_class_id'     => $data['tax_class_id']     ?? 0,
-            'variables'        => $variables,
-            'position'         => (int) ($data['position'] ?? 0),
-            'weight'           => $data['weight']       ?? 0,
-            'weight_class'     => $data['weight_class'] ?? '',
-            'sales'            => (int) ($data['sales'] ?? 0),
-            'viewed'           => (int) ($data['viewed'] ?? 0),
-            'published_at'     => $data['published_at'] ?? now(),
-            'active'           => (bool) ($data['active'] ?? true),
+            'spu_code'     => $data['spu_code']     ?? null,
+            'slug'         => $data['slug']         ?? null,
+            'brand_id'     => $data['brand_id']     ?? 0,
+            'images'       => $data['images']       ?? [],
+            'tax_class_id' => $data['tax_class_id'] ?? 0,
+            'variables'    => $variables,
+            'position'     => (int) ($data['position'] ?? 0),
+            'weight'       => $data['weight']       ?? 0,
+            'weight_class' => $data['weight_class'] ?? '',
+            'sales'        => (int) ($data['sales'] ?? 0),
+            'viewed'       => (int) ($data['viewed'] ?? 0),
+            'published_at' => $data['published_at'] ?? now(),
+            'active'       => (bool) ($data['active'] ?? true),
         ];
     }
 
     /**
-     * @param  $product
      * @param  $skus
      * @return array
      */
-    public function handleSkus($product, $skus): array
+    public function handleSkus($skus): array
     {
         if (is_string($skus)) {
             $skus = json_decode($skus, true);
@@ -325,16 +310,7 @@ class ProductRepo extends BaseRepo
         $onlyOneSku = count($skus) == 1;
 
         $items = [];
-        foreach ($skus as $index => $sku) {
-            $path = $sku['image'] ?? '';
-            if ($path) {
-                $isCover = ($index == 0);
-                $image   = ImageRepo::getInstance()->findOrCreate($product, $path, $isCover, true);
-                $imageID = $image->id ?? 0;
-            } else {
-                $imageID = $sku['product_image_id'] ?? 0;
-            }
-
+        foreach ($skus as $sku) {
             $variants = $sku['variants'] ?? [];
             if (is_string($variants)) {
                 $variants = json_decode($variants);
@@ -349,15 +325,15 @@ class ProductRepo extends BaseRepo
             $code = $sku['code'];
 
             $items[] = [
-                'product_image_id' => $imageID,
-                'variants'         => $variants,
-                'code'             => $code,
-                'model'            => $sku['model'] ?? $code,
-                'price'            => (float) ($sku['price'] ?? 0),
-                'origin_price'     => (float) ($sku['origin_price'] ?? 0),
-                'quantity'         => (int) ($sku['quantity'] ?? 0),
-                'is_default'       => (bool) $isDefault,
-                'position'         => (int) ($sku['position'] ?? 0),
+                'images'       => [$sku['image']],
+                'variants'     => $variants,
+                'code'         => $code,
+                'model'        => $sku['model'] ?? $code,
+                'price'        => (float) ($sku['price'] ?? 0),
+                'origin_price' => (float) ($sku['origin_price'] ?? 0),
+                'quantity'     => (int) ($sku['quantity'] ?? 0),
+                'is_default'   => (bool) $isDefault,
+                'position'     => (int) ($sku['position'] ?? 0),
             ];
         }
 
@@ -427,25 +403,6 @@ class ProductRepo extends BaseRepo
     }
 
     /**
-     * Sync product images.
-     *
-     * @param  Product  $product
-     * @param  $images
-     * @return void
-     * @throws Throwable
-     */
-    public function syncImages(Product $product, $images): void
-    {
-        if (empty($images)) {
-            return;
-        }
-        foreach ($images as $index => $image) {
-            $isCover = ($index == 0);
-            ImageRepo::getInstance()->findOrCreate($product, $image, $isCover);
-        }
-    }
-
-    /**
      * @return Builder
      */
     public function baseBuilder(): Builder
@@ -462,8 +419,6 @@ class ProductRepo extends BaseRepo
     public function builder(array $filters = []): Builder
     {
         $relations = [
-            'image',
-            'images',
             'masterSku',
             'translation',
             'categories.translation',

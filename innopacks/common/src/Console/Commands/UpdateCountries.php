@@ -13,6 +13,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use InnoShop\Common\Models\Country;
 use InnoShop\Common\Repositories\CountryRepo;
+use Throwable;
 
 class UpdateCountries extends Command
 {
@@ -27,7 +28,7 @@ class UpdateCountries extends Command
      * https://api.first.org/data/v1/countries?limit=300
      * https://raw.gitcode.com/dr5hn/countries-states-cities-database/raw/master/countries.json
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(): void
     {

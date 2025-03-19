@@ -9,13 +9,14 @@
 
 namespace InnoShop\Panel\Repositories\Dashboard;
 
+use Exception;
 use InnoShop\Panel\Repositories\BaseRepo;
 
 class ProductRepo extends BaseRepo
 {
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getTopSaleProducts(): array
     {
@@ -30,7 +31,7 @@ class ProductRepo extends BaseRepo
             $name    = $product->translation->name ?? '';
             $items[] = [
                 'product_id'  => $product->id,
-                'image'       => image_resize($product->image->path ?? ''),
+                'image'       => image_resize($product->image ?? ''),
                 'name'        => $name,
                 'summary'     => sub_string($name, 50),
                 'order_count' => $product->order_items_count,
@@ -42,6 +43,7 @@ class ProductRepo extends BaseRepo
 
     /**
      * @return array
+     * @throws Exception
      */
     public function getTopSaleProductsForPieChart(): array
     {
