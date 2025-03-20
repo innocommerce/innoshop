@@ -431,15 +431,19 @@ if (! function_exists('front_trans')) {
 
 if (! function_exists('theme_trans')) {
     /**
-     * @param  $themeCode
-     * @param  null  $key
+     * @param  $key
+     * @param  string  $theme
      * @param  array  $replace
      * @param  null  $locale
      * @return mixed
      */
-    function theme_trans($themeCode, $key = null, array $replace = [], $locale = null): mixed
+    function theme_trans($key, string $theme = '', array $replace = [], $locale = null): mixed
     {
-        return trans("theme-$themeCode::$key", $replace, $locale);
+        if (empty($theme)) {
+            $theme = system_setting('theme', 'default');
+        }
+
+        return trans("theme-$theme::$key", $replace, $locale);
     }
 }
 
@@ -949,8 +953,11 @@ if (! function_exists('theme_asset')) {
      * @return string
      * @throws Exception
      */
-    function theme_asset(string $theme, string $path, ?bool $secure = null): string
+    function theme_asset(string $path, string $theme = '', ?bool $secure = null): string
     {
+        if (empty($theme)) {
+            $theme = system_setting('theme', 'default');
+        }
         $originThemePath = "$theme/public/$path";
         $destThemePath   = "themes/$theme/$path";
         if (! file_exists(public_path($destThemePath))) {
@@ -975,8 +982,11 @@ if (! function_exists('theme_image')) {
      * @return string
      * @throws Exception
      */
-    function theme_image(string $theme, string $path, int $width = 100, int $height = 100): string
+    function theme_image(string $path, string $theme = '', int $width = 100, int $height = 100): string
     {
+        if (empty($theme)) {
+            $theme = system_setting('theme', 'default');
+        }
         $originThemePath = "$theme/public/$path";
         $destThemePath   = "themes/$theme/$path";
         if (! file_exists(public_path($destThemePath))) {
