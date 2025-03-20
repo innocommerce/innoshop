@@ -61,7 +61,10 @@
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active mt-3" id="basic-tab-pane" role="tabpanel" aria-labelledby="basic-tab"
                 tabindex="0">
-
+                  <div class="col-12 col-md-4">
+                      <x-common-form-input title="Spu Code" name="spu_code"
+                                           value="{{ old('spu_code', $product->spu_code ?? '') }}" required />
+                  </div>
                 <div class="mb-3 col-12 col-md-5">
                   <div class="mb-1 fs-6">{{ __('panel/product.name') }}</div>
                   @if(has_translator())

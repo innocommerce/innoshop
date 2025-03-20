@@ -325,7 +325,7 @@ class ProductRepo extends BaseRepo
             $code = $sku['code'];
 
             $items[] = [
-                'images'       => [$sku['image']],
+                'images'       => [$sku['image'] ?? ''],
                 'variants'     => $variants,
                 'code'         => $code,
                 'model'        => $sku['model'] ?? $code,

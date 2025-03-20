@@ -27,6 +27,7 @@ class Product extends BaseModel
     use HasPackageFactory, Replicate, Translatable;
 
     protected $fillable = [
+        'spu_code',
         'brand_id', 'images', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
         'active', 'weight', 'weight_class', 'sales', 'viewed',
     ];
