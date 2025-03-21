@@ -227,7 +227,17 @@
       const showAllVariant = ref(false)
       const mainVariantKey = ref(0)
       const variants = ref(@json(old('variants', $product->variables ?? [])))
-      const skus = ref(@json(old('skus', $skus ?? [])))
+      const skus = ref((() => {
+        let rawSkus = @json(old('skus', $skus ?? []));
+        if (typeof rawSkus === 'string') {
+          try {
+            rawSkus = JSON.parse(rawSkus);
+          } catch (e) {
+            rawSkus = [];
+          }
+        }
+        return rawSkus;
+      })());
 
       // 添加批量填写的数据
       const batchData = ref({

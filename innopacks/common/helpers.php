@@ -311,6 +311,19 @@ if (! function_exists('setting_locale_code')) {
     }
 }
 
+if (! function_exists('is_setting_locale')) {
+    /**
+     * Check if setting locale.
+     *
+     * @param  $localeCode
+     * @return string
+     */
+    function is_setting_locale($localeCode): string
+    {
+        return setting_locale_code() == $localeCode;
+    }
+}
+
 if (! function_exists('language_codes')) {
     /**
      * 获取语言包列表

@@ -207,4 +207,52 @@ class AttributeRepo extends BaseRepo
             'position'           => $requestData['position']           ?? 0,
         ];
     }
+
+    /**
+     * Get attributes and their values in current language
+     *
+     * @param  string|null  $locale
+     * @return array
+     */
+    public function getAttributesWithValues(?string $locale = null): array
+    {
+        if (! $locale) {
+            $locale = locale_code();
+        }
+
+        // Get all attributes with their translations and values
+        $attributes = Attribute::query()
+            ->with([
+                'translation' => function ($query) use ($locale) {
+                    $query->where('locale', $locale);
+                },
+                'values.translation' => function ($query) use ($locale) {
+                    $query->where('locale', $locale);
+                },
+            ])
+            ->get();
+
+        // Format data as three-dimensional array
+        $result = [];
+        foreach ($attributes as $attribute) {
+            $attributeData = [
+                'id'     => $attribute->id,
+                'name'   => $attribute->translation->name ?? '',
+                'values' => [],
+            ];
+
+            // Add attribute values
+            foreach ($attribute->values as $value) {
+                $attributeData['values'][] = [
+                    'id'           => $value->id,
+                    'attribute_id' => $attribute->id,
+                    'name'         => $value->translation->name ?? '',
+                ];
+            }
+
+            $result[] = $attributeData;
+        }
+
+        return $result;
+    }
 }

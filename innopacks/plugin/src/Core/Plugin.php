@@ -518,11 +518,11 @@ final class Plugin implements Arrayable, ArrayAccess
     /**
      * @param  $offset
      * @param  $value
-     * @return array
+     * @return void
      */
-    public function offsetSet($offset, $value): array
+    public function offsetSet($offset, $value): void
     {
-        return Arr::set($this->packageInfo, $offset, $value);
+        Arr::set($this->packageInfo, $offset, $value);
     }
 
     /**

@@ -49,7 +49,7 @@
                     <div class="d-flex">
                       @foreach($order->items->take(5) as $product)
                         <div class="wh-30 overflow-hidden border border-1 me-1">
-                          <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-fluid">
+                          <img src="{{ image_resize($product->image, 30, 30) }}" alt="{{ $product->name }}" class="img-fluid">
                         </div>
                       @endforeach
                     </div>

@@ -19,9 +19,11 @@
     <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
       @foreach (locales() as $locale)
         <li class="nav-item" role="presentation">
-          <button class="nav-link {{ $loop->first ? 'active' : ''}}" id="{{ $locale['code'] }}" data-bs-toggle="tab"
+          <button class="nav-link d-flex {{ $loop->first ? 'active' : ''}}" id="{{ $locale['code'] }}" data-bs-toggle="tab"
                   data-bs-target="#{{ $name }}-{{ $locale['code'] }}-pane" type="button">
-            <img src="{{ asset('images/flag/'. $locale['code'] .'.png') }}" class="me-2" style="width: 20px;">
+            <div class="wh-20 me-2">
+              <img src="{{ asset('images/flag/'. $locale['code'].'.png') }}" class="img-fluid {{ default_locale_class($locale->code) }}">
+            </div>
             {{ $locale['name'] }}
           </button>
         </li>

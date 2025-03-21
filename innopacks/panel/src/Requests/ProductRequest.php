@@ -36,13 +36,15 @@ class ProductRequest extends FormRequest
             $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:products,slug';
         }
 
+        $defaultLocale = system_setting('locale', 'en');
+
         return [
             'catalog_id' => 'integer',
             'slug'       => $slugRule,
             'active'     => 'bool',
 
-            'translations.*.locale' => 'required',
-            'translations.*.name'   => 'required',
+            "translations.$defaultLocale.locale" => 'required',
+            "translations.$defaultLocale.name"   => 'required',
         ];
     }
 }

@@ -56,6 +56,8 @@
     </div>
   </div>
 
+  @hookinsert('panel.orders.info.order_info.after')
+
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="card-title mb-0">{{ __('panel/order.order_items') }}</h5>
@@ -119,6 +121,8 @@
     </div>
   </div>
 
+  @hookinsert('panel.orders.info.order_items.after')
+
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="card-title mb-0">{{ __('panel/order.address') }}</h5>
@@ -165,6 +169,8 @@
     </div>
   </div>
 
+  @hookinsert('panel.orders.info.addresses.after')
+
   <div class="mt-4">
     <div class="card mb-4">
       <div class="card-header">
@@ -207,6 +213,9 @@
       </div>
     </div>
   </div>
+
+  @hookinsert('panel.orders.info.comment.after')
+
   <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h5 class="card-title mb-0">{{ __('panel/order.shipping_information') }}</h5>
@@ -242,6 +251,9 @@
       </table>
     </div>
   </div>
+
+  @hookinsert('panel.orders.info.shipping.after')
+
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="card-title mb-0">{{ __('panel/order.history') }}</h5>
@@ -267,6 +279,9 @@
       </table>
     </div>
   </div>
+
+  @hookinsert('panel.orders.info.history.after')
+
   <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">

@@ -13,14 +13,11 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Product;
-use InnoShop\Common\Repositories\Attribute\ValueRepo;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\TaxClassRepo;
-use InnoShop\Common\Resources\AttributeSimple;
-use InnoShop\Common\Resources\AttributeValueSimple;
 use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Panel\Requests\ProductRequest;
 
@@ -95,19 +92,16 @@ class ProductController extends BaseController
 
         $skus = SkuListItem::collection($product->skus)->jsonSerialize();
 
-        $attributes = AttributeRepo::getInstance()->all();
-
-        $attributeValues = ValueRepo::getInstance()->all();
+        $attributeData = AttributeRepo::getInstance()->getAttributesWithValues();
 
         $data = [
-            'product'              => $product,
-            'skus'                 => $skus,
-            'categories'           => $categories,
-            'brands'               => BrandRepo::getInstance()->all()->toArray(),
-            'tax_classes'          => TaxClassRepo::getInstance()->all()->toArray(),
-            'attribute_count'      => $product->productAttributes->count(),
-            'all_attributes'       => AttributeSimple::collection($attributes)->jsonSerialize(),
-            'all_attribute_values' => AttributeValueSimple::collection($attributeValues)->jsonSerialize(),
+            'product'         => $product,
+            'skus'            => $skus,
+            'categories'      => $categories,
+            'brands'          => BrandRepo::getInstance()->all()->toArray(),
+            'tax_classes'     => TaxClassRepo::getInstance()->all()->toArray(),
+            'attribute_count' => $product->productAttributes->count(),
+            'all_attributes'  => $attributeData,
         ];
 
         return inno_view('panel::products.form', $data);

@@ -113,21 +113,4 @@ class TransactionController extends BaseController
                 ->withErrors(['error' => $e->getMessage()]);
         }
     }
-
-    /**
-     * @param  Transaction  $transaction
-     * @return RedirectResponse
-     */
-    public function destroy(Transaction $transaction): RedirectResponse
-    {
-        try {
-            TransactionRepo::getInstance()->destroy($transaction);
-
-            return redirect(panel_route('transactions.index'))
-                ->with('success', panel_trans('common.deleted_success'));
-        } catch (Exception $e) {
-            return redirect(panel_route('transactions.index'))
-                ->withErrors(['error' => $e->getMessage()]);
-        }
-    }
 }

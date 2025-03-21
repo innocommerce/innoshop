@@ -174,7 +174,7 @@ if (! function_exists('is_admin')) {
 if (! function_exists('dashboard_url')) {
     /**
      * Get dashboard url
-     * like https://www.innoshop.com/install/dashboard.jpg?version=1.0.0&build_date=20250909
+     * like https://www.innoshop.com/install/dashboard.jpg?edition=community&version=1.0.0&build_date=20250909
      *
      * @return string
      */
@@ -182,12 +182,25 @@ if (! function_exists('dashboard_url')) {
     {
         $params = [
             'base_url'   => panel_route('home.index'),
+            'edition'    => config('innoshop.edition'),
             'version'    => config('innoshop.version'),
             'build_date' => config('innoshop.build'),
         ];
         $urlParams = http_build_query($params);
 
         return config('innoshop.api_url').'/install/dashboard.jpg?'.$urlParams;
+    }
+}
+
+if (! function_exists('default_locale_class')) {
+    /**
+     * Get default locale class name for panel admin.
+     * @param  $localeCode
+     * @return string
+     */
+    function default_locale_class($localeCode): string
+    {
+        return is_setting_locale($localeCode) ? 'border border-2 border-danger-subtle ' : '';
     }
 }
 

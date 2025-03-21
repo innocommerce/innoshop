@@ -347,26 +347,48 @@ class ProductRepo extends BaseRepo
      */
     private function handleTranslations($translations): array
     {
-        $items = [];
+        $defaultTranslation = $this->getDefaultTranslation($translations);
+        $translationItems   = [];
         foreach ($translations as $translation) {
             if (! in_array($translation['locale'], enabled_locale_codes())) {
                 continue;
             }
 
-            $name    = $translation['name'];
-            $items[] = [
+            if (empty($translation['name'])) {
+                $name = $defaultTranslation['name'];
+            } else {
+                $name = $translation['name'];
+            }
+
+            $translationItems[] = [
                 'locale'           => $translation['locale'],
                 'name'             => $name,
-                'summary'          => $translation['summary']          ?? $name,
-                'selling_point'    => $translation['selling_point']    ?? $name,
-                'content'          => $translation['content']          ?? $name,
-                'meta_title'       => $translation['meta_title']       ?? $name,
-                'meta_description' => $translation['meta_description'] ?? $name,
-                'meta_keywords'    => $translation['meta_keywords']    ?? $name,
+                'summary'          => ($translation['summary'] ?? ($defaultTranslation['summary'] ?? $name)),
+                'selling_point'    => ($translation['selling_point'] ?? ($defaultTranslation['selling_point'] ?? $name)),
+                'content'          => ($translation['content'] ?? ($defaultTranslation['content'] ?? $name)),
+                'meta_title'       => ($translation['meta_title'] ?? ($defaultTranslation['meta_title'] ?? $name)),
+                'meta_description' => ($translation['meta_description'] ?? ($defaultTranslation['meta_description'] ?? $name)),
+                'meta_keywords'    => ($translation['meta_keywords'] ?? ($defaultTranslation['meta_keywords'] ?? $name)),
             ];
         }
 
-        return $items;
+        return $translationItems;
+    }
+
+    /**
+     * @param  $translations
+     * @return mixed
+     * @throws Exception
+     */
+    private function getDefaultTranslation($translations): mixed
+    {
+        $localeCode = setting_locale_code();
+        foreach ($translations as $translation) {
+            if ($translation['locale'] == $localeCode) {
+                return $translation;
+            }
+        }
+        throw new Exception('Default translation not found');
     }
 
     /**
@@ -375,6 +397,10 @@ class ProductRepo extends BaseRepo
      */
     private function handleAttributes($attributes): array
     {
+        if (is_string($attributes)) {
+            $attributes = json_decode($attributes, true);
+        }
+
         $items = [];
         foreach ($attributes as $attribute) {
             if (empty($attribute['attribute_id'] ?? []) || empty($attribute['attribute_value_id'] ?? [])) {
