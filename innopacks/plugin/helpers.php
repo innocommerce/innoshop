@@ -105,9 +105,9 @@ if (! function_exists('plugin_origin')) {
 
 if (! function_exists('plugin_asset')) {
     /**
-     * Generate asset path for the plugin, demo code like below:
-     * <link rel="stylesheet" href="{{ plugin_asset('stripe','swiper-bundle.min.css') }}">,
-     * swiper-bundle.min.css is in /plugins/Stripe/Public
+     * Gets asset from a plugin.
+     * Format: plugin_asset('Stripe', 'css/swiper-bundle.min.css')
+     * so, swiper-bundle.min.css is in /plugins/Stripe/Public/css/
      *
      * @param  string  $pluginCode
      * @param  string  $path
@@ -119,9 +119,24 @@ if (! function_exists('plugin_asset')) {
         $pluginDirectory  = Str::studly($pluginCode);
         $originPluginPath = "$pluginDirectory/Public/$path";
         $destPluginPath   = strtolower("plugins/$pluginCode/$path");
-        if (! file_exists(public_path($destPluginPath))) {
-            create_directories(dirname(public_path($destPluginPath)));
-            copy(plugin_path($originPluginPath), public_path($destPluginPath));
+
+        $sourceFile = plugin_path($originPluginPath);
+        $destFile   = public_path($destPluginPath);
+        $shouldCopy = false;
+
+        if (! file_exists($destFile)) {
+            $shouldCopy = true;
+        } else {
+            $sourceModTime = filemtime($sourceFile);
+            $destModTime   = filemtime($destFile);
+            if ($sourceModTime > $destModTime) {
+                $shouldCopy = true;
+            }
+        }
+
+        if ($shouldCopy && file_exists($sourceFile)) {
+            create_directories(dirname($destFile));
+            copy($sourceFile, $destFile);
         }
 
         return app('url')->asset($destPluginPath, $secure);
