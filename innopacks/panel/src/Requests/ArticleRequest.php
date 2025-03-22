@@ -36,15 +36,28 @@ class ArticleRequest extends FormRequest
             $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:articles,slug';
         }
 
+        $defaultLocale = setting_locale_code();
+
         return [
             'catalog_id' => 'integer',
             'slug'       => $slugRule,
             'position'   => 'integer',
             'viewed'     => 'integer',
 
-            'translations.*.locale'  => 'required',
-            'translations.*.title'   => 'required',
-            'translations.*.content' => 'required',
+            "translations.$defaultLocale.locale"  => 'required',
+            "translations.$defaultLocale.title"   => 'required',
+            "translations.$defaultLocale.content" => 'required',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        $defaultLocale = setting_locale_code();
+
+        return [
+            "translations.$defaultLocale.locale"  => trans('panel/article.locale'),
+            "translations.$defaultLocale.title"   => trans('panel/article.title'),
+            "translations.$defaultLocale.content" => trans('panel/article.content'),
         ];
     }
 }

@@ -13,6 +13,8 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Tag;
 use Throwable;
 
@@ -114,26 +116,83 @@ class TagRepo extends BaseRepo
      */
     public function create($data): Tag
     {
-        $item = new Tag($data);
-        $item->saveOrFail();
-        $item->translations()->createMany($data['translations']);
+        $item = new Tag;
 
-        return $item;
+        return $this->createOrUpdate($item, $data);
     }
 
     /**
      * @param  $item
      * @param  $data
      * @return mixed
+     * @throws Exception|Throwable
      */
     public function update($item, $data): mixed
     {
-        $item->fill($data);
-        $item->saveOrFail();
-        $item->translations()->delete();
-        $item->translations()->createMany($data['translations']);
+        return $this->createOrUpdate($item, $data);
+    }
 
-        return $item;
+    /**
+     * @param  Tag  $tag
+     * @param  $data
+     * @return mixed
+     * @throws Exception|Throwable
+     */
+    private function createOrUpdate(Tag $tag, $data): mixed
+    {
+        DB::beginTransaction();
+
+        try {
+            $tagData = $this->handleData($data);
+            $tag->fill($tagData);
+            $tag->saveOrFail();
+
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $tag->translations()->delete();
+                $tag->translations()->createMany($translations);
+            }
+
+            DB::commit();
+
+            return $tag;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @param  $data
+     * @return array
+     */
+    private function handleData($data): array
+    {
+        return [
+            'slug'     => $data['slug']     ?? null,
+            'position' => $data['position'] ?? 0,
+            'active'   => (bool) ($data['active'] ?? true),
+        ];
+    }
+
+    /**
+     * @param  $translations
+     * @return array
+     * @throws Exception
+     */
+    private function handleTranslations($translations): array
+    {
+        if (empty($translations)) {
+            return [];
+        }
+
+        // Define field mapping for name to description field
+        $fieldMap = [
+            'name' => ['description'],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

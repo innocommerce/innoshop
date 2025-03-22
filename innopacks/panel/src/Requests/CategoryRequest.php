@@ -36,15 +36,15 @@ class CategoryRequest extends FormRequest
             $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:categories,slug';
         }
 
-        return [
-            'catalog_id' => 'integer',
-            'slug'       => $slugRule,
-            'position'   => 'integer',
-            'viewed'     => 'integer',
-            'active'     => 'bool',
+        $defaultLocale = setting_locale_code();
 
-            'translations.*.locale' => 'required',
-            'translations.*.name'   => 'required',
+        return [
+            'slug'     => $slugRule,
+            'position' => 'integer',
+            'active'   => 'bool',
+
+            "translations.$defaultLocale.locale" => 'required',
+            "translations.$defaultLocale.name"   => 'required',
         ];
     }
 
@@ -53,8 +53,12 @@ class CategoryRequest extends FormRequest
      */
     public function attributes(): array
     {
+        $defaultLocale = setting_locale_code();
+
         return [
-            'slug' => panel_trans('common.slug'),
+            'slug'                               => panel_trans('common.slug'),
+            "translations.$defaultLocale.locale" => trans('panel/category.locale'),
+            "translations.$defaultLocale.name"   => trans('panel/category.name'),
         ];
     }
 }

@@ -36,13 +36,29 @@ class CatalogRequest extends FormRequest
             $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:catalogs,slug';
         }
 
+        $defaultLocale = setting_locale_code();
+
         return [
             'slug'     => $slugRule,
             'position' => 'integer',
             'active'   => 'bool',
 
-            'translations.*.locale' => 'required',
-            'translations.*.title'  => 'required',
+            "translations.$defaultLocale.locale" => 'required',
+            "translations.$defaultLocale.title"  => 'required',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function attributes(): array
+    {
+        $defaultLocale = setting_locale_code();
+
+        return [
+            'slug'                               => panel_trans('common.slug'),
+            "translations.$defaultLocale.locale" => trans('panel/catalog.locale'),
+            "translations.$defaultLocale.title"  => trans('panel/catalog.title'),
         ];
     }
 }

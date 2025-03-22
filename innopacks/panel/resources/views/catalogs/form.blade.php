@@ -29,9 +29,10 @@
                           data-bs-toggle="collapse" data-bs-target="#data-locale-{{ $localeCode }}"
                           aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
                           aria-controls="data-locale-{{ $localeCode }}">
-                    <div class="wh-20 me-2">
-                      <img src="{{ image_origin($locale->image) }}" class="img-fluid">
-                    </div>
+                    <div class="d-flex align-items-center wh-20">
+                      <img src="{{ image_origin($locale->image) }}" class="img-fluid {{ default_locale_class($locale->code) }}"
+                        alt="{{ $localeName }}">
+                    </div>&nbsp;
                     {{ $localeName }}
                   </button>
                 </h2>
@@ -43,7 +44,7 @@
 
                     <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][title]"
                                         value="{{ old('translations.' . $localeCode . '.title', $catalog->translate($localeCode, 'title')) }}"
-                                        required />
+                                        />
 
                     <x-common-form-input title="{{ __('panel/article.summary') }}" name="translations[{{$localeCode}}][summary]"
                                         value="{{ old('translations.' . $localeCode . '.summary', $catalog->translate($localeCode, 'summary')) }}"

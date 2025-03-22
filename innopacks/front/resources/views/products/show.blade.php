@@ -79,7 +79,7 @@
                   <span class="value">
                 @foreach ($product->categories as $category)
                       <a href="{{ $category->url }}"
-                         class="text-dark">{{ $category->translation->name }}</a>{{ !$loop->last ? ', ' : '' }}
+                         class="text-dark">{{ $category->fallbackName() }}</a>{{ !$loop->last ? ', ' : '' }}
                     @endforeach
               </span>
                 </li>

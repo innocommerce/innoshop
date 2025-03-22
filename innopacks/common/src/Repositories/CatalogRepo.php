@@ -13,6 +13,8 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Catalog;
 use Throwable;
 
@@ -119,26 +121,50 @@ class CatalogRepo extends BaseRepo
      */
     public function create($data): Catalog
     {
-        $item = new Catalog($this->handleData($data));
-        $item->saveOrFail();
-        $item->translations()->createMany($data['translations']);
+        $item = new Catalog;
 
-        return $item;
+        return $this->createOrUpdate($item, $data);
     }
 
     /**
      * @param  $item
      * @param  $data
      * @return mixed
+     * @throws Exception|Throwable
      */
     public function update($item, $data): mixed
     {
-        $item->fill($this->handleData($data));
-        $item->saveOrFail();
-        $item->translations()->delete();
-        $item->translations()->createMany($data['translations']);
+        return $this->createOrUpdate($item, $data);
+    }
 
-        return $item;
+    /**
+     * @param  Catalog  $catalog
+     * @param  $data
+     * @return mixed
+     * @throws Throwable
+     */
+    private function createOrUpdate(Catalog $catalog, $data): mixed
+    {
+        DB::beginTransaction();
+
+        try {
+            $catalogData = $this->handleData($data);
+            $catalog->fill($catalogData);
+            $catalog->saveOrFail();
+
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $catalog->translations()->delete();
+                $catalog->translations()->createMany($translations);
+            }
+
+            DB::commit();
+
+            return $catalog;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**
@@ -191,16 +217,44 @@ class CatalogRepo extends BaseRepo
     }
 
     /**
-     * @return string[]
+     * @param  $data
+     * @return array
      */
-    private function handleData($requestData): array
+    private function handleData($data): array
     {
         return [
-            'parent_id' => (int) ($requestData['parent_id'] ?? 0),
-            'slug'      => $requestData['slug'],
-            'position'  => (int) ($requestData['position'] ?? 0),
-            'active'    => (bool) ($requestData['active'] ?? true),
+            'parent_id' => $data['parent_id'] ?? 0,
+            'slug'      => $data['slug']      ?? null,
+            'position'  => $data['position']  ?? 0,
+            'active'    => (bool) $data['active'],
         ];
+    }
+
+    /**
+     * Process the translations data with consistent rules
+     *
+     * Uses TranslationHandler to:
+     * - Apply auto-fill from default language when enabled
+     * - Map title field to meta fields when enabled
+     * - Filter out disabled locales
+     *
+     * @param  $translations
+     * @return array
+     * @throws Exception
+     */
+    private function handleTranslations($translations): array
+    {
+        if (empty($translations)) {
+            return [];
+        }
+
+        // Define field mapping for title to TDK fields
+        $fieldMap = [
+            'title' => ['meta_title', 'meta_description', 'meta_keywords'],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

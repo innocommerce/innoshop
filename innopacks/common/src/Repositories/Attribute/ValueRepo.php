@@ -12,6 +12,7 @@ namespace InnoShop\Common\Repositories\Attribute;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Attribute\Value;
 use InnoShop\Common\Repositories\BaseRepo;
 
@@ -50,18 +51,43 @@ class ValueRepo extends BaseRepo
             return;
         }
 
-        $translationList = [];
+        // Convert translations from key-value format to array format
+        $translationArray = [];
         foreach ($translations as $locale => $name) {
-            $translationList[] = [
+            $translationArray[] = [
                 'locale' => $locale,
                 'name'   => $name,
             ];
         }
 
-        if ($translationList) {
+        // Process translations using TranslationHandler
+        $processedTranslations = $this->handleTranslations($translationArray);
+
+        if ($processedTranslations) {
             $attrValue->translations()->delete();
-            $attrValue->translations()->createMany($translationList);
+            $attrValue->translations()->createMany($processedTranslations);
         }
+    }
+
+    /**
+     * Process translations with TranslationHandler
+     *
+     * @param  array  $translations
+     * @return array
+     */
+    private function handleTranslations(array $translations): array
+    {
+        if (empty($translations)) {
+            return [];
+        }
+
+        // Define field mapping if needed
+        $fieldMap = [
+            'name' => [],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

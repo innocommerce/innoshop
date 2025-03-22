@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Page;
 
 class PageRepo extends BaseRepo
@@ -81,15 +82,46 @@ class PageRepo extends BaseRepo
      */
     public function create($data): Page
     {
+        $item = new Page;
+
+        return $this->createOrUpdate($item, $data);
+    }
+
+    /**
+     * @param  $item
+     * @param  $data
+     * @return mixed
+     * @throws Exception|\Throwable
+     */
+    public function update($item, $data): mixed
+    {
+        return $this->createOrUpdate($item, $data);
+    }
+
+    /**
+     * @param  Page  $page
+     * @param  $data
+     * @return mixed
+     * @throws Exception|\Throwable
+     */
+    private function createOrUpdate(Page $page, $data): mixed
+    {
         DB::beginTransaction();
 
         try {
-            $item = new Page($data);
-            $item->saveOrFail();
-            $item->translations()->createMany($data['translations']);
+            $pageData = $this->handleData($data);
+            $page->fill($pageData);
+            $page->saveOrFail();
+
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $page->translations()->delete();
+                $page->translations()->createMany($translations);
+            }
+
             DB::commit();
 
-            return $item;
+            return $page;
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -97,28 +129,38 @@ class PageRepo extends BaseRepo
     }
 
     /**
-     * @param  $item
      * @param  $data
-     * @return mixed
+     * @return array
+     */
+    private function handleData($data): array
+    {
+        return [
+            'slug'            => $data['slug']            ?? null,
+            'viewed'          => $data['viewed']          ?? 0,
+            'position'        => $data['position']        ?? 0,
+            'show_breadcrumb' => $data['show_breadcrumb'] ?? false,
+            'active'          => (bool) ($data['active'] ?? true),
+        ];
+    }
+
+    /**
+     * @param  $translations
+     * @return array
      * @throws Exception
      */
-    public function update($item, $data): mixed
+    private function handleTranslations($translations): array
     {
-        DB::beginTransaction();
-
-        try {
-            $item->fill($data);
-            $item->saveOrFail();
-            $item->translations()->delete();
-            $item->translations()->createMany($data['translations']);
-
-            DB::commit();
-
-            return $item;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
+        if (empty($translations)) {
+            return [];
         }
+
+        // Define field mapping for title to other fields
+        $fieldMap = [
+            'title' => ['content', 'meta_title', 'meta_description', 'meta_keywords'],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

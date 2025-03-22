@@ -12,6 +12,7 @@ namespace InnoShop\Common\Repositories;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Resources\CategorySimple;
 use Throwable;
@@ -153,13 +154,15 @@ class CategoryRepo extends BaseRepo
         DB::beginTransaction();
 
         try {
-            $categoryData = $this->handleCategoryData($data);
+            $categoryData = $this->handleData($data);
             $category->fill($categoryData);
             $category->saveOrFail();
 
-            $translations = $this->handleTranslations($data['translations']);
-            $category->translations()->delete();
-            $category->translations()->createMany($translations);
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $category->translations()->delete();
+                $category->translations()->createMany($translations);
+            }
 
             DB::commit();
         } catch (Exception $e) {
@@ -170,39 +173,37 @@ class CategoryRepo extends BaseRepo
 
     /**
      * @param  $data
-     * @return string[]
+     * @return array
      */
-    private function handleCategoryData($data): array
+    private function handleData($data): array
     {
         return [
             'parent_id' => $data['parent_id'] ?? 0,
             'slug'      => $data['slug']      ?? null,
-            'image'     => $data['image']     ?? '',
+            'image'     => $data['image']     ?? null,
             'position'  => $data['position']  ?? 0,
-            'active'    => $data['active']    ?? true,
+            'active'    => (bool) $data['active'],
         ];
     }
 
     /**
      * @param  $translations
      * @return array
+     * @throws Exception
      */
     private function handleTranslations($translations): array
     {
-        $items = [];
-        foreach ($translations as $translation) {
-            $name    = $translation['name'];
-            $items[] = [
-                'locale'           => $translation['locale'],
-                'name'             => $name,
-                'content'          => $translation['content']          ?? $name,
-                'meta_title'       => $translation['meta_title']       ?? $name,
-                'meta_description' => $translation['meta_description'] ?? $name,
-                'meta_keywords'    => $translation['meta_keywords']    ?? $name,
-            ];
+        if (empty($translations)) {
+            return [];
         }
 
-        return $items;
+        // Define field mapping for name to other fields
+        $fieldMap = [
+            'name' => ['content', 'meta_title', 'meta_description', 'meta_keywords'],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

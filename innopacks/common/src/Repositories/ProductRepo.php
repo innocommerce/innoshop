@@ -14,6 +14,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\Product\VariantRepo;
@@ -122,7 +123,6 @@ class ProductRepo extends BaseRepo
 
         $item->productAttributes()->delete();
         $item->categories()->sync([]);
-        $item->images()->delete();
         $item->relations()->delete();
         $item->skus()->delete();
         $item->translations()->delete();
@@ -139,7 +139,6 @@ class ProductRepo extends BaseRepo
         $product->load([
             'skus',
             'translations',
-            'images',
             'categories',
             'productAttributes',
             'relations',
@@ -194,7 +193,11 @@ class ProductRepo extends BaseRepo
                 $product->relations()->delete();
             }
 
-            $product->translations()->createMany($this->handleTranslations($data['translations']));
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $product->translations()->createMany($translations);
+            }
+
             $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
             $product->relations()->createMany($this->handleRelations($data['related_ids'] ?? []));
             $product->categories()->sync($data['categories'] ?? []);
@@ -347,48 +350,17 @@ class ProductRepo extends BaseRepo
      */
     private function handleTranslations($translations): array
     {
-        $defaultTranslation = $this->getDefaultTranslation($translations);
-        $translationItems   = [];
-        foreach ($translations as $translation) {
-            if (! in_array($translation['locale'], enabled_locale_codes())) {
-                continue;
-            }
-
-            if (empty($translation['name'])) {
-                $name = $defaultTranslation['name'];
-            } else {
-                $name = $translation['name'];
-            }
-
-            $translationItems[] = [
-                'locale'           => $translation['locale'],
-                'name'             => $name,
-                'summary'          => ($translation['summary'] ?? ($defaultTranslation['summary'] ?? $name)),
-                'selling_point'    => ($translation['selling_point'] ?? ($defaultTranslation['selling_point'] ?? $name)),
-                'content'          => ($translation['content'] ?? ($defaultTranslation['content'] ?? $name)),
-                'meta_title'       => ($translation['meta_title'] ?? ($defaultTranslation['meta_title'] ?? $name)),
-                'meta_description' => ($translation['meta_description'] ?? ($defaultTranslation['meta_description'] ?? $name)),
-                'meta_keywords'    => ($translation['meta_keywords'] ?? ($defaultTranslation['meta_keywords'] ?? $name)),
-            ];
+        if (empty($translations)) {
+            return [];
         }
 
-        return $translationItems;
-    }
+        // Define field mapping for name to other fields
+        $fieldMap = [
+            'name' => ['summary', 'selling_point', 'content', 'meta_title', 'meta_description', 'meta_keywords'],
+        ];
 
-    /**
-     * @param  $translations
-     * @return mixed
-     * @throws Exception
-     */
-    private function getDefaultTranslation($translations): mixed
-    {
-        $localeCode = setting_locale_code();
-        foreach ($translations as $translation) {
-            if ($translation['locale'] == $localeCode) {
-                return $translation;
-            }
-        }
-        throw new Exception('Default translation not found');
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Attribute;
 use Throwable;
 
@@ -119,23 +120,9 @@ class AttributeRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $translations = array_values($data['translations'] ?? []);
+        $attribute = new Attribute;
 
-        DB::beginTransaction();
-
-        try {
-            $data      = $this->handleData($data);
-            $attribute = new Attribute($data);
-            $attribute->saveOrFail();
-
-            $attribute->translations()->createMany($translations);
-            DB::commit();
-
-            return $attribute;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        return $this->createOrUpdate($attribute, $data);
     }
 
     /**
@@ -145,22 +132,33 @@ class AttributeRepo extends BaseRepo
      */
     public function update(mixed $item, $data): mixed
     {
-        $translations = array_values($data['translations'] ?? []);
+        return $this->createOrUpdate($item, $data);
+    }
 
+    /**
+     * @param  Attribute  $attribute
+     * @param  $data
+     * @return mixed
+     * @throws Throwable
+     */
+    private function createOrUpdate(Attribute $attribute, $data): mixed
+    {
         DB::beginTransaction();
 
         try {
-            $data = $this->handleData($data);
-            $item->update($data);
+            $attributeData = $this->handleData($data);
+            $attribute->fill($attributeData);
+            $attribute->saveOrFail();
 
+            $translations = $this->handleTranslations($data['translations'] ?? []);
             if ($translations) {
-                $item->translations()->delete();
-                $item->saveOrFail();
-                $item->translations()->createMany($translations);
+                $attribute->translations()->delete();
+                $attribute->translations()->createMany($translations);
             }
+
             DB::commit();
 
-            return $item;
+            return $attribute;
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -206,6 +204,27 @@ class AttributeRepo extends BaseRepo
             'attribute_group_id' => $requestData['attribute_group_id'] ?? 0,
             'position'           => $requestData['position']           ?? 0,
         ];
+    }
+
+    /**
+     * Process translations with TranslationHandler
+     *
+     * @param  array  $translations
+     * @return array
+     */
+    private function handleTranslations(array $translations): array
+    {
+        if (empty($translations)) {
+            return [];
+        }
+
+        // Define field mapping for name to other fields if needed
+        $fieldMap = [
+            'name' => [],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

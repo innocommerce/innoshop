@@ -31,6 +31,17 @@
 </div>
 
 <div class="row">
+  <div class="col-6">
+    <x-common-form-switch-radio title="{{ __('panel/setting.auto_fill_lang') }}" name="auto_fill_lang" 
+                                value="{{ old('auto_fill_lang', system_setting('auto_fill_lang', false)) }}"/>
+  </div>
+  <div class="col-6">
+    <x-common-form-switch-radio title="{{ __('panel/setting.title_to_tdk') }}" name="title_to_tdk" 
+                                value="{{ old('title_to_tdk', system_setting('title_to_tdk', false)) }}"/>
+  </div>
+</div>
+
+<div class="row">
   <div class="col-6 col-md-3">
     <x-common-form-switch-radio title="{{ __('panel/setting.login_checkout') }}" name="login_checkout" required
                                 value="{{ old('login_checkout', system_setting('login_checkout')) }}"/>

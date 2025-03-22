@@ -12,6 +12,8 @@ namespace InnoShop\Common\Repositories;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Article;
 use Throwable;
 
@@ -109,38 +111,53 @@ class ArticleRepo extends BaseRepo
      */
     public function create($data): Article
     {
-        $item = new Article($this->handleData($data));
-        $item->saveOrFail();
+        $item = new Article;
 
-        $translations = array_values($data['translations']);
-        $item->translations()->createMany($translations);
-
-        $tagIds = $data['tag_ids'] ?? [];
-        $item->tags()->sync($tagIds);
-
-        return $item;
+        return $this->createOrUpdate($item, $data);
     }
 
     /**
      * @param  $item
      * @param  $data
      * @return mixed
+     * @throws Exception|Throwable
      */
     public function update($item, $data): mixed
     {
-        $item->fill($this->handleData($data));
-        $item->saveOrFail();
+        return $this->createOrUpdate($item, $data);
+    }
 
-        $translations = array_values($data['translations']);
-        if ($translations) {
-            $item->translations()->delete();
-            $item->translations()->createMany($translations);
+    /**
+     * @param  Article  $article
+     * @param  $data
+     * @return mixed
+     * @throws Throwable
+     */
+    private function createOrUpdate(Article $article, $data): mixed
+    {
+        DB::beginTransaction();
+
+        try {
+            $articleData = $this->handleData($data);
+            $article->fill($articleData);
+            $article->saveOrFail();
+
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $article->translations()->delete();
+                $article->translations()->createMany($translations);
+            }
+
+            $tagIds = $data['tag_ids'] ?? [];
+            $article->tags()->sync($tagIds);
+
+            DB::commit();
+
+            return $article;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-
-        $tagIds = $data['tag_ids'] ?? [];
-        $item->tags()->sync($tagIds);
-
-        return $item;
     }
 
     /**
@@ -167,6 +184,26 @@ class ArticleRepo extends BaseRepo
             'author'     => $data['author']     ?? '',
             'active'     => (bool) $data['active'],
         ];
+    }
+
+    /**
+     * @param  $translations
+     * @return array
+     * @throws Exception
+     */
+    private function handleTranslations($translations): array
+    {
+        if (empty($translations)) {
+            return [];
+        }
+
+        // Define field mapping for title to other fields
+        $fieldMap = [
+            'title' => ['content', 'summary', 'meta_title', 'meta_description', 'meta_keywords'],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

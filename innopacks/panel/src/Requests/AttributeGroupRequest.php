@@ -11,7 +11,7 @@ namespace InnoShop\Panel\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class AttributeGroupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,25 +30,19 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->product) {
-            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:products,slug,'.$this->product->id;
-        } else {
-            $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:products,slug';
-        }
-
         $defaultLocale = setting_locale_code();
 
         return [
-            'catalog_id' => 'integer',
-            'slug'       => $slugRule,
-            'active'     => 'bool',
-
+            'position'                           => 'integer',
+            'translations'                       => 'required|array',
             "translations.$defaultLocale.locale" => 'required',
             "translations.$defaultLocale.name"   => 'required',
         ];
     }
 
     /**
+     * Get custom attributes for validator errors.
+     *
      * @return array
      */
     public function attributes(): array
@@ -56,9 +50,9 @@ class ProductRequest extends FormRequest
         $defaultLocale = setting_locale_code();
 
         return [
-            'slug'                               => panel_trans('common.slug'),
-            "translations.$defaultLocale.locale" => trans('panel/product.locale'),
-            "translations.$defaultLocale.name"   => trans('panel/product.name'),
+            'position'                           => panel_trans('attribute.position'),
+            "translations.$defaultLocale.locale" => panel_trans('attribute.locale'),
+            "translations.$defaultLocale.name"   => panel_trans('attribute.name'),
         ];
     }
 }

@@ -40,12 +40,10 @@
                   <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
 
                   <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][title]"
-                    value="{{ old('translations.' . $localeCode . '.title', $article->translate($localeCode, 'title')) }}"
-                    required />
+                    value="{{ old('translations.' . $localeCode . '.title', $article->translate($localeCode, 'title')) }}" />
 
                   <x-common-form-rich-text title="{{ __('panel/article.content') }}" name="translations[{{$localeCode}}][content]"
-                    value="{{ old('translations.' . $localeCode . '.content', $article->translate($localeCode, 'content')) }}"
-                    required />
+                    value="{{ old('translations.' . $localeCode . '.content', $article->translate($localeCode, 'content')) }}" />
 
                   <x-common-form-textarea title="{{ __('panel/article.summary') }}" name="translations[{{$localeCode}}][summary]"
                     value="{{ old('translations.' . $localeCode . '.summary', $article->translate($localeCode, 'summary')) }}"
@@ -62,7 +60,7 @@
                     value="{{ old('translations.' . $localeCode . '.meta_keywords', $article->translate($localeCode, 'meta_keywords')) }}"
                     column="article_keywords" :generate="true" />
 
-                  <x-common-form-input title="{{ __('panel/setting.meta_description') }}" name="translations[{{$localeCode}}][meta_description]"
+                  <x-common-form-textarea title="{{ __('panel/setting.meta_description') }}" name="translations[{{$localeCode}}][meta_description]"
                     value="{{ old('translations.' . $localeCode . '.meta_description', $article->translate($localeCode, 'meta_description')) }}"
                     column="article_description" :generate="true" />
                 </div>

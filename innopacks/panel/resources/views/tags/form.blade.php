@@ -26,9 +26,10 @@
                 <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button"
                   data-bs-toggle="collapse" data-bs-target="#data-locale-{{ $localeCode }}"
                   aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="data-locale-{{ $localeCode }}">
-                  <div class="wh-20 me-2">
-                    <img src="{{ image_origin($locale->image) }}" class="img-fluid">
-                  </div>
+                  <div class="d-flex align-items-center wh-20">
+                    <img src="{{ image_origin($locale->image) }}" class="img-fluid {{ default_locale_class($locale->code) }}"
+                        alt="{{ $localeName }}">
+                  </div>&nbsp;
                   {{ $localeName }}
                 </button>
               </h2>
@@ -38,8 +39,7 @@
                   <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
 
                   <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][name]"
-                    value="{{ old('translations.' . $localeCode . '.name', $tag->translate($localeCode, 'name')) }}"
-                    required />
+                    value="{{ old('translations.' . $localeCode . '.name', $tag->translate($localeCode, 'name')) }}" />
 
                 </div>
               </div>

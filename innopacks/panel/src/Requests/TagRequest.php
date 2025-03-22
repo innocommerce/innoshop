@@ -36,13 +36,28 @@ class TagRequest extends FormRequest
             $slugRule = 'required|alpha_dash|unique:tags,slug';
         }
 
+        $defaultLocale = setting_locale_code();
+
         return [
             'slug'     => $slugRule,
             'position' => 'integer',
             'active'   => 'bool',
 
-            'translations.*.locale' => 'required',
-            'translations.*.name'   => 'required',
+            "translations.$defaultLocale.locale" => 'required',
+            "translations.$defaultLocale.name"   => 'required',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function attributes(): array
+    {
+        $defaultLocale = setting_locale_code();
+
+        return [
+            "translations.$defaultLocale.locale" => trans('panel/tag.locale'),
+            "translations.$defaultLocale.name"   => trans('panel/tag.name'),
         ];
     }
 }

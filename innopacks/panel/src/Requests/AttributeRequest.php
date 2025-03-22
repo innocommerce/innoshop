@@ -30,13 +30,27 @@ class AttributeRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'category_id'        => 'integer',
-            'attribute_group_id' => 'integer',
-            'position'           => 'integer',
+        $defaultLocale = setting_locale_code();
 
-            'translations.*.locale' => 'required',
-            'translations.*.name'   => 'required',
+        return [
+            'translations'                       => 'required|array',
+            "translations.$defaultLocale.locale" => 'required',
+            "translations.$defaultLocale.name"   => 'required',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes(): array
+    {
+        $defaultLocale = setting_locale_code();
+
+        return [
+            "translations.$defaultLocale.locale" => panel_trans('attribute.locale'),
+            "translations.$defaultLocale.name"   => panel_trans('attribute.name'),
         ];
     }
 }

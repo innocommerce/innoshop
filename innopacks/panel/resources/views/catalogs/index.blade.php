@@ -31,8 +31,8 @@
         @foreach($catalogs as $item)
         <tr>
         <td>{{ $item->id }}</td>
-        <td>{{ $item->translation->title ?? '' }}</td>
-        <td>{{ $item->parent->translation->title ?? '-' }}</td>
+        <td>{{ $item->fallbackName('title') }}</td>
+        <td>{{ $item->parent ? $item->parent->fallbackName('title') : '-' }}</td>
         <td>{{ $item->slug }}</td>
         <td>{{ $item->position }}</td>
         <td>@include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('catalogs.active', $item->id)])</td>

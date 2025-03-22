@@ -36,14 +36,31 @@ class PageRequest extends FormRequest
             $slugRule = 'required|alpha_dash|unique:pages,slug';
         }
 
-        return [
-            'slug'   => $slugRule,
-            'viewed' => 'integer',
-            'active' => 'bool',
+        $defaultLocale = setting_locale_code();
 
-            'translations.*.locale'  => 'required',
-            'translations.*.title'   => 'required',
-            'translations.*.content' => 'required',
+        return [
+            'slug'     => $slugRule,
+            'key_name' => 'nullable|string',
+            'position' => 'integer',
+            'active'   => 'bool',
+
+            "translations.$defaultLocale.locale"  => 'required',
+            "translations.$defaultLocale.title"   => 'required',
+            "translations.$defaultLocale.content" => 'required',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function attributes(): array
+    {
+        $defaultLocale = setting_locale_code();
+
+        return [
+            "translations.$defaultLocale.locale"  => trans('panel/page.locale'),
+            "translations.$defaultLocale.title"   => trans('panel/page.title'),
+            "translations.$defaultLocale.content" => trans('panel/page.content'),
         ];
     }
 }

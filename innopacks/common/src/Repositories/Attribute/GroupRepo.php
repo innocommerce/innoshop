@@ -11,6 +11,7 @@ namespace InnoShop\Common\Repositories\Attribute;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Attribute\Group;
 use InnoShop\Common\Repositories\BaseRepo;
 use InnoShop\Common\Resources\AttributeGroupSimple;
@@ -38,16 +39,19 @@ class GroupRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $translations = array_values($data['translations'] ?? []);
-
         DB::beginTransaction();
 
         try {
-            $data           = $this->handleData($data);
-            $attributeGroup = new Group($data);
+            $catalogData    = $this->handleData($data);
+            $attributeGroup = new Group;
+            $attributeGroup->fill($catalogData);
             $attributeGroup->saveOrFail();
 
-            $attributeGroup->translations()->createMany($translations);
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $attributeGroup->translations()->createMany($translations);
+            }
+
             DB::commit();
 
             return $attributeGroup;
@@ -64,19 +68,19 @@ class GroupRepo extends BaseRepo
      */
     public function update(mixed $item, $data): mixed
     {
-        $translations = array_values($data['translations'] ?? []);
-
         DB::beginTransaction();
 
         try {
-            $data = $this->handleData($data);
-            $item->update($data);
+            $groupData = $this->handleData($data);
+            $item->fill($groupData);
+            $item->saveOrFail();
 
+            $translations = $this->handleTranslations($data['translations'] ?? []);
             if ($translations) {
                 $item->translations()->delete();
-                $item->saveOrFail();
                 $item->translations()->createMany($translations);
             }
+
             DB::commit();
 
             return $item;
@@ -95,6 +99,27 @@ class GroupRepo extends BaseRepo
         return [
             'position' => $requestData['position'] ?? 0,
         ];
+    }
+
+    /**
+     * Process translations with TranslationHandler
+     *
+     * @param  array  $translations
+     * @return array
+     */
+    private function handleTranslations(array $translations): array
+    {
+        if (empty($translations)) {
+            return [];
+        }
+
+        // Define field mapping for name to description field if needed
+        $fieldMap = [
+            'name' => [],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**

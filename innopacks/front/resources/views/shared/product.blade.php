@@ -1,4 +1,4 @@
-@if($product->translation)
+@if($product->fallbackName())
   <div class="product-grid-item {{ request('style_list') ?? '' }}">
     <div class="image">
       <a href="{{ $product->url }}">
@@ -11,16 +11,16 @@
     </div>
     <div class="product-item-info">
       <div class="product-name">
-        <a href="{{ $product->url }}" data-bs-toggle="tooltip" title="{{ $product->translation->name }}"
+        <a href="{{ $product->url }}" data-bs-toggle="tooltip" title="{{ $product->fallbackName() }}"
            data-placement="top">
-          {{ $product->translation->name }}
+          {{ $product->fallbackName() }}
         </a>
       </div>
 
       @hookinsert('product.list_item.name.after')
 
       @if(request('style_list') == 'list')
-        <div class="sub-product-title">{{ $product->translation->summary }}</div>
+        <div class="sub-product-title">{{ $product->fallbackName('summary') }}</div>
       @endif
 
       <div class="product-bottom">

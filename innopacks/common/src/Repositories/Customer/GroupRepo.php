@@ -11,6 +11,7 @@ namespace InnoShop\Common\Repositories\Customer;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Customer\Group;
 use InnoShop\Common\Repositories\BaseRepo;
 use InnoShop\Common\Resources\CustomerGroupSimple;
@@ -38,42 +39,46 @@ class GroupRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        DB::beginTransaction();
-        try {
-            $group = new Group($this->handleData($data));
-            $group->saveOrFail();
+        $group = new Group;
 
-            $translations = $this->handleTranslations($data);
-            $group->translations()->delete();
-            $group->translations()->createMany($translations);
-            DB::commit();
-
-            return $group;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        return $this->createOrUpdate($group, $data);
     }
 
     /**
-     * @param  $item
+     * @param  mixed  $item
      * @param  $data
      * @return mixed
-     * @throws Exception
+     * @throws Throwable
      */
-    public function update($item, $data): mixed
+    public function update(mixed $item, $data): mixed
+    {
+        return $this->createOrUpdate($item, $data);
+    }
+
+    /**
+     * @param  Group  $group
+     * @param  $data
+     * @return mixed
+     * @throws Throwable
+     */
+    private function createOrUpdate(Group $group, $data): mixed
     {
         DB::beginTransaction();
+
         try {
-            $item->fill($this->handleData($data));
-            $item->saveOrFail();
+            $groupData = $this->handleData($data);
+            $group->fill($groupData);
+            $group->saveOrFail();
 
             $translations = $this->handleTranslations($data);
-            $item->translations()->delete();
-            $item->translations()->createMany($translations);
+            if ($translations) {
+                $group->translations()->delete();
+                $group->translations()->createMany($translations);
+            }
+
             DB::commit();
 
-            return $item;
+            return $group;
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -104,11 +109,23 @@ class GroupRepo extends BaseRepo
     }
 
     /**
-     * @param  $requestData
+     * Process translations with TranslationHandler
+     *
+     * @param  array  $requestData
      * @return array
      */
     private function handleTranslations($requestData): array
     {
-        return array_values($requestData['translations']);
+        if (empty($requestData['translations'])) {
+            return [];
+        }
+
+        // Define field mapping if needed
+        $fieldMap = [
+            'name' => ['description'],
+        ];
+
+        // Process translations using TranslationHandler
+        return TranslationHandler::process($requestData['translations'], $fieldMap);
     }
 }
