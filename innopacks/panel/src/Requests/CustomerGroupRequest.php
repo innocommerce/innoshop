@@ -58,7 +58,7 @@ class CustomerGroupRequest extends FormRequest
             'mini_cost'                          => panel_trans('customer.mini_cost'),
             'discount_rate'                      => panel_trans('customer.discount_rate'),
             "translations.$defaultLocale.locale" => panel_trans('customer.locale'),
-            "translations.$defaultLocale.name"   => panel_trans('customer.name'),
+            "translations.$defaultLocale.name"   => panel_trans('customer.group'),
         ];
     }
 }

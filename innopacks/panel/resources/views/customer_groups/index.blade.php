@@ -30,7 +30,7 @@
           @foreach($groups as $item)
           <tr>
             <td>{{ $item->id }}</td>
-            <td>{{ $item->translation->name ?? '' }}</td>
+            <td>{{ $item->fallbackName() }}</td>
             <td>{{ $item->level }}</td>
             <td>{{ currency_format($item->mini_cost, system_setting('currency')) }}</td>
             <td>{{ $item->discount_rate }}</td>
@@ -68,7 +68,7 @@
 
     const app = createApp({
     setup() {
-    const deleteForm = ref(null); 
+    const deleteForm = ref(null);
 
      const open = (itemId) => {
     ElMessageBox.confirm(
@@ -82,14 +82,14 @@
      )
      .then(() => {
     const deletUrl =urls.base_url +'/customer_groups/'+ itemId;
-    deleteForm.value.action = deletUrl; 
-    deleteForm.value.submit(); 
+    deleteForm.value.action = deletUrl;
+    deleteForm.value.submit();
     })
      .catch(() => {
      });
      };
 
-     return { open, deleteForm }; 
+     return { open, deleteForm };
      }
     });
 

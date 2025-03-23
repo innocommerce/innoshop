@@ -33,7 +33,7 @@
                   <label>
                     <input type="checkbox" name="categories[]" value="{{ $category->id }}"
                       {{ in_array($category->id, old('categories', $product->categories->pluck('id')->toArray())) ? 'checked' : '' }}>
-                    <span class="name">{{ $category->translation->name }}</span>
+                    <span class="name">{{ $category->fallbackName() }}</span>
                   </label>
                 </li>
               @endforeach

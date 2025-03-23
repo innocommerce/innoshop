@@ -79,6 +79,8 @@ class CurrencyRepo extends BaseRepo
     {
         $builder = Currency::query();
 
+        $filters = array_merge($this->filters, $filters);
+
         $name = $filters['name'] ?? '';
         if ($name) {
             $builder->where('name', 'like', "%$name%");
