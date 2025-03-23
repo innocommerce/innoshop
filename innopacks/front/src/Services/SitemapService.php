@@ -133,9 +133,14 @@ class SitemapService extends BaseService
      * @param  $name
      * @param  mixed  $parameters
      * @return string
+     * @throws Exception
      */
     private function frontRoute($locale, $name, mixed $parameters = []): string
     {
+        if (count(locales()) == 1) {
+            return route('front.'.$name, $parameters);
+        }
+
         return route($locale.'.front.'.$name, $parameters);
     }
 }
