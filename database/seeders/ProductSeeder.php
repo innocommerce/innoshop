@@ -24,7 +24,6 @@ class ProductSeeder extends Seeder
         if ($items) {
             Product::query()->truncate();
             Product\Translation::query()->truncate();
-            Product\Image::query()->truncate();
             Product\Category::query()->truncate();
             Product\Sku::query()->truncate();
             foreach ($items as $item) {
@@ -40,6 +39,8 @@ class ProductSeeder extends Seeder
                 'brand_id'     => 1,
                 'spu_code'     => 'galaxy-glow-evening-gown',
                 'slug'         => 'galaxy-glow-evening-gown',
+                'images'       => ['images/demo/product/1.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -125,6 +126,8 @@ class ProductSeeder extends Seeder
                 'brand_id'     => 1,
                 'spu_code'     => 'urban-elite-suit-jacket',
                 'slug'         => 'urban-elite-suit-jacket',
+                'images'       => ['images/demo/product/2.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -148,6 +151,8 @@ class ProductSeeder extends Seeder
             [
                 'brand_id'     => 1,
                 'slug'         => 'dawn-stroll-light-trench',
+                'images'       => ['images/demo/product/3.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -172,6 +177,8 @@ class ProductSeeder extends Seeder
             [
                 'brand_id'     => 1,
                 'slug'         => 'star-orbit-casual-sweater',
+                'images'       => ['images/demo/product/4.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -196,6 +203,8 @@ class ProductSeeder extends Seeder
             [
                 'brand_id'     => 1,
                 'slug'         => 'rainbow-fringe-scarf',
+                'images'       => ['images/demo/product/5.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -220,6 +229,8 @@ class ProductSeeder extends Seeder
             [
                 'brand_id'     => 2,
                 'slug'         => 'minimalist-classic-shirt',
+                'images'       => ['images/demo/product/6.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -244,6 +255,8 @@ class ProductSeeder extends Seeder
             [
                 'brand_id'     => 2,
                 'slug'         => 'retro-high-waist-jeans',
+                'images'       => ['images/demo/product/7.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -268,6 +281,8 @@ class ProductSeeder extends Seeder
             [
                 'brand_id'     => 2,
                 'slug'         => 'elegant-lace-sexy-top',
+                'images'       => ['images/demo/product/8.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
@@ -292,6 +307,8 @@ class ProductSeeder extends Seeder
             [
                 'brand_id'     => 2,
                 'slug'         => 'men-white-sweatsuit',
+                'images'       => ['images/demo/product/9.png'],
+                'active'       => true,
                 'translations' => [
                     [
                         'locale' => 'zh_cn',
