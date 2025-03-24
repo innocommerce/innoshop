@@ -5446,16 +5446,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "8d773a575e446de220dca03d600b2d8e1c1c10ec"
+                "reference": "d33cd9e14326e14a4145c21e600602eaf17cc9e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/8d773a575e446de220dca03d600b2d8e1c1c10ec",
-                "reference": "8d773a575e446de220dca03d600b2d8e1c1c10ec",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/d33cd9e14326e14a4145c21e600602eaf17cc9e7",
+                "reference": "d33cd9e14326e14a4145c21e600602eaf17cc9e7",
                 "shasum": ""
             },
             "require": {
@@ -5524,7 +5524,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v7.2.3"
+                "source": "https://github.com/symfony/cache/tree/v7.2.4"
             },
             "funding": [
                 {
@@ -5540,7 +5540,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-27T11:08:17+00:00"
+            "time": "2025-02-26T09:57:54+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -6281,16 +6281,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "7ce6078c79a4a7afff931c413d2959d3bffbfb8d"
+                "reference": "78981a2ffef6437ed92d4d7e2a86a82f256c6dc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/7ce6078c79a4a7afff931c413d2959d3bffbfb8d",
-                "reference": "7ce6078c79a4a7afff931c413d2959d3bffbfb8d",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/78981a2ffef6437ed92d4d7e2a86a82f256c6dc6",
+                "reference": "78981a2ffef6437ed92d4d7e2a86a82f256c6dc6",
                 "shasum": ""
             },
             "require": {
@@ -6356,7 +6356,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.2.3"
+                "source": "https://github.com/symfony/http-client/tree/v7.2.4"
             },
             "funding": [
                 {
@@ -6372,7 +6372,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-28T15:51:35+00:00"
+            "time": "2025-02-13T10:27:23+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -6726,16 +6726,16 @@
         },
         {
             "name": "symfony/mime",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "2fc3b4bd67e4747e45195bc4c98bea4628476204"
+                "reference": "87ca22046b78c3feaff04b337f33b38510fd686b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/2fc3b4bd67e4747e45195bc4c98bea4628476204",
-                "reference": "2fc3b4bd67e4747e45195bc4c98bea4628476204",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/87ca22046b78c3feaff04b337f33b38510fd686b",
+                "reference": "87ca22046b78c3feaff04b337f33b38510fd686b",
                 "shasum": ""
             },
             "require": {
@@ -6790,7 +6790,7 @@
                 "mime-type"
             ],
             "support": {
-                "source": "https://github.com/symfony/mime/tree/v7.2.3"
+                "source": "https://github.com/symfony/mime/tree/v7.2.4"
             },
             "funding": [
                 {
@@ -6806,7 +6806,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-27T11:08:17+00:00"
+            "time": "2025-02-19T08:51:20+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -8247,16 +8247,16 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v7.2.0",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "1a6a89f95a46af0f142874c9d650a6358d13070d"
+                "reference": "4ede73aa7a73d81506002d2caadbbdad1ef5b69a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/1a6a89f95a46af0f142874c9d650a6358d13070d",
-                "reference": "1a6a89f95a46af0f142874c9d650a6358d13070d",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/4ede73aa7a73d81506002d2caadbbdad1ef5b69a",
+                "reference": "4ede73aa7a73d81506002d2caadbbdad1ef5b69a",
                 "shasum": ""
             },
             "require": {
@@ -8303,7 +8303,7 @@
                 "serialize"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v7.2.0"
+                "source": "https://github.com/symfony/var-exporter/tree/v7.2.4"
             },
             "funding": [
                 {
@@ -8319,7 +8319,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-18T07:58:17+00:00"
+            "time": "2025-02-13T10:27:23+00:00"
         },
         {
             "name": "thenorthmemory/xml",
@@ -8660,16 +8660,16 @@
         },
         {
             "name": "w7corp/easywechat",
-            "version": "6.17.3",
+            "version": "6.17.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/w7corp/easywechat.git",
-                "reference": "42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9"
+                "reference": "ea6460149b20a0a31d614d18c5c8cbe77414c4ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9",
-                "reference": "42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9",
+                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/ea6460149b20a0a31d614d18c5c8cbe77414c4ca",
+                "reference": "ea6460149b20a0a31d614d18c5c8cbe77414c4ca",
                 "shasum": ""
             },
             "require": {
@@ -8678,7 +8678,6 @@
                 "ext-libxml": "*",
                 "ext-openssl": "*",
                 "ext-simplexml": "*",
-                "ext-sodium": "*",
                 "nyholm/psr7": "^1.5",
                 "nyholm/psr7-server": "^1.0",
                 "overtrue/socialite": "^3.5.4|^4.0.1",
@@ -8703,7 +8702,7 @@
                 "mockery/mockery": "^1.4.4",
                 "phpstan/phpstan": "^1.0 | ^2",
                 "phpunit/phpunit": "^9.5",
-                "symfony/var-dumper": "^5.2"
+                "symfony/var-dumper": "^5.2|^6|^7"
             },
             "type": "library",
             "autoload": {
@@ -8731,7 +8730,7 @@
             ],
             "support": {
                 "issues": "https://github.com/w7corp/easywechat/issues",
-                "source": "https://github.com/w7corp/easywechat/tree/6.17.3"
+                "source": "https://github.com/w7corp/easywechat/tree/6.17.5"
             },
             "funding": [
                 {
@@ -8739,7 +8738,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-13T06:28:42+00:00"
+            "time": "2025-03-19T00:52:30+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -11613,7 +11612,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -11627,6 +11626,6 @@
         "ext-pdo": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
