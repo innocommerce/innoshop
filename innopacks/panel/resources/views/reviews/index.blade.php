@@ -22,6 +22,7 @@
             <thead>
             <tr>
               <td>{{ __('panel/review.id') }}</td>
+              <td>{{ __('panel/review.customer') }}</td>
               <td>{{ __('panel/review.product') }}</td>
               <td>{{ __('panel/review.rating') }}</td>
               <td>{{ __('panel/review.review_content') }}</td>
@@ -34,15 +35,20 @@
             @foreach($reviews as $review)
               <tr>
                 <td>{{ $review->id }}</td>
-                <td data-title="product" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    title="{{ sub_string($review->product->translation->name ?? '', 200) }}">
-                  <a href="{{ $review->product->url }}" target="_blank" class="text-decoration-none">
-                    <img src="{{ image_resize($review->product->image ?? '') }}"
-                         alt="{{ $review->product->name ?? '' }}"
-                         class="img-fluid wh-30">
-                    {{ sub_string($review->product->translation->name ?? '', 10) }}
-                  </a>
-                </td>
+                <td>{{ $review->customer->name ?? '-' }}</td>
+                @if($review->product)
+                  <td data-title="product" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                      title="{{ $review->product->fallbackName() }}">
+                    <a href="{{ $review->product->url ?? '' }}" target="_blank" class="text-decoration-none">
+                      <img src="{{ image_resize($review->product->image ?? '') }}"
+                           alt="{{ $review->product->name ?? '' }}"
+                           class="img-fluid wh-30">
+                      {{ sub_string($review->product->fallbackName(), 24) }}
+                    </a>
+                  </td>
+                @else
+                  <td>-</td>
+                @endif
                 <td>
                   <x-front-review :rating="$review['rating']"/>
                 </td>

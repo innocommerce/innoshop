@@ -19,6 +19,7 @@ Route::get('/social/{provider}/callback', [Account\SocialController::class, 'cal
 
 // Upload
 Route::post('/upload/images', [Controllers\UploadController::class, 'images'])->name('upload.images');
+Route::post('/upload/docs', [Controllers\UploadController::class, 'docs'])->name('upload.docs');
 Route::post('/upload/files', [Controllers\UploadController::class, 'files'])->name('upload.files');
 
 // Sitemap

@@ -31,10 +31,9 @@
               <tbody>
               @foreach($reviews as $review)
                 <tr class="review-card-actions" data-id="{{ $review->id }}">
-                  <td data-title="Product" data-bs-toggle="tooltip"
-                  title="{{ sub_string($review->product->translation->name, 30) }}">
+                  <td data-title="Product" data-bs-toggle="tooltip" title="{{ $review->product->translation->name }}">
                     <img src="{{ $review->product->image_url }}" alt="{{ $review->product->name }}" class="img-fluid wh-30">
-                    {{ sub_string($review->product->translation->name, 12) }}
+                    {{ sub_string($review->product->translation->name, 24) }}
                   </td>
                   <td data-title="Rating"><x-front-review :rating="$review['rating']"/></td>
                   <td data-title="content" data-bs-toggle="tooltip"

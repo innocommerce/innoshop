@@ -8,7 +8,8 @@
  */
 
 return [
-    'attribute_value' => 'Attribute Value',
-    'set_attribute'   => 'Set Attribute',
     'attribute'       => 'Attribute',
+    'attribute_value' => 'Attribute Value',
+    'name'            => 'Attribute name',
+    'set_attribute'   => 'Set Attribute',
 ];

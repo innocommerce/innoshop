@@ -34,6 +34,19 @@ class UploadController
      * @param  UploadFileRequest  $request
      * @return mixed
      */
+    public function docs(UploadFileRequest $request): mixed
+    {
+        $data = UploadService::getInstance()->files($request);
+
+        return json_success('上传成功', $data);
+    }
+
+    /**
+     * Upload document files
+     *
+     * @param  UploadFileRequest  $request
+     * @return mixed
+     */
     public function files(UploadFileRequest $request): mixed
     {
         $data = UploadService::getInstance()->files($request);

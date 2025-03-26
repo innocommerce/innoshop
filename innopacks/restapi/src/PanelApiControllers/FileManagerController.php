@@ -11,6 +11,7 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use InnoShop\Panel\Controllers\BaseController;
 use InnoShop\Panel\Requests\UploadFileRequest;
 use InnoShop\RestAPI\Requests\FileRequest;
@@ -29,7 +30,7 @@ class FileManagerController extends BaseController
     {
         try {
             $driver = plugin_setting('file_manager', 'driver');
-            \Log::info('Getting file manager service:', [
+            Log::info('Getting file manager service:', [
                 'driver'     => $driver,
                 'key_exists' => ! empty(plugin_setting('file_manager', 'key')),
                 'endpoint'   => plugin_setting('file_manager', 'endpoint'),
@@ -38,19 +39,19 @@ class FileManagerController extends BaseController
 
             if ($driver === 'oss') {
                 $service = new OSSService;
-                \Log::info('Created OSS service');
+                Log::info('Created OSS service');
 
                 return fire_hook_filter('file_manager.service', $service);
             }
         } catch (Exception $e) {
-            \Log::warning('Failed to initialize OSS service, falling back to local:', [
+            Log::warning('Failed to initialize OSS service, falling back to local:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
         }
 
         // default local file service
-        \Log::info('Created local file service');
+        Log::info('Created local file service');
 
         return fire_hook_filter('file_manager.service', new FileManagerService);
     }
@@ -77,7 +78,7 @@ class FileManagerController extends BaseController
             ],
         ];
 
-        \Log::info('File manager index:', [
+        Log::info('File manager index:', [
             'data'   => $data,
             'config' => [
                 'driver'   => plugin_setting('file_manager', 'driver'),
@@ -133,7 +134,7 @@ class FileManagerController extends BaseController
             return $service->getFiles($baseFolder, $keyword, $sort, $order, $page, $perPage);
 
         } catch (Exception $e) {
-            \Log::error('Get files failed:', [
+            Log::error('Get files failed:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -301,7 +302,7 @@ class FileManagerController extends BaseController
                 throw new Exception(trans('panel::file_manager.invalid_params'));
             }
 
-            \Log::info('Move files request:', [
+            Log::info('Move files request:', [
                 'files'    => $files,
                 'destPath' => $destPath,
             ]);
@@ -311,7 +312,7 @@ class FileManagerController extends BaseController
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
-            \Log::error('Move files failed:', [
+            Log::error('Move files failed:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -383,7 +384,7 @@ class FileManagerController extends BaseController
                 throw new Exception(trans('panel::file_manager.invalid_params'));
             }
 
-            \Log::info('Copy files request:', [
+            Log::info('Copy files request:', [
                 'files'    => $files,
                 'destPath' => $destPath,
             ]);
@@ -393,7 +394,7 @@ class FileManagerController extends BaseController
 
             return json_success(trans('common.updated_success'));
         } catch (Exception $e) {
-            \Log::error('Copy files failed:', [
+            Log::error('Copy files failed:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -407,7 +408,7 @@ class FileManagerController extends BaseController
      *
      * @return mixed
      */
-    public function getStorageConfig()
+    public function getStorageConfig(): mixed
     {
         try {
             $config = [
@@ -420,7 +421,7 @@ class FileManagerController extends BaseController
                 'cdn_domain' => plugin_setting('file_manager', 'cdn_domain', ''),
             ];
 
-            \Log::info('Get storage configs:', [
+            Log::info('Get storage configs:', [
                 'config'   => array_merge($config, ['secret' => '***']),
                 'settings' => [
                     'driver'     => plugin_setting('file_manager', 'driver'),
@@ -434,7 +435,7 @@ class FileManagerController extends BaseController
 
             return json_success('获取存储配置成功', $config);
         } catch (\Exception $e) {
-            \Log::error('获取存储配置失败:', [
+            Log::error('获取存储配置失败:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -461,7 +462,7 @@ class FileManagerController extends BaseController
             $region     = $request->input('region', '');
             $cdn_domain = $request->input('cdn_domain', '');
 
-            \Log::info('Save storage configs:', [
+            Log::info('Save storage configs:', [
                 'request' => [
                     'driver'     => $driver,
                     'key'        => $key,
@@ -514,7 +515,7 @@ class FileManagerController extends BaseController
 
             return json_success('存储配置保存成功', $configData);
         } catch (\Exception $e) {
-            \Log::error('存储配置保存失败:', [
+            Log::error('存储配置保存失败:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);

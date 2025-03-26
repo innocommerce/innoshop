@@ -15,6 +15,7 @@ use InnoShop\Common\Models\OrderReturn;
 use InnoShop\Common\Repositories\Order\ItemRepo;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Repositories\OrderReturnRepo;
+use InnoShop\Common\Resources\OrderReturnHistory;
 use InnoShop\Front\Controllers\BaseController;
 use Throwable;
 
@@ -84,7 +85,7 @@ class OrderReturnController extends BaseController
     {
         $data = [
             'order_return' => $orderReturn,
-            'histories'    => $orderReturn->histories()->orderByDesc('id')->get(),
+            'histories'    => OrderReturnHistory::collection($orderReturn->histories()->get()),
         ];
 
         return read_json_success($data);

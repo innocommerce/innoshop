@@ -126,7 +126,6 @@ class ProductRepo extends BaseRepo
         $item->relations()->delete();
         $item->skus()->delete();
         $item->translations()->delete();
-        $item->videos()->delete();
         $item->delete();
     }
 

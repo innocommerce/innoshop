@@ -43,8 +43,9 @@ class ProductRequest extends FormRequest
             'slug'       => $slugRule,
             'active'     => 'bool',
 
-            "translations.$defaultLocale.locale" => 'required',
-            "translations.$defaultLocale.name"   => 'required',
+            "translations.$defaultLocale.locale"  => 'required',
+            "translations.$defaultLocale.name"    => 'required',
+            "translations.$defaultLocale.content" => 'max:20000',
         ];
     }
 
@@ -56,9 +57,10 @@ class ProductRequest extends FormRequest
         $defaultLocale = setting_locale_code();
 
         return [
-            'slug'                               => panel_trans('common.slug'),
-            "translations.$defaultLocale.locale" => trans('panel/product.locale'),
-            "translations.$defaultLocale.name"   => trans('panel/product.name'),
+            'slug'                                => panel_trans('common.slug'),
+            "translations.$defaultLocale.locale"  => trans('panel/product.locale'),
+            "translations.$defaultLocale.name"    => trans('panel/product.name'),
+            "translations.$defaultLocale.content" => trans('panel/product.content'),
         ];
     }
 }

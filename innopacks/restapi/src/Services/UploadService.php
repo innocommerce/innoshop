@@ -9,6 +9,7 @@
 
 namespace InnoShop\RestAPI\Services;
 
+use InnoShop\Front\Requests\UploadDocRequest;
 use InnoShop\Front\Requests\UploadFileRequest;
 use InnoShop\Front\Requests\UploadImageRequest;
 use InnoShop\Front\Services\BaseService;
@@ -26,6 +27,25 @@ class UploadService extends BaseService
         $image    = $request->file('image');
         $type     = $request->file('type', 'common');
         $filePath = $image->store("/{$type}", 'upload');
+        $realPath = "upload/$filePath";
+
+        return [
+            'url'   => asset($realPath),
+            'value' => $realPath,
+        ];
+    }
+
+    /**
+     * Upload document files
+     *
+     * @param  UploadDocRequest  $request
+     * @return array
+     */
+    public function docs(UploadDocRequest $request): array
+    {
+        $file     = $request->file('file');
+        $type     = $request->file('type', 'docs');
+        $filePath = $file->store("/{$type}", 'upload');
         $realPath = "upload/$filePath";
 
         return [

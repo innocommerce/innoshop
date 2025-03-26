@@ -23,31 +23,22 @@ $.ajaxSetup({
 });
 window.apiToken = $.apiToken = apiToken;
 if (window === window.parent) {
-  //console.log('apiToken:' + apiToken);
 }
 
 const processFileManagerUrl = (file, config) => {
   const isOss = config?.driver === "oss";
-
-  // 优先使用文件的完整 URL
   if (file.url && file.url.startsWith("http")) {
-    console.log("Using original URL:", file.url);
     return file.url;
   }
-
-  // 使用 path 构建 URL
   const filePath = file.path || file.url;
 
   if (isOss) {
     const endpoint = config.endpoint;
-    // 确保 endpoint 不包含协议前缀
     const cleanEndpoint = endpoint.replace(/^https?:\/\//, "");
     const newUrl = `https://${cleanEndpoint}/${filePath.replace(/^\//, "")}`;
-    console.log("Generated OSS URL:", newUrl);
     return newUrl;
   } else {
     const newUrl = config.baseUrl + "/" + filePath.replace(/^\//, "");
-    console.log("Generated local URL:", newUrl);
     return newUrl;
   }
 };
@@ -161,8 +152,6 @@ $(function () {
       });
     }
   );
-
-  // 添加文件管理器 iframe 方法到 inno 对象
   window.inno.fileManagerIframe = function (callback, options = {}) {
     const defaultOptions = {
       type: "image",
@@ -171,16 +160,11 @@ $(function () {
 
     const finalOptions = { ...defaultOptions, ...options };
 
-    // 设置回调函数
     window.fileManagerCallback = function (file) {
-      // 获取配置 - 从当前 iframe 或父窗口获取
       let config;
-
-      // 如果是在 iframe 中
       if (window !== window.parent) {
         config = window.fileManagerConfig;
       } else {
-        // 如果是在父窗口中，尝试从打开的 iframe 获取配置
         const iframe = document.querySelector(".layui-layer-iframe iframe");
         if (iframe) {
           try {
@@ -190,20 +174,9 @@ $(function () {
           }
         }
       }
-
-      console.log(
-        "Current window is:",
-        window === window.parent ? "parent" : "iframe"
-      );
-      console.log("File manager config:", config);
-
-      // 如果没有配置，记录错误并返回原始文件
       if (!config) {
-        console.error("No file manager config found!");
         return file;
       }
-
-      // 如果是数组（多选模式）
       if (Array.isArray(file)) {
         const processedFiles = file.map((f) => ({
           ...f,
@@ -215,21 +188,16 @@ $(function () {
         }
         return processedFiles;
       }
-
-      // 单个文件处理
       const processedFile = {
         ...file,
         url: processFileManagerUrl(file, config),
       };
-
-      // 调用原始回调函数并返回处理后的文件
       if (typeof callback === "function") {
         callback(processedFile);
       }
       return processedFile;
     };
 
-    // 打开文件管理器
     layer.open({
       type: 2,
       title: "文件管理器",
@@ -256,14 +224,12 @@ const tinymceInit = () => {
     branding: false,
     height: 400,
     convert_urls: false,
-    // document_base_url: 'ssssss',
     inline: false,
     relative_urls: false,
     plugins: "link lists fullscreen table hr wordcount image imagetools code",
     menubar: "",
     toolbar:
       "undo redo | toolbarImageButton | lineheight | bold italic underline strikethrough | forecolor backcolor | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify numlist bullist formatpainter removeformat charmap emoticons | preview template link anchor table toolbarImageUrlButton fullscreen code",
-    // contextmenu: "link image imagetools table",
     toolbar_items_size: "small",
     image_caption: true,
     imagetools_toolbar: "",
@@ -291,9 +257,55 @@ const tinymceInit = () => {
           );
         },
       });
+      ed.on("paste", function (e) {
+        const clipboardData = e.clipboardData;
+        if (clipboardData && clipboardData.items) {
+          for (let i = 0; i < clipboardData.items.length; i++) {
+            const item = clipboardData.items[i];
+
+            if (item.type.indexOf("image") !== -1) {
+              e.preventDefault();
+              const file = item.getAsFile();
+              const formData = new FormData();
+              formData.append("file", file);
+              formData.append("path", "/");
+              formData.append("type", "images");
+
+              layer.load(2, { shade: [0.3, "#fff"] });
+
+              axios
+                .post("api/panel/file_manager/upload", formData)
+                .then((response) => {
+                  if (response.data.url) {
+                    ed.insertContent(
+                      `<img src="${response.data.url}" class="img-fluid" />`
+                    );
+                  } else {
+                    throw new Error("Upload response missing URL");
+                  }
+                })
+                .catch((error) => {
+                  if (error.response) {
+                    errorMessage =
+                      error.response.data.message ||
+                      error.response.data.error ||
+                      errorMessage;
+                  } else {
+                    errorMessage = error.message;
+                  }
+                  layer.msg(errorMessage, { icon: 2 });
+                })
+                .finally(() => {
+                  layer.closeAll("loading");
+                });
+
+              break;
+            }
+          }
+        }
+      });
       ed.on("input", function () {
         tinymce.triggerSave();
-        // console.log('Current content:', ed.getContent());
       });
     },
   });

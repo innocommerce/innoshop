@@ -54,6 +54,7 @@ class FileManagerService implements FileManagerInterface
 
     /**
      * Get files list
+     * @throws Exception
      */
     public function getFiles(string $baseFolder, string $keyword = '', string $sort = 'created', string $order = 'desc', int $page = 1, int $perPage = 20): array
     {
@@ -523,6 +524,12 @@ class FileManagerService implements FileManagerInterface
         $mime = '';
         if (file_exists($realPath)) {
             $mime = mime_content_type($realPath);
+        }
+
+        if (str_starts_with($mime, 'application/')) {
+            $path = 'images/panel/doc.png';
+        } elseif (str_starts_with($mime, 'video/')) {
+            $path = 'images/panel/video.png';
         }
 
         return [

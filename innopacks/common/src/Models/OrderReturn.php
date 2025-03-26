@@ -59,7 +59,7 @@ class OrderReturn extends BaseModel
      */
     public function histories(): HasMany
     {
-        return $this->hasMany(History::class, 'order_return_id', 'id');
+        return $this->hasMany(History::class, 'order_return_id', 'id')->orderByDesc('id');
     }
 
     /**

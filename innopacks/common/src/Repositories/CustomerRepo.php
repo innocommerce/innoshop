@@ -23,7 +23,7 @@ class CustomerRepo extends BaseRepo
      */
     public static function getCriteria(): array
     {
-        return [
+        $criteria = [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/customer.name')],
             ['name' => 'email', 'type' => 'input', 'label' => trans('panel/customer.email')],
             ['name'       => 'customer_group_id', 'label' => trans('panel/customer.group'), 'type' => 'select',
@@ -33,6 +33,8 @@ class CustomerRepo extends BaseRepo
             ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/customer.locale')],
             ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
+
+        return fire_hook_filter('repo.customer.criteria', $criteria);
     }
 
     /**

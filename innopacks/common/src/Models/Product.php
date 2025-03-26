@@ -27,9 +27,8 @@ class Product extends BaseModel
     use HasPackageFactory, Replicate, Translatable;
 
     protected $fillable = [
-        'spu_code',
         'brand_id', 'images', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
-        'active', 'weight', 'weight_class', 'sales', 'viewed',
+        'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed',
     ];
 
     protected $casts = [
@@ -138,6 +137,14 @@ class Product extends BaseModel
     public function favCustomers(): BelongsToMany
     {
         return $this->belongsToMany(Customer::class, 'customer_favorites', 'product_id', 'customer_id');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function totalQuantity(): int
+    {
+        return (int) $this->skus->sum('quantity');
     }
 
     /**

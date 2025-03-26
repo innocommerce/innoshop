@@ -28,9 +28,10 @@
                 <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button"
                   data-bs-toggle="collapse" data-bs-target="#data-locale-{{ $localeCode }}"
                   aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="data-locale-{{ $localeCode }}">
-                  <div class="wh-20 me-2">
-                    <img src="{{ image_origin($locale->image) }}" class="img-fluid">
-                  </div>
+                  <div class="d-flex align-items-center wh-20">
+                    <img src="{{ image_origin($locale->image) }}" class="img-fluid {{ default_locale_class($locale->code) }}"
+                         alt="{{ $localeName }}">
+                  </div>&nbsp;
                   {{ $localeName }}
                 </button>
               </h2>

@@ -8,7 +8,8 @@
  */
 
 return [
-    'attribute_value' => 'ค่าคุณลักษณะ',
-    'set_attribute'   => 'ตั้งค่าคุณลักษณะ',
     'attribute'       => 'คุณลักษณะ',
+    'attribute_value' => 'ค่าคุณลักษณะ',
+    'name'            => 'ชื่อคุณสมบัติ',
+    'set_attribute'   => 'ตั้งค่าคุณลักษณะ',
 ];

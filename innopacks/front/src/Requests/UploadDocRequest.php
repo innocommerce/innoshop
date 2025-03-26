@@ -11,7 +11,7 @@ namespace InnoShop\Front\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadFileRequest extends FormRequest
+class UploadDocRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,14 +30,8 @@ class UploadFileRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (is_admin()) {
-            $rule = 'required|image|mimes:jpg,png,jpeg,gif,svg,webp,zip,doc,docx,xls,xlsx,ppt,pptx,pdf,mp4|max:4096';
-        } else {
-            $rule = 'required|image|mimes:jpg,png,jpeg,gif,webp,zip,doc,docx,xls,xlsx,ppt,pptx,pdf,mp4|max:2048';
-        }
-
         return [
-            'file' => $rule,
+            'file' => 'required|file|mimes:zip,doc,docx,xls,xlsx,ppt,pptx,pdf|max:8192',
             'type' => 'required|alpha_dash',
         ];
     }

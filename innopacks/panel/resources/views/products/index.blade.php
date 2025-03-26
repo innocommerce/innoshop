@@ -47,7 +47,7 @@
               @if($product->isMultiple()) &nbsp;<span class="text-bg-success px-1">M</span>@endif
             </td>
             <td>{{ currency_format($product->masterSku->price ?? 0) }}</td>
-            <td>{{ $product->masterSku->quantity ?? 0 }}</td>
+            <td>{{ $product->totalQuantity() }}</td>
             <td>{{ $product->created_at }}</td>
             <td>@include('panel::shared.list_switch', ['value' => $product->active, 'url' =>
               panel_route('products.active', $product->id)])</td>

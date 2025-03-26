@@ -19,7 +19,7 @@
           </div>
           <div class="card-body">
             <x-common-form-input title="{{ __('panel/common.name') }}" :multiple="true" name="name"
-                                 :value="old('translations', $attribute->translations)" required
+                                 :value="old('translations', $attribute->translations)"
                                  placeholder="{{ __('panel/common.name') }}"/>
 
             <x-common-form-select title="{{ __('panel/menu.attribute_groups') }}" name="attribute_group_id"

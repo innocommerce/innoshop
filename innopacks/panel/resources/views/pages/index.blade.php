@@ -30,7 +30,7 @@
           @foreach($pages as $item)
           <tr>
             <td>{{ $item->id }}</td>
-            <td>{{ $item->translation->title ?? '' }}</td>
+            <td>{{ $item->fallbackName('title') }}</td>
             <td>{{ $item->slug }}</td>
             <td>{{ $item->viewed }}</td>
             <td>@include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('pages.active',

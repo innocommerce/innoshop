@@ -238,7 +238,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->index('category_id')->comment('Category ID');
             $table->string('locale')->comment('Locale Code');
             $table->string('name')->comment('Name');
-            $table->text('content')->comment('Content');
+            $table->longText('content')->comment('Content');
             $table->string('meta_title')->nullable()->comment('Meta Title');
             $table->text('meta_description')->nullable()->comment('meta  Translation');
             $table->string('meta_keywords')->nullable()->comment('Meta Keywords');

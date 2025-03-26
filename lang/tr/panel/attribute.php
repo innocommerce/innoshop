@@ -8,7 +8,8 @@
  */
 
 return [
-    'attribute_value' => 'Öznitelik Değeri',
-    'set_attribute'   => 'Öznitelik Ayarla',
     'attribute'       => 'Öznitelik',
+    'attribute_value' => 'Öznitelik Değeri',
+    'name'            => 'Mülkün adı',
+    'set_attribute'   => 'Öznitelik Ayarla',
 ];

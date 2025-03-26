@@ -20,6 +20,7 @@ use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\TaxClassRepo;
 use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Panel\Requests\ProductRequest;
+use Throwable;
 
 class ProductController extends BaseController
 {
@@ -53,7 +54,7 @@ class ProductController extends BaseController
     /**
      * @param  ProductRequest  $request
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(ProductRequest $request): RedirectResponse
     {
@@ -111,7 +112,7 @@ class ProductController extends BaseController
      * @param  ProductRequest  $request
      * @param  Product  $product
      * @return RedirectResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
@@ -123,7 +124,7 @@ class ProductController extends BaseController
                 ->with('instance', $product)
                 ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
-            return redirect(panel_route('products.index'))
+            return redirect(panel_route('products.edit', $product))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
         }

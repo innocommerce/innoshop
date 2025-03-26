@@ -30,8 +30,8 @@
           @foreach($attributes as $item)
           <tr>
             <td>{{ $item->id }}</td>
-            <td>{{ $item->translation->name ?? '' }}</td>
-            <td>{{ $item->group->translation->name ?? '' }}</td>
+            <td>{{ $item->fallbackName() }}</td>
+            <td>{{ $item->group ? $item->group->fallbackName() : '' }}</td>
             <td>{{ $item->position }}</td>
             <td>{{ $item->created_at }}</td>
             <td>
@@ -72,7 +72,7 @@
 
        const app = createApp({
        setup() {
-       const deleteForm = ref(null); 
+       const deleteForm = ref(null);
 
        const open = (index) => {
        ElMessageBox.confirm(
@@ -87,14 +87,14 @@
        .then(() => {
        const deleteUrl=urls.base_url+'/attributes/' +index;
        deleteForm.value.action=deleteUrl;
-       deleteForm.value.submit(); 
+       deleteForm.value.submit();
       })
        .catch(() => {
-  
+
        });
        };
 
-       return { open, deleteForm }; 
+       return { open, deleteForm };
          }
         });
 

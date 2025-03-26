@@ -9,40 +9,21 @@
 
 namespace InnoShop\Common\Models\Attribute;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Models\BaseModel;
+use InnoShop\Common\Traits\Translatable;
 
 class Group extends BaseModel
 {
+    use Translatable;
+
     protected $table = 'attribute_groups';
 
     protected $fillable = [
         'position',
     ];
 
-    /**
-     * Define translations relationship
-     *
-     * @return HasMany
-     */
-    public function translations(): HasMany
+    public function getForeignKey(): string
     {
-        $class = \InnoShop\Common\Models\Attribute\Group\Translation::class;
-
-        return $this->hasMany($class, 'attribute_group_id', 'id');
-    }
-
-    /**
-     * Locale translation object
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    public function translation(): mixed
-    {
-        $class = \InnoShop\Common\Models\Attribute\Group\Translation::class;
-
-        return $this->hasOne($class, 'attribute_group_id', 'id')
-            ->where('locale', locale_code());
+        return 'attribute_group_id';
     }
 }

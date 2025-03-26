@@ -1992,25 +1992,53 @@
           this.loadFiles();
         },
 
-        // 上传前验证
         beforeUpload(file) {
-          // 验证文件类型
           const isImage = ['image/jpeg', 'image/png', 'image/gif'].includes(file.type);
-          if (!isImage) {
-            this.$message.error('只能上传图片文件！');
+          const isVideo = ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type)
+          const isDoc = ['application/pdf', 'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+          ].includes(file.type)
+          if (!isImage && !isVideo && !isDoc) {
+            this.$message.error('只能上传图片或视频文件！');
             return false;
           }
 
-          // 验证文件大小（默认限制 8MB）
           const isLt2M = file.size / 1024 / 1024 < 8;
           if (!isLt2M) {
-            this.$message.error('图片大小不能超过 8MB！');
+            this.$message.error('文件大小不能超过 8MB！');
             return false;
           }
-
-          // 显示裁剪对话框
-          this.cropImage(file);
-          return false; // 阻止自动上传
+          if (isVideo || isDoc) {
+            const formData = new FormData();
+            if (isVideo) {
+              formData.append('file', file);
+              formData.append('path', this.uploadData.path);
+              formData.append('type', 'videos');
+            } else {
+              formData.append('file', file);
+              formData.append('path', this.uploadData.path);
+              formData.append('type', 'application');
+            }
+            http.post('file_manager/upload', formData)
+              .then(res => {
+                if (res.success) {
+                  this.$message.success('上传成功');
+                  this.uploadDialog.visible = false;
+                  this.loadFiles();
+                } else {
+                  this.$message.error(res.message || '上传失败');
+                }
+              })
+              .catch(err => {
+                this.$message.error('上传失败：' + err.message);
+              });
+            return false;
+          } else {
+            this.cropImage(file);
+            return false;
+          }
         },
 
         cropImage(file) {

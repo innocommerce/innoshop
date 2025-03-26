@@ -25,6 +25,7 @@
             <td>{{ __('panel/customer.from') }}</td>
             <td>{{ __('panel/customer.group') }}</td>
             <td>{{ __('panel/customer.locale') }}</td>
+            @hookinsert('panel.product.index.thead.bottom')
             <td>{{ __('panel/common.created_at') }}</td>
             <td>{{ __('panel/common.active') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
@@ -43,6 +44,7 @@
             <td>{{ $item->from }}</td>
             <td>{{ $item->customerGroup->translation->name ?? '-' }}</td>
             <td>{{ $item->locale }}</td>
+            @hookinsert('panel.product.index.tbody.bottom', $item)
             <td>{{ $item->created_at }}</td>
             <td>
               @include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('customers.active',
@@ -85,7 +87,7 @@
 
       const app = createApp({
       setup() {
-     const deleteForm = ref(null); 
+     const deleteForm = ref(null);
 
      const open = (index) => {
        ElMessageBox.confirm(
@@ -100,13 +102,13 @@
      .then(() => {
       const deleteUrl = urls.base_url+'/customers/'+index;
       deleteForm.value.action=deleteUrl;
-      deleteForm.value.submit(); 
+      deleteForm.value.submit();
       })
      .catch(() => {
      });
      };
 
-     return { open, deleteForm }; 
+     return { open, deleteForm };
        }
         });
 
