@@ -25,13 +25,16 @@ class ProductDetail extends JsonResource
     public function toArray(Request $request): array
     {
         $sku = $this->masterSku;
+        if (empty($sku)) {
+            throw new Exception('Empty SKU for '.$this->id);
+        }
 
         $images = [];
         foreach ($this->images as $image) {
             $images[] = image_resize($image, 600, 600);
         }
 
-        $skuImagePath = $sku->image ?? '';
+        $skuImagePath = $sku->image;
         if ($skuImagePath) {
             $imageUrl = image_resize($skuImagePath, 600, 600);
             if (! in_array($imageUrl, $images)) {
@@ -47,7 +50,7 @@ class ProductDetail extends JsonResource
             'name'                => $this->translation->name,
             'summary'             => $this->translation->summary,
             'content'             => $this->translation->content,
-            'image_small'         => image_resize($sku->image ?? ($this->image ?? '')),
+            'image_small'         => $sku->getImageUrl(),
             'images'              => $images,
             'price_format'        => $sku->price_format,
             'origin_price_format' => $sku->origin_price_format,

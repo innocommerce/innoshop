@@ -26,7 +26,9 @@ class FavoriteItem extends JsonResource
     {
         $product = $this->product;
         $sku     = $product->masterSku;
-        $path    = $sku->image ?? ($product->image ?? '');
+        if (empty($sku)) {
+            throw new Exception('Empty SKU for '.$this->id);
+        }
 
         return [
             'id'                  => $this->id,
@@ -36,8 +38,8 @@ class FavoriteItem extends JsonResource
             'url'                 => $product->url,
             'name'                => $product->translation->name,
             'summary'             => $product->translation->summary,
-            'image_small'         => image_resize($path),
-            'image_big'           => image_resize($path, 600, 600),
+            'image_small'         => $sku->getImageUrl(),
+            'image_big'           => $sku->getImageUrl(600, 600),
             'price_format'        => $sku->price_format,
             'origin_price_format' => $sku->origin_price_format,
         ];

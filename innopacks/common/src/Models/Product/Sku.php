@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models\Product;
 
+use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Models\BaseModel;
@@ -83,6 +84,36 @@ class Sku extends BaseModel
         $data = fire_hook_filter('model.sku.final_price', $data);
 
         return $data['price'];
+    }
+
+    /**
+     * Get image path from SKU or SPU.
+     *
+     * @return string
+     */
+    public function getImagePath(): string
+    {
+        $skuImage = $this->image;
+        if ($skuImage) {
+            return $skuImage;
+        }
+
+        return $this->product->image ?? '';
+    }
+
+    /**
+     * Get image url form SKU or SPU.
+     *
+     * @param  int  $width
+     * @param  int  $height
+     * @return string
+     * @throws Exception
+     */
+    public function getImageUrl(int $width = 100, int $height = 100): string
+    {
+        $imagePath = $this->getImagePath();
+
+        return image_resize($imagePath, $width, $height);
     }
 
     /**
