@@ -1,4 +1,133 @@
 export default {
+  getTranslate() {
+    $("#translate-button").click(function () {
+      const source_locale = $("#source-locale").val();
+      const input = $(`input[data-locale="${source_locale}"]`);
+
+      const text = input.val();
+
+      axios
+        .post(`${urls.base_url}/translations/translate`, {
+          source: source_locale,
+          target: $("#target-locale").val(),
+          text: text,
+        })
+        .then(function (res) {
+          res.data.forEach(function (item) {
+            const target_input = $(
+              `input[name="translations[${item.locale}][name]"]`
+            );
+            target_input.val(item.result);
+          });
+        })
+        .catch(function (err) {
+          inno.alert({
+            msg: err.response.data.message,
+            type: "danger",
+          });
+        });
+    });
+
+    $("#translate-tab").click(function () {
+      const source_tab_code = $("#source-tab").val();
+      const textarea = $(
+        `textarea[name="translations[${source_tab_code}][content]"]`
+      );
+      const editor_id = textarea.attr("id");
+      const editor = tinymce.get(editor_id);
+
+      tinymce.triggerSave();
+      let content = editor.getContent();
+      axios
+        .post(`${urls.base_url}/translations/translate`, {
+          source: source_tab_code,
+          target: $("#target-tab").val(),
+          text: content,
+        })
+        .then(function (res) {
+          res.data.forEach((item) => {
+            const inputs = $(`input[data-locale="${item.locale}"]`);
+            inputs.each(function () {
+              const rich_text_editor = tinymce.get(`content-${item.locale}`);
+              if (rich_text_editor) {
+                rich_text_editor.setContent(item.result);
+              }
+            });
+          });
+        })
+        .catch(function (err) {
+          inno.alert({
+            msg: err.response.data.message,
+            type: "danger",
+          });
+        });
+    });
+
+    $(".translate-submit").click(function () {
+      const localeCodeContainer = $(this).closest(".form-row");
+
+      const selectElement = $(this)
+        .closest("div")
+        .next("div")
+        .find("select.form-select");
+      const selectedOptionValue = selectElement.val();
+      const textarea = localeCodeContainer.find("textarea");
+      const inputarea = localeCodeContainer.find("input");
+
+      let current_source;
+      // 首先尝试从locale-code的data属性获取
+      const localeCodeData = $(this)
+        .closest(".locale-code")
+        .data("locale-code");
+      if (localeCodeData && localeCodeData !== "undefined") {
+        current_source = localeCodeData;
+      } else {
+        // 如果data属性不存在或为undefined，则从输入框的name属性中获取
+        const inputName = textarea.length
+          ? textarea.attr("name")
+          : inputarea.attr("name");
+        const matches = inputName.match(/translations\[(.*?)\]/);
+        current_source = matches ? matches[1] : $(".source-locale").val();
+      }
+
+      let textareaValue;
+      let currentTextareaName;
+      if (textarea.is("textarea")) {
+        textareaValue = textarea.val();
+        currentTextareaName = textarea.attr("name");
+      } else {
+        textareaValue = inputarea.val(); // 赋值
+        currentTextareaName = inputarea.attr("name"); // 赋值
+      }
+      axios
+        .post(`${urls.base_url}/translations/translate`, {
+          source: current_source,
+          target: selectedOptionValue,
+          text: textareaValue,
+        })
+        .then(function (res) {
+          res.data.forEach(function (item) {
+            const targetInputSelector = currentTextareaName.replace(
+              `[${current_source}]`,
+              `[${item.locale}]`
+            );
+            if (textarea.is("textarea")) {
+              $('textarea[name="' + targetInputSelector + '"]').val(
+                item.result
+              );
+            } else {
+              $('input[name="' + targetInputSelector + '"]').val(item.result);
+            }
+          });
+        })
+        .catch(function (err) {
+          inno.alert({
+            msg: err.response.data.message,
+            type: "danger",
+          });
+        });
+    });
+  },
   randomString(length = 32) {
     let str = "";
     const chars =
@@ -69,6 +198,7 @@ export default {
     formData.append("image", file);
     formData.append("type", _self.parents(".is-up-file").data("type"));
     _self.find(".img-loading").removeClass("d-none");
+
     axios
       .post(urls.upload_images, formData, {})
       .then(function (res) {

@@ -39,7 +39,7 @@
                   <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
 
                   <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][name]"
-                    value="{{ old('translations.' . $localeCode . '.name', $tag->translate($localeCode, 'name')) }}" />
+                    :translate="true" value="{{ old('translations.' . $localeCode . '.name', $tag->translate($localeCode, 'name')) }}" />
 
                 </div>
               </div>

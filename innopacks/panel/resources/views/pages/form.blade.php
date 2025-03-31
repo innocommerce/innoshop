@@ -40,10 +40,10 @@
               <div id="data-locale-{{ $localeCode }}"
                 class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" data-bs-parent="#data-locales">
                 <div class="accordion-body">
-                  <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
+                  <input  name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
 
                   <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][title]"
-                    value="{{ old('translations.' . $localeCode . '.title', $page->translate($localeCode, 'title')) }}"/>
+                    :translate="true"  value="{{ old('translations.' . $localeCode . '.title', $page->translate($localeCode, 'title')) }}"/>
 
                   <x-panel::form.row title="{{ __('panel/article.content') }}" width="900">
                     <ul class="nav nav-tabs mb-3 code-tabs" role="tablist">
@@ -73,15 +73,15 @@
                   </x-panel::form.row>
 
                   <x-common-form-input title="{{ __('panel/setting.meta_title') }}" name="translations[{{$localeCode}}][meta_title]"
-                    value="{{ old('translations.' . $localeCode . '.meta_title', $page->translate($localeCode, 'meta_title')) }}"
+                    :translate="true"  value="{{ old('translations.' . $localeCode . '.meta_title', $page->translate($localeCode, 'meta_title')) }}"
                      />
 
                   <x-common-form-input title="{{ __('panel/setting.meta_keywords') }}" name="translations[{{$localeCode}}][meta_keywords]"
-                    value="{{ old('translations.' . $localeCode . '.meta_keywords', $page->translate($localeCode, 'meta_keywords')) }}"
+                    :translate="true"  value="{{ old('translations.' . $localeCode . '.meta_keywords', $page->translate($localeCode, 'meta_keywords')) }}"
                      />
 
                   <x-common-form-input title="{{ __('panel/setting.meta_description') }}" name="translations[{{$localeCode}}][meta_description]"
-                    value="{{ old('translations.' . $localeCode . '.meta_description', $page->translate($localeCode, 'meta_description')) }}"
+                    :translate="true"  value="{{ old('translations.' . $localeCode . '.meta_description', $page->translate($localeCode, 'meta_description')) }}"
                      />
                 </div>
               </div>

@@ -11,7 +11,7 @@
               {{ __('panel/product.translate') }}
             </button>
           </div>
-          <div class="me-3">
+          <div>
             <select class="form-select form-select-sm  ">
               <option value="all">{{ __('panel/product.other_all') }}</option>
               @foreach (locales() as $locale)
@@ -21,7 +21,7 @@
           </div>
         @endif
         @if ($generate ?? false)
-          <div>
+          <div class="ms-3">
             <a class="btn btn-success btn-sm ai-generate"
                data-column="{{ $column ?? '' }}">{{ __('panel/common.ai_generate') }}</a>
           </div>

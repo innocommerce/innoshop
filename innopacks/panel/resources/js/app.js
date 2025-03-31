@@ -54,7 +54,7 @@ $(function () {
     url.searchParams.set("tab", dataBsTarget.replace("#", ""));
     window.history.pushState({}, "", url.toString());
   });
-
+  inno.getTranslate();
   const tab = inno.getQueryString("tab");
   if (tab) {
     if ($(`a[href="#${tab}"]`).length) {
