@@ -22,6 +22,7 @@
             <td>{{ __('panel/admin.name') }}</td>
             <td>{{ __('panel/admin.email') }}</td>
             <td>{{ __('panel/admin.locale') }}</td>
+            <td>{{ __('panel/admin.roles') }}</td>
             <td>{{ __('panel/admin.active') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
           </tr>
@@ -33,6 +34,7 @@
             <td>{{ $item->name }}</td>
             <td>{{ $item->email }}</td>
             <td>{{ $item->locale }}</td>
+            <td>{{ $item->getRoleLabel() }}</td>
             <td>@include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('admins.active',
               $item->id)])</td>
             <td>
@@ -83,7 +85,7 @@
       )
       .then(() => {
       const deleteUrl =urls.base_url+'/admins/'+index;
-      deleteForm.value.action=deleteUrl; 
+      deleteForm.value.action=deleteUrl;
       deleteForm.value.submit();
       })
       .catch(() => {

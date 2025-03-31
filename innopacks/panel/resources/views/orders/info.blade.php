@@ -37,8 +37,8 @@
           <th>{{ __('panel/order.number') }}</th>
           <th>{{ __('panel/order.created_at') }}</th>
           <th>{{ __('panel/order.total') }}</th>
-          <th>{{ __('panel/order.billing_method_code') }}</th>
-          <th>{{ __('panel/order.shipping_method_code') }}</th>
+          <th>{{ __('panel/order.billing_method_name') }}</th>
+          <th>{{ __('panel/order.shipping_method_name') }}</th>
           <th>{{ __('panel/common.status') }}</th>
         </tr>
         </thead>
@@ -47,9 +47,9 @@
           <td>{{ $order->number }}</td>
           <td>{{ $order->created_at }}</td>
           <td>{{ $order->total_format }}</td>
-          <td>{{ $order->billing_method_code }}</td>
-          <td>{{ $order->shipping_method_code }}</td>
-          <td>{{ $order->status }}</td>
+          <td>{{ $order->billing_method_name }}</td>
+          <td>{{ $order->shipping_method_name }}</td>
+          <td><span class="badge bg-{{$order->status_color}}">{{ $order->status_format }}</span></td>
         </tr>
         </tbody>
       </table>

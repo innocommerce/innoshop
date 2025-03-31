@@ -35,7 +35,7 @@ return [
     'completed'                  => '已完成',
     'confirm'                    => '确认',
     'create_time'                => '创建时间',
-    'created'                    => '创建',
+    'created'                    => '已创建',
     'created_at'                 => '下单时间',
     'currency_code'              => '货币',
     'currency_value'             => '汇率',

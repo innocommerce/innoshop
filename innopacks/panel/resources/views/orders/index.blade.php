@@ -20,8 +20,8 @@
             <td>{{ __('panel/order.customer_name') }}</td>
             <td>{{ __('panel/order.shipping_method_name') }}</td>
             <td>{{ __('panel/order.billing_method_name') }}</td>
-            <td>{{ __('panel/order.status') }}</td>
             <td>{{ __('panel/order.total') }}</td>
+            <td>{{ __('panel/order.status') }}</td>
             <td>{{ __('panel/order.created_at') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
           </tr>
@@ -40,11 +40,13 @@
                   @endforeach
                 </div>
               </td>
-              <td>{{ $item->customer_name }}</td>
+              <td><a href="{{ panel_route('customers.edit', $item->customer_id) }}" class="text-decoration-none" target="_blank">
+                  {{ $item->customer_name }}
+                </a></td>
               <td>{{ $item->shipping_method_name }}</td>
               <td>{{ $item->billing_method_name }}</td>
-              <td>{{ $item->status_format }}</td>
               <td>{{ $item->total_format }}</td>
+              <td><span class="badge bg-{{$item->status_color}}">{{ $item->status_format }}</span></td>
               <td>{{ $item->created_at }}</td>
               <td>
                 <a href="{{ panel_route('orders.show', [$item->id]) }}" class="btn btn-sm btn-outline-primary">{{ __('panel/common.view') }}</a>

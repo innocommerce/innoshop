@@ -12,6 +12,7 @@ namespace InnoShop\Common\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use InnoShop\Panel\Notifications\ForgottenNotification;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -27,6 +28,27 @@ class Admin extends AuthUser
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * @return Collection
+     */
+    public function getRoleNames(): Collection
+    {
+        return $this->roles->pluck('name');
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoleLabel(): string
+    {
+        if ($this->id == 1) {
+            return 'Root';
+        }
+        $names = $this->getRoleNames();
+
+        return $names->implode(', ');
+    }
 
     /**
      * @param  $code

@@ -3,12 +3,13 @@
     @hookupdate('front.products.show.variants.value')
     @foreach($variants as $key => $variant)
       <div class="product-variant">
-        <div class="variant-title">{{ $variant['name'][front_locale_code()] ?? '-' }}</div>
-        <div class="variant-values">
-          @foreach($variant['values'] as $vk => $value)
-            <div class="variant-value-name" data-variant="{{ $key }}"
-                 data-value="{{ $vk }}">{{ $value['name'][front_locale_code()] ?? '-' }}</div>
-          @endforeach
+        <div class="variant-title">
+            {{ $variant['name'][front_locale_code()] ?? ($variant['name'][setting_locale_code()] ?? '-') }}</div>
+          <div class="variant-values">
+            @foreach ($variant['values'] as $vk => $value)
+              <div class="variant-value-name" data-variant="{{ $key }}" data-value="{{ $vk }}">
+                {{ $value['name'][front_locale_code()] ?? ($value['name'][setting_locale_code()] ?? '-') }}</div>
+            @endforeach
         </div>
       </div>
     @endforeach

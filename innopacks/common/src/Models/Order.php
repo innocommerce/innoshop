@@ -133,6 +133,26 @@ class Order extends BaseModel
      * @return string
      * @throws Exception
      */
+    public function getStatusColorAttribute(): string
+    {
+        $statusCode = $this->status;
+        if ($statusCode == null) {
+            return '';
+        }
+
+        if ($statusCode == StateMachineService::UNPAID) {
+            return 'warning';
+        } elseif (in_array($statusCode, [StateMachineService::CREATED, StateMachineService::CANCELLED])) {
+            return 'danger';
+        } else {
+            return 'success';
+        }
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function getStatusFormatAttribute(): string
     {
         $statusCode = $this->status;

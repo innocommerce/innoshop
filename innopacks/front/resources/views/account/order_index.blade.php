@@ -56,7 +56,7 @@
                   </td>
                   <td data-title="Date">{{ $order->created_at->format('Y-m-d') }}</td>
                   <td data-title="Status">
-                    <span class="badge {{ $order->status == 'completed' || $order->status == 'paid' ? 'bg-success' : 'bg-warning' }} ">{{ $order->status_format }}</span>
+                    <span class="badge bg-{{ $order->status_color }} ">{{ $order->status_format }}</span>
                   </td>
                   <td data-title="Total">{{ $order->total_format }}</td>
                   <td data-title="Actions">
@@ -64,8 +64,8 @@
                     @if($order->status == 'shipped')
                       <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">{{
                         __('front/account.signed') }}</button>
-                    @endif  
-                </td>
+                    @endif
+                  </td>
                 </tr>
               @endforeach
               </tbody>
@@ -89,13 +89,13 @@
     $('.btn-shipped').click(function() {
       var button = $(this);
       var number = $(this).data('number');
-      
+
       axios.post(`${urls.api_base}/orders/${number}/complete`, {
         number: number
       }).then(function (response) {
         inno.msg(__('front/account.signed_success'));
         button.fadeOut(300, function() {
-          $(this).remove(); 
+          $(this).remove();
         });
         window.location.reload();
       }).catch(function (error) {

@@ -174,9 +174,6 @@ class StateMachineService
         $result   = [];
         $statuses = self::ORDER_STATUS;
         foreach ($statuses as $status) {
-            if ($status == self::CREATED) {
-                continue;
-            }
             $result[] = [
                 'status' => $status,
                 'name'   => panel_trans("order.$status"),
