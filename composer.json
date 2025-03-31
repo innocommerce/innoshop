@@ -14,6 +14,7 @@
         "ext-openssl": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "aws/aws-sdk-php": "^3.342",
         "devster/ubench": "^2.1",
         "erusev/parsedown": "^1.7",
         "intervention/image": "^3.5",
