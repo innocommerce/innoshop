@@ -363,6 +363,8 @@ if (! function_exists('locale_code')) {
             $locale = current_admin()->locale ?? $configLocale;
             if (locales()->contains('code', $locale)) {
                 return $locale;
+            } else {
+                return setting_locale_code();
             }
         }
 
