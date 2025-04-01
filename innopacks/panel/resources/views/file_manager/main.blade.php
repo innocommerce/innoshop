@@ -1,10 +1,10 @@
 @push('header')
   <script src="{{ asset('vendor/vue/2.7/vue.min.js') }}"></script>
-  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.24.3/vuedraggable.umd.min.js"></script>
+  <link rel="stylesheet" href="{{ asset('vendor/element-ui/element-ui.css') }}">
+  <script src="{{ asset('vendor/element-ui/element-ui.js') }}"></script>
+  <link rel="stylesheet" href="{{  asset('vendor/cropper/cropper.min.css') }}">
+  <script src="{{ asset('vendor/cropper/cropper.min.js') }}"></script>
+  <script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
 
   <script>
     // 从 URL 参数获取配置
