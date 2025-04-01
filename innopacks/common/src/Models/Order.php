@@ -46,6 +46,22 @@ class Order extends BaseModel
     ];
 
     /**
+     * @return HasMany
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Order::class, 'parent_id', 'id')->whereRaw('id != parent_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'parent_id', 'id');
+    }
+
+    /**
      * @return BelongsTo
      */
     public function shippingCountry(): BelongsTo

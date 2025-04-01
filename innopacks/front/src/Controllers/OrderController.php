@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
@@ -20,7 +21,7 @@ class OrderController extends Controller
     /**
      * @param  Request  $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function pay(Request $request): mixed
     {
@@ -28,7 +29,7 @@ class OrderController extends Controller
             $order = Order::query()->where('number', $request->number)->firstOrFail();
 
             return PaymentService::getInstance($order)->pay();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }

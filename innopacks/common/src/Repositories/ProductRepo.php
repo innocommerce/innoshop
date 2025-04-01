@@ -41,7 +41,7 @@ class ProductRepo extends BaseRepo
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
-        $sort  = $filters['sort']  ?? 'id';
+        $sort  = $filters['sort']  ?? 'updated_at';
         $order = $filters['order'] ?? 'desc';
 
         return $this->builder($filters)->orderBy($sort, $order)->paginate($filters['per_page'] ?? 15);

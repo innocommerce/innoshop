@@ -515,6 +515,7 @@ return new class extends Migration
             $table->comment('Order');
             $table->bigIncrements('id')->comment('ID');
             $table->string('number')->comment('Order Number');
+            $table->integer('parent_id')->default(0)->comment('Parent Order ID');
             $table->integer('customer_id')->index('o_customer_id')->comment('Customer ID');
             $table->integer('customer_group_id')->index('o_cg_id')->comment('Customer Group ID');
             $table->integer('shipping_address_id')->index('o_sa_id')->comment('Shipping Address ID');

@@ -30,7 +30,7 @@
           @foreach($orders as $item)
             <tr>
               <td>{{ $item->id }}</td>
-              <td>{{ $item->number }}</td>
+              <td>{{ $item->number }} {{ $item->id == $item->parent_id ? 'M' : '' }}</td>
               <td>
                 <div class="d-flex">
                   @foreach($item->items->take(5) as $product)

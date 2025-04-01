@@ -16,6 +16,7 @@ use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\ReviewRepo;
+use InnoShop\Common\Resources\ProductVariable;
 use InnoShop\Common\Resources\ReviewListItem;
 use InnoShop\Common\Resources\SkuListItem;
 
@@ -89,12 +90,13 @@ class ProductController extends Controller
         $product->increment('viewed');
         $reviews    = ReviewRepo::getInstance()->getListByProduct($product);
         $customerID = current_customer_id();
+        $variables  = ProductVariable::collection($product->variables)->jsonSerialize();
 
         $data = [
             'product'    => $product,
             'sku'        => (new SkuListItem($sku))->jsonSerialize(),
             'skus'       => SkuListItem::collection($product->skus)->jsonSerialize(),
-            'variants'   => $product->variables,
+            'variants'   => $variables,
             'attributes' => $product->groupedAttributes(),
             'reviews'    => ReviewListItem::collection($reviews)->jsonSerialize(),
             'reviewed'   => ReviewRepo::productReviewed($customerID, $product->id),

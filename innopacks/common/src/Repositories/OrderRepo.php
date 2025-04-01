@@ -99,6 +99,7 @@ class OrderRepo extends BaseRepo
         $relations = [
             'customer',
             'items',
+            'children',
         ];
 
         $relations = array_merge($this->relations, $relations);

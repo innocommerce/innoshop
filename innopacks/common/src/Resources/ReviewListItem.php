@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Resources;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +20,7 @@ class ReviewListItem extends JsonResource
      *
      * @param  Request  $request
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function toArray(Request $request): array
     {
