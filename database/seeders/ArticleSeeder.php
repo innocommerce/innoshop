@@ -94,7 +94,7 @@ class ArticleSeeder extends Seeder
         return [
             [
                 'article_id'       => 1,
-                'locale'           => 'zh_cn',
+                'locale'           => 'zh-cn',
                 'title'            => 'InnoShop - 创新电商，智选未来',
                 'summary'          => 'InnoShop，一个以创新为核心的开源电商平台，致力于提供灵活、可扩展的电商解决方案。我们的产品管理功能全面，包括产品分类、添加、库存及价格管理等，旨在帮助商家轻松管理商品，提升运营效率。',
                 'image'            => 'images/demo/news/1.jpg',
@@ -116,7 +116,7 @@ class ArticleSeeder extends Seeder
             ],
             [
                 'article_id'       => 2,
-                'locale'           => 'zh_cn',
+                'locale'           => 'zh-cn',
                 'title'            => 'InnoShop - 创新电商，智选未来',
                 'summary'          => 'InnoShop，一个以创新为核心的开源电商平台，致力于提供灵活、可扩展的电商解决方案。我们的产品管理功能全面，包括产品分类、添加、库存及价格管理等，旨在帮助商家轻松管理商品，提升运营效率。',
                 'image'            => 'images/demo/news/2.jpg',
@@ -138,7 +138,7 @@ class ArticleSeeder extends Seeder
             ],
             [
                 'article_id'       => 3,
-                'locale'           => 'zh_cn',
+                'locale'           => 'zh-cn',
                 'title'            => 'InnoShop - 创新电商，智选未来',
                 'summary'          => 'InnoShop，一个以创新为核心的开源电商平台，致力于提供灵活、可扩展的电商解决方案。我们的产品管理功能全面，包括产品分类、添加、库存及价格管理等，旨在帮助商家轻松管理商品，提升运营效率。',
                 'image'            => 'images/demo/news/3.jpg',
@@ -160,7 +160,7 @@ class ArticleSeeder extends Seeder
             ],
             [
                 'article_id'       => 4,
-                'locale'           => 'zh_cn',
+                'locale'           => 'zh-cn',
                 'title'            => 'InnoShop - 创新电商，智选未来',
                 'summary'          => 'InnoShop，一个以创新为核心的开源电商平台，致力于提供灵活、可扩展的电商解决方案。我们的产品管理功能全面，包括产品分类、添加、库存及价格管理等，旨在帮助商家轻松管理商品，提升运营效率。',
                 'image'            => 'images/demo/news/4.jpg',

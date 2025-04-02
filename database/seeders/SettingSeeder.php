@@ -58,7 +58,7 @@ class SettingSeeder extends Seeder
                 'space' => 'system',
                 'name'  => 'meta_title',
                 'value' => [
-                    'zh_cn' => 'InnoShop - 创新开源电商系统 - Laravel 11，多语言和多货币支持，基于Hook的强大插件架构电商系统',
+                    'zh-cn' => 'InnoShop - 创新开源电商系统 - Laravel 11，多语言和多货币支持，基于Hook的强大插件架构电商系统',
                     'en'    => 'InnoShop - Innovative Open Source E-commerce System - Built on Laravel 11, with multi-language and multi-currency support, a powerful e-commerce system based on a Hook-based plugin architecture.',
                 ],
             ],
@@ -66,7 +66,7 @@ class SettingSeeder extends Seeder
                 'space' => 'system',
                 'name'  => 'meta_keywords',
                 'value' => [
-                    'zh_cn' => 'InnoShop, 创新, 开源, 电子商务, Laravel 11, 多语言, 多货币, Hook, 插件架构, 灵活, 强大',
+                    'zh-cn' => 'InnoShop, 创新, 开源, 电子商务, Laravel 11, 多语言, 多货币, Hook, 插件架构, 灵活, 强大',
                     'en'    => 'InnoShop, Innovation, Open Source, E-commerce, Laravel 11, Multi-language, Multi-currency, Hook, Plugin architecture, Flexible, Powerful',
                 ],
             ],
@@ -74,7 +74,7 @@ class SettingSeeder extends Seeder
                 'space' => 'system',
                 'name'  => 'meta_description',
                 'value' => [
-                    'zh_cn' => 'InnoShop 是一款创新的开源电子商务平台，基于 Laravel 11 开发，具有多语言和多货币支持的特性。它采用了基于 Hook 的强大而灵活的插件架构，为用户提供了丰富的定制和扩展功能。欢迎体验 InnoShop, 打造属于您自己的电子商务平台！',
+                    'zh-cn' => 'InnoShop 是一款创新的开源电子商务平台，基于 Laravel 11 开发，具有多语言和多货币支持的特性。它采用了基于 Hook 的强大而灵活的插件架构，为用户提供了丰富的定制和扩展功能。欢迎体验 InnoShop, 打造属于您自己的电子商务平台！',
                     'en'    => 'InnoShop is an innovative open-source e-commerce platform developed based on Laravel 11, featuring multi-language and multi-currency support. It adopts a powerful and flexible plugin architecture based on Hooks, providing users with a wealth of customization and extension capabilities. Welcome to experience InnoShop and create your own e-commerce platform!',
                 ],
             ],
@@ -85,14 +85,14 @@ class SettingSeeder extends Seeder
                     [
                         'image' => [
                             'en'    => 'images/demo/banner/banner-1-en.jpg',
-                            'zh_cn' => 'images/demo/banner/banner-1-cn.jpg',
+                            'zh-cn' => 'images/demo/banner/banner-1-cn.jpg',
                         ],
                         'link' => '/en/category-women-clothing',
                     ],
                     [
                         'image' => [
                             'en'    => 'images/demo/banner/banner-2-en.jpg',
-                            'zh_cn' => 'images/demo/banner/banner-2-cn.jpg',
+                            'zh-cn' => 'images/demo/banner/banner-2-cn.jpg',
                         ],
                         'link' => '/en/category-women-clothing',
                     ],

@@ -50,7 +50,7 @@ if (! function_exists('current_install_locale_code')) {
     {
         try {
             $defaultLocale = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'en', 0, 2);
-            $defaultLocale = ($defaultLocale == 'zh' ? 'zh_cn' : $defaultLocale);
+            $defaultLocale = ($defaultLocale == 'zh' ? 'zh-cn' : $defaultLocale);
 
             return (string) request()->get('locale', $defaultLocale);
         } catch (Exception $e) {

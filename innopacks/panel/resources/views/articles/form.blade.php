@@ -38,21 +38,21 @@
                   <div id="data-locale-{{ $localeCode }}"
                     class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" data-bs-parent="#data-locales">
                     <div class="accordion-body">
-                      <input  name="translations[{{ $localeCode }}][locale]"
-                        value="{{ $localeCode }}" class="d-none">
+                      <input name="translations[{{ $localeCode }}][locale]" value="{{ $localeCode }}"
+                        class="d-none">
 
                       <x-common-form-input title="{{ __('panel/article.title') }}"
-                        name="translations[{{ $localeCode }}][title]"
-                      :translate="true" value="{{ old('translations.' . $localeCode . '.title', $article->translate($localeCode, 'title')) }}" />
+                        name="translations[{{ $localeCode }}][title]" :translate="true"
+                        value="{{ old('translations.' . $localeCode . '.title', $article->translate($localeCode, 'title')) }}" />
 
                       <x-common-form-rich-text title="{{ __('panel/article.content') }}"
-                        name="translations[{{ $localeCode }}][content]"
-                      value="{{ old('translations.' . $localeCode . '.content', $article->translate($localeCode, 'content')) }}" />
+                        name="translations[{{ $localeCode }}][content]" :translate="true" elID="content-{{ $localeCode }}"
+                        value="{{ old('translations.' . $localeCode . '.content', $article->translate($localeCode, 'content')) }}" />
 
                       <x-common-form-textarea title="{{ __('panel/article.summary') }}"
                         name="translations[{{ $localeCode }}][summary]"
                         value="{{ old('translations.' . $localeCode . '.summary', $article->translate($localeCode, 'summary')) }}"
-                       :translate="true" column="article_summary" :generate="true" />
+                        :translate="true" column="article_summary" />
 
                       <x-common-form-image title="{{ __('panel/article.image') }}"
                         name="translations[{{ $localeCode }}][image]"

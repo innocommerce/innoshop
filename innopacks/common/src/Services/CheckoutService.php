@@ -377,33 +377,33 @@ class CheckoutService
      */
     public function getCheckoutResult(): array
     {
-        $amount = $this->getAmount();
+        $cartAmount    = $this->getAmount();
+        $balanceAmount = $this->getBalanceAmount();
 
         $result = [
-            'cart_list'        => $this->getCartList(),
-            'address_list'     => $this->getAddressList(),
-            'shipping_methods' => ShippingService::getInstance()->setCheckoutService($this)->getMethods(),
-            'billing_methods'  => BillingService::getInstance()->getMethods(),
-            'checkout'         => $this->getCheckoutData(),
-            'fee_list'         => $this->getFeeList(),
-            'amount'           => $amount,
-            'amount_format'    => currency_format($amount),
-            'total_number'     => $this->getTotalNumber(),
-            'is_virtual'       => $this->checkIsVirtual(),
-            'balance_amount'   => $this->getBalanceAmount(),
+            'cart_list'             => $this->getCartList(),
+            'address_list'          => $this->getAddressList(),
+            'shipping_methods'      => ShippingService::getInstance()->setCheckoutService($this)->getMethods(),
+            'billing_methods'       => BillingService::getInstance()->getMethods(),
+            'checkout'              => $this->getCheckoutData(),
+            'fee_list'              => $this->getFeeList(),
+            'amount'                => $cartAmount,
+            'amount_format'         => currency_format($cartAmount),
+            'total_number'          => $this->getTotalNumber(),
+            'is_virtual'            => $this->checkIsVirtual(),
+            'balance_amount'        => $this->getBalanceAmount(),
+            'balance_amount_format' => currency_format($balanceAmount, setting_currency_code()),
         ];
 
         return fire_hook_filter('service.checkout.checkout.result', $result);
     }
 
     /**
-     * @return string
+     * @return float
      */
-    public function getBalanceAmount(): string
+    public function getBalanceAmount(): float
     {
-        $balance = $this->customer->balance ?? 0;
-
-        return currency_format($balance, '', 0, false);
+        return (float) ($this->customer->balance ?? 0);
     }
 
     /**

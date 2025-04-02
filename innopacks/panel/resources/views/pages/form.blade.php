@@ -45,7 +45,7 @@
                   <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][title]"
                     :translate="true"  value="{{ old('translations.' . $localeCode . '.title', $page->translate($localeCode, 'title')) }}"/>
 
-                  <x-panel::form.row title="{{ __('panel/article.content') }}" width="900">
+                  <x-panel::form.row title="{{ __('panel/article.content') }}" width="900" :translate="true">
                     <ul class="nav nav-tabs mb-3 code-tabs" role="tablist">
                       <li class="nav-item" role="presentation">
                         <button class="nav-link active" data-bs-toggle="tab"
@@ -60,7 +60,7 @@
 
                     <div class="tab-content">
                       <div class="tab-pane fade show active" id="tab-contentx-{{ $localeCode }}">
-                        <textarea rows="4" type="text" name="translations[{{$localeCode}}][content]" class="tinymce"
+                        <textarea rows="4" type="text" name="translations[{{$localeCode}}][content]" class="tinymce" id="content-{{ $localeCode }}"
                           placeholder="{{ __('panel/article.content') }}">{{ old('translations.' . $localeCode . '.content', $page->translate($localeCode, 'content')) }}</textarea>
                       </div>
                       <div class="tab-pane fade show" id="tab-code-{{ $localeCode }}">

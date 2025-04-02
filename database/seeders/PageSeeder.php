@@ -68,7 +68,7 @@ class PageSeeder extends Seeder
         return [
             [
                 'page_id'  => 1,
-                'locale'   => 'zh_cn',
+                'locale'   => 'zh-cn',
                 'title'    => '产品',
                 'content'  => '',
                 'template' => '<div class="page-product-content">
@@ -131,7 +131,7 @@ class PageSeeder extends Seeder
             ],
             [
                 'page_id'  => 2,
-                'locale'   => 'zh_cn',
+                'locale'   => 'zh-cn',
                 'title'    => '服务',
                 'content'  => '',
                 'template' => "<div class=\"page-service-content\">
@@ -201,7 +201,7 @@ class PageSeeder extends Seeder
             ],
             [
                 'page_id'  => 3,
-                'locale'   => 'zh_cn',
+                'locale'   => 'zh-cn',
                 'title'    => '关于',
                 'content'  => '',
                 'template' => "<div class=\"page-about-content\">

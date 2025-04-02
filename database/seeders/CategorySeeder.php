@@ -42,7 +42,7 @@ class CategorySeeder extends Seeder
                 'active'       => 1,
                 'translations' => [
                     [
-                        'locale'  => 'zh_cn',
+                        'locale'  => 'zh-cn',
                         'name'    => '女装',
                         'content' => '女性时尚服装',
                     ],
@@ -59,7 +59,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '休闲装',
                                 'content' => '休闲风格的女装',
                             ],
@@ -76,7 +76,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '正装',
                                 'content' => '正式场合的女装',
                             ],
@@ -95,7 +95,7 @@ class CategorySeeder extends Seeder
                 'active'       => 1,
                 'translations' => [
                     [
-                        'locale'  => 'zh_cn',
+                        'locale'  => 'zh-cn',
                         'name'    => '男装',
                         'content' => '男性时尚服装',
                     ],
@@ -112,7 +112,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '休闲装',
                                 'content' => '休闲风格的男装',
                             ],
@@ -129,7 +129,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '商务装',
                                 'content' => '商务场合的男装',
                             ],
@@ -148,7 +148,7 @@ class CategorySeeder extends Seeder
                 'active'       => 1,
                 'translations' => [
                     [
-                        'locale'  => 'zh_cn',
+                        'locale'  => 'zh-cn',
                         'name'    => '童装',
                         'content' => '儿童时尚服装',
                     ],
@@ -165,7 +165,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '男童',
                                 'content' => '男童时尚服装',
                             ],
@@ -182,7 +182,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '女童',
                                 'content' => '女童时尚服装',
                             ],
@@ -201,7 +201,7 @@ class CategorySeeder extends Seeder
                 'active'       => 1,
                 'translations' => [
                     [
-                        'locale'  => 'zh_cn',
+                        'locale'  => 'zh-cn',
                         'name'    => '运动装',
                         'content' => '运动风格的服装',
                     ],
@@ -218,7 +218,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '运动服',
                                 'content' => '适合运动的服装',
                             ],
@@ -235,7 +235,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '运动配件',
                                 'content' => '运动所需的配件',
                             ],
@@ -254,7 +254,7 @@ class CategorySeeder extends Seeder
                 'active'       => 1,
                 'translations' => [
                     [
-                        'locale'  => 'zh_cn',
+                        'locale'  => 'zh-cn',
                         'name'    => '配饰',
                         'content' => '服装搭配的配饰',
                     ],
@@ -271,7 +271,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '帽子',
                                 'content' => '各种款式的帽子',
                             ],
@@ -288,7 +288,7 @@ class CategorySeeder extends Seeder
                         'active'       => 1,
                         'translations' => [
                             [
-                                'locale'  => 'zh_cn',
+                                'locale'  => 'zh-cn',
                                 'name'    => '围巾',
                                 'content' => '各种款式的围巾',
                             ],

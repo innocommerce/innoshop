@@ -43,7 +43,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '银河流光璀璨晚礼服闪耀全场',
                     ],
                     [
@@ -104,18 +104,18 @@ class ProductSeeder extends Seeder
                 ],
                 'variables' => [
                     [
-                        'name'   => ['en' => 'Color', 'zh_cn' => '颜色'],
+                        'name'   => ['en' => 'Color', 'zh-cn' => '颜色'],
                         'values' => [
-                            ['image' => '', 'name' => ['en' => 'Red', 'zh_cn' => '红色']],
-                            ['image' => '', 'name' => ['en' => 'Green', 'zh_cn' => '绿色']],
-                            ['image' => '', 'name' => ['en' => 'Blue', 'zh_cn' => '蓝色']],
+                            ['image' => '', 'name' => ['en' => 'Red', 'zh-cn' => '红色']],
+                            ['image' => '', 'name' => ['en' => 'Green', 'zh-cn' => '绿色']],
+                            ['image' => '', 'name' => ['en' => 'Blue', 'zh-cn' => '蓝色']],
                         ],
                     ],
                     [
-                        'name'   => ['en' => 'Size', 'zh_cn' => '尺寸'],
+                        'name'   => ['en' => 'Size', 'zh-cn' => '尺寸'],
                         'values' => [
-                            ['image' => '', 'name' => ['en' => 'Big', 'zh_cn' => '大']],
-                            ['image' => '', 'name' => ['en' => 'Small', 'zh_cn' => '小']],
+                            ['image' => '', 'name' => ['en' => 'Big', 'zh-cn' => '大']],
+                            ['image' => '', 'name' => ['en' => 'Small', 'zh-cn' => '小']],
                         ],
                     ],
                 ],
@@ -130,7 +130,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '都市精英风尚西装外套经典剪裁'],
                     [
                         'locale' => 'en',
@@ -155,7 +155,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '晨曦漫步轻盈薄款风衣春意盎然',
                     ],
                     [
@@ -181,7 +181,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '星辰轨迹个性休闲卫衣夜空星辰',
                     ],
                     [
@@ -207,7 +207,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '幻彩流苏时尚个性围巾绚丽多彩',
                     ],
                     [
@@ -233,7 +233,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '极简风格主义经典衬衫简约不简单',
                     ],
                     [
@@ -259,7 +259,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '摩登复古风高腰牛仔裤经典再现',
                     ],
                     [
@@ -285,7 +285,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '优雅蕾丝边透视性感上衣女性魅力',
                     ],
                     [
@@ -311,7 +311,7 @@ class ProductSeeder extends Seeder
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh_cn',
+                        'locale' => 'zh-cn',
                         'name'   => '男士白色卫衣套装',
                     ],
                     [

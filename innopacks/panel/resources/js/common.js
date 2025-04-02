@@ -1,3 +1,4 @@
+
 export default {
   getTranslate() {
     $("#translate-button").click(function () {
@@ -22,7 +23,7 @@ export default {
         })
         .catch(function (err) {
           inno.alert({
-            msg: err.response.data.message,
+            msg: err.response?.data?.message || err.message,
             type: "danger",
           });
         });
@@ -49,6 +50,7 @@ export default {
             const inputs = $(`input[data-locale="${item.locale}"]`);
             inputs.each(function () {
               const rich_text_editor = tinymce.get(`content-${item.locale}`);
+
               if (rich_text_editor) {
                 rich_text_editor.setContent(item.result);
               }
@@ -57,7 +59,7 @@ export default {
         })
         .catch(function (err) {
           inno.alert({
-            msg: err.response.data.message,
+            msg: err.response?.data?.message || err.message,
             type: "danger",
           });
         });
@@ -92,13 +94,20 @@ export default {
 
       let textareaValue;
       let currentTextareaName;
-      if (textarea.is("textarea")) {
+      if (textarea.is(".form-control")) {
         textareaValue = textarea.val();
         currentTextareaName = textarea.attr("name");
+      } else if (textarea.is(".tinymce")) {
+        const editor = tinymce.get(textarea.attr("id"));
+        textareaValue = editor.getContent();
+        // Remove p tags from content
+        textareaValue = textareaValue.replace(/<p>/g, "").replace(/<\/p>/g, "");
+        currentTextareaName = textarea.attr("name");
       } else {
-        textareaValue = inputarea.val(); // 赋值
-        currentTextareaName = inputarea.attr("name"); // 赋值
+        textareaValue = inputarea.val();
+        currentTextareaName = inputarea.attr("name");
       }
+
       axios
         .post(`${urls.base_url}/translations/translate`, {
           source: current_source,
@@ -111,7 +120,13 @@ export default {
               `[${current_source}]`,
               `[${item.locale}]`
             );
-            if (textarea.is("textarea")) {
+            if (textarea.is(".tinymce")) {
+              const targetEditor = tinymce.get(`content-${item.locale}`);
+
+              if (targetEditor) {
+                targetEditor.setContent(item.result);
+              }
+            } else if (textarea.is("textarea")) {
               $('textarea[name="' + targetInputSelector + '"]').val(
                 item.result
               );
@@ -122,7 +137,7 @@ export default {
         })
         .catch(function (err) {
           inno.alert({
-            msg: err.response.data.message,
+            msg: err.response?.data?.message || err.message,
             type: "danger",
           });
         });

@@ -32,10 +32,14 @@ class Page extends BaseModel
      */
     public function getUrlAttribute(): string
     {
-        if ($this->slug) {
-            return front_route('pages.'.$this->slug);
-        }
+        try {
+            if ($this->slug) {
+                return front_route('pages.'.$this->slug);
+            }
 
-        return front_route('pages.show', $this);
+            return front_route('pages.show', $this);
+        } catch (Exception $e) {
+            return '';
+        }
     }
 }

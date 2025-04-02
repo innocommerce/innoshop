@@ -23,20 +23,26 @@ class RichText extends Component
 
     public bool $multiple;
 
+    public bool $generate;
+
+    public bool $translate;
+
     public ?string $elID;
 
-    public function __construct(string $name, string $title = '', bool $required = false, $value = null, bool $multiple = false, string $elID = '')
+    public function __construct(string $name, string $title = '', bool $required = false, $value = null, bool $multiple = false, string $elID = '', $generate = false, bool $translate = false)
     {
         if (! $multiple) {
             $value = html_entity_decode($value, ENT_QUOTES);
         }
 
-        $this->name     = $name;
-        $this->title    = $title;
-        $this->value    = $value;
-        $this->required = $required;
-        $this->multiple = $multiple;
-        $this->elID     = $elID;
+        $this->name      = $name;
+        $this->title     = $title;
+        $this->value     = $value;
+        $this->required  = $required;
+        $this->multiple  = $multiple;
+        $this->elID      = $elID;
+        $this->generate  = $generate;
+        $this->translate = $translate && has_translator();
     }
 
     public function render()

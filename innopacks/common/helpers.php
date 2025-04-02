@@ -915,6 +915,18 @@ if (! function_exists('current_currency_code')) {
     }
 }
 
+if (! function_exists('setting_currency_code')) {
+    /**
+     * Get setting locale code.
+     *
+     * @return string
+     */
+    function setting_currency_code(): string
+    {
+        return system_setting('currency', 'usd');
+    }
+}
+
 if (! function_exists('currency_format')) {
     /**
      * @param  $price
