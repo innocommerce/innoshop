@@ -35,14 +35,14 @@
             <td>
               <div class="d-flex align-items-center justify-content-center wh-50 border">
                 <a href="{{ $product->url }}" target="_blank">
-                  <img src="{{ image_resize($product->image) }}" class="img-fluid"
+                  <img src="{{ $product->image_url }}" class="img-fluid"
                     alt="{{ $product->fallbackName() }}">
                 </a>
               </div>
             </td>
             <td>
               <a href="{{ $product->url }}" class="text-decoration-none" target="_blank" data-bs-toggle="tooltip" title="{{ $product->fallbackName() }}">
-                {{ sub_string($product->fallbackName(), 36) }}
+                {{ sub_string($product->fallbackName(),28) }}
               </a>
               @if($product->isMultiple()) &nbsp;<span class="text-bg-success px-1">M</span>@endif
             </td>

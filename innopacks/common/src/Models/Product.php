@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -215,7 +216,7 @@ class Product extends BaseModel
      * Get URL
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUrlAttribute(): string
     {
@@ -230,7 +231,7 @@ class Product extends BaseModel
      * Get URL
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getImageUrlAttribute(): string
     {
@@ -241,7 +242,7 @@ class Product extends BaseModel
      * @param  int  $with
      * @param  int  $height
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getImageUrl(int $with = 600, int $height = 600): string
     {

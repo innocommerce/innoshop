@@ -24,6 +24,7 @@ return new class extends Migration
                 $table->decimal('amount')->comment('Amount');
                 $table->string('type')->comment('Transaction Type');
                 $table->text('comment')->nullable()->comment('Comment');
+                $table->decimal('balance')->nullable()->comment('Current Balance');
                 $table->timestamps();
             });
         }

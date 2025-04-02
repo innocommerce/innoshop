@@ -18,7 +18,7 @@ class Transaction extends BaseModel
     protected $table = 'customer_transactions';
 
     protected $fillable = [
-        'customer_id', 'amount', 'type', 'comment',
+        'customer_id', 'amount', 'type', 'comment', 'balance',
     ];
 
     const TYPE_RECHARGE = 'recharge';

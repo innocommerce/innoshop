@@ -68,7 +68,11 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/customers/{customer}/login', [Controllers\CustomerController::class, 'loginFrontend'])->name('customers.login');
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
-        Route::resource('/transactions', Controllers\TransactionController::class);
+        Route::get('/transactions', [Controllers\TransactionController::class, 'index'])->name('transactions.index');
+        Route::get('/transactions/create', [Controllers\TransactionController::class, 'create'])->name('transactions.create');
+        Route::post('/transactions', [Controllers\TransactionController::class, 'store'])->name('transactions.store');
+        Route::get('/transactions/{transaction}', [Controllers\TransactionController::class, 'show'])->name('transactions.show');
+
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
         Route::get('/social', [Controllers\SocialController::class, 'index'])->name('socials.index');
         Route::post('/social', [Controllers\SocialController::class, 'store'])->name('socials.store');

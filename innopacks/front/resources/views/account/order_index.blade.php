@@ -70,8 +70,8 @@
                       class="badge bg-{{ $order->status_color }} ">{{ $order->status_format }}</span></td>
                   <td data-title="Total">{{ $order->total_format }}</td>
                   <td data-title="Actions">
-                    <a href="{{ account_route('orders.number_show', $order->number) }}"
-                       class="btn btn-primary btn-sm" role="button">{{ __('front/common.view') }}</a>
+                    <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary btn-sm"
+                       role="button">{{ __('front/common.view') }}</a>
                     @if ($order->status == 'shipped')
                       <button data-number="{{ $order->number }}"
                               class="btn btn-primary btn-sm btn-shipped">{{ __('front/account.signed') }}</button>
@@ -81,10 +81,10 @@
 
                 @if ($order->children->count())
                   <tr class="p-0">
-                    <td colspan="6" class="p-0">
+                    <td colspan="6" class="p-0 border-bottom-0">
                       <div class="collapse" id="collapse{{ $order->id }}">
                         <div class="tab ps-5">
-                          <table class="table table-sm mb-0 ">
+                          <table class="table table-sm mb-0">
                             <thead>
                             <tr>
                               <th>{{ __('front/order.order_number') }}</th>
@@ -104,7 +104,8 @@
                                     @foreach ($child->items->take(5) as $product)
                                       <div class="wh-30 overflow-hidden border border-1 me-1">
                                         <img src="{{ image_resize($product->image, 30, 30) }}"
-                                             alt="{{ $product->name }}" class="img-fluid">
+                                             alt="{{ $product->name }}"
+                                             class="img-fluid">
                                       </div>
                                     @endforeach
                                   </div>

@@ -154,6 +154,7 @@ class TransactionRepo extends BaseRepo
     /**
      * @param  $data
      * @return array
+     * @throws Throwable
      */
     private function handleData($data): array
     {
@@ -166,11 +167,16 @@ class TransactionRepo extends BaseRepo
             $amount = $data['amount'];
         }
 
+        $customer = Customer::query()->findOrFail($data['customer_id']);
+        $customer->syncBalance();
+        $balance = $customer->balance + $amount;
+
         return [
             'customer_id' => $data['customer_id'],
             'amount'      => $amount,
             'type'        => $type,
             'comment'     => $data['comment'] ?? '',
+            'balance'     => $balance,
         ];
     }
 }

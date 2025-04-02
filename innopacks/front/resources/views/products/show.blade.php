@@ -25,30 +25,34 @@
       <div class="row">
         <div class="col-12 col-lg-6 product-left-col">
           <div class="product-images">
-            <div class="sub-product-img">
-              <div class="swiper" id="sub-product-img-swiper">
-                <div class="swiper-wrapper">
-                  @foreach($product->images as $image)
-                    <div class="swiper-slide">
-                      <a href="{{ image_resize($image, 600, 600) }}" data-pswp-width="800" data-pswp-height="800">
-                        <img src="{{ image_resize($image) }}" class="img-fluid">
-                      </a>
-                    </div>
-                  @endforeach
-                </div>
-                <div class="sub-product-btn">
-                  <div class="sub-product-prev"><i class="bi bi-chevron-compact-up"></i></div>
-                  <div class="sub-product-next"><i class="bi bi-chevron-compact-down"></i></div>
-                </div>
 
-                <div class="swiper-pagination sub-product-pagination"></div>
+            @if(is_array($product->images))
+              <div class="sub-product-img">
+                <div class="swiper" id="sub-product-img-swiper">
+                  <div class="swiper-wrapper">
+                    @foreach($product->images as $image)
+                      <div class="swiper-slide">
+                        <a href="{{ image_resize($image, 600, 600) }}" data-pswp-width="800" data-pswp-height="800">
+                          <img src="{{ image_resize($image) }}" class="img-fluid">
+                        </a>
+                      </div>
+                    @endforeach
+                  </div>
+                  <div class="sub-product-btn">
+                    <div class="sub-product-prev"><i class="bi bi-chevron-compact-up"></i></div>
+                    <div class="sub-product-next"><i class="bi bi-chevron-compact-down"></i></div>
+                  </div>
+                  <div class="swiper-pagination sub-product-pagination"></div>
+                </div>
               </div>
-            </div>
+            @endif
+
             <div class="main-product-img">
               <img src="{{ $product->image_url }}" class="img-fluid">
             </div>
           </div>
         </div>
+
         <div class="col-12 col-lg-6">
           <div class="product-info">
             <h1 class="product-title">{{ $product->fallbackName() }}</h1>
@@ -70,7 +74,7 @@
 
             <ul class="product-param">
               <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span
-                    class="value">{{ $sku['code'] }}</span></li>
+                  class="value">{{ $sku['code'] }}</span></li>
               <li class="model {{ !($sku['model'] ?? false) ? 'd-none' : '' }}"><span class="title">{{ __('front/product.model') }}:</span>
                 <span class="value">{{ $sku['model'] }}</span></li>
               @if ($product->categories->count())
@@ -116,7 +120,8 @@
             </div>
             <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"
                  data-price="{{ $product->masterSku->price }}">
-              <i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
+              <i
+                class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
             </div>
             @hookinsert('product.detail.after')
           </div>

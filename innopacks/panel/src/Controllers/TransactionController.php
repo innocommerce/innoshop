@@ -93,6 +93,19 @@ class TransactionController extends BaseController
     }
 
     /**
+     * @param  Transaction  $transaction
+     * @return mixed
+     */
+    public function show(Transaction $transaction): mixed
+    {
+        $data = [
+            'transaction' => $transaction,
+        ];
+
+        return inno_view('panel::transactions.show', $data);
+    }
+
+    /**
      * @param  TransactionRequest  $request
      * @param  Transaction  $transaction
      * @return RedirectResponse

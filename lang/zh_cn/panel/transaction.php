@@ -17,4 +17,5 @@ return [
     'refund'          => '退款',
     'type'            => '交易类型',
     'withdraw'        => '提现',
+    'balance'         => '当前余额',
 ];

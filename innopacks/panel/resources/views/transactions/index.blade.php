@@ -22,6 +22,7 @@
               <td>{{ __('panel/transaction.customer') }}</td>
               <td>{{ __('panel/transaction.type') }}</td>
               <td>{{ __('panel/transaction.amount') }}</td>
+              <td>{{ __('panel/transaction.balance') }}</td>
               <td>{{ __('panel/common.actions') }}</td>
             </tr>
             </thead>
@@ -32,10 +33,11 @@
                 <td>{{ $item->customer->name ?? '' }}</td>
                 <td>{{ $item->type_format }}</td>
                 <td>{{ $item->amount }}</td>
+                <td>{{ $item->balance }}</td>
                 <td>
                   <div class="d-flex gap-1">
-                    <a href="{{ panel_route('transactions.edit', [$item->id]) }}" class="btn btn-primary btn-sm">
-                      {{ __('panel/common.edit') }}
+                    <a href="{{ panel_route('transactions.show', [$item->id]) }}" class="btn btn-primary btn-sm">
+                      {{ __('panel/common.view') }}
                     </a>
                   </div>
                 </td>
