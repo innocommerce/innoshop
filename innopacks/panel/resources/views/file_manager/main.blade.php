@@ -1993,7 +1993,7 @@
         },
 
         beforeUpload(file) {
-          const isImage = ['image/jpeg', 'image/png', 'image/gif'].includes(file.type);
+          const isImage = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type);
           const isVideo = ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type)
           const isDoc = ['application/pdf', 'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel',

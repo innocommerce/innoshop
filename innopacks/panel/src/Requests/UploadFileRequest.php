@@ -31,7 +31,7 @@ class UploadFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:zip,doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,jpeg,png,gif,mp4|max:8192',
+            'file' => 'required|file|mimes:zip,doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,jpeg,png,gif,webp,mp4|max:8192',
             'type' => 'required|alpha_dash',
         ];
     }
