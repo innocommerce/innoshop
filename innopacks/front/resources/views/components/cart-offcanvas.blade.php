@@ -51,7 +51,7 @@
       </div>
     @else
       <div class="text-center py-5">
-        <img src="{{ asset('icon/empty-cart.svg') }}" class="img-fluid w-max-200 mb-4">
+        <img src="{{ asset('images/icons/empty-cart.svg') }}" class="img-fluid w-max-200 mb-4">
         <h5>{{ __('front/cart.empty_cart') }}</h5>
         <a class="btn btn-primary mt-3" href="{{ front_route('home.index') }}">{{ __('front/cart.continue') }}</a>
       </div>

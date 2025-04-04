@@ -142,7 +142,7 @@ function updateCartOffcanvasContent(data) {
     console.log('No items in cart, showing empty cart message');
     offcanvasBody.innerHTML = `
       <div class="text-center py-5">
-        <img src="${asset_url}icon/empty-cart.svg" class="img-fluid w-max-200 mb-4">
+        <img src="${asset_url}images/icons/empty-cart.svg" class="img-fluid w-max-200 mb-4">
         <h5>${translations.empty_cart || 'Your shopping cart is empty'}</h5>
         <a class="btn btn-primary mt-3" href="${urls.base_url}">${translations.continue || 'Continue Shopping'}</a>
       </div>

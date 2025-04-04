@@ -12,7 +12,7 @@
   <div class="container">
     <div class="checkout-success-box">
       @if($order)
-        <div class="order-success-icon"><img src="{{ asset('/icon/order-success.svg') }}" class="img-fluid"></div>
+        <div class="order-success-icon"><img src="{{ asset('/images/icons/order-success.svg') }}" class="img-fluid"></div>
         <div class="checkout-success-title"><span>Thank you. Your order has been received.</span></div>
         <table class="table w-max-700 mx-auto mb-3 mb-md-5 checkout-success-table">
           <thead>

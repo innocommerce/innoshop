@@ -40,7 +40,7 @@
                 <tr>
                   <td class="text-center">
                     @if ($loop->iteration <= 3)
-                      <img src="{{ asset('icon/grade-'. $loop->iteration .'.svg') }}" alt="{{ $product['name'] }}" class="img-fluid wh-30">
+                      <img src="{{ asset('images/icons/grade-'. $loop->iteration .'.svg') }}" alt="{{ $product['name'] }}" class="img-fluid wh-30">
                     @else
                       <span class="badge bg-secondary">{{ $loop->iteration }}</span>
                     @endif

@@ -8,6 +8,12 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.php]
+indent_size = 4
+
+[*.blade.php]
+indent_size = 2
+
 [*.md]
 trim_trailing_whitespace = false
 

@@ -15,13 +15,13 @@ const mix = require('laravel-mix');
 // If you wish to modify the template's SCSS or JS, please change 'theme' to the directory where your current theme is located.
 const theme = '';
 if (theme === '') {
-  mix.sass('innopacks/front/resources/css/bootstrap/bootstrap.scss', 'public/themes/default/css/bootstrap.css');
-  mix.sass('innopacks/front/resources/css/app.scss', 'public/themes/default/css/app.css');
-  mix.js('innopacks/front/resources/js/app.js', 'public/themes/default/js/app.js');
+  mix.sass('innopacks/front/resources/css/bootstrap/bootstrap.scss', 'public/build/front/css/bootstrap.css');
+  mix.sass('innopacks/front/resources/css/app.scss', 'public/build/front/css/app.css');
+  mix.js('innopacks/front/resources/js/app.js', 'public/build/front/js/app.js');
 } else {
-  mix.sass('themes/' + theme + '/css/bootstrap/bootstrap.scss', 'public/themes/' + theme + '/css/bootstrap.css');
-  mix.sass('themes/' + theme + '/css/app.scss', 'public/themes/' + theme + '/css/app.css');
-  mix.js('themes/' + theme + '/js/app.js', 'public/themes/' + theme + '/js/app.js');
+  mix.sass('themes/' + theme + '/css/bootstrap/bootstrap.scss', 'public/static/themes/' + theme + '/css/bootstrap.css');
+  mix.sass('themes/' + theme + '/css/app.scss', 'public/static/themes/' + theme + '/css/app.css');
+  mix.js('themes/' + theme + '/js/app.js', 'public/static/themes/' + theme + '/js/app.js');
 }
 
 // panel

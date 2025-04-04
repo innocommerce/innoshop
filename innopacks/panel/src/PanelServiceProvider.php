@@ -68,10 +68,10 @@ class PanelServiceProvider extends ServiceProvider
      */
     protected function registerUploadFileSystem(): void
     {
-        Config::set('filesystems.disks.catalog', [
+        Config::set('filesystems.disks.media', [
             'driver'      => 'local',
-            'root'        => public_path('catalog'),
-            'url'         => env('APP_URL').'/catalog',
+            'root'        => public_path('static/media'),
+            'url'         => env('APP_URL').'/media',
             'visibility'  => 'public',
             'throw'       => true,
             'permissions' => [

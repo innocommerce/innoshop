@@ -1,0 +1,6 @@
+*
+!.gitignore
+!/front/.gitkeep
+!/install/.gitkeep
+!/panel/.gitignore
+!/seller/.gitignore

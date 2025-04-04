@@ -968,16 +968,51 @@ if (! function_exists('theme_path')) {
     }
 }
 
+if (! function_exists('should_copy_static_file')) {
+    /**
+     * Check if a static file needs to be copied and copy it if necessary
+     * Used by theme_asset, theme_image and plugin_asset functions
+     *
+     * @param  string  $sourceFile  Source file path
+     * @param  string  $destFile  Destination file path
+     * @return bool True if file exists or was copied successfully
+     */
+    function should_copy_static_file(string $sourceFile, string $destFile): bool
+    {
+        $shouldCopy = false;
+
+        // Check if destination file doesn't exist or source file is newer
+        if (! file_exists($destFile)) {
+            $shouldCopy = true;
+        } elseif (file_exists($sourceFile)) {
+            $sourceModTime = filemtime($sourceFile);
+            $destModTime   = filemtime($destFile);
+            if ($sourceModTime > $destModTime) {
+                $shouldCopy = true;
+            }
+        }
+
+        // Copy file if needed
+        if ($shouldCopy && file_exists($sourceFile)) {
+            create_directories(dirname($destFile));
+
+            return copy($sourceFile, $destFile);
+        }
+
+        return file_exists($destFile);
+    }
+}
+
 if (! function_exists('theme_asset')) {
     /**
      * Generate asset path for the theme, demo code like below:
-     * <link rel="stylesheet" href="{{ theme_asset('default','swiper-bundle.min.css') }}">,
+     * <link rel="stylesheet" href="{{ theme_asset('swiper-bundle.min.css', 'default') }}">
      * swiper-bundle.min.css is in /themes/default/public
      *
-     * @param  string  $theme
-     * @param  string  $path
-     * @param  bool|null  $secure
-     * @return string
+     * @param  string  $path  Asset file path
+     * @param  string  $theme  Theme name (default taken from system settings)
+     * @param  bool|null  $secure  Whether to use HTTPS
+     * @return string URL to the asset
      * @throws Exception
      */
     function theme_asset(string $path, string $theme = '', ?bool $secure = null): string
@@ -986,11 +1021,12 @@ if (! function_exists('theme_asset')) {
             $theme = system_setting('theme', 'default');
         }
         $originThemePath = "$theme/public/$path";
-        $destThemePath   = "themes/$theme/$path";
-        if (! file_exists(public_path($destThemePath))) {
-            create_directories(dirname(public_path($destThemePath)));
-            @copy(theme_path($originThemePath), public_path($destThemePath));
-        }
+        $destThemePath   = "static/themes/$theme/$path";
+
+        $sourceFile = theme_path($originThemePath);
+        $destFile   = public_path($destThemePath);
+
+        should_copy_static_file($sourceFile, $destFile);
 
         return app('url')->asset($destThemePath, $secure);
     }
@@ -999,14 +1035,14 @@ if (! function_exists('theme_asset')) {
 if (! function_exists('theme_image')) {
     /**
      * Generate asset path for the theme, demo code like below:
-     * <link rel="stylesheet" href="{{ theme_image('default','preview.jpg') }}">,
+     * <link rel="stylesheet" href="{{ theme_image('preview.jpg', 'default') }}">
      * preview.jpg is in /themes/default/public
      *
-     * @param  string  $theme
-     * @param  string  $path
-     * @param  int  $width
-     * @param  int  $height
-     * @return string
+     * @param  string  $path  Image file path
+     * @param  string  $theme  Theme name (default taken from system settings)
+     * @param  int  $width  Desired width for resizing
+     * @param  int  $height  Desired height for resizing
+     * @return string URL to the resized image
      * @throws Exception
      */
     function theme_image(string $path, string $theme = '', int $width = 100, int $height = 100): string
@@ -1015,13 +1051,14 @@ if (! function_exists('theme_image')) {
             $theme = system_setting('theme', 'default');
         }
         $originThemePath = "$theme/public/$path";
-        $destThemePath   = "themes/$theme/$path";
-        if (! file_exists(public_path($destThemePath))) {
-            create_directories(dirname(public_path($destThemePath)));
-            @copy(theme_path($originThemePath), public_path($destThemePath));
-        }
+        $destThemePath   = "static/themes/$theme/$path";
 
-        if (! file_exists(public_path($destThemePath))) {
+        $sourceFile = theme_path($originThemePath);
+        $destFile   = public_path($destThemePath);
+
+        $fileExists = should_copy_static_file($sourceFile, $destFile);
+
+        if (! $fileExists) {
             return image_resize('', $width, $height);
         }
 

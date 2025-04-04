@@ -109,35 +109,21 @@ if (! function_exists('plugin_asset')) {
      * Format: plugin_asset('Stripe', 'css/swiper-bundle.min.css')
      * so, swiper-bundle.min.css is in /plugins/Stripe/Public/css/
      *
-     * @param  string  $pluginCode
-     * @param  string  $path
-     * @param  bool|null  $secure
-     * @return string
+     * @param  string  $pluginCode  Plugin code/name
+     * @param  string  $path  Asset file path within plugin
+     * @param  bool|null  $secure  Whether to use HTTPS
+     * @return string URL to the asset
      */
     function plugin_asset(string $pluginCode, string $path, ?bool $secure = null): string
     {
         $pluginDirectory  = Str::studly($pluginCode);
         $originPluginPath = "$pluginDirectory/Public/$path";
-        $destPluginPath   = strtolower("plugins/$pluginCode/$path");
+        $destPluginPath   = strtolower("static/plugins/$pluginCode/$path");
 
         $sourceFile = plugin_path($originPluginPath);
         $destFile   = public_path($destPluginPath);
-        $shouldCopy = false;
 
-        if (! file_exists($destFile)) {
-            $shouldCopy = true;
-        } else {
-            $sourceModTime = filemtime($sourceFile);
-            $destModTime   = filemtime($destFile);
-            if ($sourceModTime > $destModTime) {
-                $shouldCopy = true;
-            }
-        }
-
-        if ($shouldCopy && file_exists($sourceFile)) {
-            create_directories(dirname($destFile));
-            copy($sourceFile, $destFile);
-        }
+        should_copy_static_file($sourceFile, $destFile);
 
         return app('url')->asset($destPluginPath, $secure);
     }

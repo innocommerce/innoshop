@@ -100,7 +100,7 @@
           <div class="item">
             <div class="dropdown account-icon">
               <a class="btn dropdown-toggle px-0" href="{{ front_route('account.index') }}">
-                <img src="{{ asset('icon/account.svg') }}" class="img-fluid">
+                <img src="{{ asset('images/icons/account.svg') }}" class="img-fluid">
               </a>
 
               <div class="dropdown-menu dropdown-menu-end">
@@ -122,13 +122,13 @@
             </div>
           </div>
           <div class="item">
-            <a href="{{ account_route('favorites.index') }}"><img src="{{ asset('icon/love.svg') }}"
+            <a href="{{ account_route('favorites.index') }}"><img src="{{ asset('images/icons/love.svg') }}"
                                                                   class="img-fluid"><span
                 class="icon-quantity">{{ $fav_total }}</span></a>
           </div>
           <div class="item">
             <a href="javascript:void(0)" class="header-cart-icon" data-bs-toggle="offcanvas"
-               data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas"><img src="{{ asset('icon/cart.svg') }}"
+               data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas"><img src="{{ asset('images/icons/cart.svg') }}"
                                                                                   class="img-fluid"><span
                 class="icon-quantity">0</span></a>
           </div>
@@ -149,7 +149,7 @@
       </a>
     </div>
 
-    <a href="{{ front_route('carts.index') }}" class="header-cart-icon"><img src="{{ asset('icon/cart.svg') }}"
+    <a href="{{ front_route('carts.index') }}" class="header-cart-icon"><img src="{{ asset('images/icons/cart.svg') }}"
                                                                              class="img-fluid"><span
         class="icon-quantity">0</span></a>
 
@@ -160,7 +160,7 @@
           <button type="submit" class="btn"><i class="bi bi-search"></i></button>
         </form>
         <a class="account-icon" href="{{ front_route('account.index') }}">
-          <img src="{{ asset('icon/account.svg') }}" class="img-fluid">
+          <img src="{{ asset('images/icons/account.svg') }}" class="img-fluid">
         </a>
       </div>
       <div class="close-offcanvas" data-bs-dismiss="offcanvas"><i class="bi bi-chevron-compact-left"></i></div>

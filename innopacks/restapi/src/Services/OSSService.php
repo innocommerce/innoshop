@@ -142,7 +142,7 @@ class OSSService implements FileManagerInterface
                     'name'          => $name,
                     'path'          => $prefix['Prefix'],
                     'is_dir'        => true,
-                    'thumb'         => url('/icon/folder.png'),
+                    'thumb'         => url('/images/icons/folder.png'),
                     'url'           => '',
                     'mime'          => 'directory',
                     'size'          => 0,
@@ -162,7 +162,7 @@ class OSSService implements FileManagerInterface
                     'name'          => $name,
                     'path'          => $object['Key'],  // 这里返回的是相对路径
                     'is_dir'        => false,
-                    'thumb'         => $this->isImagePath($object['Key']) ? $url : url('/icon/file.png'),
+                    'thumb'         => $this->isImagePath($object['Key']) ? $url : url('/images/icons/file.png'),
                     'url'           => $url,  // 这里应该返回完整的 URL
                     'mime'          => $this->getMimeType($object['Key']) ?? 'application/octet-stream',
                     'size'          => $object['Size']                    ?? 0,

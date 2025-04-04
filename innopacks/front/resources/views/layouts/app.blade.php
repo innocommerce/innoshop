@@ -12,12 +12,12 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="api-token" content="{{ session('front_api_token') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
-  <link rel="stylesheet" href="{{ mix('themes/default/css/bootstrap.css') }}">
-  <script src="{{ mix('themes/default/js/app.js') }}"></script>
+  <link rel="stylesheet" href="{{ mix('build/front/css/bootstrap.css') }}">
+  <script src="{{ mix('build/front/js/app.js') }}"></script>
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <link rel="stylesheet" href="{{ mix('themes/default/css/app.css') }}">
+  <link rel="stylesheet" href="{{ mix('build/front/css/app.css') }}">
   <script>
     let urls = {
       api_base: '{{ route('api.home.base') }}',

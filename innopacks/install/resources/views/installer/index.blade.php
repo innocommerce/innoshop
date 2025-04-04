@@ -205,7 +205,7 @@
       <div class="install-4 install-item install-success d-none">
         <div class="head-title">{{ __('install/common.install_complete') }}</div>
         <div class="install-content">
-          <div class="icon"><img src="{{ asset('icon/install-icon-4.svg') }}" class="img-fluid"></div>
+          <div class="icon"><img src="{{ asset('images/icons/install-icon-4.svg') }}" class="img-fluid"></div>
           <div class="success-text">
             {{ __('install/common.congratulations') }}
           </div>

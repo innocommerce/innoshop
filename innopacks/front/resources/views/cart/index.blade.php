@@ -101,7 +101,7 @@
       </div>
     @else
       <div class="text-center pm-5">
-        <img src="{{ asset('icon/empty-cart.svg') }}" class="img-fluid w-max-300 mb-5">
+        <img src="{{ asset('images/icons/empty-cart.svg') }}" class="img-fluid w-max-300 mb-5">
         <h2>{{ __('front/cart.empty_cart') }}</h2>
         <a class="btn btn-primary btn-lg mt-3"
           href="{{ front_route('home.index') }}">{{ __('front/cart.continue') }}</a>
