@@ -87,15 +87,34 @@ class CategoryController extends BaseController
      */
     public function form(Category $category): mixed
     {
-        $childIDs   = $category->children->pluck('id')->toArray();
-        $excludeIDs = array_unique(array_merge($childIDs, [$category->id]));
-        $filters    = [
-            'active'      => 1,
-            'exclude_ids' => $excludeIDs,
+        $excludeIDs = [];
+
+        // Only exclude the current category and its children if it exists (has an ID)
+        if ($category->id) {
+            $excludeIDs[] = $category->id;
+            $childIDs = $category->children->pluck('id')->toArray();
+            $excludeIDs = array_unique(array_merge($childIDs, $excludeIDs));
+        }
+
+        $filters = [
+            'active' => 1,
         ];
 
-        $categories    = CategoryRepo::getInstance()->all($filters);
+        // Only add exclude_ids if there are any to exclude
+        if (!empty($excludeIDs)) {
+            $filters['exclude_ids'] = $excludeIDs;
+        }
+
+        $categories = CategoryRepo::getInstance()->all($filters);
         $categoryItems = CategorySimple::collection($categories)->jsonSerialize();
+
+        // Debug information
+        logger()->debug('Category form debug', [
+            'filters' => $filters,
+            'categories_count' => count($categories),
+            'category_items_count' => count($categoryItems),
+            'first_few_items' => array_slice($categoryItems, 0, 3)
+        ]);
 
         $data = [
             'category'   => $category,

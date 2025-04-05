@@ -74,12 +74,11 @@
           <x-common-form-input title="{{ panel_trans('common.slug') }}" name="slug" :value="old('slug', $category->slug ?? '')"
             placeholder="{{ panel_trans('common.slug') }}" />
           <x-common-form-image title="{{ panel_trans('common.image') }}" name="image" value="{{ old('image', $category->image) }}" />
-          <x-common-form-select title="{{ panel_trans('category.parent') }}" name="parent_id" :value="old('parent_id', $catalog->parent_id ?? 0)"
+          <x-common-form-select title="{{ panel_trans('category.parent') }}" name="parent_id" :value="old('parent_id', $category->parent_id ?? 0)"
             :options="$categories" key="id" label="name" />
           <x-common-form-input title="{{ panel_trans('common.position') }}" name="position" :value="old('position', $category->position ?? 0)"
             placeholder="{{ panel_trans('common.position') }}" />
-          <x-common-form-switch-radio title="{{ panel_trans('common.whether_enable') }}" name="active" :value="old('active', $category->active ?? true)"
-            placeholder="{{ panel_trans('common.whether_enable') }}" />
+          <!-- Removed duplicate active field -->
         </div>
       </div>
     </div>
