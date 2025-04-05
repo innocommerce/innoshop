@@ -735,7 +735,16 @@ if (! function_exists('front_route')) {
     function front_route($name, mixed $parameters = [], bool $absolute = true): string
     {
         // Always use locale prefix for consistent URLs
-        return route(front_locale_code().'.front.'.$name, $parameters, $absolute);
+        $routeName = front_locale_code().'.front.'.$name;
+
+        // Check if the route exists with locale prefix
+        if (Route::has($routeName)) {
+            return route($routeName, $parameters, $absolute);
+        }
+
+        // Fallback to non-prefixed route if the prefixed one doesn't exist
+        // This helps with backward compatibility, especially in admin panel
+        return route('front.'.$name, $parameters, $absolute);
     }
 }
 
@@ -765,10 +774,14 @@ if (! function_exists('has_front_route')) {
      */
     function has_front_route($name): bool
     {
-        // Always use locale prefix for consistent URLs
-        $route = front_locale_code().'.front.'.$name;
+        // Check with locale prefix first
+        $routeName = front_locale_code().'.front.'.$name;
+        if (Route::has($routeName)) {
+            return true;
+        }
 
-        return Route::has($route);
+        // Fallback to non-prefixed route
+        return Route::has('front.'.$name);
     }
 }
 
@@ -785,7 +798,15 @@ if (! function_exists('account_route')) {
     function account_route($name, mixed $parameters = [], bool $absolute = true): string
     {
         // Always use locale prefix for consistent URLs
-        return route(front_locale_code().'.front.account.'.$name, $parameters, $absolute);
+        $routeName = front_locale_code().'.front.account.'.$name;
+
+        // Check if the route exists with locale prefix
+        if (Route::has($routeName)) {
+            return route($routeName, $parameters, $absolute);
+        }
+
+        // Fallback to non-prefixed route if the prefixed one doesn't exist
+        return route('front.account.'.$name, $parameters, $absolute);
     }
 }
 
