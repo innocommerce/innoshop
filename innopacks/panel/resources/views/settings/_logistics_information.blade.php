@@ -5,7 +5,7 @@
         <table class="table table-response align-middle table-bordered">
           <thead>
           <tr>
-            <th>{{ __('panel/setting.express_company') }}</th>    
+            <th>{{ __('panel/setting.express_company') }}</th>
             <th>{{ __('panel/setting.express_code') }}</th>
             <th></th>
           </tr>
@@ -35,6 +35,8 @@
 </div>
 
 <form class="needs-validation" id="app-form">
+  <!-- Always include an empty logistics array if there are no items -->
+  <input type="hidden" name="logistics" value="[]" v-if="text.length === 0" />
   <div v-for="(item, index) in text" :key="index">
     <input type="hidden" :name="'logistics[' + index + '][company]'" :value="item.company"/>
     <input type="hidden" :name="'logistics[' + index + '][code]'" :value="item.code"/>
