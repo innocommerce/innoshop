@@ -117,21 +117,14 @@ class FrontServiceProvider extends ServiceProvider
             });
 
         $locales = locales();
-        if (count($locales) == 1) {
+        // Always register routes with locale prefixes for URL consistency
+        foreach ($locales as $locale) {
             Route::middleware('front')
-                ->name('front.')
+                ->prefix($locale->code)
+                ->name($locale->code.'.front.')
                 ->group(function () {
                     $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
                 });
-        } else {
-            foreach ($locales as $locale) {
-                Route::middleware('front')
-                    ->prefix($locale->code)
-                    ->name($locale->code.'.front.')
-                    ->group(function () {
-                        $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
-                    });
-            }
         }
     }
 

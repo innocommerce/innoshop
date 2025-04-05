@@ -27,7 +27,15 @@ class LocaleController extends Controller
         $refererUrl  = $request->headers->get('referer');
         $baseUrl     = url('/').'/';
 
-        $newUrl = str_replace($baseUrl.$currentCode, $baseUrl.$destCode, $refererUrl);
+        // Handle URL switching consistently
+        if (strpos($refererUrl, $baseUrl.$currentCode) !== false) {
+            // If URL already has locale prefix, replace it
+            $newUrl = str_replace($baseUrl.$currentCode, $baseUrl.$destCode, $refererUrl);
+        } else {
+            // If URL doesn't have locale prefix, add it
+            $newUrl = str_replace($baseUrl, $baseUrl.$destCode.'/', $refererUrl);
+        }
+
         App::setLocale($destCode);
         session(['locale' => $destCode]);
 

@@ -734,10 +734,7 @@ if (! function_exists('front_route')) {
      */
     function front_route($name, mixed $parameters = [], bool $absolute = true): string
     {
-        if (count(locales()) == 1) {
-            return route('front.'.$name, $parameters, $absolute);
-        }
-
+        // Always use locale prefix for consistent URLs
         return route(front_locale_code().'.front.'.$name, $parameters, $absolute);
     }
 }
@@ -768,11 +765,8 @@ if (! function_exists('has_front_route')) {
      */
     function has_front_route($name): bool
     {
-        if (count(locales()) == 1) {
-            $route = 'front.'.$name;
-        } else {
-            $route = front_locale_code().'.front.'.$name;
-        }
+        // Always use locale prefix for consistent URLs
+        $route = front_locale_code().'.front.'.$name;
 
         return Route::has($route);
     }
@@ -790,10 +784,7 @@ if (! function_exists('account_route')) {
      */
     function account_route($name, mixed $parameters = [], bool $absolute = true): string
     {
-        if (count(locales()) == 1) {
-            return route('front.account.'.$name, $parameters, $absolute);
-        }
-
+        // Always use locale prefix for consistent URLs
         return route(front_locale_code().'.front.account.'.$name, $parameters, $absolute);
     }
 }

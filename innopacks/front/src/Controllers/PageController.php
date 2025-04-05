@@ -24,11 +24,8 @@ class PageController extends Controller
     public function show(Request $request): mixed
     {
         $locale = front_locale_code();
-        if (count(locales()) == 1) {
-            $slug = trim($request->getRequestUri(), '/');
-        } else {
-            $slug = str_replace("/$locale/", '', $request->getRequestUri());
-        }
+        // Always handle URLs with locale prefix for consistency
+        $slug = str_replace("/$locale/", '', $request->getRequestUri());
         $filters = [
             'slug'   => $slug,
             'active' => true,

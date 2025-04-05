@@ -137,10 +137,7 @@ class SitemapService extends BaseService
      */
     private function frontRoute($locale, $name, mixed $parameters = []): string
     {
-        if (count(locales()) == 1) {
-            return route('front.'.$name, $parameters);
-        }
-
+        // Always use locale prefix for consistent URLs
         return route($locale.'.front.'.$name, $parameters);
     }
 }
