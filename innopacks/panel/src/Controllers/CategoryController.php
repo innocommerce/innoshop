@@ -100,21 +100,12 @@ class CategoryController extends BaseController
             'active' => 1,
         ];
 
-        // Only add exclude_ids if there are any to exclude
         if (!empty($excludeIDs)) {
             $filters['exclude_ids'] = $excludeIDs;
         }
 
         $categories = CategoryRepo::getInstance()->all($filters);
         $categoryItems = CategorySimple::collection($categories)->jsonSerialize();
-
-        // Debug information
-        logger()->debug('Category form debug', [
-            'filters' => $filters,
-            'categories_count' => count($categories),
-            'category_items_count' => count($categoryItems),
-            'first_few_items' => array_slice($categoryItems, 0, 3)
-        ]);
 
         $data = [
             'category'   => $category,
