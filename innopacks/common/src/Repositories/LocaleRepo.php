@@ -119,7 +119,7 @@ class LocaleRepo extends BaseRepo
      */
     public function getActiveList(): mixed
     {
-        if (self::$enabledLocales !== null) {
+        if (self::$enabledLocales !== null && self::$enabledLocales->isNotEmpty()) {
             return self::$enabledLocales;
         }
 

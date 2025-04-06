@@ -8,7 +8,7 @@
   <title>{{ __('install/common.install_wizard') }}</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
-  <link rel="stylesheet" href="{{ asset('build/css/bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ asset('build/front/css/bootstrap.css') }}">
   <link rel="stylesheet" href="{{ asset('build/install/css/app.css') }}">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
@@ -111,7 +111,7 @@
               <div class="col-6">
                 <div class="mb-3">
                   <label for="type" class="form-label">{{ __('install/common.db_type') }}</label>
-                  <select class="form-select sql-type" id="type" name="type" required>
+                  <select class="form-select sql-type" id="type" name="db_type" required>
                     <option value="sqlite">SQLite</option>
                     <option value="mysql">MySQL</option>
                   </select>
@@ -220,199 +220,252 @@
 </div>
 
 <script>
-  $('#db-driver').change(function () {
-    let code = $(this).val();
-    layer.load(2, {shade: [0.3, '#fff']})
-    $.ajax({
-      url: '{{ $driver_url }}',
-      type: "POST",
-      data: {db_code: code, locale: '{{current_install_locale()['code']}}'},
-      success: function (response) {
-        $('.env-check').html(response);
-        console.log("Success: ", response);
-      },
-      error: function (xhr, status, error) {
-        console.log("Error: ", status, error);
-        layer.msg(error);
-      },
-      complete: function () {
-        layer.closeAll('loading');
-      }
-    });
+  // Initialize the installer when document is ready
+  $(document).ready(() => {
+    Installer.init();
   });
 
-  $('.next-btn').click(function () {
-    var current = $('.install-item').filter('.active');
-    var next = current.next('.install-item');
-    if (next.length === 0) {
-      return;
-    }
+  // Global variables
+  const Installer = {
+    // Initialize the installer
+    init() {
+      this.bindEvents();
+    },
 
-    if (next.hasClass('install-2')) {
-      checkStatus();
-    }
+    // Bind all event listeners
+    bindEvents() {
+      // Database driver selection
+      $('#db-driver').on('change', (e) => this.handleDriverChange(e));
+      
+      // Next step button
+      $('.next-btn').on('click', (e) => this.handleNextStep(e));
+      
+      // Previous step button
+      $('.prev-btn').on('click', (e) => this.handlePrevStep(e));
+      
+      // Database type selection
+      $('.sql-type').on('change', (e) => this.handleDbTypeChange(e));
+      
+      // MySQL input fields
+      $('.mysql-item input').on('input', (e) => this.handleMysqlInput(e));
+      
+      // Form enter key
+      $('form').on('keypress', (e) => this.handleFormKeypress(e));
+    },
 
-    if (next.hasClass('install-3')) {
-      $('input[name="db_type"]').val($('#db-driver').val());
-      $('.sql-type').val($('#db-driver').val()).prop('disabled', 'disabled').trigger('change');
-    }
+    // Handle database driver change
+    handleDriverChange(e) {
+      const code = $(e.currentTarget).val();
+      layer.load(2, {shade: [0.3, '#fff']});
+      
+      $.ajax({
+        url: '{{ $driver_url }}',
+        type: "POST",
+        data: {db_code: code, locale: '{{current_install_locale()['code']}}'},
+        success: (response) => {
+          $('.env-check').html(response);
+        },
+        error: (xhr, status, error) => {
+          layer.msg(error);
+        },
+        complete: () => {
+          layer.closeAll('loading');
+        }
+      });
+    },
 
-    if (current.hasClass('install-3')) {
-      var form = current.find('form');
-      form.removeClass('was-validated');
-      if (form[0].checkValidity() === false) {
-        form.addClass('was-validated');
+    // Handle next step button click
+    handleNextStep(e) {
+      const current = $('.install-item').filter('.active');
+      const next = current.next('.install-item');
+      
+      if (next.length === 0) return;
+
+      if (next.hasClass('install-2')) {
+        this.checkStatus();
+      }
+
+      if (next.hasClass('install-3')) {
+        $('input[name="db_type"]').val($('#db-driver').val());
+        $('.sql-type').val($('#db-driver').val()).prop('disabled', 'disabled').trigger('change');
+      }
+
+      if (current.hasClass('install-3')) {
+        const form = current.find('form');
+        form.removeClass('was-validated');
+        
+        if (form[0].checkValidity() === false) {
+          form.addClass('was-validated');
+          return;
+        }
+
+        const data = form.serialize();
+        this.checkComplete(data, () => this.activeStep(current, next));
         return;
       }
 
-      var data = form.serialize();
-      checkComplete(data, function (res) {
-        activeStep(current, next);
-      })
-      return
-    }
+      this.activeStep(current, next);
+    },
 
-    activeStep(current, next);
-  });
-
-  $('.prev-btn').click(function () {
-    var current = $('.install-item').filter('.active');
-    var prev = current.prev('.install-item');
-    $('.next-btn').prop('disabled', false);
-    if (prev.length === 0) {
-      return;
-    }
-
-    activeStep(current, prev);
-  });
-
-  $('.sql-type').change(function () {
-    var type = $(this).val();
-    if (type === 'sqlite') {
-      $('.mysql-item').find('input').prop('required', false).prop('disabled', true);
-      $('.admin-setting').removeClass('d-none');
+    // Handle previous step button click
+    handlePrevStep(e) {
+      const current = $('.install-item').filter('.active');
+      const prev = current.prev('.install-item');
+      
       $('.next-btn').prop('disabled', false);
-    } else {
-      $('.mysql-item').find('input').prop('required', true).prop('disabled', false);
-      $('.admin-setting').addClass('d-none');
-      $('.next-btn').prop('disabled', true);
-    }
-    if (type === 'sqlite') {
-      checkConnect();
-    }
-  });
+      if (prev.length === 0) return;
 
-  var timer = null;
-  $('.mysql-item input').on('input', function () {
-    var flag = true;
-    $('.mysql-item input').each(function () {
-      if ($(this).val() === '' && $(this).attr('id') !== 'password') {
-        flag = false;
+      this.activeStep(current, prev);
+    },
+
+    // Handle database type change
+    handleDbTypeChange(e) {
+      const type = $(e.currentTarget).val();
+      const mysqlItems = $('.mysql-item');
+      const adminSetting = $('.admin-setting');
+      const nextBtn = $('.next-btn');
+
+      if (type === 'sqlite') {
+        mysqlItems.find('input').prop('required', false).prop('disabled', true);
+        adminSetting.removeClass('d-none');
+        nextBtn.prop('disabled', false);
+        this.checkConnect();
+      } else {
+        mysqlItems.find('input').prop('required', true).prop('disabled', false);
+        adminSetting.addClass('d-none');
+        nextBtn.prop('disabled', true);
       }
-    });
+    },
 
-    if (flag) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        checkConnect();
-      }, 500);
-    }
-  });
+    // Handle MySQL input fields change
+    handleMysqlInput(e) {
+      let timer = null;
+      const flag = $('.mysql-item input').toArray().every(input => {
+        return $(input).val() !== '' || $(input).attr('id') === 'password';
+      });
 
-  function checkConnect() {
-    $.ajax({
-      url: '/install/connected',
-      type: 'POST',
-      data: {
-        _token: '{{ csrf_token() }}',
-        type: $('#type').val(),
-        db_hostname: $('#host').val(),
-        db_port: $('#port').val(),
-        db_name: $('#database').val(),
-        db_prefix: $('#db_prefix').val(),
-        db_username: $('#username').val(),
-        db_password: $('#password').val(),
-      },
-      success: function (res) {
-        if (res.db_success) {
-          $('.is-invalid').removeClass('is-invalid').next().text('');
+      if (flag) {
+        clearTimeout(timer);
+        timer = setTimeout(() => this.checkConnect(), 500);
+      }
+    },
 
-          $('.admin-setting').removeClass('d-none');
-          $('.next-btn').prop('disabled', false);
-          setTimeout(() => {
-            $('.install-3 .install-content').animate({scrollTop: $('.install-3 .install-content')[0].scrollHeight}, 400);
-          }, 200);
-        } else {
-          for (var key in res) {
-            $('input[name="' + key + '"]').addClass('is-invalid').next().text(res[key]);
+    // Check database connection
+    checkConnect() {
+      $.ajax({
+        url: '/install/connected',
+        type: 'POST',
+        data: {
+          _token: '{{ csrf_token() }}',
+          locale: '{{ current_install_locale()["code"] }}',
+          db_type: $('select[name="db_type"]').val(),
+          db_hostname: $('#host').val(),
+          db_port: $('#port').val(),
+          db_name: $('#database').val(),
+          db_prefix: $('#db_prefix').val(),
+          db_username: $('#username').val(),
+          db_password: $('#password').val(),
+        },
+        success: (res) => {
+          if (res.db_success) {
+            $('.is-invalid').removeClass('is-invalid').next().text('');
+            $('.admin-setting').removeClass('d-none');
+            $('.next-btn').prop('disabled', false);
+            
+            setTimeout(() => {
+              $('.install-3 .install-content').animate({
+                scrollTop: $('.install-3 .install-content')[0].scrollHeight
+              }, 400);
+            }, 200);
+          } else {
+            for (const key in res) {
+              $(`input[name="${key}"]`).addClass('is-invalid').next().text(res[key]);
+            }
           }
         }
-      }
-    });
-  }
+      });
+    },
 
-  function checkComplete(data, callback) {
-    layer.load(2, {shade: [0.3, '#fff']})
-    $('.is-invalid').removeClass('is-invalid').next('.invalid-feedback').text('');
-    $.ajax({
-      url: '/install/complete',
-      type: 'POST',
-      data: data,
-      success: function (res) {
-        if (res.success) {
-          callback(res);
+    // Check installation completion
+    checkComplete(data, callback) {
+      layer.load(2, {shade: [0.3, '#fff']});
+      $('.is-invalid').removeClass('is-invalid').next('.invalid-feedback').text('');
+      
+      data += '&locale={{ current_install_locale()["code"] }}';
+      
+      $.ajax({
+        url: '/install/complete',
+        type: 'POST',
+        data: data,
+        success: (res) => {
+          if (res.success) {
+            layer.closeAll('loading');
+            callback(res);
+          } else {
+            layer.closeAll('loading');
+            if (res.errors) {
+              Object.keys(res.errors).forEach(key => {
+                $(`input[name="${key}"]`).addClass('is-invalid')
+                  .next('.invalid-feedback').text(res.errors[key][0]);
+              });
+            }
+            if (res.message) {
+              layer.msg(res.message);
+            }
+          }
+        },
+        error: (res) => {
+          layer.closeAll('loading');
+          const errors = res.responseJSON.errors;
+          if (errors) {
+            Object.keys(errors).forEach(key => {
+              $(`input[name="${key}"]`).addClass('is-invalid')
+                .next('.invalid-feedback').text(errors[key][0]);
+            });
+          }
+          if (res.responseJSON.message) {
+            layer.msg(res.responseJSON.message);
+          }
         }
-      },
-      error: function (res) {
-        const errors = res.responseJSON.errors;
-        Object.keys(errors).forEach(function (key) {
-          $('input[name="' + key + '"]').addClass('is-invalid').next('.invalid-feedback').text(errors[key][0]);
-        });
-        layer.msg(res.responseJSON.message);
-      },
-      complete: function () {
-        layer.closeAll('loading');
-      }
-    });
-  }
+      });
+    },
 
-  function checkStatus() {
-    var flag = true;
-    $('.install-2 table .bi').each(function () {
-      if ($(this).hasClass('text-danger')) {
-        flag = false;
-      }
-    });
+    // Check system requirements status
+    checkStatus() {
+      const flag = $('.install-2 table .bi').toArray()
+        .every(icon => !$(icon).hasClass('text-danger'));
 
-    if (flag) {
-      $('.install-2 .next-btn').prop('disabled', false);
-    } else {
-      layer.msg('{{ __('install/common.check_system') }}');
+      if (flag) {
+        $('.install-2 .next-btn').prop('disabled', false);
+      } else {
+        layer.msg('{{ __('install/common.check_system') }}');
+      }
+    },
+
+    // Activate installation step
+    activeStep(current, next) {
+      const index = next.index();
+
+      $('.progress-wrap li').removeClass('complete active');
+      $('.install-wrap .install-item').removeClass('active').addClass('d-none');
+
+      $('.progress-wrap li').each(function(i) {
+        if (i < index) {
+          $(this).addClass('complete active');
+        }
+      });
+
+      $('.progress-wrap li').eq(next.index()).addClass('active');
+      $('.install-wrap .install-' + (index + 1)).removeClass('d-none').addClass('active');
+    },
+
+    // Handle form enter key press
+    handleFormKeypress(e) {
+      if (e.keyCode === 13) {
+        e.preventDefault();
+      }
     }
-  }
-
-  function activeStep(current, next) {
-    var index = next.index();
-
-    $('.progress-wrap li').removeClass('complete active');
-    $('.install-wrap .install-item').removeClass('active').addClass('d-none');
-
-    $('.progress-wrap li').each(function (i) {
-      if (i < index) {
-        $(this).addClass('complete active');
-      }
-    });
-
-    $('.progress-wrap li').eq(next.index()).addClass('active');
-
-    $('.install-wrap .install-' + (index + 1)).removeClass('d-none').addClass('active');
-  }
-
-  $('form').on('keypress', function (e) {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-    }
-  });
+  };
 </script>
 </body>
 </html>

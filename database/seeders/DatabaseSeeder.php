@@ -22,6 +22,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            SettingSeeder::class,
+            LocaleSeeder::class,
+            CurrencySeeder::class,
+
             AdminSeeder::class,
             ArticleSeeder::class,
             AttributeSeeder::class,
@@ -29,12 +33,9 @@ class DatabaseSeeder extends Seeder
             CatalogSeeder::class,
             CategorySeeder::class,
             CountrySeeder::class,
-            CurrencySeeder::class,
             CustomerGroupSeeder::class,
-            LocaleSeeder::class,
             PageSeeder::class,
             ProductSeeder::class,
-            SettingSeeder::class,
             StateSeeder::class,
             TagSeeder::class,
             RegionSeeder::class,

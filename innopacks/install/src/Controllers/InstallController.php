@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use InnoShop\Install\Libraries\Checker;
 use InnoShop\Install\Libraries\Creator;
+use InnoShop\Install\Libraries\Environment\EnvironmentChecker;
+use InnoShop\Install\Libraries\Installer;
 use InnoShop\Install\Requests\CompleteRequest;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -22,6 +24,16 @@ use Throwable;
 
 class InstallController extends Controller
 {
+    private Installer $installer;
+
+    private EnvironmentChecker $environmentChecker;
+
+    public function __construct()
+    {
+        $this->installer          = new Installer;
+        $this->environmentChecker = new EnvironmentChecker;
+    }
+
     /**
      * @param  Request  $request
      * @return mixed
@@ -76,6 +88,9 @@ class InstallController extends Controller
      */
     public function checkConnected(Request $request): array
     {
+        $locale = current_install_locale_code();
+        app()->setLocale($locale);
+
         return (new Checker)->checkConnection($request->all());
     }
 
@@ -87,6 +102,9 @@ class InstallController extends Controller
     public function complete(CompleteRequest $request): mixed
     {
         try {
+            $locale = current_install_locale_code();
+            app()->setLocale($locale);
+
             $data      = $request->all();
             $outputLog = Creator::getInstance()->setup($data)->getOutputLog();
 
@@ -94,5 +112,32 @@ class InstallController extends Controller
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    public function checkDatabase(Request $request)
+    {
+        $data = $request->validate([
+            'db_type'     => 'required|in:mysql,sqlite',
+            'db_hostname' => 'required_if:db_type,mysql',
+            'db_port'     => 'required_if:db_type,mysql',
+            'db_name'     => 'required_if:db_type,mysql',
+            'db_username' => 'required_if:db_type,mysql',
+            'db_password' => 'required_if:db_type,mysql',
+            'db_path'     => 'required_if:db_type,sqlite',
+        ]);
+
+        $result = $this->installer->install($data);
+
+        if ($result['success']) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Installation completed successfully',
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'errors'  => $result['errors'],
+        ], 422);
     }
 }

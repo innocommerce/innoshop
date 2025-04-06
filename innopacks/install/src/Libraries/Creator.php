@@ -42,6 +42,7 @@ class Creator
      */
     public function setup($data): static
     {
+        $this->saveEnv($data);
         $this->migrate();
         $this->seedData();
         $this->setAdmin($data);
@@ -67,7 +68,7 @@ class Creator
     {
         $scheme = is_secure() ? 'https' : 'http';
         $appUrl = $scheme.'://'.$_SERVER['HTTP_HOST'];
-        $dbType = strtolower($data['type']);
+        $dbType = strtolower($data['db_type']);
 
         $envFileData = 'APP_NAME='.($data['app_name'] ?? 'InnoShop')."\n".
             'APP_ENV='.($data['environment'] ?? 'local')."\n".
@@ -77,7 +78,7 @@ class Creator
             'APP_URL='.$appUrl."\n\n".
             'APP_LOCALE=en'."\n\n";
         if ($dbType == 'mysql') {
-            $envFileData .= 'DB_CONNECTION='.$data['type']."\n".
+            $envFileData .= 'DB_CONNECTION=mysql'."\n".
                 'DB_PREFIX='.($data['db_prefix'] ?: 'inno_')."\n".
                 'DB_HOST='.$data['db_hostname']."\n".
                 'DB_PORT='.$data['db_port']."\n".
@@ -85,7 +86,7 @@ class Creator
                 'DB_USERNAME='.$data['db_username']."\n".
                 'DB_PASSWORD=\''.$data['db_password']."'\n";
         } elseif ($dbType == 'sqlite') {
-            $envFileData .= 'DB_CONNECTION='.$data['type']."\n".
+            $envFileData .= 'DB_CONNECTION=sqlite'."\n".
                 'DB_PREFIX='.($data['db_prefix'] ?: 'inno_')."\n";
         }
 

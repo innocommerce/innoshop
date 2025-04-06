@@ -83,7 +83,19 @@ class Checker
      */
     private function getPermission($folder): string
     {
-        return substr(sprintf('%o', fileperms(base_path($folder))), -4);
+        $path = base_path($folder);
+        if (! file_exists($path)) {
+            if ($folder === '.env') {
+                // Create default .env file
+                $defaultEnv = "APP_NAME=InnoShop\nAPP_ENV=local\nAPP_KEY=\nAPP_DEBUG=true\nAPP_URL=http://localhost\n\nDB_CONNECTION=sqlite\nDB_DATABASE=database/database.sqlite\n\nLOG_CHANNEL=stack\nLOG_LEVEL=debug";
+                file_put_contents($path, $defaultEnv);
+                chmod($path, 0755);
+            }
+
+            return '0644';
+        }
+
+        return substr(sprintf('%o', fileperms($path)), -4);
     }
 
     /**
@@ -94,11 +106,17 @@ class Checker
      */
     public function checkConnection($data): array
     {
-        $type = strtolower($data['type']);
+        $type = strtolower($data['db_type'] ?? '');
+        if (empty($type)) {
+            return ['db_success' => false, 'db_type' => trans('install/common.select_db_type')];
+        }
+
         if ($type == 'mysql') {
             $this->configMySQL($data);
         } elseif ($type == 'sqlite') {
             $this->configSQLite();
+        } else {
+            return ['db_success' => false, 'db_type' => trans('install/common.invalid_db_type')];
         }
 
         DB::purge();
