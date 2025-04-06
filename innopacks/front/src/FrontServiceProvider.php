@@ -106,6 +106,8 @@ class FrontServiceProvider extends ServiceProvider
     {
         $router      = $this->app['router'];
         $middlewares = [SetFrontLocale::class, EventActionHook::class, ContentFilterHook::class, GlobalFrontData::class];
+        // Add the RedirectToLocale middleware to the front group
+        $router->pushMiddlewareToGroup('front', \InnoShop\Front\Middleware\RedirectToLocale::class);
         foreach ($middlewares as $middleware) {
             $router->pushMiddlewareToGroup('front', $middleware);
         }
