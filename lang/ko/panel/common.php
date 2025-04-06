@@ -28,6 +28,7 @@ return [
     'date'              => '날짜',
     'date_end'          => '종료 날짜',
     'date_start'        => '시작 날짜',
+    'default'           => '묵인',
     'delete'            => '삭제',
     'delete_confirm'    => '삭제하시겠습니까?',
     'deleted_success'   => '삭제 성공',

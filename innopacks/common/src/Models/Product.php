@@ -93,6 +93,22 @@ class Product extends BaseModel
     }
 
     /**
+     * @return BelongsTo
+     */
+    public function taxClass(): BelongsTo
+    {
+        return $this->belongsTo(TaxClass::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function weightClass(): BelongsTo
+    {
+        return $this->belongsTo(WeightClass::class, 'weight_class', 'code');
+    }
+
+    /**
      * @return HasMany
      */
     public function favorites(): HasMany

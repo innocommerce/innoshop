@@ -63,4 +63,5 @@ return [
     'top_product'        => '产品',
     'top_setting'        => '设置',
     'upload'             => '上传功能',
+    'weight_classes'     => '重量单位',
 ];

@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             LocaleSeeder::class,
             CurrencySeeder::class,
+            WeightClassSeeder::class,
 
             AdminSeeder::class,
             ArticleSeeder::class,

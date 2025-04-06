@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Repositories\Product\RelationRepo;
 use InnoShop\Common\Repositories\Product\VariantRepo;
 use Throwable;
 
@@ -198,7 +199,7 @@ class ProductRepo extends BaseRepo
             }
 
             $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
-            $product->relations()->createMany($this->handleRelations($data['related_ids'] ?? []));
+            RelationRepo::getInstance()->handleBidirectionalRelations($product, $data['related_ids'] ?? []);
             $product->categories()->sync($data['categories'] ?? []);
             $product->skus()->createMany($this->handleSkus($data['skus']));
 
@@ -250,8 +251,7 @@ class ProductRepo extends BaseRepo
             }
 
             if (isset($data['related_ids'])) {
-                $product->relations()->delete();
-                $product->relations()->createMany($this->handleRelations($data['related_ids']));
+                RelationRepo::getInstance()->handleBidirectionalRelations($product, $data['related_ids']);
             }
 
             if (isset($data['categories'])) {
@@ -378,22 +378,6 @@ class ProductRepo extends BaseRepo
                 continue;
             }
             $items[] = $attribute;
-        }
-
-        return $items;
-    }
-
-    /**
-     * @param  $relationIDs
-     * @return array
-     */
-    private function handleRelations($relationIDs): array
-    {
-        $items = [];
-        foreach ($relationIDs as $relationID) {
-            $items[] = [
-                'relation_id' => $relationID,
-            ];
         }
 
         return $items;

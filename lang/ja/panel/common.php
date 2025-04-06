@@ -28,6 +28,7 @@ return [
     'date'              => '日付',
     'date_end'          => '終了日時',
     'date_start'        => '開始日時',
+    'default'           => '黙認します',
     'delete'            => '削除',
     'delete_confirm'    => '本当に削除しますか？',
     'deleted_success'   => '削除に成功しました',

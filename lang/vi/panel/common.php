@@ -28,6 +28,7 @@ return [
     'date'              => 'Ngày',
     'date_end'          => 'Ngày kết thúc',
     'date_start'        => 'Ngày bắt đầu',
+    'default'           => 'Mặc định',
     'delete'            => 'Xóa',
     'delete_confirm'    => 'Bạn có chắc chắn muốn xóa?',
     'deleted_success'   => 'Đã xóa thành công',

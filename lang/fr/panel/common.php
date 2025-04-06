@@ -28,6 +28,7 @@ return [
     'date'              => 'Date',
     'date_end'          => 'Date de fin',
     'date_start'        => 'Date de début',
+    'default'           => 'Par défaut',
     'delete'            => 'Supprimer',
     'delete_confirm'    => 'Êtes-vous sûr de vouloir supprimer ?',
     'deleted_success'   => 'Supprimé avec succès',

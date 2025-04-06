@@ -47,10 +47,6 @@
   <x-common-form-images title="{{ __('panel/common.image') }}" name="images"
                         :values="old('images', $product->images ?? [])"/>
 
-  <div class="col-12 col-md-5">
-    <x-common-form-input title="Spu Code" name="spu_code" value="{{ old('spu_code', $product->spu_code ?? '') }}"/>
-  </div>
-
   <x-common-form-switch-radio :title="__('panel/common.status')" name="active"
                               :value="old('active', $product->active ?? true)"/>
   @hookinsert('panel.product.edit.basic.after')

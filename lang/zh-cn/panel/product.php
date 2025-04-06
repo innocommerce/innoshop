@@ -49,6 +49,7 @@ return [
     'sku_notice'              => '请填写商品单规格信息，或点击下方\"添加规格\"按钮设置多规格商品',
     'sku_validation_error'    => '请至少完整填写单规格信息或多规格商品信息',
     'specification_attribute' => '规格属性',
+    'spu_code'                => 'SPU编码',
     'summary'                 => '摘要',
     'tax_class'               => '税类',
     'title'                   => '商品标题',
@@ -62,5 +63,7 @@ return [
     'variant_value_help'      => '规格值, 如: 红色',
     'viewed'                  => '浏览量',
     'weight'                  => '重量',
+    'weight_help'             => '输入商品重量数值',
     'weight_class'            => '重量单位',
+    'weight_class_help'       => '选择商品重量的计量单位',
 ];

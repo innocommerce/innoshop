@@ -63,4 +63,5 @@ return [
     'top_setting'        => 'Setting',
     'transactions'       => 'Customer balance',
     'upload'             => 'Upload',
+    'weight_classes'     => 'Weight Units',
 ];

@@ -17,6 +17,7 @@ use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\MailRepo;
 use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Repositories\SettingRepo;
+use InnoShop\Common\Repositories\WeightClassRepo;
 use InnoShop\Panel\Repositories\ContentAIRepo;
 use InnoShop\Panel\Repositories\ThemeRepo;
 use Throwable;
@@ -30,15 +31,16 @@ class SettingController
     public function index(): mixed
     {
         $data = [
-            'locales'      => locales()->toArray(),
-            'currencies'   => CurrencyRepo::getInstance()->enabledList()->toArray(),
-            'categories'   => CategoryRepo::getInstance()->getTwoLevelCategories(),
-            'catalogs'     => CatalogRepo::getInstance()->getTopCatalogs(),
-            'pages'        => PageRepo::getInstance()->withActive()->builder()->get(),
-            'themes'       => ThemeRepo::getInstance()->getListFromPath(),
-            'mail_engines' => MailRepo::getInstance()->getEngines(),
-            'ai_models'    => ContentAIRepo::getInstance()->getModels(),
-            'ai_prompts'   => ContentAIRepo::getInstance()->getPrompts(),
+            'locales'        => locales()->toArray(),
+            'currencies'     => CurrencyRepo::getInstance()->enabledList()->toArray(),
+            'weight_classes' => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
+            'categories'     => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'catalogs'       => CatalogRepo::getInstance()->getTopCatalogs(),
+            'pages'          => PageRepo::getInstance()->withActive()->builder()->get(),
+            'themes'         => ThemeRepo::getInstance()->getListFromPath(),
+            'mail_engines'   => MailRepo::getInstance()->getEngines(),
+            'ai_models'      => ContentAIRepo::getInstance()->getModels(),
+            'ai_prompts'     => ContentAIRepo::getInstance()->getPrompts(),
         ];
 
         return inno_view('panel::settings.index', $data);

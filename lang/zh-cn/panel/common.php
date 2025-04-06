@@ -28,6 +28,7 @@ return [
     'date'              => '日期',
     'date_end'          => '结束时间',
     'date_start'        => '开始时间',
+    'default'           => '默认',
     'delete'            => '删除',
     'delete_confirm'    => '确定要删除吗？',
     'deleted_success'   => '删除成功',

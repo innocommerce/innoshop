@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use InnoShop\Common\Libraries\ApiHook;
 use InnoShop\Common\Libraries\Currency;
 use InnoShop\Common\Libraries\ViewHook;
+use InnoShop\Common\Libraries\Weight;
 use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\LocaleRepo;
 use InnoShop\Common\Repositories\SettingRepo;
@@ -1182,5 +1183,51 @@ if (! function_exists('parsedown')) {
         }
 
         return $parser->text($value);
+    }
+}
+
+if (! function_exists('weight_convert')) {
+    /**
+     * Convert weight from one unit to another
+     *
+     * @param  float  $value  Weight value
+     * @param  string  $fromCode  Source weight unit code
+     * @param  string  $toCode  Target weight unit code
+     * @return float
+     * @throws Exception
+     */
+    function weight_convert(float $value, string $fromCode, string $toCode): float
+    {
+        return Weight::getInstance()->convert($value, $fromCode, $toCode);
+    }
+}
+
+if (! function_exists('weight_format')) {
+    /**
+     * Format weight with unit
+     *
+     * @param  float  $value  Weight value
+     * @param  string  $code  Weight unit code
+     * @return string
+     * @throws Exception
+     */
+    function weight_format(float $value, string $code): string
+    {
+        return Weight::getInstance()->format($value, $code);
+    }
+}
+
+if (! function_exists('weight_to_default')) {
+    /**
+     * Convert weight to system default unit
+     *
+     * @param  float  $value  Weight value
+     * @param  string  $fromCode  Source weight unit code
+     * @return float
+     * @throws Exception
+     */
+    function weight_to_default(float $value, string $fromCode): float
+    {
+        return Weight::getInstance()->toDefault($value, $fromCode);
     }
 }

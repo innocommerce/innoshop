@@ -28,6 +28,7 @@ return [
     'date'              => 'تاريخ',
     'date_end'          => 'تاريخ الانتهاء',
     'date_start'        => 'تاريخ البدء',
+    'default'           => 'افتراضي',
     'delete'            => 'حذف',
     'delete_confirm'    => 'هل تريد الحذف؟',
     'deleted_success'   => 'تم الحذف بنجاح',

@@ -41,7 +41,11 @@
             @foreach($currencies as $item)
               <tr>
                 <td>{{ $item->id }}</td>
-                <td>{{ $item->name }}</td>
+                <td>{{ $item->name }}
+                  @if($item->code === system_setting('currency'))
+                    <span class="badge bg-success">{{ __('panel/common.default') }}</span>
+                  @endif
+                </td>
                 <td>{{ $item->code }}</td>
                 <td>{{ $item->symbol_left }}</td>
                 <td>{{ $item->symbol_right }}</td>

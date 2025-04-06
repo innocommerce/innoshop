@@ -28,6 +28,7 @@ return [
     'date'              => 'Datum',
     'date_end'          => 'Enddatum',
     'date_start'        => 'Startdatum',
+    'default'           => 'Standard?',
     'delete'            => 'Löschen',
     'delete_confirm'    => 'Sind Sie sicher, dass Sie löschen möchten?',
     'deleted_success'   => 'Erfolgreich gelöscht',

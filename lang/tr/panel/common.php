@@ -28,6 +28,7 @@ return [
     'date'              => 'Tarih',
     'date_end'          => 'Bitiş Tarihi',
     'date_start'        => 'Başlangıç Tarihi',
+    'default'           => 'temerrüt',
     'delete'            => 'Sil',
     'delete_confirm'    => 'Silmek istediğinizden emin misiniz?',
     'deleted_success'   => 'Başarıyla silindi',

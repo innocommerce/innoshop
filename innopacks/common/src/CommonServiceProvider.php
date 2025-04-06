@@ -137,6 +137,7 @@ class CommonServiceProvider extends ServiceProvider
             'form-switch-radio' => Components\Forms\SwitchRadio::class,
             'form-textarea'     => Components\Forms\Textarea::class,
             'no-data'           => Components\NoData::class,
+            'delete-button'     => Components\DeleteButton::class,
         ]);
     }
 

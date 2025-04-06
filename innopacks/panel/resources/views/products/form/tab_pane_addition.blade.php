@@ -6,16 +6,24 @@
                             :value="old('tax_class_id', $product->tax_class_id ?? 0)" :options="$tax_classes"
                             key="id" label="name"/>
 
-      <x-common-form-input :title="__('panel/product.weight')" name="weight"
+      <div class="row">
+        <div class="col-md-6">
+          <x-common-form-input :title="__('panel/product.weight')" name="weight"
                            :value="old('weight', $product->weight ?? '')" :placeholder="__('panel/product.weight')"/>
+        </div>
+        <div class="col-md-6">
+          <x-common-form-select :title="__('panel/product.weight_class')" name="weight_class"
+                             :value="old('weight_class', $product->weight_class ?? '')" :options="$weightClasses"
+                             key="code" label="name" />
+        </div>
+      </div>
 
-      <div class="pt-2"></div>
-      <x-common-form-select :title="__('panel/product.weight_class')" name="weight_class"
-                            :value="old('weight_class', $product->weight_class ?? 0)" :options="$weightClasses"
-                            key="id" label="name"/>
       <x-common-form-select :title="__('panel/product.brand')" name="brand_id"
                             :value="old('brand_id', $product->brand_id ?? 0)" :options="$brands"
                             key="id" label="name"/>
+      <x-common-form-input :title="__('panel/product.spu_code')" name="spu_code" 
+                           :value="old('spu_code', $product->spu_code ?? '')"
+                           :placeholder="__('panel/product.spu_code')"/>
       <x-common-form-input :title="__('panel/product.position')" name="position"
                            :value="old('position', $product->position ?? '')"
                            :placeholder="__('panel/product.position')"/>

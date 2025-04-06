@@ -28,6 +28,7 @@ return [
     'date'              => 'Tanggal',
     'date_end'          => 'Tanggal Akhir',
     'date_start'        => 'Tanggal Awal',
+    'default'           => 'standar',
     'delete'            => 'Hapus',
     'delete_confirm'    => 'Apakah Anda yakin ingin menghapus?',
     'deleted_success'   => 'Berhasil dihapus',

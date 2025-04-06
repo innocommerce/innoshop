@@ -28,6 +28,7 @@ return [
     'date'              => 'дата',
     'date_end'          => 'конечная дата',
     'date_start'        => 'начальная дата',
+    'default'           => 'По умолчан',
     'delete'            => 'удалить',
     'delete_confirm'    => 'удалить?',
     'deleted_success'   => 'удалено успешно',

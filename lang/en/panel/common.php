@@ -28,6 +28,7 @@ return [
     'date'              => 'Date',
     'date_end'          => 'End',
     'date_start'        => 'Start',
+    'default'           => 'acquiesce',
     'delete'            => 'Delete',
     'delete_confirm'    => 'You sure you want to delete it?',
     'deleted_success'   => 'Deleted successfully',

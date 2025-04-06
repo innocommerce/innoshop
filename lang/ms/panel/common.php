@@ -28,6 +28,7 @@ return [
     'date'              => 'Tarikh',
     'date_end'          => 'Tarikh akhir',
     'date_start'        => 'Tarikh mula',
+    'default'           => 'Lalai',
     'delete'            => 'Padam',
     'delete_confirm'    => 'Anda pasti untuk memadam?',
     'deleted_success'   => 'Berjaya dipadam',

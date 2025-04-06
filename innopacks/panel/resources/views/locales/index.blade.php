@@ -28,7 +28,11 @@
               <tr>
                 <td>{{ $item['id'] }}</td>
                 <td><img src="{{ image_resize($item['image'], 90, 60) }}" class="border" style="width: 30px;"></td>
-                <td>{{ $item['name'] }}</td>
+                <td>{{ $item['name'] }}
+                  @if($item['code'] === system_setting('front_locale'))
+                    <span class="badge bg-success">{{ __('panel/common.default') }}</span>
+                  @endif
+                </td>
                 <td>{{ $item['code'] }}</td>
                 <td>{{ $item['position'] }}</td>
                 <td>

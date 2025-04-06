@@ -28,6 +28,7 @@ return [
     'date'              => 'วันที่',
     'date_end'          => 'วันสิ้นสุด',
     'date_start'        => 'วันเริ่มต้น',
+    'default'           => 'ค่าปริยาย',
     'delete'            => 'ลบ',
     'delete_confirm'    => 'ยืนยันการลบ',
     'deleted_success'   => 'ลบข้อมูลสำเร็จ',

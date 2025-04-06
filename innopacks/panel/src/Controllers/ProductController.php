@@ -18,6 +18,7 @@ use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\TaxClassRepo;
+use InnoShop\Common\Repositories\WeightClassRepo;
 use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Panel\Requests\ProductRequest;
 use Throwable;
@@ -101,6 +102,7 @@ class ProductController extends BaseController
             'categories'      => $categories,
             'brands'          => BrandRepo::getInstance()->all()->toArray(),
             'tax_classes'     => TaxClassRepo::getInstance()->all()->toArray(),
+            'weightClasses'   => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
             'attribute_count' => $product->productAttributes->count(),
             'all_attributes'  => $attributeData,
         ];

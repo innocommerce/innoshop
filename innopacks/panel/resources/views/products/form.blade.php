@@ -4,15 +4,6 @@
 
 <x-panel::form.right-btns formid="product-form" />
 
-@php
-  $weightClasses = [
-      ['id' => 0, 'name' => 'g'],
-      ['id' => 1, 'name' => 'kg'],
-      ['id' => 2, 'name' => 'lb'],
-      ['id' => 3, 'name' => 'oz'],
-  ];
-@endphp
-
 @section('content')
   <form class="needs-validation no-load" novalidate
     action="{{ $product->id ? panel_route('products.update', [$product->id]) : panel_route('products.store') }}"
