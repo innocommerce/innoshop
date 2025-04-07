@@ -51,6 +51,6 @@ class Textarea extends Component
      */
     public function render(): mixed
     {
-        return view('panel::components.form.textarea');
+        return view('common::components.form.textarea');
     }
 }

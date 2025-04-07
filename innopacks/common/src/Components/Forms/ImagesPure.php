@@ -37,6 +37,6 @@ class ImagesPure extends Component
 
     public function render()
     {
-        return view('panel::components.form.imagesp');
+        return view('common::components.form.imagesp');
     }
 }

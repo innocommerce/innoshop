@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Panel\Components;
+namespace InnoShop\Panel\Components\Layout;
 
 use Illuminate\View\Component;
 
@@ -52,7 +52,7 @@ class Sidebar extends Component
     {
         $this->menuLinks = $this->handleMenus($this->getMenus());
 
-        return view('panel::components.sidebar');
+        return view('panel::components.layout.sidebar');
     }
 
     /**

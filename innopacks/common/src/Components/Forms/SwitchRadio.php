@@ -31,6 +31,6 @@ class SwitchRadio extends Component
      */
     public function render(): mixed
     {
-        return view('panel::components.form.switch-radio');
+        return view('common::components.form.switch-radio');
     }
 }

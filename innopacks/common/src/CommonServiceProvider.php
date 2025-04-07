@@ -11,6 +11,8 @@ namespace InnoShop\Common;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
+use InnoShop\Common\Components\Base;
+use InnoShop\Common\Components\Forms;
 use InnoShop\Common\Console\Commands;
 
 class CommonServiceProvider extends ServiceProvider
@@ -123,21 +125,26 @@ class CommonServiceProvider extends ServiceProvider
      */
     protected function loadViewComponents(): void
     {
+        // Base components
         $this->loadViewComponentsAs('common', [
-            'alert'             => Components\Alert::class,
-            'form-input'        => Components\Forms\Input::class,
-            'form-date'         => Components\Forms\Date::class,
-            'form-image'        => Components\Forms\Image::class,
-            'form-imagep'       => Components\Forms\ImagePure::class,
-            'form-file'         => Components\Forms\File::class,
-            'form-images'       => Components\Forms\Images::class,
-            'form-imagesp'      => Components\Forms\ImagesPure::class,
-            'form-rich-text'    => Components\Forms\RichText::class,
-            'form-select'       => Components\Forms\Select::class,
-            'form-switch-radio' => Components\Forms\SwitchRadio::class,
-            'form-textarea'     => Components\Forms\Textarea::class,
-            'no-data'           => Components\NoData::class,
-            'delete-button'     => Components\DeleteButton::class,
+            'alert'         => Base\Alert::class,
+            'no-data'       => Base\NoData::class,
+            'delete-button' => Base\DeleteButton::class,
+        ]);
+
+        // Form components
+        $this->loadViewComponentsAs('common-form', [
+            'input'        => Forms\Input::class,
+            'select'       => Forms\Select::class,
+            'textarea'     => Forms\Textarea::class,
+            'rich-text'    => Forms\RichText::class,
+            'image'        => Forms\Image::class,
+            'imagep'       => Forms\ImagePure::class,
+            'images'       => Forms\Images::class,
+            'imagesp'      => Forms\ImagesPure::class,
+            'file'         => Forms\File::class,
+            'date'         => Forms\Date::class,
+            'switch-radio' => Forms\SwitchRadio::class,
         ]);
     }
 

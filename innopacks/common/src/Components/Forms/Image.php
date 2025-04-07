@@ -34,6 +34,6 @@ class Image extends Component
 
     public function render()
     {
-        return view('panel::components.form.image');
+        return view('common::components.form.image');
     }
 }

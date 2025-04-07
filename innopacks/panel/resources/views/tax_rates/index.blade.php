@@ -15,7 +15,7 @@
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('tax_rates.index')" />
+    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('tax_rates.index')" />
 
     @if ($tax_rates->count())
     <div class="table-responsive">
@@ -169,7 +169,7 @@
   deleteForm.value.submit();
   })
   .catch(() => {
-  
+
   });
   };
 

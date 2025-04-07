@@ -46,7 +46,12 @@ class ArticleRequest extends FormRequest
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.title"   => 'required',
-            "translations.$defaultLocale.content" => 'required',
+            "translations.$defaultLocale.content" => 'required|max:20000',
+
+            'translations.*.summary'          => 'max:320',
+            'translations.*.meta_title'       => 'max:256',
+            'translations.*.meta_keywords'    => 'max:256',
+            'translations.*.meta_description' => 'max:320',
         ];
     }
 
@@ -58,6 +63,11 @@ class ArticleRequest extends FormRequest
             "translations.$defaultLocale.locale"  => trans('panel/article.locale'),
             "translations.$defaultLocale.title"   => trans('panel/article.title'),
             "translations.$defaultLocale.content" => trans('panel/article.content'),
+
+            'translations.*.summary'          => trans('panel/article.summary'),
+            'translations.*.meta_title'       => trans('panel/common.meta_title'),
+            'translations.*.meta_keywords'    => trans('panel/common.meta_keywords'),
+            'translations.*.meta_description' => trans('panel/common.meta_description'),
         ];
     }
 }

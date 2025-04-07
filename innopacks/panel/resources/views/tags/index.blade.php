@@ -12,7 +12,7 @@
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('tags.index')" />
+    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('tags.index')" />
 
     @if ($tags->count())
     <div class="table-responsive">
@@ -85,11 +85,11 @@
       )
       .then(() => {
       const deleturl =urls.base_url+'/tags/'+index;
-      deleteForm.value.action=deleturl;  
+      deleteForm.value.action=deleturl;
       deleteForm.value.submit();
       })
       .catch(() => {
-      
+
       });
       };
 

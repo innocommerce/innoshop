@@ -70,6 +70,6 @@ class Input extends Component
      */
     public function render(): mixed
     {
-        return view('panel::components.form.input');
+        return view('common::components.form.input');
     }
 }

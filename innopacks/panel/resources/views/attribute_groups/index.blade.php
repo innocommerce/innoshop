@@ -18,7 +18,7 @@
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('attribute_groups.index')" />
+    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('attribute_groups.index')" />
 
     @if ($attributes->count())
     <div class="table-responsive">

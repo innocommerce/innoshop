@@ -46,6 +46,6 @@ class Date extends Component
 
     public function render()
     {
-        return view('panel::components.form.date');
+        return view('common::components.form.date');
     }
 }

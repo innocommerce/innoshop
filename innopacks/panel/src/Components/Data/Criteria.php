@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Panel\Components;
+namespace InnoShop\Panel\Components\Data;
 
 use Illuminate\View\Component;
 
@@ -34,6 +34,6 @@ class Criteria extends Component
      */
     public function render(): mixed
     {
-        return view('panel::components.criteria');
+        return view('panel::components.data.criteria');
     }
 }

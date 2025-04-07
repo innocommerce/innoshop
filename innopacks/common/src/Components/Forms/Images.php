@@ -37,6 +37,6 @@ class Images extends Component
      */
     public function render(): mixed
     {
-        return view('panel::components.form.images');
+        return view('common::components.form.images');
     }
 }

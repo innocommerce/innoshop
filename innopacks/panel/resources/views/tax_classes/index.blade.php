@@ -18,7 +18,7 @@
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('tax_classes.index')" />
+    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('tax_classes.index')" />
 
     @if ($tax_classes->count())
     <div class="table-responsive">
@@ -177,7 +177,7 @@
     window.location.reload()
     })
     }
-    const deleteForm = ref(null); 
+    const deleteForm = ref(null);
     const close = () => {
     proxy.$refs.formRef.resetFields()
     }
@@ -209,7 +209,7 @@
     deleteForm.value.submit();
     })
     .catch(() => {
-    
+
     });
     };
     const exportFuns = {

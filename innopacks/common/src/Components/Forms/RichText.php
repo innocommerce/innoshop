@@ -47,6 +47,6 @@ class RichText extends Component
 
     public function render()
     {
-        return view('panel::components.form.rich-text');
+        return view('common::components.form.rich-text');
     }
 }

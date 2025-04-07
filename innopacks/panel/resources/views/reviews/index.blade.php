@@ -14,7 +14,7 @@
   <div class="card h-min-600">
     <div class="card-body">
 
-      <x-panel-criteria :criteria="$criteria ?? []" :action="panel_route('reviews.index')"/>
+      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('reviews.index')"/>
 
       @if ($reviews->count())
         <div class="table-responsive">

@@ -51,6 +51,6 @@ class File extends Component
             default => '.zip',
         };
 
-        return view('panel::components.form.file', $data);
+        return view('common::components.form.file', $data);
     }
 }

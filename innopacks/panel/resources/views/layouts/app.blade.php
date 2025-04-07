@@ -46,7 +46,7 @@
   <div class="main-content">
     <aside class="sidebar-box navbar-expand-xs border-radius-xl">
       <div class="sidebar-body">
-        <x-panel-sidebar></x-panel-sidebar>
+        <x-panel-layout-sidebar></x-panel-layout-sidebar>
       </div>
       <div class="mb-menu-close"><i class="bi bi-chevron-left"></i></div>
     </aside>

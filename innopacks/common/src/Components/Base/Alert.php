@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Common\Components;
+namespace InnoShop\Common\Components\Base;
 
 use Illuminate\View\Component;
 
