@@ -27,7 +27,7 @@ class UploadService extends BaseService
         $image    = $request->file('image');
         $type     = $request->file('type', 'common');
         $filePath = $image->store("/{$type}", 'upload');
-        $realPath = "upload/$filePath";
+        $realPath = "static/uploads/$filePath";
 
         return [
             'url'   => asset($realPath),
@@ -46,7 +46,7 @@ class UploadService extends BaseService
         $file     = $request->file('file');
         $type     = $request->file('type', 'docs');
         $filePath = $file->store("/{$type}", 'upload');
-        $realPath = "upload/$filePath";
+        $realPath = "static/uploads/$filePath";
 
         return [
             'url'   => asset($realPath),
@@ -65,7 +65,7 @@ class UploadService extends BaseService
         $file     = $request->file('file');
         $type     = $request->file('type', 'files');
         $filePath = $file->store("/{$type}", 'upload');
-        $realPath = "upload/$filePath";
+        $realPath = "static/uploads/$filePath";
 
         return [
             'url'   => asset($realPath),

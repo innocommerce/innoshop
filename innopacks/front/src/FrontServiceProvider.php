@@ -79,8 +79,8 @@ class FrontServiceProvider extends ServiceProvider
     {
         Config::set('filesystems.disks.upload', [
             'driver'      => 'local',
-            'root'        => public_path('upload'),
-            'url'         => env('APP_URL').'/upload',
+            'root'        => public_path('static/uploads'),
+            'url'         => env('APP_URL').'/static/uploads',
             'visibility'  => 'public',
             'throw'       => true,
             'permissions' => [
