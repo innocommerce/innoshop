@@ -1947,12 +1947,14 @@
           this.currentFolder = data;
           this.loadFiles(data.path);
         },
-        loadFiles(path) {
+        loadFiles(path = null) {
           this.loading = true;
+          const currentPath = path !== null ? path : (this.currentFolder ? this.currentFolder.path : '/');
+          
           const params = {
             page: this.pagination.page,
             per_page: this.pagination.per_page,
-            base_folder: path
+            base_folder: currentPath
           };
 
           http.get('file_manager/files', {
