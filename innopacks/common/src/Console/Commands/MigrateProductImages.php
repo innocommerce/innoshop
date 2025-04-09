@@ -13,6 +13,11 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Product;
 
+/**
+ * Product image migration command
+ * 
+ * This command requires InnoShop version >= 0.4.0
+ */
 class MigrateProductImages extends Command
 {
     protected $signature = 'product:migrate-images';
@@ -21,6 +26,14 @@ class MigrateProductImages extends Command
 
     public function handle(): void
     {
+        // Check if system version is greater than or equal to 0.4.0
+        $currentVersion = config('innoshop.version');
+        if (version_compare($currentVersion, '0.4.0', '<')) {
+            $this->error('This command requires InnoShop version 0.4.0 or higher.');
+            $this->error('Current version: ' . $currentVersion);
+            return;
+        }
+        
         $this->migrateProductImages();
         $this->migrateSkuImages();
     }

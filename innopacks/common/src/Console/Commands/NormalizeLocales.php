@@ -16,6 +16,11 @@ use InnoShop\Common\Models\Admin;
 use InnoShop\Common\Models\Locale;
 use InnoShop\Common\Models\Setting;
 
+/**
+ * Locale normalization command
+ * 
+ * This command requires InnoShop version >= 0.4.0
+ */
 class NormalizeLocales extends Command
 {
     /**
@@ -49,6 +54,14 @@ class NormalizeLocales extends Command
      */
     public function handle(): void
     {
+        // Check if system version is greater than or equal to 0.4.0
+        $currentVersion = config('innoshop.version');
+        if (version_compare($currentVersion, '0.4.0', '<')) {
+            $this->error('This command requires InnoShop version 0.4.0 or higher.');
+            $this->error('Current version: ' . $currentVersion);
+            return;
+        }
+        
         $this->info('Starting locale normalization...');
 
         // Process admin and settings tables
