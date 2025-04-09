@@ -18,7 +18,7 @@ use InnoShop\Common\Models\Setting;
 
 /**
  * Locale normalization command
- * 
+ *
  * This command requires InnoShop version >= 0.4.0
  */
 class NormalizeLocales extends Command
@@ -58,10 +58,11 @@ class NormalizeLocales extends Command
         $currentVersion = config('innoshop.version');
         if (version_compare($currentVersion, '0.4.0', '<')) {
             $this->error('This command requires InnoShop version 0.4.0 or higher.');
-            $this->error('Current version: ' . $currentVersion);
+            $this->error('Current version: '.$currentVersion);
+
             return;
         }
-        
+
         $this->info('Starting locale normalization...');
 
         // Process admin and settings tables

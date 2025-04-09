@@ -303,7 +303,9 @@ class CheckoutService
         $shippingService    = ShippingService::getInstance()->setCheckoutService($this);
         $shippingMethods    = $shippingService->getMethods();
         $shippingQuoteCodes = $shippingService->getQuoteCodes();
-        if (! in_array($this->checkoutData['shipping_method_code'], $shippingQuoteCodes)) {
+        $defaultAddress     = $this->getDefaultAddress();
+
+        if (! in_array($this->checkoutData['shipping_method_code'], $shippingQuoteCodes) && $defaultAddress) {
             $defaultShippingCode = $shippingMethods[0]['quotes'][0]['code'] ?? '';
             $this->updateValues(['shipping_method_code' => $defaultShippingCode]);
         }
@@ -356,15 +358,20 @@ class CheckoutService
      */
     public function createCheckout($data): mixed
     {
-        $defaultAddress = $this->getDefaultAddress();
+        $shippingMethods = $billingMethods = [];
 
-        $shippingMethods = ShippingService::getInstance()->setCheckoutService($this)->getMethods();
-        $billingMethods  = BillingService::getInstance()->getMethods();
+        $defaultAddress   = $this->getDefaultAddress();
+        $defaultAddressID = $defaultAddress['id'] ?? 0;
 
-        $data['shipping_address_id']  = $defaultAddress['id']                    ?? 0;
+        if ($defaultAddressID) {
+            $shippingMethods = ShippingService::getInstance()->setCheckoutService($this)->getMethods();
+            $billingMethods  = BillingService::getInstance()->getMethods();
+        }
+
+        $data['shipping_address_id']  = $defaultAddressID;
         $data['shipping_method_code'] = $shippingMethods[0]['quotes'][0]['code'] ?? '';
-        $data['billing_address_id']   = $defaultAddress['id']                    ?? 0;
-        $data['billing_method_code']  = $billingMethods[0]['code']               ?? '';
+        $data['billing_address_id']   = $defaultAddressID;
+        $data['billing_method_code']  = $billingMethods[0]['code'] ?? '';
 
         return CheckoutRepo::getInstance()->create($data);
     }

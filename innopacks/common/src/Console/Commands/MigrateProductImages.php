@@ -15,7 +15,7 @@ use InnoShop\Common\Models\Product;
 
 /**
  * Product image migration command
- * 
+ *
  * This command requires InnoShop version >= 0.4.0
  */
 class MigrateProductImages extends Command
@@ -30,10 +30,11 @@ class MigrateProductImages extends Command
         $currentVersion = config('innoshop.version');
         if (version_compare($currentVersion, '0.4.0', '<')) {
             $this->error('This command requires InnoShop version 0.4.0 or higher.');
-            $this->error('Current version: ' . $currentVersion);
+            $this->error('Current version: '.$currentVersion);
+
             return;
         }
-        
+
         $this->migrateProductImages();
         $this->migrateSkuImages();
     }

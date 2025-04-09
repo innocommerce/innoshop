@@ -10,6 +10,7 @@
 return [
     'billing_address'       => 'Billing Address',
     'billing_methods'       => 'Billing Methods',
+    'please_create_address' => 'Please create an address first',
     'cancel_create'         => 'Cancel',
     'checkout'              => 'Checkout',
     'create_address'        => 'Create Address',

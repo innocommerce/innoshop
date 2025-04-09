@@ -11,6 +11,7 @@ namespace InnoShop\Common\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Checkout;
+use Throwable;
 
 class CheckoutRepo extends BaseRepo
 {
@@ -71,7 +72,7 @@ class CheckoutRepo extends BaseRepo
     /**
      * @param  $data
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function create($data): mixed
     {

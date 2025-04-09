@@ -112,22 +112,27 @@
               <div class="title">{{ __('front/checkout.shipping_methods') }}</div>
             </div>
             <div class="checkout-select-wrap">
-              <div v-for="item in source.shippingMethods" :key="item.code">
-                <div v-for="quote in item.quotes" :key="quote.code"
-                  @click="updateCheckout('shipping_method_code', quote.code)"
-                  :class="['select-item', current.shipping_method_code == quote.code ? 'active' : '']">
-                  <div class="left">
-                    <i class="bi bi-circle"></i>
-                    <div class="select-title">
-                      <span class="name"> @{{ quote.name }}</span> &nbsp;&nbsp;
-                      <span class="cost"> @{{ quote.cost_format }}</span>
-                    </div>
-                  </div>
-                  <div class="icon"><img :src="quote.icon" class="img-fluid"></div>
-                </div>
+              <div v-if="!current.shipping_address_id" class="alert alert-warning">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.please_create_address') }}
               </div>
-              <div v-if="!source.shippingMethods.length" class="alert alert-warning">
-                <i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_shipping_methods') }}
+              <div v-else>
+                <div v-for="item in source.shippingMethods" :key="item.code">
+                  <div v-for="quote in item.quotes" :key="quote.code"
+                    @click="updateCheckout('shipping_method_code', quote.code)"
+                    :class="['select-item', current.shipping_method_code == quote.code ? 'active' : '']">
+                    <div class="left">
+                      <i class="bi bi-circle"></i>
+                      <div class="select-title">
+                        <span class="name"> @{{ quote.name }}</span> &nbsp;&nbsp;
+                        <span class="cost"> @{{ quote.cost_format }}</span>
+                      </div>
+                    </div>
+                    <div class="icon"><img :src="quote.icon" class="img-fluid"></div>
+                  </div>
+                </div>
+                <div v-if="!source.shippingMethods.length" class="alert alert-warning">
+                  <i class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_shipping_methods') }}
+                </div>
               </div>
             </div>
           </div>
@@ -199,7 +204,7 @@
               <li class="cart-data-list" v-for="fee in source.feeList" :key="fee.title">
                 <span>@{{ fee.title }}</span><span> @{{ fee.total_format }} </span>
               </li>
-              <li><span>{{ __('front/cart.total') }}</span><span>@{{ source.totalAmount }}</span></li>
+              <li><span>{{ __('front/cart.total') }}</span><span>@{{ source.totalAmountFormat }}</span></li>
             </ul>
 
             @hookinsert('checkout.confirm.before')
@@ -240,7 +245,8 @@
           addressEdit: @json($address_list).length ? false : true,
           same_as_shipping_address: true,
           feeList: @json($fee_list),
-          totalAmount: @json(currency_format($amount)),
+          totalAmount: @json($amount),
+          totalAmountFormat: @json(currency_format($amount)),
         })
 
         const current = reactive({
@@ -275,12 +281,12 @@
             if (res.success) {
               inno.msg(res.message)
               if (id) {
-                const index = source.addresses.findIndex(address => address.id == id)
+                const index = source.addresses.findIndex(address => address.id === id)
                 source.addresses[index] = res.data
               } else {
                 source.addresses.push(res.data)
 
-                if (source.addresses.length == 1) {
+                if (source.addresses.length === 1) {
                   current.shipping_address_id = res.data.id
                   current.billing_address_id = res.data.id
                   updateCheckout('shipping_address_id', res.data.id)
@@ -300,7 +306,7 @@
 
         const updateCheckout = (key, value) => {
           current[key] = value
-          if (source.same_as_shipping_address && key == 'shipping_address_id') {
+          if (source.same_as_shipping_address && key === 'shipping_address_id') {
             current.billing_address_id = value
           }
 
@@ -309,6 +315,8 @@
               source.feeList = res.data.fee_list
               source.totalAmount = res.data.amount
               source.totalAmountFormat = res.data.amount_format
+              source.shippingMethods = res.data.shipping_methods
+              current.shipping_method_code = res.data.checkout.shipping_method_code
               //window.location.href = '{{ front_route('checkout.index') }}'
             }
           })

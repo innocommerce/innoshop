@@ -61,7 +61,7 @@ class Shipping extends BaseService
     /**
      * @param  $quoteCode
      * @return string
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function getShippingQuoteName($quoteCode): string
     {

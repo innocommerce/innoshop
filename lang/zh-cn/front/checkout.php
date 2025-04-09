@@ -11,6 +11,7 @@ return [
     'billing_address'       => '账单地址',
     'billing_methods'       => '支付方式',
     'cancel_create'         => '取消',
+    'please_create_address' => '请创建地址',
     'checkout'              => '结账',
     'create_address'        => '创建地址',
     'failed'                => '用户名或密码错误。',

@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 /**
  * Image path migration command
- * 
+ *
  * This command requires InnoShop version >= 0.4.0
  */
 class MigrateImagePaths extends Command
@@ -50,10 +50,11 @@ class MigrateImagePaths extends Command
         $currentVersion = config('innoshop.version');
         if (version_compare($currentVersion, '0.4.0', '<')) {
             $this->error('This command requires InnoShop version 0.4.0 or higher.');
-            $this->error('Current version: ' . $currentVersion);
+            $this->error('Current version: '.$currentVersion);
+
             return;
         }
-        
+
         $this->info('Starting image path migration...');
 
         foreach ($this->tables as $table => $fields) {
