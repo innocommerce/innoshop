@@ -13,6 +13,7 @@ use InnoShop\Front\Controllers;
 use InnoShop\Front\Controllers\Account;
 
 Route::get('/', [Controllers\HomeController::class, 'index'])->name('home.index');
+Route::get('/maintenance', [Controllers\MaintenanceController::class, 'index'])->name('maintenance.index');
 
 Route::get('/locales/switch/{code}', [Controllers\LocaleController::class, 'switch'])->name('locales.switch');
 Route::get('/currencies/switch/{code}', [Controllers\CurrencyController::class, 'switch'])->name('currencies.switch');
