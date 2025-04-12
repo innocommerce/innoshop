@@ -14,11 +14,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\Product\FilterRepo;
+use InnoShop\Common\Repositories\Product\SkuRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\ReviewRepo;
 use InnoShop\Common\Resources\ProductDetail;
 use InnoShop\Common\Resources\ProductSimple;
 use InnoShop\Common\Resources\ReviewListItem;
+use InnoShop\Common\Resources\SkuSimple;
 
 class ProductController extends BaseController
 {
@@ -93,5 +95,19 @@ class ProductController extends BaseController
         $list = ReviewRepo::getInstance()->builder($filters)->paginate();
 
         return ReviewListItem::collection($list);
+    }
+
+    /**
+     * Summary of searchSku
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function skuList(Request $request)
+    {
+        $keyword = $request->get('keyword');
+        $skus    = SkuRepo::getInstance()->searchByKeyword($keyword);
+
+        return read_json_success(SkuSimple::collection($skus));
     }
 }

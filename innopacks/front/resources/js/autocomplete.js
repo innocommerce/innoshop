@@ -49,8 +49,7 @@ $(function() {
 
         $(this).siblings('ul.dropdown-menu').css({
           top: pos.top + $(this).outerHeight(),
-          left: pos.left,
-          position: 'absolute'
+          left: pos.left
         });
 
         $(this).siblings('ul.dropdown-menu').show();

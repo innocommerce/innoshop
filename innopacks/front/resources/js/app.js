@@ -7,6 +7,7 @@ import './bootstrap-validation';
 import './footer';
 import './header';
 import './cart';
+import './autocomplete';
 
 const apiToken = $('meta[name="api-token"]').attr('content');
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;

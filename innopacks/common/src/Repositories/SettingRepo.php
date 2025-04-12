@@ -132,11 +132,17 @@ class SettingRepo extends BaseRepo
 
         $setting = $this->builder(['space' => $space, 'name' => $name])->first();
 
+        $isJson = false;
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            $isJson  = json_last_error() === JSON_ERROR_NONE && is_array($decoded);
+        }
+
         $settingData = [
             'space' => $space,
             'name'  => $name,
-            'value' => is_array($value) ? json_encode($value) : $value,
-            'json'  => is_array($value),
+            'value' => $isJson ? $value : (is_array($value) ? json_encode($value) : $value),
+            'json'  => $isJson || is_array($value),
         ];
 
         if (empty($setting)) {

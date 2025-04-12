@@ -30,6 +30,7 @@ Route::get('/categories/tree', [FrontApiControllers\CategoryController::class, '
 
 Route::get('/products', [FrontApiControllers\ProductController::class, 'index'])->name('products.index');
 Route::get('/products/filters', [FrontApiControllers\ProductController::class, 'filters'])->name('products.filters');
+Route::get('/products/skus', [FrontApiControllers\ProductController::class, 'skuList'])->name('products.sku_list');
 Route::get('/products/{product}', [FrontApiControllers\ProductController::class, 'show'])->name('products.show');
 Route::get('/products/{product}/reviews', [FrontApiControllers\ProductController::class, 'productReviews'])->name('products.reviews');
 

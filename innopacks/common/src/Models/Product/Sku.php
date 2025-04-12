@@ -180,6 +180,6 @@ class Sku extends BaseModel
         ];
         $data = fire_hook_filter('model.sku.variant_label_attribute', $data);
 
-        return $data['vLabel'];
+        return trim($data['vLabel']);
     }
 }
