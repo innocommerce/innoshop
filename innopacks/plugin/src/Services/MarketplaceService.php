@@ -14,6 +14,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PhpZip\Exception\ZipException;
 use PhpZip\ZipFile;
@@ -34,11 +35,17 @@ class MarketplaceService
             define('CURL_SSLVERSION_TLSv1_2', 6);
         }
 
+        $domainToken   = system_setting('domain_token');
         $this->baseUrl = config('innoshop.api_url').'/api/seller';
 
         $this->client = Http::baseUrl($this->baseUrl)
             ->withOptions(['verify' => false])
-            ->withHeaders(['domain-token' => system_setting('domain_token')]);
+            ->withHeaders(['domain-token' => $domainToken]);
+
+        Log::info('MarketplaceService initialized', [
+            'baseUrl'     => $this->baseUrl,
+            'domainToken' => $domainToken,
+        ]);
     }
 
     /**
@@ -135,6 +142,7 @@ class MarketplaceService
     private function getMarketCategories($parentSlug): mixed
     {
         $uri = "/categories?parent_slug=$parentSlug";
+        Log::info('getMarketCategories', ['uri' => $uri]);
 
         $response = $this->client->get($uri);
 
@@ -151,6 +159,7 @@ class MarketplaceService
     public function getMarketProducts($categorySlug): mixed
     {
         $uri = "/products?category_slug=$categorySlug&page=$this->page&per_page=$this->perPage";
+        Log::info('getMarketProducts', ['uri' => $uri]);
 
         $response = $this->client->get($uri);
 
@@ -167,6 +176,7 @@ class MarketplaceService
     public function quickCheckout($data): mixed
     {
         $uri = '/checkout/quick_confirm';
+        Log::info('quickCheckout', ['uri' => $uri, 'data' => $data]);
 
         $response = $this->client->post($uri, $data);
 
@@ -189,6 +199,7 @@ class MarketplaceService
         }
 
         $uri = "/products/$id/download";
+        Log::info('download', ['uri' => $uri]);
 
         $datetime = date('Y-m-d');
 
@@ -213,6 +224,7 @@ class MarketplaceService
      */
     private function response(Response $response): mixed
     {
+        Log::info('response', ['status' => $response->status(), 'body' => $response->body()]);
         if ($response->status() == 200) {
             return $response->json();
         }

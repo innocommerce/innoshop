@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Services;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\PageRepo;
@@ -51,13 +52,14 @@ class SitemapService extends BaseService
     /**
      * @param  $locale
      * @return void
+     * @throws Exception
      */
     private function addSpecials($locale): void
     {
-        $this->sitemap->add($this->frontRoute($locale, 'register.index'));
-        $this->sitemap->add($this->frontRoute($locale, 'login.index'));
-        $this->sitemap->add($this->frontRoute($locale, 'products.index'));
-        $this->sitemap->add($this->frontRoute($locale, 'brands.index'));
+        $this->addUrl($this->frontRoute($locale, 'register.index'));
+        $this->addUrl($this->frontRoute($locale, 'login.index'));
+        $this->addUrl($this->frontRoute($locale, 'products.index'));
+        $this->addUrl($this->frontRoute($locale, 'brands.index'));
     }
 
     /**
@@ -74,13 +76,14 @@ class SitemapService extends BaseService
             } else {
                 $url = $this->frontRoute($locale, 'products.show', $item);
             }
-            $this->sitemap->add($url);
+            $this->addUrl($url);
         }
     }
 
     /**
      * @param  $locale
      * @return void
+     * @throws Exception
      */
     private function addCategories($locale): void
     {
@@ -91,7 +94,7 @@ class SitemapService extends BaseService
             } else {
                 $url = $this->frontRoute($locale, 'categories.show', $item);
             }
-            $this->sitemap->add($url);
+            $this->addUrl($url);
         }
     }
 
@@ -109,7 +112,7 @@ class SitemapService extends BaseService
             } else {
                 $url = $this->frontRoute($locale, 'articles.show', $item);
             }
-            $this->sitemap->add($url);
+            $this->addUrl($url);
         }
     }
 
@@ -124,7 +127,7 @@ class SitemapService extends BaseService
         foreach ($pages as $item) {
             $url = $this->frontRoute($locale, 'pages.'.$item->slug);
 
-            $this->sitemap->add($url);
+            $this->addUrl($url);
         }
     }
 
@@ -137,10 +140,29 @@ class SitemapService extends BaseService
      */
     private function frontRoute($locale, $name, mixed $parameters = []): string
     {
-        if (count(locales()) == 1) {
-            return route('front.'.$name, $parameters);
-        }
+        try {
+            if (count(locales()) == 1) {
+                return route('front.'.$name, $parameters);
+            }
 
-        return route($locale.'.front.'.$name, $parameters);
+            return route($locale.'.front.'.$name, $parameters);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+
+            return '';
+        }
+    }
+
+    /**
+     * Add a URL to the sitemap
+     * @param  mixed  $url
+     * @return void
+     */
+    private function addUrl(mixed $url): void
+    {
+        if (empty($url)) {
+            return;
+        }
+        $this->sitemap->add($url);
     }
 }

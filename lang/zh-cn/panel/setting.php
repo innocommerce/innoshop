@@ -83,6 +83,8 @@ return [
     'specials'                          => '固定页',
     'store_features'                    => '店铺功能设置',
     'store_features_desc'               => '配置店铺的功能选项和用户体验',
+    'online_order'                      => '在线下单',
+    'online_order_desc'                 => '开启后，用户可以在前台进行在线下单，关闭后将隐藏所有下单相关按钮',
     'system_options'                    => '系统选项',
     'telephone'                         => '联系电话',
     'title_to_tdk'                      => '标题填充到TDK',

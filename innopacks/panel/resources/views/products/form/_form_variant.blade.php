@@ -56,7 +56,6 @@
                       <div v-for="locale in locales" class="input-group" :key="locale.code">
                         <span class="input-group-text"><img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid">@{{ locale.name }}</span>
                         <input type="text" class="form-control" v-model="value.name[locale.code]" placeholder="{{ __('panel/product.variant_value_help') }}" ref="variantValue">
-                        {{-- @keyup.enter="addVariantValue" --}}
                       </div>
                       <span class="text-12 text-danger" style="margin-left: 100px" v-if="value.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel/common.verify_required') }}</span>
                     </div>
@@ -64,7 +63,6 @@
                     <div class="delete-icon" v-else></div>
                   </div>
                   <div class="add-variant-btns">
-                    {{-- <div class="text-secondary text-12 mb-2">按回车键新增一行</div> --}}
                     <div class="text-primary text-12 mb-3">
                       <div class="d-inline-block cursor-pointer" @click="addVariantValue(index)"><i class="bi bi-plus-lg"></i> {{ __('panel/product.add_variant_value') }}</div>
                     </div>
@@ -205,28 +203,37 @@
   const { createApp, ref, watch, watchEffect, onMounted, getCurrentInstance, nextTick, computed } = Vue
   const draggable = window.vuedraggable;
 
+  // Initialize locale utilities
   const $locales = @json(locales());
   const localesFill = (text) => {
-    var obj = {};
+    let obj = {};
     $locales.map(e => {
       obj[e.code] = text
     })
-
     return obj;
   }
 
+  // Create Vue application for variants management
   let variantsBoxApp = createApp({
     components: {
       draggable,
     },
 
     setup() {
+      // Core state variables
       const instance = getCurrentInstance();
       const locales = $locales;
       const defaultLocale = @json(panel_locale_code());
-      const showAllVariant = ref(false)
-      const mainVariantKey = ref(0)
-      const variants = ref(@json(old('variants', $product->variables ?? [])))
+      const showAllVariant = ref(false);
+      const mainVariantKey = ref(0);
+      
+      // Initialize variants from product data
+      const variants = ref(@json(old('variants', $product->variables ?? [])));
+      if (typeof variants.value === 'string') {
+        variants.value = JSON.parse(variants.value);
+      }
+      
+      // Initialize SKUs with proper parsing
       const skus = ref((() => {
         let rawSkus = @json(old('skus', $skus ?? []));
         if (typeof rawSkus === 'string') {
@@ -238,8 +245,11 @@
         }
         return rawSkus;
       })());
+      
+      // Initialize small variants array for UI display
+      const smallVariants = ref([]);
 
-      // 添加批量填写的数据
+      // Batch data for bulk operations
       const batchData = ref({
         skuPrefix: '',
         price: '',
@@ -248,171 +258,154 @@
         quantity: ''
       });
 
-      // SKU Code 批量填写
-      const batchFillSkuCode = () => {
-        if (!batchData.value.skuPrefix) {
-          layer.msg('请输入SKU前缀', {icon: 2});
+      // Watch for changes in main variant key or variants array
+      watch([mainVariantKey, variants.value], ([newValue1, newValue2], [oldValue1, oldValue2]) => {
+        // Show single SKU box if no variants exist
+        if (!variants.value.length) {
+          $('.skus-single-box').removeClass('d-none');
+        } else {
+          $('.skus-single-box').addClass('d-none');
+        }
+
+        // Don't generate SKUs if only one empty variant exists
+        if (variants.value.length == 1 && isObjectValuesEmpty(variants.value[0].values[0].name)) {
           return;
         }
 
-        skus.value.forEach((sku, index) => {
-          const suffix = String(index + 1).padStart(2, '0');
-          sku.code = `${batchData.value.skuPrefix}-${suffix}`;
-        });
+        // Generate SKUs and update small variants
+        generateSku();
+        smallVariantsFormat(newValue1 != oldValue1);
+      });
 
-        layer.msg('SKU Code 已批量填写', {icon: 1});
-      };
+      // Watch for changes in SKUs to validate
+      watch(skus, () => {
+        validateSkus();
+      }, {deep: true});
 
-      // 其他列的批量填写
-      const batchFillColumn = (column) => {
-        if (!batchData.value[column]) {
-          layer.msg('请输入要填写的值', {icon: 2});
-          return;
+      // Watch for changes in variants to sync with single SKU
+      watch(variants, (newValue) => {
+        if (newValue.length > 0) {
+          // Get existing single SKU data
+          const singleSkuPrice = $('input[name="skus[0][price]"]').val();
+          const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
+          const singleSkuCode = $('input[name="skus[0][code]"]').val();
+
+          if (singleSkuPrice || singleSkuQuantity || singleSkuCode) {
+            // Transfer single SKU data to the first variant SKU
+            const firstSku = skus.value[0];
+            if (firstSku) {
+              firstSku.price = singleSkuPrice || '';
+              firstSku.quantity = singleSkuQuantity || '';
+              firstSku.code = singleSkuCode || '';
+              firstSku.is_default = 1;
+            }
+
+            // Clear single SKU form
+            $('input[name="skus[0][price]"]').val('');
+            $('input[name="skus[0][quantity]"]').val('');
+            $('input[name="skus[0][code]"]').val('');
+          }
+        } else {
+          // Sync default SKU back to single SKU form when removing variants
+          const defaultSku = skus.value.find(sku => sku.is_default === 1);
+          if (defaultSku) {
+            $('input[name="skus[0][price]"]').val(defaultSku.price);
+            $('input[name="skus[0][quantity]"]').val(defaultSku.quantity);
+            $('input[name="skus[0][code]"]').val(defaultSku.code);
+          }
         }
+      }, { deep: true });
 
-        const columnMap = {
-          price: 'price',
-          originPrice: 'origin_price',
-          model: 'model',
-          quantity: 'quantity'
-        };
-
-        skus.value.forEach(sku => {
-          sku[columnMap[column]] = batchData.value[column];
-        });
-
-        layer.msg('批量填写成功', {icon: 1});
-      };
-
-      if (typeof variants.value === 'string') {
-        variants.value = JSON.parse(variants.value);
-      }
-
-      const smallVariants = ref([])
-
+      // Initialize on component mount
       onMounted(() => {
-        generateSku()
-        smallVariantsFormat()
+        generateSku();
+        smallVariantsFormat();
+        
+        // Validate form on submit
         $('#product-form').on('submit', function(e) {
           if (!validateForm()) {
             e.preventDefault();
-            layer.msg('请至少填写单规格信息或添加多规格商品信息', {icon: 2});
+            layer.msg('Please fill in single specification information or add multiple specification product information', {icon: 2});
             return false;
           }
         });
-      })
-
-      watch([mainVariantKey, variants.value], ([newValue1, newValue2], [oldValue1, oldValue2]) => {
-        // 判断 variants.value 为空 .skus-single-box 显示
-        if (!variants.value.length) {
-          $('.skus-single-box').removeClass('d-none')
-        } else {
-          $('.skus-single-box').addClass('d-none')
-        }
-
-        // 判断 variants.value 只有一个规格的时候 并且 values 为空的时候，就不生成 sku
-        if (variants.value.length == 1 && isObjectValuesEmpty(variants.value[0].values[0].name)) {
-          return
-        }
-
-        generateSku()
-        // 如果是 mainVariantKey 发生变化，就要完全重新生成 smallVariants
-        smallVariantsFormat(newValue1 != oldValue1 ? true : false)
       });
 
-      watch(skus, (newValue, oldValue) => {
-        validateSkus()
-      }, {deep: true})
-
-      // 生成 通过...分组 的几个大规格
+      // Format small variants for display
       const smallVariantsFormat = () => {
         if (variants.value.length === 0) {
-          smallVariants.value = []
-          return
+          smallVariants.value = [];
+          return;
         }
 
-        // 直接使用 skus 数据,不再进行分组
+        // Map SKUs to small variants with additional properties
         smallVariants.value = skus.value.map((sku, index) => ({
           ...sku,
           init_index: index,
           show_variant: false,
           sku_quantity: null
-        }))
+        }));
       }
 
+      // Add a new value to a variant
       const addVariantValue = (index) => {
-        variants.value[index].values.push({name: localesFill('')})
+        variants.value[index].values.push({name: localesFill('')});
       }
 
-      // 修改 sku值，分 批量修改 和 单个修改
-      const modifySku = (init_index, index, type) => {
-        let sku_quantity = smallVariants.value[index].sku_quantity
-        // let sku = smallVariants.value[(init_index * sku_quantity) + init_index]
-        let sku = smallVariants.value[index]
-        let tempSkus = skus.value.slice(init_index * sku_quantity, (init_index + 1) * sku_quantity)
-
-        tempSkus.forEach((e, i) => {
-          e[type] = sku[type]
-        })
-
-        // 获取有多少个相同的sku,然后加下标, 判断一个 - 前的字符是否相同，如果相同就加上下标
-        if (typeof init_index != 'undefined' ) {
-          let sameSku = skus.value.filter((e, i) => e.code.split('-')[0] === sku.code)
-          sameSku.forEach((e, i) => {
-            e.code = sku.code + '-' + i
-          })
-        }
-      }
-
+      // Add a new variant
       const addVariant = () => {
         variants.value.push({
           name: localesFill(''),
           error: false,
           variantFormShow: true,
           values: [{name: localesFill(''), error: false}],
-        })
+        });
       }
 
+      // Delete a variant and update main variant key
       const deleteVariant = (index) => {
-        variants.value.splice(index, 1)
+        variants.value.splice(index, 1);
 
         if (index < mainVariantKey.value) {
-          mainVariantKey.value--
+          mainVariantKey.value--;
         } else if (index === mainVariantKey.value) {
-          mainVariantKey.value = 0
+          mainVariantKey.value = 0;
         }
       }
 
+      // Save variant after validation
       const saveVariant = (index) => {
-        let isError = true
+        let isError = true;
 
+        // Validate all variants and values
         variants.value.forEach((e, i) => {
           if (isObjectValuesEmpty(e.name)) {
-            e.error = true
-            isError = false
+            e.error = true;
+            isError = false;
           } else {
-            e.error = false
+            e.error = false;
           }
 
           e.values.forEach((value, j) => {
             if (isObjectValuesEmpty(value.name)) {
-              value.error = true
-              isError = false
+              value.error = true;
+              isError = false;
             } else {
-              value.error = false
+              value.error = false;
             }
-          })
-        })
+          });
+        });
 
         if (!isError) {
-          return
+          return;
         }
 
-        variants.value[index].variantFormShow = false
-        localStorage.setItem('variants', JSON.stringify(variants.value))
+        // Hide form and save variants to localStorage
+        variants.value[index].variantFormShow = false;
+        localStorage.setItem('variants', JSON.stringify(variants.value));
       }
 
-      // Function to get first available locale value as fallback
+      // Get first available locale value for display
       const getFirstAvailableLocaleValue = (localeObject) => {
         if (!localeObject) return '';
 
@@ -427,26 +420,31 @@
           }
         }
 
-        // If still nothing, return empty string
         return '';
       };
 
-      // 生成 sku 组合
+      // Generate SKU combinations based on variants
       const generateSku = () => {
         if (variants.value.length === 0) {
-          return
+          return;
         }
 
-        let mainVariant = variants.value[mainVariantKey.value]
-        let tempVariants = [mainVariant, ...variants.value.filter((e, i) => i !== mainVariantKey.value)]
-        let sku = []
-        let skuVariants = []
-        let skuVariantsLength = tempVariants.length
-        let skuVariantsIndex = Array(skuVariantsLength).fill(0)
-        let skuVariantsValues = tempVariants.map(e => e.values.length)
+        // Prepare variants for SKU generation (main variant first)
+        let mainVariant = variants.value[mainVariantKey.value];
+        let tempVariants = [mainVariant, ...variants.value.filter((e, i) => i !== mainVariantKey.value)];
+        
+        // Initialize SKU generation variables
+        let sku = [];
+        let skuVariantsLength = tempVariants.length;
+        let skuVariantsIndex = Array(skuVariantsLength).fill(0);
+        let skuVariantsValues = tempVariants.map(e => e.values.length);
+        
+        // Calculate total number of combinations
+        const totalCombinations = skuVariantsValues.reduce((a, b) => a * b);
 
-        for (let i = 0; i < skuVariantsValues.reduce((a, b) => a * b); i++) {
-          // 如果sku中有值，就用原来的值，否则就用默认值
+        // Generate each SKU combination
+        for (let i = 0; i < totalCombinations; i++) {
+          // Create SKU item (preserve existing values if available)
           let skuItem = {
             code: skus.value[i] ? skus.value[i].code : '',
             price: skus.value[i] ? skus.value[i].price : '',
@@ -459,38 +457,61 @@
             error: false,
             text: '',
             variants: []
-          }
+          };
 
+          // Build SKU text and variants array
           for (let j = 0; j < skuVariantsLength; j++) {
-            skuItem.variants.push(skuVariantsIndex[j])
+            skuItem.variants.push(skuVariantsIndex[j]);
             const valueName = tempVariants[j].values[skuVariantsIndex[j]].name[defaultLocale] ||
-                              getFirstAvailableLocaleValue(tempVariants[j].values[skuVariantsIndex[j]].name)
-            skuItem.text += ' ' + valueName + ' /'
+                            getFirstAvailableLocaleValue(tempVariants[j].values[skuVariantsIndex[j]].name);
+            skuItem.text += ' ' + valueName + ' /';
           }
 
-          skuItem.text = skuItem.text.slice(0, -1)
-          sku.push(skuItem)
+          // Clean up text and add SKU to array
+          skuItem.text = skuItem.text.slice(0, -1);
+          sku.push(skuItem);
 
-          // 递增 skuVariantsIndex
+          // Increment indices for next combination
           for (let j = skuVariantsLength - 1; j >= 0; j--) {
             if (skuVariantsIndex[j] < skuVariantsValues[j] - 1) {
-              skuVariantsIndex[j]++
-              break
+              skuVariantsIndex[j]++;
+              break;
             } else {
-              skuVariantsIndex[j] = 0
+              skuVariantsIndex[j] = 0;
             }
           }
         }
 
-        // 如果 is_default 都是0 那么就把第一个设置为主规格
-        let isMaster = sku.filter((e, i) => e.is_default == 1)
+        // Set first SKU as default if none is marked
+        let isMaster = sku.filter((e, i) => e.is_default == 1);
         if (isMaster.length === 0) {
-          sku[0].is_default = 1
+          sku[0].is_default = 1;
         }
 
-        skus.value = sku
+        skus.value = sku;
       }
 
+      // Modify SKU values in batch or individually
+      const modifySku = (init_index, index, type) => {
+        let sku_quantity = smallVariants.value[index].sku_quantity;
+        let sku = smallVariants.value[index];
+        let tempSkus = skus.value.slice(init_index * sku_quantity, (init_index + 1) * sku_quantity);
+
+        // Apply value to all SKUs in the group
+        tempSkus.forEach((e) => {
+          e[type] = sku[type];
+        });
+
+        // Update SKU codes with sequential numbering
+        if (typeof init_index != 'undefined') {
+          let sameSku = skus.value.filter((e) => e.code.split('-')[0] === sku.code);
+          sameSku.forEach((e, i) => {
+            e.code = sku.code + '-' + i;
+          });
+        }
+      }
+
+      // Open file manager to upload variant image
       const upVariantImage = (init_index, index) => {
         inno.fileManagerIframe((file) => {
           if (file.url) {
@@ -502,33 +523,29 @@
         });
       }
 
-      const skuImgUploadAjax = (file, init_index, index) => {
-        // 此方法已不再使用，保持为空
-      }
-
+      // Update main variant key after drag and drop
       const dragVariantsEnd = (evt) => {
-        // console.log(evt);
         const oldIndex = evt.oldIndex;
         const newIndex = evt.newIndex;
-        // console.log(mainVariantKey.value);
-        // 拖拽 Variants 之后要保证 mainVariantKey 的值是正确的
 
+        // Adjust main variant key based on drag direction
         if (oldIndex === mainVariantKey.value) {
-          mainVariantKey.value = newIndex
+          mainVariantKey.value = newIndex;
         } else if (oldIndex < mainVariantKey.value && newIndex >= mainVariantKey.value) {
-          mainVariantKey.value--
+          mainVariantKey.value--;
         } else if (oldIndex > mainVariantKey.value && newIndex <= mainVariantKey.value) {
-          mainVariantKey.value++
+          mainVariantKey.value++;
         }
       }
 
+      // Generate thumbnail URL for images
       const thumbnail = (image) => {
         const asset = document.querySelector('meta[name="asset"]').content;
         if (!image) {
           return 'image/placeholder.png';
         }
 
-        // 判断 image 是否以 http 开头
+        // Return URL directly if it's absolute
         if (image.indexOf('http') === 0) {
           return image;
         }
@@ -536,130 +553,71 @@
         return asset + image;
       }
 
+      // Set a SKU as the master/default
       const setMasterSku = (index) => {
-        skus.value.forEach((e, i) => {
-          e.is_default = 0
-        })
+        // Reset all SKUs
+        skus.value.forEach((e) => {
+          e.is_default = 0;
+        });
 
-        getSkusItem(index).is_default = 1
+        // Set the selected SKU as default
+        getSkusItem(index).is_default = 1;
       }
 
-      // 找出 skus中的variants 与 smallVariants.value[index].variants 是一样的
+      // Find matching SKU from smallVariants
       const getSkusItem = (index) => {
-        return skus.value.find((e, i) => {
-          return e.variants.toString() === smallVariants.value[index].variants.toString()
-        })
+        return skus.value.find((e) => {
+          return e.variants.toString() === smallVariants.value[index].variants.toString();
+        });
       }
 
-      // 检测 variants 内容是否有值
+      // Validate variants have values
       const validateVariants = () => {
-        variants.value.forEach((e, i) => {
-          if (isObjectValuesEmpty(e.name)) {
-            e.error = true
-          } else {
-            e.error = false
-          }
+        variants.value.forEach((e) => {
+          e.error = isObjectValuesEmpty(e.name);
 
-          e.values.forEach((value, j) => {
-            if (isObjectValuesEmpty(value.name)) {
-              value.error = true
-            } else {
-              value.error = false
-            }
-          })
-        })
+          e.values.forEach((value) => {
+            value.error = isObjectValuesEmpty(value.name);
+          });
+        });
       }
 
-      // 检测 skus 中是否有重复的 code
+      // Check for duplicate SKU codes
       const validateSkus = () => {
-        skus.value.forEach((e, i) => {
-          let sameSku = skus.value.filter((s, j) => s.code === e.code)
-          if (sameSku.length > 1) {
-            e.error = true
-          } else {
-            e.error = false
-          }
-        })
+        skus.value.forEach((e) => {
+          const sameSku = skus.value.filter((s) => s.code === e.code);
+          e.error = sameSku.length > 1;
+        });
       }
 
+      // Toggle expanded/collapsed view for all variants
       const allVariantEC = () => {
-        showAllVariant.value = !showAllVariant.value
-        // 把 smallVariants 里面的 show_variant 全部设置为true
-        smallVariants.value.forEach((e, i) => {
-          e.show_variant = showAllVariant.value
-        })
+        showAllVariant.value = !showAllVariant.value;
+        
+        // Update all small variants
+        smallVariants.value.forEach((e) => {
+          e.show_variant = showAllVariant.value;
+        });
 
-        smallVariantsFormat()
+        smallVariantsFormat();
       }
 
+      // Validate form before submission
       const validateForm = () => {
-        // 检查单规格表单
+        // Check single SKU form
         const singleSkuPrice = $('input[name="skus[0][price]"]').val();
         const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
-        const singleSkuCode = $('input[name="skus[0][code]"]').val();
 
-        // 检查多规格
+        // Check multi-variant SKUs
         const hasValidVariants = variants.value.length > 0 && skus.value.some(sku => {
           return sku.price && sku.quantity && (sku.is_default === 1);
         });
 
-        // 确保至少有一个完整的 SKU 信息
+        // Ensure at least one complete SKU exists
         return hasValidVariants || (singleSkuPrice && singleSkuQuantity);
       }
 
-      // 监听表单提交
-      onMounted(() => {
-        $('#product-form').on('submit', function(e) {
-          if (!validateForm()) {
-            e.preventDefault();
-            layer.msg('请至少填写单规格信息或添加多规格商品信息', {icon: 2});
-            return false;
-          }
-        });
-      });
-
-      // 在切换到多规格时提示用户
-      watch(variants, (newValue) => {
-        if (newValue.length > 0) {
-          const singleSkuPrice = $('input[name="skus[0][price]"]').val();
-          const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
-          const singleSkuCode = $('input[name="skus[0][code]"]').val();
-
-          if (singleSkuPrice || singleSkuQuantity || singleSkuCode) {
-            layer.confirm('切换到多规格后，单规格信息将被忽略，是否继续？', {
-              btn: ['继续', '取消']
-            }, function() {
-              // 用户确认后，可以选择将单规格数据作为第一个多规格的默认值
-              const firstSku = skus.value[0];
-              if (firstSku) {
-                firstSku.price = singleSkuPrice || '';
-                firstSku.quantity = singleSkuQuantity || '';
-                firstSku.code = singleSkuCode || '';
-                firstSku.is_default = 1;
-              }
-
-              // 清空单规格表单
-              $('input[name="skus[0][price]"]').val('');
-              $('input[name="skus[0][quantity]"]').val('');
-              $('input[name="skus[0][code]"]').val('');
-              layer.closeAll();
-            }, function() {
-              // 用户取消，回滚多规格添加
-              variants.value.pop();
-            });
-          }
-        } else {
-          // 切换回单规格模式时，将默认 SKU 的数据同步到单规格表单
-          const defaultSku = skus.value.find(sku => sku.is_default === 1);
-          if (defaultSku) {
-            $('input[name="skus[0][price]"]').val(defaultSku.price);
-            $('input[name="skus[0][quantity]"]').val(defaultSku.quantity);
-            $('input[name="skus[0][code]"]').val(defaultSku.code);
-          }
-        }
-      }, { deep: true });
-
-      // Add validation methods
+      // Batch data validation methods
       const validateBatchPrice = () => {
         if (batchData.value.price < 0) {
           batchData.value.price = 0;
@@ -684,6 +642,7 @@
         }
       }
 
+      // SKU field validation methods
       const validatePrice = (sku) => {
         let price = parseFloat(sku.price);
         if (isNaN(price) || price < 0) {
@@ -711,6 +670,43 @@
         }
       }
 
+      // Batch fill SKU codes with prefix and sequential numbers
+      const batchFillSkuCode = () => {
+        if (!batchData.value.skuPrefix) {
+          layer.msg('Please enter SKU prefix', {icon: 2});
+          return;
+        }
+
+        skus.value.forEach((sku, index) => {
+          const suffix = String(index + 1).padStart(2, '0');
+          sku.code = `${batchData.value.skuPrefix}-${suffix}`;
+        });
+
+        layer.msg('SKU codes have been filled', {icon: 1});
+      };
+
+      // Batch fill values for a specific column
+      const batchFillColumn = (column) => {
+        if (!batchData.value[column]) {
+          layer.msg('Please enter a value to fill', {icon: 2});
+          return;
+        }
+
+        const columnMap = {
+          price: 'price',
+          originPrice: 'origin_price',
+          model: 'model',
+          quantity: 'quantity'
+        };
+
+        skus.value.forEach(sku => {
+          sku[columnMap[column]] = batchData.value[column];
+        });
+
+        layer.msg('Batch fill completed', {icon: 1});
+      };
+
+      // Expose methods and state to the template
       return {
         skus,
         variants,
@@ -722,7 +718,6 @@
         defaultLocale,
         mainVariantKey,
         smallVariants,
-// showVariant,
         modifySku,
         upVariantImage,
         dragVariantsEnd,
@@ -730,16 +725,21 @@
         setMasterSku,
         showAllVariant,
         allVariantEC,
-        // 添加新的返回值
         batchData,
         batchFillSkuCode,
         batchFillColumn,
         getFirstAvailableLocaleValue,
+        validateBatchPrice,
+        validateBatchOriginPrice,
+        validateBatchQuantity,
+        validatePrice,
+        validateOriginPrice,
+        validateQuantity
       }
     }
   }).mount('#variants-box');
 
-  // 将数组分割成指定长度的数组
+  // Split an array into chunks of specified size
   function chunkArray(array, chunkSize) {
     let chunks = [];
     for (let i = 0; i < array.length; i += chunkSize) {
@@ -748,10 +748,10 @@
     return chunks;
   }
 
-  // 将数组分为指定组
+  // Split an array into a specified number of groups
   function splitArrayIntoGroups(array, groupCount) {
     if (groupCount <= 0) {
-      throw new Error('组的数量必须大于 0');
+      throw new Error('Group count must be greater than 0');
     }
 
     const result = [];
@@ -766,15 +766,14 @@
     return result;
   }
 
-  // 判断对象里面所有值是否为空
+  // Check if all values in an object are empty
   function isObjectValuesEmpty(obj) {
     for (let key in obj) {
       if (obj[key] != '') {
-        return false
+        return false;
       }
     }
-
-    return true
+    return true;
   }
 </script>
 @endpush

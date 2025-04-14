@@ -32,7 +32,8 @@
                   <div class="swiper-wrapper">
                     @foreach($product->images as $image)
                       <div class="swiper-slide">
-                        <a href="{{ image_resize($image, 600, 600) }}" data-pswp-width="800" data-pswp-height="800">
+                        <a href="{{ image_resize($image, 600, 600) }}" data-pswp-width="800"
+                           data-pswp-height="800">
                           <img src="{{ image_resize($image) }}" class="img-fluid">
                         </a>
                       </div>
@@ -102,23 +103,27 @@
             <div class="product-info-bottom">
               <div class="quantity-wrap">
                 <div class="minus"><i class="bi bi-dash-lg"></i></div>
-                <input type="number" class="form-control product-quantity" value="1" data-sku-id="{{ $sku['id'] }}">
+                <input type="number" class="form-control product-quantity" value="1"
+                       data-sku-id="{{ $sku['id'] }}">
                 <div class="plus"><i class="bi bi-plus-lg"></i></div>
               </div>
 
               <div class="product-info-btns">
-                <button class="btn btn-primary add-cart" data-id="{{ $product->id }}"
-                        data-price="{{ $product->masterSku->price }}">
-                  {{ __('front/product.add_to_cart') }}
-                </button>
-                <button class="btn buy-now ms-2" data-id="{{ $product->id }}"
-                        data-price="{{ $product->masterSku->price }}">
-                  {{ __('front/product.buy_now') }}
-                </button>
+                @if(system_setting('online_order', true))
+                    <button class="btn btn-primary add-cart" data-id="{{ $product->id }}"
+                            data-price="{{ $product->masterSku->price }}">
+                      {{ __('front/product.add_to_cart') }}
+                    </button>
+                    <button class="btn buy-now ms-2" data-id="{{ $product->id }}"
+                            data-price="{{ $product->masterSku->price }}">
+                      {{ __('front/product.buy_now') }}
+                    </button>
+                @endif
                 @hookinsert('product.detail.cart.after')
               </div>
             </div>
-            <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"
+            <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}"
+                 data-id="{{ $product->id }}"
                  data-price="{{ $product->masterSku->price }}">
               <i
                 class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
@@ -132,7 +137,8 @@
     <div class="product-description">
       <ul class="nav nav-tabs tabs-plus">
         <li class="nav-item">
-          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#product-description-description"
+          <button class="nav-link active" data-bs-toggle="tab"
+                  data-bs-target="#product-description-description"
                   type="button">{{ __('front/product.description') }}</button>
         </li>
         @if($attributes)
@@ -146,7 +152,8 @@
           </li>
         @endif
         <li class="nav-item">
-          <button class="nav-link correlation" data-bs-toggle="tab" data-bs-target="#product-description-correlation"
+          <button class="nav-link correlation" data-bs-toggle="tab"
+                  data-bs-target="#product-description-correlation"
                   type="button">{{__('front/product.related_product')}}
           </button>
         </li>
@@ -196,78 +203,78 @@
         </div>
         @hookinsert('product.detail.tab.pane.after')
       </div>
-
     </div>
 
     @hookinsert('product.show.bottom')
 
+  </div>
 
-    @endsection
+@endsection
 
-    @push('footer')
-      <script>
-        const isMobile = window.innerWidth < 992;
+@push('footer')
+  <script>
+    const isMobile = window.innerWidth < 992;
 
-        if (isMobile) {
-          $('.sub-product-img .swiper-slide').each(function () {
-            $(this).find('a > img').attr('src', $(this).find('a').attr('href'));
-          });
+    if (isMobile) {
+      $('.sub-product-img .swiper-slide').each(function () {
+        $(this).find('a > img').attr('src', $(this).find('a').attr('href'));
+      });
+    }
+
+    let subProductSwiper = new Swiper('#sub-product-img-swiper', {
+      direction: !isMobile ? 'vertical' : 'horizontal',
+      autoHeight: !isMobile ? true : false,
+      slidesPerView: !isMobile ? 5 : 1,
+      spaceBetween: !isMobile ? 10 : 0,
+      navigation: {
+        nextEl: '.sub-product-next',
+        prevEl: '.sub-product-prev',
+      },
+      pagination: {
+        el: '.sub-product-pagination',
+        clickable: true,
+      },
+      observer: true,
+      observeParents: true,
+    });
+
+    let lightbox = new PhotoSwipeLightbox({
+      gallery: '#sub-product-img-swiper',
+      children: 'a',
+      // dynamic import is not supported in UMD version
+      pswpModule: PhotoSwipe
+    });
+    lightbox.init();
+
+    $('.main-product-img').on('click', function () {
+      $('#sub-product-img-swiper .swiper-slide').eq(0).find('a').get(0).click();
+    });
+
+    $('.quantity-wrap .plus, .quantity-wrap .minus').on('click', function () {
+      if ($(this).parent().hasClass('disabled')) {
+        return;
+      }
+
+      let quantity = parseInt($(this).siblings('input').val());
+      if ($(this).hasClass('plus')) {
+        $(this).siblings('input').val(quantity + 1);
+      } else {
+        if (quantity > 1) {
+          $(this).siblings('input').val(quantity - 1);
         }
+      }
+    });
 
-        let subProductSwiper = new Swiper('#sub-product-img-swiper', {
-          direction: !isMobile ? 'vertical' : 'horizontal',
-          autoHeight: !isMobile ? true : false,
-          slidesPerView: !isMobile ? 5 : 1,
-          spaceBetween: !isMobile ? 10 : 0,
-          navigation: {
-            nextEl: '.sub-product-next',
-            prevEl: '.sub-product-prev',
-          },
-          pagination: {
-            el: '.sub-product-pagination',
-            clickable: true,
-          },
-          observer: true,
-          observeParents: true,
-        });
+    $('.add-cart, .buy-now').on('click', function () {
+      const quantity = $('.product-quantity').val();
+      const skuId = $('.product-quantity').data('sku-id');
+      const isBuyNow = $(this).hasClass('buy-now');
 
-        let lightbox = new PhotoSwipeLightbox({
-          gallery: '#sub-product-img-swiper',
-          children: 'a',
-          // dynamic import is not supported in UMD version
-          pswpModule: PhotoSwipe
-        });
-        lightbox.init();
-
-        $('.main-product-img').on('click', function () {
-          $('#sub-product-img-swiper .swiper-slide').eq(0).find('a').get(0).click();
-        });
-
-        $('.quantity-wrap .plus, .quantity-wrap .minus').on('click', function () {
-          if ($(this).parent().hasClass('disabled')) {
-            return;
-          }
-
-          let quantity = parseInt($(this).siblings('input').val());
-          if ($(this).hasClass('plus')) {
-            $(this).siblings('input').val(quantity + 1);
-          } else {
-            if (quantity > 1) {
-              $(this).siblings('input').val(quantity - 1);
-            }
-          }
-        });
-
-        $('.add-cart, .buy-now').on('click', function () {
-          const quantity = $('.product-quantity').val();
-          const skuId = $('.product-quantity').data('sku-id');
-          const isBuyNow = $(this).hasClass('buy-now');
-
-          inno.addCart({skuId, quantity, isBuyNow}, this, function (res) {
-            if (isBuyNow) {
-              window.location.href = '{{ front_route('carts.index') }}';
-            }
-          })
-        });
-      </script>
-  @endpush
+      inno.addCart({skuId, quantity, isBuyNow}, this, function (res) {
+        if (isBuyNow) {
+          window.location.href = '{{ front_route('carts.index') }}';
+        }
+      })
+    });
+  </script>
+@endpush

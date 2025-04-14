@@ -23,6 +23,16 @@ use Throwable;
 
 class ProductRepo extends BaseRepo
 {
+    const AVAILABLE_SORT_FIELDS = [
+        'updated_at',
+        'created_at',
+        'ps.price',
+        'pt.name',
+        'sales',
+        'viewed',
+        //'rating'
+    ];
+
     /**
      * @return array[]
      */
@@ -73,6 +83,14 @@ class ProductRepo extends BaseRepo
                 $query->on('ps.product_id', '=', 'products.id')
                     ->where('is_default', true);
             });
+        }
+
+        if (! in_array($sort, self::AVAILABLE_SORT_FIELDS)) {
+            $sort = 'updated_at';
+        }
+
+        if (! in_array($order, ['asc', 'desc'])) {
+            $order = 'desc';
         }
 
         if ($sort && $order) {
@@ -201,7 +219,13 @@ class ProductRepo extends BaseRepo
             $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
             RelationRepo::getInstance()->handleBidirectionalRelations($product, $data['related_ids'] ?? []);
             $product->categories()->sync($data['categories'] ?? []);
-            $product->skus()->createMany($this->handleSkus($data['skus']));
+
+            $skus = $this->handleSkus($data['skus'] ?? []);
+            if (isset($data['price_type']) && $data['price_type'] === 'single' && ! empty($skus)) {
+                $product->update(['variables' => []]);
+                $skus = [$skus[0]];
+            }
+            $product->skus()->createMany($skus);
 
             DB::commit();
 
@@ -213,7 +237,7 @@ class ProductRepo extends BaseRepo
     }
 
     /**
-     * Crate or update product.
+     * Patch a product.
      *
      * @param  Product  $product
      * @param  $data

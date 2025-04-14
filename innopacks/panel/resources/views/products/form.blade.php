@@ -50,17 +50,17 @@
             </ul>
 
             <div class="tab-content" id="myTabContent">
-              @include('panel::products.form.tab_pane_basic', $product)
+              @include('panel::products.panes.tab_pane_basic', $product)
 
-              @include('panel::products.form.tab_pane_content', $product)
+              @include('panel::products.panes.tab_pane_content', $product)
 
-              @include('panel::products.form.tab_pane_specification', $product)
+              @include('panel::products.panes.tab_pane_specification', $product)
 
-              @include('panel::products.form.tab_pane_addition', $product)
+              @include('panel::products.panes.tab_pane_addition', $product)
 
-              @include('panel::products.form.tab_pane_seo', $product)
+              @include('panel::products.panes.tab_pane_seo', $product)
 
-              @include('panel::products.form.tab_pane_related', $product)
+              @include('panel::products.panes.tab_pane_related', $product)
 
               @hookinsert('panel.product.edit.tab.pane.bottom')
             </div>
@@ -73,26 +73,71 @@
 
 @push('footer')
   <script>
-    $(document).ready(function() {
-      $('#product-form').on('keypress', function(e) {
-        if (e.which === 13) {
-          e.preventDefault();
-        }
-      });
+    // Product form module
+    const ProductForm = {
+      // Initialize the module
+      init() {
+        this.preventEnterSubmit();
+        this.setupCategorySearch();
+        this.setupPriceTypeToggle();
+      },
 
-      $('.category-search input').on('input', function() {
-        const val = $(this).val().trim();
-        var lists = $('.category-select li');
-        lists.each(function() {
-          var text = $(this).find('.name').text();
-          if (text.indexOf(val) > -1) {
-            $(this).show();
-            $(this).find('.name').html(text.replace(val, '<span style="color: red;">' + val + '</span>'));
-          } else {
-            $(this).hide();
+      // Prevent form submission on Enter key press
+      preventEnterSubmit() {
+        $('#product-form').on('keypress', function(e) {
+          if (e.which === 13) {
+            e.preventDefault();
           }
         });
-      });
+      },
+
+      // Setup category search and filtering
+      setupCategorySearch() {
+        $('.category-search input').on('input', function() {
+          const searchValue = $(this).val().trim();
+          const categoryItems = $('.category-select li');
+          
+          categoryItems.each(function() {
+            const itemText = $(this).find('.name').text();
+            
+            if (itemText.indexOf(searchValue) > -1 && searchValue !== '') {
+              $(this).show();
+              $(this).find('.name').html(itemText.replace(
+                searchValue, 
+                '<span style="color: red;">' + searchValue + '</span>'
+              ));
+            } else if (searchValue === '') {
+              $(this).show();
+              $(this).find('.name').text(itemText);
+            } else {
+              $(this).hide();
+            }
+          });
+        });
+      },
+
+      // Setup price type toggle functionality
+      setupPriceTypeToggle() {
+        // Toggle price visibility when radio changes
+        $('input[name="price_type"]').on('change', function() {
+          const isMultiple = $(this).val() === 'multiple';
+          ProductForm.togglePriceVisibility(isMultiple);
+        });
+        
+        // Set initial visibility state
+        this.togglePriceVisibility($('#price_type_multiple').is(':checked'));
+      },
+
+      // Toggle price-related elements visibility
+      togglePriceVisibility(isMultiple) {
+        $('#single_price_box').toggleClass('d-none', isMultiple);
+        $('#specifications_box').toggleClass('d-none', !isMultiple);
+      }
+    };
+
+    // Initialize when document is ready
+    $(document).ready(function() {
+      ProductForm.init();
     });
   </script>
 @endpush

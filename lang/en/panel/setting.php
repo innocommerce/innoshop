@@ -83,6 +83,8 @@ return [
     'specials'                          => 'Fixed page',
     'store_features'                    => 'Store function setting',
     'store_features_desc'               => 'Configure the store\'s functional options and user experience',
+    'online_order'                      => 'Online Ordering',
+    'online_order_desc'                 => 'When enabled, users can place orders online. When disabled, all order-related buttons will be hidden',
     'system_options'                    => 'System option',
     'telephone'                         => 'Contact Phone Number',
     'title_to_tdk'                      => 'Title fill into TDK',

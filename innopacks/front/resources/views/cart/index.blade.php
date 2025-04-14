@@ -94,13 +94,15 @@
               <li><span>{{ __('front/cart.selected') }} </span><span class="total-total">{{ $total }}</span></li>
               <li><span>{{ __('front/cart.total') }}</span><span class="total-amount">{{ $amount_format }}</span></li>
             </ul>
-            <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout"
-              href="{{ front_route('checkout.index') }}">{{ __('front/cart.go_checkout') }}</a>
+            @if(system_setting('online_order', true))
+                <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout"
+                  href="{{ front_route('checkout.index') }}">{{ __('front/cart.go_checkout') }}</a>
+            @endif
           </div>
         </div>
       </div>
     @else
-      <div class="text-center pm-5">
+      <div class="text-center pm-5 pb-5">
         <img src="{{ asset('images/icons/empty-cart.svg') }}" class="img-fluid w-max-300 mb-5">
         <h2>{{ __('front/cart.empty_cart') }}</h2>
         <a class="btn btn-primary btn-lg mt-3"
