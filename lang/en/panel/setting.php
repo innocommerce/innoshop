@@ -91,4 +91,6 @@ return [
     'title_to_tdk_desc'                 => 'Automatically generate TDK (title, description, keyword) information using product titles',
     'user_experience'                   => 'User experience',
     'website_data'                      => 'Website Data',
+    'maintenance_mode'                  => 'Maintenance Mode',
+    'maintenance_mode_desc'             => 'When enabled, all users except administrators will be unable to access the frontend',
 ];

@@ -19,6 +19,7 @@ use InnoShop\Common\Middleware\EventActionHook;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Front\Middleware\CustomerAuthentication;
 use InnoShop\Front\Middleware\GlobalFrontData;
+use InnoShop\Front\Middleware\MaintenanceMode;
 use InnoShop\Front\Middleware\SetFrontLocale;
 use InnoShop\Panel\Repositories\ThemeRepo;
 
@@ -105,7 +106,14 @@ class FrontServiceProvider extends ServiceProvider
     protected function registerWebRoutes(): void
     {
         $router      = $this->app['router'];
-        $middlewares = [SetFrontLocale::class, EventActionHook::class, ContentFilterHook::class, GlobalFrontData::class];
+        $middlewares = [
+            SetFrontLocale::class,
+            EventActionHook::class,
+            ContentFilterHook::class,
+            GlobalFrontData::class,
+            MaintenanceMode::class,
+        ];
+
         foreach ($middlewares as $middleware) {
             $router->pushMiddlewareToGroup('front', $middleware);
         }

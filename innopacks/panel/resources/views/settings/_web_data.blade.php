@@ -111,6 +111,13 @@
           <p class="text-muted small mt-1">{{ __('panel/setting.debug_desc') }}</p>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="mb-4">
+          <x-common-form-switch-radio title="{{ __('panel/setting.maintenance_mode') }}" name="maintenance_mode" required
+                                  value="{{ old('maintenance_mode', system_setting('maintenance_mode')) }}"/>
+          <p class="text-muted small mt-1">{{ __('panel/setting.maintenance_mode_desc') }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

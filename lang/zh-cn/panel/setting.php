@@ -91,4 +91,6 @@ return [
     'title_to_tdk_desc'                 => '使用产品标题自动生成TDK（标题、描述、关键词）信息',
     'user_experience'                   => '用户体验',
     'website_data'                      => '网站设置',
+    'maintenance_mode'                  => '系统维护模式',
+    'maintenance_mode_desc'             => '开启后，除管理员外的所有用户将无法访问前台',
 ];
