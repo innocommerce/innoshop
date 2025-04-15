@@ -67,7 +67,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td><img class="img-thumbnail" src="{{ $item['image'] }}" style="width: 30px;"></td>
                 <td>{{ $item['name'] }}
-                  @if ($item->productSku->variantLabel)
+                  @if ($item->productSku->variantLabel ?? '')
                     <br /><span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
                   @endif
                 </td>

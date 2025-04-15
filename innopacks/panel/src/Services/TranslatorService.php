@@ -39,7 +39,6 @@ class TranslatorService extends BaseService
                 } elseif (is_string($text)) {
                     $result = $translator->translate($source, $target, $text);
                 }
-                $result = addslashes(str_replace('’', '\'', $result));
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }

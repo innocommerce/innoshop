@@ -484,7 +484,7 @@ class FileManagerService implements FileManagerInterface
         $originName = $this->getUniqueFileName($savePath, $originName);
         $filePath   = $file->storeAs($savePath, $originName, 'media');
 
-        return asset($this->mediaDir.$filePath);
+        return asset($this->mediaDir.'/'.$filePath);
     }
 
     /**
