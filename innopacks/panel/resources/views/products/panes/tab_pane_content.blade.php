@@ -18,7 +18,7 @@
           <option value="{{ $locale->code }}">{{ $locale->name }}</option>
         @endforeach
       </select>
-      <button type="button" class="mx-2 btn btn-primary btn-custom-small btn-sm" id="translate-tab">
+      <button type="button" class="mx-2 btn btn-primary btn-custom-small btn-sm" id="translate-html">
         {{ __('panel/product.translate') }}
       </button>
     </div>

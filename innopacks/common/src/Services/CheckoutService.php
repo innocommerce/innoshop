@@ -56,6 +56,10 @@ class CheckoutService
      */
     public function __construct(int $customerID = 0, string $guestID = '')
     {
+        if (system_setting('disable_online_order')) {
+            throw new Exception('The online order is disabled.');
+        }
+
         if ($customerID) {
             $this->customerID = $customerID;
         } else {

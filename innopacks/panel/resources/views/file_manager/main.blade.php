@@ -16,7 +16,8 @@
       driver: '{{ $config['driver'] }}',
       endpoint: '{{ $config['endpoint'] }}',
       bucket: '{{ $config['bucket'] }}',
-      baseUrl: '{{ $config['baseUrl'] }}'
+      baseUrl: '{{ $config['baseUrl'] }}',
+      enableCrop: {{ system_setting('file_manager_enable_crop', false) ? 'true' : 'false' }}
     };
   </script>
 
@@ -1994,6 +1995,28 @@
           this.loadFiles();
         },
 
+        // 上传文件方法
+        uploadFileToServer(file, path, type) {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('path', path);
+          formData.append('type', type);
+          
+          return http.post('file_manager/upload', formData)
+            .then(res => {
+              if (res.success) {
+                this.$message.success('上传成功');
+                this.uploadDialog.visible = false;
+                this.loadFiles();
+              } else {
+                this.$message.error(res.message || '上传失败');
+              }
+            })
+            .catch(err => {
+              this.$message.error('上传失败：' + err.message);
+            });
+        },
+
         beforeUpload(file) {
           const isImage = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type);
           const isVideo = ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type)
@@ -2013,32 +2036,16 @@
             return false;
           }
           if (isVideo || isDoc) {
-            const formData = new FormData();
-            if (isVideo) {
-              formData.append('file', file);
-              formData.append('path', this.uploadData.path);
-              formData.append('type', 'videos');
-            } else {
-              formData.append('file', file);
-              formData.append('path', this.uploadData.path);
-              formData.append('type', 'application');
-            }
-            http.post('file_manager/upload', formData)
-              .then(res => {
-                if (res.success) {
-                  this.$message.success('上传成功');
-                  this.uploadDialog.visible = false;
-                  this.loadFiles();
-                } else {
-                  this.$message.error(res.message || '上传失败');
-                }
-              })
-              .catch(err => {
-                this.$message.error('上传失败：' + err.message);
-              });
+            const type = isVideo ? 'videos' : 'application';
+            this.uploadFileToServer(file, this.uploadData.path, type);
             return false;
           } else {
-            this.cropImage(file);
+            // 根据 enableCrop 变量决定是否进行裁剪
+            if (window.fileManagerConfig.enableCrop) {
+              this.cropImage(file);
+            } else {
+              this.uploadFileToServer(file, this.uploadData.path, 'images');
+            }
             return false;
           }
         },
@@ -2078,31 +2085,7 @@
               });
 
               canvas.toBlob((blob) => {
-                const formData = new FormData();
-                formData.append('file', blob, file.name);
-                formData.append('path', this.uploadData.path);
-                formData.append('type', 'images');
-
-                // 上传裁剪后的图片
-                http.post('file_manager/upload', formData)
-                  .then(res => {
-                    if (res.success) {
-                      this.$message.success('上传成功');
-
-                      this.cleanupDialog(dialog, mask);
-
-                      // 关闭上传话框
-                      this.uploadDialog.visible = false;
-
-                      // 刷新件列表
-                      this.loadFiles();
-                    } else {
-                      this.$message.error(res.message || '上传失败');
-                    }
-                  })
-                  .catch(err => {
-                    this.$message.error('上传失败：' + err.message);
-                  })
+                this.uploadFileToServer(blob, this.uploadData.path, 'images')
                   .finally(() => {
                     this.cleanupDialog(dialog, mask);
                     this.uploadDialog.visible = false;

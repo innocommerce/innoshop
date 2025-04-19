@@ -24,7 +24,7 @@
                 :required="(bool)$field['required']"
                 :value="old($field['name'], $field['value'] ?? '')">
                 @if ($field['recommend_size'] ?? false)
-                <div class="help-text font-size-12 lh-base">{{ __('common.recommend_size') }} {{ $field['recommend_size'] }}</div>
+                  <div class="text-secondary"><small>{{ __('common.recommend_size') }} {{ $field['recommend_size'] }}</small></div>
                 @endif
               </x-common-form-image>
             @endif
@@ -60,7 +60,7 @@
                 :options="$field['options']"
                 :emptyOption="$field['emptyOption'] ?? true" >
                 @if (isset($field['description']))
-                  <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
+                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
                 @endif
               </x-common-form-select>
             @endif
@@ -71,7 +71,7 @@
                 :title="$field['label']"
                 :value="old($field['name'], $field['value'] ?? '')">
                 @if (isset($field['description']))
-                  <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
+                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
                 @endif
               </x-common-form-switch-radio>
             @endif
@@ -83,7 +83,7 @@
                 :required="(bool)$field['required']"
                 :value="old($field['name'], $field['value'] ?? '')">
                 @if (isset($field['description']))
-                  <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
+                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
                 @endif
               </x-common-form-textarea>
             @endif
@@ -96,7 +96,7 @@
                 :is-locales="true"
                 :value="old($field['name'], $field['value'] ?? '')">
                 @if (isset($field['description']))
-                  <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
+                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
                 @endif
               </x-common-form-textarea>
             @endif
@@ -109,7 +109,7 @@
                 :required="(bool)$field['required']"
                 >
                 @if (isset($field['description']))
-                  <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
+                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
                 @endif
               </x-common-form-rich-text>
             @endif
@@ -123,7 +123,7 @@
                 :is-locales="true"
                 >
                 @if (isset($field['description']))
-                  <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
+                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
                 @endif
               </x-common-form-rich-text>
             @endif
@@ -147,7 +147,7 @@
                   @endforeach
                 </div>
                 @if (isset($field['description']))
-                  <div class="help-text font-size-12 lh-base">{{ $field['description'] }}</div>
+                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
                 @endif
               </x-panel::form.row>
             @endif

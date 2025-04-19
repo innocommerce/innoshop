@@ -59,7 +59,7 @@
                    @endif @if($readonly) readonly @endif />
           @endif
           @if ($description)
-            <div class="help-text font-size-12 lh-base">{!! $description !!}</div>
+            <div class="text-secondary"><small>{!! $description !!}</small></div>
           @endif
 
           <span class="invalid-feedback" role="alert">

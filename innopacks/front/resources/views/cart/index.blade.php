@@ -94,7 +94,7 @@
               <li><span>{{ __('front/cart.selected') }} </span><span class="total-total">{{ $total }}</span></li>
               <li><span>{{ __('front/cart.total') }}</span><span class="total-amount">{{ $amount_format }}</span></li>
             </ul>
-            @if(system_setting('online_order', true))
+            @if(!system_setting('disable_online_order', false))
                 <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout"
                   href="{{ front_route('checkout.index') }}">{{ __('front/cart.go_checkout') }}</a>
             @endif

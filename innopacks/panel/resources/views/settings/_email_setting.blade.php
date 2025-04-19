@@ -1,3 +1,4 @@
+<!-- Email Settings -->
 <div class="container">
   <div class="col-12 mx-auto">
   <div class="row">

@@ -109,7 +109,7 @@
               </div>
 
               <div class="product-info-btns">
-                @if(system_setting('online_order', true))
+                @if(!system_setting('disable_online_order', true))
                     <button class="btn btn-primary add-cart" data-id="{{ $product->id }}"
                             data-price="{{ $product->masterSku->price }}">
                       {{ __('front/product.add_to_cart') }}

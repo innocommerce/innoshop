@@ -267,7 +267,7 @@ class PluginServiceProvider extends ServiceProvider
         $frontRoutePath = "$pluginBasePath/$pluginCode/Routes/front.php";
         if (file_exists($frontRoutePath)) {
             $locales = locales();
-            if (count($locales) == 1) {
+            if (hide_url_locale()) {
                 Route::middleware('front')
                     ->name('front.')
                     ->group(function () use ($frontRoutePath) {

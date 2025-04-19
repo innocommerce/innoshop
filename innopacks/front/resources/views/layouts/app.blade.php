@@ -63,14 +63,8 @@
     @include('layouts.footer')
   @endif
 
-  <!-- Cart Offcanvas (Desktop only) -->
   @if (!request('iframe'))
-    @php
-      $cartData = \InnoShop\Common\Services\CartService::getInstance()->getCartList();
-      $list = $cartData['list'] ?? [];
-      $amount_format = $cartData['amount_format'] ?? '0.00';
-    @endphp
-    @include('components.cart-offcanvas', ['list' => $list, 'amount_format' => $amount_format])
+    @include('components.cart-offcanvas')
   @endif
 
   @stack('footer')

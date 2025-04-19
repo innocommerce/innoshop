@@ -1,4 +1,3 @@
-
 export default {
   getTranslate() {
     $("#translate-button").click(function () {
@@ -8,7 +7,7 @@ export default {
       const text = input.val();
 
       axios
-        .post(`${urls.base_url}/translations/translate`, {
+        .post(`${urls.base_url}/translations/translate-text`, {
           source: source_locale,
           target: $("#target-locale").val(),
           text: text,
@@ -29,7 +28,7 @@ export default {
         });
     });
 
-    $("#translate-tab").click(function () {
+    $("#translate-html").click(function () {
       const source_tab_code = $("#source-tab").val();
       const textarea = $(
         `textarea[name="translations[${source_tab_code}][content]"]`
@@ -40,7 +39,7 @@ export default {
       tinymce.triggerSave();
       let content = editor.getContent();
       axios
-        .post(`${urls.base_url}/translations/translate`, {
+        .post(`${urls.base_url}/translations/translate-html`, {
           source: source_tab_code,
           target: $("#target-tab").val(),
           text: content,
@@ -109,7 +108,7 @@ export default {
       }
 
       axios
-        .post(`${urls.base_url}/translations/translate`, {
+        .post(`${urls.base_url}/translations/translate-text`, {
           source: current_source,
           target: selectedOptionValue,
           text: textareaValue,

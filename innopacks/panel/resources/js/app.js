@@ -312,7 +312,6 @@ const Editor = {
 };
 
 $(function() {
-  window.inno = common;
   window.dominateColor = dominateColor;
   window.inno.fileManagerIframe = FileManager.init;
 
@@ -330,3 +329,5 @@ $(function() {
 
   inno.getTranslate();
 });
+
+window.inno = common;

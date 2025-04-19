@@ -12,7 +12,7 @@
             </button>
           </div>
           <div>
-            <select class="form-select form-select-sm  ">
+            <select class="form-select form-select-sm">
               <option value="all">{{ __('panel/product.other_all') }}</option>
               @foreach (locales() as $locale)
                 <option value="{{ $locale->code }}">{{ $locale->name }}</option>

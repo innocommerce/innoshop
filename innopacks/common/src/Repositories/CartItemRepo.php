@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\CartItem;
 use InnoShop\Common\Models\Product\Sku;
@@ -58,6 +59,10 @@ class CartItemRepo extends BaseRepo
      */
     public function create($data): mixed
     {
+        if (system_setting('disable_online_order')) {
+            throw new Exception('The online order is disabled.');
+        }
+
         $data    = $this->handleData($data);
         $filters = [
             'sku_code'    => $data['sku_code'],

@@ -141,7 +141,7 @@ class SitemapService extends BaseService
     private function frontRoute($locale, $name, mixed $parameters = []): string
     {
         try {
-            if (count(locales()) == 1) {
+            if (hide_url_locale()) {
                 return route('front.'.$name, $parameters);
             }
 
