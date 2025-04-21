@@ -132,7 +132,7 @@ let app = createApp({
       if (items.value.length < 3) {
         const nextIndex = items.value.length;
         const newOption = availableOptions(nextIndex)[0] || { code: 'facebook', label: 'Facebook' };
-        const callbackUrl = `{{ panel_route('home.index') }}/${newOption.code}/callback`;
+        const callbackUrl = `{{ url('/') }}/social/${newOption.code}/callback`;
         items.value.push(createItem(newOption, nextIndex, callbackUrl));
       }
     };
@@ -140,7 +140,7 @@ let app = createApp({
     const addAfter = (index) => {
       if (items.value.length < 3) {
         const newOption = availableOptions(index + 1)[0] || { code: 'facebook', label: 'Facebook' };
-        const callbackUrl = `{{ panel_route('home.index') }}/${newOption.code}/callback`;
+        const callbackUrl = `{{ url('/') }}/social/${newOption.code}/callback`;
         items.value.splice(index + 1, 0, createItem(newOption, index + 1, callbackUrl));
       }
     };
@@ -175,7 +175,7 @@ let app = createApp({
 
     const updateCallbackUrl = (index) => {
       const item = items.value[index];
-      item.callback_url = `{{ panel_route('home.index') }}/${item.provider}/callback`;
+      item.callback_url = `{{ url('/') }}/social/${item.provider}/callback`;
     };
 
     const isValid = computed(() => {
