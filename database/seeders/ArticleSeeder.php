@@ -181,7 +181,6 @@ class ArticleSeeder extends Seeder
                 'meta_keywords'    => 'InnoShop - Innovative ecommerce',
             ],
         ];
-
     }
 
     /**

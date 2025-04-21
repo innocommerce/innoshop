@@ -57,6 +57,12 @@ class PageSeeder extends Seeder
                 'viewed' => 999,
                 'active' => 1,
             ],
+            [
+                'id'     => 4,
+                'slug'   => 'privacy-policy',
+                'viewed' => 0,
+                'active' => 1,
+            ],
         ];
     }
 
@@ -251,7 +257,6 @@ class PageSeeder extends Seeder
                 'meta_description' => '关于',
                 'meta_keywords'    => '关于',
             ],
-
             [
                 'page_id'          => 1,
                 'locale'           => 'en',
@@ -278,6 +283,114 @@ class PageSeeder extends Seeder
                 'meta_title'       => 'About Us',
                 'meta_description' => 'About Us',
                 'meta_keywords'    => 'About Us',
+            ],
+            [
+                'page_id' => 4,
+                'locale'  => 'zh-cn',
+                'title'   => '隐私政策',
+                'content' => '<p>InnoShop 非常重视用户的隐私保护。本隐私政策说明了我们如何收集、使用和保护您的个人信息。</p>
+
+<h3>1. 信息收集</h3>
+<p>我们收集的信息包括：</p>
+<ul>
+    <li>账号信息：邮箱、用户名等</li>
+    <li>设备信息：IP地址、浏览器类型等</li>
+    <li>使用数据：访问记录、操作日志等</li>
+</ul>
+
+<h3>2. 信息使用</h3>
+<p>我们使用收集的信息用于：</p>
+<ul>
+    <li>提供和改进服务</li>
+    <li>发送重要通知</li>
+    <li>防止欺诈和滥用</li>
+</ul>
+
+<h3>3. 信息保护</h3>
+<p>我们采取严格的安全措施保护您的信息，包括：</p>
+<ul>
+    <li>数据加密存储</li>
+    <li>访问权限控制</li>
+    <li>定期安全审计</li>
+</ul>
+
+<h3>4. 信息共享</h3>
+<p>我们不会出售您的个人信息。仅在以下情况下可能共享信息：</p>
+<ul>
+    <li>获得您的明确同意</li>
+    <li>法律要求</li>
+    <li>保护我们的合法权益</li>
+</ul>
+
+<h3>5. 您的权利</h3>
+<p>您有权：</p>
+<ul>
+    <li>访问您的个人信息</li>
+    <li>更正不准确的信息</li>
+    <li>要求删除您的信息</li>
+    <li>限制信息处理</li>
+</ul>
+
+<h3>6. 联系我们</h3>
+<p>如果您有任何关于隐私政策的疑问，请联系我们：</p>
+<p>邮箱：privacy@innoshop.com</p>',
+                'meta_title'       => '隐私政策 - InnoShop',
+                'meta_description' => 'InnoShop 隐私政策说明',
+                'meta_keywords'    => '隐私政策,数据保护,个人信息',
+            ],
+            [
+                'page_id' => 4,
+                'locale'  => 'en',
+                'title'   => 'Privacy Policy',
+                'content' => '<p>InnoShop takes your privacy seriously. This Privacy Policy explains how we collect, use, and protect your personal information.</p>
+
+<h3>1. Information Collection</h3>
+<p>We collect the following information:</p>
+<ul>
+    <li>Account information: email, username, etc.</li>
+    <li>Device information: IP address, browser type, etc.</li>
+    <li>Usage data: access records, operation logs, etc.</li>
+</ul>
+
+<h3>2. Information Usage</h3>
+<p>We use the collected information to:</p>
+<ul>
+    <li>Provide and improve services</li>
+    <li>Send important notifications</li>
+    <li>Prevent fraud and abuse</li>
+</ul>
+
+<h3>3. Information Protection</h3>
+<p>We implement strict security measures to protect your information, including:</p>
+<ul>
+    <li>Data encryption</li>
+    <li>Access control</li>
+    <li>Regular security audits</li>
+</ul>
+
+<h3>4. Information Sharing</h3>
+<p>We do not sell your personal information. We may share information only in the following cases:</p>
+<ul>
+    <li>With your explicit consent</li>
+    <li>When required by law</li>
+    <li>To protect our legal rights</li>
+</ul>
+
+<h3>5. Your Rights</h3>
+<p>You have the right to:</p>
+<ul>
+    <li>Access your personal information</li>
+    <li>Correct inaccurate information</li>
+    <li>Request deletion of your information</li>
+    <li>Restrict information processing</li>
+</ul>
+
+<h3>6. Contact Us</h3>
+<p>If you have any questions about our Privacy Policy, please contact us:</p>
+<p>Email: privacy@innoshop.com</p>',
+                'meta_title'       => 'Privacy Policy - InnoShop',
+                'meta_description' => 'InnoShop Privacy Policy',
+                'meta_keywords'    => 'Privacy Policy, Data Protection, Personal Information',
             ],
         ];
     }
