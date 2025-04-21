@@ -24,8 +24,8 @@ Route::middleware(['admin_auth:admin'])
         Route::post('/upload/images', [Controllers\UploadController::class, 'images'])->name('upload.images');
         Route::post('/upload/files', [Controllers\UploadController::class, 'files'])->name('upload.files');
 
-        Route::post('/translations/trans-text', [Controllers\TranslationController::class, 'translateText'])->name('translations.trans_text');
-        Route::post('/translations/trans-html', [Controllers\TranslationController::class, 'translateHtml'])->name('translations.trans_html');
+        Route::post('/translations/translate-text', [Controllers\TranslationController::class, 'translateText'])->name('translations.trans_text');
+        Route::post('/translations/translate-html', [Controllers\TranslationController::class, 'translateHtml'])->name('translations.trans_html');
 
         Route::resource('/orders', Controllers\OrderController::class);
         Route::get('/orders/{order}/printing', [Controllers\OrderController::class, 'printing'])->name('orders.printing');
