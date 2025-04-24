@@ -24,11 +24,13 @@ class BrandName extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'     => $this->id,
             'slug'   => $this->slug,
             'name'   => $this->name,
             'active' => (bool) $this->active,
         ];
+
+        return fire_hook_filter('resource.brand.name', $data);
     }
 }

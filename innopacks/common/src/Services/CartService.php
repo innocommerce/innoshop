@@ -99,8 +99,14 @@ class CartService
      */
     public function addCart($data): array
     {
-        $data = $this->mergeAuthId($data);
-        CartItemRepo::getInstance()->create($data);
+        $data     = $this->mergeAuthId($data);
+        $cartItem = CartItemRepo::getInstance()->create($data);
+
+        // Trigger hook after adding item to cart
+        fire_hook_action('service.cart.add.after', [
+            'cart_item' => $cartItem,
+            'quantity'  => $data['quantity'],
+        ]);
 
         return $this->handleResponse();
     }
@@ -114,6 +120,12 @@ class CartService
     {
         $data = $this->mergeAuthId($data);
         CartItemRepo::getInstance()->update($cartItem, $data);
+
+        // Trigger hook after updating cart item
+        fire_hook_action('service.cart.update.after', [
+            'cart_item' => $cartItem,
+            'quantity'  => $data['quantity'] ?? $cartItem->quantity,
+        ]);
 
         return $this->handleResponse();
     }

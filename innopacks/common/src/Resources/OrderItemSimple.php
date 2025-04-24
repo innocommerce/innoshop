@@ -24,7 +24,7 @@ class OrderItemSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'              => $this->id,
             'order_id'        => $this->order_id,
             'product_id'      => $this->product_id,
@@ -42,6 +42,10 @@ class OrderItemSimple extends JsonResource
             'price_format'    => $this->price_format,
             'subtotal_format' => $this->subtotal_format,
             'has_review'      => $this->has_review,
+            'item_type'       => $this->item_type,
+            'item_type_label' => $this->item_type_label,
         ];
+
+        return fire_hook_filter('resource.order.item.simple', $data);
     }
 }

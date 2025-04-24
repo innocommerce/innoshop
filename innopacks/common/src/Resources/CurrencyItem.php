@@ -22,7 +22,7 @@ class CurrencyItem extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'            => $this->id,
             'name'          => $this->name,
             'code'          => $this->code,
@@ -32,5 +32,7 @@ class CurrencyItem extends JsonResource
             'value'         => $this->value,
             'active'        => $this->active,
         ];
+
+        return fire_hook_filter('resource.currency.item', $data);
     }
 }

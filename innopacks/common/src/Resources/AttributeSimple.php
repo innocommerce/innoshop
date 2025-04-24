@@ -24,10 +24,12 @@ class AttributeSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'     => $this->id,
             'locale' => $this->translation->locale ?? '',
             'name'   => $this->translation->name   ?? '',
         ];
+
+        return fire_hook_filter('resource.attribute.simple', $data);
     }
 }

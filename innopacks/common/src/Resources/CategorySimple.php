@@ -24,7 +24,7 @@ class CategorySimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'       => $this->id,
             'slug'     => $this->slug,
             'locale'   => $this->translation->locale ?? '',
@@ -34,5 +34,7 @@ class CategorySimple extends JsonResource
             'active'   => (bool) $this->active,
             'children' => self::collection($this->children)->jsonSerialize(),
         ];
+
+        return fire_hook_filter('resource.category.simple', $data);
     }
 }

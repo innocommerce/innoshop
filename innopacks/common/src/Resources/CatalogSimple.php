@@ -22,11 +22,13 @@ class CatalogSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'       => $this->id,
             'name'     => $this->translation->title ?? '',
             'url'      => $this->url,
             'children' => self::collection($this->children)->jsonSerialize(),
         ];
+
+        return fire_hook_filter('resource.catalog.simple', $data);
     }
 }

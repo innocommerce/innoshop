@@ -22,9 +22,11 @@ class CustomerGroupSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'   => $this->id,
             'name' => $this->fallbackName(),
         ];
+
+        return fire_hook_filter('resource.customer_group.simple', $data);
     }
 }

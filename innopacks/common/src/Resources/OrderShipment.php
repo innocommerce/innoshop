@@ -24,12 +24,14 @@ class OrderShipment extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'              => $this->id,
             'express_code'    => $this->express_code,
             'express_company' => $this->express_company,
             'express_number'  => $this->express_number,
             'created_at'      => $this->created_at,
         ];
+
+        return fire_hook_filter('resource.order.shipment', $data);
     }
 }

@@ -24,7 +24,7 @@ class OrderSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'                  => $this->id,
             'number'              => $this->number,
             'customer_id'         => $this->customer_id,
@@ -51,5 +51,7 @@ class OrderSimple extends JsonResource
             'admin_note'          => $this->admin_note,
             'quantity_total'      => $this->items->sum('quantity'),
         ];
+
+        return fire_hook_filter('resource.order.simple', $data);
     }
 }

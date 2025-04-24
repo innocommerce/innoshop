@@ -28,7 +28,7 @@ class CustomerDetail extends JsonResource
     {
         $customerOrders = Order::query()->where('customer_id', $this->id)->get();
 
-        return [
+        $data = [
             'id'                  => $this->id,
             'email'               => $this->email,
             'name'                => $this->name,
@@ -39,5 +39,7 @@ class CustomerDetail extends JsonResource
             'paid_order_total'    => $customerOrders->where('status', StateMachineService::PAID)->count(),
             'shipped_order_total' => $customerOrders->where('status', StateMachineService::SHIPPED)->count(),
         ];
+
+        return fire_hook_filter('resource.customer.detail', $data);
     }
 }

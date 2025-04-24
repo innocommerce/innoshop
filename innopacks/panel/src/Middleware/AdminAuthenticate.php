@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Middleware;
 
 use Closure;
+use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class AdminAuthenticate extends Middleware
      * @param  ...$guards
      * @return mixed
      * @throws AuthenticationException
+     * @throws Exception
      */
     public function handle($request, Closure $next, ...$guards): mixed
     {
@@ -36,7 +38,9 @@ class AdminAuthenticate extends Middleware
 
         $routeCode = str_replace('.', '_', $routeCode);
         if (! current_admin()->can($routeCode)) {
-            abort(403);
+            app()->setLocale(panel_locale_code());
+
+            return response()->view('panel::errors.403', [], 403);
         }
 
         return $next($request);

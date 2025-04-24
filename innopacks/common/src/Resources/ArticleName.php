@@ -24,7 +24,7 @@ class ArticleName extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'         => $this->id,
             'slug'       => $this->slug,
             'name'       => $this->translation->title,
@@ -32,5 +32,7 @@ class ArticleName extends JsonResource
             'active'     => (bool) $this->active,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
+
+        return fire_hook_filter('resource.article.name', $data);
     }
 }

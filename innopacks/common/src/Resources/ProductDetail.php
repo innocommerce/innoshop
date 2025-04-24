@@ -42,7 +42,7 @@ class ProductDetail extends JsonResource
             }
         }
 
-        return [
+        $data = [
             'sku_id'              => $sku->id,
             'product_id'          => $this->id,
             'slug'                => $this->slug,
@@ -62,5 +62,7 @@ class ProductDetail extends JsonResource
             'viewed'              => $this->viewed,
             'related'             => ProductSimple::collection($this->relationProducts),
         ];
+
+        return fire_hook_filter('resource.product.detail', $data);
     }
 }

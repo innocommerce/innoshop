@@ -21,13 +21,15 @@ use InnoShop\Plugin\Repositories\SettingRepo;
 final class Plugin implements Arrayable, ArrayAccess
 {
     public const TYPES = [
-        'billing',
-        'shipping',
-        'feature',
-        'fee',
-        'social',
-        'language',
-        'intelli',
+        'feature',    // Feature modules
+        'marketing',  // Marketing tools
+        'billing',    // Payment methods
+        'shipping',   // Shipping methods
+        'fee',        // Order fees
+        'social',     // Social login
+        'language',   // Language packs
+        'translator', // Translation tools
+        'intelli',    // AI models
     ];
 
     protected string $type;

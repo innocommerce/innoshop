@@ -189,6 +189,9 @@
                             @if ($product['variant_label'])
                               - {{ $product['variant_label'] }}
                             @endif
+                            @if ($product['item_type_label'])
+                              <span class="badge bg-danger ms-2">{{ $product['item_type_label'] }}</span>
+                            @endif
                             x {{ $product['quantity'] }}
                           </div>
                         </div>

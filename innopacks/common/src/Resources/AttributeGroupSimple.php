@@ -22,9 +22,11 @@ class AttributeGroupSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'   => $this->id,
             'name' => $this->translation->name ?? '',
         ];
+
+        return fire_hook_filter('resource.attribute_group.simple', $data);
     }
 }

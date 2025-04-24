@@ -24,13 +24,11 @@ class AddressListItem extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $countryID  = $this->country_id;
-        $countryRow = Country::query()->find($countryID);
+        $countryRow = Country::query()->find($this->country_id);
+        $stateID    = $this->state_id ?: 0;
+        $stateRow   = State::query()->find($stateID);
 
-        $stateID  = $this->state_id;
-        $stateRow = State::query()->find($stateID);
-
-        return [
+        $data = [
             'id'           => $this->id,
             'customer_id'  => $this->customer_id,
             'guest_id'     => $this->guest_id,
@@ -52,5 +50,7 @@ class AddressListItem extends JsonResource
             'default'      => $this->default,
             'created_at'   => $this->created_at,
         ];
+
+        return fire_hook_filter('resource.address.item', $data);
     }
 }

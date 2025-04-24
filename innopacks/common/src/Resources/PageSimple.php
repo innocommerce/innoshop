@@ -22,11 +22,13 @@ class PageSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'     => $this->id,
             'name'   => $this->translation->title ?? '',
             'url'    => $this->url,
             'active' => (bool) $this->active,
         ];
+
+        return fire_hook_filter('resource.page.simple', $data);
     }
 }

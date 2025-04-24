@@ -24,7 +24,7 @@ class OrderDetail extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'                     => $this->id,
             'number'                 => $this->number,
             'customer_id'            => $this->customer_id,
@@ -80,5 +80,7 @@ class OrderDetail extends JsonResource
             'updated_at'             => $this->updated_at,
             'deleted_at'             => $this->deleted_at,
         ];
+
+        return fire_hook_filter('resource.order.detail', $data);
     }
 }

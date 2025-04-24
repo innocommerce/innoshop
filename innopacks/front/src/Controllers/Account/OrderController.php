@@ -12,6 +12,7 @@ namespace InnoShop\Front\Controllers\Account;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\OrderRepo;
+use InnoShop\Common\Resources\OrderItemSimple;
 use InnoShop\Common\Services\CartService;
 use Throwable;
 
@@ -48,7 +49,8 @@ class OrderController extends Controller
         $order = OrderRepo::getInstance()->getOrderByNumber($number);
         $order->load(['items', 'fees']);
         $data = [
-            'order' => $order,
+            'order'       => $order,
+            'order_items' => OrderItemSimple::collection($order->items)->jsonSerialize(),
         ];
 
         return inno_view('account.order_info', $data);

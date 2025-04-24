@@ -26,7 +26,7 @@ class ReviewListItem extends JsonResource
     {
         $customer = $this->customer;
 
-        return [
+        $data = [
             'id'              => $this->id,
             'customer_id'     => $customer->id ?? 0,
             'product_id'      => $this->product_id,
@@ -41,5 +41,7 @@ class ReviewListItem extends JsonResource
             'active'          => $this->active,
             'created_at'      => $this->created_at,
         ];
+
+        return fire_hook_filter('resource.review.item', $data);
     }
 }

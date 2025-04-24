@@ -122,7 +122,9 @@ class CheckoutService
             'selected' => true,
         ];
 
-        return $this->cartList = CartService::getInstance($this->customerID, $this->guestID)->getCartList($filters);
+        $cartService = CartService::getInstance($this->customerID, $this->guestID);
+
+        return $this->cartList = $cartService->getCartList($filters);
     }
 
     /**

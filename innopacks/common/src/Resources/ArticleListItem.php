@@ -22,9 +22,11 @@ class ArticleListItem extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'    => $this->id,
             'title' => $this->translation->title ?? '',
         ];
+
+        return fire_hook_filter('resource.article.list_item', $data);
     }
 }

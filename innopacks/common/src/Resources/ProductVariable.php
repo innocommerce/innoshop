@@ -41,9 +41,11 @@ class ProductVariable extends JsonResource
             }
         }
 
-        return [
+        $data = [
             'name'   => $names,
             'values' => $values,
         ];
+
+        return fire_hook_filter('resource.product.variable', $data);
     }
 }

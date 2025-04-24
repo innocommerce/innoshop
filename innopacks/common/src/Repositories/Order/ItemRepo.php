@@ -62,15 +62,17 @@ class ItemRepo extends BaseRepo
         $sku = Sku::query()->where('code', $requestData['sku_code'])->firstOrFail();
 
         return [
-            'order_id'      => $requestData['order_id'] ?? 0,
+            'order_id'      => $order->id,
             'product_id'    => $sku->product_id,
             'order_number'  => $order->number,
             'product_sku'   => $sku->code,
-            'variant_label' => $requestData['variant_label'] ?? $sku->variant_label,
-            'name'          => $requestData['product_name'],
-            'image'         => $requestData['image'],
+            'variant_label' => $sku->variant_label,
+            'name'          => $requestData['product_name'] ?? '',
+            'image'         => $requestData['image']        ?? '',
             'quantity'      => $requestData['quantity'],
             'price'         => $requestData['price'],
+            'item_type'     => $requestData['item_type'] ?? 'normal',
+            'ref_id'        => $requestData['ref_id']    ?? null,
         ];
     }
 }

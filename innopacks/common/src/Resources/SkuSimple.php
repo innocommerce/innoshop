@@ -28,7 +28,7 @@ class SkuSimple extends JsonResource
         $imageUrl   = $imagePath ? image_resize($imagePath) : '';
         $finalPrice = $this->getFinalPrice();
 
-        return [
+        $data = [
             'id'                  => $this->id,
             'product_id'          => $this->product_id,
             'product_name'        => $this->product->translation->name,
@@ -44,5 +44,7 @@ class SkuSimple extends JsonResource
             'origin_price_format' => $this->origin_price_format,
             'quantity'            => $this->quantity,
         ];
+
+        return fire_hook_filter('resource.sku.simple', $data);
     }
 }

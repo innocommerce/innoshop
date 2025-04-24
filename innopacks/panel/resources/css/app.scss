@@ -1,5 +1,4 @@
 @import './_variables';
-
 @import './global';
 @import './dashboard';
 @import './login';
@@ -10,3 +9,6 @@
 @import './page-market-item';
 @import './page-social';
 @import './page-transaction';
+
+// Components
+@import "components/sidebar";

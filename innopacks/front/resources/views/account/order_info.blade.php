@@ -63,7 +63,7 @@
               </tr>
               </thead>
               <tbody>
-              @foreach ($order->items as $product)
+              @foreach ($order_items as $product)
                 <tr>
                   <td>
                     <div class="product-item">
@@ -78,13 +78,16 @@
                           @if ($product['variant_label'])
                             - {{ $product['variant_label'] }}
                           @endif
+                          @if ($product['item_type_label'])
+                            <span class="badge bg-danger ms-2">{{ $product['item_type_label'] }}</span>
+                          @endif
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
                     @php($reviewed = \InnoShop\Common\Repositories\ReviewRepo::orderReviewed(current_customer_id(),$product['id']))
-                    @if($order->status == 'completed' && !$reviewed)
+                    @if($order->status == 'completed' && !$reviewed && $product['item_type'] === 'normal')
                       <button type="button" class="btn btn-sm btn-primary add_review" data-bs-toggle="modal"
                               data-bs-target="#addReview-Modal" data-name="{{ $product['name'] }}"
                               data-image="{{ $product['image'] }}" data-ordernumber="{{ $product['order_number'] }}"

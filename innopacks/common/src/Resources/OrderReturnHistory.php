@@ -24,7 +24,7 @@ class OrderReturnHistory extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'            => $this->id,
             'status'        => $this->status,
             'status_format' => $this->status_format,
@@ -32,5 +32,7 @@ class OrderReturnHistory extends JsonResource
             'comment'       => $this->comment,
             'created_at'    => $this->created_at,
         ];
+
+        return fire_hook_filter('resource.order_return.history', $data);
     }
 }

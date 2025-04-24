@@ -24,7 +24,7 @@ class OrderFeeSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'           => $this->id,
             'order_id'     => $this->order_id,
             'code'         => $this->code,
@@ -35,5 +35,7 @@ class OrderFeeSimple extends JsonResource
             'updated_at'   => $this->updated_at,
             'value_format' => $this->value_format,
         ];
+
+        return fire_hook_filter('resource.order_fee.simple', $data);
     }
 }

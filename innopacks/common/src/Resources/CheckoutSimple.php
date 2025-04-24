@@ -27,7 +27,7 @@ class CheckoutSimple extends JsonResource
         $shippingPlugin = plugin($parseShipping[0]);
         $billingPlugin  = plugin($this->billing_method_code);
 
-        return [
+        $data = [
             'id'                   => $this->id,
             'customer_id'          => $this->customer_id,
             'guest_id'             => $this->guest_id,
@@ -40,5 +40,7 @@ class CheckoutSimple extends JsonResource
             'reference'            => $this->reference,
             'comment'              => $this->comment,
         ];
+
+        return fire_hook_filter('resource.checkout.simple', $data);
     }
 }

@@ -24,7 +24,7 @@ class BrandSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'       => $this->id,
             'first'    => $this->first,
             'name'     => $this->name,
@@ -32,5 +32,7 @@ class BrandSimple extends JsonResource
             'logo_url' => image_resize($this->logo),
             'active'   => (bool) $this->active,
         ];
+
+        return fire_hook_filter('resource.brand.simple', $data);
     }
 }

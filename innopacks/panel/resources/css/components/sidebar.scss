@@ -1,0 +1,42 @@
+.sidebar {
+  .accordion-button {
+    border: none;
+    background: transparent;
+    padding: 0.75rem 1rem;
+
+    &:not(.collapsed) {
+      background: rgba(var(--bs-primary-rgb), 0.05);
+      color: var(--bs-primary);
+    }
+  }
+
+  .accordion-item {
+    border: none;
+    background: transparent;
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem 0.5rem 3rem;
+    color: var(--bs-gray-700);
+
+    &:hover {
+      color: var(--bs-primary);
+      background-color: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    &.active {
+      color: var(--bs-primary);
+      background-color: rgba(var(--bs-primary-rgb), 0.1);
+    }
+  }
+
+  .icon {
+    display: inline-block;
+    width: 1.5rem;
+  }
+
+  .dropdown-divider {
+    border-top: 1px solid rgba(108, 117, 125, 0.15);
+    margin: 0;
+  }
+}

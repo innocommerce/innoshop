@@ -6,13 +6,31 @@
     </a>
   </div>
   <div class="d-flex justify-content-end right-tool">
-    <div class="header-item dropdown d-flex align-items-center d-none d-lg-flex">
+    <!-- Market -->
+    <div class="header-item dropdown d-none d-lg-flex align-items-center">
+      <span class="dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="bi bi-grid me-1"></i><span>{{ __('panel/common.market') }}</span>
+      </span>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="{{ panel_route('plugin_market.index') }}">
+          <i class="bi bi-puzzle me-2"></i>{{ __('panel/common.market_plugin') }}
+        </a></li>
+        <li><a class="dropdown-item" href="{{ panel_route('theme_market.index') }}">
+          <i class="bi bi-palette me-2"></i>{{ __('panel/common.market_theme') }}
+        </a></li>
+      </ul>
+    </div>
+
+    <!-- Language -->
+    <div class="header-item dropdown d-none d-lg-flex align-items-center">
       <div class="wh-20 me-2"><img src="{{ image_origin('images/flag/'. panel_locale_code().'.png') }}" class="img-fluid"></div>
-      <span class="">{{ current_panel_locale()['name'] }} <i class="bi bi-chevron-down"></i></span>
-      <ul class="dropdown-menu">
+      <span class="dropdown-toggle" data-bs-toggle="dropdown">
+        <span>{{ current_panel_locale()['name'] }}</span>
+      </span>
+      <ul class="dropdown-menu dropdown-menu-end">
         @foreach (panel_locales() as $locale)
         <li>
-          <a class="dropdown-item d-flex" href="{{ panel_route('locale.switch', ['code'=> $locale['code']]) }}">
+          <a class="dropdown-item d-flex align-items-center" href="{{ panel_route('locale.switch', ['code'=> $locale['code']]) }}">
             <div class="wh-20 me-2"><img src="{{ image_origin($locale['image']) }}" class="img-fluid border"></div>
             {{ $locale['name'] }}
           </a>
@@ -20,16 +38,23 @@
         @endforeach
       </ul>
     </div>
-    <div class="header-item dropdown d-flex align-items-center">
-      <div class="wh-40 rounded-circle overflow-hidden d-none d-lg-block">
-        <img src="{{ image_resize() }}" class="img-fluid">
-      </div>
-      <span class="ms-2">{{ current_admin()->name }} <i class="bi bi-chevron-down"></i></span>
 
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="{{ front_route('home.index') }}" target="_blank">{{ __('panel/dashboard.frontend') }}</a></li>
-        <li><a class="dropdown-item" href="{{ panel_route('account.index') }}">{{ __('panel/dashboard.profile') }}</a></li>
-        <li><a class="dropdown-item" href="{{ panel_route('logout.index') }}">{{ __('panel/dashboard.sign_out') }}</a></li>
+    <!-- User -->
+    <div class="header-item dropdown d-flex align-items-center">
+      <span class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+        <i class="bi bi-person-circle fs-5 me-2"></i>
+        <span class="d-none d-lg-inline">{{ current_admin()->name }}</span>
+      </span>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="{{ front_route('home.index') }}" target="_blank">
+          <i class="bi bi-house me-2"></i>{{ __('panel/dashboard.frontend') }}
+        </a></li>
+        <li><a class="dropdown-item" href="{{ panel_route('account.index') }}">
+          <i class="bi bi-person me-2"></i>{{ __('panel/dashboard.profile') }}
+        </a></li>
+        <li><a class="dropdown-item" href="{{ panel_route('logout.index') }}">
+          <i class="bi bi-box-arrow-right me-2"></i>{{ __('panel/dashboard.sign_out') }}
+        </a></li>
       </ul>
     </div>
   </div>

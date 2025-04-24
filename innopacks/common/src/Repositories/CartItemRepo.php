@@ -68,6 +68,8 @@ class CartItemRepo extends BaseRepo
             'sku_code'    => $data['sku_code'],
             'customer_id' => $data['customer_id'],
             'guest_id'    => $data['guest_id'],
+            'item_type'   => $data['item_type'],
+            'ref_id'      => $data['ref_id'],
         ];
 
         $cart = $this->builder($filters)->first();
@@ -104,6 +106,8 @@ class CartItemRepo extends BaseRepo
             'guest_id'    => $customerID ? '' : $guestID,
             'selected'    => true,
             'quantity'    => (int) ($requestData['quantity'] ?? 1),
+            'item_type'   => $requestData['item_type'] ?? 'normal',
+            'ref_id'      => $requestData['ref_id']    ?? null,
         ];
     }
 }

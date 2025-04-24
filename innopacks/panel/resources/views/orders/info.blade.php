@@ -88,6 +88,9 @@
                   @if($item->productSku->variantLabel ?? '')
                     <span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
                   @endif
+                  @if($item->item_type_label)
+                    <span class="badge bg-danger">{{ $item->item_type_label }}</span>
+                  @endif
                 </div>
               </div>
             </td>

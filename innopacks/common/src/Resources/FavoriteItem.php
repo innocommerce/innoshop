@@ -30,7 +30,7 @@ class FavoriteItem extends JsonResource
             throw new Exception('Empty SKU for '.$this->id);
         }
 
-        return [
+        $data = [
             'id'                  => $this->id,
             'sku_id'              => $sku->id,
             'product_id'          => $product->id,
@@ -43,5 +43,7 @@ class FavoriteItem extends JsonResource
             'price_format'        => $sku->price_format,
             'origin_price_format' => $sku->origin_price_format,
         ];
+
+        return fire_hook_filter('resource.favorite.item', $data);
     }
 }

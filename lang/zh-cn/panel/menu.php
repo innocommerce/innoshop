@@ -8,6 +8,8 @@
  */
 
 return [
+    'divider_operation'  => '运营管理',
+    'divider_system'     => '系统管理',
     'transactions'       => '客户余额',
     'account'            => '个人信息',
     'admins'             => '后台用户',
@@ -37,8 +39,7 @@ return [
     'order_returns'      => '售后管理',
     'orders'             => '订单管理',
     'pages'              => '单页管理',
-    'plugin_market'      => '插件市场',
-    'plugins'            => '插件设置',
+    'plugin_settings'    => '插件设置',
     'product'            => '产品',
     'products'           => '产品管理',
     'regions'            => '区域组',
@@ -51,13 +52,13 @@ return [
     'tags'               => '文章标签',
     'tax_classes'        => '税类设置',
     'tax_rates'          => '税率设置',
-    'theme_market'       => '主题市场',
     'themes'             => '主题切换',
     'themes_settings'    => '界面设置',
     'top_analytic'       => '分析',
     'top_content'        => '内容',
     'top_customer'       => '客户',
     'top_design'         => '界面',
+    'top_marketing'      => '营销',
     'top_order'          => '订单',
     'top_plugin'         => '插件',
     'top_product'        => '产品',

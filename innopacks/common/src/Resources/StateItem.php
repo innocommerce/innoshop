@@ -22,10 +22,12 @@ class StateItem extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'   => $this->id,
             'name' => $this->name,
             'code' => $this->code,
         ];
+
+        return fire_hook_filter('resource.state.item', $data);
     }
 }

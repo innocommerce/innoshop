@@ -29,7 +29,7 @@ class SkuListItem extends JsonResource
         $originImageUrl = $imagePath ? image_origin($imagePath) : '';
         $finalPrice     = $this->getFinalPrice();
 
-        return [
+        $data = [
             'id'                  => $this->id,
             'product_id'          => $this->product_id,
             'product_image_id'    => $this->product_image_id,
@@ -47,5 +47,7 @@ class SkuListItem extends JsonResource
             'is_default'          => $this->is_default,
             'position'            => $this->position,
         ];
+
+        return fire_hook_filter('resource.sku.item', $data);
     }
 }

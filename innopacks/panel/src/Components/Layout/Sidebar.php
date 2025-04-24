@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Components\Layout;
 
 use Illuminate\View\Component;
+use InnoShop\Plugin\Repositories\PluginTypeRepo;
 
 class Sidebar extends Component
 {
@@ -84,6 +85,18 @@ class Sidebar extends Component
                 'prefixes' => ['customers'],
                 'children' => $this->getCustomerSubRoutes(),
             ],
+
+            // Operation Management Divider
+            [
+                'type'  => 'divider',
+                'title' => __('panel/menu.divider_operation'),
+            ],
+
+            [
+                'title'    => __('panel/menu.top_marketing'),
+                'icon'     => 'bi-broadcast',
+                'children' => $this->getMarketingSubRoutes(),
+            ],
             [
                 'title'    => __('panel/menu.top_content'),
                 'icon'     => 'bi-sticky',
@@ -91,16 +104,23 @@ class Sidebar extends Component
                 'children' => $this->getContentSubRoutes(),
             ],
             [
+                'title'    => __('panel/menu.top_design'),
+                'icon'     => 'bi-palette',
+                'children' => $this->getDesignSubRoutes(),
+            ],
+            [
                 'title'    => __('panel/menu.top_analytic'),
                 'icon'     => 'bi-bar-chart',
                 'prefixes' => ['analytics', 'analytics_order'],
                 'children' => $this->getAnalyticSubRoutes(),
             ],
+
+            // System Management Divider
             [
-                'title'    => __('panel/menu.top_design'),
-                'icon'     => 'bi-palette',
-                'children' => $this->getDesignSubRoutes(),
+                'type'  => 'divider',
+                'title' => __('panel/menu.divider_system'),
             ],
+
             [
                 'title'    => __('panel/menu.top_plugin'),
                 'icon'     => 'bi-puzzle',
@@ -121,8 +141,17 @@ class Sidebar extends Component
      */
     private function handleMenus($links): array
     {
-        $result = [];
+        $result      = [];
+        $lastDivider = null;  // Store the last divider temporarily
+
         foreach ($links as $index => $link) {
+            // If it's a divider, store it temporarily
+            if (isset($link['type']) && $link['type'] == 'divider') {
+                $lastDivider = $link;
+
+                continue;
+            }
+
             $topUrl   = $link['url']   ?? '';
             $topRoute = $link['route'] ?? '';
             if (empty($topUrl) && $topRoute) {
@@ -130,7 +159,9 @@ class Sidebar extends Component
             }
 
             $parentChecked = false;
-            if ($this->checkChildActive($topRoute)) {
+            if (isset($link['active'])) {
+                $parentChecked = $link['active'];
+            } elseif ($this->checkChildActive($topRoute)) {
                 $parentChecked = true;
             }
 
@@ -138,6 +169,8 @@ class Sidebar extends Component
             $children = $link['children'] ?? [];
 
             $link['has_children'] = (bool) $children;
+            $hasVisibleChild      = false;  // Track if there are visible child menus
+
             foreach ($children as $key => $item) {
                 $code = str_replace('.', '_', $item['route']);
                 if (! $this->adminUser->can($code)) {
@@ -146,11 +179,18 @@ class Sidebar extends Component
                     continue;
                 }
 
+                $hasVisibleChild = true;
+
                 $url = $item['url'] ?? '';
                 if (empty($url)) {
                     $item['url'] = panel_route($item['route']);
                 }
-                if ($this->checkChildActive($item['route'])) {
+
+                if (isset($item['active'])) {
+                    if ($item['active']) {
+                        $parentChecked = true;
+                    }
+                } elseif ($this->checkChildActive($item['route'])) {
                     $item['active'] = true;
                     $parentChecked  = true;
                 } else {
@@ -167,17 +207,34 @@ class Sidebar extends Component
                 $parentChecked = true;
             }
 
-            if ($topRoute != 'home.index' && empty($link['children'])) {
-                unset($link);
+            // Check if this menu item should be kept
+            if ($topRoute == 'home.index') {
+                $shouldKeep = true;
+            } elseif ($link['has_children']) {
+                $shouldKeep = $hasVisibleChild;
+            } else {
+                $code       = str_replace('.', '_', $topRoute);
+                $shouldKeep = $this->adminUser->can($code);
             }
 
-            if (isset($link) && $link) {
-                $result[$index]           = $link;
-                $result[$index]['active'] = $parentChecked;
+            if ($shouldKeep) {
+                // If there's a stored divider, add it first
+                if ($lastDivider) {
+                    $result[]    = $lastDivider;
+                    $lastDivider = null;
+                }
+
+                if ($link['has_children']) {
+                    $link['children'] = array_values($link['children']);
+                }
+
+                $result[] = $link;
+
+                $result[count($result) - 1]['active'] = $parentChecked;
             }
         }
 
-        return $result;
+        return array_values($result);
     }
 
     /**
@@ -300,20 +357,30 @@ class Sidebar extends Component
         $routes = [
             ['route' => 'themes_settings.index', 'title' => __('panel/menu.themes_settings')],
             ['route' => 'themes.index', 'title' => __('panel/menu.themes')],
-            ['route' => 'theme_market.index', 'title' => __('panel/menu.theme_market')],
         ];
 
         return fire_hook_filter('panel.component.sidebar.design.routes', $routes);
     }
 
     /**
-     * Get design sub routes.
+     * Get plugin sub routes.
      */
     public function getPluginSubRoutes(): array
     {
-        $routes = [
-            ['route' => 'plugins.index', 'title' => __('panel/menu.plugins')],
-            ['route' => 'plugin_market.index', 'title' => __('panel/menu.plugin_market')],
+        $routes = [];
+
+        // Add plugin type menus
+        $typeMenus = PluginTypeRepo::getInstance()->getTypeMenus();
+        foreach ($typeMenus as $menu) {
+            $menu['active'] = request('type') === $menu['params']['type'] && $this->currentRoute === 'plugins.index';
+            $routes[]       = $menu;
+        }
+
+        // Add settings to the end
+        $routes[] = [
+            'route'  => 'plugins.settings',
+            'title'  => __('panel/menu.plugin_settings'),
+            'active' => $this->currentRoute === 'plugins.settings',
         ];
 
         return fire_hook_filter('panel.component.sidebar.plugin.routes', $routes);
@@ -340,5 +407,15 @@ class Sidebar extends Component
         ];
 
         return fire_hook_filter('panel.component.sidebar.setting.routes', $routes);
+    }
+
+    /**
+     * Get marketing sub routes.
+     */
+    public function getMarketingSubRoutes(): array
+    {
+        $routes = [];
+
+        return fire_hook_filter('panel.component.sidebar.marketing.routes', $routes);
     }
 }

@@ -29,7 +29,7 @@ class ProductSimple extends JsonResource
             throw new Exception('Empty SKU for '.$this->id);
         }
 
-        return [
+        $data = [
             'id'                  => $this->id,
             'master_sku_id'       => $sku->id,
             'slug'                => $this->slug,
@@ -44,5 +44,7 @@ class ProductSimple extends JsonResource
             'viewed'              => $this->viewed,
             'active'              => (bool) $this->active,
         ];
+
+        return fire_hook_filter('resource.product.simple', $data);
     }
 }

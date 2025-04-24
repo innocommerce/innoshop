@@ -22,12 +22,14 @@ class TagListItem extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'       => $this->id,
             'slug'     => $this->slug,
             'name'     => $this->translation->name ?? '',
             'position' => $this->position,
             'active'   => (bool) $this->active,
         ];
+
+        return fire_hook_filter('resource.tag.list_item', $data);
     }
 }

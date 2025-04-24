@@ -24,11 +24,13 @@ class CategoryName extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'     => $this->id,
             'slug'   => $this->slug,
             'name'   => $this->translation->name,
             'active' => (bool) $this->active,
         ];
+
+        return fire_hook_filter('resource.category.name', $data);
     }
 }

@@ -22,12 +22,14 @@ class RegionDetail extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'          => $this->id,
             'name'        => $this->name,
             'description' => $this->description,
             'position'    => $this->position,
             'active'      => $this->active,
         ];
+
+        return fire_hook_filter('resource.region.detail', $data);
     }
 }

@@ -1,27 +1,10 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-my-plugins')
 
-@section('title', __('panel/menu.plugins'))
+@section('title', __('panel/plugin.'.$type))
 
 @section('content')
   <div class="card h-min-600">
-    <div class="card-header">
-      <ul class="nav nav-tabs mb-2" id="myTab">
-        <li class="nav-item">
-          <a class="nav-link {{ $type == '' ? 'active' : 'fw-normal' }}" type="button" href="{{ panel_route('plugins.index') }}">
-            {{ __('panel/plugin.all') }}
-          </a>
-        </li>
-        @foreach($types as $item)
-          <li class="nav-item">
-            <a class="nav-link {{ $item==$type ? 'active' : 'fw-normal' }}" type="button" href="{{ panel_route('plugins.index', ['type'=>$item]) }}">
-              {{ __('panel/plugin.'.$item) }}
-            </a>
-          </li>
-        @endforeach
-      </ul>
-    </div>
-
     <div class="card-body">
       <div class="row">
         @if (count($plugins))

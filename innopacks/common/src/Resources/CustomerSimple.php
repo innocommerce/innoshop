@@ -24,7 +24,7 @@ class CustomerSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'           => $this->id,
             'email'        => $this->email,
             'name'         => $this->name,
@@ -32,5 +32,7 @@ class CustomerSimple extends JsonResource
             'locale'       => $this->locale,
             'has_password' => $this->has_password,
         ];
+
+        return fire_hook_filter('resource.customer.simple', $data);
     }
 }

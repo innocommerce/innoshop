@@ -24,7 +24,7 @@ class Item extends BaseModel
     protected $table = 'order_items';
 
     protected $fillable = [
-        'order_id', 'product_id', 'order_number', 'product_sku', 'variant_label', 'name', 'image', 'quantity', 'price',
+        'order_id', 'product_id', 'order_number', 'product_sku', 'variant_label', 'name', 'image', 'quantity', 'price', 'item_type', 'ref_id',
     ];
 
     protected $appends = [
@@ -32,6 +32,7 @@ class Item extends BaseModel
         'price_format',
         'subtotal_format',
         'has_review',
+        'item_type_label',
     ];
 
     /**
@@ -108,5 +109,20 @@ class Item extends BaseModel
     public function getHasReviewAttribute(): bool
     {
         return (bool) $this->review;
+    }
+
+    /**
+     * Get the item type label
+     *
+     * @return string
+     */
+    public function getItemTypeLabelAttribute(): string
+    {
+        $data = [
+            'label' => '',
+            'item'  => $this,
+        ];
+
+        return fire_hook_filter('model.order.item.type_label', $data)['label'];
     }
 }
