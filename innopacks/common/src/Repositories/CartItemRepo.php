@@ -44,6 +44,16 @@ class CartItemRepo extends BaseRepo
             $builder->where('guest_id', $guestID);
         }
 
+        $itemType = $filters['item_type'] ?? '';
+        if ($itemType) {
+            $builder->where('item_type', $itemType);
+        }
+
+        $refID = $filters['ref_id'] ?? 0;
+        if ($refID) {
+            $builder->where('ref_id', $refID);
+        }
+
         $selected = $filters['selected'] ?? false;
         if ($selected) {
             $builder->where('selected', true);
