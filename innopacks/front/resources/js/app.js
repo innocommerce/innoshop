@@ -6,12 +6,10 @@ window.inno = common;
 import './bootstrap-validation';
 import './footer';
 import './header';
-import './cart';
 import './autocomplete';
 
 const apiToken = $('meta[name="api-token"]').attr('content');
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiToken;
-//console.log('apiToken:' + apiToken);
 
 $(function () {
   common.getCarts();

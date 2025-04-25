@@ -36,14 +36,6 @@
       isLogin: !!{{ current_customer()->id ?? 'null' }},
     }
 
-    let translations = {
-      empty_cart: '{{ __('front/cart.empty_cart') }}',
-      continue: '{{ __('front/cart.continue') }}',
-      total: '{{ __('front/cart.total') }}',
-      go_checkout: '{{ __('front/cart.go_checkout') }}',
-      view_cart: '{{ __('front/cart.view_cart') }}',
-    }
-
     let asset_url = '{{ asset('') }}';
   </script>
   @stack('header')
@@ -64,7 +56,7 @@
   @endif
 
   @if (!request('iframe'))
-    @include('components.cart-offcanvas')
+    @include('components.mini-cart')
   @endif
 
   @stack('footer')

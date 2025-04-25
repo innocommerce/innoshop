@@ -17,6 +17,7 @@ return [
     'price'       => 'السعر',
     'product'     => 'المنتج',
     'quantity'    => 'الكمية',
+    'select_all'  => 'QuanXuan',
     'selected'    => 'محدد',
     'subtotal'    => 'المجموع الفرعي',
     'total'       => 'الإجمالي',

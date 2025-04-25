@@ -17,6 +17,7 @@ return [
     'price'       => 'Harga Satuan',
     'product'     => 'Produk',
     'quantity'    => 'Jumlah',
+    'select_all'  => 'memilih semua',
     'selected'    => 'Terpilih',
     'subtotal'    => 'Subtotal',
     'total'       => 'Total',

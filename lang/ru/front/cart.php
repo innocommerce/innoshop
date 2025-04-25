@@ -17,6 +17,7 @@ return [
     'price'       => 'цена',
     'product'     => 'продукт',
     'quantity'    => 'количество',
+    'select_all'  => 'выбира',
     'selected'    => 'выбрано',
     'subtotal'    => 'подсчет',
     'total'       => 'итого',

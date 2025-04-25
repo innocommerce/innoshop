@@ -17,6 +17,7 @@ return [
     'price'       => 'Prix unitaire',
     'product'     => 'Produit',
     'quantity'    => 'Quantité',
+    'select_all'  => 'Aléatoire!',
     'selected'    => 'Sélectionné',
     'subtotal'    => 'Sous-total',
     'total'       => 'Total',

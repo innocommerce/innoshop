@@ -17,6 +17,7 @@ return [
     'price'       => 'Đơn giá',
     'product'     => 'Sản phẩm',
     'quantity'    => 'Số lượng',
+    'select_all'  => 'QuanXuan',
     'selected'    => 'Đã chọn',
     'subtotal'    => 'Tổng phụ',
     'total'       => 'Tổng cộng',

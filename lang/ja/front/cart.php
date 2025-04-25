@@ -17,6 +17,7 @@ return [
     'price'       => '単価',
     'product'     => '商品',
     'quantity'    => '数量',
+    'select_all'  => '全選です',
     'selected'    => '選択済み',
     'subtotal'    => '小計',
     'total'       => '合計',

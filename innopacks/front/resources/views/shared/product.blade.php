@@ -30,12 +30,14 @@
                data-sku-id="{{ $product->masterSku->id }}">{{ __('front/cart.add_to_cart') }}
           </div>
         </div>
-        <div class="product-price">
-          @if ($product->masterSku->origin_price)
-            <div class="price-old">{{ $product->masterSku->origin_price_format }}</div>
-          @endif
-          <div class="price-new">{{ $product->masterSku->getFinalPriceFormat() }}</div>
-        </div>
+        @if(system_setting('disable_online_order'))
+          <div class="product-price">
+            @if ($product->masterSku->origin_price)
+              <div class="price-old">{{ $product->masterSku->origin_price_format }}</div>
+            @endif
+            <div class="price-new">{{ $product->masterSku->getFinalPriceFormat() }}</div>
+          </div>
+        @endif
       </div>
       @if(request('style_list') == 'list')
         <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}" data-id="{{ $product->id }}"

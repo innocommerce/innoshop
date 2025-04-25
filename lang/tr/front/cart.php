@@ -17,6 +17,7 @@ return [
     'price'       => 'Fiyat',
     'product'     => 'Ürün',
     'quantity'    => 'Adet',
+    'select_all'  => 'Tümünü seç',
     'selected'    => 'Seçili',
     'subtotal'    => 'Ara Toplam',
     'total'       => 'Toplam',

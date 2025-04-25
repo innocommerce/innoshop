@@ -17,6 +17,7 @@ return [
     'price'       => 'Preço',
     'product'     => 'Produto',
     'quantity'    => 'Quantidade',
+    'select_all'  => 'Cobrir todos',
     'selected'    => 'Selecionado',
     'subtotal'    => 'Subtotal',
     'total'       => 'Total',

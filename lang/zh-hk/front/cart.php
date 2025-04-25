@@ -17,6 +17,7 @@ return [
     'price'       => '價格',
     'product'     => '產品',
     'quantity'    => '數量',
+    'select_all'  => '全選',
     'selected'    => '已選',
     'subtotal'    => '小計',
     'total'       => '總計',

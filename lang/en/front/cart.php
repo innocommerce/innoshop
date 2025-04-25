@@ -17,6 +17,7 @@ return [
     'price'       => 'Price',
     'product'     => 'Product',
     'quantity'    => 'Quantity',
+    'select_all'  => 'Select All',
     'selected'    => 'Selected',
     'subtotal'    => 'Subtotal',
     'total'       => 'Total',

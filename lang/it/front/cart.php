@@ -17,6 +17,7 @@ return [
     'price'       => 'Prezzo',
     'product'     => 'Prodotto',
     'quantity'    => 'Quantità',
+    'select_all'  => 'QuanXuan',
     'selected'    => 'Selezionato',
     'subtotal'    => 'Subtotale',
     'total'       => 'Totale',

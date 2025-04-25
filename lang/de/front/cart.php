@@ -17,6 +17,7 @@ return [
     'price'       => 'Preis',
     'product'     => 'Produkt',
     'quantity'    => 'Menge',
+    'select_all'  => 'Eine reine wahl.',
     'selected'    => 'Ausgewählt',
     'subtotal'    => 'Zwischensumme',
     'total'       => 'Gesamt',

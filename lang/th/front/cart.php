@@ -17,6 +17,7 @@ return [
     'price'       => 'ราคา',
     'product'     => 'สินค้า',
     'quantity'    => 'จำนวน',
+    'select_all'  => 'ตัวเลือกเต็ม',
     'selected'    => 'เลือกแล้ว',
     'subtotal'    => 'ยอดรวม',
     'total'       => 'ยอดรวม',

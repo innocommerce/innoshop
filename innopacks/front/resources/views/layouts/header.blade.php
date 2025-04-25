@@ -128,9 +128,10 @@
           </div>
           <div class="item">
             <a href="javascript:void(0)" class="header-cart-icon" data-bs-toggle="offcanvas"
-               data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas"><img src="{{ asset('images/icons/cart.svg') }}"
-                                                                                  class="img-fluid"><span
-                class="icon-quantity">0</span></a>
+               data-bs-target="#miniCart" aria-controls="miniCart">
+              <img src="{{ asset('images/icons/cart.svg') }}" class="img-fluid">
+              <span class="icon-quantity">0</span>
+            </a>
           </div>
           @hookinsert('layouts.header.cart.after')
         </div>

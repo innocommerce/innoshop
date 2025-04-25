@@ -17,6 +17,7 @@ return [
     'price'       => '가격',
     'product'     => '상품',
     'quantity'    => '수량',
+    'select_all'  => '모두 선택',
     'selected'    => '선택됨',
     'subtotal'    => '소계',
     'total'       => '총액',
