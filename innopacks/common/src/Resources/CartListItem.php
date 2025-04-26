@@ -49,7 +49,7 @@ class CartListItem extends JsonResource
             'url'                 => $product->url,
             'item_type'           => $this->item_type,
             'item_type_label'     => $this->item_type_label,
-            'ref_id'              => $this->ref_id,
+            'reference'           => $this->reference,
             'selected'            => (bool) $this->selected,
         ];
 

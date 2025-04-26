@@ -44,6 +44,7 @@ class OrderItemSimple extends JsonResource
             'has_review'      => $this->has_review,
             'item_type'       => $this->item_type,
             'item_type_label' => $this->item_type_label,
+            'reference'       => $this->reference,
         ];
 
         return fire_hook_filter('resource.order.item.simple', $data);

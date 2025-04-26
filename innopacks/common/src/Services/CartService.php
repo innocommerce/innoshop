@@ -11,6 +11,7 @@ namespace InnoShop\Common\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use InnoShop\Common\Models\CartItem;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\CartItemRepo;
 use InnoShop\Common\Resources\CartListItem;
@@ -126,6 +127,22 @@ class CartService
             'cart_item' => $cartItem,
             'quantity'  => $data['quantity'] ?? $cartItem->quantity,
         ]);
+
+        return $this->handleResponse();
+    }
+
+    /**
+     * Delete cart item
+     *
+     * @param  CartItem  $cartItem
+     * @return array
+     */
+    public function delete(CartItem $cartItem): array
+    {
+        $cartItem->delete();
+
+        // Trigger cart item deleted event
+        fire_hook_action('service.cart.delete.after', $cartItem);
 
         return $this->handleResponse();
     }

@@ -130,8 +130,7 @@ class CartController extends BaseController
             if ($cart->customer_id != token_customer_id()) {
                 throw new \Exception('Cart cannot belongs to the customer');
             }
-            $cart->delete();
-            $cartData = CartService::getInstance(token_customer_id())->getCartList();
+            $cartData = CartService::getInstance(token_customer_id())->delete($cart);
 
             return json_success(front_trans('common.deleted_success'), $cartData);
         } catch (\Exception $e) {

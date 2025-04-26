@@ -72,7 +72,7 @@ class ItemRepo extends BaseRepo
             'quantity'      => $requestData['quantity'],
             'price'         => $requestData['price'],
             'item_type'     => $requestData['item_type'] ?? 'normal',
-            'ref_id'        => $requestData['ref_id']    ?? null,
+            'reference'     => $requestData['reference'] ?? null,
         ];
     }
 }

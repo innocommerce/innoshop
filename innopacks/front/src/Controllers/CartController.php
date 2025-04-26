@@ -117,8 +117,7 @@ class CartController extends Controller
     public function destroy(CartItem $cart): mixed
     {
         try {
-            $cart->delete();
-            $cartData = CartService::getInstance()->handleResponse();
+            $cartData = CartService::getInstance()->delete($cart);
 
             return json_success(front_trans('common.deleted_success'), $cartData);
         } catch (Exception $e) {

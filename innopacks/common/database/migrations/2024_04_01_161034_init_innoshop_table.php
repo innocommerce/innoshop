@@ -188,7 +188,7 @@ return new class extends Migration
             $table->boolean('selected')->comment('Selected');
             $table->unsignedInteger('quantity')->comment('Quantity');
             $table->string('item_type', 20)->default('normal')->comment('Item type: normal|gift');
-            $table->unsignedBigInteger('ref_id')->nullable()->comment('Reference ID, like gift rule id, promotion id, etc.');
+            $table->json('reference')->nullable()->comment('Reference information for gifts, promotions, etc.');
             $table->timestamps();
         });
 
@@ -451,7 +451,7 @@ return new class extends Migration
             $table->integer('quantity')->comment('Quantity');
             $table->decimal('price', 16, 4)->comment('Unit Price');
             $table->string('item_type', 20)->default('normal')->comment('Item type: normal|gift');
-            $table->unsignedBigInteger('ref_id')->nullable()->comment('Reference ID, like gift rule id, promotion id, etc.');
+            $table->json('reference')->nullable()->comment('Reference information for gifts, promotions, etc. including parent order item ID');
             $table->timestamps();
             $table->softDeletes()->comment('Deleted At');
         });

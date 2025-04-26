@@ -16,13 +16,17 @@ class CartItem extends BaseModel
     protected $table = 'cart_items';
 
     protected $fillable = [
-        'customer_id', 'product_id', 'sku_code', 'guest_id', 'selected', 'quantity', 'item_type', 'ref_id',
+        'customer_id', 'product_id', 'sku_code', 'guest_id', 'selected', 'quantity', 'item_type', 'reference',
     ];
 
     protected $appends = [
         'subtotal',
         'price',
         'item_type_label',
+    ];
+
+    protected $casts = [
+        'reference' => 'array',
     ];
 
     /**

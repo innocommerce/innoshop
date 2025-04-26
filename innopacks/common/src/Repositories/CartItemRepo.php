@@ -49,14 +49,14 @@ class CartItemRepo extends BaseRepo
             $builder->where('item_type', $itemType);
         }
 
-        $refID = $filters['ref_id'] ?? 0;
-        if ($refID) {
-            $builder->where('ref_id', $refID);
-        }
-
         $selected = $filters['selected'] ?? false;
         if ($selected) {
             $builder->where('selected', true);
+        }
+
+        $reference = $filters['reference'] ?? [];
+        if ($reference) {
+            $builder->whereJsonContains('reference', $reference);
         }
 
         return fire_hook_filter('repo.cart_item.builder', $builder);
@@ -79,7 +79,7 @@ class CartItemRepo extends BaseRepo
             'customer_id' => $data['customer_id'],
             'guest_id'    => $data['guest_id'],
             'item_type'   => $data['item_type'],
-            'ref_id'      => $data['ref_id'],
+            'reference'   => $data['reference'],
         ];
 
         $cart = $this->builder($filters)->first();
@@ -117,7 +117,7 @@ class CartItemRepo extends BaseRepo
             'selected'    => true,
             'quantity'    => (int) ($requestData['quantity'] ?? 1),
             'item_type'   => $requestData['item_type'] ?? 'normal',
-            'ref_id'      => $requestData['ref_id']    ?? null,
+            'reference'   => $requestData['reference'] ?? null,
         ];
     }
 }
