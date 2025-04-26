@@ -35,6 +35,10 @@ class Item extends BaseModel
         'item_type_label',
     ];
 
+    protected $casts = [
+        'reference' => 'array',
+    ];
+
     /**
      * @return BelongsTo
      */
