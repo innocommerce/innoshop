@@ -42,19 +42,45 @@
     <!-- User -->
     <div class="header-item dropdown d-flex align-items-center">
       <span class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-        <i class="bi bi-person-circle fs-5 me-2"></i>
-        <span class="d-none d-lg-inline">{{ current_admin()->name }}</span>
+        <div class="user-avatar me-2">
+          <i class="bi bi-person-circle fs-5"></i>
+        </div>
+        <div class="user-info d-none d-lg-block">
+          <div class="user-name">{{ current_admin()->name }}</div>
+        </div>
       </span>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="{{ front_route('home.index') }}" target="_blank">
-          <i class="bi bi-house me-2"></i>{{ __('panel/dashboard.frontend') }}
-        </a></li>
-        <li><a class="dropdown-item" href="{{ panel_route('account.index') }}">
-          <i class="bi bi-person me-2"></i>{{ __('panel/dashboard.profile') }}
-        </a></li>
-        <li><a class="dropdown-item" href="{{ panel_route('logout.index') }}">
-          <i class="bi bi-box-arrow-right me-2"></i>{{ __('panel/dashboard.sign_out') }}
-        </a></li>
+        <li class="dropdown-header">
+          <div class="d-flex align-items-center">
+            <div class="user-avatar me-2">
+              <i class="bi bi-person-circle fs-4"></i>
+            </div>
+            <div>
+              <div class="user-name">{{ current_admin()->name }}</div>
+              <div class="user-email small text-muted">{{ current_admin()->email }}</div>
+            </div>
+          </div>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="{{ front_route('home.index') }}" target="_blank">
+            <i class="bi bi-house me-2"></i>
+            <span>{{ __('panel/dashboard.frontend') }}</span>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="{{ panel_route('account.index') }}">
+            <i class="bi bi-person me-2"></i>
+            <span>{{ __('panel/dashboard.profile') }}</span>
+          </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center text-danger" href="{{ panel_route('logout.index') }}">
+            <i class="bi bi-box-arrow-right me-2"></i>
+            <span>{{ __('panel/dashboard.sign_out') }}</span>
+          </a>
+        </li>
       </ul>
     </div>
   </div>

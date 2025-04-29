@@ -56,4 +56,14 @@ class Article extends BaseModel
 
         return front_route('articles.show', $this);
     }
+
+    /**
+     * Get edit URL
+     *
+     * @return string
+     */
+    public function getEditUrlAttribute(): string
+    {
+        return panel_route('articles.edit', $this);
+    }
 }

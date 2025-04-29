@@ -68,9 +68,10 @@
         {{ $products->links('panel::vendor/pagination/bootstrap-4') }}
       </div>
     </div>
-  </div>
 
-  @hookinsert('category.show.bottom')
+    @hookinsert('category.show.bottom')
+
+  </div>
 
 @endsection
 

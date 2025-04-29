@@ -91,6 +91,36 @@ if (! function_exists('system_setting_locale')) {
     }
 }
 
+if (! function_exists('locale_image')) {
+    /**
+     * Get locale image
+     *
+     * @param  string  $code
+     * @return string
+     */
+    function locale_image($code)
+    {
+        $locale = locales()->where('code', $code)->first();
+
+        return $locale ? $locale->image : '';
+    }
+}
+
+if (! function_exists('locale_name')) {
+    /**
+     * Get locale name by code
+     *
+     * @param  string  $code
+     * @return string
+     */
+    function locale_name($code)
+    {
+        $locale = locales()->where('code', $code)->first();
+
+        return $locale ? $locale->name : $code;
+    }
+}
+
 if (! function_exists('is_secure')) {
     /**
      * Check if current env is https
@@ -429,7 +459,7 @@ if (! function_exists('pure_route_name')) {
     {
         $name = request()->route()->getName();
 
-        return str_replace(locale_code().'.front.', '', $name);
+        return str_replace([locale_code().'.front.', 'front.'], '', $name);
     }
 }
 

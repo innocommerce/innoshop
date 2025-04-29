@@ -14,13 +14,13 @@
   @if(isset($result))
     {!! $result !!}
   @else
-    <div class="page-content">
+    <div class="page-content mb-5">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12">
-            <div class="card shadow-sm">
-              <div class="card-body p-4 p-lg-5">
-                <h1 class="text-center mb-4">{{ $page->translation->title }}</h1>
+            <div class="card  border">
+              <div class="">
+                <h1 class="text-start mb-4">{{ $page->translation->title }}</h1>
                 <div class="content">
                   {!! $page->translation->content !!}
                 </div>
@@ -99,7 +99,7 @@
   .page-content .card-body {
     padding: 1.5rem !important;
   }
-  
+
   .page-content .content {
     font-size: 15px;
   }

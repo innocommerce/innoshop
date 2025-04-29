@@ -30,7 +30,7 @@ return [
     'login'             => 'Login',
     'logo'              => 'Lego',
     'name'              => 'Name',
-    'news'              => 'Articles',
+    'news'              => 'News',
     'no'                => 'no',
     'out_of_stock'      => 'Out of Stock',
     'page_total_show'   => 'Showing :first to :last of :total items',

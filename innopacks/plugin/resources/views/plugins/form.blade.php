@@ -1,13 +1,12 @@
 @extends('panel::layouts.app')
 
-@section('title', __('panel/menu.plugins'))
+@section('title', $plugin->getLocaleName())
 
 <x-panel::form.right-btns />
 
 @section('content')
 <div class="card h-min-600">
   <div class="card-body">
-    <h6 class="border-bottom pb-3 mb-4">{{ $plugin->getLocaleName() }}</h6>
 
     <form class="needs-validation" id="app-form" novalidate action="{{ panel_route('plugins.update', [$plugin->getCode()]) }}" method="POST">
       @csrf

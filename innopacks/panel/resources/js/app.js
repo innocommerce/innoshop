@@ -10,6 +10,7 @@ const Config = {
   apiToken: $('meta[name="api-token"]').attr("content") || 
             $(window.parent.document).find('meta[name="api-token"]').attr("content"),
   csrfToken: $('meta[name="csrf-token"]').attr("content"),
+  locale: $('html').attr("lang"),
 };
 
 const Utils = {
@@ -30,10 +31,12 @@ const Utils = {
 
   setupApiHeaders: () => {
     axios.defaults.headers.common["Authorization"] = "Bearer " + Config.apiToken;
+    axios.defaults.headers.common["locale"] = Config.locale;
     $.ajaxSetup({
       headers: {
         "X-CSRF-TOKEN": Config.csrfToken,
         Authorization: "Bearer " + Config.apiToken,
+        locale: Config.locale,
       },
     });
     window.apiToken = $.apiToken = Config.apiToken;

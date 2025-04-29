@@ -30,7 +30,7 @@ return [
     'login'             => '登录',
     'logo'              => '品牌',
     'name'              => '名称',
-    'news'              => '文章',
+    'news'              => '新闻',
     'no'                => '否',
     'out_of_stock'      => '缺货',
     'page_total_show'   => '显示第 :first 到第 :last 项，共 :total 项',

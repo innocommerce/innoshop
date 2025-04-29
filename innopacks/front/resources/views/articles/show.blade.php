@@ -60,8 +60,9 @@
         </div>
       </div>
     </div>
-  </div>
 
-  @hookinsert('article.show.bottom')
+    @hookinsert('article.show.bottom')
+    
+  </div>
 
 @endsection

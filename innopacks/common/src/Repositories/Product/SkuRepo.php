@@ -63,8 +63,11 @@ class SkuRepo extends BaseRepo
      * @param  ?string  $keyword
      * @return \Illuminate\Support\Collection
      */
-    public function searchByKeyword(?string $keyword)
+    public function searchByKeyword(?string $keyword, $limit = 10)
     {
-        return $this->builder(['keyword' => $keyword])->get();
+        return $this->builder(['keyword' => $keyword])
+            ->limit($limit)
+            ->orderBy('updated_at', 'desc')
+            ->get();
     }
 }

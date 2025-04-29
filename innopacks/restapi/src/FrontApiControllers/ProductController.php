@@ -106,7 +106,8 @@ class ProductController extends BaseController
     public function skuList(Request $request)
     {
         $keyword = $request->get('keyword');
-        $skus    = SkuRepo::getInstance()->searchByKeyword($keyword);
+        $limit   = $request->get('limit', 10);
+        $skus    = SkuRepo::getInstance()->searchByKeyword($keyword, $limit);
 
         return read_json_success(SkuSimple::collection($skus));
     }

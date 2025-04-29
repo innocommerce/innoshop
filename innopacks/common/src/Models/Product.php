@@ -244,6 +244,16 @@ class Product extends BaseModel
     }
 
     /**
+     * Get edit URL
+     *
+     * @return string
+     */
+    public function getEditUrlAttribute(): string
+    {
+        return panel_route('products.edit', $this);
+    }
+
+    /**
      * Get URL
      *
      * @return string

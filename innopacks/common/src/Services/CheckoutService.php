@@ -462,14 +462,15 @@ class CheckoutService
 
             DB::commit();
 
-            $this->checkout->delete();
-            CartService::getInstance($this->customerID)->getCartBuilder(['selected' => true])->delete();
-
             $data = [
-                'checkout_data' => $checkoutData,
-                'order'         => $order,
+                'cart_list' => $this->getCartList(),
+                'checkout'  => $checkoutData,
+                'order'     => $order,
             ];
             fire_hook_action('service.checkout.confirm.after', $data);
+
+            $this->checkout->delete();
+            CartService::getInstance($this->customerID)->getCartBuilder(['selected' => true])->delete();
 
             return $order;
         } catch (Exception $e) {
