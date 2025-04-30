@@ -101,7 +101,7 @@
 
             @include('products._variants')
 
-            @if(!system_setting('disable_online_order'))
+            @if(!system_setting('disable_online_order', false))
               <div class="product-info-bottom">
                 <div class="quantity-wrap">
                   <div class="minus"><i class="bi bi-dash-lg"></i></div>

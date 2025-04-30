@@ -24,13 +24,13 @@
       @endif
 
       <div class="product-bottom">
-        <div class="product-bottom-btns">
-          <div class="btn-add-cart cursor-pointer" data-id="{{ $product->id }}"
-               data-price="{{ $product->masterSku->getFinalPrice() }}"
-               data-sku-id="{{ $product->masterSku->id }}">{{ __('front/cart.add_to_cart') }}
+        @if(!system_setting('disable_online_order', false))
+          <div class="product-bottom-btns">
+            <div class="btn-add-cart cursor-pointer" data-id="{{ $product->id }}"
+                 data-price="{{ $product->masterSku->getFinalPrice() }}"
+                 data-sku-id="{{ $product->masterSku->id }}">{{ __('front/cart.add_to_cart') }}
+            </div>
           </div>
-        </div>
-        @if(system_setting('disable_online_order'))
           <div class="product-price">
             @if ($product->masterSku->origin_price)
               <div class="price-old">{{ $product->masterSku->origin_price_format }}</div>
