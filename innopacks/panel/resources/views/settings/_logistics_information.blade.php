@@ -1,7 +1,8 @@
 <!-- Logistics Information Settings -->
+<div class="tab-pane fade" id="tab-setting-logistics-information">
 <div class="container">
   <div class="row">
-    <div class="ml-4" id="app-form">
+    <div class="ml-4" id="logistics-form">
       <div class="row col-7">
         <table class="table table-response align-middle table-bordered">
           <thead>
@@ -48,7 +49,7 @@
   const {createApp, ref} = Vue;
   const {CirclePlusFilled} = ElementPlus;
 
-  const app = createApp({
+  const logisticsApp = createApp({
     setup() {
       const logisticsData = @json(system_setting('logistics')) || [];
       const text = ref(Array.isArray(logisticsData) ? logisticsData.map(logistic => ({
@@ -76,6 +77,7 @@
       };
     }
   });
-  app.use(ElementPlus);
-  app.mount('#app-form');
+  logisticsApp.use(ElementPlus);
+  logisticsApp.mount('#logistics-form');
 </script>
+</div>

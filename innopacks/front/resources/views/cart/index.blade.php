@@ -94,7 +94,7 @@
                 </td>
                 <td class="td-subtotal">@{{ item.subtotal_format }}</td>
                 <td class="td-delete">
-                  <div class="delete-cart text-danger fs-5 cursor-pointer" 
+                  <div class="delete-cart text-danger fs-5 cursor-pointer"
                     v-if="item.item_type === 'normal'"
                     @click="deleteItem(item.id)">
                     <i class="bi bi-x-circle-fill"></i>
@@ -112,7 +112,7 @@
               <li><span>{{ __('front/cart.selected') }} </span><span class="total-total">@{{ total }}</span></li>
               <li><span>{{ __('front/cart.total') }}</span><span class="total-amount">@{{ amount_format }}</span></li>
             </ul>
-            @if(!system_setting('disable_online_order', false))
+            @if(!system_setting('disable_online_order'))
               <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout"
                 :disabled="!selectedItems.length"
                 @click="goToCheckout">

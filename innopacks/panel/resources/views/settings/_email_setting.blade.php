@@ -1,4 +1,5 @@
 <!-- Email Settings -->
+<div class="tab-pane fade" id="tab-setting-email">
 <div class="container">
   <div class="col-12 mx-auto">
   <div class="row">
@@ -27,7 +28,7 @@
                              placeholder="{{ __('panel/setting.smtp_password') }}"/>
       </div>
       <div class="row">
-        @php($emailEncryptionType=[['code'=>'SSL','name'=>'SSL','value'=>'SSL'],['code'=>'TLS','name'=>'TLS','value'=>'TLS'],])
+        @php($emailEncryptionType=[["code"=>"SSL","name"=>"SSL","value"=>"SSL"],["code"=>"TLS","name"=>"TLS","value"=>"TLS"],])
         <x-common-form-select title="{{ __('panel/setting.smtp_encryption') }}"
                               name="smtp_encryption" :options="$emailEncryptionType" key="code"
                               label="name"
@@ -67,3 +68,4 @@
     elm.trigger('change');
   });
 </script>
+</div>

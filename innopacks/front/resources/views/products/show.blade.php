@@ -100,28 +100,29 @@
             </ul>
 
             @include('products._variants')
-            <div class="product-info-bottom">
-              <div class="quantity-wrap">
-                <div class="minus"><i class="bi bi-dash-lg"></i></div>
-                <input type="number" class="form-control product-quantity" value="1"
-                       data-sku-id="{{ $sku['id'] }}">
-                <div class="plus"><i class="bi bi-plus-lg"></i></div>
-              </div>
 
-              <div class="product-info-btns">
-                @if(!system_setting('disable_online_order', true))
-                    <button class="btn btn-primary add-cart" data-id="{{ $product->id }}"
-                            data-price="{{ $product->masterSku->price }}">
-                      {{ __('front/product.add_to_cart') }}
-                    </button>
-                    <button class="btn buy-now ms-2" data-id="{{ $product->id }}"
-                            data-price="{{ $product->masterSku->price }}">
-                      {{ __('front/product.buy_now') }}
-                    </button>
-                @endif
-                @hookinsert('product.detail.cart.after')
+            @if(!system_setting('disable_online_order'))
+              <div class="product-info-bottom">
+                <div class="quantity-wrap">
+                  <div class="minus"><i class="bi bi-dash-lg"></i></div>
+                  <input type="number" class="form-control product-quantity" value="1"
+                         data-sku-id="{{ $sku['id'] }}">
+                  <div class="plus"><i class="bi bi-plus-lg"></i></div>
+                </div>
+                <div class="product-info-btns">
+                  <button class="btn btn-primary add-cart" data-id="{{ $product->id }}"
+                          data-price="{{ $product->masterSku->price }}">
+                    {{ __('front/product.add_to_cart') }}
+                  </button>
+                  <button class="btn buy-now ms-2" data-id="{{ $product->id }}"
+                          data-price="{{ $product->masterSku->price }}">
+                    {{ __('front/product.buy_now') }}
+                  </button>
+                  @hookinsert('product.detail.cart.after')
+                </div>
               </div>
-            </div>
+            @endif
+
             <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}"
                  data-id="{{ $product->id }}"
                  data-price="{{ $product->masterSku->price }}">

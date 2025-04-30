@@ -1,4 +1,5 @@
 <!-- Basic Store Information -->
+<div class="tab-pane fade show active" id="tab-setting-basics">
 <div class="card mb-4">
   <div class="card-header">
     <h5 class="card-title mb-0">{{ __('panel/setting.basic_store_info') }}</h5>
@@ -59,4 +60,5 @@
                           :value="old('meta_description', system_setting('meta_description'))" 
                           placeholder="{{ __('panel/setting.meta_description') }}" />
   </div>
+</div>
 </div>

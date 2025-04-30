@@ -1163,7 +1163,27 @@ if (! function_exists('innoshop_version')) {
      */
     function innoshop_version(): string
     {
-        return ucfirst(config('innoshop.edition')).' v'.config('innoshop.version').'('.config('innoshop.build').')';
+        $default = ucfirst(config('innoshop.edition')).' v'.config('innoshop.version').'('.config('innoshop.build').')';
+
+        return fire_hook_filter('innoshop.version.display', $default);
+    }
+}
+
+if (! function_exists('innoshop_brand_link')) {
+    /**
+     * Get innoshop brand link
+     *
+     * @return string
+     */
+    function innoshop_brand_link(): string
+    {
+        if (is_admin()) {
+            $default = '<a href="https://www.innoshop.com" class="ms-2" target="_blank">InnoShop</a>';
+        } else {
+            $default = 'Powered By <a href="https://www.innoshop.com" class="ms-2" target="_blank">InnoShop</a>';
+        }
+
+        return fire_hook_filter('innoshop.brand.link.display', $default);
     }
 }
 

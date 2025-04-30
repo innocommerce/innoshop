@@ -1,4 +1,5 @@
 <!-- Localization Settings -->
+<div class="tab-pane fade" id="tab-setting-webdata">
 <div class="card mb-4">
   <div class="card-header">
     <h5 class="card-title mb-0">{{ __('panel/setting.localization_settings') }}</h5>
@@ -188,4 +189,5 @@
                           value="{{ old('js_code', system_setting('js_code')) }}"
                           placeholder="{{ __('panel/setting.js_code') }}"/>
   </div>
+</div>
 </div>

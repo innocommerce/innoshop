@@ -19,7 +19,8 @@
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel/setting.website_data') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting.email_setting') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-content-ai">{{ __('panel/setting.content_ai') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-logistics-information">{{ __('panel/setting.express_company') }}</a>  
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-logistics-information">{{ __('panel/setting.express_company') }}</a>
+            @hookinsert('panel.settings.tab.nav.bottom')
         </ul>
         </div>
       </div>
@@ -29,25 +30,12 @@
         <div class="card-header setting-header">{{ __('panel/setting.basic') }}</div>
         <div class="card-body">
           <div class="tab-content">
-            <div class="tab-pane fade show active" id="tab-setting-basics">
-              @include('panel::settings._basic_setting')
-            </div>
-
-            <div class="tab-pane fade" id="tab-setting-webdata">
-              @include('panel::settings._web_data')
-            </div>
-
-            <div class="tab-pane fade" id="tab-setting-email">
-              @include('panel::settings._email_setting')
-            </div>
-
-            <div class="tab-pane fade" id="tab-setting-content-ai">
-              @include('panel::settings._content_ai') 
-            </div>
-
-            <div class="tab-pane fade" id="tab-setting-logistics-information">
-              @include('panel::settings._logistics_information')
-            </div>
+            @include('panel::settings._basic_setting')
+            @include('panel::settings._web_data')
+            @include('panel::settings._email_setting')
+            @include('panel::settings._content_ai')
+            @include('panel::settings._logistics_information')
+            @hookinsert('panel.settings.tab.pane.bottom')
           </div>
         </div>
       </div>

@@ -74,7 +74,7 @@
             </div>
         </div>
         <p class="text-center text-secondary mt-5">
-          <a href="https://www.innoshop.com" class="ms-2" target="_blank">InnoShop</a>
+          {!! innoshop_brand_link() !!}
           {{ innoshop_version() }} &copy; {{ date('Y') }} All Rights Reserved
         </p>
       </div>

@@ -1,4 +1,5 @@
 <!-- AI Content Settings -->
+<div class="tab-pane fade" id="tab-setting-content-ai">
 <div class="container">
   <div class="row">
     <div class="col-6">
@@ -25,4 +26,5 @@
                             value="{{ old($prompt, system_setting($prompt)) }}"
                             placeholder="{{ __('panel/setting.'.$prompt) }}"/>
   @endforeach
+</div>
 </div>
