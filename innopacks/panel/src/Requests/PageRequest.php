@@ -46,7 +46,7 @@ class PageRequest extends FormRequest
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.title"   => 'required',
-            "translations.$defaultLocale.content" => 'required',
+            "translations.$defaultLocale.content" => 'required|string|max:1000000',
         ];
     }
 

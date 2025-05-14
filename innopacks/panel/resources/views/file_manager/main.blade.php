@@ -1969,7 +1969,7 @@
                 id: file.id || file.path, // 确保每个文件都有唯一标识
                 selected: false,
                 preview_url: file.url, // 保存预览URL
-                url: file.path ? file.path : file.url // 实际文件路径
+                url: file.url // 实际文件路径
               }));
 
               // 更新分页信息

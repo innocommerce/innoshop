@@ -324,7 +324,7 @@
             <div class="mb-3">
               <label for="logisticsCompany" class="form-label">{{ __('panel/order.express_company') }}</label>
               <select class="form-control" id="logisticsCompany">
-                @foreach(system_setting('logistics', []) as $expressCompany)
+                @foreach(is_array(system_setting('logistics', [])) ?: [] as $expressCompany)
                   <option value="{{ $expressCompany['code'] }}">{{ $expressCompany['company'] }}</option>
                 @endforeach
               </select>

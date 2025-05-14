@@ -50,15 +50,50 @@
   </div>
 @endif
 
-@foreach($reviews as $review)
-  <br/>
-  <hr/>
-  <div class="review-list row">
-    <div class="row">
-      <h5 class="col-2 mb-3">{{ $review['customer_name'] }}</h5>
-      <span class="col-4 text-left"><x-front-review :rating="$review['rating']"/></span>
-      <span class="col-6 text-end date">{{ $review['created_at'] }}</span>
-    </div>
-    <p class="mb-3">{{ $review['content'] }}</p>
+<div class="review-list-container">
+  @include('products._review_list', ['reviews' => $reviews])
+</div>
+
+@if($reviews->hasMorePages())
+  <div class="text-center mt-3">
+    <button class="btn btn-outline-primary load-more-reviews" data-page="2" data-product-id="{{ $product->id }}">
+      {{ __('front/common.load_more') }}
+    </button>
   </div>
-@endforeach
+@endif
+
+@push('footer')
+<script>
+$(document).ready(function() {
+  $('.load-more-reviews').on('click', function() {
+    const button = $(this);
+    const page = button.data('page');
+    const productId = button.data('product-id');
+    
+    button.prop('disabled', true).html('<i class="bi bi-arrow-repeat spin"></i> {{ __("front/common.loading") }}');
+    
+    axios.get(`{{ front_route('products.reviews', ['product' => $product->id]) }}`, {
+      params: {
+        page: page
+      }
+    })
+    .then(function(response) {
+      if (response.success) {
+        $('.review-list-container').append(response.data.html);
+        
+        if (response.data.has_more) {
+          button.data('page', page + 1).prop('disabled', false).text('{{ __("front/product.load_more") }}');
+        } else {
+          button.remove();
+        }
+      }
+    })
+    .catch(function(error) {
+      console.error('加载评论失败:', error);
+      button.prop('disabled', false).text('{{ __("front/product.load_more") }}');
+      inno.msg('{{ __("front/product.load_failed") }}');
+    });
+  });
+});
+</script>
+@endpush

@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'Tajuk SEO produk',
     'ai_prompt_product_slug'            => 'Slug produk',
     'ai_prompt_product_summary'         => 'Ringkasan produk',
+    'allow_out_of_stock'                => 'Pesanan saham negatif dibenarkan',
+    'allow_out_of_stock_desc'           => 'Setelah dihidupkan, pengguna masih boleh membuat pesanan walaupun inventori tidak mencukupi',
     'auto_fill_lang'                    => 'Bahasa autoisi',
     'auto_fill_lang_desc'               => 'Autoisi kandungan dalam bahasa lain untuk tapak berbilang bahasa',
     'backend_logo'                      => 'Logo backend',

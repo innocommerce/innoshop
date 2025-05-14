@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'عنوان SEO للمنتج',
     'ai_prompt_product_slug'            => 'نموذج URL للمنتج',
     'ai_prompt_product_summary'         => 'ملخص المنتج',
+    'allow_out_of_stock'                => 'يسمح أوامر المخزون السلبية',
+    'allow_out_of_stock_desc'           => 'وبعد الفتح، يمكن للمستعمل تقديم طلب حتى إذا كان المخزون غير كاف',
     'auto_fill_lang'                    => 'الحشو التلقائي',
     'auto_fill_lang_desc'               => 'ويمكن استخدام الملء التلقائي لمحتويات اللغات الأخرى في المواقع المتعددة اللغات',
     'backend_logo'                      => 'شعار الخلفية',

@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'Prompt titolo SEO prodotto',
     'ai_prompt_product_slug'            => 'Prompt slug prodotto',
     'ai_prompt_product_summary'         => 'Prompt riassunto prodotto',
+    'allow_out_of_stock'                => '• possibilità di effettuare ordinazioni per scorte negative',
+    'allow_out_of_stock_desc'           => 'Dopo l’apertura, gli ordini possono essere emessi dagli utenti anche se le scorte sono insufficienti',
     'auto_fill_lang'                    => 'Linguaggio di ripiena automatica',
     'auto_fill_lang_desc'               => 'Integrazione automatica dei contenuti in altre lingue per i siti multilingui',
     'backend_logo'                      => 'Logo backend',

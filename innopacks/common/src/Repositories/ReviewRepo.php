@@ -68,7 +68,7 @@ class ReviewRepo extends BaseRepo
      * @param  $product
      * @return LengthAwarePaginator
      */
-    public function getListByProduct($product): LengthAwarePaginator
+    public function getListByProduct($product, $limit = 10, $page = 1): LengthAwarePaginator
     {
         if (is_object($product)) {
             $productID = $product->id;
@@ -81,7 +81,7 @@ class ReviewRepo extends BaseRepo
             'active'     => true,
         ];
 
-        return $this->builder($filters)->paginate();
+        return $this->builder($filters)->paginate($limit, ['*'], 'page', $page);
     }
 
     /**

@@ -16,6 +16,9 @@ use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Services\ProductPriceService;
 
+/**
+ * @property int $quantity
+ */
 class Sku extends BaseModel
 {
     protected $table = 'product_skus';

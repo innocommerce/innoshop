@@ -17,7 +17,6 @@ use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\ReviewRepo;
 use InnoShop\Common\Resources\ProductVariable;
-use InnoShop\Common\Resources\ReviewListItem;
 use InnoShop\Common\Resources\SkuListItem;
 
 class ProductController extends Controller
@@ -88,7 +87,7 @@ class ProductController extends Controller
         }
 
         $product->increment('viewed');
-        $reviews    = ReviewRepo::getInstance()->getListByProduct($product);
+        $reviews    = ReviewRepo::getInstance()->getListByProduct($product, 10);
         $customerID = current_customer_id();
         $variables  = ProductVariable::collection($product->variables)->jsonSerialize();
 
@@ -98,11 +97,34 @@ class ProductController extends Controller
             'skus'       => SkuListItem::collection($product->skus)->jsonSerialize(),
             'variants'   => $variables,
             'attributes' => $product->groupedAttributes(),
-            'reviews'    => ReviewListItem::collection($reviews)->jsonSerialize(),
+            'reviews'    => $reviews,
             'reviewed'   => ReviewRepo::productReviewed($customerID, $product->id),
             'related'    => $product->relationProducts,
         ];
 
         return inno_view('products.show', $data);
+    }
+
+    /**
+     * @param  Request  $request
+     * @param  Product  $product
+     * @return mixed
+     */
+    public function reviews(Request $request, Product $product): mixed
+    {
+        $page    = $request->get('page', 1);
+        $reviews = ReviewRepo::getInstance()->getListByProduct($product, 10, $page);
+
+        $html = view('products._review_list', [
+            'reviews' => $reviews,
+        ])->render();
+
+        return response()->json([
+            'success' => true,
+            'data'    => [
+                'html'     => $html,
+                'has_more' => $reviews->hasMorePages(),
+            ],
+        ]);
     }
 }

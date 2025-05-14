@@ -331,4 +331,22 @@ class CategoryRepo extends BaseRepo
 
         return $this->create($data);
     }
+
+    /**
+     * Summary of getCategoryOptions
+     *
+     * @return array
+     */
+    public function getCategoryOptions(): array
+    {
+        $categories = $this->getActiveCategories();
+        foreach ($categories as $category) {
+            $options[] = [
+                'id'   => $category->id,
+                'name' => $category->fallbackName(),
+            ];
+        }
+
+        return $options;
+    }
 }

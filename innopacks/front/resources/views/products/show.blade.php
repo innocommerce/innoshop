@@ -67,8 +67,11 @@
             @endhookupdate
 
             <div class="stock-wrap">
-              <div class="in-stock badge">{{ __('front/product.in_stock') }}</div>
-              <div class="out-stock badge d-none">{{ __('front/product.out_stock') }}</div>
+              @if($sku['quantity'] > 0)
+                <div class="in-stock badge">{{ __('front/product.in_stock') }}</div>
+              @else
+                <div class="out-stock badge d-none">{{ __('front/product.out_stock') }}</div>
+              @endif
             </div>
 
             <div class="sub-product-title">{{ $product->fallbackName('summary') }}</div>
@@ -101,7 +104,7 @@
 
             @include('products._variants')
 
-            @if(!system_setting('disable_online_order', false))
+            @if(!system_setting('disable_online_order'))
               <div class="product-info-bottom">
                 <div class="quantity-wrap">
                   <div class="minus"><i class="bi bi-dash-lg"></i></div>
@@ -147,11 +150,11 @@
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-description-attribute"
                     type="button">{{ __('front/product.attribute') }}</button>
           </li>
-          <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-review"
-                    type="button">{{ __('front/product.review') }}</button>
-          </li>
         @endif
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-review"
+                  type="button">{{ __('front/product.review') }}</button>
+        </li>
         <li class="nav-item">
           <button class="nav-link correlation" data-bs-toggle="tab"
                   data-bs-target="#product-description-correlation"

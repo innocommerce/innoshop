@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => '상품 SEO 제목 프롬프트',
     'ai_prompt_product_slug'            => '상품 Slug 프롬프트',
     'ai_prompt_product_summary'         => '상품 요약 프롬프트',
+    'allow_out_of_stock'                => '마이너스주문 허용',
+    'allow_out_of_stock_desc'           => '개봉 후, 재고가 부족하더라도 사용자는 여전히 주문을 할 수 있다',
     'auto_fill_lang'                    => '자동 입력 언어',
     'auto_fill_lang_desc'               => '다언어 사이트를 위해 다른 언어로 된 내용을 자동으로 채워줍니다',
     'backend_logo'                      => '백엔드 로고',

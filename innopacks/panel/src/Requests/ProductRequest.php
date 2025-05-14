@@ -43,9 +43,12 @@ class ProductRequest extends FormRequest
             'slug'       => $slugRule,
             'active'     => 'bool',
 
-            "translations.$defaultLocale.locale"  => 'required',
-            "translations.$defaultLocale.name"    => 'required',
-            "translations.$defaultLocale.content" => 'max:20000',
+            "translations.$defaultLocale.locale"           => 'required',
+            "translations.$defaultLocale.name"             => 'required',
+            "translations.$defaultLocale.content"          => 'max:20000',
+            "translations.$defaultLocale.meta_title"       => 'max:60',
+            "translations.$defaultLocale.meta_description" => 'max:160',
+            "translations.$defaultLocale.meta_keywords"    => 'max:100',
         ];
     }
 
@@ -57,10 +60,15 @@ class ProductRequest extends FormRequest
         $defaultLocale = setting_locale_code();
 
         return [
-            'slug'                                => panel_trans('common.slug'),
+            'slug' => panel_trans('common.slug'),
+
             "translations.$defaultLocale.locale"  => trans('panel/product.locale'),
             "translations.$defaultLocale.name"    => trans('panel/product.name'),
             "translations.$defaultLocale.content" => trans('panel/product.content'),
+
+            "translations.$defaultLocale.meta_title"       => trans('panel/common.meta_title'),
+            "translations.$defaultLocale.meta_description" => trans('panel/common.meta_description'),
+            "translations.$defaultLocale.meta_keywords"    => trans('panel/common.meta_keywords'),
         ];
     }
 }

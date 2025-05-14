@@ -25,10 +25,6 @@
                       {{ __('front/checkout.shipping_address') }}
                     </div>
                     <div>
-                      <label class="form-check-label me-4">
-                        <input class="form-check-input" type="checkbox" v-model="source.same_as_shipping_address">
-                        {{ __('front/checkout.same_shipping_address') }}
-                      </label>
                       <span class="cursor-pointer" v-if="!source.addressEdit" @click="addressEdit(true)"><i
                           class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
                     </div>
@@ -36,7 +32,7 @@
                   <div class="checkout-select-wrap address-select" v-if="source.addresses.length && !source.addressEdit">
                     <div :class="['select-item', current.shipping_address_id == address.id ? 'active' : '']"
                       v-for="address, index in source.addresses" :key="address.id"
-                      @click="updateCheckout('shipping_address_id', address.id)">
+                      @click="updateShippingAddress(address.id)">
                       <div class="left">
                         <i class="bi bi-circle"></i>
                         <div class="select-title">
@@ -56,34 +52,37 @@
                 </div>
               </div>
             </div>
-            <div class="checkout-item" v-if="!source.addressEdit && !source.same_as_shipping_address">
+            <div class="checkout-item" v-if="!source.addressEdit">
               <div class="addresses-wrap">
                 <div class="shipping-address">
                   <div class="title-wrap">
                     <div class="title">{{ __('front/checkout.billing_address') }}</div>
-                    <span class="cursor-pointer" v-if="!source.addressEdit" @click="addressEdit(true)"><i
-                        class="bi bi-plus-lg"></i>{{ __('front/checkout.create_address') }}</span>
-                    <span class="cursor-pointer" v-else @click="addressEdit(false)">
-                      <i class="bi bi-plus-lg"></i>{{ __('front/checkout.cancel_create') }}
-                    </span>
+                    <div>
+                      <label class="form-check-label" v-if="!source.addressEdit">
+                        <input class="form-check-input" type="checkbox" v-model="source.same_as_shipping_address">
+                        {{ __('front/checkout.same_shipping_address') }}
+                      </label>
+                    </div>
                   </div>
-                  <div class="checkout-select-wrap address-select" v-if="source.addresses.length && !source.addressEdit">
-                    <div :class="['select-item', current.billing_address_id == address.id ? 'active' : '']"
-                      v-for="address, index in source.addresses" :key="address.id"
-                      @click="updateCheckout('billing_address_id', address.id)">
-                      <div class="left">
-                        <i class="bi bi-circle"></i>
-                        <div class="select-title">
-                          <div class="address-name mb-1">@{{ address.name }} @{{ address.phone }}
-                            @{{ address.zipcode }}
-                          </div>
-                          <div class="address-info">@{{ address.address_1 }} @{{ address.address_2 }}
-                            @{{ address.state }} @{{ address.city }} @{{ address.country_id }}
+                  <div v-if="!source.same_as_shipping_address">
+                    <div class="checkout-select-wrap address-select" v-if="source.addresses.length && !source.addressEdit">
+                      <div :class="['select-item', current.billing_address_id == address.id ? 'active' : '']"
+                        v-for="address, index in source.addresses" :key="address.id"
+                        @click="updateCheckout('billing_address_id', address.id)">
+                        <div class="left">
+                          <i class="bi bi-circle"></i>
+                          <div class="select-title">
+                            <div class="address-name mb-1">@{{ address.name }} @{{ address.phone }}
+                              @{{ address.zipcode }}
+                            </div>
+                            <div class="address-info">@{{ address.address_1 }} @{{ address.address_2 }}
+                              @{{ address.state }} @{{ address.city }} @{{ address.country_id }}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="edit-address text-decoration-underline text-secondary" @click="editAddress(index)">
-                        {{ __('front/common.edit') }}
+                        <div class="edit-address text-decoration-underline text-secondary" @click="editAddress(index)">
+                          {{ __('front/common.edit') }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -175,33 +174,76 @@
               <div class="title">{{ __('front/checkout.my_order') }}</div>
             </div>
             <div class="products-table">
-              <div class="products-table-title"><span>{{ __('front/cart.product') }}</span><span
-                  class="text-end">{{ __('front/cart.price') }}</span></div>
-              <div class="products-table-wrap">
-                @foreach ($cart_list as $product)
-                  <div class="products-table-list">
-                    <div>
-                      <div class="product-item">
-                        <div class="product-image"><img src="{{ $product['image'] }}" class="img-fluid"></div>
-                        <div class="product-info">
-                          <div class="name">{{ $product['product_name'] }}</div>
-                          <div class="sku mt-2 text-secondary">{{ $product['sku_code'] }}
-                            @if ($product['variant_label'])
-                              - {{ $product['variant_label'] }}
-                            @endif
-                            @if ($product['item_type_label'])
-                              <span class="badge bg-danger ms-2">{{ $product['item_type_label'] }}</span>
-                            @endif
-                            x {{ $product['quantity'] }}
+
+              @hookinsert('checkout.products.before')
+              
+              @if (!empty($cart_list))
+                <div class="products-table-title">
+                  <span>{{ __('front/cart.product') }}</span>
+                  <span class="text-end">{{ __('front/cart.price') }}</span>
+                </div>
+                <div class="products-table-wrap">
+                  @foreach ($cart_list as $product)
+                    <div class="products-table-list">
+                      <div>
+                        <div class="product-item">
+                          <div class="product-image"><img src="{{ $product['image'] }}" class="img-fluid"></div>
+                          <div class="product-info">
+                            <div class="name">{{ $product['product_name'] }}</div>
+                            <div class="sku mt-2 text-secondary">{{ $product['sku_code'] }}
+                              @if ($product['variant_label'])
+                                - {{ $product['variant_label'] }}
+                              @endif
+                              @if ($product['item_type_label'])
+                                <span class="badge bg-danger ms-2">{{ $product['item_type_label'] }}</span>
+                              @endif
+                              x {{ $product['quantity'] }}
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <div class="text-end">{{ $product['price_format'] }}</div>
                     </div>
-                    <div class="text-end">{{ $product['price_format'] }}</div>
-                  </div>
-                @endforeach
-              </div>
+                  @endforeach
+                </div>
+              @endif
+              
+              @hookinsert('checkout.products.after')
+
             </div>
+
+            @if (current_customer())
+              <div class="border-top pt-3 pb-2">
+                <div class="row">
+                  <div class="col-12 d-flex align-items-center gap-3">
+                    <div class="input-group flex-nowrap">
+                      <span class="input-group-text">{{ default_currency()->symbol_left }}</span>
+                      <input type="text" v-model="current.balance" class="form-control py-2"
+                        placeholder="{{ __('front/transaction.balance_placeholder') }}"
+                        aria-label="{{ __('front/transaction.balance') }}" @input="validateInput">
+                    </div>
+                    <button
+                      :class="{
+                          'disabled': parseFloat(current.balance) > source.balanceAmount || parseFloat(current
+                              .balance) >= source.totalAmount || isNaN(parseFloat(current.balance))
+                      }"
+                      class="input-group-text btn btn-primary py-2" id="addon-wrapping" @click="submitBalance"
+                      :disabled="parseFloat(current.balance) > source.balanceAmount || parseFloat(current.balance) >= source.totalAmount ||
+                          isNaN(parseFloat(current.balance))"
+                      style="cursor: pointer;">
+                      {{ __('front/transaction.confirm') }}
+                    </button>
+                  </div>
+                </div>
+                <div class="pt-1 fs-7 d-flex gap-3" style="font-size: 10px;">
+                  <span>{{ __('front/transaction.available_balance') }}: @{{ source.balanceAmountFormat }}</span>
+                  <span class="fs-7 text-danger" style="font-size: 10px;"
+                    v-if="parseFloat(current.balance) > source.balanceAmount">{{ __('front/transaction.input_should_balance') }}</span>
+                  <span class="fs-7 text-danger" style="font-size: 10px;"
+                    v-else-if="parseFloat(current.balance) >= source.totalAmount">{{ __('front/transaction.input_balance_total') }}</span>
+                </div>
+              </div>
+            @endif
 
             <ul class="cart-data-list">
               <li class="cart-data-list" v-for="fee in source.feeList" :key="fee.title">
@@ -239,7 +281,7 @@
       checkoutConfirm: @json(front_route('checkout.confirm')),
     }
 
-    const addressApp = createApp({
+    const checkoutApp = createApp({
       setup() {
         const source = reactive({
           addresses: @json($address_list),
@@ -250,6 +292,8 @@
           feeList: @json($fee_list),
           totalAmount: @json($amount),
           totalAmountFormat: @json(currency_format($amount)),
+          balanceAmount: @json($balance_amount ?? 0),
+          balanceAmountFormat: @json($balance_amount_format ?? '0'),
         })
 
         const current = reactive({
@@ -258,7 +302,13 @@
           shipping_method_code: @json($checkout['shipping_method_code'] ?? ''),
           billing_method_code: @json($checkout['billing_method_code'] ?? ''),
           comment: '',
+          balance: 0,
+          reference: {
+            balance: Number(@json($checkout['reference']['balance'] ?? 0))
+          },
         })
+
+        current.balance = current.reference.balance;
 
         const isCheckout = computed(() => {
           return !current.shipping_address_id || !current.billing_address_id || !current.shipping_method_code || !
@@ -276,53 +326,71 @@
           })
         }
 
+        const updateCheckout = (key, value) => {
+          current[key] = value;
+          if (source.same_as_shipping_address && key === 'shipping_address_id') {
+            current.billing_address_id = value;
+          }
+
+          axios.put(api.checkout, current).then(function(res) {
+            if (res.success) {
+              source.feeList = res.data.fee_list;
+              source.totalAmount = res.data.amount;
+              source.totalAmountFormat = res.data.amount_format;
+              source.shippingMethods = res.data.shipping_methods;
+            }
+          });
+        }
+
+        const selectFirstShippingMethod = () => {
+          if (source.shippingMethods.length && source.shippingMethods[0].quotes.length) {
+            const firstQuote = source.shippingMethods[0].quotes[0];
+            current.shipping_method_code = firstQuote.code;
+            updateCheckout('shipping_method_code', firstQuote.code);
+          }
+        }
+
+        const updateShippingAddress = (addressId) => {
+          current.shipping_method_code = '';
+          updateCheckout('shipping_address_id', addressId);
+          
+          axios.put(api.checkout, current).then(function(res) {
+            if (res.success) {
+              source.shippingMethods = res.data.shipping_methods;
+              selectFirstShippingMethod();
+            }
+          });
+        }
+
         const updateAddress = (params) => {
-          const id = new URLSearchParams(params).get('id');
-          const url = id ? api.address + '/' + id : api.address
-          const method = id ? 'put' : 'post'
+          const id = parseInt(new URLSearchParams(params).get('id'));
+          const url = id ? api.address + '/' + id : api.address;
+          const method = id ? 'put' : 'post';
+
           axios[method](url, params).then(function(res) {
             if (res.success) {
-              inno.msg(res.message)
+              inno.msg(res.message);
+              
               if (id) {
-                const index = source.addresses.findIndex(address => address.id === id)
-                source.addresses[index] = res.data
+                const index = source.addresses.findIndex(address => address.id === id);
+                source.addresses[index] = res.data;
+                updateShippingAddress(id);
               } else {
-                source.addresses.push(res.data)
-
+                source.addresses.push(res.data);
                 if (source.addresses.length === 1) {
-                  current.shipping_address_id = res.data.id
-                  current.billing_address_id = res.data.id
-                  updateCheckout('shipping_address_id', res.data.id)
+                  updateShippingAddress(res.data.id);
                 }
               }
 
-              source.addressEdit = false
-              clearForm()
+              source.addressEdit = false;
+              clearForm();
             }
-          })
+          });
         }
 
         const addressEdit = (status) => {
           source.addressEdit = status
           clearForm()
-        }
-
-        const updateCheckout = (key, value) => {
-          current[key] = value
-          if (source.same_as_shipping_address && key === 'shipping_address_id') {
-            current.billing_address_id = value
-          }
-
-          axios.put(api.checkout, current).then(function(res) {
-            if (res.success) {
-              source.feeList = res.data.fee_list
-              source.totalAmount = res.data.amount
-              source.totalAmountFormat = res.data.amount_format
-              source.shippingMethods = res.data.shipping_methods
-              current.shipping_method_code = res.data.checkout.shipping_method_code
-              //window.location.href = '{{ front_route('checkout.index') }}'
-            }
-          })
         }
 
         const submitCheckout = () => {
@@ -334,7 +402,6 @@
               layer.msg(res.message, {
                 time: 1000
               }, function() {
-                // location.href = '{{ front_route('checkout.success') }}?order_number=' + res.data.number;
                 location.href = inno.getBase() + '/orders/' + res.data.number + '/pay'
               })
             }
@@ -347,6 +414,35 @@
           inno.openLogin()
         }
 
+        const submitBalance = () => {
+          if (parseFloat(current.balance) <= source.balanceAmount && parseFloat(current.balance) < source.totalAmount) {
+            axios.put(api.checkout, {
+              reference: {
+                balance: parseFloat(current.balance)
+              }
+            }).then(function(res) {
+              if (res.success) {
+                source.feeList = res.data.fee_list;
+                source.totalAmount = res.data.amount;
+                source.totalAmountFormat = res.data.amount_format;
+              }
+            }).catch(function(error) {
+              console.error('Error:', error);
+            });
+          }
+        }
+
+        const validateInput = (event) => {
+          let value = event.target.value;
+          value = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+          if (value.startsWith('.')) {
+            value = value.substring(1);
+          }
+          if (value !== event.target.value) {
+            event.target.value = value;
+          }
+        }
+
         return {
           source,
           login,
@@ -356,13 +452,16 @@
           addressEdit,
           isCheckout,
           updateAddress,
+          updateShippingAddress,
           submitCheckout,
+          submitBalance,
+          validateInput,
         }
       }
     }).mount('#app-checkout')
 
     function updateAddress(params) {
-      addressApp.updateAddress(params)
+      checkoutApp.updateAddress(params)
     }
   </script>
 @endpush

@@ -537,25 +537,24 @@ class FileManagerService implements FileManagerInterface
      */
     protected function handleImage(string $filePath, string $baseName): array
     {
-        $path     = "$this->mediaDir$filePath";
-        $realPath = str_replace($this->fileBasePath.$this->basePath, $this->fileBasePath, $this->fileBasePath.$filePath);
+        $thumbPath = $path = "$this->mediaDir$filePath";
+        $realPath  = str_replace($this->fileBasePath.$this->basePath, $this->fileBasePath, $this->fileBasePath.$filePath);
 
         $mime = '';
         if (file_exists($realPath)) {
             $mime = mime_content_type($realPath);
-        }
-
-        if (str_starts_with($mime, 'application/')) {
-            $path = 'images/panel/doc.png';
-        } elseif (str_starts_with($mime, 'video/')) {
-            $path = 'images/panel/video.png';
+            if (str_starts_with($mime, 'application/')) {
+                $thumbPath = 'images/panel/doc.png';
+            } elseif (str_starts_with($mime, 'video/')) {
+                $thumbPath = 'images/panel/video.png';
+            }
         }
 
         return [
             'path'       => '/'.$path,
             'name'       => $baseName,
             'origin_url' => image_origin($path),
-            'url'        => image_resize($path),
+            'url'        => image_resize($thumbPath),
             'mime'       => $mime,
             'selected'   => false,
         ];

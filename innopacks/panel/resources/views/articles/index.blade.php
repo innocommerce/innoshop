@@ -33,15 +33,15 @@
             @foreach($articles as $item)
               <tr>
                 <td>{{ $item->id }}</td>
-                <td><img src="{{ image_resize($item->translation->image ?? '', 30, 30) }}" class="wh-30"></td>
+                <td><img src="{{ image_resize($item->fallbackName('image'), 30, 30) }}" class="wh-30"></td>
                 <td>
                   <a href="{{ $item->url }}" target="_blank" class="text-decoration-none">
-                    {{ sub_string($item->translation->title ?? '', 32) }}
+                    {{ sub_string($item->fallbackName('title'), 32) }}
                   </a>
                 </td>
                 <td>{{ $item->catalog->translation->title ?? '-' }}</td>
-                <td>{{ $item->tagNames ?? '' }}</td>
-                <td>{{ sub_string($item->slug) }}</td>
+                <td>{{ $item->tagNames ?: '-' }}</td>
+                <td>{{ sub_string($item->slug ?: '-') }}</td>
                 <td>{{ $item->position }}</td>
                 <td>@include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('articles.active', $item->id)])</td>
                 <td>

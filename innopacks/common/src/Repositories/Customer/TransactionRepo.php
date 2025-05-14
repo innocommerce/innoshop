@@ -26,6 +26,7 @@ class TransactionRepo extends BaseRepo
 
         return [
             ['name' => 'customer_id', 'type' => 'input', 'label' => trans('panel/transaction.customer')],
+            ['name' => 'email', 'type' => 'input', 'label' => trans('panel/common.email')],
             ['name' => 'type', 'type' => 'select', 'label' => trans('panel/transaction.type'), 'options' => $options, 'options_key' => 'code', 'options_label' => 'label'],
             ['name' => 'amount', 'type' => 'range', 'label' => trans('panel/transaction.amount')],
             ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
@@ -106,6 +107,13 @@ class TransactionRepo extends BaseRepo
         $customerID = $filters['customer_id'] ?? 0;
         if ($customerID) {
             $builder->where('customer_id', $customerID);
+        }
+
+        $email = $filters['email'] ?? '';
+        if ($email) {
+            $builder->whereHas('customer', function ($query) use ($email) {
+                $query->where('email', 'like', '%'.$email.'%');
+            });
         }
 
         $type = $filters['type'] ?? '';

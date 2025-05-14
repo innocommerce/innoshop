@@ -41,9 +41,11 @@ class Input extends Component
 
     public bool $translate;
 
+    public string $localeCode;
+
     public function __construct(string $name, string $title, $value = null, bool $required = false, string $error = '',
         string $type = 'text', string $placeholder = '', string $description = '', bool $disabled = false, bool $readonly = false,
-        bool $multiple = false, string $column = '', bool $generate = false, bool $translate = false)
+        bool $multiple = false, string $column = '', bool $generate = false, bool $translate = false, string $localeCode = '')
     {
         if (! $multiple) {
             $value = html_entity_decode($value, ENT_QUOTES);
@@ -63,6 +65,7 @@ class Input extends Component
         $this->column      = $column;
         $this->generate    = $generate;
         $this->translate   = $translate && has_translator();
+        $this->localeCode  = $localeCode;
     }
 
     /**

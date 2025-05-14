@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'Produkt SEO Titel-Eingabeaufgabe',
     'ai_prompt_product_slug'            => 'Produkt Slug-Eingabeaufgabe',
     'ai_prompt_product_summary'         => 'Produkt Zusammenfassungs-Eingabeaufgabe',
+    'allow_out_of_stock'                => 'Inventarlisten werden zugelassen',
+    'allow_out_of_stock_desc'           => 'Nach öffnung können die nutzer ihre aufträge auch dann bestellen, wenn sie keine inventaren mehr haben',
     'auto_fill_lang'                    => 'Automatische füllung sprache',
     'auto_fill_lang_desc'               => 'Zusätzliche sprachen werden automatisch ausgefüllt, und die seiten werden somit in mehreren sprachen verfügbar sein',
     'backend_logo'                      => 'Backend Logo',

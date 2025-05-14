@@ -10,12 +10,38 @@
 namespace InnoShop\Common\Repositories\Customer;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Repositories\BaseRepo;
 
 class FavoriteRepo extends BaseRepo
 {
     protected string $model = Favorite::class;
+
+    /**
+     * Get list of favorites.
+     *
+     * @param  array  $filters
+     * @return LengthAwarePaginator
+     */
+    public function list(array $filters = []): LengthAwarePaginator
+    {
+        $favorites = $this->builder($filters)->paginate();
+
+        $validFavorites = $favorites->getCollection()->filter(function ($favorite) {
+            if ($favorite->product === null) {
+                $favorite->delete();
+
+                return false;
+            }
+
+            return true;
+        });
+
+        $favorites->setCollection($validFavorites);
+
+        return $favorites;
+    }
 
     /**
      * @param  $data

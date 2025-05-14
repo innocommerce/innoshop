@@ -21,6 +21,8 @@ class Textarea extends Component
 
     public mixed $value;
 
+    public string $description;
+
     public bool $multiple;
 
     public string $column;
@@ -29,21 +31,25 @@ class Textarea extends Component
 
     public bool $translate;
 
-    public function __construct(string $name, string $title, $value = null, bool $required = false, bool $multiple = false,
-        string $column = '', bool $generate = false, bool $translate = false)
+    public string $localeCode;
+
+    public function __construct(string $name, string $title, mixed $value = null, string $description = '', bool $required = false,
+        bool $multiple = false, string $column = '', bool $generate = false, bool $translate = false, string $localeCode = '')
     {
         if (! $multiple) {
             $value = html_entity_decode($value, ENT_QUOTES);
         }
 
-        $this->name      = $name;
-        $this->title     = $title;
-        $this->value     = $value;
-        $this->required  = $required;
-        $this->multiple  = $multiple;
-        $this->column    = $column;
-        $this->generate  = $generate;
-        $this->translate = $translate && has_translator();
+        $this->name        = $name;
+        $this->title       = $title;
+        $this->value       = $value;
+        $this->description = $description;
+        $this->required    = $required;
+        $this->multiple    = $multiple;
+        $this->column      = $column;
+        $this->generate    = $generate;
+        $this->translate   = $translate && has_translator();
+        $this->localeCode  = $localeCode;
     }
 
     /**

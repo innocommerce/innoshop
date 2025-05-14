@@ -8,6 +8,8 @@
  */
 
 use Barryvdh\Debugbar\Facades\Debugbar;
+use Detection\Exception\MobileDetectException;
+use Detection\MobileDetect;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -97,8 +99,9 @@ if (! function_exists('locale_image')) {
      *
      * @param  string  $code
      * @return string
+     * @throws Exception
      */
-    function locale_image($code)
+    function locale_image(string $code): string
     {
         $locale = locales()->where('code', $code)->first();
 
@@ -112,8 +115,9 @@ if (! function_exists('locale_name')) {
      *
      * @param  string  $code
      * @return string
+     * @throws Exception
      */
-    function locale_name($code)
+    function locale_name(string $code): string
     {
         $locale = locales()->where('code', $code)->first();
 
@@ -154,8 +158,8 @@ if (! function_exists('is_mobile')) {
     function is_mobile(): bool
     {
         try {
-            return (new \Detection\MobileDetect)->isMobile();
-        } catch (\Detection\Exception\MobileDetectException $e) {
+            return (new MobileDetect)->isMobile();
+        } catch (MobileDetectException $e) {
             return false;
         }
     }
@@ -222,7 +226,7 @@ if (! function_exists('installed')) {
             if (Schema::hasTable('settings') && file_exists(storage_path('installed'))) {
                 return true;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
             return false;
@@ -747,7 +751,7 @@ if (! function_exists('create_directories')) {
 
             if (! is_dir($path)) {
                 if (! @mkdir($path, 0755, true) && ! is_dir($path)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $path));
                 }
             }
         }
@@ -1144,7 +1148,7 @@ if (! function_exists('parse_attr_filters')) {
         return array_map(function ($item) {
             $itemArr = explode(':', $item);
             if (count($itemArr) != 2) {
-                throw new \Exception('Invalid attribute parameters!');
+                throw new Exception('Invalid attribute parameters!');
             }
 
             return [
@@ -1218,7 +1222,7 @@ if (! function_exists('seller_enabled')) {
      */
     function seller_enabled(): bool
     {
-        return class_exists(\InnoShop\Seller\SellerServiceProvider::class) && env('SELLER_ENABLED', true);
+        return class_exists('\InnoShop\Seller\SellerServiceProvider') && env('SELLER_ENABLED', true);
     }
 }
 

@@ -8,6 +8,7 @@
  */
 
 return [
+    'all_states'    => 'Tutte le province',
     'description'   => 'Descrizione',
     'name'          => 'Nome',
     'position'      => 'Posizione',

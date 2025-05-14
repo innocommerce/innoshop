@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => '製品のSEOタイトル',
     'ai_prompt_product_slug'            => '製品のスラッグ',
     'ai_prompt_product_summary'         => '製品の要約',
+    'allow_out_of_stock'                => 'マイナス在庫註文を許可します。',
+    'allow_out_of_stock_desc'           => 'オンにしておけば、在庫が足りなくても註文できます',
     'auto_fill_lang'                    => '自動充填言語です',
     'auto_fill_lang_desc'               => '他言語のコンテンツを自動的にパディングし、多言語サイトにも適しています。',
     'backend_logo'                      => 'バックエンドロゴ',

@@ -11,6 +11,11 @@ namespace InnoShop\Common\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $quantity
+ * @property string $sku_code
+ */
 class CartItem extends BaseModel
 {
     protected $table = 'cart_items';

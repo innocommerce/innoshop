@@ -39,7 +39,7 @@ class ArticleRequest extends FormRequest
         $defaultLocale = setting_locale_code();
 
         return [
-            'catalog_id' => 'integer',
+            'catalog_id' => 'required|integer',
             'slug'       => $slugRule,
             'position'   => 'integer',
             'viewed'     => 'integer',
@@ -49,9 +49,9 @@ class ArticleRequest extends FormRequest
             "translations.$defaultLocale.content" => 'required|max:20000',
 
             'translations.*.summary'          => 'max:320',
-            'translations.*.meta_title'       => 'max:256',
-            'translations.*.meta_keywords'    => 'max:256',
-            'translations.*.meta_description' => 'max:320',
+            'translations.*.meta_title'       => 'max:60',
+            'translations.*.meta_keywords'    => 'max:100',
+            'translations.*.meta_description' => 'max:160',
         ];
     }
 
@@ -60,6 +60,8 @@ class ArticleRequest extends FormRequest
         $defaultLocale = setting_locale_code();
 
         return [
+            'catalog_id' => trans('panel/article.catalog'),
+
             "translations.$defaultLocale.locale"  => trans('panel/article.locale'),
             "translations.$defaultLocale.title"   => trans('panel/article.title'),
             "translations.$defaultLocale.content" => trans('panel/article.content'),

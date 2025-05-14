@@ -55,8 +55,7 @@
                        :value="old('meta_keywords', system_setting('meta_keywords'))" 
                        placeholder="{{ __('panel/setting.meta_keywords') }}" />
 
-    <x-common-form-textarea title="{{ __('panel/setting.meta_description') }}" :multiple="true" 
-                          name="meta_description" 
+    <x-common-form-textarea title="{{ __('panel/setting.meta_description') }}" name="meta_description" :multiple="true" 
                           :value="old('meta_description', system_setting('meta_description'))" 
                           placeholder="{{ __('panel/setting.meta_description') }}" />
   </div>

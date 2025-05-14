@@ -1,10 +1,11 @@
-<x-panel::form.row :title="$title" :required="$required" :disabled="$disabled" :readonly="$readonly" :column="$column" :generate="$generate" :translate="$translate">
+<x-panel::form.row :title="$title" :required="$required" :disabled="$disabled" :readonly="$readonly" :locale-code="$localeCode ?? ''" :column="$column" :generate="$generate" :translate="$translate">
   @if (!$multiple)
     <input type="{{ $type }}" name="{{ $name }}" class="form-control {{ $error ? 'is-invalid' : '' }}"
            value="{{ $value }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required
-           @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
+           @endif @if($disabled) disabled @endif @if($readonly) readonly @endif 
+           data-column="{{ $column ?? '' }}" data-lang="{{ $localeCode ?? '' }}" />
 
-    @if ($description)
+    @if ($description ?? '')
       <div class="text-secondary"><small>{!! $description !!}</small></div>
     @endif
 

@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'Judul SEO produk',
     'ai_prompt_product_slug'            => 'Slug produk',
     'ai_prompt_product_summary'         => 'Ringkasan produk',
+    'allow_out_of_stock'                => 'Perintah inventaris negatif diizinkan',
+    'allow_out_of_stock_desc'           => 'Ketika diaktifkan, bahkan dengan persediaan yang tidak mencukupi, pengguna dapat memesan',
     'auto_fill_lang'                    => 'Secara otomatis mengisi bahasa',
     'auto_fill_lang_desc'               => 'Secara otomatis mengisi konten dari bahasa lain yang bekerja untuk situs multibahasa',
     'backend_logo'                      => 'Logo backend',

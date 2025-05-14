@@ -92,7 +92,7 @@
         <div class="col-md-6">
           <div class="mb-4">
             <x-common-form-switch-radio title="{{ __('panel/setting.disable_online_order') }}" name="disable_online_order" required
-                                    value="{{ old('disable_online_order', system_setting('disable_online_order', false)) }}"/>
+                                    value="{{ old('disable_online_order', system_setting('disable_online_order', true)) }}"/>
             <div class="text-secondary"><small>{{ __('panel/setting.disable_online_order_desc') }}</small></div>
           </div>
         </div>
@@ -111,6 +111,21 @@
             <x-common-form-switch-radio title="{{ __('panel/setting.bought_review') }}" name="bought_review" required
                                     value="{{ old('bought_review', system_setting('bought_review')) }}"/>
             <div class="text-secondary"><small>{{ __('panel/setting.bought_review_desc') }}</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-4">
+            <x-common-form-switch-radio 
+              title="{{ __('panel/setting.allow_out_of_stock') }}" 
+              name="allow_out_of_stock" 
+              value="{{ old('allow_out_of_stock', system_setting('allow_out_of_stock')) }}"
+            />
+            <div class="text-secondary">
+              <small>{{ __('panel/setting.allow_out_of_stock_desc') }}</small>
+            </div>
           </div>
         </div>
       </div>
@@ -162,7 +177,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="mb-4">
-            <x-common-form-switch-radio title="{{ __('panel/setting.file_manager_enable_crop') }}" name="file_manager_enable_crop"
+            <x-common-form-switch-radio title="{{ __('panel/setting.file_manager_enable_crop') }}" name="file_manager_enable_crop" 
                                     value="{{ old('file_manager_enable_crop', system_setting('file_manager_enable_crop')) }}"/>
             <div class="text-secondary"><small>{{ __('panel/setting.file_manager_enable_crop_desc') }}</small></div>
           </div>

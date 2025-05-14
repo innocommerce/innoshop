@@ -7,7 +7,7 @@ import dominateColor from "./dominate_color";
 const Config = {
   base: document.querySelector("base").href,
   editorLanguage: document.querySelector('meta[name="editor_language"]')?.content || "zh_cn",
-  apiToken: $('meta[name="api-token"]').attr("content") || 
+  apiToken: $('meta[name="api-token"]').attr("content") ||
             $(window.parent.document).find('meta[name="api-token"]').attr("content"),
   csrfToken: $('meta[name="csrf-token"]').attr("content"),
   locale: $('html').attr("lang"),
@@ -138,27 +138,38 @@ const UI = {
   },
 
   initAIGenerate: () => {
-    $(".ai-generate").on("click", function (e) {
-      let accordionBody = $(this).closest(".accordion-body");
-      let formRow = $(this).closest(".form-row");
-      let inputEle = formRow.find(":input");
+    $(document).on("click", ".ai-generate", function (e) {
+      const $row = $(this).closest(".form-row");
+      const $input = $row.find("input[data-column], textarea[data-column]");
+      if ($input.length === 0) {
+        layer.msg('Cloud not find input or textarea', { icon: 2 });
+        return;
+      }
 
-      let formData = {
-        locale_code: accordionBody.data("locale-code"),
-        locale_name: accordionBody.data("locale-name"),
-        column_name: $(this).data("column"),
-        column_value: inputEle.val(),
+      const column = $input.data('column');
+      const lang = $input.data('lang');
+      const name = $input.attr('name');
+      const value = $input.val();
+
+      const formData = {
+        column: column,
+        lang: lang,
+        name: name,
+        value: value,
       };
 
       layer.load(2, { shade: [0.3, "#fff"] });
       axios
         .post(urls.ai_generate, formData, {})
         .then(function (res) {
-          let message = res.data.message;
-          inputEle.val(message);
+          if (res.data && res.data.generated_text) {
+            $input.val(res.data.generated_text);
+          } else if (res.data && res.data.message) {
+            $input.val(res.data.message);
+          }
         })
         .catch(function (err) {
-          layer.msg(err.response.data.message, { icon: 2 });
+          layer.msg(err.response?.data?.message || 'AI Generate Fail', { icon: 2 });
         })
         .finally(function () {
           layer.closeAll("loading");
@@ -295,8 +306,8 @@ const Editor = {
             }
           })
           .catch((error) => {
-            const errorMessage = error.response?.data?.message || 
-                               error.response?.data?.error || 
+            const errorMessage = error.response?.data?.message ||
+                               error.response?.data?.error ||
                                error.message;
             layer.msg(errorMessage, { icon: 2 });
           })

@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'tiêu đề SEO sản phẩm gợi ý',
     'ai_prompt_product_slug'            => 'slug sản phẩm gợi ý',
     'ai_prompt_product_summary'         => 'tóm tắt sản phẩm gợi ý',
+    'allow_out_of_stock'                => 'Cho phép hàng tồn kho tiêu cực để đặt hàng',
+    'allow_out_of_stock_desc'           => 'Sau khi mở, ngay cả khi cổ phiếu là không đủ, người dùng vẫn có thể đặt hàng',
     'auto_fill_lang'                    => 'Ngôn ngữ tự động lấp đầy',
     'auto_fill_lang_desc'               => 'Tự động điền vào nội dung của các ngôn ngữ khác, phù hợp với các trang web đa ngôn ngữ',
     'backend_logo'                      => 'logo backend',

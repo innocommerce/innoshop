@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'Ürün SEO Başlık Komutu',
     'ai_prompt_product_slug'            => 'Ürün URL Komutu',
     'ai_prompt_product_summary'         => 'Ürün Özeti Komutu',
+    'allow_out_of_stock'                => 'Negatif hisse senedi emirlerine izin verilir',
+    'allow_out_of_stock_desc'           => 'Bir kez açıldıktan sonra, envanter yetersiz olsa bile kullanıcılar sipariş vermeye devam edebilir',
     'auto_fill_lang'                    => 'Otomatik doldurma dilleri',
     'auto_fill_lang_desc'               => 'Çok dilli siteler için diğer dillerdeki içeriği otomatik doldurma',
     'backend_logo'                      => 'Backend Logo',

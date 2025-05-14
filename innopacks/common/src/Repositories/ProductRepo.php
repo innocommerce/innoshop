@@ -38,8 +38,11 @@ class ProductRepo extends BaseRepo
      */
     public static function getCriteria(): array
     {
+        $categoryOptions = CategoryRepo::getInstance()->getCategoryOptions();
+
         return [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'category_id', 'type' => 'select', 'label' => trans('panel/product.category'), 'options' => $categoryOptions, 'options_key' => 'id', 'options_label' => 'name'],
             ['name' => 'price', 'type' => 'range', 'label' => trans('panel/product.price')],
             ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];

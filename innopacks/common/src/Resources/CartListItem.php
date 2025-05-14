@@ -51,6 +51,7 @@ class CartListItem extends JsonResource
             'item_type_label'     => $this->item_type_label,
             'reference'           => $this->reference,
             'selected'            => (bool) $this->selected,
+            'is_stock_enough'     => $this->is_stock_enough,
         ];
 
         return fire_hook_filter('resource.cart.item', $data);

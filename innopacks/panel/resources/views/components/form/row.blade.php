@@ -22,8 +22,9 @@
         @endif
         @if ($generate ?? false)
           <div class="ms-3">
-            <a class="btn btn-success btn-sm ai-generate"
-               data-column="{{ $column ?? '' }}">{{ __('panel/common.ai_generate') }}</a>
+            <a class="btn btn-success btn-sm ai-generate" data-column="{{ $column ?? '' }}" data-lang="{{ $localeCode ?? '' }}">
+              {{ __('panel/common.ai_generate') }}
+            </a>
           </div>
         @endif
       </div>

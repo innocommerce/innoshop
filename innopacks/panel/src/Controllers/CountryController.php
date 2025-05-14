@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Country;
@@ -105,21 +106,17 @@ class CountryController extends BaseController
     /**
      * @param  CountryRequest  $request
      * @param  Country  $country
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function update(CountryRequest $request, Country $country): RedirectResponse
+    public function update(CountryRequest $request, Country $country): JsonResponse
     {
         try {
             $data = $request->all();
             CountryRepo::getInstance()->update($country, $data);
 
-            return redirect(panel_route('countries.index'))
-                ->with('instance', $country)
-                ->with('success', panel_trans('common.updated_success'));
+            return update_json_success($country);
         } catch (Exception $e) {
-            return redirect(panel_route('countries.index'))
-                ->withInput()
-                ->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 

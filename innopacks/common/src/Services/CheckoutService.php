@@ -150,7 +150,7 @@ class CheckoutService
         $weightTotal = 0;
         $cartList    = $this->getCartList();
         foreach ($cartList as $product) {
-            $weightTotal += $product['weight'];
+            $weightTotal += $product['weight'] * $product['quantity'];
         }
 
         return $weightTotal;
@@ -390,6 +390,8 @@ class CheckoutService
      */
     public function getCheckoutResult(): array
     {
+        $this->checkCartStockEnough();
+
         $cartAmount    = $this->getAmount();
         $balanceAmount = $this->getBalanceAmount();
 
@@ -440,6 +442,21 @@ class CheckoutService
     }
 
     /**
+     * Check if all cart items have enough stock
+     *
+     * @throws Exception
+     */
+    protected function checkCartStockEnough(): void
+    {
+        $cartList = $this->getCartList();
+        foreach ($cartList as $item) {
+            if (isset($item['is_stock_enough']) && ! $item['is_stock_enough']) {
+                throw new Exception(trans('front/common.stock_not_enough'));
+            }
+        }
+    }
+
+    /**
      * Confirm checkout and place order.
      *
      * @return mixed
@@ -447,6 +464,8 @@ class CheckoutService
      */
     public function confirm(): mixed
     {
+        $this->checkCartStockEnough();
+
         DB::beginTransaction();
 
         try {

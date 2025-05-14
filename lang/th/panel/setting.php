@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'SEO ชื่อสินค้า',
     'ai_prompt_product_slug'            => 'Slug ของสินค้า',
     'ai_prompt_product_summary'         => 'คำใบ้สรุปสินค้า',
+    'allow_out_of_stock'                => 'อนุญาตให้มีการติดลบในการสั่งซื้อ',
+    'allow_out_of_stock_desc'           => 'หลังจากเปิดผู้ใช้สามารถสั่งซื้อได้แม้ว่า จะมีสินค้าคงคลังไม่เพียงพอ',
     'auto_fill_lang'                    => 'เติมภาษาอัตโนมัติ',
     'auto_fill_lang_desc'               => 'เติมเนื้อหาของภาษาอื่นโดยอัตโนมัติสำหรับเว็บไซต์หลายภาษา',
     'backend_logo'                      => 'โลโก้หลังบ้าน',

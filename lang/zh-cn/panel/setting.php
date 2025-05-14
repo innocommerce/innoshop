@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => '产品 SEO 标题提示语',
     'ai_prompt_product_slug'            => '产品 Slug 提示语',
     'ai_prompt_product_summary'         => '产品摘要提示语',
+    'allow_out_of_stock'                => '允许负库存下单',
+    'allow_out_of_stock_desc'           => '开启后，即使库存不足，用户仍可以下单',
     'auto_fill_lang'                    => '自动填充语言',
     'auto_fill_lang_desc'               => '自动填充其他语言的内容，适用于多语言站点',
     'backend_logo'                      => '后台 Logo',

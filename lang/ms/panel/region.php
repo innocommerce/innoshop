@@ -8,6 +8,7 @@
  */
 
 return [
+    'all_states'    => 'Semua wilayah',
     'description'   => 'Penerangan',
     'name'          => 'Nama',
     'position'      => 'Kedudukan',

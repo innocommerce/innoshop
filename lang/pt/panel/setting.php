@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => 'Prompt de Título SEO para Produto',
     'ai_prompt_product_slug'            => 'Prompt de Slug para Produto',
     'ai_prompt_product_summary'         => 'Prompt de Resumo para Produto',
+    'allow_out_of_stock'                => 'Pedido de estoque negativo permitido',
+    'allow_out_of_stock_desc'           => 'Após a abertura, os usuários podem fazer pedidos mesmo se o estoque for insuficiente',
     'auto_fill_lang'                    => 'Preenchimento automático de idiomas',
     'auto_fill_lang_desc'               => 'Preenchimento automático de conteúdo em outros idiomas, adequado para sites multilíngues',
     'backend_logo'                      => 'Logo do Painel',

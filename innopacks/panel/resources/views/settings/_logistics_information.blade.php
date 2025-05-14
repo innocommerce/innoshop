@@ -36,44 +36,42 @@
   </div>
 </div>
 
-<form class="needs-validation" id="app-form">
-  <!-- Always include an empty logistics array if there are no items -->
-  <input type="hidden" name="logistics" value="[]" v-if="text.length === 0" />
-  <div v-for="(item, index) in text" :key="index">
-    <input type="hidden" :name="'logistics[' + index + '][company]'" :value="item.company"/>
-    <input type="hidden" :name="'logistics[' + index + '][code]'" :value="item.code"/>
-  </div>
-</form>
+<input type="hidden" name="logistics" :value="JSON.stringify(text)" />
 
 <script>
-  const {createApp, ref} = Vue;
+  const {createApp, ref, watch} = Vue;
   const {CirclePlusFilled} = ElementPlus;
 
   const logisticsApp = createApp({
     setup() {
       const logisticsData = @json(system_setting('logistics')) || [];
       const text = ref(Array.isArray(logisticsData) ? logisticsData.map(logistic => ({
-        company: logistic.company,
-        code: logistic.code
+        company: logistic.company || '',
+        code: logistic.code || ''
       })) : []);
+
       const addInput = () => {
-        const newId = text.value.length + 1;
         text.value.push({
           company: '',
           code: ''
         });
       };
+
       const removeInput = (index) => {
         text.value.splice(index, 1);
       };
-      const printData = () => {
-        const formData = new FormData(document.getElementById('app-form'));
-      }
+
+      watch(text, (newValue) => {
+        const logisticsInput = document.querySelector('input[name="logistics"]');
+        if (logisticsInput) {
+          logisticsInput.value = JSON.stringify(newValue || []);
+        }
+      }, { deep: true });
+
       return {
         text,
         addInput,
-        removeInput,
-        printData
+        removeInput
       };
     }
   });

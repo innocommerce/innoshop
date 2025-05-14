@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Services;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use InnoShop\Common\Models\CartItem;
@@ -22,6 +23,8 @@ class CartService
     private int $customerID;
 
     private string $guestID;
+
+    private StockService $stockService;
 
     /**
      * @param  int  $customerID
@@ -40,6 +43,8 @@ class CartService
         } else {
             $this->guestID = current_guest_id();
         }
+
+        $this->stockService = StockService::getInstance();
     }
 
     /**
@@ -74,11 +79,14 @@ class CartService
         return $cartItems->filter(function ($item) {
             if (empty($item->product) || empty($item->productSku)) {
                 $item->delete();
+
+                return false;
             }
 
+            $item->is_stock_enough = $this->stockService->checkStock($item->sku_code, $item->quantity, $item->id);
             fire_hook_action('service.cart.items.item', $item);
 
-            return $item->product && $item->productSku;
+            return true;
         });
     }
 
@@ -100,6 +108,10 @@ class CartService
      */
     public function addCart($data): array
     {
+        if (! $this->stockService->checkStockBySkuId($data['sku_id'], $data['quantity'] ?? 1)) {
+            throw new Exception(trans('front/common.stock_not_enough'));
+        }
+
         $data     = $this->mergeAuthId($data);
         $cartItem = CartItemRepo::getInstance()->create($data);
 
@@ -116,9 +128,14 @@ class CartService
      * @param  $cartItem
      * @param  $data
      * @return array
+     * @throws Exception
      */
     public function updateCart($cartItem, $data): array
     {
+        if (! $this->stockService->checkStockByCartItem($cartItem, $data['quantity'])) {
+            throw new Exception(trans('front/common.stock_not_enough'));
+        }
+
         $data = $this->mergeAuthId($data);
         CartItemRepo::getInstance()->update($cartItem, $data);
 

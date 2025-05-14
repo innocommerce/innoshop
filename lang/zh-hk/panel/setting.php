@@ -24,6 +24,8 @@ return [
     'ai_prompt_product_seo_title'       => '產品 SEO 標題提示語',
     'ai_prompt_product_slug'            => '產品 Slug 提示語',
     'ai_prompt_product_summary'         => '產品摘要提示語',
+    'allow_out_of_stock'                => '允許負庫存下單',
+    'allow_out_of_stock_desc'           => '開啓後，即使庫存不足，用戶仍可以下單',
     'auto_fill_lang'                    => '自動填充語言',
     'auto_fill_lang_desc'               => '自動填充其他語言的內容，適用於多語言站點',
     'backend_logo'                      => '後台 Logo',

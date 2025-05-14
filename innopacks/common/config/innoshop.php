@@ -9,7 +9,7 @@
 
 return [
     'edition' => 'community',
-    'version' => '0.4.3',
-    'build'   => '20250430',
+    'version' => '0.4.5',
+    'build'   => '20250515',
     'api_url' => env('INNOSHOP_API_URL', 'https://www.innoshop.cn'),
 ];

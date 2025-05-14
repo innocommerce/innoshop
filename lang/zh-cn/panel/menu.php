@@ -42,7 +42,7 @@ return [
     'plugin_settings'    => '插件设置',
     'product'            => '产品',
     'products'           => '产品管理',
-    'regions'            => '区域组',
+    'regions'            => '区域分组',
     'reviews'            => '评论管理',
     'roles'              => '后台角色',
     'settings'           => '系统设置',

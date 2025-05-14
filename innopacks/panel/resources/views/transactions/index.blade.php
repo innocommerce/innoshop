@@ -20,6 +20,7 @@
             <tr>
               <td>{{ __('panel/common.id') }}</td>
               <td>{{ __('panel/transaction.customer') }}</td>
+              <td>{{ __('panel/common.email') }}</td>
               <td>{{ __('panel/transaction.type') }}</td>
               <td>{{ __('panel/transaction.amount') }}</td>
               <td>{{ __('panel/transaction.balance') }}</td>
@@ -31,6 +32,7 @@
               <tr>
                 <td>{{ $item->id }}</td>
                 <td>{{ $item->customer->name ?? '' }}</td>
+                <td>{{ $item->customer->email ?? '' }}</td>
                 <td>{{ $item->type_format }}</td>
                 <td>{{ $item->amount }}</td>
                 <td>{{ $item->balance }}</td>

@@ -24,6 +24,8 @@
     <div id="app-cart" v-cloak>
       <div class="row" v-if="list.length">
         <div class="col-12 col-md-9">
+          @hookinsert('cart.table.before')
+
           <table class="table products-table align-middle">
             <thead>
               <tr>
@@ -61,7 +63,12 @@
                           <template v-if="item.variant_label">
                             - @{{ item.variant_label }}
                           </template>
-                          <span v-if="item.item_type_label" class="badge bg-danger ms-2">@{{ item.item_type_label }}</span>
+                          <span v-if="!item.is_stock_enough" class="badge bg-danger ms-2">
+                            {{ __('front/common.stock_not_enough') }}
+                          </span> 
+                          <span v-if="item.item_type_label" class="badge bg-danger ms-2">
+                            @{{ item.item_type_label }}
+                          </span>
                         </div>
                       </div>
                       <div class="mb-price mt-1">@{{ item.price_format }}</div>
@@ -103,6 +110,8 @@
               </tr>
             </tbody>
           </table>
+
+          @hookinsert('cart.table.after')
         </div>
 
         <div class="col-12 col-md-3">
@@ -112,9 +121,9 @@
               <li><span>{{ __('front/cart.selected') }} </span><span class="total-total">@{{ total }}</span></li>
               <li><span>{{ __('front/cart.total') }}</span><span class="total-amount">@{{ amount_format }}</span></li>
             </ul>
-            @if(!system_setting('disable_online_order', false))
+            @if(!system_setting('disable_online_order'))
               <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout"
-                :disabled="!selectedItems.length"
+                :disabled="!selectedItems.length || hasStockNotEnough"
                 @click="goToCheckout">
                 {{ __('front/cart.go_checkout') }}
               </button>
@@ -154,6 +163,8 @@
           return list.value.filter(item => item.selected && item.item_type === 'normal')
         })
 
+        const hasStockNotEnough = computed(() => selectedItems.value.some(item => !item.is_stock_enough));
+
         // Methods
         const updateCartState = (data) => {
           list.value = data.list
@@ -178,7 +189,6 @@
         }
 
         const updateSelection = async (selected, ids) => {
-          // 过滤出普通商品ID
           const normalIds = ids.filter(id => {
             const item = list.value.find(item => item.id === id)
             return item && item.item_type === 'normal'
