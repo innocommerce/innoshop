@@ -42,7 +42,8 @@ class ProductRepo extends BaseRepo
 
         return [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
-            ['name' => 'category_id', 'type' => 'select', 'label' => trans('panel/product.category'), 'options' => $categoryOptions, 'options_key' => 'id', 'options_label' => 'name'],
+            ['name'       => 'category_id', 'type' => 'select', 'label' => trans('panel/product.category'),
+                'options' => $categoryOptions, 'options_key' => 'id', 'options_label' => 'name'],
             ['name' => 'price', 'type' => 'range', 'label' => trans('panel/product.price')],
             ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
@@ -55,10 +56,10 @@ class ProductRepo extends BaseRepo
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
-        $sort  = $filters['sort']  ?? 'updated_at';
-        $order = $filters['order'] ?? 'desc';
+        $builder = $this->builder($filters);
+        $this->applySorting($builder, $filters);
 
-        return $this->builder($filters)->orderBy($sort, $order)->paginate($filters['per_page'] ?? 15);
+        return $builder->paginate($filters['per_page'] ?? 15);
     }
 
     /**
@@ -68,11 +69,24 @@ class ProductRepo extends BaseRepo
      */
     public function getFrontList(array $filters = []): LengthAwarePaginator
     {
-        $sort    = $filters['sort']     ?? 'created_at';
-        $order   = $filters['order']    ?? 'desc';
-        $perPage = $filters['per_page'] ?? 15;
-
         $builder = $this->withActive()->builder($filters);
+        $this->applySorting($builder, $filters);
+
+        return $builder->paginate($filters['per_page'] ?? 15);
+    }
+
+    /**
+     * Apply sorting to the builder.
+     *
+     * @param  Builder  $builder
+     * @param  array  $filters
+     * @return void
+     * @throws Exception
+     */
+    private function applySorting(Builder $builder, array $filters): void
+    {
+        $sort  = $filters['sort']  ?? 'updated_at';
+        $order = $filters['order'] ?? 'desc';
 
         if ($sort == 'pt.name') {
             $builder->select(['products.*', 'pt.name', 'pt.content']);
@@ -99,8 +113,6 @@ class ProductRepo extends BaseRepo
         if ($sort && $order) {
             $builder->orderBy($sort, $order);
         }
-
-        return $builder->paginate($perPage);
     }
 
     /**
