@@ -74,6 +74,7 @@
           <div class="col-12 col-md-3">
             <x-common-form-input :title="__('panel/product.price')" name="skus[0][price]"
                                value="{{ old('skus.0.price', $product->masterSku->price ?? '') }}" required/>
+              @hookinsert('panel.product.edit.sku.single.input.item.price.after')
           </div>
           <div class="col-12 col-md-3">
             <x-common-form-input :title="__('panel/product.quantity')" name="skus[0][quantity]"
