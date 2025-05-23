@@ -49,9 +49,9 @@ class ArticleRequest extends FormRequest
             "translations.$defaultLocale.content" => 'required|max:20000',
 
             'translations.*.summary'          => 'max:320',
-            'translations.*.meta_title'       => 'max:60',
-            'translations.*.meta_keywords'    => 'max:100',
-            'translations.*.meta_description' => 'max:160',
+            'translations.*.meta_title'       => 'max:500',
+            'translations.*.meta_keywords'    => 'max:500',
+            'translations.*.meta_description' => 'max:1000',
         ];
     }
 

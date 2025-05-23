@@ -24,6 +24,7 @@
               <td>{{ __('panel/transaction.type') }}</td>
               <td>{{ __('panel/transaction.amount') }}</td>
               <td>{{ __('panel/transaction.balance') }}</td>
+              @hookinsert('panel.transactions.index.thead.bottom')
               <td>{{ __('panel/common.actions') }}</td>
             </tr>
             </thead>
@@ -31,11 +32,14 @@
             @foreach($transactions as $item)
               <tr>
                 <td>{{ $item->id }}</td>
-                <td>{{ $item->customer->name ?? '' }}</td>
+                <td><a href="{{ panel_route('customers.edit', [$item->customer->id]) }}" class="text-decoration-none">
+                  {{ $item->customer->name ?? '' }}
+                </a></td>
                 <td>{{ $item->customer->email ?? '' }}</td>
                 <td>{{ $item->type_format }}</td>
                 <td>{{ $item->amount }}</td>
                 <td>{{ $item->balance }}</td>
+                @hookinsert('panel.transactions.index.tbody.bottom', $item)
                 <td>
                   <div class="d-flex gap-1">
                     <a href="{{ panel_route('transactions.show', [$item->id]) }}" class="btn btn-primary btn-sm">

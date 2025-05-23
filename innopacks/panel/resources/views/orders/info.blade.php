@@ -4,16 +4,15 @@
 @section('page-title-right')
   <div class="title-right-btns">
     <div class="status-wrap" id="status-app">
-      @foreach($next_statuses as $status)
+      @foreach ($next_statuses as $status)
         <button class="btn btn-primary ms-2" @click="edit('{{ $status['status'] }}')">{{ $status['name'] }}</button>
       @endforeach
-      <a class="btn btn-success ms-2" href="{{ panel_route('orders.printing', $order) }}" target="_blank">{{
-            panel_trans('order.print') }}</a>
+      <a class="btn btn-success ms-2" href="{{ panel_route('orders.printing', $order) }}"
+        target="_blank">{{ panel_trans('order.print') }}</a>
       @hookinsert('panel.orders.info.print.after')
       <el-dialog v-model="statusDialog" title="{{ __('panel/order.status') }}" width="500">
         <div class="mb-2">{{ __('panel/order.comment') }}</div>
-        <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}"
-                  rows="3"></textarea>
+        <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}" rows="3"></textarea>
         <template #footer>
           <div class="dialog-footer">
             <el-button @click="statusDialog = false">{{ __('panel/common.close') }}</el-button>
@@ -31,28 +30,42 @@
       <h5 class="card-title mb-0">{{ __('panel/order.order_info') }}</h5>
     </div>
     <div class="card-body">
-      <table class="table align-middle">
-        <thead>
-        <tr>
-          <th>{{ __('panel/order.number') }}</th>
-          <th>{{ __('panel/order.created_at') }}</th>
-          <th>{{ __('panel/order.total') }}</th>
-          <th>{{ __('panel/order.billing_method_name') }}</th>
-          <th>{{ __('panel/order.shipping_method_name') }}</th>
-          <th>{{ __('panel/common.status') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>{{ $order->number }}</td>
-          <td>{{ $order->created_at }}</td>
-          <td>{{ $order->total_format }}</td>
-          <td>{{ $order->billing_method_name }}</td>
-          <td>{{ $order->shipping_method_name }}</td>
-          <td><span class="badge bg-{{$order->status_color}}">{{ $order->status_format }}</span></td>
-        </tr>
-        </tbody>
-      </table>
+      <div class="order-info-grid row g-2">
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/order.number') }}:</div>
+          <p class="mb-0">{{ $order->number }}</p>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/order.customer_name') }}:</div>
+          <p class="mb-0">{{ $order->customer_name ?? ($order->customer->name ?? '') }}</p>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/order.created_at') }}:</div>
+          <p class="mb-0">{{ $order->created_at }}</p>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/common.status') }}:</div>
+          <div>
+            <span class="badge bg-{{ $order->status_color }}">{{ $order->status_format }}</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/order.total') }}:</div>
+          <p class="mb-0">{{ $order->total_format }}</p>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/order.billing_method_name') }}:</div>
+          <p class="mb-0">{{ $order->billing_method_name }}</p>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/order.shipping_method_name') }}:</div>
+          <p class="mb-0">{{ $order->shipping_method_name }}</p>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex">
+          <div class="fw-bold me-2">{{ __('panel/order.email') }}:</div>
+          <p class="mb-0">{{ $order->email }}</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -64,62 +77,62 @@
     </div>
     <div class="card-body">
       @hookupdate('panel.orders.info.order_items')
-      <table class="table products-table align-middle">
-        <thead>
-        <tr>
-          <th>{{ __('panel/common.id') }}</th>
-          <th>{{ __('panel/order.product') }}</th>
-          <th>{{ __('panel/order.sku_code') }}</th>
-          <th>{{ __('panel/order.quantity') }}</th>
-          <th>{{ __('panel/order.unit_price') }}</th>
-          <th>{{ __('panel/order.subtotal') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach ($order->items as $item)
-          <tr>
-            <td>{{ $item->id }}</td>
-            <td>
-              <div class="product-item d-flex align-items-center">
-                <div class="product-image wh-40 border"><img src="{{ $item->image }}" class="img-fluid">
-                </div>
-                <div class="product-info ms-2">
-                  <div class="name">{{ $item->name }}</div>
-                  @if($item->productSku->variantLabel ?? '')
-                    <span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
-                  @endif
-                  @if($item->item_type_label)
-                    <span class="badge bg-danger">{{ $item->item_type_label }}</span>
-                  @endif
-                </div>
-              </div>
-            </td>
-            <td>{{ $item->product_sku }}</td>
-            <td>{{ $item->quantity }}</td>
-            <td>{{ $item->price_format }}</td>
-            <td>{{ $item->subtotal_format }}</td>
-          </tr>
-        @endforeach
-        @foreach ($order->fees as $total)
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><strong>{{ $total->title }}</strong></td>
-            <td>{{ $total->value_format }}</td>
-          </tr>
-        @endforeach
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><strong>{{ __('panel/order.total') }}</strong></td>
-          <td>{{ $order->total_format }}</td>
-        </tr>
-        </tbody>
-      </table>
+        <table class="table products-table align-middle">
+          <thead>
+            <tr>
+              <th>{{ __('panel/common.id') }}</th>
+              <th>{{ __('panel/order.product') }}</th>
+              <th>{{ __('panel/order.sku_code') }}</th>
+              <th>{{ __('panel/order.quantity') }}</th>
+              <th>{{ __('panel/order.unit_price') }}</th>
+              <th>{{ __('panel/order.subtotal') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($order->items as $item)
+              <tr>
+                <td>{{ $item->id }}</td>
+                <td>
+                  <div class="product-item d-flex align-items-center">
+                    <div class="product-image wh-40 border"><img src="{{ $item->image }}" class="img-fluid">
+                    </div>
+                    <div class="product-info ms-2">
+                      <div class="name">{{ $item->name }}</div>
+                      @if ($item->productSku->variantLabel ?? '')
+                        <span class="small fst-italic">{{ $item->productSku->variantLabel }}</span>
+                      @endif
+                      @if ($item->item_type_label)
+                        <span class="badge bg-danger">{{ $item->item_type_label }}</span>
+                      @endif
+                    </div>
+                  </div>
+                </td>
+                <td>{{ $item->product_sku }}</td>
+                <td>{{ $item->quantity }}</td>
+                <td>{{ $item->price_format }}</td>
+                <td>{{ $item->subtotal_format }}</td>
+              </tr>
+            @endforeach
+            @foreach ($order->fees as $total)
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><strong>{{ $total->title }}</strong></td>
+                <td>{{ $total->value_format }}</td>
+              </tr>
+            @endforeach
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><strong>{{ __('panel/order.total') }}</strong></td>
+              <td>{{ $order->total_format }}</td>
+            </tr>
+          </tbody>
+        </table>
       @endhookupdate
     </div>
   </div>
@@ -142,7 +155,7 @@
               <p>{{ __('common/address.phone') }}: {{ $order->shipping_telephone }}</p>
               <p>{{ __('common/address.zipcode') }}: {{ $order->shipping_zipcode }}</p>
               <p>{{ __('common/address.address_1') }}: {{ $order->shipping_address_1 }}</p>
-              @if($order->shipping_address_2)
+              @if ($order->shipping_address_2)
                 <p>{{ __('common/address.address_2') }}: {{ $order->shipping_address_2 }}</p>
               @endif
               <p>{{ __('common/address.region') }}: {{ $order->shipping_city }}, {{ $order->shipping_state }}
@@ -160,7 +173,7 @@
               <p>{{ __('common/address.phone') }}: {{ $order->billing_telephone }}</p>
               <p>{{ __('common/address.zipcode') }}: {{ $order->billing_zipcode }}</p>
               <p>{{ __('common/address.address_1') }}: {{ $order->billing_address_1 }}</p>
-              @if($order->billing_address_2)
+              @if ($order->billing_address_2)
                 <p>{{ __('common/address.address_2') }}: {{ $order->billing_address_2 }} </p>
               @endif
               <p>{{ __('common/address.region') }}: {{ $order->billing_city }}, {{ $order->billing_state }}
@@ -199,14 +212,13 @@
                     <h4 class="modal-title" id="admin_noteLabel">{{ __('panel/order.administrator_remarks') }}</h4>
                   </div>
                   <div class="modal-body">
-                    <textarea class="form-control admin-comment-input" rows="5"
-                              data-order-id="{{ $order->id }}">{{ $order->admin_note }}</textarea>
+                    <textarea class="form-control admin-comment-input" rows="5" data-order-id="{{ $order->id }}">{{ $order->admin_note }}</textarea>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default"
-                            data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
+                      data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
                     <button type="button" class="btn btn-primary"
-                            onclick="submitComment()">{{ __('panel/order.submit') }}</button>
+                      onclick="submitComment()">{{ __('panel/order.submit') }}</button>
                   </div>
                 </div>
               </div>
@@ -227,29 +239,29 @@
     <div class="card-body">
       <table class="table table-response align-middle table-bordered" id="logisticsTable">
         <thead>
-        <tr>
-          <td>ID</td>
-          <th>{{ __('panel/order.express_company') }}</th>
-          <th>{{ __('panel/order.express_number') }}</th>
-          <th>{{ __('panel/order.create_time') }}</th>
-          <th>{{ __('panel/order.operation') }}</th>
-        </tr>
+          <tr>
+            <td>ID</td>
+            <th>{{ __('panel/order.express_company') }}</th>
+            <th>{{ __('panel/order.express_number') }}</th>
+            <th>{{ __('panel/order.create_time') }}</th>
+            <th>{{ __('panel/order.operation') }}</th>
+          </tr>
         </thead>
         <tbody>
-        @foreach($order->shipments as $shipment)
-          <tr>
-            <td data-title="id">{{ $shipment->id }}</td>
-            <td data-title="express_company">{{ $shipment->express_company }}</td>
-            <td data-title="express_number">{{ $shipment->express_number }}</td>
-            <td data-title="created_at">{{ $shipment->created_at }}</td>
-            <td>
-              <button class="btn btn-sm btn-primary deleteRow"
-                      onclick="deleteShipment('{{ $shipment->id }}')">{{ __('panel/order.delete') }}</button>
-              <button class="btn btn-sm btn-primary viewRow"
-                      onclick="viewShipmentDetails('{{ $shipment->id }}')">{{ __('panel/order.view') }}</button>
-            </td>
-          </tr>
-        @endforeach
+          @foreach ($order->shipments as $shipment)
+            <tr>
+              <td data-title="id">{{ $shipment->id }}</td>
+              <td data-title="express_company">{{ $shipment->express_company }}</td>
+              <td data-title="express_number">{{ $shipment->express_number }}</td>
+              <td data-title="created_at">{{ $shipment->created_at }}</td>
+              <td>
+                <button class="btn btn-sm btn-primary deleteRow"
+                  onclick="deleteShipment('{{ $shipment->id }}')">{{ __('panel/order.delete') }}</button>
+                <button class="btn btn-sm btn-primary viewRow"
+                  onclick="viewShipmentDetails('{{ $shipment->id }}')">{{ __('panel/order.view') }}</button>
+              </td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
@@ -264,20 +276,20 @@
     <div class="card-body">
       <table class="table table-response align-middle">
         <thead>
-        <tr>
-          <th>{{ __('panel/order.status') }}</th>
-          <th>{{ __('panel/order.comment') }}</th>
-          <th>{{ __('panel/order.date_time') }}</th>
-        </tr>
+          <tr>
+            <th>{{ __('panel/order.status') }}</th>
+            <th>{{ __('panel/order.comment') }}</th>
+            <th>{{ __('panel/order.date_time') }}</th>
+          </tr>
         </thead>
         <tbody>
-        @foreach($order->histories->sortByDesc('id') as $history)
-          <tr>
-            <td>{{ $history->status }}</td>
-            <td>{{ $history->comment }}</td>
-            <td>{{ $history->created_at }}</td>
-          </tr>
-        @endforeach
+          @foreach ($order->histories->sortByDesc('id') as $history)
+            <tr>
+              <td>{{ $history->status }}</td>
+              <td>{{ $history->comment }}</td>
+              <td>{{ $history->created_at }}</td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
@@ -286,7 +298,7 @@
   @hookinsert('panel.orders.info.history.after')
 
   <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel"
-       aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -296,17 +308,18 @@
         <div class="modal-body">
           <table class="table">
             <tbody>
-            <tr>
-              <th class="col-3">{{ __('panel/order.time') }}</th>
-              <th class="col-9">{{ __('panel/order.logistics_information') }}</th>
-            </tr>
+              <tr>
+                <th class="col-3">{{ __('panel/order.time') }}</th>
+                <th class="col-9">{{ __('panel/order.logistics_information') }}</th>
+              </tr>
             </tbody>
             <tbody>
             </tbody>
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ __('panel/order.confirm') }}</button>
+          <button type="button" class="btn btn-primary"
+            data-bs-dismiss="modal">{{ __('panel/order.confirm') }}</button>
         </div>
       </div>
     </div>
@@ -324,7 +337,7 @@
             <div class="mb-3">
               <label for="logisticsCompany" class="form-label">{{ __('panel/order.express_company') }}</label>
               <select class="form-control" id="logisticsCompany">
-                @foreach(is_array(system_setting('logistics', [])) ? system_setting('logistics', []) : [] as $expressCompany)
+                @foreach (is_array(system_setting('logistics', [])) ? system_setting('logistics', []) : [] as $expressCompany)
                   <option value="{{ $expressCompany['code'] }}">{{ $expressCompany['company'] }}</option>
                 @endforeach
               </select>
@@ -337,9 +350,9 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary"
-                  data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
+            data-bs-dismiss="modal">{{ __('panel/order.close') }}</button>
           <button type="button" class="btn btn-primary"
-                  onclick="submitEdit()">{{ __('panel/order.save_changes') }}</button>
+            onclick="submitEdit()">{{ __('panel/order.save_changes') }}</button>
         </div>
       </div>
     </div>
@@ -350,22 +363,22 @@
 @push('footer')
   <script>
     var admin_note = new bootstrap.Modal(document.getElementById('admin_note'));
-    document.querySelector('[data-bs-toggle="modal"]').addEventListener('click', function () {
+    document.querySelector('[data-bs-toggle="modal"]').addEventListener('click', function() {
       admin_note.show();
     });
 
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-      $('.admin-comment-input').on('keydown', function (event) {
+      $('.admin-comment-input').on('keydown', function(event) {
         if (event.keyCode === 13) {
           event.preventDefault();
           var comment = $(this).val();
           var orderId = $(this).data('order-id');
           var apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
           axios.post(apiUrl, {
-            admin_note: comment,
-          })
-            .then(function (res) {
+              admin_note: comment,
+            })
+            .then(function(res) {
               inno.msg(res.message);
               $('.admin-comment-input').val(res.data.admin_note);
               window.location.reload()
@@ -373,17 +386,17 @@
         }
       });
 
-      $('#addRow').click(function () {
+      $('#addRow').click(function() {
         $('#editModal').modal('show');
       });
 
-      $(document).on('click', '.deleteRow', function () {
+      $(document).on('click', '.deleteRow', function() {
         $(this).closest('tr').remove();
       });
 
-      window.viewShipmentDetails = function (shipmentId) {
+      window.viewShipmentDetails = function(shipmentId) {
         axios.get(`${urls.api_base}/shipments/${shipmentId}/traces`)
-          .then(function (response) {
+          .then(function(response) {
             if (response.data && response.data.traces) {
               const tbody = $('#newShipmentModal .modal-body table tbody').last();
               tbody.empty();
@@ -398,7 +411,7 @@
               newShipmentModal.show();
             }
           })
-          .catch(function (error) {
+          .catch(function(error) {
             inno.msg('{{ __('panel/order.no_logistics_information') }}');
           });
       }
@@ -410,9 +423,9 @@
       let orderId = elment.data('order-id');
       let apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
       axios.post(apiUrl, {
-        admin_note: comment,
-      })
-        .then(function (res) {
+          admin_note: comment,
+        })
+        .then(function(res) {
           inno.msg(res.message);
           var admin_note = bootstrap.Modal.getInstance(document.getElementById('admin_note'));
           if (admin_note) {
@@ -432,11 +445,11 @@
         express_code: logisticsCompany,
         express_company: selectedCompanyName,
         express_number: trackingNumber,
-      }).then(function (response) {
+      }).then(function(response) {
         inno.msg('{{ __('panel/order.add_successfully') }}');
         $('#editModal').modal('hide');
         window.location.reload();
-      }).catch(function (res) {
+      }).catch(function(res) {
         inno.msg('{{ __('panel/order.add_failed!') }}');
       });
     }
@@ -444,13 +457,16 @@
     function deleteShipment(shipmentId) {
       const apiUrl = `${urls.api_base}/shipments/${shipmentId}`;
       axios.delete(apiUrl)
-        .then(function (response) {
+        .then(function(response) {
           inno.msg('{{ __('panel/order.delete_successfully') }}');
           window.location.reload();
         })
     }
 
-    const {createApp, ref} = Vue
+    const {
+      createApp,
+      ref
+    } = Vue
     const api = @json(panel_route('orders.change_status', $order));
     const statusApp = createApp({
       setup() {
@@ -464,7 +480,10 @@
         }
 
         const submit = () => {
-          axios.put(api, {status: status, comment: comment.value}).then(() => {
+          axios.put(api, {
+            status: status,
+            comment: comment.value
+          }).then(() => {
             statusDialog.value = false
             window.location.reload()
           })

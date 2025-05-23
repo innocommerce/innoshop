@@ -141,6 +141,8 @@ class TransactionRepo extends BaseRepo
             $builder->where('created_at', '<', $createdEnd);
         }
 
+        $builder = fire_hook_filter('repo.transaction.builder', $builder);
+
         return $builder;
     }
 

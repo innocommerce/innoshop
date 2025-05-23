@@ -43,12 +43,13 @@ class ProductRequest extends FormRequest
             'slug'       => $slugRule,
             'active'     => 'bool',
 
-            "translations.$defaultLocale.locale"           => 'required',
-            "translations.$defaultLocale.name"             => 'required',
-            "translations.$defaultLocale.content"          => 'max:20000',
-            "translations.$defaultLocale.meta_title"       => 'max:60',
-            "translations.$defaultLocale.meta_description" => 'max:160',
-            "translations.$defaultLocale.meta_keywords"    => 'max:100',
+            "translations.$defaultLocale.locale"  => 'required',
+            "translations.$defaultLocale.name"    => 'required',
+            "translations.$defaultLocale.content" => 'max:20000',
+
+            'translations.*.meta_title'       => 'max:500',
+            'translations.*.meta_keywords'    => 'max:500',
+            'translations.*.meta_description' => 'max:1000',
         ];
     }
 

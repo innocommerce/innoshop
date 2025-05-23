@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Exceptions\Unauthorized;
-use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\CheckoutService;
 use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Front\Requests\CheckoutConfirmRequest;
@@ -85,32 +84,5 @@ class CheckoutController extends Controller
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
-    }
-
-    /**
-     * Checkout success.
-     *
-     * @param  Request  $request
-     * @return mixed
-     * @throws Exception
-     */
-    public function success(Request $request): mixed
-    {
-        $orderNumber = $request->get('order_number');
-        if (empty($orderNumber)) {
-            $orderNumber = session('order_number');
-        }
-
-        if ($orderNumber) {
-            $order = OrderRepo::getInstance()->builder(['number' => $orderNumber])->firstOrFail();
-        }
-
-        if (empty($order)) {
-            return redirect(front_route('home.index'));
-        }
-
-        $data['order'] = $order;
-
-        return inno_view('checkout.success', $data);
     }
 }

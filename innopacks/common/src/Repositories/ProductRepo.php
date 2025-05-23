@@ -24,13 +24,14 @@ use Throwable;
 class ProductRepo extends BaseRepo
 {
     const AVAILABLE_SORT_FIELDS = [
+        'position',
+        'rating',
+        'sales',
+        'viewed',
         'updated_at',
         'created_at',
         'ps.price',
         'pt.name',
-        'sales',
-        'viewed',
-        //'rating'
     ];
 
     /**
@@ -38,12 +39,20 @@ class ProductRepo extends BaseRepo
      */
     public static function getCriteria(): array
     {
-        $categoryOptions = CategoryRepo::getInstance()->getCategoryOptions();
-
         return [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
-            ['name'       => 'category_id', 'type' => 'select', 'label' => trans('panel/product.category'),
-                'options' => $categoryOptions, 'options_key' => 'id', 'options_label' => 'name'],
+            [
+                'name'  => 'category',
+                'type'  => 'autocomplete',
+                'label' => trans('panel/product.category'),
+                'url'   => route('api.panel.categories.autocomplete'),
+            ],
+            [
+                'name'  => 'brand',
+                'type'  => 'autocomplete',
+                'label' => trans('panel/product.brand'),
+                'url'   => route('api.panel.brands.autocomplete'),
+            ],
             ['name' => 'price', 'type' => 'range', 'label' => trans('panel/product.price')],
             ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
@@ -217,6 +226,7 @@ class ProductRepo extends BaseRepo
         try {
             $productData = $this->handleProductData($data);
             $product->fill($productData);
+            $product->updated_at = now();
             $product->saveOrFail();
 
             if ($isUpdating) {
@@ -439,6 +449,7 @@ class ProductRepo extends BaseRepo
     public function builder(array $filters = []): Builder
     {
         $relations = [
+            'skus',
             'masterSku',
             'translation',
             'categories.translation',
@@ -502,6 +513,8 @@ class ProductRepo extends BaseRepo
         if ($keyword) {
             $builder->whereHas('translation', function (Builder $query) use ($keyword) {
                 $query->where('name', 'like', "%$keyword%");
+            })->orWhereHas('skus', function (Builder $query) use ($keyword) {
+                $query->where('code', 'like', "%$keyword%");
             });
         }
 
@@ -545,6 +558,13 @@ class ProductRepo extends BaseRepo
         if ($priceEnd) {
             $builder->whereHas('masterSku', function (Builder $query) use ($priceEnd) {
                 $query->where('price', '<', $priceEnd);
+            });
+        }
+
+        $skuCode = $filters['sku_code'] ?? '';
+        if ($skuCode) {
+            $builder->whereHas('skus', function (Builder $query) use ($skuCode) {
+                $query->where('code', 'like', "%$skuCode%");
             });
         }
 
@@ -620,7 +640,7 @@ class ProductRepo extends BaseRepo
      */
     public function findBySlug($slug): ?Product
     {
-        if (empty($spuCode)) {
+        if (empty($slug)) {
             return null;
         }
 

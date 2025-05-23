@@ -47,7 +47,11 @@ Route::delete('/carts/{cart}', [Controllers\CartController::class, 'destroy'])->
 Route::get('/checkout', [Controllers\CheckoutController::class, 'index'])->name('checkout.index');
 Route::put('/checkout', [Controllers\CheckoutController::class, 'update'])->name('checkout.update');
 Route::post('/checkout/confirm', [Controllers\CheckoutController::class, 'confirm'])->name('checkout.confirm');
-Route::get('/checkout/success', [Controllers\CheckoutController::class, 'success'])->name('checkout.success');
+
+// Payment
+Route::get('/payment/success', [Controllers\PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/cancel', [Controllers\PaymentController::class, 'cancel'])->name('payment.cancel');
+Route::get('/payment/fail', [Controllers\PaymentController::class, 'fail'])->name('payment.fail');
 
 // Orders
 Route::get('/orders/{number}/pay', [Controllers\OrderController::class, 'pay'])->name('orders.pay');

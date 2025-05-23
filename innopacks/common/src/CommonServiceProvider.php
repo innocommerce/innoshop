@@ -84,6 +84,7 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\MigrateProductImages::class,
                 Commands\NormalizeLocales::class,
                 Commands\MigrateImagePaths::class,
+                Commands\OrderComplete::class,
             ]);
         }
     }

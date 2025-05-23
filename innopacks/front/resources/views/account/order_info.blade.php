@@ -17,17 +17,17 @@
             <span class="fw-bold">{{ __('front/order.order_details') }}</span>
             <div class="d-flex align-items-center gap-2">
               <div>
-                @if($order->status == 'unpaid')
-                  <a href="{{ front_route('orders.pay', ['number'=>$order->number]) }}" class="btn btn-primary btn-sm">{{
-                    __('front/order.continue_pay') }}</a>
-                   <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-canceled">{{
-                    __('front/account.cancel_order') }}</button>
+                @if ($order->status == 'unpaid')
+                  <a href="{{ front_route('orders.pay', ['number' => $order->number]) }}"
+                     class="btn btn-primary btn-sm">{{ __('front/order.continue_pay') }}</a>
+                  <button data-number="{{ $order->number }}"
+                          class="btn btn-primary btn-sm btn-canceled">{{ __('front/account.cancel_order') }}</button>
                 @elseif($order->status == 'completed')
-                  <a href="{{ account_route('order_returns.create', ['order_number'=>$order->number]) }}"
-                    class="btn btn-primary btn-sm">{{ __('front/order.create_rma') }}</a>
+                  <a href="{{ account_route('order_returns.create', ['order_number' => $order->number]) }}"
+                     class="btn btn-primary btn-sm">{{ __('front/order.create_rma') }}</a>
                 @elseif($order->status == 'shipped')
-                  <button data-number="{{ $order->number }}" class="btn btn-primary btn-sm btn-shipped">{{
-                    __('front/account.signed') }}</button>
+                  <button data-number="{{ $order->number }}"
+                          class="btn btn-primary btn-sm btn-shipped">{{ __('front/account.signed') }}</button>
                 @endif
               </div>
             </div>
@@ -86,8 +86,8 @@
                     </div>
                   </td>
                   <td>
-                    @php($reviewed = \InnoShop\Common\Repositories\ReviewRepo::orderReviewed(current_customer_id(),$product['id']))
-                    @if($order->status == 'completed' && !$reviewed && $product['item_type'] === 'normal')
+                    @php($reviewed = \InnoShop\Common\Repositories\ReviewRepo::orderReviewed(current_customer_id(), $product['id']))
+                    @if ($order->status == 'completed' && !$reviewed && $product['item_type'] === 'normal')
                       <button type="button" class="btn btn-sm btn-primary add_review" data-bs-toggle="modal"
                               data-bs-target="#addReview-Modal" data-name="{{ $product['name'] }}"
                               data-image="{{ $product['image'] }}" data-ordernumber="{{ $product['order_number'] }}"
@@ -124,14 +124,15 @@
             <div class="col-12 col-md-6">
               <div class="address-card">
                 <div class="address-card-header mb-3">
-                  <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.shipping_address') }}</h5>
+                  <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.shipping_address') }}
+                  </h5>
                 </div>
                 <div class="address-card-body">
                   <p>{{ __('common/address.name') }}: {{ $order->shipping_customer_name }}</p>
                   <p>{{ __('common/address.phone') }}: {{ $order->shipping_telephone }}</p>
                   <p>{{ __('common/address.zipcode') }}: {{ $order->shipping_zipcode }}</p>
                   <p>{{ __('common/address.address_1') }}: {{ $order->shipping_address_1 }}</p>
-                  @if($order->shipping_address_2)
+                  @if ($order->shipping_address_2)
                     <p>{{ __('common/address.address_2') }}: {{ $order->shipping_address_2 }}</p>
                   @endif
                   <p>{{ __('common/address.region') }}: {{ $order->shipping_city }}, {{ $order->shipping_state }}
@@ -142,14 +143,15 @@
             <div class="col-12 col-md-6">
               <div class="address-card">
                 <div class="address-card-header mb-3">
-                  <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.billing_address') }}</h5>
+                  <h5 class="address-card-title border-bottom pb-3 fw-bold">{{ __('common/address.billing_address') }}
+                  </h5>
                 </div>
                 <div class="address-card-body">
                   <p>{{ __('common/address.name') }}: {{ $order->billing_customer_name }}</p>
                   <p>{{ __('common/address.phone') }}: {{ $order->billing_telephone }}</p>
                   <p>{{ __('common/address.zipcode') }}: {{ $order->billing_zipcode }}</p>
                   <p>{{ __('common/address.address_1') }}: {{ $order->billing_address_1 }}</p>
-                  @if($order->billing_address_2)
+                  @if ($order->billing_address_2)
                     <p>{{ __('common/address.address_2') }}: {{ $order->billing_address_2 }} </p>
                   @endif
                   <p>{{ __('common/address.region') }}: {{ $order->billing_city }}, {{ $order->billing_state }}
@@ -159,7 +161,7 @@
             </div>
           </div>
 
-          @if($order->comment)
+          @if ($order->comment)
             <div class="account-card-sub-title d-flex justify-content-between align-items-center">
               <span class="fw-bold">{{ __('front/checkout.order_comment') }}</span>
             </div>
@@ -182,14 +184,15 @@
               </tr>
               </thead>
               <tbody>
-              @foreach($order->shipments as $shipment)
+              @foreach ($order->shipments as $shipment)
                 <tr class="align-middle">
                   <td data-title="express_code">{{ $shipment->express_code }}</td>
                   <td data-title="express_company">{{ $shipment->express_company }}</td>
                   <td data-title="express_number">{{ $shipment->express_number }}</td>
                   <td data-title="created_at">{{ $shipment->created_at }}</td>
                   <td class="align-middle">
-                    <button data-id="{{ $shipment->id }}" type="button" class="btn btn-primary" id="view-shipment-{{ $shipment->id }}">
+                    <button data-id="{{ $shipment->id }}" type="button" class="btn btn-primary"
+                            id="view-shipment-{{ $shipment->id }}">
                       {{ __('front/order.view') }}
                     </button>
                   </td>
@@ -212,7 +215,7 @@
               </tr>
               </thead>
               <tbody>
-              @foreach($order->histories as $history)
+              @foreach ($order->histories as $history)
                 <tr>
                   <td data-title="State">{{ $history->status }}</td>
                   <td data-title="Remark">{{ $history->comment }}</td>
@@ -222,195 +225,133 @@
               </tbody>
             </table>
           </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="modal fade modal-lg" id="addReview-Modal" tabindex="-1" aria-labelledby="addReview-Modal-Label"
-       aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="addReview-Modal-Label">{{ __('front/order.add_review') }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade modal-lg" id="addReview-Modal" tabindex="-1" aria-labelledby="addReview-Modal-Label"
+         aria-hidden="true">
+      <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="addReview-Modal-Label">{{ __('front/order.add_review') }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          @include('shared.review')
         </div>
-        <form action="{{ account_route('reviews.store') }}" method="POST">
+      </div>
+    </div>
+    <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newShipmentModalLabel">{{ __('front/order.shipment_info') }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
           <div class="modal-body">
-            @csrf
-            <input type="hidden" name="order_number" value="">
-            <input type="hidden" name="order_item_id" value="">
-            <input type="hidden" name="product_sku" value="">
-            <div>
-              <div class="review-content">
-                <div class="row">
-                  <div>
-                    <table class="table table-bordered table-striped mb-3 table-response">
-                      <thead>
-                      <tr>
-                        <th>{{ __('front/order.order_number') }}</th>
-                        <th>{{ __('front/order.product_image') }}</th>
-                        <th>{{ __('front/order.product_name') }}</th>
-                        <th>{{ __('front/order.product_spec') }}</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td data-title="Order number" class="Order number align-items-center" id='order_number'></td>
-                        <td data-title="product-image">
-                          <img class="product-image wh-30 justify-content-center align-items-center" id="product-image"
-                               src="" class="img-fluid wh-20">
-                        </td>
-                        <td data-title="product-name" class="name align-items-center" id="name"></td>
-                        <td data-title="product-label" class="label mt-2 text-secondary" id="label"></td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <label class="col-8 text-left font-size-25 mb-0" for="review">
-                    <h5>
-                      {{ __('front/product.input_your_review')}}</h5>
-                  </label>
-
-                  <div class="rating col-4 text-end">
-                    <input type="radio" name="rating" value="5" id="5">
-                    <label for="5">☆</label>
-                    <input type="radio" name="rating" value="4" id="4">
-                    <label for="4">☆</label>
-                    <input type="radio" name="rating" value="3" id="3" checked>
-                    <label for="3">☆</label>
-                    <input type="radio" name="rating" value="2" id="2">
-                    <label for="2">☆</label>
-                    <input type="radio" name="rating" value="1" id="1">
-                    <label for="1">☆</label>
-                  </div>
-                </div>
-                <textarea class="form-control" name="content" id="review" rows="5"
-                          placeholder="{{ __('front/product.input_some_text_here')}}..."></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('front/order.close') }}</button>
-            <button type="submit" class="btn btn-primary submit_review">{{ __('front/product.submit_review') }}</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="newShipmentModal" tabindex="-1" aria-labelledby="newShipmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="newShipmentModalLabel">{{ __('front/order.shipment_info') }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table">
-            <thead>
+            <table class="table">
+              <thead>
               <tr>
                 <th class="col-3">{{ __('front/order.time') }}</th>
                 <th class="col-9">{{ __('front/order.shipment_info') }}</th>
               </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ ('front/order.confirm') }}</button>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary"
+                    data-bs-dismiss="modal">{{ 'front/order.confirm' }}</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    @hookinsert('account.order_info.bottom')
+    @endsection
+    @push('footer')
+      <script>
+        $(document).ready(function () {
+          const reviewModal = document.getElementById('addReview-Modal')
+          reviewModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget
+            const orderNumber = button.getAttribute('data-ordernumber')
+            const productImage = button.getAttribute('data-image')
+            const productName = button.getAttribute('data-name')
+            const productLabel = button.getAttribute('data-label')
+            const productItemId = button.getAttribute('data-orderitemid')
+            const productSku = button.getAttribute('data-productsku')
 
-  @hookinsert('account.order_info.bottom')
+            $('#order_number').text(orderNumber)
+            $('#product-image').attr('src', productImage)
+            $('#name').text(productName)
+            $('#label').text(productLabel)
+            $('input[name="order_number"]').val(orderNumber)
+            $('input[name="order_item_id"]').val(productItemId)
+            $('input[name="product_sku"]').val(productSku)
+          })
+          // View shipment details
+          $(document).on('click', '[id^="view-shipment-"]', function () {
+            const shipmentId = $(this).data('id')
+            axios.get(`${urls.api_base}/panel/shipments/${shipmentId}/traces`)
+              .then(response => {
+                const traces = response.data.traces
+                const tbody = $('#newShipmentModal .modal-body table tbody').last()
+                tbody.empty()
 
-@endsection
-@push('footer')
-  <script>
-    const exampleModal = document.getElementById('addReview-Modal')
-    exampleModal.addEventListener('show.bs.modal', event => {
-      const button = event.relatedTarget
+                traces.forEach(trace => {
+                  tbody.append(`
+                <tr>
+                  <td>${trace.time}</td>
+                  <td>${trace.station}</td>
+                </tr>
+              `)
+                })
+                $('#newShipmentModal').modal('show')
+              })
+          })
+          // Mark order as shipped
+          $(document).on('click', '.btn-shipped', function () {
+            const orderNumber = $(this).data('number')
+            axios.post(`${urls.api_base}/orders/${orderNumber}/complete`, {
+              number: orderNumber
+            })
+              .then(() => {
+                inno.msg(__('front/account.signed_success'))
+                window.location.reload()
+              })
+              .catch(() => inno.msg(__('front/account.signed_failed')))
+          })
+          // Cancel order
+          $(document).on('click', '.btn-canceled', function () {
+            const orderNumber = $(this).data('number')
+            layer.confirm('{{ __('front/account.cancel_order_confirm') }}', {
+              icon: 5,
+              title: '{{ __('front/account.tip') }}',
+              btn: [
+                '{{ __('front/account.cancel_order_confirm_title') }}',
+                '{{ __('front/account.cancel_order_confirm_btn_close') }}'
+              ],
+              offset: 'auto',
+              area: ['400px', 'auto'],
+              shade: [0.3, "#fff"]
+            }, function (index) {
+              layer.close(index)
+              layer.load(2, {
+                shade: [0.3, "#fff"]
+              })
 
-      const ordernumber = button.getAttribute('data-ordernumber')
-      $('#order_number').text(ordernumber)
-      const productImage = button.getAttribute('data-image')
-      $('#product-image').attr('src', productImage)
-      const productName = button.getAttribute('data-name')
-      $('#name').text(productName)
-      const productlabel = button.getAttribute('data-label')
-      $('#label').text(productlabel)
-
-      const productitemid = button.getAttribute('data-orderitemid')
-      const productsku = button.getAttribute('data-productsku')
-
-
-      $('input[name="order_number"]').val(ordernumber);
-      $('input[name="order_item_id"]').val(productitemid);
-      $('input[name="product_sku"]').val(productsku);
-
-      const modalTitle = exampleModal.querySelector('.modal-title')
-      const modalBodyInput = exampleModal.querySelector('.modal-body input')
-    })
-
-    $(document).ready(function() {
-      $(document).on('click', '[id^="view-shipment-"]', function() {
-        const shipmentId = $(this).data('id');
-
-        axios.get(`${urls.api_base}/panel/shipments/${shipmentId}/traces`)
-          .then(response => {
-            const traces = response.data.traces;
-            const tbody = $('#newShipmentModal .modal-body table tbody').last();
-            tbody.empty();
-
-            traces.forEach(trace => {
-              const row = `<tr>
-                             <td>${trace.time}</td>
-                             <td>${trace.station}</td>
-                           </tr>`;
-              tbody.append(row);
-            });
-            $('#newShipmentModal').modal('show');
-          });
-      });
-
-      $(document).on('click', '.btn-shipped', function() {
-        const orderNumber = $(this).data('number');
-        axios.post(`${urls.api_base}/orders/${orderNumber}/complete`, {
-          number: orderNumber
-        }).then(response => {
-          inno.msg(__('front/account.signed_success'));
-          window.location.reload();
-        }).catch(error => {
-          inno.msg(__('front/account.signed_failed'));
-        });
-    });
-      $(document).on('click', '.btn-canceled', function() {
-        const orderNumber = $(this).data('number');
-
-        layer.confirm('{{ __('front/account.cancel_order_confirm') }}', {
-          icon: 3,
-          title: '{{ __('front/account.tip') }}',
-          btn: ['{{ __('front/account.cancel_order_confirm_title') }}', '{{ __('front/account.cancel_order_confirm_btn_close') }}'],
-          offset: 'auto',
-          area: ['400px', 'auto'],
-          shade: [0.3, "#fff"]
-        }, function(index) {
-          layer.close(index);
-          layer.load(2, { shade: [0.3, "#fff"] });
-          axios.post(`${urls.api_base}/orders/${orderNumber}/cancel`, {
-            number: orderNumber
-          }).then(response => {
-            inno.msg("{{ __('front/account.cancel_order_success') }}");
-            window.location.reload();
-          }).catch(error => {
-            inno.msg("{{ __('front/account.cancel_order_failed') }}");
-          }).finally(() => {
-            layer.closeAll('loading');
-          });
-        });
-      });
-    });
-  </script>
-@endpush
+              axios.post(`${urls.api_base}/orders/${orderNumber}/cancel`, {
+                number: orderNumber
+              })
+                .then(() => {
+                  inno.msg("{{ __('front/account.cancel_order_success') }}")
+                  window.location.reload()
+                })
+                .catch(() => inno.msg("{{ __('front/account.cancel_order_failed') }}"))
+                .finally(() => layer.closeAll('loading'))
+            })
+          })
+        })
+      </script>
+  @endpush

@@ -326,7 +326,11 @@ final class Plugin implements Arrayable, ArrayAccess
             return '';
         }
 
-        return panel_route('plugins.edit', ['plugin' => $this->code]);
+        try {
+            return panel_route('plugins.edit', ['plugin' => $this->code]);
+        } catch (Exception $e) {
+            return '';
+        }
     }
 
     public function checkActive(): bool

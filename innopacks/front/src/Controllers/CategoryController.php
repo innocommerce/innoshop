@@ -25,12 +25,19 @@ class CategoryController extends Controller
      */
     public function index(Request $request): mixed
     {
-        $filters  = $request->all();
+        $filters = [
+            'keyword'  => $request->get('keyword'),
+            'sort'     => $request->get('sort', 'position'),
+            'order'    => $request->get('order', 'asc'),
+            'per_page' => $request->get('per_page', 15),
+        ];
+
         $products = ProductRepo::getInstance()->withActive()->list($filters);
 
         $data = [
-            'products'   => $products,
-            'categories' => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'products'       => $products,
+            'categories'     => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'per_page_items' => CategoryRepo::getInstance()->getPerPageItems(),
         ];
 
         return inno_view('products.index', $data);
@@ -80,9 +87,9 @@ class CategoryController extends Controller
         $filters = [
             'category_id' => $category->id,
             'keyword'     => $keyword,
-            'sort'        => $request->get('sort'),
-            'order'       => $request->get('order'),
-            'per_page'    => $request->get('per_page'),
+            'sort'        => $request->get('sort', 'position'),
+            'order'       => $request->get('order', 'asc'),
+            'per_page'    => $request->get('per_page', 15),
         ];
         $products = ProductRepo::getInstance()->getFrontList($filters);
 

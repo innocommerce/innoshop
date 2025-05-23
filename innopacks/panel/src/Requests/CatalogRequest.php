@@ -45,6 +45,10 @@ class CatalogRequest extends FormRequest
 
             "translations.$defaultLocale.locale" => 'required',
             "translations.$defaultLocale.title"  => 'required',
+
+            'translations.*.meta_title'       => 'max:500',
+            'translations.*.meta_keywords'    => 'max:500',
+            'translations.*.meta_description' => 'max:1000',
         ];
     }
 
@@ -59,6 +63,10 @@ class CatalogRequest extends FormRequest
             'slug'                               => panel_trans('common.slug'),
             "translations.$defaultLocale.locale" => trans('panel/catalog.locale'),
             "translations.$defaultLocale.title"  => trans('panel/catalog.title'),
+
+            'translations.*.meta_title'       => trans('panel/common.meta_title'),
+            'translations.*.meta_keywords'    => trans('panel/common.meta_keywords'),
+            'translations.*.meta_description' => trans('panel/common.meta_description'),
         ];
     }
 }

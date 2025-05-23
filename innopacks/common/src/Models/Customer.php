@@ -53,6 +53,14 @@ class Customer extends AuthUser
     /**
      * @return HasMany
      */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'customer_id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'customer_id');

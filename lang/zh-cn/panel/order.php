@@ -41,7 +41,7 @@ return [
     'currency_value'             => '汇率',
     'customer_group_id'          => '客户组ID',
     'customer_id'                => '客户ID',
-    'customer_name'              => '客户姓名',
+    'customer_name'              => '客户名称',
     'customer_remarks'           => '客户备注',
     'date_time'                  => '更新时间',
     'delete'                     => '删除',

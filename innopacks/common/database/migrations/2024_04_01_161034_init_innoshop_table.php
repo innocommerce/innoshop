@@ -80,9 +80,9 @@ return new class extends Migration
             $table->string('summary')->nullable()->comment('Summary');
             $table->string('image')->nullable()->comment('Article Image');
             $table->longText('content')->nullable()->comment('Content');
-            $table->string('meta_title')->nullable()->comment('Meta Title');
-            $table->text('meta_description')->nullable()->comment('Meta description');
-            $table->string('meta_keywords')->nullable()->comment('Meta keywords');
+            $table->string('meta_title', 500)->nullable()->comment('Meta Title');
+            $table->string('meta_description', 1000)->nullable()->comment('Meta description');
+            $table->string('meta_keywords', 500)->nullable()->comment('Meta keywords');
             $table->timestamps();
         });
 
@@ -199,9 +199,9 @@ return new class extends Migration
             $table->string('locale')->comment('Locale Code');
             $table->string('title')->comment('Title');
             $table->text('summary')->nullable()->comment('Category Summary');
-            $table->string('meta_title')->nullable()->comment('Meta Title');
-            $table->text('meta_description')->nullable()->comment('Meta Translation');
-            $table->string('meta_keywords')->nullable()->comment('Meta Keywords');
+            $table->string('meta_title', 500)->nullable()->comment('Meta Title');
+            $table->string('meta_description', 1000)->nullable()->comment('Meta Translation');
+            $table->string('meta_keywords', 500)->nullable()->comment('Meta Keywords');
             $table->timestamps();
         });
 
@@ -241,9 +241,9 @@ return new class extends Migration
             $table->string('locale')->comment('Locale Code');
             $table->string('name')->comment('Name');
             $table->longText('content')->comment('Content');
-            $table->string('meta_title')->nullable()->comment('Meta Title');
-            $table->text('meta_description')->nullable()->comment('meta  Translation');
-            $table->string('meta_keywords')->nullable()->comment('Meta Keywords');
+            $table->string('meta_title', 500)->nullable()->comment('Meta Title');
+            $table->string('meta_description', 1000)->nullable()->comment('meta  Translation');
+            $table->string('meta_keywords', 500)->nullable()->comment('Meta Keywords');
             $table->timestamps();
         });
 
@@ -583,9 +583,9 @@ return new class extends Migration
             $table->string('title')->comment('Title');
             $table->longText('content')->nullable()->comment('Content');
             $table->text('template')->nullable()->comment('Content');
-            $table->string('meta_title')->nullable()->comment('Meta Title');
-            $table->text('meta_description')->nullable()->comment('Meta description');
-            $table->string('meta_keywords')->nullable()->comment('Meta keywords');
+            $table->string('meta_title', 500)->nullable()->comment('Meta Title');
+            $table->string('meta_description', 1000)->nullable()->comment('Meta description');
+            $table->string('meta_keywords', 500)->nullable()->comment('Meta keywords');
             $table->timestamps();
         });
 
@@ -683,9 +683,9 @@ return new class extends Migration
             $table->string('name')->comment('Name');
             $table->text('summary')->nullable()->comment('Summary');
             $table->longText('content')->nullable()->comment('Content');
-            $table->string('meta_title')->nullable()->comment('Meta Title');
-            $table->text('meta_description')->nullable()->comment('Meta Description');
-            $table->string('meta_keywords')->nullable()->comment('Meta Keywords');
+            $table->string('meta_title', 500)->nullable()->comment('Meta Title');
+            $table->string('meta_description', 1000)->nullable()->comment('Meta Description');
+            $table->string('meta_keywords', 500)->nullable()->comment('Meta Keywords');
             $table->timestamps();
         });
 

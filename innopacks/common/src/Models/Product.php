@@ -27,6 +27,8 @@ class Product extends BaseModel
 {
     use HasPackageFactory, Replicate, Translatable;
 
+    public $timestamps = true;
+
     protected $fillable = [
         'brand_id', 'images', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
         'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed',

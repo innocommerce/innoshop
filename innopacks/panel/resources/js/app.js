@@ -7,7 +7,7 @@ import dominateColor from "./dominate_color";
 const Config = {
   base: document.querySelector("base").href,
   editorLanguage: document.querySelector('meta[name="editor_language"]')?.content || "zh_cn",
-  apiToken: $('meta[name="api-token"]').attr("content") ||
+  apiToken: $('meta[name="api-token"]').attr("content") || 
             $(window.parent.document).find('meta[name="api-token"]').attr("content"),
   csrfToken: $('meta[name="csrf-token"]').attr("content"),
   locale: $('html').attr("lang"),
@@ -139,23 +139,27 @@ const UI = {
 
   initAIGenerate: () => {
     $(document).on("click", ".ai-generate", function (e) {
+      // 找到当前按钮所在的 form-row
       const $row = $(this).closest(".form-row");
+      // 在 row 内查找 input 或 textarea
       const $input = $row.find("input[data-column], textarea[data-column]");
       if ($input.length === 0) {
-        layer.msg('Cloud not find input or textarea', { icon: 2 });
+        layer.msg('未找到对应输入框', { icon: 2 });
         return;
       }
-
+      // 获取字段名、语言、当前值
       const column = $input.data('column');
       const lang = $input.data('lang');
       const name = $input.attr('name');
       const value = $input.val();
 
+      // 组装请求数据
       const formData = {
         column: column,
         lang: lang,
         name: name,
         value: value,
+        // 可根据需要添加 product_id 等其它参数
       };
 
       layer.load(2, { shade: [0.3, "#fff"] });
@@ -169,7 +173,7 @@ const UI = {
           }
         })
         .catch(function (err) {
-          layer.msg(err.response?.data?.message || 'AI Generate Fail', { icon: 2 });
+          layer.msg(err.response?.data?.message || 'AI生成失败，请重试', { icon: 2 });
         })
         .finally(function () {
           layer.closeAll("loading");
@@ -306,8 +310,8 @@ const Editor = {
             }
           })
           .catch((error) => {
-            const errorMessage = error.response?.data?.message ||
-                               error.response?.data?.error ||
+            const errorMessage = error.response?.data?.message || 
+                               error.response?.data?.error || 
                                error.message;
             layer.msg(errorMessage, { icon: 2 });
           })
