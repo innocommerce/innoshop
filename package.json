@@ -10,13 +10,16 @@
     "production": "mix --production"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "axios": "^1.6.4",
     "jquery": "^3.7.1",
     "laravel-mix": "^6.0.49",
     "laravel-vite-plugin": "^1.0",
+    "postcss": "^8.5.5",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
+    "tailwindcss": "^4.1.10",
     "vite": "^5.0"
   },
   "dependencies": {
