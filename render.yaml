@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: sinha-backend
+    env: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: ""
+    startCommand: ""
