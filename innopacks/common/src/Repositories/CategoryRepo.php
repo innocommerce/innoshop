@@ -60,6 +60,29 @@ class CategoryRepo extends BaseRepo
     }
 
     /**
+     * Format categories for cascader component
+     *
+     * @param  Collection  $categories
+     * @return array
+     */
+    public static function formatCategoriesForCascader($categories): array
+    {
+        $result = [];
+        foreach ($categories as $category) {
+            $node = [
+                'value' => $category->id,
+                'label' => $category->fallbackName(),
+            ];
+            if ($category->children && ! $category->children->isEmpty()) {
+                $node['children'] = self::formatCategoriesForCascader($category->children);
+            }
+            $result[] = $node;
+        }
+
+        return $result;
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

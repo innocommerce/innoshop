@@ -24,8 +24,11 @@ class SkuSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $imagePath  = $this->image ?? '';
-        $imageUrl   = $imagePath ? image_resize($imagePath) : '';
+        $imagePath = $this->image ?? '';
+        if (empty($imagePath)) {
+            $imagePath = $this->product->image ?? '';
+        }
+        $imageUrl   = image_resize($imagePath);
         $finalPrice = $this->getFinalPrice();
 
         $data = [

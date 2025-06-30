@@ -11,7 +11,7 @@
   <div class="card h-min-600">
     <div class="card-body">
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('orders.index')" />
+      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('orders.index')" :export="true" />
 
       @if ($orders->count())
         <div class="table-responsive">

@@ -21,6 +21,8 @@
             @endhookupdate
           </div>
 
+          @hookinsert('account.home.info.after')
+          
           <div class="account-data">
             <div class="row">
               <div class="col-6 col-md-4">
@@ -43,6 +45,8 @@
               </div>
             </div>
           </div>
+
+          @hookinsert('account.home.analysis.after')
 
           <div class="account-card-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/account.orders') }}</span>

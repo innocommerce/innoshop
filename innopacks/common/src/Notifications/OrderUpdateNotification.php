@@ -44,8 +44,10 @@ class OrderUpdateNotification extends Notification implements ShouldQueue
     {
         $drivers[] = 'database';
 
-        $mailEngine = system_setting('email_engine');
-        if ($mailEngine) {
+        $mailEngine    = system_setting('email_engine');
+        $notifications = system_setting('email_notifications', []);
+
+        if ($mailEngine && in_array('order_status_update', $notifications)) {
             $drivers[] = 'mail';
         }
 

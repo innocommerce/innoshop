@@ -17,7 +17,16 @@
 @push('footer')
 <script>
 $(function () {
-  $('#autocomplete-{{ $item['name'] }}').autocomplete({
+  const $input = $('#autocomplete-{{ $item['name'] }}');
+  const $hiddenInput = $('#autocomplete-{{ $item['name'] }}-id');
+  
+  $input.on('keyup', function() {
+    if ($(this).val() === '') {
+      $hiddenInput.val('');
+    }
+  });
+  
+  $input.autocomplete({
     'source': function (request, response) {
       axios.get('{{ $item['url'] }}', { params: { keyword: request } })
         .then(function (res) {
@@ -30,8 +39,8 @@ $(function () {
         });
     },
     'select': function (item) {
-      $('#autocomplete-{{ $item['name'] }}').val(item.label);
-      $('#autocomplete-{{ $item['name'] }}-id').val(item.value);
+      $input.val(item.label);
+      $hiddenInput.val(item.value);
       return false;
     }
   });

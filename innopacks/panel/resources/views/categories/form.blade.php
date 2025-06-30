@@ -76,8 +76,6 @@
       <div class="col-12 col-md-3 ps-md-0">
         <div class="card">
           <div class="card-body">
-            <x-common-form-switch-radio title="{{ panel_trans('common.status') }}" name="active" :value="old('active', $category->active ?? true)"
-              placeholder="{{ panel_trans('common.status') }}" />
             <x-common-form-input title="{{ panel_trans('common.slug') }}" name="slug" :value="old('slug', $category->slug ?? '')"
               placeholder="{{ panel_trans('common.slug') }}" />
             <x-common-form-image title="{{ panel_trans('common.image') }}" name="image"

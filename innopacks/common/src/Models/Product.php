@@ -29,8 +29,12 @@ class Product extends BaseModel
 
     public $timestamps = true;
 
+    const TYPE_NORMAL = 'normal';
+
+    const TYPE_BUNDLE = 'bundle';
+
     protected $fillable = [
-        'brand_id', 'images', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
+        'type', 'brand_id', 'images', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
         'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed',
     ];
 
@@ -132,6 +136,15 @@ class Product extends BaseModel
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'product_id');
+    }
+
+    /**
+     * Bundle relation
+     * @return HasMany
+     */
+    public function bundles(): HasMany
+    {
+        return $this->hasMany(Product\Bundle::class, 'product_id');
     }
 
     /**

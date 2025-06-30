@@ -27,7 +27,7 @@ class ArticleName extends JsonResource
         $data = [
             'id'         => $this->id,
             'slug'       => $this->slug,
-            'name'       => $this->translation->title,
+            'name'       => $this->fallbackName('title'),
             'image'      => image_resize($this->translation->image ?? '', 200, 150),
             'active'     => (bool) $this->active,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),

@@ -1,6 +1,25 @@
 <div class="tab-pane fade show active mt-3" id="basic-tab-pane" role="tabpanel" aria-labelledby="basic-tab"
      tabindex="0">
   <div class="mb-3 col-12 col-md-5">
+    <label class="form-label">{{ __('panel/product.type') }}</label>
+    <select class="form-select" name="type" id="product-type" {{ $product->id ? 'disabled' : '' }} required>
+      @php
+        $productTypes = \InnoShop\Common\Repositories\ProductRepo::getProductTypes();
+        $currentType = old('type', $product->type ?? 'normal');
+      @endphp
+      @foreach($productTypes as $typeValue => $typeLabel)
+        <option value="{{ $typeValue }}" {{ $currentType == $typeValue ? 'selected' : '' }}>
+          {{ $typeLabel }}
+        </option>
+      @endforeach
+    </select>
+    @if($product->id)
+      <input type="hidden" name="type" value="{{ old('type', $product->type ?? 'normal') }}">
+    @endif
+    <div class="form-text">{{ __('panel/product.type_hint') }}</div>
+  </div>
+
+  <div class="mb-3 col-12 col-md-5">
     <div class="mb-1 fs-6">{{ __('panel/product.name') }}</div>
     @if(has_translator())
       <div
@@ -52,7 +71,7 @@
 
   <div class="row mt-5 mb-4">
     <div class="col-12">
-      <div class="mb-3">
+      <div class="mb-3" id="spec-type-group">
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="price_type" id="price_type_single" value="single"
                 {{ (!$product->isMultiple()) ? 'checked' : '' }}>
@@ -92,7 +111,7 @@
         </div>
       </div>
       
-      <!-- 多规格部分 -->
+      <!-- Variant -->
       <div id="specifications_box" class="{{ !$product->isMultiple() ? 'd-none' : '' }}">
         <div class="alert alert-info mb-3" id="multi_spec_notice">
           <i class="bi bi-info-circle me-2"></i>

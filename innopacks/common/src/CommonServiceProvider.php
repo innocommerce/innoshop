@@ -46,7 +46,9 @@ class CommonServiceProvider extends ServiceProvider
     private function registerConfig(): void
     {
         $this->mergeConfigFrom($this->basePath.'config/innoshop.php', 'innoshop');
-        Config::set('app.debug', system_setting('debug', false));
+        if (installed()) {
+            Config::set('app.debug', system_setting('debug', false));
+        }
     }
 
     /**

@@ -33,16 +33,15 @@ class FrontServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadTranslations();
-
-        if (! installed()) {
+        if (! has_install_lock()) {
             return;
         }
 
         load_settings();
+        $this->registerWebRoutes();
+        $this->loadTranslations();
         $this->registerGuard();
         $this->registerUploadFileSystem();
-        $this->registerWebRoutes();
         $this->publishViewTemplates();
         $this->loadThemeViewPath();
         $this->loadViewComponents();

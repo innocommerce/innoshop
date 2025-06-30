@@ -24,4 +24,6 @@ return [
     'mini_cost'      => '最低消费额度',
     'name'           => '姓名',
     'password'       => '密码',
+    'balance_manage' => '余额管理',
+    'customer_info'  => '客户信息',
 ];

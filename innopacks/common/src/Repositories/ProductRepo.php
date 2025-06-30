@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Repositories\Product\BundleRepo;
 use InnoShop\Common\Repositories\Product\RelationRepo;
 use InnoShop\Common\Repositories\Product\VariantRepo;
 use Throwable;
@@ -35,11 +36,48 @@ class ProductRepo extends BaseRepo
     ];
 
     /**
+     * Get available sort options for products
+     *
+     * @return array
+     */
+    public static function getSortOptions(): array
+    {
+        $options = [
+            'pt.name'    => __('panel/common.name'),
+            'ps.price'   => __('panel/product.price'),
+            'position'   => __('panel/common.position'),
+            'sales'      => __('panel/product.sales'),
+            'viewed'     => __('panel/product.viewed'),
+            'created_at' => __('panel/common.created_at'),
+            'updated_at' => __('panel/common.updated_at'),
+        ];
+
+        return fire_hook_filter('common.repo.product.sort_options', $options);
+    }
+
+    /**
+     * Get available product types
+     *
+     * @return array
+     */
+    public static function getProductTypes(): array
+    {
+        $types = [
+            'normal' => __('panel/product.type_normal'),
+            'bundle' => __('panel/product.type_bundle'),
+            // 'virtual' => __('panel/product.type_virtual'),
+            // 'card'    => __('panel/product.type_card'),
+        ];
+
+        return fire_hook_filter('common.repo.product.types', $types);
+    }
+
+    /**
      * @return array[]
      */
     public static function getCriteria(): array
     {
-        return [
+        $criteria = [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
             [
                 'name'  => 'category',
@@ -56,6 +94,8 @@ class ProductRepo extends BaseRepo
             ['name' => 'price', 'type' => 'range', 'label' => trans('panel/product.price')],
             ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
+
+        return fire_hook_filter('common.repo.product.criteria', $criteria);
     }
 
     /**
@@ -167,9 +207,179 @@ class ProductRepo extends BaseRepo
         $item->productAttributes()->delete();
         $item->categories()->sync([]);
         $item->relations()->delete();
+        BundleRepo::getInstance()->deleteBundles($item);
         $item->skus()->delete();
         $item->translations()->delete();
         $item->delete();
+    }
+
+    /**
+     * Bulk update products
+     *
+     * @param  array  $ids
+     * @param  string  $action
+     * @param  array  $data
+     * @return array
+     * @throws Throwable
+     */
+    public function bulkUpdate(array $ids, string $action, array $data = []): array
+    {
+        $updatedCount = 0;
+
+        DB::beginTransaction();
+        try {
+            $products = Product::whereIn('id', $ids)->get();
+
+            foreach ($products as $product) {
+                switch ($action) {
+                    case 'price':
+                        $this->updateProductPrice($product, $data);
+                        break;
+                    case 'categories':
+                        $this->updateProductCategories($product, $data);
+                        break;
+                    case 'quantity':
+                        $this->updateProductQuantity($product, $data);
+                        break;
+                    case 'publish':
+                        $product->update(['active' => true]);
+                        break;
+                    case 'unpublish':
+                        $product->update(['active' => false]);
+                        break;
+                }
+                $updatedCount++;
+            }
+
+            DB::commit();
+
+            return ['success' => true, 'count' => $updatedCount];
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Update product price
+     *
+     * @param  Product  $product
+     * @param  array  $data
+     * @return void
+     */
+    private function updateProductPrice(Product $product, array $data): void
+    {
+        $mode  = $data['mode'] ?? 'reset';
+        $value = (float) ($data['value'] ?? 0);
+
+        if ($value <= 0) {
+            return;
+        }
+
+        $skus = $product->skus;
+        foreach ($skus as $sku) {
+            $currentPrice = $sku->price;
+
+            switch ($mode) {
+                case 'reset':
+                    $newPrice = $value;
+                    break;
+                case 'increase':
+                    $newPrice = $currentPrice + $value;
+                    break;
+                case 'decrease':
+                    $newPrice = max(0, $currentPrice - $value);
+                    break;
+                default:
+                    continue 2;
+            }
+
+            $sku->update(['price' => $newPrice]);
+        }
+    }
+
+    /**
+     * Update product categories
+     *
+     * @param  Product  $product
+     * @param  array  $data
+     * @return void
+     */
+    private function updateProductCategories(Product $product, array $data): void
+    {
+        if (empty($data) || ! is_array($data)) {
+            return;
+        }
+
+        $categoryIds = array_filter($data, 'is_numeric');
+        $product->categories()->sync($categoryIds);
+    }
+
+    /**
+     * Update product quantity
+     *
+     * @param  Product  $product
+     * @param  array  $data
+     * @return void
+     */
+    private function updateProductQuantity(Product $product, array $data): void
+    {
+        $mode  = $data['mode'] ?? 'reset';
+        $value = (int) ($data['value'] ?? 0);
+
+        if ($value < 0) {
+            return;
+        }
+
+        $skus = $product->skus;
+        foreach ($skus as $sku) {
+            $currentQuantity = $sku->quantity;
+
+            switch ($mode) {
+                case 'reset':
+                    $newQuantity = $value;
+                    break;
+                case 'increase':
+                    $newQuantity = $currentQuantity + $value;
+                    break;
+                case 'decrease':
+                    $newQuantity = max(0, $currentQuantity - $value);
+                    break;
+                default:
+                    continue 2;
+            }
+
+            $sku->update(['quantity' => $newQuantity]);
+        }
+    }
+
+    /**
+     * Bulk destroy products
+     *
+     * @param  array  $ids
+     * @return int
+     * @throws Throwable
+     */
+    public function bulkDestroy(array $ids): int
+    {
+        $deletedCount = 0;
+
+        DB::beginTransaction();
+        try {
+            $products = Product::whereIn('id', $ids)->get();
+
+            foreach ($products as $product) {
+                $this->destroy($product);
+                $deletedCount++;
+            }
+
+            DB::commit();
+
+            return $deletedCount;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**
@@ -184,6 +394,7 @@ class ProductRepo extends BaseRepo
             'categories',
             'productAttributes',
             'relations',
+            'bundles',
             'videos',
         ]);
         $copy = $product->replicate();
@@ -200,12 +411,16 @@ class ProductRepo extends BaseRepo
                     $copy->categories()->attach($entry->id);
 
                     continue;
+                } elseif ($relation == 'bundles') {
+                    continue;
                 }
                 if ($newEntry->push()) {
                     $copy->{$relation}()->save($newEntry);
                 }
             }
         }
+
+        BundleRepo::getInstance()->copyBundles($product, $copy);
 
         return $copy;
     }
@@ -224,6 +439,9 @@ class ProductRepo extends BaseRepo
         DB::beginTransaction();
 
         try {
+            if ($isUpdating) {
+                $data['type'] = $product->type;
+            }
             $productData = $this->handleProductData($data);
             $product->fill($productData);
             $product->updated_at = now();
@@ -244,6 +462,10 @@ class ProductRepo extends BaseRepo
             $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
             RelationRepo::getInstance()->handleBidirectionalRelations($product, $data['related_ids'] ?? []);
             $product->categories()->sync($data['categories'] ?? []);
+
+            if (isset($data['bundles'])) {
+                BundleRepo::getInstance()->handleBundles($product, $data['bundles'] ?? []);
+            }
 
             $skus = $this->handleSkus($data['skus'] ?? []);
             if (isset($data['price_type']) && $data['price_type'] === 'single' && ! empty($skus)) {
@@ -312,6 +534,10 @@ class ProductRepo extends BaseRepo
                 $product->skus()->createMany($this->handleSkus($data['skus']));
             }
 
+            if (isset($data['bundles'])) {
+                BundleRepo::getInstance()->handleBundles($product, $data['bundles']);
+            }
+
             DB::commit();
 
             return $product;
@@ -333,6 +559,7 @@ class ProductRepo extends BaseRepo
         }
 
         return [
+            'type'         => $data['type']         ?? Product::TYPE_NORMAL,
             'spu_code'     => $data['spu_code']     ?? null,
             'slug'         => $data['slug']         ?? null,
             'brand_id'     => $data['brand_id']     ?? 0,
@@ -454,6 +681,7 @@ class ProductRepo extends BaseRepo
             'translation',
             'categories.translation',
             'favorites',
+            'bundles.sku.product.translation',
         ];
 
         $relations = array_merge($this->relations, $relations);
@@ -671,5 +899,26 @@ class ProductRepo extends BaseRepo
     public function getNameByID($id): string
     {
         return Product::query()->find($id)->description->name ?? '';
+    }
+
+    /**
+     * Get bundle items for product display
+     *
+     * @param  Product  $product
+     * @return Collection
+     */
+    public function getBundleItems(Product $product): Collection
+    {
+        return BundleRepo::getInstance()->getBundleItemsForDisplay($product);
+    }
+
+    /**
+     * Get category options for cascader component
+     *
+     * @return array
+     */
+    public static function getCategoryOptions(): array
+    {
+        return CategoryRepo::formatCategoriesForCascader(Category::tree());
     }
 }

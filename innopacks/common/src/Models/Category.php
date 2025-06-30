@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -53,7 +54,7 @@ class Category extends BaseModel
      * Get slug url link.
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUrlAttribute(): string
     {
@@ -72,5 +73,27 @@ class Category extends BaseModel
     public function getEditUrlAttribute(): string
     {
         return panel_route('categories.edit', $this);
+    }
+
+    /**
+     * Get URL
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return $this->getImageUrl();
+    }
+
+    /**
+     * @param  int  $with
+     * @param  int  $height
+     * @return string
+     * @throws Exception
+     */
+    public function getImageUrl(int $with = 600, int $height = 600): string
+    {
+        return image_resize($this->image ?? '', $with, $height);
     }
 }

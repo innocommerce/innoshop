@@ -272,7 +272,7 @@ class CartService
      * @return void
      * @throws Throwable
      */
-    public function reorder(Order $order): void
+    public function addOrderToCart(Order $order): void
     {
         $this->unselectAll();
         foreach ($order->items as $item) {
@@ -280,6 +280,7 @@ class CartService
             $data       = [
                 'sku_id'   => $productSku->id,
                 'quantity' => $item->quantity,
+                'selected' => true,
             ];
             $this->addCart($data);
         }

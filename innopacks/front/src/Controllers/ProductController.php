@@ -92,14 +92,15 @@ class ProductController extends Controller
         $variables  = ProductVariable::collection($product->variables)->jsonSerialize();
 
         $data = [
-            'product'    => $product,
-            'sku'        => (new SkuListItem($sku))->jsonSerialize(),
-            'skus'       => SkuListItem::collection($product->skus)->jsonSerialize(),
-            'variants'   => $variables,
-            'attributes' => $product->groupedAttributes(),
-            'reviews'    => $reviews,
-            'reviewed'   => ReviewRepo::productReviewed($customerID, $product->id),
-            'related'    => $product->relationProducts,
+            'product'      => $product,
+            'sku'          => (new SkuListItem($sku))->jsonSerialize(),
+            'skus'         => SkuListItem::collection($product->skus)->jsonSerialize(),
+            'variants'     => $variables,
+            'attributes'   => $product->groupedAttributes(),
+            'reviews'      => $reviews,
+            'reviewed'     => ReviewRepo::productReviewed($customerID, $product->id),
+            'related'      => $product->relationProducts,
+            'bundle_items' => ProductRepo::getInstance()->getBundleItems($product),
         ];
 
         return inno_view('products.show', $data);

@@ -84,6 +84,8 @@ class OrderReturnRepo extends BaseRepo
             });
         }
 
+        $builder = fire_hook_filter('repo.order_return.builder', $builder);
+
         return $builder;
     }
 

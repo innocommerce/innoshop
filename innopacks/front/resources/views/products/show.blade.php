@@ -24,6 +24,7 @@
     <div class="page-product-top">
       <div class="row">
         <div class="col-12 col-lg-6 product-left-col">
+         
           <div class="product-images">
 
             @if(is_array($product->images))
@@ -48,7 +49,8 @@
               </div>
             @endif
 
-            <div class="main-product-img">
+            <div class="main-product-img position-relative">
+              @hookinsert('front.product.show.image.before')
               <img src="{{ $product->image_url }}" class="img-fluid">
             </div>
           </div>
@@ -75,6 +77,8 @@
             </div>
 
             <div class="sub-product-title">{{ $product->fallbackName('summary') }}</div>
+
+            @include('products._bundle_items')
 
             <ul class="product-param">
               <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span

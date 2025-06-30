@@ -12,6 +12,7 @@ namespace InnoShop\Common\Services;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Order;
+use InnoShop\Common\Repositories\OrderRepo;
 use Throwable;
 
 class OrderService
@@ -46,11 +47,23 @@ class OrderService
         DB::beginTransaction();
 
         try {
-
             $this->order->load(['items', 'fees']);
             $order = $this->order->replicate();
 
+            $order->number = OrderRepo::generateOrderNumber();
             $order->saveOrFail();
+
+            foreach ($this->order->items as $item) {
+                $newItem           = $item->replicate();
+                $newItem->order_id = $order->id;
+                $newItem->saveOrFail();
+            }
+
+            foreach ($this->order->fees as $fee) {
+                $newFee           = $fee->replicate();
+                $newFee->order_id = $order->id;
+                $newFee->saveOrFail();
+            }
 
             DB::commit();
 

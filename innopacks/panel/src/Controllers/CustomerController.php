@@ -13,9 +13,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Customer;
-use InnoShop\Common\Repositories\Customer\GroupRepo;
 use InnoShop\Common\Repositories\CustomerRepo;
-use InnoShop\Common\Resources\AddressListItem;
 use InnoShop\Panel\Requests\CustomerRequest;
 use Throwable;
 
@@ -86,13 +84,7 @@ class CustomerController extends BaseController
      */
     public function form($customer): mixed
     {
-        $addresses = AddressListItem::collection($customer->addresses)->jsonSerialize();
-        $data      = [
-            'customer'  => $customer,
-            'addresses' => $addresses,
-            'groups'    => GroupRepo::getInstance()->getSimpleList(),
-            'locales'   => locales()->toArray(),
-        ];
+        $data = CustomerRepo::getInstance()->getCustomerDetailData($customer);
 
         return inno_view('panel::customers.form', $data);
     }

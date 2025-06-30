@@ -15,4 +15,15 @@
                           :data="$customer_latest_week['totals']"></x-panel-chart-line>
     </div>
   </div>
+
+  <div class="row d-flex ">
+    <div class="col-6">
+      <x-panel-chart-pie id="customer_source" :labels="$customer_source['labels']" :title="__('panel/analytics.customer_source')"
+                         :data="$customer_source['data']"></x-panel-chart-pie>
+    </div>
+
+   @hookinsert('panel.analytics.customer.bottom')
+
+  </div>
 @endsection
+

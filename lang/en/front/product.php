@@ -30,4 +30,5 @@ return [
     'input_some_text_here'  => 'Input Review Here',
     'related_product'       => 'Related',
     'have_reviewed'         => 'You have reviewed this product',
+    'bundle_includes'       => 'Bundle Includes',
 ];

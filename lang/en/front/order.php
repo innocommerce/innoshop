@@ -49,4 +49,5 @@ return [
     'unpaid'          => 'Unpaid',
     'unshipped'       => 'Unshipped',
     'view'            => 'View',
+    'bundle_includes' => 'Bundle Includes',
 ];

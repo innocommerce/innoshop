@@ -14,7 +14,10 @@
                  data-installed="{{ $plugin['installed'] ? 1 : 0 }}">
               <div class="image-wrap">
                 <div class="image"><img src="{{ $plugin['icon'] }}" alt="{{ $plugin['name'] }}" class="img-fluid"></div>
-                <div class="title">{{ $plugin['name'] }}</div>
+                <div class="title">
+                  <span class="badge bg-light text-dark small fw-light">{{ $plugin['first_letter'] }}</span>
+                  {{ $plugin['name'] }}
+                </div>
               </div>
 
               <div class="plugin-info">
@@ -56,12 +59,12 @@
     $(function () {
       $('.install-plugin').click(function () {
         var code = $(this).parents('.plugin-item').data('code');
-        pluginsUpdata(code, 'install');
+        pluginsUpdate(code, 'install');
       });
 
       $('.uninstall-plugin').click(function () {
         var code = $(this).parents('.plugin-item').data('code');
-        pluginsUpdata(code, 'uninstall');
+        pluginsUpdate(code, 'uninstall');
       });
     });
 
@@ -77,7 +80,7 @@
       });
     });
 
-    function pluginsUpdata(code, type) {
+    function pluginsUpdate(code, type) {
       const url = type === 'install' ? '/{{ panel_name() }}/plugins' : '/{{ panel_name() }}/plugins/' + code;
       const method = type === 'install' ? 'post' : 'delete';
 
@@ -87,6 +90,9 @@
         } else {
           inno.alert(res.message);
         }
+      }).catch(error => {
+        data = error.response.data
+        layer.msg(data.message, { icon: 2 });
       });
     }
   </script>

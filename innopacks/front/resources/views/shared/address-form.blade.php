@@ -168,16 +168,24 @@
       });
     }
 
-    // 获取对应国家的省份数据
     function getZones(countryId, callback = null) {
       axios.get('{{ front_route('countries.index') }}/' + countryId).then(function (res) {
         var zones = res.data;
         var zoneSelect = $('select[name="state_code"]');
-        zoneSelect.empty().prop('disabled', false);
-        zoneSelect.append('<option value="">{{ __('front/common.please_choose') }}</option>');
-        zones.forEach(function (zone) {
-          zoneSelect.append('<option value="' + zone.code + '"' + (zone.code == settingStateCode ? ' selected' : '') + '>' + zone.name + '</option>');
-        });
+        zoneSelect.empty();
+
+        if (zones.length === 0) {
+          zoneSelect.prop('disabled', true);
+          zoneSelect.prop('required', false);
+          zoneSelect.append('<option value="">N/A</option>');
+        } else {
+          zoneSelect.prop('disabled', false);
+          zoneSelect.prop('required', true);
+          zoneSelect.append('<option value="">{{ __('front/common.please_choose') }}</option>');
+          zones.forEach(function (zone) {
+            zoneSelect.append('<option value="' + zone.code + '">' + zone.name + '</option>');
+          });
+        }
 
         if (typeof callback === 'function') {
           callback();

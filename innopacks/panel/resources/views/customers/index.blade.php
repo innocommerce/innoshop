@@ -1,5 +1,5 @@
 @extends('panel::layouts.app')
-@section('body-class', '')
+@section('body-class', 'page-customer')
 
 @section('title', __('panel/menu.customers'))
 @section('page-title-right')
@@ -19,9 +19,8 @@
         <thead>
           <tr>
             <td>{{ __('panel/common.id')}}</td>
-            <td>{{ __('panel/customer.avatar') }}</td>
-            <td>{{ __('panel/customer.email') }}</td>
-            <td>{{ __('panel/customer.name') }}</td>
+            <td>{{ __('panel/customer.customer_info') }}</td>
+            @hookinsert('panel.customer.index.thead.bottom')
             <td>{{ __('panel/customer.from') }}</td>
             <td>{{ __('panel/customer.group') }}</td>
             <td>{{ __('panel/customer.locale') }}</td>
@@ -35,14 +34,21 @@
           @foreach($customers as $item)
           <tr>
             <td>{{ $item->id }}</td>
-            <td>
-              <div class="wh-40 border d-flex justify-content-center align-items-center"><img
-                  src="{{ image_resize($item->avatar) }}" class="img-fluid"></div>
+            <td class="customer-info-cell">
+              <div class="customer-info-wrapper">
+                <div class="avatar-wrapper">
+                  <img src="{{ image_resize($item->avatar, 40, 40) }}" 
+                       alt="{{ $item->name }}">
+                </div>
+                <div class="customer-details">
+                  <div class="customer-name">{{ $item->name }}</div>
+                  <div class="customer-email">{{ $item->email }}</div>
+                </div>
+              </div>
             </td>
-            <td>{{ $item->email }}</td>
-            <td>{{ $item->name }}</td>
-            <td>{{ $item->from }}</td>
-            <td>{{ $item->customerGroup->translation->name ?? '-' }}</td>
+            @hookinsert('panel.customer.index.tbody.bottom', $item)
+            <td>{{ $item->from_display }}</td>
+            <td>{{ $item->customerGroup->translation->name ?? '-' }}</td> 
             <td>{{ $item->locale }}</td>
             @hookinsert('panel.product.index.tbody.bottom', $item)
             <td>{{ $item->created_at }}</td>

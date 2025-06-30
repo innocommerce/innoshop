@@ -229,7 +229,7 @@ if (! function_exists('has_set_value')) {
      */
     function has_set_value($parameters): bool
     {
-        $ignoreList = ['page', 'per_page'];
+        $ignoreList = ['page', 'per_page', 'sort', 'order'];
         foreach ($parameters as $key => $value) {
             if (in_array($key, $ignoreList)) {
                 continue;

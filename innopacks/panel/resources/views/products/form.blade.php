@@ -21,6 +21,11 @@
                   type="button" role="tab" aria-controls="basic-tab-pane"
                   aria-selected="true">{{ __('panel/product.basic_information') }}</button>
               </li>
+              <li class="nav-item" role="presentation" id="bundle-items-tab-nav" style="display:none;">
+                <button class="nav-link" id="bundle-items-tab" data-bs-toggle="tab" data-bs-target="#bundle-items-tab-pane"
+                  type="button" role="tab" aria-controls="bundle-items-tab-pane"
+                  aria-selected="false">{{ __('panel/product.bundle_items_tab') }}</button>
+              </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="translation-tab" data-bs-toggle="tab" data-bs-target="#translation-tab-pane"
                   type="button" role="tab" aria-controls="translation-tab-pane"
@@ -51,6 +56,9 @@
 
             <div class="tab-content" id="myTabContent">
               @include('panel::products.panes.tab_pane_basic', $product)
+              <div class="tab-pane fade" id="bundle-items-tab-pane" role="tabpanel" aria-labelledby="bundle-items-tab">
+                @include('panel::products.panes.tab_pane_bundle_items', $product)
+              </div>
 
               @include('panel::products.panes.tab_pane_content', $product)
 
@@ -80,6 +88,7 @@
         this.preventEnterSubmit();
         this.setupCategorySearch();
         this.setupPriceTypeToggle();
+        this.setupTypeVariantLinkage();
       },
 
       // Prevent form submission on Enter key press
@@ -132,12 +141,42 @@
       togglePriceVisibility(isMultiple) {
         $('#single_price_box').toggleClass('d-none', isMultiple);
         $('#specifications_box').toggleClass('d-none', !isMultiple);
-      }
+      },
+
+      // Type and variant linkage
+      setupTypeVariantLinkage() {
+        $('#product-type').on('change', function() {
+          if ($(this).val() === 'bundle') {
+            // Bundle product only single variant
+            $('#price_type_single').prop('checked', true);
+            $('#price_type_multiple').prop('disabled', true);
+            ProductForm.togglePriceVisibility(false);
+          } else {
+            $('#price_type_multiple').prop('disabled', false);
+          }
+        }).trigger('change');
+      },
+
+      setupBundleTabToggle() {
+        function toggleBundleTab() {
+          if ($('#product-type').val() === 'bundle') {
+            $('#bundle-items-tab-nav').show();
+          } else {
+            $('#bundle-items-tab-nav').hide();
+            if ($('#bundle-items-tab').hasClass('active')) {
+              $('#basic-tab').click();
+            }
+          }
+        }
+        $('#product-type').on('change', toggleBundleTab);
+        toggleBundleTab();
+      },
     };
 
     // Initialize when document is ready
-    $(document).ready(function() {
+    $(function() {
       ProductForm.init();
+      ProductForm.setupBundleTabToggle();
     });
   </script>
 @endpush

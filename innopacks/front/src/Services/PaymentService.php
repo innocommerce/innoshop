@@ -62,9 +62,12 @@ class PaymentService
             ];
 
             $paymentData = fire_hook_filter("service.payment.pay.$originCode.data", $paymentData);
-            $viewContent = view($viewPath, $paymentData)->render();
 
-            return view('orders.pay', ['order' => $this->order, 'payment_view' => $viewContent]);
+            return view('orders.pay', [
+                'order'     => $this->order,
+                'view_path' => $viewPath,
+                'view_data' => $paymentData,
+            ]);
         } catch (Exception $e) {
             return view('orders.pay', ['order' => $this->order, 'error' => $e->getMessage()]);
         }

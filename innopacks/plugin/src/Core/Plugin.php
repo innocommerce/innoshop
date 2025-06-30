@@ -319,6 +319,11 @@ final class Plugin implements Arrayable, ArrayAccess
         return $this->version;
     }
 
+    public function getFirstLetter(): string
+    {
+        return strtoupper(substr($this->getCode(), 0, 1));
+    }
+
     public function getEditUrl(): string
     {
         $viewFile = $this->getPath().'/Views/panel/config.blade.php';

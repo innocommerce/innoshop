@@ -101,15 +101,15 @@ class AccountService extends BaseService
     private function checkFrom(): string
     {
         if (is_wechat_mini()) {
-            return 'miniapp';
+            return Customer::FROM_MINIAPP;
         } elseif (is_wechat_official()) {
-            return 'wechat_official';
+            return Customer::FROM_WECHAT_OFFICIAL;
         } elseif (is_mobile()) {
-            return 'mobile_web';
+            return Customer::FROM_MOBILE_WEB;
         } elseif (is_app()) {
-            return 'app';
+            return Customer::FROM_APP;
         } else {
-            return 'pc_web';
+            return Customer::FROM_PC_WEB;
         }
     }
 }

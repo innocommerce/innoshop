@@ -37,8 +37,9 @@ class PaymentRepo extends BaseRepo
             'charge_id'    => $data['charge_id'] ?? '',
             'amount'       => (float) ($data['amount'] ?? 0),
             'handling_fee' => (float) ($data['handling_fee'] ?? 0),
-            'paid'         => $data['paid'] ?? false,
-            'reference'    => json_encode($data['reference'] ?? ''),
+            'paid'         => $data['paid']        ?? false,
+            'reference'    => $data['reference']   ?? [],
+            'certificate'  => $data['certificate'] ?? '',
         ];
 
         $orderPayment->fill($paymentData);

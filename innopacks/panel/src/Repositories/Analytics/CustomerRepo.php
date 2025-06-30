@@ -45,4 +45,38 @@ class CustomerRepo extends BaseRepo
             'totals' => $totals,
         ];
     }
+
+    /**
+     * 获取客户来源数据
+     *
+     * @return array
+     */
+    public function getCustomerSourceData(): array
+    {
+        $sourceData = \InnoShop\Common\Repositories\CustomerRepo::getInstance()->builder()
+            ->select(DB::raw('`from`, count(*) as total'))
+            ->groupBy('from')
+            ->get()
+            ->keyBy('from');
+
+        $labels      = [];
+        $data        = [];
+        $fromOptions = \InnoShop\Common\Repositories\CustomerRepo::getFromList();
+
+        // 遍历所有可能的来源类型
+        foreach ($fromOptions as $option) {
+            $key   = $option['key'];
+            $label = $option['value'];
+
+            // 基本数据
+            $total    = isset($sourceData[$key]) ? $sourceData[$key]->total : 0;
+            $labels[] = $label;
+            $data[]   = $total;
+        }
+
+        return [
+            'labels' => $labels,
+            'data'   => $data,
+        ];
+    }
 }

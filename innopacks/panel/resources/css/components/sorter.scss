@@ -1,0 +1,36 @@
+// 排序组件样式
+.sorter-component {
+  .sorter-label {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    height: 31px; // 与 form-select-sm 高度匹配
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  .sorter-field {
+    width: 130px;
+  }
+
+  .sorter-direction {
+    width: 100px;
+  }
+
+  // 移动端样式调整
+  @media (max-width: 767.98px) {
+    .sorter-label {
+      font-size: 0.8rem !important;
+    }
+    
+    .sorter-field {
+      width: 120px !important;
+    }
+    
+    .sorter-direction {
+      width: 80px !important;
+    }
+  }
+} 

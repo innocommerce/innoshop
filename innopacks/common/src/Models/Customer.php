@@ -27,6 +27,17 @@ class Customer extends AuthUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    // From constants
+    public const FROM_PC_WEB = 'pc_web';
+
+    public const FROM_MOBILE_WEB = 'mobile_web';
+
+    public const FROM_MINIAPP = 'miniapp';
+
+    public const FROM_WECHAT_OFFICIAL = 'wechat_official';
+
+    public const FROM_APP = 'app';
+
     protected $fillable = [
         'email', 'password', 'name', 'avatar', 'customer_group_id', 'address_id', 'locale', 'active', 'code', 'from',
         'deleted_at',
@@ -136,5 +147,43 @@ class Customer extends AuthUser
         } else {
             $this->notifyNow(new ForgottenNotification($this, $code));
         }
+    }
+
+    /**
+     * Get all from options.
+     *
+     * @return array
+     */
+    public static function getFromOptions(): array
+    {
+        return [
+            self::FROM_PC_WEB          => trans('common/customer.from_pc_web'),
+            self::FROM_MOBILE_WEB      => trans('common/customer.from_mobile_web'),
+            self::FROM_MINIAPP         => trans('common/customer.from_miniapp'),
+            self::FROM_WECHAT_OFFICIAL => trans('common/customer.from_wechat_official'),
+            self::FROM_APP             => trans('common/customer.from_app'),
+        ];
+    }
+
+    /**
+     * Get the display name of the from.
+     *
+     * @return string
+     */
+    public function getFromDisplayAttribute(): string
+    {
+        $options = self::getFromOptions();
+
+        return $options[$this->from] ?? $this->from;
+    }
+
+    /**
+     * Check if the customer is from mobile.
+     *
+     * @return bool
+     */
+    public function isMobile(): bool
+    {
+        return in_array($this->from, [self::FROM_MOBILE_WEB, self::FROM_MINIAPP, self::FROM_WECHAT_OFFICIAL, self::FROM_APP]);
     }
 }

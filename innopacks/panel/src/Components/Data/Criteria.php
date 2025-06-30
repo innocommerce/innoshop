@@ -17,16 +17,22 @@ class Criteria extends Component
 
     public array $criteria;
 
+    public bool $export;
+
+    public bool $hasFilters;
+
     /**
      * Types: [input, select, date, range, date_range]
      *
      * @param  string  $action
      * @param  array  $criteria
      */
-    public function __construct(string $action, array $criteria)
+    public function __construct(string $action, array $criteria, bool $export = false)
     {
-        $this->action   = $action;
-        $this->criteria = $criteria;
+        $this->action     = $action;
+        $this->criteria   = $criteria;
+        $this->export     = $export;
+        $this->hasFilters = has_set_value(request()->except(['page', 'export']));
     }
 
     /**
@@ -35,5 +41,19 @@ class Criteria extends Component
     public function render(): mixed
     {
         return view('panel::components.data.criteria');
+    }
+
+    /**
+     * Generate export url, include all query parameters (except page)
+     *
+     * @return string
+     */
+    public function getExportUrl(): string
+    {
+        $query = request()->except(['page', 'export']);
+
+        $exportAction = $this->action.'/export';
+
+        return $exportAction.'?'.http_build_query($query);
     }
 }

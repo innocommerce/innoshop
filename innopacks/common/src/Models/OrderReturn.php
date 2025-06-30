@@ -69,4 +69,34 @@ class OrderReturn extends BaseModel
     {
         return trans('common/rma.'.$this->status);
     }
+
+    /**
+     * @return string
+     */
+    public function getStatusColorAttribute(): string
+    {
+        $statusCode = $this->status;
+        if ($statusCode == null) {
+            return '';
+        }
+        $map = self::statusColorMap();
+
+        return $map[$statusCode] ?? 'secondary';
+    }
+
+    /**
+     * Get status color map.
+     *
+     * @return array
+     */
+    private static function statusColorMap(): array
+    {
+        return [
+            \InnoShop\Common\Services\ReturnStateService::CREATED   => 'secondary',
+            \InnoShop\Common\Services\ReturnStateService::PENDING   => 'warning',
+            \InnoShop\Common\Services\ReturnStateService::REFUNDED  => 'info',
+            \InnoShop\Common\Services\ReturnStateService::RETURNED  => 'success',
+            \InnoShop\Common\Services\ReturnStateService::CANCELLED => 'danger',
+        ];
+    }
 }

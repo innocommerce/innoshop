@@ -14,10 +14,26 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Repositories\Customer\GroupRepo;
+use InnoShop\Common\Resources\AddressListItem;
 use Throwable;
 
 class CustomerRepo extends BaseRepo
 {
+    public static function getFromList(): array
+    {
+        $options = Customer::getFromOptions();
+        $result  = [];
+
+        foreach ($options as $key => $value) {
+            $result[] = [
+                'key'   => $key,
+                'value' => $value,
+            ];
+        }
+
+        return $result;
+    }
+
     /**
      * @return array[]
      */
@@ -29,7 +45,7 @@ class CustomerRepo extends BaseRepo
             ['name'       => 'customer_group_id', 'label' => trans('panel/customer.group'), 'type' => 'select',
                 'options' => GroupRepo::getInstance()->getSimpleList(), 'options_key' => 'id', 'options_label' => 'name',
             ],
-            ['name' => 'from', 'type' => 'input', 'label' => trans('panel/customer.from')],
+            ['name' => 'from', 'type' => 'select', 'label' => trans('panel/customer.from'), 'options' => self::getFromList(), 'options_key' => 'key', 'options_label' => 'value'],
             ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/customer.locale')],
             ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
         ];
@@ -277,5 +293,31 @@ class CustomerRepo extends BaseRepo
             ->whereIn('id', $customerIDs)
             ->orderByRaw('FIELD(id, '.implode(',', $customerIDs).')')
             ->get();
+    }
+
+    /**
+     * Get customer detail data including addresses, transactions, groups and locales.
+     *
+     * @param  Customer  $customer
+     * @param  int  $transactionPerPage
+     * @return array
+     */
+    public function getCustomerDetailData(Customer $customer, int $transactionPerPage = 10): array
+    {
+        $addresses = AddressListItem::collection($customer->addresses)->jsonSerialize();
+
+        $transactions = $customer->transactions()
+            ->orderByDesc('created_at')
+            ->paginate($transactionPerPage);
+
+        $data = [
+            'customer'     => $customer,
+            'addresses'    => $addresses,
+            'groups'       => GroupRepo::getInstance()->getSimpleList(),
+            'locales'      => locales()->toArray(),
+            'transactions' => $transactions,
+        ];
+
+        return fire_hook_filter('repo.customer.detail_data', $data, $customer);
     }
 }

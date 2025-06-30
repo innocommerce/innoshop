@@ -33,9 +33,12 @@ class ProductController extends BaseController
     public function index(Request $request): mixed
     {
         $filters = $request->all();
-        $data    = [
-            'criteria' => ProductRepo::getCriteria(),
-            'products' => ProductRepo::getInstance()->list($filters),
+
+        $data = [
+            'criteria'        => ProductRepo::getCriteria(),
+            'sortOptions'     => ProductRepo::getSortOptions(),
+            'products'        => ProductRepo::getInstance()->list($filters),
+            'categoryOptions' => ProductRepo::getCategoryOptions(),
         ];
 
         return inno_view('panel::products.index', $data);
@@ -159,6 +162,61 @@ class ProductController extends BaseController
             return back()->with('success', panel_trans('common.saved_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Bulk update products
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function bulkUpdate(Request $request): mixed
+    {
+        try {
+            $action = $request->input('action');
+            $ids    = $request->input('ids', []);
+            $data   = $request->input('data', []);
+
+            // Validate required parameters
+            if (empty($action) || empty($ids)) {
+                return json_fail(__('panel/common.invalid_parameters'));
+            }
+
+            // Validate action type
+            $allowedActions = ['price', 'categories', 'quantity', 'publish', 'unpublish'];
+            if (! in_array($action, $allowedActions)) {
+                return json_fail(__('panel/common.invalid_action'));
+            }
+
+            $result = ProductRepo::getInstance()->bulkUpdate($ids, $action, $data);
+
+            return json_success(__('panel/product.bulk_update_success', ['count' => $result['count']]));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Bulk destroy products
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function bulkDestroy(Request $request): mixed
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return json_fail(__('panel/common.select_items'));
+            }
+
+            $deletedCount = ProductRepo::getInstance()->bulkDestroy($ids);
+
+            return json_success(__('panel/product.bulk_delete_success', ['count' => $deletedCount]));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
         }
     }
 }

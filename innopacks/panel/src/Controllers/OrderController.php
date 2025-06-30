@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\StateMachineService;
+use InnoShop\Panel\Exports\OrdersBatchExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends BaseController
 {
@@ -41,7 +43,7 @@ class OrderController extends BaseController
      */
     public function show(Order $order): mixed
     {
-        $order->load(['items', 'fees']);
+        $order->load(['items', 'fees', 'payments']);
 
         return $this->form($order);
     }
@@ -53,7 +55,7 @@ class OrderController extends BaseController
      */
     public function edit(Order $order): mixed
     {
-        $order->load(['items', 'fees']);
+        $order->load(['items', 'fees', 'payments']);
 
         return $this->form($order);
     }
@@ -70,20 +72,7 @@ class OrderController extends BaseController
             'next_statuses' => StateMachineService::getInstance($order)->nextBackendStatuses(),
         ];
 
-        return inno_view('panel::orders.info', $data);
-    }
-
-    /**
-     * @param  Order  $order
-     * @return mixed
-     */
-    public function printing(Order $order): mixed
-    {
-        $data = [
-            'order' => $order,
-        ];
-
-        return inno_view('panel::orders.printing', $data);
+        return inno_view('panel::orders.detail', $data);
     }
 
     /**
@@ -102,6 +91,19 @@ class OrderController extends BaseController
     }
 
     /**
+     * @param  Order  $order
+     * @return mixed
+     */
+    public function printing(Order $order): mixed
+    {
+        $data = [
+            'order' => $order,
+        ];
+
+        return inno_view('panel::orders.printing', $data);
+    }
+
+    /**
      * @param  Request  $request
      * @param  Order  $order
      * @return mixed
@@ -117,5 +119,18 @@ class OrderController extends BaseController
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Export batch orders
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function exportBatch(Request $request)
+    {
+        $orders = OrderRepo::getInstance()->builder($request->all())->get();
+
+        return Excel::download(new OrdersBatchExport($orders), 'orders.xlsx');
     }
 }

@@ -53,8 +53,10 @@ class ItemRepo extends BaseRepo
     }
 
     /**
+     * Handle single order item data.
+     *
      * @param  Order  $order
-     * @param  $requestData
+     * @param  $requestData  array from cart or directly created.
      * @return array
      */
     private function handleItem(Order $order, $requestData): array

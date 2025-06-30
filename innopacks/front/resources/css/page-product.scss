@@ -301,4 +301,51 @@ body.page-product {
   .product-description {
     margin-bottom: 40px;
   }
+
+  // Bundle items styles
+  .bundle-items-display {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+  }
+  
+  .bundle-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .bundle-products {
+    gap: 10px;
+  }
+  
+  .bundle-product-item {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 8px;
+    margin: 2px 0;
+  }
+  
+  .bundle-product-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #212529;
+    line-height: 1.2;
+  }
+  
+  .bundle-separator {
+    font-weight: bold;
+    color: #6c757d;
+    font-size: 18px;
+  }
+  
+  .bundle-total-price {
+    color: #dc3545;
+    font-size: 16px;
+    border-top: 1px solid #dee2e6;
+    padding-top: 10px;
+  }
 }

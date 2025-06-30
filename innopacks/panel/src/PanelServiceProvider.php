@@ -29,11 +29,15 @@ class PanelServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (! has_install_lock()) {
+            return;
+        }
+
         load_settings();
+        $this->registerWebRoutes();
         $this->registerGuard();
         $this->registerUploadFileSystem();
         $this->registerCommands();
-        $this->registerWebRoutes();
         $this->loadTranslations();
         $this->loadViewTemplates();
         $this->loadViewComponents();
@@ -146,8 +150,11 @@ class PanelServiceProvider extends ServiceProvider
     {
         $this->loadViewComponentsAs('panel', [
             'data-criteria'          => Components\Data\Criteria::class,
+            'data-sorter'            => Components\Data\Sorter::class,
+            'data-info'              => Components\Data\DataInfo::class,
             'layout-sidebar'         => Components\Layout\Sidebar::class,
             'chart-line'             => Components\Charts\Line::class,
+            'chart-pie'              => Components\Charts\Pie::class,
             'form-codemirror'        => Components\Forms\Codemirror::class,
             'form-autocomplete-list' => Components\Forms\AutocompleteList::class,
         ]);

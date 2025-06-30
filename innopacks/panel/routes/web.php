@@ -27,6 +27,7 @@ Route::middleware(['admin_auth:admin'])
         Route::post('/translations/translate-text', [Controllers\TranslationController::class, 'translateText'])->name('translations.trans_text');
         Route::post('/translations/translate-html', [Controllers\TranslationController::class, 'translateHtml'])->name('translations.trans_html');
 
+        Route::get('/orders/export', [Controllers\OrderController::class, 'exportBatch'])->name('orders.export.batch');
         Route::resource('/orders', Controllers\OrderController::class);
         Route::get('/orders/{order}/printing', [Controllers\OrderController::class, 'printing'])->name('orders.printing');
         Route::put('/orders/{order}/status', [Controllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
@@ -37,6 +38,11 @@ Route::middleware(['admin_auth:admin'])
         Route::resource('/products', Controllers\ProductController::class);
         Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
         Route::get('/products/{product}/copy', [Controllers\ProductController::class, 'copy'])->name('products.copy');
+        Route::post('/products/bulk/update', [Controllers\ProductController::class, 'bulkUpdate'])->name('products.bulk.update');
+        Route::delete('/products/bulk/destroy', [Controllers\ProductController::class, 'bulkDestroy'])->name('products.destroy.batch');
+        Route::get('/product-selector', [Controllers\ProductSelectorController::class, 'selectorPage'])->name('panel.product.selector');
+
+        Route::put('/payments/{payment}/active', [Controllers\PaymentController::class, 'active'])->name('payments.active');
 
         Route::resource('/categories', Controllers\CategoryController::class);
         Route::put('/categories/{category}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');

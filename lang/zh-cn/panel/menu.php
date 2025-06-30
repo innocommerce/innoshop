@@ -65,4 +65,5 @@ return [
     'top_setting'        => '设置',
     'upload'             => '上传功能',
     'weight_classes'     => '重量单位',
+    'translations'       => '翻译管理',
 ];

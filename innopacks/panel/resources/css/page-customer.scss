@@ -1,0 +1,82 @@
+/**
+ * Customer page styles
+ */
+
+.page-customer {
+  .customer-info-cell {
+    min-width: 80px;
+    
+    .customer-info-wrapper {
+      display: flex;
+      align-items: center;
+      
+      .avatar-wrapper {
+        margin-right: 12px;
+        flex-shrink: 0;
+        
+        img {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+          border-radius: 50%;
+          border: 1px solid #dee2e6;
+        }
+      }
+      
+      .customer-details {
+        flex-grow: 1;
+        min-width: 0;
+        
+        .customer-name {
+          font-weight: 600;
+          color: #212529;
+          font-size: 14px;
+          line-height: 1.2;
+          margin-bottom: 2px;
+        }
+        
+        .customer-email {
+          color: #6c757d;
+          font-size: 12px;
+          line-height: 1.2;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+  
+  // 客户编辑表单样式
+  .customersmt {
+    margin-top: 58px;
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .page-customer {
+    .customer-info-cell {
+      min-width: 160px;
+      
+      .customer-info-wrapper {
+        .avatar-wrapper {
+          margin-right: 8px;
+          
+          img {
+            width: 32px;
+            height: 32px;
+          }
+        }
+        
+        .customer-details {
+          .customer-name {
+            font-size: 13px;
+          }
+          
+          .customer-email {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+} 

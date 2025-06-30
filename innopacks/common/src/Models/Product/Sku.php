@@ -11,7 +11,6 @@ namespace InnoShop\Common\Models\Product;
 
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Services\ProductPriceService;
@@ -41,14 +40,6 @@ class Sku extends BaseModel
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function variants(): HasMany
-    {
-        return $this->hasMany(SkuVariant::class, 'product_sku_id');
     }
 
     /**
@@ -184,5 +175,17 @@ class Sku extends BaseModel
         $data = fire_hook_filter('model.sku.variant_label_attribute', $data);
 
         return trim($data['vLabel']);
+    }
+
+    /**
+     * Get full SKU name (product name + variant label)
+     * @return string
+     */
+    public function getFullNameAttribute(): string
+    {
+        $productName  = $this->product->translation->name ?? '';
+        $variantLabel = $this->variant_label;
+
+        return $productName.($variantLabel ? ' ('.$variantLabel.')' : '');
     }
 }

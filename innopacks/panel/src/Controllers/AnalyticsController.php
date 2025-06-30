@@ -69,6 +69,7 @@ class AnalyticsController extends BaseController
     {
         $data = [
             'customer_latest_week' => CustomerRepo::getInstance()->getCustomerCountLatestWeek(),
+            'customer_source'      => CustomerRepo::getInstance()->getCustomerSourceData(),
         ];
 
         return inno_view('panel::analytics.customer', $data);

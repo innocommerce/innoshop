@@ -214,6 +214,18 @@ if (! function_exists('is_app')) {
     }
 }
 
+if (! function_exists('has_install_lock')) {
+    /**
+     * Check install lockfile.
+     *
+     * @return bool
+     */
+    function has_install_lock(): bool
+    {
+        return file_exists(storage_path('installed'));
+    }
+}
+
 if (! function_exists('installed')) {
     /**
      * Check installed by DB connection.
@@ -223,7 +235,7 @@ if (! function_exists('installed')) {
     function installed(): bool
     {
         try {
-            if (Schema::hasTable('settings') && file_exists(storage_path('installed'))) {
+            if (Schema::hasTable('settings') && has_install_lock()) {
                 return true;
             }
         } catch (Exception $e) {

@@ -16,10 +16,12 @@ use Illuminate\Notifications\Notifiable;
 use InnoShop\Common\Models\Order\Fee;
 use InnoShop\Common\Models\Order\History;
 use InnoShop\Common\Models\Order\Item;
+use InnoShop\Common\Models\Order\Payment;
 use InnoShop\Common\Models\Order\Shipment;
 use InnoShop\Common\Notifications\OrderNewNotification;
 use InnoShop\Common\Notifications\OrderUpdateNotification;
 use InnoShop\Common\Services\CartService;
+use InnoShop\Common\Services\OrderService;
 use InnoShop\Common\Services\StateMachineService;
 use Throwable;
 
@@ -116,6 +118,16 @@ class Order extends BaseModel
     }
 
     /**
+     * Order payments.
+     *
+     * @return HasMany
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'order_id', 'id');
+    }
+
+    /**
      * Calculate order subtotal.
      *
      * @return float
@@ -185,9 +197,18 @@ class Order extends BaseModel
      * @return void
      * @throws Throwable
      */
-    public function reorder(): void
+    public function addToCart(): void
     {
-        CartService::getInstance($this->customer_id)->reorder($this);
+        CartService::getInstance($this->customer_id)->addOrderToCart($this);
+    }
+
+    /**
+     * @return Order
+     * @throws Throwable
+     */
+    public function reorder(): Order
+    {
+        return OrderService::getInstance($this->id)->reorder();
     }
 
     /**

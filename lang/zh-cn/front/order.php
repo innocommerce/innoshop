@@ -49,4 +49,5 @@ return [
     'unpaid'          => '待支付',
     'unshipped'       => '待发货',
     'view'            => '查看',
+    'bundle_includes' => '组合包含',
 ];

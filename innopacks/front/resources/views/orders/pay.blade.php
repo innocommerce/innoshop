@@ -38,8 +38,8 @@
     </table>
 
     <div class="d-flex flex-column justify-content-center w-max-800 mx-auto">
-      @if(isset($payment_view))
-        {!! $payment_view !!}
+      @if(isset($view_path) && isset($view_data))
+        @include($view_path, $view_data)
       @endif
     </div>
   </div>

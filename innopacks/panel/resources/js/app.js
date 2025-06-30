@@ -1,11 +1,12 @@
-import "./bootstrap";
+import "./http";
 import "./bootstrap-validation";
 import "./autocomplete";
 import common from "./common";
 import dominateColor from "./dominate_color";
+import ProductSelector from './product_selector'; 
 
 const Config = {
-  base: document.querySelector("base").href,
+  base: document.querySelector("base")?.href || window.location.origin,
   editorLanguage: document.querySelector('meta[name="editor_language"]')?.content || "zh_cn",
   apiToken: $('meta[name="api-token"]').attr("content") || 
             $(window.parent.document).find('meta[name="api-token"]').attr("content"),
@@ -329,9 +330,12 @@ const Editor = {
   }
 };
 
+
+
 $(function() {
   window.dominateColor = dominateColor;
   window.inno.fileManagerIframe = FileManager.init;
+  window.inno.productSelectorIframe = ProductSelector.init;
 
   Utils.setupApiHeaders();
 

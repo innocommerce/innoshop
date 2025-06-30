@@ -1,11 +1,13 @@
 <div class="account-sidebar">
-  <div class="account-user">
+  <div class="account-user flex-column">
     <div class="profile"><img src="{{ image_resize($customer->avatar) }}" class="img-fluid"></div>
     <div class="account-name">
       <div class="fw-bold name">{{ __('front/account.hello') }}, {{ $customer->name }}</div>
       <div class="text-secondary email">{{ $customer->email }}</div>
     </div>
+    @hookinsert('front.account.sidebar.avatar.after', $customer)
   </div>
+
   <ul class="account-links">
     <li class="{{ equal_route_name('front.account.index') ? 'active' : '' }}">
       <a href="{{ account_route('index') }}"><i class="bi bi-person"></i>{{ front_trans('account.account') }}</a>

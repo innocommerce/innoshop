@@ -154,13 +154,18 @@ class PluginManager
             if (is_dir($path)) {
                 $packageJsonPath = $path.DIRECTORY_SEPARATOR.'config.json';
                 if (file_exists($packageJsonPath)) {
-                    $installed[$filename] = json_decode(file_get_contents($packageJsonPath), true);
+                    $config = json_decode(file_get_contents($packageJsonPath), true);
+                    if ($config) {
+                        $installed[$filename] = $config;
+                    }
                 }
             }
         }
         closedir($resource);
 
-        return $installed;
+        return collect($installed)->sortBy(function ($item) {
+            return strtolower($item['code'] ?? '');
+        })->all();
     }
 
     /**

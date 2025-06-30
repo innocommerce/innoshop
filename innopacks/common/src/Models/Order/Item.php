@@ -122,11 +122,31 @@ class Item extends BaseModel
      */
     public function getItemTypeLabelAttribute(): string
     {
+        if ($this->item_type == 'normal') {
+            return '';
+        } elseif ($this->item_type == 'bundle') {
+            return trans('panel/product.type_bundle');
+        }
+
         $data = [
             'label' => '',
             'item'  => $this,
         ];
 
         return fire_hook_filter('model.order.item.type_label', $data)['label'];
+    }
+
+    /**
+     * Get bundle items
+     *
+     * @return array
+     */
+    public function getBundleItemsAttribute()
+    {
+        if ($this->item_type === 'bundle' && isset($this->reference['bundles'])) {
+            return $this->reference['bundles'];
+        }
+
+        return [];
     }
 }

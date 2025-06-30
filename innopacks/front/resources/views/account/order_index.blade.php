@@ -31,6 +31,18 @@
             @endforeach
           </ul>
 
+          <form method="GET" action="{{ account_route('orders.index') }}" class="mb-3 d-flex" style="max-width: 400px;">
+            <input type="hidden" name="status" value="{{ request('status') }}">
+            <input
+                type="text"
+                name="number"
+                class="form-control me-2"
+                placeholder="{{ __('front/order.order_number') }}"
+                value="{{ request('number') }}"
+            >
+            <button class="btn btn-primary" type="submit">{{ __('front/common.search') }}</button>
+          </form>
+
           @if ($orders->count())
             <table class="table align-middle account-table-box table-response">
               <thead>
@@ -76,6 +88,7 @@
                       <button data-number="{{ $order->number }}"
                               class="btn btn-primary btn-sm btn-shipped">{{ __('front/account.signed') }}</button>
                     @endif
+                    @hookinsert('account.order_index.actions.after', $order)
                   </td>
                 </tr>
 

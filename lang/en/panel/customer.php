@@ -24,4 +24,5 @@ return [
     'mini_cost'      => 'Minimum Consumption Amount',
     'name'           => 'Name',
     'password'       => 'Password',
+    'balance_manage' => 'Balance Management',
 ];

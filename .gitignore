@@ -13,6 +13,7 @@
 Homestead.json
 Homestead.yaml
 auth.json
+package-lock.json
 npm-debug.log
 yarn-error.log
 webpack.mix.js

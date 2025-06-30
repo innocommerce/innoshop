@@ -464,6 +464,7 @@ return new class extends Migration
             $table->decimal('handling_fee')->comment('Handling Fee');
             $table->boolean('paid')->comment('Paid or not');
             $table->text('reference')->nullable()->comment('Proof of payment');
+            $table->string('certificate', 500)->nullable()->comment('Payment certificate image path');
             $table->timestamps();
         });
 
