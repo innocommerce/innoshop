@@ -31,6 +31,6 @@
 
 <script>
   $('.btn-bank-transfer').click(function () {
-    location.href = '{{ front_route('checkout.success') }}?order_number={{ $order->number }}'
+    location.href = '{{ front_route('payment.success') }}?order_number={{ $order->number }}'
   });
 </script>

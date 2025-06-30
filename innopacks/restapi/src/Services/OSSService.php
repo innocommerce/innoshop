@@ -4,6 +4,7 @@ namespace InnoShop\RestAPI\Services;
 
 use Aws\S3\S3Client;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class OSSService implements FileManagerInterface
 {
@@ -21,7 +22,7 @@ class OSSService implements FileManagerInterface
         $this->bucket    = plugin_setting('file_manager', 'bucket', '');
         $this->cdnDomain = plugin_setting('file_manager', 'cdn_domain', '');
 
-        \Log::info('OSS Service initialized with:', [
+        Log::info('OSS Service initialized with:', [
             'bucket'    => $this->bucket,
             'cdnDomain' => $this->cdnDomain,
             'endpoint'  => plugin_setting('file_manager', 'endpoint', ''),
@@ -63,7 +64,7 @@ class OSSService implements FileManagerInterface
         }
 
         if (! empty($missing)) {
-            \Log::warning('OSS configuration incomplete:', ['missing' => $missing]);
+            Log::warning('OSS configuration incomplete:', ['missing' => $missing]);
             throw new Exception('OSS 配置不完整，请检查以下配置：'.PHP_EOL.
                 implode(PHP_EOL, array_map(fn ($key) => "- {$key}", $missing)));
         }
@@ -83,7 +84,7 @@ class OSSService implements FileManagerInterface
             'bucket_endpoint'         => true,
         ]);
 
-        \Log::info('S3 Client initialized with:', [
+        Log::info('S3 Client initialized with:', [
             'region'   => plugin_setting('file_manager', 'region', ''),
             'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
             'key'      => plugin_setting('file_manager', 'key', '') ? '(set)' : '(not set)',
@@ -93,6 +94,8 @@ class OSSService implements FileManagerInterface
     public function uploadFile($file, $savePath, $originName): string
     {
         try {
+            // Security validation is handled by UploadService
+            // This method is for internal OSS operations only
             $key = $this->getObjectKey($savePath, $originName);
 
             $this->s3Client->putObject([
@@ -105,7 +108,7 @@ class OSSService implements FileManagerInterface
 
             return $this->getFileUrl($key);
         } catch (Exception $e) {
-            \Log::error('OSS upload failed:', [
+            Log::error('OSS upload failed:', [
                 'error' => $e->getMessage(),
                 'file'  => $originName,
             ]);
@@ -119,7 +122,7 @@ class OSSService implements FileManagerInterface
     public function getFiles(string $baseFolder, ?string $keyword = '', string $sort = 'name', string $order = 'asc', int $page = 1, int $perPage = 20): array
     {
         try {
-            \Log::info('OSS getFiles:', [
+            Log::info('OSS getFiles:', [
                 'baseFolder' => $baseFolder,
                 'bucket'     => $this->bucket,
             ]);
@@ -213,7 +216,7 @@ class OSSService implements FileManagerInterface
             $items  = array_slice($items, $offset, $perPage);
 
             // 添加调试日志
-            \Log::info('File pagination:', [
+            Log::info('File pagination:', [
                 'total_items'    => $total,
                 'page'           => $page,
                 'per_page'       => $perPage,
@@ -230,7 +233,7 @@ class OSSService implements FileManagerInterface
                 'success'        => true,
             ];
         } catch (Exception $e) {
-            \Log::error('OSS get files failed:', [
+            Log::error('OSS get files failed:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -302,14 +305,14 @@ class OSSService implements FileManagerInterface
             }
 
             // 添加调试日志
-            \Log::info('OSS directories:', [
+            Log::info('OSS directories:', [
                 'baseFolder'  => $baseFolder,
                 'directories' => $directories,
             ]);
 
             return $directories;
         } catch (Exception $e) {
-            \Log::error('OSS get directories failed:', [
+            Log::error('OSS get directories failed:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -332,7 +335,7 @@ class OSSService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            \Log::error('OSS create directory failed:', [
+            Log::error('OSS create directory failed:', [
                 'error' => $e->getMessage(),
                 'path'  => $path,
             ]);
@@ -364,7 +367,7 @@ class OSSService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            \Log::error('OSS move files failed:', [
+            Log::error('OSS move files failed:', [
                 'error'    => $e->getMessage(),
                 'files'    => $files,
                 'destPath' => $destPath,
@@ -390,7 +393,7 @@ class OSSService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            \Log::error('OSS copy files failed:', [
+            Log::error('OSS copy files failed:', [
                 'error'    => $e->getMessage(),
                 'files'    => $files,
                 'destPath' => $destPath,
@@ -420,7 +423,7 @@ class OSSService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            \Log::error('OSS delete files failed:', [
+            Log::error('OSS delete files failed:', [
                 'error' => $e->getMessage(),
                 'files' => $files,
             ]);
@@ -455,7 +458,7 @@ class OSSService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            \Log::error('OSS delete directory failed:', [
+            Log::error('OSS delete directory failed:', [
                 'error' => $e->getMessage(),
                 'path'  => $path,
             ]);
@@ -499,7 +502,7 @@ class OSSService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            \Log::error('OSS move directory failed:', [
+            Log::error('OSS move directory failed:', [
                 'error'      => $e->getMessage(),
                 'sourcePath' => $sourcePath,
                 'destPath'   => $destPath,
@@ -531,7 +534,7 @@ class OSSService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            \Log::error('OSS rename failed:', [
+            Log::error('OSS rename failed:', [
                 'error'      => $e->getMessage(),
                 'originPath' => $originPath,
                 'newPath'    => $newPath,
@@ -584,7 +587,7 @@ class OSSService implements FileManagerInterface
 
             return $files;
         } catch (Exception $e) {
-            \Log::error('OSS search failed:', [
+            Log::error('OSS search failed:', [
                 'error'   => $e->getMessage(),
                 'keyword' => $keyword,
             ]);
@@ -609,7 +612,7 @@ class OSSService implements FileManagerInterface
                 'url'           => $this->getFileUrl($path),
             ];
         } catch (Exception $e) {
-            \Log::error('OSS get file info failed:', [
+            Log::error('OSS get file info failed:', [
                 'error' => $e->getMessage(),
                 'path'  => $path,
             ]);

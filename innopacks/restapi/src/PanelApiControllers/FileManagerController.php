@@ -12,8 +12,8 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Panel\Controllers\BaseController;
-use InnoShop\Panel\Requests\UploadFileRequest;
 use InnoShop\RestAPI\Requests\FileRequest;
 use InnoShop\RestAPI\Services\FileManagerInterface;
 use InnoShop\RestAPI\Services\FileManagerService;
@@ -322,29 +322,6 @@ class FileManagerController extends BaseController
     }
 
     /**
-     * Export a folder as a zip file for download.
-     *
-     * @param  Request  $request
-     */
-    public function exportZip(Request $request): void
-    {
-        try {
-            $imagePath = $request->get('path');
-            $service   = $this->getService();
-            $zipFile   = $service->zipFolder($imagePath);
-
-            header('Content-Type: application/zip');
-            header('Content-Disposition: attachment; filename="'.basename($zipFile).'"');
-            header('Content-Length: '.filesize($zipFile));
-            readfile($zipFile);
-            unlink($zipFile);
-
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    /**
      * Upload a file to the specified directory.
      *
      * @param  UploadFileRequest  $request
@@ -440,7 +417,7 @@ class FileManagerController extends BaseController
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return json_error('获取存储配置失败: '.$e->getMessage());
+            return json_fail('获取存储配置失败: '.$e->getMessage());
         }
     }
 
@@ -520,7 +497,7 @@ class FileManagerController extends BaseController
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return json_error('存储配置保存失败: '.$e->getMessage());
+            return json_fail('存储配置保存失败: '.$e->getMessage());
         }
     }
 }

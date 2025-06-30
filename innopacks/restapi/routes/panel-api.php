@@ -88,7 +88,6 @@ Route::middleware($middlewares)->group(function () {
     Route::delete('/file_manager/directories', [PanelApiControllers\FileManagerController::class, 'destroyDirectories'])->name('file_manager.delete_directories');
     Route::post('/file_manager/move_directories', [PanelApiControllers\FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
     Route::post('/file_manager/move_files', [PanelApiControllers\FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
-    Route::get('/file_manager/export', [PanelApiControllers\FileManagerController::class, 'exportZip'])->name('file_manager.export');
     Route::post('/file_manager/copy_files', [PanelApiControllers\FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
 
     Route::get('/file_manager/storage_config', [\InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'getStorageConfig']);

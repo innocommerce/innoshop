@@ -7,11 +7,11 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\Front\Requests;
+namespace InnoShop\Common\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadImageRequest extends FormRequest
+class UploadFileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,15 +30,19 @@ class UploadImageRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (is_admin()) {
-            $rule = 'required|image|mimes:jpg,png,jpeg,gif,svg,webp|max:4096';
+        // Unified security policy - no dangerous file types including SVG
+        $allowedMimes = 'jpg,png,jpeg,gif,webp,zip,doc,docx,xls,xlsx,ppt,pptx,pdf,mp4';
+
+        // Dynamic file size limits based on context
+        if (request()->is('panel/*') || is_admin()) {
+            $maxSize = 8192; // 8MB for admin/panel
         } else {
-            $rule = 'required|image|mimes:jpg,png,jpeg,gif,webp|max:2048';
+            $maxSize = 2048; // 2MB for regular users
         }
 
         return [
-            'image' => $rule,
-            'type'  => 'required|alpha_dash',
+            'file' => "required|file|mimes:{$allowedMimes}|max:{$maxSize}",
+            'type' => 'required|alpha_dash',
         ];
     }
 }

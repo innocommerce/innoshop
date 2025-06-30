@@ -9,8 +9,9 @@
 
 namespace InnoShop\Panel\Controllers;
 
-use InnoShop\Panel\Requests\UploadFileRequest;
-use InnoShop\Panel\Requests\UploadImageRequest;
+use InnoShop\Common\Requests\UploadFileRequest;
+use InnoShop\Common\Requests\UploadImageRequest;
+use InnoShop\RestAPI\Services\UploadService;
 
 class UploadController
 {
@@ -22,17 +23,13 @@ class UploadController
      */
     public function images(UploadImageRequest $request): mixed
     {
-        $image    = $request->file('image');
-        $type     = $request->file('type', 'common');
-        $filePath = $image->store("/{$type}", 'catalog');
-        $realPath = "catalog/$filePath";
+        $image = $request->file('image');
+        $type  = $request->file('type', 'common');
 
-        $data = [
-            'url'   => asset($realPath),
-            'value' => $realPath,
-        ];
+        // Use unified upload service with security validation
+        $data = UploadService::getInstance()->uploadForPanel($image, $type);
 
-        return json_success('上传成功', $data);
+        return json_success(trans('common/upload.upload_success'), $data);
     }
 
     /**
@@ -43,16 +40,12 @@ class UploadController
      */
     public function files(UploadFileRequest $request): mixed
     {
-        $file     = $request->file('file');
-        $type     = $request->file('type', 'files');
-        $filePath = $file->store("/{$type}", 'catalog');
-        $realPath = "catalog/$filePath";
+        $file = $request->file('file');
+        $type = $request->file('type', 'files');
 
-        $data = [
-            'url'   => asset($realPath),
-            'value' => $realPath,
-        ];
+        // Use unified upload service with security validation
+        $data = UploadService::getInstance()->uploadForPanel($file, $type);
 
-        return json_success('上传成功', $data);
+        return json_success(trans('common/upload.upload_success'), $data);
     }
 }

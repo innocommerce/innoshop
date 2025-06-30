@@ -92,7 +92,7 @@
         <div class="col-md-6">
           <div class="mb-4">
             <x-common-form-switch-radio title="{{ __('panel/setting.disable_online_order') }}" name="disable_online_order" required
-                                    value="{{ old('disable_online_order', system_setting('disable_online_order', true)) }}"/>
+                                    value="{{ old('disable_online_order', system_setting('disable_online_order', false)) }}"/>
             <div class="text-secondary"><small>{{ __('panel/setting.disable_online_order_desc') }}</small></div>
           </div>
         </div>

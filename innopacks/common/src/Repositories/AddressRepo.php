@@ -44,15 +44,13 @@ class AddressRepo extends BaseRepo
      */
     public function builder(array $filters = []): Builder
     {
-        $builder    = Address::query();
-        $customerID = $filters['customer_id'] ?? 0;
-        if ($customerID) {
-            $builder->where('customer_id', $customerID);
+        $builder = Address::query();
+        if (isset($filters['customer_id'])) {
+            $builder->where('customer_id', (int) $filters['customer_id']);
         }
 
-        $guestID = $filters['guest_id'] ?? '';
-        if (empty($customerID) && $guestID) {
-            $builder->where('guest_id', $guestID);
+        if (isset($filters['guest_id'])) {
+            $builder->where('guest_id', (int) $filters['guest_id']);
         }
 
         return fire_hook_filter('repo.address.builder', $builder);

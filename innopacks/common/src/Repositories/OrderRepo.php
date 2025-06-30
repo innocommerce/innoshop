@@ -206,10 +206,12 @@ class OrderRepo extends BaseRepo
             $customer = Customer::query()->find($customerID);
         }
 
+        $guestID = $requestData['guest_id'] ?? '';
+
         $shippingAddressID = (int) $requestData['shipping_address_id'];
         $billingAddressID  = (int) $requestData['billing_address_id'];
-        $shippingAddress   = $shippingAddressID ? Address::query()->findOrFail($shippingAddressID) : null;
-        $billingAddress    = $billingAddressID ? Address::query()->findOrFail($billingAddressID) : null;
+        $shippingAddress   = $this->getValidatedAddress($shippingAddressID, $customerID, $guestID);
+        $billingAddress    = $this->getValidatedAddress($billingAddressID, $customerID, $guestID);
 
         $saData = $shippingAddress ? (new AddressListItem($shippingAddress))->jsonSerialize() : [];
         $baData = $billingAddress ? (new AddressListItem($billingAddress))->jsonSerialize() : [];
@@ -273,6 +275,33 @@ class OrderRepo extends BaseRepo
         }
 
         return $this->builder(['number' => $orderNumber])->first();
+    }
+
+    /**
+     * Get validated address by ID and customer/guest ownership
+     *
+     * @param  int  $addressID
+     * @param  int  $customerID
+     * @param  string  $guestID
+     * @return Address|null
+     */
+    private function getValidatedAddress(int $addressID, int $customerID, string $guestID = ''): ?Address
+    {
+        if (! $addressID) {
+            return null;
+        }
+
+        $query = Address::query()->where('id', $addressID);
+
+        if ($customerID) {
+            $query->where('customer_id', $customerID);
+        } elseif ($guestID) {
+            $query->where('customer_id', 0)->where('guest_id', $guestID);
+        } else {
+            throw new Exception('Address validation requires either customer_id or guest_id');
+        }
+
+        return $query->firstOrFail();
     }
 
     /**

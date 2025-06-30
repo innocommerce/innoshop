@@ -79,6 +79,10 @@ class ReviewController extends BaseController
     public function destroy(Review $review): mixed
     {
         try {
+            if ($review->customer_id !== current_customer_id()) {
+                return json_fail('Unauthorized: You can only delete your own reviews', null, 403);
+            }
+
             $review->delete();
 
             return delete_json_success();

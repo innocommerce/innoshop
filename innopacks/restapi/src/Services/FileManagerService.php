@@ -10,8 +10,9 @@
 namespace InnoShop\RestAPI\Services;
 
 use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use InnoShop\Common\Services\FileSecurityValidator;
 
 class FileManagerService implements FileManagerInterface
 {
@@ -35,6 +36,9 @@ class FileManagerService implements FileManagerInterface
      */
     public function getDirectories(string $baseFolder = '/'): array
     {
+        // Validate path security
+        $baseFolder = FileSecurityValidator::validateDirectoryPath($baseFolder);
+
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
         $directories     = glob("$currentBasePath/*", GLOB_ONLYDIR);
 
@@ -69,6 +73,9 @@ class FileManagerService implements FileManagerInterface
      */
     public function getFiles(string $baseFolder, string $keyword = '', string $sort = 'created', string $order = 'desc', int $page = 1, int $perPage = 20): array
     {
+        // Validate path security
+        $baseFolder = FileSecurityValidator::validateDirectoryPath($baseFolder);
+
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
 
         $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
@@ -155,6 +162,9 @@ class FileManagerService implements FileManagerInterface
     public function createDirectory(string $path): bool
     {
         try {
+            // Validate path security
+            $path = FileSecurityValidator::validateDirectoryPath($path);
+
             $folderPath = $this->getFullPath($path);
             if (is_dir($folderPath)) {
                 throw new Exception(trans('panel/file_manager.directory_already_exist'));
@@ -248,6 +258,16 @@ class FileManagerService implements FileManagerInterface
                 throw new Exception(trans('panel/file_manager.no_files_selected'));
             }
 
+            // Validate destination path security
+            $destPath = FileSecurityValidator::validateDirectoryPath($destPath);
+
+            // Validate all source file paths
+            $validatedFiles = [];
+            foreach ($files as $file) {
+                $validatedFiles[] = FileSecurityValidator::validateDirectoryPath($file);
+            }
+            $files = $validatedFiles;
+
             $destFullPath = $this->getFullPath($destPath);
             if (! is_dir($destFullPath)) {
                 throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
@@ -300,28 +320,6 @@ class FileManagerService implements FileManagerInterface
     }
 
     /**
-     * Zips a folder and returns the zip path.
-     *
-     * @param  string  $imagePath  Path to the folder to zip
-     * @return string Path to the created zip file
-     */
-    public function zipFolder(string $imagePath): string
-    {
-        $realPath = $this->fileBasePath.$imagePath;
-        $zipName  = basename($realPath).'-'.date('Ymd').'.zip';
-        $zipPath  = storage_path('app/public/temp/'.$zipName);
-
-        // Ensure temp directory exists
-        if (! is_dir(dirname($zipPath))) {
-            mkdir(dirname($zipPath), 0755, true);
-        }
-
-        zip_folder($realPath, $zipPath);
-
-        return $zipPath;
-    }
-
-    /**
      * Deletes a file or folder.
      *
      * @param  string  $path  Path to the file or folder to delete
@@ -331,6 +329,9 @@ class FileManagerService implements FileManagerInterface
     public function deleteDirectoryOrFile(string $path): bool
     {
         try {
+            // Validate path security
+            $path = FileSecurityValidator::validateDirectoryPath($path);
+
             $fullPath = $this->getFullPath($path);
 
             Log::info('Deleting path:', [
@@ -437,6 +438,19 @@ class FileManagerService implements FileManagerInterface
     public function updateName(string $originPath, string $newPath): bool
     {
         try {
+            // Validate path security (防止路径遍历)
+            $originPath = FileSecurityValidator::validateDirectoryPath($originPath);
+            $newPath    = FileSecurityValidator::validateDirectoryPath($newPath);
+
+            // Validate new file name security (防止文件名包含路径分隔符等)
+            $newFileName = basename($newPath);
+            FileSecurityValidator::validateFileName($newFileName);
+
+            // Validate file extension if it's a file rename (防止危险扩展名)
+            if (pathinfo($newFileName, PATHINFO_EXTENSION)) {
+                FileSecurityValidator::validateFileExtension($newFileName);
+            }
+
             $originFullPath = $this->getFullPath($originPath);
             $newFullPath    = $this->getFullPath($newPath);
 
@@ -481,6 +495,12 @@ class FileManagerService implements FileManagerInterface
      */
     public function uploadFile(UploadedFile $file, string $savePath, string $originName): string
     {
+        // Validate file security (包括文件名和扩展名安全性)
+        FileSecurityValidator::validateFile($originName);
+
+        // Validate save path security
+        $savePath = FileSecurityValidator::validateDirectoryPath($savePath);
+
         $originName = $this->getUniqueFileName($savePath, $originName);
         $filePath   = $file->storeAs($savePath, $originName, 'media');
 
@@ -589,6 +609,16 @@ class FileManagerService implements FileManagerInterface
             if (empty($files)) {
                 throw new Exception(trans('panel/file_manager.no_files_selected'));
             }
+
+            // Validate destination path security
+            $destPath = FileSecurityValidator::validateDirectoryPath($destPath);
+
+            // Validate all source file paths
+            $validatedFiles = [];
+            foreach ($files as $file) {
+                $validatedFiles[] = FileSecurityValidator::validateDirectoryPath($file);
+            }
+            $files = $validatedFiles;
 
             $destFullPath = $this->getFullPath($destPath);
             if (! is_dir($destFullPath)) {

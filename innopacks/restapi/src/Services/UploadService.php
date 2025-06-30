@@ -9,25 +9,29 @@
 
 namespace InnoShop\RestAPI\Services;
 
-use InnoShop\Front\Requests\UploadDocRequest;
-use InnoShop\Front\Requests\UploadFileRequest;
-use InnoShop\Front\Requests\UploadImageRequest;
+use InnoShop\Common\Requests\UploadFileRequest;
+use InnoShop\Common\Requests\UploadImageRequest;
+use InnoShop\Common\Services\FileSecurityValidator;
 use InnoShop\Front\Services\BaseService;
 
 class UploadService extends BaseService
 {
     /**
-     * Upload images.
+     * Generic upload method for different file types and storage disks
      *
-     * @param  UploadImageRequest  $request
+     * @param  mixed  $file  The uploaded file
+     * @param  string  $type  File type/directory
+     * @param  string  $disk  Storage disk name
+     * @param  string  $pathPrefix  Path prefix for the final URL
      * @return array
      */
-    public function images(UploadImageRequest $request): array
+    public function uploadFile($file, string $type = 'common', string $disk = 'upload', string $pathPrefix = 'static/uploads'): array
     {
-        $image    = $request->file('image');
-        $type     = $request->file('type', 'common');
-        $filePath = $image->store("/{$type}", 'upload');
-        $realPath = "static/uploads/$filePath";
+        // Unified security validation - this is the single point of validation
+        FileSecurityValidator::validateFile($file->getClientOriginalName());
+
+        $filePath = $file->store("/{$type}", $disk);
+        $realPath = "{$pathPrefix}/$filePath";
 
         return [
             'url'   => asset($realPath),
@@ -36,22 +40,43 @@ class UploadService extends BaseService
     }
 
     /**
-     * Upload document files
+     * Upload for Panel (using catalog disk)
      *
-     * @param  UploadDocRequest  $request
+     * @param  mixed  $file  The uploaded file
+     * @param  string  $type  File type/directory
      * @return array
      */
-    public function docs(UploadDocRequest $request): array
+    public function uploadForPanel($file, string $type = 'common'): array
     {
-        $file     = $request->file('file');
-        $type     = $request->file('type', 'docs');
-        $filePath = $file->store("/{$type}", 'upload');
-        $realPath = "static/uploads/$filePath";
+        return $this->uploadFile($file, $type, 'catalog', 'catalog');
+    }
 
-        return [
-            'url'   => asset($realPath),
-            'value' => $realPath,
-        ];
+    /**
+     * Upload images.
+     *
+     * @param  UploadImageRequest  $request
+     * @return array
+     */
+    public function images(UploadImageRequest $request): array
+    {
+        $image = $request->file('image');
+        $type  = $request->file('type', 'common');
+
+        return $this->uploadFile($image, $type);
+    }
+
+    /**
+     * Upload document files
+     *
+     * @param  UploadFileRequest  $request
+     * @return array
+     */
+    public function docs(UploadFileRequest $request): array
+    {
+        $file = $request->file('file');
+        $type = $request->file('type', 'docs');
+
+        return $this->uploadFile($file, $type);
     }
 
     /**
@@ -62,14 +87,9 @@ class UploadService extends BaseService
      */
     public function files(UploadFileRequest $request): array
     {
-        $file     = $request->file('file');
-        $type     = $request->file('type', 'files');
-        $filePath = $file->store("/{$type}", 'upload');
-        $realPath = "static/uploads/$filePath";
+        $file = $request->file('file');
+        $type = $request->file('type', 'files');
 
-        return [
-            'url'   => asset($realPath),
-            'value' => $realPath,
-        ];
+        return $this->uploadFile($file, $type);
     }
 }

@@ -9,8 +9,8 @@
 
 namespace InnoShop\RestAPI\FrontApiControllers;
 
-use InnoShop\Front\Requests\UploadFileRequest;
-use InnoShop\Front\Requests\UploadImageRequest;
+use InnoShop\Common\Requests\UploadFileRequest;
+use InnoShop\Common\Requests\UploadImageRequest;
 use InnoShop\RestAPI\Services\UploadService;
 
 class UploadController

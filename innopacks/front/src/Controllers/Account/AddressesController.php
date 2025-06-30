@@ -59,8 +59,14 @@ class AddressesController extends Controller
      */
     public function update(Request $request, Address $address): mixed
     {
+        $currentCustomerId = current_customer_id();
+
+        if ($address->customer_id !== $currentCustomerId) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
         $data                = $request->all();
-        $data['customer_id'] = current_customer_id();
+        $data['customer_id'] = $currentCustomerId;
 
         $address = AddressRepo::getInstance()->update($address, $data);
         $result  = new AddressListItem($address);
@@ -74,6 +80,12 @@ class AddressesController extends Controller
      */
     public function destroy(Address $address): mixed
     {
+        $currentCustomerId = current_customer_id();
+
+        if ($address->customer_id !== $currentCustomerId) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
         AddressRepo::getInstance()->destroy($address);
 
         return delete_json_success();

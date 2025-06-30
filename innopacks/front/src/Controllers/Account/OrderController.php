@@ -47,6 +47,11 @@ class OrderController extends Controller
     public function numberShow(int $number): mixed
     {
         $order = OrderRepo::getInstance()->getOrderByNumber($number);
+
+        if ($order->customer_id !== current_customer_id()) {
+            abort(403, 'Unauthorized access to order details');
+        }
+
         $order->load(['items', 'fees']);
         $data = [
             'order'       => $order,
@@ -66,6 +71,11 @@ class OrderController extends Controller
     public function recart(int $number): mixed
     {
         $order = OrderRepo::getInstance()->getOrderByNumber($number);
+
+        if ($order->customer_id !== current_customer_id()) {
+            abort(403, 'Unauthorized access to order');
+        }
+
         foreach ($order->items as $item) {
             CartService::getInstance()->addCart([
                 'sku_code' => $item->product_sku,

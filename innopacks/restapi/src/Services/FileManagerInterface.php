@@ -2,7 +2,7 @@
 
 namespace InnoShop\RestAPI\Services;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Http\UploadedFile;
 
 interface FileManagerInterface
 {
