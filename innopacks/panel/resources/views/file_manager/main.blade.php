@@ -1494,7 +1494,7 @@
                               预览
                             </div>
                             <el-image :ref="'image-' + file.id" :src="file.url" :alt="file.name"
-                              fit="contain" :preview-src-list="[file.url]">
+                              fit="contain" :preview-src-list="[file.origin_url || file.url]">
                             </el-image>
                           </div>
                         </template>
@@ -1968,8 +1968,9 @@
                 ...file,
                 id: file.id || file.path, // 确保每个文件都有唯一标识
                 selected: false,
-                preview_url: file.url, // 保存预览URL
-                url: file.url // 实际文件路径
+                preview_url: file.url, // 保存预览URL（缩略图）
+                url: file.url, // 缩略图URL（用于列表显示）
+                origin_url: file.origin_url // 原图URL（用于插入编辑器）
               }));
 
               // 更新分页信息

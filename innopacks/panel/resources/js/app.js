@@ -3,12 +3,12 @@ import "./bootstrap-validation";
 import "./autocomplete";
 import common from "./common";
 import dominateColor from "./dominate_color";
-import ProductSelector from './product_selector'; 
+import ProductSelector from './product_selector';
 
 const Config = {
   base: document.querySelector("base")?.href || window.location.origin,
   editorLanguage: document.querySelector('meta[name="editor_language"]')?.content || "zh_cn",
-  apiToken: $('meta[name="api-token"]').attr("content") || 
+  apiToken: $('meta[name="api-token"]').attr("content") ||
             $(window.parent.document).find('meta[name="api-token"]').attr("content"),
   csrfToken: $('meta[name="csrf-token"]').attr("content"),
   locale: $('html').attr("lang"),
@@ -275,8 +275,9 @@ const Editor = {
       onAction: () => {
         FileManager.init(
           (file) => {
-            if (file.url) {
-              ed.insertContent(`<img src="${file.url}" class="img-fluid" />`);
+            const imageUrl = file.origin_url || file.url;
+            if (imageUrl) {
+              ed.insertContent(`<img src="${imageUrl}" class="img-fluid" alt="${file.name || ''}" />`);
             }
           },
           { type: "image", multiple: false }
@@ -311,8 +312,8 @@ const Editor = {
             }
           })
           .catch((error) => {
-            const errorMessage = error.response?.data?.message || 
-                               error.response?.data?.error || 
+            const errorMessage = error.response?.data?.message ||
+                               error.response?.data?.error ||
                                error.message;
             layer.msg(errorMessage, { icon: 2 });
           })
