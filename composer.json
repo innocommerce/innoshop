@@ -23,6 +23,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.10",
+        "maatwebsite/excel": "^3.1",
         "mobiledetect/mobiledetectlib": "^4.8",
         "nelexa/zip": "^4.0",
         "phpunit/php-timer": "^7.0",
