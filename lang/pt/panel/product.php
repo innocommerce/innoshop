@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'Adicionar itens combinados',
     'add_variant'              => 'Adicionar Variação',
     'add_variant_value'        => 'Adicionar Valor da Variação',
     'auto_translate'           => 'Tradução automática disponível',
     'basic_information'        => 'Informações Básicas',
     'brand'                    => 'Marca',
     'bulk_delete_confirm'      => 'Tem certeza de que deseja remover os itens selecionados em massa?',
+    'bulk_delete_success'      => 'Removido com sucesso :count items',
     'bulk_edit'                => 'Modificação em lote',
     'bulk_fill'                => 'Preencha com um clique',
     'bulk_fill_apply'          => 'aplicação',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'Definir preços de commodities em lote',
     'bulk_set_quantity'        => 'Configuração em massa de inventário de mercadorias',
     'bulk_settings'            => 'Configuração em lote',
+    'bulk_update_success'      => 'Atualizado com sucesso :count items',
     'bundle_items'             => 'Conteúdo da combinação',
     'bundle_items_tab'         => 'Conteúdo da combinação',
     'bundle_product'           => 'produtos',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'Classe de imposto',
     'title'                    => 'Título do produto',
     'translate'                => 'Tradução',
+    'type'                     => 'Tipo de mercadoria',
     'type_bundle'              => 'Combinação de mercadorias',
     'type_card'                => 'Disco de malha carmi',
     'type_hint'                => 'O tipo de mercadoria não pode ser alterado após a criação',

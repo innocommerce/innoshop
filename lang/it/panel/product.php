@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'Aggiunta di voci combinate',
     'add_variant'              => 'Aggiungi variante',
     'add_variant_value'        => 'Aggiungi valore variante',
     'auto_translate'           => 'Traduzione automatica',
     'basic_information'        => 'Informazioni di Base',
     'brand'                    => 'Marche',
     'bulk_delete_confirm'      => 'Indicare con certezza se le partite selezionate devono essere cancellate in lotti.',
+    'bulk_delete_success'      => 'cancellare',
     'bulk_edit'                => 'Modifica del lotto',
     'bulk_fill'                => 'Da compilare',
     'bulk_fill_apply'          => 'applicazioni',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'Prezzi all’ingrosso',
     'bulk_set_quantity'        => 'Le masse formano le scorte di beni',
     'bulk_settings'            => 'Impostazione dei lotti',
+    'bulk_update_success'      => '(’) rubrica «contabilità»',
     'bundle_items'             => 'Contenuto combinato',
     'bundle_items_tab'         => 'Contenuto combinato',
     'bundle_product'           => 'beni',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'Classe fiscale',
     'title'                    => 'Titolo del prodotto',
     'translate'                => 'traduzione',
+    'type'                     => 'Tipo di merce',
     'type_bundle'              => 'Prodotti combinati',
     'type_card'                => 'Rete a scheda',
     'type_hint'                => 'Non modificabile dopo la creazione del tipo di bene',

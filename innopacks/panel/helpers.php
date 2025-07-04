@@ -7,7 +7,6 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Str;
 use InnoShop\Panel\Repositories\LocaleRepo;
 use InnoShop\Panel\Services\TranslatorService;
@@ -148,7 +147,7 @@ if (! function_exists('current_admin')) {
     /**
      * get current admin user.
      */
-    function current_admin(): ?Authenticatable
+    function current_admin(): mixed
     {
         return auth('admin')->user();
     }

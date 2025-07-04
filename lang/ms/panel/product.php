@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'Tambah item komposit',
     'add_variant'              => 'Tambah Varian',
     'add_variant_value'        => 'Tambah Nilai Varian',
     'auto_translate'           => 'Terjemahan automatik',
     'basic_information'        => 'Maklumat Asas',
     'brand'                    => 'Merek',
     'bulk_delete_confirm'      => 'Adakah anda pasti anda mahu memadamkan item yang dipilih secara pukal?',
+    'bulk_delete_success'      => 'Berjaya dipadamkan :count item',
     'bulk_edit'                => 'Penyuntingan pukal',
     'bulk_fill'                => 'Pengisian satu klik',
     'bulk_fill_apply'          => 'Memohon',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'Tetapkan harga secara pukal',
     'bulk_set_quantity'        => 'Sediakan inventori produk secara pukal',
     'bulk_settings'            => 'Tetapan kumpulan',
+    'bulk_update_success'      => 'Berjaya dikemas kini :count item',
     'bundle_items'             => 'Gabungkan kandungan',
     'bundle_items_tab'         => 'Gabungkan kandungan',
     'bundle_product'           => 'Komoditi',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'Kelas Cukai',
     'title'                    => 'Tajuk Produk',
     'translate'                => 'Penterjemahan',
+    'type'                     => 'Jenis produk',
     'type_bundle'              => 'Produk gabungan',
     'type_card'                => 'Cakera rangkaian Kami',
     'type_hint'                => 'Sebaik sahaja jenis produk telah dibuat, ia tidak boleh diubah',

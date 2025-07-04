@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'Thêm các mục kết hợp',
     'add_variant'              => 'thêm biến thể',
     'add_variant_value'        => 'thêm giá trị biến thể',
     'auto_translate'           => 'Tự động dịch',
     'basic_information'        => 'Thông tin cơ bản',
     'brand'                    => 'thương hiệu',
     'bulk_delete_confirm'      => 'Bạn có chắc là bạn muốn loại bỏ hàng hóa được chọn với số lượng lớn?',
+    'bulk_delete_success'      => 'Thành công xoá: phần đếm hàng hóa',
     'bulk_edit'                => 'Sửa đổi số lượng lớn',
     'bulk_fill'                => 'Một phím để điền vào',
     'bulk_fill_apply'          => 'Ứng dụng',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'Đặt giá hàng hóa với số lượng lớn',
     'bulk_set_quantity'        => 'Thiết lập hàng hóa hàng hóa hàng loạt',
     'bulk_settings'            => 'Thiết lập hàng loạt',
+    'bulk_update_success'      => 'Cập nhật thành công: đếm các mặt hàng',
     'bundle_items'             => 'Nội dung kết hợp',
     'bundle_items_tab'         => 'Nội dung kết hợp',
     'bundle_product'           => 'Hàng hóa',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'lớp thuế',
     'title'                    => 'tiêu đề sản phẩm',
     'translate'                => 'Dịch thuật',
+    'type'                     => 'Loại hàng hóa',
     'type_bundle'              => 'Sự kết hợp của hàng hóa',
     'type_card'                => 'Kamikaze đĩa',
     'type_hint'                => 'Không thể thay đổi kiểu hàng hóa khi được tạo ra',

@@ -10,6 +10,7 @@
 namespace InnoShop\Front\Controllers\Account;
 
 use InnoShop\Common\Repositories\Customer\TransactionRepo;
+use InnoShop\Common\Repositories\Customer\WithdrawalRepo;
 use InnoShop\RestAPI\FrontApiControllers\BaseController;
 
 class TransactionController extends BaseController
@@ -28,7 +29,7 @@ class TransactionController extends BaseController
 
         $customer->syncBalance();
         $balance = $customer->balance;
-        $frozen  = TransactionRepo::getInstance()->getAmountByType('frozen', $customerID);
+        $frozen  = (new WithdrawalRepo)->getFrozenAmount($customerID);
         $data    = [
             'balance'      => $balance,
             'frozen'       => $frozen,

@@ -12,4 +12,5 @@ return [
     'recharge'    => 'Recharge',
     'refund'      => 'Refund',
     'withdraw'    => 'Withdraw',
+    'commission'  => 'Commission',
 ];

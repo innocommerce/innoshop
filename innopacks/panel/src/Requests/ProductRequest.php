@@ -43,6 +43,7 @@ class ProductRequest extends FormRequest
             'slug'       => $slugRule,
             'active'     => 'bool',
             'type'       => 'required|in:normal,bundle,virtual,card',
+            'weight'     => 'nullable|numeric|min:0',
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.name"    => 'required',
@@ -70,8 +71,9 @@ class ProductRequest extends FormRequest
         $defaultLocale = setting_locale_code();
 
         return [
-            'slug' => panel_trans('common.slug'),
-            'type' => panel_trans('product.type'),
+            'slug'   => panel_trans('common.slug'),
+            'type'   => panel_trans('product.type'),
+            'weight' => panel_trans('product.weight'),
 
             "translations.$defaultLocale.locale"  => trans('panel/product.locale'),
             "translations.$defaultLocale.name"    => trans('panel/product.name'),

@@ -35,12 +35,12 @@ Route::middleware(['admin_auth:admin'])
         Route::resource('/order_returns', Controllers\OrderReturnController::class);
         Route::put('/order_returns/{order_return}/status', [Controllers\OrderReturnController::class, 'changeStatus'])->name('order_returns.change_status');
 
-        Route::resource('/products', Controllers\ProductController::class);
         Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
         Route::get('/products/{product}/copy', [Controllers\ProductController::class, 'copy'])->name('products.copy');
         Route::post('/products/bulk/update', [Controllers\ProductController::class, 'bulkUpdate'])->name('products.bulk.update');
         Route::delete('/products/bulk/destroy', [Controllers\ProductController::class, 'bulkDestroy'])->name('products.destroy.batch');
-        Route::get('/product-selector', [Controllers\ProductSelectorController::class, 'selectorPage'])->name('panel.product.selector');
+        Route::get('/products/selector', [Controllers\ProductSelectorController::class, 'selectorPage'])->name('products.selector');
+        Route::resource('/products', Controllers\ProductController::class);
 
         Route::put('/payments/{payment}/active', [Controllers\PaymentController::class, 'active'])->name('payments.active');
 
@@ -79,6 +79,10 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/transactions/create', [Controllers\TransactionController::class, 'create'])->name('transactions.create');
         Route::post('/transactions', [Controllers\TransactionController::class, 'store'])->name('transactions.store');
         Route::get('/transactions/{transaction}', [Controllers\TransactionController::class, 'show'])->name('transactions.show');
+
+        Route::get('/withdrawals', [Controllers\CustomerWithdrawalController::class, 'index'])->name('withdrawals.index');
+        Route::get('/withdrawals/{withdrawal}', [Controllers\CustomerWithdrawalController::class, 'show'])->name('withdrawals.show');
+        Route::put('/withdrawals/{withdrawal}/status', [Controllers\CustomerWithdrawalController::class, 'changeStatus'])->name('withdrawals.change_status');
 
         Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
         Route::get('/social', [Controllers\SocialController::class, 'index'])->name('socials.index');

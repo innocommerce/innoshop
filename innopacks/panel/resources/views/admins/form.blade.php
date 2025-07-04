@@ -23,6 +23,8 @@
         <x-common-form-input title="{{ __('panel/admin.email') }}" name="email" value="{{ old('email', $admin->email) }}" required/>
 
         <x-common-form-select title="{{ __('panel/admin.system_language') }}" name="locale" key="code" label="name" :options="locales()->toArray()" :empty-option="false" :value="old('locale', $admin->locale)" required/>
+        
+        @hookinsert('panel.admins.form.language.after') 
 
         <x-panel::form.row title="{{ __('panel/admin.roles') }}" :required="true">
           <div class="form-control px-0 border-0 d-flex flex-wrap">

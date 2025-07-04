@@ -10,7 +10,6 @@
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Detection\Exception\MobileDetectException;
 use Detection\MobileDetect;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -265,7 +264,7 @@ if (! function_exists('current_customer')) {
     /**
      * Get current customer.
      */
-    function current_customer(): ?Authenticatable
+    function current_customer(): mixed
     {
         return auth('customer')->user();
     }
@@ -876,13 +875,23 @@ if (! function_exists('equal_route_name')) {
     /**
      * Check route is current
      *
-     * @param  $routeName
+     * @param  string|array  $routeName
+     * @param  string|null  $prefix  Remove specific prefix from route name
      * @return bool
      */
-    function equal_route_name($routeName): bool
+    function equal_route_name($routeName, ?string $prefix = null): bool
     {
         $currentRouteName = Route::getCurrentRoute()->getName();
-        $currentRouteName = str_replace(front_locale_code().'.', '', $currentRouteName);
+
+        // Default prefix removal (locale code)
+        $defaultPrefix    = front_locale_code().'.';
+        $currentRouteName = str_replace($defaultPrefix, '', $currentRouteName);
+
+        // Remove additional prefix if provided
+        if ($prefix !== null) {
+            $currentRouteName = str_replace($prefix, '', $currentRouteName);
+        }
+
         if (is_string($routeName)) {
             return $currentRouteName == $routeName;
         } elseif (is_array($routeName)) {
@@ -890,6 +899,20 @@ if (! function_exists('equal_route_name')) {
         }
 
         return false;
+    }
+}
+
+if (! function_exists('equal_account_route_name')) {
+    /**
+     * Check account route is current
+     * This is a shorthand for equal_route_name() with account prefix
+     *
+     * @param  string|array  $routeName
+     * @return bool
+     */
+    function equal_account_route_name($routeName): bool
+    {
+        return equal_route_name($routeName, 'front.account.');
     }
 }
 

@@ -1,8 +1,8 @@
 @extends('layouts.app')
-@section('body-class', 'page-transaction')
+@section('body-class', 'page-wallet')
 
 @section('content')
-  <x-front-breadcrumb type="route" value="account.transactions.index" title="{{ __('front/account.transactions') }}"/>
+  <x-front-breadcrumb type="route" value="account.wallet.transactions.index" title="{{ __('front/account.transactions') }}"/>
 
   @hookinsert('account.transaction_index.top')
 
@@ -12,34 +12,21 @@
         @include('shared.account-sidebar')
       </div>
       <div class="col-12 col-lg-9">
-        <div class="transaction-card-box transaction-info">
-         <div class="transaction-card-title d-flex justify-content-between align-items-center">
+        <div class="transaction-card-box">
+          <div class="transaction-card-title d-flex justify-content-between align-items-center">
             <span class="fw-bold">{{ __('front/transaction.transaction') }}</span>
           </div>
-          <div class="transaction-data">
-            <div class="row">
-              <div class="col-6 col-md-4">
-                <div class="transaction-item-data">
-                  <div class="value">{{ $balance }}</div>
-                  <div class="title text-secondary">{{ __('front/transaction.total') }}</div>
-                </div>
-              </div>
-              <div class="col-6 col-md-4">
-                <div class="transaction-item-data">
-                  <div class="value">{{ $frozen }}</div>
-                  <div class="title text-secondary">{{ __('front/transaction.frozen') }}</div>
-                </div>
-              </div>
-              <div class="col-6 col-md-4">
-                <div class="transaction-item-data">
-                  <div class="value">{{ $available }}</div>
-                  <div class="title text-secondary">{{ __('front/transaction.available') }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
+
+          @if (session('success'))
+            <x-common-alert type="success" msg="{{ session('success') }}" class="mt-3"/>
+          @endif
+          @if (session('error'))
+            <x-common-alert type="danger" msg="{{ session('error') }}" class="mt-3"/>
+          @endif
+
           @if ($transactions->count())
-              <table class="table align-middle transaction-table-box table-response table-bordered">
+            <div class="table-responsive">
+              <table class="table align-middle transaction-table-box table-response">
                 <thead>
                 <tr>
                   <th class="text-center">{{ __('front/transaction.type') }}</th>
@@ -59,11 +46,11 @@
                 @endforeach
                 </tbody>
               </table>
+            </div>
 
-
-            {{ $transactions->links('panel::vendor/pagination/bootstrap-4') }}
+            {{ $transactions->withQueryString()->links('panel::vendor/pagination/bootstrap-4') }}
           @else
-            <x-common-no-data/>
+            <x-common-no-data text="{{ __('front/transaction.no_transactions') }}"/>
           @endif
         </div>
       </div>
@@ -73,3 +60,5 @@
   @hookinsert('account.transaction_index.bottom')
 
 @endsection
+
+

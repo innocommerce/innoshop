@@ -14,4 +14,5 @@ return [
     'hint_delete' => '确定要删除吗?',
     'hint_unload' => '确定要卸载吗?',
     'name'        => '简体中文',
+    'back'        => '返回',
 ];

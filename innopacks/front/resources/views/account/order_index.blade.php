@@ -40,7 +40,7 @@
                 placeholder="{{ __('front/order.order_number') }}"
                 value="{{ request('number') }}"
             >
-            <button class="btn btn-primary" type="submit">{{ __('front/common.search') }}</button>
+            <button class="btn btn-primary text-nowrap" type="submit">{{ __('front/common.search') }}</button>
           </form>
 
           @if ($orders->count())

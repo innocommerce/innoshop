@@ -167,6 +167,7 @@ return [
     'products_show'               => 'Show Product',
     'products_store'              => 'Store Product',
     'products_update'             => 'Update Product',
+    'products_selector'           => 'Product Selector',
     'regions_active'              => 'Activate Region',
     'regions_create'              => 'Create Region',
     'regions_destroy'             => 'Destroy Region',

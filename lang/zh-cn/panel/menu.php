@@ -29,6 +29,7 @@ return [
     'currencies'         => '货币汇率',
     'currency'           => '汇率设置',
     'customer_groups'    => '客户分组',
+    'withdrawals'        => '客户提现',
     'customers'          => '客户管理',
     'dashboard'          => '概览',
     'file_manager'       => '文件管理器',

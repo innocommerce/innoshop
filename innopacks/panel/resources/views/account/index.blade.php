@@ -17,6 +17,9 @@
           <x-common-form-input title="{{ __('panel/common.name') }}" name="name" value="{{ old('name', $admin->name) }}" required />
           <x-common-form-input title="{{ __('panel/common.email') }}" name="email" value="{{ old('email', $admin->email) }}" required />
           <x-common-form-input title="{{ __('panel/common.password') }}" name="password" value="" type="password" />
+
+          @hookinsert('panel.account.form.password.after')
+
         </form>
       </div>
     </div>

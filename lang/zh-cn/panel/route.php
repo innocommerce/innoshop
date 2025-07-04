@@ -167,6 +167,7 @@ return [
     'products_show'               => '显示产品',
     'products_store'              => '保存产品',
     'products_update'             => '更新产品',
+    'products_selector'           => '产品选择器',
     'regions_active'              => '启用地区',
     'regions_create'              => '创建地区',
     'regions_destroy'             => '删除地区',

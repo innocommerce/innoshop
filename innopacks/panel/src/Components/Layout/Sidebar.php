@@ -82,7 +82,7 @@ class Sidebar extends Component
             [
                 'title'    => __('panel/menu.top_customer'),
                 'icon'     => 'bi-person',
-                'prefixes' => ['customers'],
+                'prefixes' => ['customers', 'withdrawals'],
                 'children' => $this->getCustomerSubRoutes(),
             ],
 
@@ -312,6 +312,7 @@ class Sidebar extends Component
             ['route' => 'customers.index', 'title' => __('panel/menu.customers')],
             ['route' => 'customer_groups.index', 'title' => __('panel/menu.customer_groups')],
             ['route' => 'transactions.index', 'title' => __('panel/menu.transactions')],
+            ['route' => 'withdrawals.index', 'title' => __('panel/menu.withdrawals')],
             ['route' => 'socials.index', 'title' => __('panel/menu.sns')],
         ];
 

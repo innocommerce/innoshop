@@ -26,6 +26,7 @@ return [
     'currencies'         => 'Currencies',
     'currency'           => 'Currency',
     'customer_groups'    => 'Customer Groups',
+    'withdrawals'        => 'Withdrawals',
     'customers'          => 'Customers',
     'dashboard'          => 'Dashboard',
     'divider_operation'  => 'Operation',
@@ -62,7 +63,7 @@ return [
     'top_plugin'         => 'Plugin',
     'top_product'        => 'Product',
     'top_setting'        => 'Setting',
-    'transactions'       => 'Customer balance',
+    'transactions'       => 'Balance',
     'upload'             => 'Upload',
     'weight_classes'     => 'Weight Units',
 ];

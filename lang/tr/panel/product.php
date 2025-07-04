@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'Bileşik öğe ekleme',
     'add_variant'              => 'Varyant Ekle',
     'add_variant_value'        => 'Varyant Değeri Ekle',
     'auto_translate'           => 'Otomatik çeviri',
     'basic_information'        => 'Temel Bilgiler',
     'brand'                    => 'Marka',
     'bulk_delete_confirm'      => 'Seçili öğeleri toplu olarak silmek istediğinizden emin misiniz?',
+    'bulk_delete_success'      => 'Başarıyla silindi :öğeleri sayma',
     'bulk_edit'                => 'Toplu düzenleme',
     'bulk_fill'                => 'Tek tıkla doldurma',
     'bulk_fill_apply'          => 'uygulamak',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'Fiyatları toplu olarak belirleme',
     'bulk_set_quantity'        => 'Ürün envanterini toplu olarak ayarlama',
     'bulk_settings'            => 'Toplu iş ayarları',
+    'bulk_update_success'      => 'Başarıyla güncellendi: öğeleri sayma',
     'bundle_items'             => 'İçeriği birleştirin',
     'bundle_items_tab'         => 'İçeriği birleştirin',
     'bundle_product'           => 'emtia',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'Vergi Sınıfı',
     'title'                    => 'Ürün Başlığı',
     'translate'                => 'Çeviri',
+    'type'                     => 'Ürün türü',
     'type_bundle'              => 'Kombinasyon ürünleri',
     'type_card'                => 'Kami ağ diski',
     'type_hint'                => 'Ürün türü oluşturulduktan sonra değiştirilemez',

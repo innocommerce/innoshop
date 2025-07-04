@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'Tambahkan proyek gabungan',
     'add_variant'              => 'Tambahkan Varian',
     'add_variant_value'        => 'Tambahkan Nilai Varian',
     'auto_translate'           => 'Terjemahan otomatis',
     'basic_information'        => 'Informasi Dasar',
     'brand'                    => 'Merek',
     'bulk_delete_confirm'      => 'Apakah anda yakin ingin menghapus barang terpilih secara besar-besaran?',
+    'bulk_delete_success'      => 'Sukses dihapus: hitung barang dagangan',
     'bulk_edit'                => 'Revisi volume',
     'bulk_fill'                => 'Satu tombol untuk mengisi',
     'bulk_fill_apply'          => 'aplikasi',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'Mengatur harga barang secara grosir',
     'bulk_set_quantity'        => 'Mengatur persediaan barang untuk batch',
     'bulk_settings'            => 'Pengaturan batch',
+    'bulk_update_success'      => 'Sukses diperbarui: hitung barang dagangan',
     'bundle_items'             => 'Menggabungkan konten',
     'bundle_items_tab'         => 'Menggabungkan konten',
     'bundle_product'           => 'barang',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'Kelas pajak',
     'title'                    => 'Judul Produk',
     'translate'                => 'penerjemahan',
+    'type'                     => 'Jenis barang',
     'type_bundle'              => 'Menggabungkan barang',
     'type_card'                => 'kamit',
     'type_hint'                => 'Tak dapat diubah setelah tipe barang dibuat',

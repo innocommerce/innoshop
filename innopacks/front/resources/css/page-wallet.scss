@@ -1,0 +1,269 @@
+// 钱包页面样式
+.page-wallet {
+  // 通用卡片样式
+  .transaction-card-box,
+  .withdrawal-card-box,
+  .wallet-card-box {
+    background: #fff;
+    border: 1px solid #e8eef3;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  // 通用卡片标题样式
+  .transaction-card-title,
+  .withdrawal-card-title,
+  .wallet-card-title {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e8eef3;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    min-height: 52px;
+
+    .fw-bold {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+
+  // 通用表格样式
+  .transaction-table-box,
+  .withdrawal-table-box,
+  .wallet-table-box {
+    margin-top: 15px;
+
+    th, 
+    td {
+      padding: 12px 8px;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+  }
+
+  // 钱包余额展示
+  .wallet-balance-item,
+  .wallet-stats-item {
+    text-align: center;
+    padding: 15px;
+
+    .value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .title {
+      font-size: 0.9rem;
+    }
+  }
+
+  // 钱包操作按钮区域
+  .wallet-actions {
+    .btn {
+      &.disabled {
+        pointer-events: none;
+      }
+    }
+  }
+
+  // 提现申请页面样式
+  .withdrawal-create-box {
+    background: #fff;
+    border: 1px solid #e8eef3;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+    // 钱包余额概览组件
+.wallet-balance-overview {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 0;
+  margin-bottom: 30px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+  overflow: hidden;
+
+  .balance-header {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    i {
+      font-size: 1.2rem;
+      margin-right: 10px;
+      opacity: 0.9;
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+  }
+
+  .balance-content {
+    padding: 24px 20px 20px;
+
+    .balance-main {
+      text-align: center;
+      margin-bottom: 16px;
+
+      .available-balance {
+        .amount {
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .label {
+          font-size: 0.95rem;
+          opacity: 0.9;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .balance-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      opacity: 0.9;
+
+      i {
+        margin-right: 8px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// 旧版本兼容样式
+.balance-info-box {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 15px;
+}
+
+.balance-item {
+  text-align: center;
+
+  .value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .label {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+}
+
+  .withdrawal-form {
+    .required::after {
+      content: " *";
+      color: #dc3545;
+    }
+  }
+
+  .form-actions {
+    padding-top: 20px;
+    border-top: 1px solid #e8eef3;
+    margin-top: 20px;
+  }
+
+  // 响应式设计
+  @media (max-width: 768px) {
+    .transaction-card-box,
+    .withdrawal-card-box,
+    .wallet-card-box {
+      padding: 15px;
+    }
+    
+    .transaction-table-box,
+    .withdrawal-table-box,
+    .wallet-table-box {
+      th, 
+      td {
+        padding: 8px 5px;
+        font-size: 0.8rem;
+      }
+    }
+
+    .wallet-balance-item,
+    .wallet-stats-item {
+      padding: 10px 5px;
+
+      .value {
+        font-size: 1.2rem;
+      }
+    }
+
+    .withdrawal-create-box {
+      padding: 15px;
+    }
+    
+        .balance-item .value {
+    font-size: 1.2rem;
+  }
+
+  // 钱包余额概览组件响应式
+  .wallet-balance-overview {
+    margin-bottom: 20px;
+
+    .balance-header {
+      padding: 12px 16px;
+
+      i {
+        font-size: 1.1rem;
+      }
+
+      span {
+        font-size: 0.9rem;
+      }
+    }
+
+    .balance-content {
+      padding: 20px 16px 16px;
+
+      .balance-main {
+        margin-bottom: 12px;
+
+        .available-balance {
+          .amount {
+            font-size: 2rem;
+          }
+
+          .label {
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      .balance-note {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+
+        i {
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+  }
+}

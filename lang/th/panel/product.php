@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'เพิ่มรายการรวมกลุ่ม',
     'add_variant'              => 'เพิ่มรูปแบบสินค้า',
     'add_variant_value'        => 'เพิ่มค่ารูปแบบสินค้า',
     'auto_translate'           => 'แปลภาษาอัตโนมัติ',
     'basic_information'        => 'ข้อมูลพื้นฐาน',
     'brand'                    => 'ยี่ห้อ',
     'bulk_delete_confirm'      => 'คุณต้องการลบรายการ ที่เลือกไว้เป็นกลุ่ม หรือไม่?',
+    'bulk_delete_success'      => 'ลบรายการ ที่นับไว้สำเร็จแล้ว',
     'bulk_edit'                => 'แก้ไขจำนวนมาก',
     'bulk_fill'                => 'กรอกหนึ่งปุ่ม',
     'bulk_fill_apply'          => 'โปรแกรม',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'ตั้งค่าปริมาณของสินค้า',
     'bulk_set_quantity'        => 'การตั้งค่าปริมาณสินค้าในสต็อก',
     'bulk_settings'            => 'ตั้งค่าปริมาณ',
+    'bulk_update_success'      => 'ปรับปรุงสำเร็จ: รายการ ที่นับไว้',
     'bundle_items'             => 'รวมเนื้อหา',
     'bundle_items_tab'         => 'รวมเนื้อหา',
     'bundle_product'           => 'รายการ',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'ประเภทภาษี',
     'title'                    => 'ชื่อสินค้า',
     'translate'                => 'แปลภาษา',
+    'type'                     => 'ประเภทสินค้า',
     'type_bundle'              => 'รายการรวม',
     'type_card'                => 'ถาดคาร์มิเนต',
     'type_hint'                => 'ไม่สามารถเปลี่ยนประเภทสินค้าได้หลังจาก ที่สร้างแล้ว',

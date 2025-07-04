@@ -8,12 +8,14 @@
  */
 
 return [
+    'add_bundle_item'          => 'إضافة عناصر المجموعة',
     'add_variant'              => 'إضافة متغير',
     'add_variant_value'        => 'إضافة قيمة المتغير',
     'auto_translate'           => 'الترجمة التلقائية',
     'basic_information'        => 'المعلومات الأساسية',
     'brand'                    => 'العلامة التجارية',
     'bulk_delete_confirm'      => 'هل أنت متأكد أنه يجب حذف المنتقاة من الشحنة؟',
+    'bulk_delete_success'      => 'حُذفت بنجاح: سلعة أساسية',
     'bulk_edit'                => 'تعديل الحجم',
     'bulk_fill'                => 'مفتاح واحد',
     'bulk_fill_apply'          => 'التطبيقات',
@@ -26,6 +28,7 @@ return [
     'bulk_set_price'           => 'تحديد أسعار السلع بالجملة',
     'bulk_set_quantity'        => 'إنشاء مخزون السلع بالجملة',
     'bulk_settings'            => 'الإعداد الكمي',
+    'bulk_update_success'      => 'تحديث ناجح: سلعة count سلعة',
     'bundle_items'             => 'الجمع',
     'bundle_items_tab'         => 'الجمع',
     'bundle_product'           => 'السلع الأساسية',
@@ -95,6 +98,7 @@ return [
     'tax_class'                => 'فئة الضريبة',
     'title'                    => 'عنوان المنتج',
     'translate'                => 'الترجمة',
+    'type'                     => 'نوع البضائع',
     'type_bundle'              => 'تجميع السلع',
     'type_card'                => 'قرص كارمن',
     'type_hint'                => 'لا يتغير بعد إنشاء نوع السلعة',

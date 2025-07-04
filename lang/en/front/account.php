@@ -32,7 +32,10 @@ return [
     'signed_failed'                  => 'Signing failure',
     'signed_success'                 => 'Sign successfully',
     'tip'                            => 'Tips',
-    'transactions'                   => 'My balance',
+    'transactions'                   => 'Transaction History',
+    'wallet'                         => 'My Wallet',
+    'withdrawals'                    => 'Withdrawals',
+    'balance_overview'               => 'Balance Overview',
     'verify_code_error'              => 'Verification code error',
     'view_all'                       => 'View All',
 ];

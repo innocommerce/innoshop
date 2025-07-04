@@ -120,9 +120,16 @@ Route::prefix('account')
         Route::post('/favorites', [Account\FavoriteController::class, 'store'])->name('favorites.store');
         Route::post('/favorites/cancel', [Account\FavoriteController::class, 'cancel'])->name('favorites.cancel');
 
-        // Transactions
-        Route::get('/transactions', [Account\TransactionController::class, 'index'])->name('transactions.index');
-        Route::get('/transactions/{transaction}', [Account\TransactionController::class, 'show'])->name('transactions.show');
+        // Wallet
+        Route::prefix('wallet')->name('wallet.')->group(function () {
+            Route::get('/', [Account\WalletController::class, 'index'])->name('index');
+            Route::get('/transactions', [Account\TransactionController::class, 'index'])->name('transactions.index');
+            Route::get('/transactions/{transaction}', [Account\TransactionController::class, 'show'])->name('transactions.show');
+            Route::get('/withdrawals', [Account\WithdrawalController::class, 'index'])->name('withdrawals.index');
+            Route::get('/withdrawals/create', [Account\WithdrawalController::class, 'create'])->name('withdrawals.create');
+            Route::post('/withdrawals', [Account\WithdrawalController::class, 'store'])->name('withdrawals.store');
+            Route::get('/withdrawals/{withdrawal}', [Account\WithdrawalController::class, 'show'])->name('withdrawals.show');
+        });
 
         // Reviews
         Route::get('/reviews', [Account\ReviewController::class, 'index'])->name('reviews.index');

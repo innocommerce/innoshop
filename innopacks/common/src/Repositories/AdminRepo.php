@@ -44,7 +44,7 @@ class AdminRepo extends BaseRepo
         $user->saveOrFail();
         $user->assignRole($data['roles']);
 
-        return $user;
+        return fire_hook_filter('common.repo.admin.create.after', $user);
     }
 
     /**
@@ -58,7 +58,7 @@ class AdminRepo extends BaseRepo
         $item->update($data);
         $item->syncRoles($data['roles']);
 
-        return $item;
+        return fire_hook_filter('common.repo.admin.update.after', $item);
     }
 
     /**

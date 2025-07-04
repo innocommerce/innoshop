@@ -32,7 +32,10 @@ return [
     'signed_failed'                  => '签收失败',
     'signed_success'                 => '签收成功',
     'tip'                            => '提示',
-    'transactions'                   => '我的余额',
+    'transactions'                   => '交易记录',
+    'wallet'                         => '我的钱包',
+    'withdrawals'                    => '提现申请',
+    'balance_overview'               => '余额概览',
     'verify_code_error'              => '验证码错误',
     'view_all'                       => '查看全部',
 ];
