@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'Valor da transação',
+    'balance'         => 'O saldo atual',
     'comment'         => 'Observações da transação',
     'consumption'     => 'consumo',
     'customer'        => 'O cliente',

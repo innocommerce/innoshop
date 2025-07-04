@@ -8,7 +8,8 @@
  */
 
 return [
-    'create' => 'Buat Halaman Baru',
-    'list'   => 'Daftar Halaman',
-    'theme'  => 'Tema',
+    'content' => 'isi',
+    'create'  => 'Buat Halaman Baru',
+    'list'    => 'Daftar Halaman',
+    'theme'   => 'Tema',
 ];

@@ -10,6 +10,7 @@
 return [
     'account'                        => '마이페이지',
     'addresses'                      => '주소록',
+    'balance_overview'               => '잔고 개요',
     'cancel_order'                   => '주문 취소',
     'cancel_order_confirm'           => '이 주문 취소하는 거 확정인가요?',
     'cancel_order_confirm_btn_close' => '닫기',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => '내 잔고',
     'verify_code_error'              => '인증 코드 오류',
     'view_all'                       => '전체 보기',
+    'wallet'                         => '내 지갑',
+    'withdrawals'                    => '현금 인출 신청',
 ];

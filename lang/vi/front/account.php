@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Trung tâm cá nhân',
     'addresses'                      => 'Địa chỉ của tôi',
+    'balance_overview'               => 'Tổng quan số dư',
     'cancel_order'                   => 'Hủy bỏ đơn đặt hàng',
     'cancel_order_confirm'           => 'Bạn có chắc bạn muốn hủy bỏ đơn đặt hàng này?',
     'cancel_order_confirm_btn_close' => 'Đóng cửa',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'Số dư của tôi',
     'verify_code_error'              => 'Mã xác minh không đúng',
     'view_all'                       => 'Xem tất cả',
+    'wallet'                         => 'Ví của tôi',
+    'withdrawals'                    => 'Ứng dụng rút tiền',
 ];

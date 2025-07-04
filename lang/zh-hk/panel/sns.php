@@ -9,6 +9,7 @@
 
 return [
     'add'               => '添加',
+    'callback'          => '回呼 URL',
     'callback_url'      => '回呼 URL',
     'client_id'         => '客戶端 ID',
     'client_secret'     => '客戶端密鑰',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => '請輸入客戶端密鑰',
     'required_fields'   => '請填寫所有必填欄位',
     'save'              => '保存',
-    'callback'          => '回呼 URL',
     'status'            => '狀態',
     'success'           => '數據保存成功',
     'twitter'           => 'Twitter',

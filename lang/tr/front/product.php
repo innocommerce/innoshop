@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'İstek Listesine Ekle',
     'attribute'             => 'Özellik',
     'brand'                 => 'Marka',
+    'bundle_includes'       => 'Kombinasyon şunları içerir:',
     'buy_now'               => 'Hemen Al',
     'category'              => 'Kategoriler',
     'description'           => 'Açıklama',

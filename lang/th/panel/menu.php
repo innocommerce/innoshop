@@ -63,6 +63,8 @@ return [
     'top_product'        => 'สินค้า',
     'top_setting'        => 'การตั้งค่า',
     'transactions'       => 'ความสมดุลของลูกค้า',
+    'translations'       => 'การจัดการการแปล',
     'upload'             => 'ฟังก์ชันการอัปโหลด',
     'weight_classes'     => 'หน่วยน้ำหนัก',
+    'withdrawals'        => 'ถอนเงินจากลูกค้า',
 ];

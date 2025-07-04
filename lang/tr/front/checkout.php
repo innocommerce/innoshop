@@ -20,6 +20,7 @@ return [
     'order_comment'         => 'Sipariş Yorumu',
     'password'              => 'Şifre hatalı.',
     'place_order'           => 'Siparişi Tamamla',
+    'please_create_address' => 'Lütfen bir adres oluşturun',
     'same_shipping_address' => 'Teslimat adresi ile aynı',
     'shipping_address'      => 'Teslimat Adresi',
     'shipping_methods'      => 'Kargo Yöntemleri',

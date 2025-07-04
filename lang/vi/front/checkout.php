@@ -20,9 +20,10 @@ return [
     'order_comment'         => 'Ghi chú đơn hàng',
     'password'              => 'Mật khẩu không đúng.',
     'place_order'           => 'Đặt hàng',
+    'please_create_address' => 'Xin vui lòng tạo một địa chỉ',
     'same_shipping_address' => 'Địa chỉ thanh toán như địa chỉ giao hàng',
     'shipping_address'      => 'Địa chỉ giao hàng',
     'shipping_methods'      => 'Phương thức vận chuyển',
-    'shipping_quote_error'  => 'Vui lòng thực hiện phương pháp : public function getQuotes($checkoutService)" trong plugin :classname',
+    'shipping_quote_error'  => 'Vui lòng thực hiện phương pháp : public function getQuotes($checkoutService)\" trong plugin :classname',
     'throttle'              => 'Bạn đã thử đăng nhập quá nhiều lần, vui lòng thử lại sau :seconds giây.',
 ];

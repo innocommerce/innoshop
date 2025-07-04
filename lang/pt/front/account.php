@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Centro de Conta',
     'addresses'                      => 'Meus Endereços',
+    'balance_overview'               => 'Balanço em resumo',
     'cancel_order'                   => 'Cancelar uma encomenda',
     'cancel_order_confirm'           => 'Tem certeza de que deseja cancelar este pedido?',
     'cancel_order_confirm_btn_close' => 'encerramento',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'O meu saldo',
     'verify_code_error'              => 'Código de Verificação Errado',
     'view_all'                       => 'Ver Tudo',
+    'wallet'                         => 'A minha carteira',
+    'withdrawals'                    => 'Pedido de retirada',
 ];

@@ -20,9 +20,10 @@ return [
     'order_comment'         => 'Bemerkungen zur Bestellung',
     'password'              => 'Passwort falsch.',
     'place_order'           => 'Bestellung aufgeben',
+    'please_create_address' => 'Bitte erstellen sie eine adresse.',
     'same_shipping_address' => 'Lieferadresse wie Rechnungsadresse',
     'shipping_address'      => 'Lieferadresse',
     'shipping_methods'      => 'Versandmethoden',
-    'shipping_quote_error'  => 'Bitte implementieren Sie die Methode: public function getQuotes($checkoutService)\" in der Klasse :classname Plugin.',
+    'shipping_quote_error'  => 'Bitte implementieren Sie die Methode: public function getQuotes($checkoutService)\\\" in der Klasse :classname Plugin.',
     'throttle'              => 'Sie haben zu viele Anmeldeversuche. Bitte warten Sie :seconds Sekunden, bevor Sie es erneut versuchen.',
 ];

@@ -52,6 +52,8 @@ return [
     'import'               => '가져오기',
     'inactive'             => '비활성화',
     'install'              => '설치',
+    'invalid_action'       => '잘못된 동작',
+    'invalid_parameters'   => '인자가 잘못됨',
     'link'                 => '링크',
     'list'                 => '목록',
     'loading'              => '불러오는 중...',

@@ -63,6 +63,8 @@ return [
     'top_product'        => 'Товары',
     'top_setting'        => 'Настройки',
     'transactions'       => 'Баланс клиента',
+    'translations'       => 'Управление переводом',
     'upload'             => 'Функции загрузки',
     'weight_classes'     => 'Весовой единица',
+    'withdrawals'        => 'Снятие наличных.',
 ];

@@ -20,9 +20,10 @@ return [
     'order_comment'         => 'Commento ordine',
     'password'              => 'Password errata.',
     'place_order'           => 'Inserisci ordine',
+    'please_create_address' => 'Indicare l’indirizzo',
     'same_shipping_address' => 'Indirizzo di fatturazione uguale all\'indirizzo di spedizione',
     'shipping_address'      => 'Indirizzo di spedizione',
     'shipping_methods'      => 'Metodi di spedizione',
-    'shipping_quote_error'  => 'Si prega di implementare il metodo: public function getQuotes($checkoutService)\" nel plugin :classname',
+    'shipping_quote_error'  => 'Si prega di implementare il metodo: public function getQuotes($checkoutService)\\\" nel plugin :classname',
     'throttle'              => 'Hai effettuato troppi tentativi di accesso, riprova tra :seconds secondi.',
 ];

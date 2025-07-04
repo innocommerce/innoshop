@@ -52,6 +52,8 @@ return [
     'import'               => '導入します',
     'inactive'             => '無効',
     'install'              => 'インストール',
+    'invalid_action'       => '無効な操作です',
+    'invalid_parameters'   => 'パラメータ無効です',
     'link'                 => 'リンク',
     'list'                 => '一覧',
     'loading'              => 'ロード中です…',

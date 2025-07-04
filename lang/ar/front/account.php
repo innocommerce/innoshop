@@ -10,6 +10,7 @@
 return [
     'account'                        => 'مركز الحساب',
     'addresses'                      => 'عناويني',
+    'balance_overview'               => 'لمحة عامة عن الأرصدة',
     'cancel_order'                   => 'إلغاء الطلب',
     'cancel_order_confirm'           => 'هل أنت متأكد من إلغاء هذا الطلب؟',
     'cancel_order_confirm_btn_close' => 'إغلاق',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'الرصيد الخاص بي',
     'verify_code_error'              => 'خطأ في الرمز التحقق',
     'view_all'                       => 'عرض الكل',
+    'wallet'                         => 'محفظتي',
+    'withdrawals'                    => 'طلب السحب',
 ];

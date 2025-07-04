@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'أضف إلى المفضلة',
     'attribute'             => 'خصائص المنتج',
     'brand'                 => 'علامة تجارية',
+    'bundle_includes'       => 'يحتوي على',
     'buy_now'               => 'اشتري الآن',
     'category'              => 'فئة',
     'description'           => 'تفاصيل المنتج',

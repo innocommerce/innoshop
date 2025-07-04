@@ -9,6 +9,7 @@
 
 return [
     'add'               => 'إضافة',
+    'callback'          => 'عنوان الرد',
     'callback_url'      => 'عنوان الارتداد',
     'client_id'         => 'معرف العميل',
     'client_secret'     => 'سرية العميل',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'يرجى إدخال سرية العميل',
     'required_fields'   => 'يرجى ملء جميع الحقول المطلوبة',
     'save'              => 'حفظ',
-    'callback'          => 'عنوان الرد',
     'status'            => 'حالة',
     'success'           => 'نجاح حفظ البيانات',
     'twitter'           => 'تويتر',

@@ -52,6 +52,8 @@ return [
     'import'               => '導入',
     'inactive'             => '禁用',
     'install'              => '安裝',
+    'invalid_action'       => '無效的操作',
+    'invalid_parameters'   => '參數無效',
     'link'                 => '鏈接',
     'list'                 => '列表',
     'loading'              => '加載中...',

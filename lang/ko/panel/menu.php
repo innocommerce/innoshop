@@ -63,6 +63,8 @@ return [
     'top_product'        => '상품',
     'top_setting'        => '설정',
     'transactions'       => '고객 잔고',
+    'translations'       => '번역 관리',
     'upload'             => '업로드 기능',
     'weight_classes'     => '중량 단위',
+    'withdrawals'        => '고객이 현금을 인출하다.',
 ];

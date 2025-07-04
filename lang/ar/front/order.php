@@ -10,6 +10,7 @@
 return [
     'add_review'      => 'إضافة تقييم',
     'all'             => 'الكل',
+    'bundle_includes' => 'يحتوي على',
     'cancelled'       => 'ملغى',
     'close'           => 'إغلاق',
     'completed'       => 'مكتمل',

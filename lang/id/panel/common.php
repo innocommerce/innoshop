@@ -52,6 +52,8 @@ return [
     'import'               => 'Impor penanda',
     'inactive'             => 'Nonaktif',
     'install'              => 'Instal',
+    'invalid_action'       => 'Operasi tidak valid',
+    'invalid_parameters'   => 'Parameternya tidak valid',
     'link'                 => 'Tautan',
     'list'                 => 'Daftar',
     'loading'              => 'Memuat …',

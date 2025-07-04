@@ -52,6 +52,8 @@ return [
     'import'               => 'นำเข้า',
     'inactive'             => 'ไม่ใช้งาน',
     'install'              => 'ติดตั้ง',
+    'invalid_action'       => 'การกระทำไม่ถูกต้อง',
+    'invalid_parameters'   => 'พารามิเตอร์ไม่ถูกต้อง',
     'link'                 => 'ลิงค์',
     'list'                 => 'รายการ',
     'loading'              => 'กำลังโหลด...',

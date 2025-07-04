@@ -10,6 +10,7 @@
 return [
     'account'                        => 'ส่วนตัวของฉัน',
     'addresses'                      => 'ที่อยู่ของฉัน',
+    'balance_overview'               => 'ภาพรวมความสมดุล',
     'cancel_order'                   => 'ยกเลิกคำสั่งซื้อ',
     'cancel_order_confirm'           => 'แน่ใจนะว่า จะยกเลิกคำสั่ง',
     'cancel_order_confirm_btn_close' => 'ปิด',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'ความสมดุลของฉัน',
     'verify_code_error'              => 'รหัสยืนยันผิด',
     'view_all'                       => 'ดูทั้งหมด',
+    'wallet'                         => 'กระเป๋าฉัน',
+    'withdrawals'                    => 'โปรแกรมถอนเงินสด',
 ];

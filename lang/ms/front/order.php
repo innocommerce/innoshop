@@ -10,6 +10,7 @@
 return [
     'add_review'      => 'Tambah Ulasan',
     'all'             => 'Semua',
+    'bundle_includes' => 'Gabungan ini mengandungi',
     'cancelled'       => 'Dibatalkan',
     'close'           => 'Tutup',
     'completed'       => 'Selesai',

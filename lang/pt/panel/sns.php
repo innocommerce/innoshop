@@ -9,6 +9,7 @@
 
 return [
     'add'               => 'Adicionar',
+    'callback'          => 'URL de retorno',
     'callback_url'      => 'URL de retorno',
     'client_id'         => 'ID do cliente',
     'client_secret'     => 'Segredo do cliente',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'Por favor, insira o segredo do cliente',
     'required_fields'   => 'Por favor, preencha todos os campos obrigatórios',
     'save'              => 'Salvar',
-    'callback'          => 'URL de retorno',
     'status'            => 'Status',
     'success'           => 'Dados salvos com sucesso',
     'twitter'           => 'Twitter',

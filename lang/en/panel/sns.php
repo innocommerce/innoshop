@@ -9,6 +9,7 @@
 
 return [
     'add'               => 'Add',
+    'callback'          => 'Callback address',
     'callback_url'      => 'Callback URL',
     'client_id'         => 'Client ID',
     'client_secret'     => 'Client Secret',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'Please enter Client Secret',
     'required_fields'   => 'Please fill in all required fields',
     'save'              => 'Save',
-    'callback'          => 'Callback address',
     'status'            => 'Status',
     'success'           => 'Data saved successfully',
     'twitter'           => 'Twitter',

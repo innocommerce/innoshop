@@ -9,6 +9,7 @@
 
 return [
     'add'               => 'Thêm',
+    'callback'          => 'URL gọi lại',
     'callback_url'      => 'URL gọi lại',
     'client_id'         => 'Mã khách hàng',
     'client_secret'     => 'Mật khẩu khách hàng',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'Vui lòng nhập mật khẩu khách hàng',
     'required_fields'   => 'Vui lòng điền đầy đủ các trường bắt buộc',
     'save'              => 'Lưu',
-    'callback'          => 'URL gọi lại',
     'status'            => 'Trạng thái',
     'success'           => 'Lưu dữ liệu thành công',
     'twitter'           => 'Twitter',

@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'お気に入りに追加',
     'attribute'             => '商品属性',
     'brand'                 => 'ブランド',
+    'bundle_includes'       => '組み合わせには様々な要素が含まれます',
     'buy_now'               => '今すぐ購入',
     'category'              => 'カテゴリ',
     'description'           => '商品詳細',

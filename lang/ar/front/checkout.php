@@ -20,9 +20,10 @@ return [
     'order_comment'         => 'تعليق على الطلب',
     'password'              => 'كلمة المرور غير صحيحة',
     'place_order'           => 'وضع الطلب',
+    'please_create_address' => 'يرجى إنشاء العنوان',
     'same_shipping_address' => 'عنوان الشحن هو نفسه لعنوان الفواتير',
     'shipping_address'      => 'عنوان الشحن',
     'shipping_methods'      => 'طرق الشحن',
-    'shipping_quote_error'  => 'يرجى تنفيذ الطريقة: public function getQuotes($checkoutService)\" في الإضافة :classname',
+    'shipping_quote_error'  => 'يرجى تنفيذ الطريقة: public function getQuotes($checkoutService)\\\" في الإضافة :classname',
     'throttle'              => 'لقد قمت بمحاولات تسجيل دخول متعددة، يرجى الانتظار :seconds ثوان قبل المحاولة مرة أخرى.',
 ];

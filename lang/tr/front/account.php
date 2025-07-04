@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Hesap',
     'addresses'                      => 'Adresler',
+    'balance_overview'               => 'Teraziye genel bakış',
     'cancel_order'                   => 'Siparişi iptal et',
     'cancel_order_confirm'           => 'Bu siparişi iptal etmek istediğinizden emin misiniz?',
     'cancel_order_confirm_btn_close' => 'Kapat',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'My balance',
     'verify_code_error'              => 'Doğrulama kodu hatası',
     'view_all'                       => 'Tümünü Görüntüle',
+    'wallet'                         => 'Benim cüzdanım',
+    'withdrawals'                    => 'Para çekme talepleri',
 ];

@@ -8,7 +8,8 @@
  */
 
 return [
-    'create' => 'Cipta Halaman',
-    'list'   => 'Senarai Halaman',
-    'theme'  => 'Templat',
+    'content' => 'Kandungan',
+    'create'  => 'Cipta Halaman',
+    'list'    => 'Senarai Halaman',
+    'theme'   => 'Templat',
 ];

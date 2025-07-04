@@ -12,8 +12,10 @@ return [
     'address_id'     => 'Address ID',
     'address_manage' => 'Address management',
     'avatar'         => 'Avatar',
+    'balance_manage' => 'Balance Management',
     'basic_info'     => 'Basic information',
     'code'           => 'Code',
+    'customer_info'  => 'Customer Information',
     'discount_rate'  => 'Discount rate',
     'email'          => 'Email',
     'from'           => 'From',
@@ -24,5 +26,4 @@ return [
     'mini_cost'      => 'Minimum Consumption Amount',
     'name'           => 'Name',
     'password'       => 'Password',
-    'balance_manage' => 'Balance Management',
 ];

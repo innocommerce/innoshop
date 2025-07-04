@@ -63,6 +63,8 @@ return [
     'top_product'        => 'Ürün',
     'top_setting'        => 'Ayar',
     'transactions'       => 'Customer balance',
+    'translations'       => 'Çeviri yönetimi',
     'upload'             => 'Yükle',
     'weight_classes'     => 'Ağırlık birimleri',
+    'withdrawals'        => 'Müşteri para çekme işlemleri',
 ];

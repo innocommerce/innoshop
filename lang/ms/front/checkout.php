@@ -20,6 +20,7 @@ return [
     'order_comment'         => 'Ulasan Pesanan',
     'password'              => 'Kata Laluan Salah.',
     'place_order'           => 'Hantar Pesanan',
+    'please_create_address' => 'Sila buat alamat',
     'same_shipping_address' => 'Alamat Biling Sama dengan Alamat Penghantaran',
     'shipping_address'      => 'Alamat Penghantaran',
     'shipping_methods'      => 'Kaedah Penghantaran',

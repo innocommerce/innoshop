@@ -8,9 +8,9 @@
  */
 
 return [
-    'Product_spec'    => '製品仕様',
     'add_review'      => 'レビューを追加',
     'all'             => 'すべて',
+    'bundle_includes' => '組み合わせには様々な要素が含まれます',
     'cancelled'       => 'キャンセル済み',
     'close'           => '閉める',
     'completed'       => '完了',

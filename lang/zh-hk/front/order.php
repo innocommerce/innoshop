@@ -10,6 +10,7 @@
 return [
     'add_review'      => '添加評論',
     'all'             => '全部',
+    'bundle_includes' => '組合包含',
     'cancelled'       => '已取消',
     'close'           => '關閉',
     'completed'       => '已完成',

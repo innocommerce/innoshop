@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => '돌아가',
     'cancel'      => '취소',
     'confirm'     => '확인',
     'hint'        => '힌트',

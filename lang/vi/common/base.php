@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => 'Trở về',
     'cancel'      => 'Hủy bỏ',
     'confirm'     => 'Xác nhận',
     'hint'        => 'Gợi ý',

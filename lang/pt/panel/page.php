@@ -8,7 +8,8 @@
  */
 
 return [
-    'create' => 'Criar Nova Página',
-    'list'   => 'Lista de Páginas',
-    'theme'  => 'Tema',
+    'content' => 'conteúdo',
+    'create'  => 'Criar Nova Página',
+    'list'    => 'Lista de Páginas',
+    'theme'   => 'Tema',
 ];

@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'เพิ่มลงรายการโปรด',
     'attribute'             => 'คุณลักษณะสินค้า',
     'brand'                 => 'ยี่ห้อ',
+    'bundle_includes'       => 'คำบรรยายภาพ',
     'buy_now'               => 'ซื้อสินค้าทันที',
     'category'              => 'หมวดหมู่',
     'description'           => 'รายละเอียดสินค้า',

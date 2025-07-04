@@ -52,6 +52,8 @@ return [
     'import'               => 'Nhập khẩu',
     'inactive'             => 'Không kích hoạt',
     'install'              => 'Cài đặt',
+    'invalid_action'       => 'Hoạt động không hiệu quả',
+    'invalid_parameters'   => 'Tham số không hợp lệ',
     'link'                 => 'Liên kết',
     'list'                 => 'Danh sách',
     'loading'              => 'Đang tải …',

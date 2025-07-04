@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => '返回',
     'cancel'      => '取消',
     'confirm'     => '確定',
     'hint'        => '提示',

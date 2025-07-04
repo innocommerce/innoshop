@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => 'dönmek',
     'cancel'      => 'İptal',
     'confirm'     => 'Onayla',
     'hint'        => 'İpucu',

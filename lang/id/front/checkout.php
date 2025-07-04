@@ -20,6 +20,7 @@ return [
     'order_comment'         => 'Komentar Pesanan',
     'password'              => 'Kata Sandi Salah.',
     'place_order'           => 'Pesan Sekarang',
+    'please_create_address' => 'Silahkan buat alamat',
     'same_shipping_address' => 'Alamat Tagihan Sama dengan Alamat Pengiriman',
     'shipping_address'      => 'Alamat Pengiriman',
     'shipping_methods'      => 'Metode Pengiriman',

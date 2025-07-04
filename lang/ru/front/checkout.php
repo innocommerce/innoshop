@@ -20,9 +20,10 @@ return [
     'order_comment'         => 'комментарий к заказу',
     'password'              => 'ошибка пароля',
     'place_order'           => 'оформить заказ',
+    'please_create_address' => 'Пожалуйста, напишите адрес.',
     'same_shipping_address' => 'адрес доставки такой же, как и адрес для выставления счетов',
     'shipping_address'      => 'адрес доставки',
     'shipping_methods'      => 'способы доставки',
-    'shipping_quote_error'  => 'пожалуйста, в плагине :classname реализуйте метод: public function getQuotes($checkoutService)\"',
+    'shipping_quote_error'  => 'пожалуйста, в плагине :classname реализуйте метод: public function getQuotes($checkoutService)\\\"',
     'throttle'              => 'слишком много попыток входа, попробуйте снова через :seconds секунд',
 ];

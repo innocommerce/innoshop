@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'Aggiungi ai desideri',
     'attribute'             => 'Attributi del prodotto',
     'brand'                 => 'Marca',
+    'bundle_includes'       => 'composizione',
     'buy_now'               => 'Acquista ora',
     'category'              => 'Categoria',
     'description'           => 'Descrizione del prodotto',

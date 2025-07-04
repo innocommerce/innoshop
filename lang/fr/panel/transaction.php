@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'Montant des transactions',
+    'balance'         => 'Balance des paiements',
     'comment'         => 'Remarques sur l\'opération',
     'consumption'     => 'consommation',
     'customer'        => 'Les clients',

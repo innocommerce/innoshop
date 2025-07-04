@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Pusat Akun',
     'addresses'                      => 'Alamat Saya',
+    'balance_overview'               => 'Gambaran keseluruhan baki',
     'cancel_order'                   => 'Batalkan pesanan',
     'cancel_order_confirm'           => 'Adakah anda pasti mahu membatalkan pesanan ini?',
     'cancel_order_confirm_btn_close' => 'Tutup',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'Baki saya',
     'verify_code_error'              => 'Kod Pengesahan Salah',
     'view_all'                       => 'Lihat Semua',
+    'wallet'                         => 'Dompet saya',
+    'withdrawals'                    => 'Permintaan pengeluaran',
 ];

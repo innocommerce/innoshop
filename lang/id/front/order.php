@@ -8,9 +8,9 @@
  */
 
 return [
-    'Product_spec'    => 'Spesifikasi Produk',
     'add_review'      => 'Tambahkan Ulasan',
     'all'             => 'Semua',
+    'bundle_includes' => 'Kombinasi berisi',
     'cancelled'       => 'Dibatalkan',
     'close'           => 'Tutup',
     'completed'       => 'Selesai',
@@ -32,7 +32,6 @@ return [
     'order_number'    => 'Nomor Pesanan',
     'order_status'    => 'Status',
     'order_total'     => 'Total',
-    'out_stock'       => 'Stok Habis',
     'paid'            => 'Telah Dibayar',
     'price'           => 'Harga',
     'product'         => 'Produk',
@@ -40,14 +39,10 @@ return [
     'product_name'    => 'Nama Produk',
     'product_spec'    => 'Spesifikasi Produk',
     'quantity'        => 'Jumlah',
-    'rating'          => 'Rating',
     'remark'          => 'Catatan',
-    'review'          => 'Ulasan',
-    'review_content'  => 'Isi Ulasan',
     'shipment_info'   => 'Informasi pengiriman',
     'shipped'         => 'Telah Dikirim',
     'state'           => 'Negara',
-    'status'          => 'Status',
     'subtotal'        => 'Subtotal',
     'time'            => 'Waktu',
     'to_be_bound'     => 'Belum Terikat',

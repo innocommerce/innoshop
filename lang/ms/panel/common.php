@@ -52,6 +52,8 @@ return [
     'import'               => 'Import',
     'inactive'             => 'Tidak aktif',
     'install'              => 'Pasang',
+    'invalid_action'       => 'Tindakan tidak sah',
+    'invalid_parameters'   => 'Parameter tidak sah',
     'link'                 => 'Pautan',
     'list'                 => 'Senarai',
     'loading'              => 'Memuatkan...',

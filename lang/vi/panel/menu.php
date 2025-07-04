@@ -63,6 +63,8 @@ return [
     'top_product'        => 'sản phẩm',
     'top_setting'        => 'thiết lập',
     'transactions'       => 'Số dư khách hàng',
+    'translations'       => 'Quản lý dịch thuật',
     'upload'             => 'chức năng tải lên',
     'weight_classes'     => 'Đơn vị trọng lượng',
+    'withdrawals'        => 'Khách hàng rút tiền',
 ];

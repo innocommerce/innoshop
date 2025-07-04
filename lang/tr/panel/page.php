@@ -8,7 +8,8 @@
  */
 
 return [
-    'list'   => 'Sayfa Listesi',
-    'create' => 'Yeni Sayfa',
-    'theme'  => 'Tema',
+    'content' => 'içerik',
+    'create'  => 'Yeni Sayfa',
+    'list'    => 'Sayfa Listesi',
+    'theme'   => 'Tema',
 ];

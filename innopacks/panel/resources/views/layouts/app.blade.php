@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <div class="container-fluid p-0 mt-3">
+      <div class="container-fluid p-0 mt-2">
         <div class="content-info">
           @if (session()->has('errors'))
             <x-common-alert type="danger" msg="{{ session('errors')->first() }}" class="mt-4"/>

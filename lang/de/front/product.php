@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'Zur Wunschliste hinzufügen',
     'attribute'             => 'Produktattribut',
     'brand'                 => 'Marke',
+    'bundle_includes'       => 'Kombination bedeutet:',
     'buy_now'               => 'Jetzt kaufen',
     'category'              => 'Kategorie',
     'description'           => 'Produktbeschreibung',

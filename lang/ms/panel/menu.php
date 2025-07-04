@@ -63,6 +63,8 @@ return [
     'top_product'        => 'Produk',
     'top_setting'        => 'Tetapan',
     'transactions'       => 'Baki pelanggan',
+    'translations'       => 'Pengurusan terjemahan',
     'upload'             => 'Fungsi Muat Naik',
     'weight_classes'     => 'Unit berat',
+    'withdrawals'        => 'Pengeluaran pelanggan',
 ];

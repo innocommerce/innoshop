@@ -52,6 +52,8 @@ return [
     'import'               => 'importations',
     'inactive'             => 'Inactif',
     'install'              => 'Installer',
+    'invalid_action'       => 'Une opération invalide',
+    'invalid_parameters'   => 'Paramètre non valide',
     'link'                 => 'Lien',
     'list'                 => 'Liste',
     'loading'              => 'Chargement en cours...',

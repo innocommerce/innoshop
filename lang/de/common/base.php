@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => 'Abreise.',
     'cancel'      => 'Abbrechen',
     'confirm'     => 'Bestätigen',
     'hint'        => 'Hinweis',

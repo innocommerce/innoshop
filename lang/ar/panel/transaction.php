@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'مبلغ الصفقة',
+    'balance'         => 'الرصيد الحالي',
     'comment'         => 'مذكرة الصفقة',
     'consumption'     => 'الاستهلاك',
     'customer'        => 'العملاء',

@@ -8,9 +8,9 @@
  */
 
 return [
-    'Product_spec'    => '规格สินค้า',
     'add_review'      => 'เพิ่มรีวิว',
     'all'             => 'ทั้งหมด',
+    'bundle_includes' => 'คำบรรยายภาพ',
     'cancelled'       => 'ถูกยกเลิก',
     'close'           => 'ปิด',
     'completed'       => 'เสร็จสมบูรณ์',
@@ -37,6 +37,7 @@ return [
     'product'         => 'สินค้า',
     'product_image'   => 'รูปภาพสินค้า',
     'product_name'    => 'ชื่อสินค้า',
+    'product_spec'    => 'รายละเอียดของผลิตภัณฑ์',
     'quantity'        => 'จำนวน',
     'remark'          => 'หมายเหตุ',
     'shipment_info'   => 'ข้อมูลการจัดส่ง',

@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Centre du compte',
     'addresses'                      => 'Mes adresses',
+    'balance_overview'               => 'Aperçu des soldes',
     'cancel_order'                   => 'Annuler une commande',
     'cancel_order_confirm'           => 'Êtes-vous sûr de vouloir annuler cette commande?',
     'cancel_order_confirm_btn_close' => 'La fermeture',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'Mon solde solde',
     'verify_code_error'              => 'Erreur de code de vérification',
     'view_all'                       => 'Voir tout',
+    'wallet'                         => 'Mon portefeuille mon portefeuille',
+    'withdrawals'                    => 'Demande de retrait',
 ];

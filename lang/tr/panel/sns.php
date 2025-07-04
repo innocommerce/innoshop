@@ -9,6 +9,7 @@
 
 return [
     'add'               => 'Ekle',
+    'callback'          => 'Geri Arama Adresi',
     'callback_url'      => 'Geri Arama URL\'si',
     'client_id'         => 'Müşteri ID\'si',
     'client_secret'     => 'Müşteri Gizli Anahtarı',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'Lütfen Müşteri Gizli Anahtarını girin',
     'required_fields'   => 'Lütfen tüm gerekli alanları doldurun',
     'save'              => 'Kaydet',
-    'callback'          => 'Geri Arama Adresi',
     'status'            => 'Durum',
     'success'           => 'Veri başarıyla kaydedildi',
     'twitter'           => 'Twitter',

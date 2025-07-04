@@ -9,6 +9,7 @@
 
 return [
     'add'               => '追加',
+    'callback'          => 'コールバックURL',
     'callback_url'      => 'コールバックURL',
     'client_id'         => 'クライアントID',
     'client_secret'     => 'クライアントシークレット',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'クライアントシークレットを入力してください',
     'required_fields'   => 'すべての必須フィールドを入力してください',
     'save'              => '保存',
-    'callback'          => 'コールバックURL',
     'status'            => 'ステータス',
     'success'           => 'データが正常に保存されました',
     'twitter'           => 'ツイッター',

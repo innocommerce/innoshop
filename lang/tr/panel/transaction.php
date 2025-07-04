@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'Transaction amount',
+    'balance'         => 'Akım dengesi',
     'comment'         => 'Trading note',
     'consumption'     => 'consumption',
     'customer'        => 'client',

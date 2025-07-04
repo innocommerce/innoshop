@@ -9,6 +9,7 @@
 
 return [
     'add'               => 'Tambah',
+    'callback'          => 'URL Callback',
     'callback_url'      => 'URL Callback',
     'client_id'         => 'ID Pelanggan',
     'client_secret'     => 'Rahsia Pelanggan',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'Sila masukkan Rahsia Pelanggan',
     'required_fields'   => 'Sila isi semua medan yang diperlukan',
     'save'              => 'Simpan',
-    'callback'          => 'URL Callback',
     'status'            => 'Status',
     'success'           => 'Data berjaya disimpan',
     'twitter'           => 'Twitter',

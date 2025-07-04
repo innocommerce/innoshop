@@ -63,6 +63,8 @@ return [
     'top_product'        => '產品',
     'top_setting'        => '設置',
     'transactions'       => '客戶餘額',
+    'translations'       => '翻譯管理',
     'upload'             => '上傳功能',
     'weight_classes'     => '重量單位',
+    'withdrawals'        => '客戶提現',
 ];

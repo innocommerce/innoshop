@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => 'Le retour',
     'cancel'      => 'Annuler',
     'confirm'     => 'Confirmer',
     'hint'        => 'Indice',

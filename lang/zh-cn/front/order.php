@@ -10,6 +10,7 @@
 return [
     'add_review'      => '添加评论',
     'all'             => '全部',
+    'bundle_includes' => '组合包含',
     'cancelled'       => '已取消',
     'close'           => '关闭',
     'completed'       => '已完成',
@@ -49,5 +50,4 @@ return [
     'unpaid'          => '待支付',
     'unshipped'       => '待发货',
     'view'            => '查看',
-    'bundle_includes' => '组合包含',
 ];

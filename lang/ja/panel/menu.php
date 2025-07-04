@@ -63,6 +63,8 @@ return [
     'top_product'        => '製品',
     'top_setting'        => '設定',
     'transactions'       => 'お客様残高です',
+    'translations'       => '翻訳管理です',
     'upload'             => 'アップロード機能',
     'weight_classes'     => '重さの単位です',
+    'withdrawals'        => '顧客キャッシュバックです',
 ];

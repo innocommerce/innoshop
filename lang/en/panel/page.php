@@ -8,7 +8,8 @@
  */
 
 return [
-    'list'   => 'Page List',
-    'create' => 'New Page',
-    'theme'  => 'Theme',
+    'content' => '"Content',
+    'create'  => 'New Page',
+    'list'    => 'Page List',
+    'theme'   => 'Theme',
 ];

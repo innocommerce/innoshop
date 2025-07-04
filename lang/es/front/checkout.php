@@ -20,6 +20,7 @@ return [
     'order_comment'         => 'Comentario del pedido',
     'password'              => 'Contraseña incorrecta.',
     'place_order'           => 'Realizar pedido',
+    'please_create_address' => 'Por favor crea una dirección',
     'same_shipping_address' => 'Igual que la dirección de envío',
     'shipping_address'      => 'Dirección de envío',
     'shipping_methods'      => 'Métodos de envío',

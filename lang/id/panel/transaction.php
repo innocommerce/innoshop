@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'Jumlah transaksi',
+    'balance'         => 'Saldo saat ini',
     'comment'         => 'Catatan perdagangan',
     'consumption'     => 'Konsumen.',
     'customer'        => 'klien',

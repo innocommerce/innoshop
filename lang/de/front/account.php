@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Konto',
     'addresses'                      => 'Meine Adressen',
+    'balance_overview'               => 'tabelle',
     'cancel_order'                   => 'Stornieren sie die bestellung.',
     'cancel_order_confirm'           => 'Sollen wir die bestellung stornieren?',
     'cancel_order_confirm_btn_close' => 'Noch näher.',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'Meine kontoübersicht',
     'verify_code_error'              => 'Captcha-Fehler',
     'view_all'                       => 'Alle anzeigen',
+    'wallet'                         => 'Meine brieftasche.',
+    'withdrawals'                    => 'Antrag stattgegeben.',
 ];

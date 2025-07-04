@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'Importo delle operazioni',
+    'balance'         => 'Saldo delle partite correnti',
     'comment'         => 'Osservazioni sulle operazioni',
     'consumption'     => 'consumo',
     'customer'        => 'clienti',

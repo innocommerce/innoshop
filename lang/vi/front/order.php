@@ -10,6 +10,7 @@
 return [
     'add_review'      => 'Thêm đánh giá',
     'all'             => 'Tất cả',
+    'bundle_includes' => 'Sự kết hợp bao gồm',
     'cancelled'       => 'Đã hủy',
     'close'           => 'Đóng',
     'completed'       => 'Đã hoàn thành',

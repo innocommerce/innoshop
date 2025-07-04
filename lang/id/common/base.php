@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => 'kembali',
     'cancel'      => 'Batal',
     'confirm'     => 'Konfirmasi',
     'hint'        => 'Petunjuk',

@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Account personale',
     'addresses'                      => 'I miei indirizzi',
+    'balance_overview'               => 'Sintesi dei saldi',
     'cancel_order'                   => 'Annullamento dell\'ordinanza',
     'cancel_order_confirm'           => 'È certo che tale ordine verrà annullato?',
     'cancel_order_confirm_btn_close' => 'chiusura',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'I saldo',
     'verify_code_error'              => 'Codice di verifica errato',
     'view_all'                       => 'Visualizza tutto',
+    'wallet'                         => 'Il mio portafoglio',
+    'withdrawals'                    => 'Domanda di revoca',
 ];

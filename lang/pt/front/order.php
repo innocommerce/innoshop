@@ -10,6 +10,7 @@
 return [
     'add_review'      => 'Adicionar Comentário',
     'all'             => 'Todos',
+    'bundle_includes' => 'A combinação contém',
     'cancelled'       => 'Cancelado',
     'close'           => 'Fechar',
     'completed'       => 'Completo',

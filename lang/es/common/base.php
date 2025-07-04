@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => 'regreso',
     'cancel'      => 'Cancelar',
     'confirm'     => 'Confirmar',
     'hint'        => 'Sugerencia',

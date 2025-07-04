@@ -8,7 +8,8 @@
  */
 
 return [
-    'create' => 'tạo trang mới',
-    'list'   => 'danh sách trang',
-    'theme'  => 'chủ đề',
+    'content' => 'Nội dung',
+    'create'  => 'tạo trang mới',
+    'list'    => 'danh sách trang',
+    'theme'   => 'chủ đề',
 ];

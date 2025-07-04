@@ -52,6 +52,8 @@ return [
     'import'               => 'To lead into',
     'inactive'             => 'Pasif',
     'install'              => 'Yükle',
+    'invalid_action'       => 'Geçersiz eylem',
+    'invalid_parameters'   => 'Parametre geçersiz',
     'link'                 => 'Bağlantı',
     'list'                 => 'Liste',
     'loading'              => 'Yükleme...',

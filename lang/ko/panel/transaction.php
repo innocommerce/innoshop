@@ -9,6 +9,7 @@
 
 return [
     'amount'          => '거래 금액',
+    'balance'         => '현재 잔고',
     'comment'         => '거래설명',
     'consumption'     => '소비',
     'customer'        => '고객',

@@ -10,6 +10,7 @@
 return [
     'add_review'      => '리뷰 추가',
     'all'             => '전체',
+    'bundle_includes' => '콤보 포함',
     'cancelled'       => '취소됨',
     'close'           => '닫기',
     'completed'       => '완료됨',

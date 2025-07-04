@@ -12,8 +12,10 @@ return [
     'address_id'     => '地址ID',
     'address_manage' => '地址管理',
     'avatar'         => '头像',
+    'balance_manage' => '余额管理',
     'basic_info'     => '基本信息',
     'code'           => '验证码',
+    'customer_info'  => '客户信息',
     'discount_rate'  => '折扣率',
     'email'          => '电子邮件',
     'from'           => '来源',
@@ -24,6 +26,4 @@ return [
     'mini_cost'      => '最低消费额度',
     'name'           => '姓名',
     'password'       => '密码',
-    'balance_manage' => '余额管理',
-    'customer_info'  => '客户信息',
 ];

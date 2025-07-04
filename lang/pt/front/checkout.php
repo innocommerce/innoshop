@@ -20,9 +20,10 @@ return [
     'order_comment'         => 'Comentário do Pedido',
     'password'              => 'Senha incorreta.',
     'place_order'           => 'Enviar Pedido',
+    'please_create_address' => 'Por favor crie um endereço',
     'same_shipping_address' => 'Endereço de cobrança é o mesmo que o de entrega',
     'shipping_address'      => 'Endereço de Entrega',
     'shipping_methods'      => 'Métodos de Envio',
-    'shipping_quote_error'  => 'Por favor, implemente o método: public function getQuotes($checkoutService)\" no plugin :classname',
+    'shipping_quote_error'  => 'Por favor, implemente o método: public function getQuotes($checkoutService)\\\" no plugin :classname',
     'throttle'              => 'Você tentou fazer login muitas vezes, por favor tente novamente em :seconds segundos.',
 ];

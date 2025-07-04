@@ -10,6 +10,7 @@
 return [
     'account'                        => '個人中心',
     'addresses'                      => '我的地址',
+    'balance_overview'               => '餘額概覽',
     'cancel_order'                   => '取消訂單',
     'cancel_order_confirm'           => '確定要取消這個訂單嗎？',
     'cancel_order_confirm_btn_close' => '關閉',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => '我的餘額',
     'verify_code_error'              => '驗證碼錯誤',
     'view_all'                       => '查看全部',
+    'wallet'                         => '我的錢包',
+    'withdrawals'                    => '提現申請',
 ];

@@ -10,6 +10,7 @@
 return [
     'account'                        => 'Pusat Akun',
     'addresses'                      => 'Alamat Saya',
+    'balance_overview'               => 'Ikhtisar saldo',
     'cancel_order'                   => 'Batalkan pesanan',
     'cancel_order_confirm'           => 'Yakin ingin membatalkan pesanan?',
     'cancel_order_confirm_btn_close' => 'menutup',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'Saldo saya',
     'verify_code_error'              => 'Kode Verifikasi Salah',
     'view_all'                       => 'Lihat Semua',
+    'wallet'                         => 'Dompet saya',
+    'withdrawals'                    => 'Permintaan penarikan',
 ];

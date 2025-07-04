@@ -52,6 +52,8 @@ return [
     'import'               => 'importazioni',
     'inactive'             => 'Disattivato',
     'install'              => 'Installa',
+    'invalid_action'       => 'Ricorso d’annullamento',
+    'invalid_parameters'   => 'Parametri non validi',
     'link'                 => 'Link',
     'list'                 => 'Lista',
     'loading'              => 'Carico …',

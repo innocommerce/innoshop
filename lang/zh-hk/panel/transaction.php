@@ -9,6 +9,7 @@
 
 return [
     'amount'          => '交易金額',
+    'balance'         => '當前餘額',
     'comment'         => '交易備註',
     'consumption'     => '消費',
     'customer'        => '客戶',

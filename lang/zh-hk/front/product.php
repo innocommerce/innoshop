@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => '加入收藏',
     'attribute'             => '商品屬性',
     'brand'                 => '品牌',
+    'bundle_includes'       => '組合包含',
     'buy_now'               => '立即購買',
     'category'              => '分類',
     'description'           => '商品詳情',

@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'Umfang der transaktion.',
+    'balance'         => 'Kontostand $0,00',
     'comment'         => 'bemerkungen',
     'consumption'     => 'Konsum.',
     'customer'        => 'Mandanten.',

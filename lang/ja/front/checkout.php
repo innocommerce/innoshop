@@ -20,9 +20,10 @@ return [
     'order_comment'         => '注文コメント',
     'password'              => 'パスワードが間違っています。',
     'place_order'           => '注文を確定する',
+    'please_create_address' => 'アドレス作成をお願いします。',
     'same_shipping_address' => '請求先住所は配送先住所と同じ',
     'shipping_address'      => '配送先住所',
     'shipping_methods'      => '配送方法',
-    'shipping_quote_error'  => 'プラグイン :classname のメソッド: public function getQuotes($checkoutService)\" を実装してください。',
+    'shipping_quote_error'  => 'プラグイン :classname のメソッド: public function getQuotes($checkoutService)\\\" を実装してください。',
     'throttle'              => '試行回数が多すぎます。 :seconds 秒後に再試行してください。',
 ];

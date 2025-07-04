@@ -8,6 +8,7 @@
  */
 
 return [
+    'back'        => '戻ります',
     'cancel'      => 'キャンセル',
     'confirm'     => '確認',
     'hint'        => 'ヒント',

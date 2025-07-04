@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'Thêm vào yêu thích',
     'attribute'             => 'Thuộc tính sản phẩm',
     'brand'                 => 'Nhãn hàng',
+    'bundle_includes'       => 'Sự kết hợp bao gồm',
     'buy_now'               => 'Mua ngay',
     'category'              => 'Danh mục',
     'description'           => 'Chi tiết sản phẩm',

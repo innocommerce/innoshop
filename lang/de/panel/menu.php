@@ -63,6 +63,8 @@ return [
     'top_product'        => 'Produkte',
     'top_setting'        => 'Einstellungen',
     'transactions'       => 'Kontostand der gäste',
+    'translations'       => 'Übersetzung und management',
     'upload'             => 'Upload Funktion',
     'weight_classes'     => 'Waage?',
+    'withdrawals'        => 'Ein kunde taucht auf.',
 ];

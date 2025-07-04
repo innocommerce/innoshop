@@ -8,6 +8,7 @@
  */
 
 return [
+    'commission'  => 'Komisi.',
     'consumption' => 'Konsumen.',
     'recharge'    => 'Daya penuh',
     'refund'      => 'Pengembalian uang.',

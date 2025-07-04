@@ -10,6 +10,7 @@
 return [
     'add_review'      => 'Bewertung hinzufügen',
     'all'             => 'Alle',
+    'bundle_includes' => 'Kombination bedeutet:',
     'cancelled'       => 'Abgebrochen',
     'close'           => 'Schließen',
     'completed'       => 'Abgeschlossen',

@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'в закладки',
     'attribute'             => 'атрибуты продукта',
     'brand'                 => 'бренд',
+    'bundle_includes'       => 'Комбинированное включение',
     'buy_now'               => 'купить сейчас',
     'category'              => 'категория',
     'description'           => 'детали продукта',

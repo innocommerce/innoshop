@@ -8,7 +8,7 @@
  */
 
 return [
-    'add'               => '添加',
+    'callback'          => '回调地址',
     'callback_url'      => 'Callback URL',
     'client_id'         => 'Client ID',
     'client_secret'     => 'Client Secret',
@@ -22,10 +22,8 @@ return [
     'please_secret'     => '请输入 Client Secret',
     'required_fields'   => '请填写所有必填项',
     'save'              => '保存',
-    'callback'          => '回调地址',
     'status'            => '状态',
     'success'           => '数据保存成功',
     'twitter'           => 'Twitter',
     'type'              => '类型',
-    'delete'            => '删除',
 ];

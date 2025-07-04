@@ -73,7 +73,7 @@
                 <input style="max-width: 50px;" class="form-control" v-model="item.position"/>
               </td>
               <td class="align-middle text-center">
-                <el-button size="small" type="danger" plain @click="open(index)">{{__('panel/sns.delete')}}</el-button>
+                <el-button size="small" type="danger" plain @click="open(index)">{{__('panel/common.delete')}}</el-button>
               </td>
             </tr>
             <tr v-if="items.length > 0 && items.length < 3">
@@ -93,7 +93,7 @@
             <tr v-if="items.length === 0">
               <td colspan="7" style="text-align: center;">
                 {{__('panel/sns.no_data')}}
-                <el-button size="small" type="primary" @click.prevent="add">{{__('panel/sns.add')}}</el-button>
+                <el-button size="small" type="primary" @click.prevent="add">{{__('panel/common.add')}}</el-button>
               </td>
             </tr>
             </tbody>

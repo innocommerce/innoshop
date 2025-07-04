@@ -52,6 +52,8 @@ return [
     'import'               => 'الاستيراد',
     'inactive'             => 'غير نشط',
     'install'              => 'تثبيت',
+    'invalid_action'       => 'عملية غير صالحة',
+    'invalid_parameters'   => 'البارامترات غير صالحة',
     'link'                 => 'رابط',
     'list'                 => 'قائمة',
     'loading'              => 'تحميل …',

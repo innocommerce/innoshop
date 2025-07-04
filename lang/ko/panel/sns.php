@@ -9,6 +9,7 @@
 
 return [
     'add'               => '추가',
+    'callback'          => '콜백 URL',
     'callback_url'      => '콜백 URL',
     'client_id'         => '클라이언트 ID',
     'client_secret'     => '클라이언트 시크릿',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => '클라이언트 시크릿을 입력하세요',
     'required_fields'   => '모든 필수 항목을 채워주세요',
     'save'              => '저장',
-    'callback'          => '콜백 URL',
     'status'            => '상태',
     'success'           => '데이터 저장 성공',
     'twitter'           => '트위터',

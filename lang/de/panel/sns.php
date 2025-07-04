@@ -9,6 +9,7 @@
 
 return [
     'add'               => 'Hinzufügen',
+    'callback'          => 'Rückrufadresse',
     'callback_url'      => 'Rückruff-URL',
     'client_id'         => 'Kunden-ID',
     'client_secret'     => 'Geheime Kunden-ID',
@@ -22,7 +23,6 @@ return [
     'please_secret'     => 'Bitte geben Sie das Geheimnis ein',
     'required_fields'   => 'Bitte füllen Sie alle erforderlichen Felder aus',
     'save'              => 'Speichern',
-    'callback'          => 'Rückrufadresse',
     'status'            => 'Status',
     'success'           => 'Datenspeicherung erfolgreich',
     'twitter'           => 'Twitter',

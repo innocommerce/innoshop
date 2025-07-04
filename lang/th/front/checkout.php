@@ -20,9 +20,10 @@ return [
     'order_comment'         => 'หมายเหตุคำสั่งซื้อ',
     'password'              => 'รหัสผ่านผิด',
     'place_order'           => 'ส่งคำสั่งซื้อ',
+    'please_create_address' => 'โปรดสร้าง ที่อยู่',
     'same_shipping_address' => 'ที่อยู่ออกบิลเหมือนที่อยู่จัดส่ง',
     'shipping_address'      => 'ที่อยู่สำหรับจัดส่ง',
     'shipping_methods'      => 'วิธีจัดส่ง',
-    'shipping_quote_error'  => 'กรุณาไปที่ปลั๊กอิน :classname และใช้งานฟังก์ชั่น: public function getQuotes($checkoutService)\"',
+    'shipping_quote_error'  => 'กรุณาไปที่ปลั๊กอิน :classname และใช้งานฟังก์ชั่น: public function getQuotes($checkoutService)\\\"',
     'throttle'              => 'คุณได้ลองเข้าสู่ระบบหลายครั้งเกินไป กรุณารอ :seconds วินาทีแล้วลองอีกครั้ง',
 ];

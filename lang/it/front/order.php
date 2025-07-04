@@ -10,6 +10,7 @@
 return [
     'add_review'      => 'Aggiungi recensione',
     'all'             => 'Tutto',
+    'bundle_includes' => 'composizione',
     'cancelled'       => 'Cancellato',
     'close'           => 'Chiudi',
     'completed'       => 'Completato',

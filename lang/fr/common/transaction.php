@@ -8,6 +8,7 @@
  */
 
 return [
+    'commission'  => 'Proposition de la commission',
     'consumption' => 'consommation',
     'recharge'    => 'complément',
     'refund'      => 'Les restitutions',

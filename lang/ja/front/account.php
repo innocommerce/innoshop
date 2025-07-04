@@ -10,6 +10,7 @@
 return [
     'account'                        => 'マイページ',
     'addresses'                      => '住所',
+    'balance_overview'               => '残高の概要です',
     'cancel_order'                   => '註文をキャンセルします。',
     'cancel_order_confirm'           => 'この註文のキャンセルは確定ですか?',
     'cancel_order_confirm_btn_close' => '閉鎖します',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => '私の残額です',
     'verify_code_error'              => '確認コードが間違っています',
     'view_all'                       => 'すべて表示',
+    'wallet'                         => '私の財布です',
+    'withdrawals'                    => '現金引き出しの申し込みです',
 ];

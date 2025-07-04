@@ -8,6 +8,7 @@
  */
 
 return [
+    'commission'  => '커미션',
     'consumption' => '소비',
     'recharge'    => '충전',
     'refund'      => '환불',

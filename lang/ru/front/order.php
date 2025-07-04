@@ -10,6 +10,7 @@
 return [
     'add_review'      => 'добавить обзор',
     'all'             => 'все',
+    'bundle_includes' => 'Комбинированное включение',
     'cancelled'       => 'отменено',
     'close'           => 'закрыть',
     'completed'       => 'завершено',

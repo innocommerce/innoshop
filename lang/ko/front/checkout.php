@@ -20,9 +20,10 @@ return [
     'order_comment'         => '주문 메모',
     'password'              => '비밀번호가 잘못되었습니다.',
     'place_order'           => '주문하기',
+    'please_create_address' => '주소를 만들어주세요',
     'same_shipping_address' => '배송 주소와 청구 주소가 동일합니다',
     'shipping_address'      => '배송 주소',
     'shipping_methods'      => '배송 방법',
-    'shipping_quote_error'  => '플러그인 :classname 에서 public function getQuotes($checkoutService)\" 를 구현해주세요.',
+    'shipping_quote_error'  => '플러그인 :classname 에서 public function getQuotes($checkoutService)\\\" 를 구현해주세요.',
     'throttle'              => '로그인 시도 횟수가 너무 많습니다. :seconds 초 후에 다시 시도해주세요.',
 ];

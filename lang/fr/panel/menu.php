@@ -63,6 +63,8 @@ return [
     'top_product'        => 'Produit',
     'top_setting'        => 'Paramètres',
     'transactions'       => 'Solde des clients',
+    'translations'       => 'Gestion des traductions',
     'upload'             => 'Fonctionnalité de téléchargement',
     'weight_classes'     => 'Unité de poids',
+    'withdrawals'        => 'Retrait par client',
 ];

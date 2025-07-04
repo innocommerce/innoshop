@@ -10,6 +10,7 @@
 return [
     'account'                        => 'личный кабинет',
     'addresses'                      => 'мои адреса',
+    'balance_overview'               => 'Обзор баланса',
     'cancel_order'                   => 'Отмени заказ.',
     'cancel_order_confirm'           => 'Вы уверены, что хотите отменить приказ?',
     'cancel_order_confirm_btn_close' => 'закр',
@@ -35,4 +36,6 @@ return [
     'transactions'                   => 'Мой баланс',
     'verify_code_error'              => 'ошибка кода проверки',
     'view_all'                       => 'посмотреть все',
+    'wallet'                         => 'Мой бумажник.',
+    'withdrawals'                    => 'Заявление на снятие наличных',
 ];

@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => 'Tambah ke Kegemar',
     'attribute'             => 'Atribut Produk',
     'brand'                 => 'Merek',
+    'bundle_includes'       => 'Gabungan ini mengandungi',
     'buy_now'               => 'Beli Sekarang',
     'category'              => 'Kategori',
     'description'           => 'Butiran Produk',

@@ -20,9 +20,10 @@ return [
     'order_comment'         => '訂單備註',
     'password'              => '密碼錯誤。',
     'place_order'           => '提交訂單',
+    'please_create_address' => '請創建地址',
     'same_shipping_address' => '賬單地址同收貨地址',
     'shipping_address'      => '收貨地址',
     'shipping_methods'      => '配送方式',
-    'shipping_quote_error'  => '請在插件 :classname 實現方法: public function getQuotes($checkoutService)\"',
+    'shipping_quote_error'  => '請在插件 :classname 實現方法: public function getQuotes($checkoutService)\\\"',
     'throttle'              => '您嘗試嘅登錄次數過多，請 :seconds 秒後再試。',
 ];

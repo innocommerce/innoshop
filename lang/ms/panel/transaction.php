@@ -9,6 +9,7 @@
 
 return [
     'amount'          => 'Jumlah transaksi',
+    'balance'         => 'Baki semasa',
     'comment'         => 'Nota Transaksi',
     'consumption'     => 'Mengambil',
     'customer'        => 'Pelanggan',

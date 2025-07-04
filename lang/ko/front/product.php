@@ -12,6 +12,7 @@ return [
     'add_wishlist'          => '위시리스트에 추가',
     'attribute'             => '상품 속성',
     'brand'                 => '브랜드',
+    'bundle_includes'       => '콤보 포함',
     'buy_now'               => '바로 구매',
     'category'              => '카테고리',
     'description'           => '상품 설명',
