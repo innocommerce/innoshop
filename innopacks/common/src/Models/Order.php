@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\Order\Fee;
 use InnoShop\Common\Models\Order\History;
 use InnoShop\Common\Models\Order\Item;
@@ -218,11 +219,16 @@ class Order extends BaseModel
      */
     public function notifyNewOrder(): void
     {
-        $useQueue = system_setting('use_queue', false);
-        if ($useQueue) {
-            $this->notify(new OrderNewNotification($this));
-        } else {
-            $this->notifyNow(new OrderNewNotification($this));
+        try {
+            $useQueue = system_setting('use_queue', false);
+            if ($useQueue) {
+                $this->notify(new OrderNewNotification($this));
+            } else {
+                $this->notifyNow(new OrderNewNotification($this));
+            }
+        } catch (Throwable $th) {
+            Log::error($th->getMessage());
+            Log::error($th->getTraceAsString());
         }
     }
 
@@ -234,11 +240,16 @@ class Order extends BaseModel
      */
     public function notifyUpdateOrder($fromCode): void
     {
-        $useQueue = system_setting('use_queue', false);
-        if ($useQueue) {
-            $this->notify(new OrderUpdateNotification($this, $fromCode));
-        } else {
-            $this->notifyNow(new OrderUpdateNotification($this, $fromCode));
+        try {
+            $useQueue = system_setting('use_queue', false);
+            if ($useQueue) {
+                $this->notify(new OrderUpdateNotification($this, $fromCode));
+            } else {
+                $this->notifyNow(new OrderUpdateNotification($this, $fromCode));
+            }
+        } catch (Throwable $th) {
+            Log::error($th->getMessage());
+            Log::error($th->getTraceAsString());
         }
     }
 }

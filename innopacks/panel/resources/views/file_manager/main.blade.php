@@ -117,26 +117,20 @@
       border-right: 1px solid #EBEEF5;
       overflow-y: auto;
       background: #fff;
-      height: 100%;
+      max-height:90vh;
+      border-bottom: 1px solid #F0F0F0;
     }
 
     /* 右侧文件列表样式 */
     .file-list {
       padding: 20px;
       overflow-y: auto;
-      height: calc(100vh - 100px);
-      /* 设置一个固定高度，减去头部工具栏等区域的高度 */
+      height:90vh;
       flex: 1;
+      border-bottom: 1px solid #F0F0F0;
       display: flex;
       flex-direction: column;
     }
-
-    /* 文件列表内容容器 */
-    .file-list-content {
-
-      /* 确保内容可以正确滚动 */
-    }
-
     /* 顶部工具栏 */
     .file-toolbar {
       padding: 15px 20px;
@@ -299,21 +293,6 @@
     .file-list .el-loading-mask {
       border-radius: 4px;
     }
-
-    /* 调整文件列表高度，为分页腾出空间 */
-    .file-list {}
-
-    /* 调整文件网格布局 */
-    .el-row {
-      margin-right: -7.5px !important;
-      margin-left: -7.5px !important;
-    }
-
-    .el-col {
-      padding-right: 7.5px !important;
-      padding-left: 7.5px !important;
-    }
-
     /* 修改按钮样式部分 */
     /* Element UI 按钮样式重置 */
     .el-button {
@@ -667,18 +646,6 @@
       background: #fff;
       border-radius: 4px;
     }
-
-    /* 调整网格布局间距 */
-    .el-row {
-      margin-right: -7.5px !important;
-      margin-left: -7.5px !important;
-    }
-
-    .el-col {
-      padding-right: 7.5px !important;
-      padding-left: 7.5px !important;
-    }
-
     /* 文件管理器整体容器 */
     .file-manager {
       background: #fff;

@@ -76,6 +76,8 @@
               @endif
             </div>
 
+            @hookinsert('product.detail.stock.after')
+
             <div class="sub-product-title">{{ $product->fallbackName('summary') }}</div>
 
             @include('products._bundle_items')

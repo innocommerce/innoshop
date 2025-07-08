@@ -10,14 +10,15 @@
 @section('content')
   <div class="card h-min-600">
     <div class="card-body">
-
       <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('orders.index')" :export="true" />
+      @hookinsert('panel.orders.index.criteria.after')
 
       @if ($orders->count())
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
               <tr>
+               @hookinsert('panel.orders.index.header.top')
                 <td>{{ __('panel/common.id') }}</td>
                 <td>{{ __('panel/order.number') }}</td>
                 <td>{{ __('panel/order.order_items') }}</td>
@@ -34,6 +35,7 @@
             <tbody>
               @foreach ($orders as $item)
                 <tr>
+                 @hookinsert('panel.orders.index.row.top', $item)
                   <td>{{ $item->id }}</td>
                   <td>{{ $item->number }} {{ $item->id == $item->parent_id ? 'M' : '' }}</td>
                   <td>
@@ -45,10 +47,16 @@
                       @endforeach
                     </div>
                   </td>
-                  <td><a href="{{ panel_route('customers.edit', $item->customer_id) }}" class="text-decoration-none"
+                  <td>
+                    @if ($item->customer_id > 0)
+                      <a href="{{ panel_route('customers.edit', $item->customer_id) }}" class="text-decoration-none"
                       target="_blank">
+                        {{ $item->customer_name }}
+                      </a>
+                    @else
                       {{ $item->customer_name }}
-                    </a></td>
+                    @endif
+                  </td>
                   <td>{{ $item->shipping_method_name }}</td>
                   <td>{{ $item->billing_method_name }}</td>
                   <td>{{ $item->total_format }}</td>
@@ -73,5 +81,5 @@
 @endsection
 
 @push('footer')
-  <script></script>
+    @hookinsert('panel.orders.footer.script.bottom')
 @endpush
