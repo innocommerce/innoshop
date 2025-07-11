@@ -9,9 +9,9 @@
          value="{{ request($item['name']) }}"
          placeholder="{{ $item['label'] }}">
   <input type="hidden"
-         name="{{ $item['hidden'] ?? ($item['name'].'_id') }}"
+         name="{{ $item['hidden_input_name'] ?? ($item['name'].'_id') }}"
          id="autocomplete-{{ $item['name'] }}-id"
-         value="{{ request($item['hidden'] ?? ($item['name'].'_id')) }}">
+         value="{{ request($item['hidden_input_name'] ?? ($item['name'].'_id')) }}">
 </div>
 
 @push('footer')
@@ -32,15 +32,16 @@ $(function () {
         .then(function (res) {
           response($.map(res.data, function (item) {
             return {
-              label: item['{{ $item['label_key'] ?? 'name' }}'],
-              value: item['{{ $item['value_key'] ?? 'id' }}']
+              label: item['{{ $item['option_label_key'] ?? 'name' }}'],
+              value: item['{{ $item['input_value_key'] ?? ($item['option_label_key'] ?? 'name') }}'],
+              hidden: item['{{ $item['hidden_value_key'] ?? 'id' }}']
             };
           }));
         });
     },
     'select': function (item) {
-      $input.val(item.label);
-      $hiddenInput.val(item.value);
+      $input.val(item.value);
+      $hiddenInput.val(item.hidden);
       return false;
     }
   });

@@ -60,6 +60,10 @@ final class Plugin implements Arrayable, ArrayAccess
 
     protected array $fields = [];
 
+    protected string $authorName = '';
+
+    protected string $authorEmail = '';
+
     public function __construct(string $path, array $packageInfo)
     {
         $this->path        = $path;
@@ -148,14 +152,38 @@ final class Plugin implements Arrayable, ArrayAccess
     }
 
     /**
-     * @param  string  $author
+     * Set author info
+     *
+     * @param  array  $author
      * @return $this
      */
-    public function setAuthor(string $author): self
+    public function setAuthor($author): self
     {
-        $this->author = $author;
+        $this->authorName  = $author['name'];
+        $this->authorEmail = $author['email'];
+        $this->author      = $author['name'].' <'.$author['email'].'>';
 
         return $this;
+    }
+
+    /**
+     * Get author name
+     *
+     * @return string
+     */
+    public function getAuthorName(): string
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * Get author email
+     *
+     * @return string
+     */
+    public function getAuthorEmail(): string
+    {
+        return $this->authorEmail;
     }
 
     /**
@@ -289,6 +317,11 @@ final class Plugin implements Arrayable, ArrayAccess
         return $this->type;
     }
 
+    public function getTypeFormat(): string
+    {
+        return trans("panel/plugin.{$this->type}");
+    }
+
     public function getCode(): string
     {
         return $this->code;
@@ -307,6 +340,11 @@ final class Plugin implements Arrayable, ArrayAccess
     public function getIcon(): string
     {
         return $this->icon;
+    }
+
+    public function getIconUrl(): string
+    {
+        return plugin_resize($this->code, $this->icon);
     }
 
     public function getAuthor(): string
@@ -543,5 +581,42 @@ final class Plugin implements Arrayable, ArrayAccess
     public function offsetUnset($offset): void
     {
         unset($this->packageInfo[$offset]);
+    }
+
+    /**
+     * Get plugin README.md file path
+     *
+     * @return string
+     */
+    public function getReadmePath(): string
+    {
+        return $this->getPath().DIRECTORY_SEPARATOR.'README.md';
+    }
+
+    /**
+     * Get plugin README.md content
+     *
+     * @return string
+     */
+    public function getReadme(): string
+    {
+        $readmePath = $this->getReadmePath();
+        if (file_exists($readmePath)) {
+            return file_get_contents($readmePath);
+        }
+
+        return '';
+    }
+
+    /**
+     * Get plugin README.md content
+     *
+     * @return string
+     */
+    public function getReadmeHtml(): string
+    {
+        $readme = $this->getReadme();
+
+        return parsedown($readme);
     }
 }

@@ -12,8 +12,10 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use InnoShop\Common\Repositories\Product\SkuRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Resources\ProductSimple;
+use InnoShop\Common\Resources\SkuSimple;
 use InnoShop\RestAPI\Services\ProductImportService;
 use Throwable;
 
@@ -53,6 +55,22 @@ class ProductController extends BaseController
         $products = ProductRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
 
         return ProductSimple::collection($products);
+    }
+
+    /**
+     * SKU编码自动完成
+     *
+     * @param  Request  $request
+     * @return AnonymousResourceCollection
+     */
+    public function skuAutocomplete(Request $request): AnonymousResourceCollection
+    {
+        $keyword = $request->get('keyword') ?? '';
+        $limit   = $request->get('limit', 10);
+
+        $skus = SkuRepo::getInstance()->searchByKeyword($keyword, $limit);
+
+        return SkuSimple::collection($skus);
     }
 
     /**

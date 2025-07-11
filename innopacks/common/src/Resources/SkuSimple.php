@@ -31,10 +31,13 @@ class SkuSimple extends JsonResource
         $imageUrl   = image_resize($imagePath);
         $finalPrice = $this->getFinalPrice();
 
+        $productName = $this->product->fallbackName();
+
         $data = [
             'id'                  => $this->id,
             'product_id'          => $this->product_id,
-            'product_name'        => $this->product->translation->name,
+            'product_name'        => $productName,
+            'display_name'        => $this->code.' - '.$productName,
             'image'               => $imagePath,
             'image_url'           => $imageUrl,
             'variants'            => $this->variants,

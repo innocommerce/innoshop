@@ -7,174 +7,78 @@
 @section('content')
 <div class="card h-min-600">
   <div class="card-body">
-
+    <div class="row mb-4 align-items-center pb-3 plugin-header-bar">
+      <div class="col-auto">
+        @if($plugin->getIconUrl())
+          <img src="{{ $plugin->getIconUrl() }}" alt="logo" class="img-fluid rounded me-4 plugin-header-logo">
+        @endif
+      </div>
+      <div class="col ps-0">
+        <div class="fw-bold fs-4 mb-1">
+          {{ $plugin->getLocaleName() }}
+          @if($plugin->getVersion())
+            <small class="text-muted ms-2">{{ $plugin->getVersion() }}</small>
+          @endif
+        </div>
+        @if($plugin->getLocaleDescription())
+          <div class="mb-2 text-secondary plugin-header-desc">{{ $plugin->getLocaleDescription() }}</div>
+        @endif
+        <div class="d-flex flex-wrap gap-3">
+          <div class="text-secondary small">
+            <i class="bi bi-person"></i> {{ __('panel/plugin.author') }}: {{ $plugin->getAuthorName() }}
+            @if($plugin->getAuthorEmail())
+              <span class="ms-2"><i class="bi bi-envelope"></i> {{ __('panel/plugin.email') }}: <a href="mailto:{{ $plugin->getAuthorEmail() }}" class="text-decoration-none">{{ $plugin->getAuthorEmail() }}</a></span>
+            @endif
+          </div>
+          @if($plugin->getType())
+            <div class="text-secondary small"><i class="bi bi-tag"></i> {{ __('panel/plugin.type') }}：{{ $plugin->getTypeFormat() }}</div>
+          @endif
+        </div>
+      </div>
+    </div>
     <form class="needs-validation" id="app-form" novalidate action="{{ panel_route('plugins.update', [$plugin->getCode()]) }}" method="POST">
       @csrf
       {{ method_field('put') }}
       <div class="row">
         <div class="col-12 col-md-7">
-          @foreach ($fields as $field)
-            @if ($field['type'] == 'image')
-              <x-common-form-image
-                :name="$field['name']"
-                :title="$field['label']"
-                :description="$field['description'] ?? ''"
-                :error="$errors->first($field['name'])"
-                :required="(bool)$field['required']"
-                :value="old($field['name'], $field['value'] ?? '')">
-                @if ($field['recommend_size'] ?? false)
-                  <div class="text-secondary"><small>{{ __('common.recommend_size') }} {{ $field['recommend_size'] }}</small></div>
-                @endif
-              </x-common-form-image>
-            @endif
-
-            @if ($field['type'] == 'string')
-              <x-common-form-input
-                :name="$field['name']"
-                :title="$field['label']"
-                :placeholder="$field['placeholder'] ?? ''"
-                :description="$field['description'] ?? ''"
-                :error="$errors->first($field['name'])"
-                :required="(bool)($field['required'] ?? false)"
-                :value="old($field['name'], $field['value'] ?? '')" />
-            @endif
-
-            @if ($field['type'] == 'multi-string')
-              @php
-                $value = $field['value'] ?? '';
-                if (is_string($value)) {
-                    $value = json_decode($value, true) ?? [];
-                }
-              @endphp
-              <x-common-form-input
-                :name="$field['name']"
-                :title="$field['label']"
-                :placeholder="$field['placeholder'] ?? ''"
-                :description="$field['description'] ?? ''"
-                :error="$errors->first($field['name'])"
-                :required="(bool)$field['required']"
-                :is-locales="true"
-                :multiple="true"
-                :value="$value" />
-            @endif
-
-            @if ($field['type'] == 'select')
-              <x-common-form-select
-                :name="$field['name']"
-                :title="$field['label']"
-                :value="old($field['name'], $field['value'] ?? '')"
-                :options="$field['options']"
-                :emptyOption="$field['emptyOption'] ?? true" >
-                @if (isset($field['description']))
-                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
-                @endif
-              </x-common-form-select>
-            @endif
-
-            @if ($field['type'] == 'bool')
-              <x-common-form-switch-radio
-                :name="$field['name']"
-                :title="$field['label']"
-                :value="old($field['name'], $field['value'] ?? '')">
-                @if (isset($field['description']))
-                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
-                @endif
-              </x-common-form-switch-radio>
-            @endif
-
-            @if ($field['type'] == 'textarea')
-              <x-common-form-textarea
-                :name="$field['name']"
-                :title="$field['label']"
-                :required="(bool)$field['required']"
-                :value="old($field['name'], $field['value'] ?? '')">
-                @if (isset($field['description']))
-                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
-                @endif
-              </x-common-form-textarea>
-            @endif
-
-            @if ($field['type'] == 'multi-textarea')
-              <x-common-form-textarea
-                :name="$field['name']"
-                :title="$field['label']"
-                :required="(bool)$field['required']"
-                :is-locales="true"
-                :multiple="true"
-                :value="old($field['name'], $field['value'] ?? '')">
-                @if (isset($field['description']))
-                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
-                @endif
-              </x-common-form-textarea>
-            @endif
-
-            @if ($field['type'] == 'rich-text')
-              <x-common-form-rich-text
-                :name="$field['name']"
-                :title="$field['label']"
-                :value="old($field['name'], $field['value'] ?? '')"
-                :required="(bool)$field['required']"
-                >
-                @if (isset($field['description']))
-                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
-                @endif
-              </x-common-form-rich-text>
-            @endif
-
-            @if ($field['type'] == 'multi-rich-text')
-              <x-common-form-rich-text
-                :name="$field['name']"
-                :title="$field['label']"
-                :value="old($field['name'], $field['value'] ?? '')"
-                :required="(bool)$field['required']"
-                :is-locales="true"
-                >
-                @if (isset($field['description']))
-                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
-                @endif
-              </x-common-form-rich-text>
-            @endif
-
-            @if ($field['type'] == 'checkbox')
-              <x-panel::form.row :title="$field['label']" :required="(bool)($field['required'] ?? false)">
-                <div class="form-checkbox">
-                  @php
-                    $checkedValues = old($field['name'], $field['value'] ?? []);
-                    if (is_string($checkedValues)) {
-                        $checkedValues = json_decode($checkedValues, true);
-                    }
-                    if (!is_array($checkedValues)) {
-                        $checkedValues = [];
-                    }
-                  @endphp
-                  @foreach ($field['options'] as $item)
-                  <div class="form-check d-inline-block mt-2 me-3">
-                    <input
-                      class="form-check-input"
-                      name="{{ $field['name'] }}[]"
-                      type="checkbox"
-                      value="{{ $item['value'] }}"
-                      {{ in_array($item['value'], $checkedValues) ? 'checked' : '' }}
-                      id="flexCheck-{{ $field['name'] }}-{{ $loop->index }}">
-                    <label class="form-check-label" for="flexCheck-{{ $field['name'] }}-{{ $loop->index }}">
-                      {{ $item['label'] }}
-                    </label>
-                  </div>
-                  @endforeach
-                </div>
-                @if (isset($field['description']))
-                  <div class="text-secondary"><small>{{ $field['description'] }}</small></div>
-                @endif
-              </x-panel::form.row>
-            @endif
-          @endforeach
+          @include('plugin::plugins.fields', ['fields' => $fields, 'errors' => $errors])
         </div>
       </div>
     </form>
+    @if($plugin->getReadmeHtml())
+      <div class="card mt-4">
+        <div class="card-header">插件说明文档</div>
+        <div class="card-body markdown-body">
+          {!! $plugin->getReadmeHtml() !!}
+        </div>
+      </div>
+    @endif
   </div>
 </div>
 @endsection
 
-@push('footer')
-  <script></script>
+@push('header')
+  <link rel="stylesheet" href="{{ asset('vendor/github/github-markdown.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('vendor/github/highlight-github.min.css') }}">
+  <style>
+    .markdown-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #fff;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .plugin-header-bar {
+      border-bottom: 1.5px solid #eee;
+    }
+    .plugin-header-logo {
+      max-height: 100px;
+      border: 1px solid #e9e9e9;
+      box-sizing: border-box;
+    }
+    .plugin-header-desc {
+      font-size: 15px;
+    }
+  </style>
 @endpush

@@ -80,6 +80,15 @@ class ProductRepo extends BaseRepo
         $criteria = [
             ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
             [
+                'name'              => 'sku_code',
+                'type'              => 'autocomplete',
+                'label'             => trans('panel/product.sku_code'),
+                'url'               => route('api.panel.products.sku_autocomplete'),
+                'hidden_input_name' => 'sku_id',
+                'option_label_key'  => 'display_name',
+                'input_value_key'   => 'code',
+            ],
+            [
                 'name'  => 'category',
                 'type'  => 'autocomplete',
                 'label' => trans('panel/product.category'),
@@ -793,6 +802,13 @@ class ProductRepo extends BaseRepo
         if ($skuCode) {
             $builder->whereHas('skus', function (Builder $query) use ($skuCode) {
                 $query->where('code', 'like', "%$skuCode%");
+            });
+        }
+
+        $skuId = $filters['sku_id'] ?? '';
+        if ($skuId) {
+            $builder->whereHas('skus', function (Builder $query) use ($skuId) {
+                $query->where('id', $skuId);
             });
         }
 

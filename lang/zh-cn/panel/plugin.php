@@ -10,6 +10,8 @@
 return [
     'all'                    => '所有插件',
     'author'                 => '作者',
+    'email'                  => '邮箱',
+    'type'                   => '类型',
     'billing'                => '支付方式',
     'bind'                   => '绑定',
     'bind_token'             => '绑定Token',

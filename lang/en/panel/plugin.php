@@ -10,6 +10,8 @@
 return [
     'all'                    => 'All',
     'author'                 => 'Author',
+    'email'                  => 'Email',
+    'type'                   => 'Type',
     'billing'                => 'Billing',
     'bind'                   => 'Bind',
     'bind_token'             => 'Bind Token',
