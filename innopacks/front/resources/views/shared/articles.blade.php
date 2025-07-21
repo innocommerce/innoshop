@@ -63,7 +63,7 @@
 
         @if(isset($tags) && $tags)
           <div class="sidebar-item">
-            <div class="sidebar-title">新闻标签</div>
+            <div class="sidebar-title">{{__("front/article.news_tag")}}</div>
             <div class="sidebar-list">
               <ul>
                 @foreach($tags as $tag)
