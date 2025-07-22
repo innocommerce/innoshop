@@ -25,6 +25,8 @@
 
       masterSku.variants.forEach((variant, i) => {
         $('.product-variant-box .product-variant').eq(i).find('.variant-values .variant-value-name').eq(variant).addClass('active');
+        masterSku.origin_image_url = masterSku.origin_image_url.replace(/100x100/g, '600x600');
+        $('.main-product-img img').attr('src', masterSku.origin_image_url);
       });
 
       updateVariantStatus()
@@ -66,6 +68,7 @@
         $('.product-quantity').data('sku-id', masterSku.id)
 
         if (masterSku.origin_image_url) {
+          masterSku.origin_image_url = masterSku.origin_image_url.replace(/100x100/g, '600x600');
           $('.main-product-img img').attr('src', masterSku.origin_image_url);
         }
         history.pushState({}, '', inno.updateQueryStringParameter(window.location.href, 'sku_id', masterSku.id));
