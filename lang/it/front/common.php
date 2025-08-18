@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'Esaurito',
     'page_total_show'   => 'Mostra da :first a :last di :total',
     'pages'             => 'Pagine',
+    'pagination_info'   => 'Totale :pages, totale: totale',
     'password'          => 'password',
     'please_choose'     => 'Si prega di selezionare',
     'products'          => 'Prodotti',

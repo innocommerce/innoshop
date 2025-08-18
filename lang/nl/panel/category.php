@@ -12,4 +12,3 @@ return [
     'name'    => 'Categorienaam',
     'parent'  => 'Bovenliggende categorie',
 ];
-

@@ -11,7 +11,8 @@ namespace InnoShop\Panel\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use InnoShop\Common\Services\AI\AIServiceManager;
 
 class ContentAIController extends BaseController
 {
@@ -22,26 +23,91 @@ class ContentAIController extends BaseController
     public function generate(Request $request): mixed
     {
         try {
-            $aiModel = system_setting('ai_model');
-            if (empty($aiModel)) {
-                throw new Exception('Empty AI Model');
+            // Log all request parameters
+            $allParams = $request->all();
+            Log::info('AI Generate Request: '.json_encode($allParams));
+
+            $purpose = $request->get('purpose', 'general');
+            $prompt  = $request->get('prompt', '');
+            $options = $request->get('options', []);
+
+            // Compatible with frontend form format: get prompt from value field
+            if (empty($prompt) && $request->has('value')) {
+                $prompt = $request->get('value');
             }
 
-            $modelName = Str::studly($aiModel);
-            $className = "Plugin\\$modelName\\Services\\{$modelName}Service";
-            if (! class_exists($className)) {
-                throw new Exception("Cannot found class $className");
+            // Add column and lang parameters from frontend to options
+            if ($request->has('column')) {
+                $options['column'] = $request->get('column');
+            }
+            if ($request->has('lang')) {
+                $options['lang'] = $request->get('lang');
             }
 
-            if (! method_exists($className, 'complete')) {
-                throw new Exception("Cannot found method complete for $className");
+            if (empty($prompt)) {
+                throw new Exception('Empty prompt');
             }
+
+            $manager = AIServiceManager::getInstance();
+            $result  = $manager->generate($prompt, $purpose, $options);
 
             $data = [
-                'message' => (new $className)->complete($request->all()),
+                'message' => $result,
+                'model'   => $manager->getModelForPurpose($purpose),
             ];
 
+            Log::info('AI Generate Success: '.json_encode($data));
+
             return read_json_success($data);
+        } catch (Exception $e) {
+            Log::error('AI Generate Error: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
+            Log::error('AI Generate Stack: '.$e->getTraceAsString());
+
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Get available AI model list
+     *
+     * @return mixed
+     */
+    public function getModels(): mixed
+    {
+        try {
+            $manager = AIServiceManager::getInstance();
+            $models  = $manager->getModelsForSelect();
+
+            return read_json_success([
+                'models' => $models,
+            ]);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Test model configuration
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function testModel(Request $request): mixed
+    {
+        try {
+            $model  = $request->get('model');
+            $config = $request->get('config', []);
+
+            if (empty($model)) {
+                throw new Exception('Empty model name');
+            }
+
+            $manager = AIServiceManager::getInstance();
+            $isValid = $manager->validateModelConfig($model, $config);
+
+            return read_json_success([
+                'valid' => $isValid,
+            ]);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

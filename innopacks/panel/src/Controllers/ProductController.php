@@ -15,12 +15,12 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Common\Repositories\BrandRepo;
-use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\TaxClassRepo;
 use InnoShop\Common\Repositories\WeightClassRepo;
 use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Panel\Requests\ProductRequest;
+use InnoShop\Panel\Resources\ProductNameResource;
 use Throwable;
 
 class ProductController extends BaseController
@@ -93,21 +93,37 @@ class ProductController extends BaseController
      */
     public function form($product): mixed
     {
-        $categories = CategoryRepo::getInstance()->withActive()->all();
+        // Preload related product relationships
+        if ($product->id) {
+            $product->load([
+                'relations.relationProduct.translation',
+            ]);
+        }
 
         $skus = SkuListItem::collection($product->skus)->jsonSerialize();
 
         $attributeData = AttributeRepo::getInstance()->getAttributesWithValues();
 
+        $categories = ProductRepo::getCategoryOptions();
+
+        // Process complete data for selected related products
+        $selectedRelatedProducts = [];
+        if ($product->id && $product->relations) {
+            $selectedRelatedProducts = ProductNameResource::collection(
+                $product->relations->pluck('relationProduct')
+            )->toArray(request());
+        }
+
         $data = [
-            'product'         => $product,
-            'skus'            => $skus,
-            'categories'      => $categories,
-            'brands'          => BrandRepo::getInstance()->all()->toArray(),
-            'tax_classes'     => TaxClassRepo::getInstance()->all()->toArray(),
-            'weightClasses'   => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
-            'attribute_count' => $product->productAttributes->count(),
-            'all_attributes'  => $attributeData,
+            'product'                 => $product,
+            'skus'                    => $skus,
+            'categories'              => $categories,
+            'brands'                  => BrandRepo::getInstance()->all()->toArray(),
+            'tax_classes'             => TaxClassRepo::getInstance()->all()->toArray(),
+            'weightClasses'           => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
+            'attribute_count'         => $product->productAttributes->count(),
+            'all_attributes'          => $attributeData,
+            'selectedRelatedProducts' => $selectedRelatedProducts,
         ];
 
         return inno_view('panel::products.form', $data);

@@ -27,7 +27,7 @@ class CatalogName extends JsonResource
         $data = [
             'id'     => $this->id,
             'slug'   => $this->slug,
-            'name'   => $this->translation->title,
+            'name'   => $this->fallbackName('title'),
             'active' => (bool) $this->active,
         ];
 

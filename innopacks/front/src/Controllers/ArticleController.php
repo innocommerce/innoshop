@@ -40,13 +40,11 @@ class ArticleController extends Controller
      */
     public function show(Article $article): mixed
     {
-        $article->increment('viewed');
-        $data = [
-            'article'  => $article,
-            'catalogs' => CatalogRepo::getInstance()->list(['active' => true]),
-        ];
+        if (! $article->active) {
+            abort(404);
+        }
 
-        return inno_view('articles.show', $data);
+        return $this->renderArticleDetail($article);
     }
 
     /**
@@ -58,12 +56,29 @@ class ArticleController extends Controller
     {
         $slug    = $request->slug;
         $article = ArticleRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
+
+        return $this->renderArticleDetail($article, ['slug' => $slug]);
+    }
+
+    /**
+     * Render article detail page
+     * @param  Article  $article  Article object
+     * @param  array  $extraData  Extra data
+     * @return mixed
+     * @throws \Exception
+     */
+    private function renderArticleDetail(Article $article, array $extraData = []): mixed
+    {
         $article->increment('viewed');
-        $data = [
-            'slug'     => $slug,
-            'article'  => $article,
-            'catalogs' => CatalogRepo::getInstance()->list(['active' => true]),
-        ];
+
+        $articleRepo = ArticleRepo::getInstance();
+
+        $data = array_merge([
+            'article'         => $article,
+            'catalogs'        => CatalogRepo::getInstance()->list(['active' => true]),
+            'relatedArticles' => $articleRepo->getRelatedArticles($article, 5),
+            'relatedProducts' => $articleRepo->getRelatedProducts($article, 8),
+        ], $extraData);
 
         return inno_view('articles.show', $data);
     }

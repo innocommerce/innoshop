@@ -6,7 +6,8 @@ define('LARAVEL_START', microtime(true));
 
 // Determine if the application is installed...
 $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-if (! file_exists(__DIR__ . '/../storage/installed') && !str_starts_with($requestUri, '/install')
+if (! file_exists(__DIR__.'/../storage/installed')
+    && ! str_starts_with($requestUri, '/install')
     && (stripos($_SERVER['REQUEST_URI'], '_debugbar') !== 1)) {
     header('Location: /install');
     exit;

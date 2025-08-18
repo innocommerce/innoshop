@@ -44,7 +44,7 @@
 
 <body class="@yield('body-class')">
   @if (!request('iframe'))
-    @include('layouts.header')
+    <x-front-header />
   @endif
 
   <div class="m-0 p-0" id="appContent">
@@ -52,7 +52,7 @@
   </div>
 
   @if (!request('iframe'))
-    @include('layouts.footer')
+    <x-front-footer />
   @endif
 
   @if (!request('iframe'))

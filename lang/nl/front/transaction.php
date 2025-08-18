@@ -23,4 +23,3 @@ return [
     'transaction'          => 'Mijn saldo',
     'type'                 => 'Type',
 ];
-

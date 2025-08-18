@@ -110,7 +110,7 @@ class CartItemRepo extends BaseRepo
         }
 
         $customerID = $requestData['customer_id'] ?? 0;
-        $guestID    = $requestData['guest_id']    ?? 0;
+        $guestID    = $requestData['guest_id'] ?? 0;
         $product    = $sku->product;
         $itemType   = $this->determineItemType($product, $requestData);
 

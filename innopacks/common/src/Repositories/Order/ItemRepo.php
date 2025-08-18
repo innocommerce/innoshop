@@ -70,7 +70,7 @@ class ItemRepo extends BaseRepo
             'product_sku'   => $sku->code,
             'variant_label' => $sku->variant_label,
             'name'          => $requestData['product_name'] ?? '',
-            'image'         => $requestData['image']        ?? '',
+            'image'         => $requestData['image'] ?? '',
             'quantity'      => $requestData['quantity'],
             'price'         => $requestData['price'],
             'item_type'     => $requestData['item_type'] ?? 'normal',

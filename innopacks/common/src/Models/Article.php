@@ -12,6 +12,7 @@ namespace InnoShop\Common\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Traits\Translatable;
 
 class Article extends BaseModel
@@ -19,7 +20,7 @@ class Article extends BaseModel
     use Translatable;
 
     protected $fillable = [
-        'catalog_id', 'slug', 'position', 'viewed', 'author', 'active',
+        'catalog_id', 'slug', 'position', 'viewed', 'author', 'image', 'active',
     ];
 
     public function catalog(): BelongsTo
@@ -30,6 +31,25 @@ class Article extends BaseModel
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'article_tags', 'article_id', 'tag_id');
+    }
+
+    /**
+     * Related articles relationship
+     * @return HasMany
+     */
+    public function relatedArticles(): HasMany
+    {
+        return $this->hasMany(Article\Relation::class, 'article_id');
+    }
+
+    /**
+     * Related products relationship
+     * @return BelongsToMany
+     */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'article_products', 'article_id', 'product_id')
+            ->withTimestamps();
     }
 
     /**

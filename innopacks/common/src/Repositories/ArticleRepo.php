@@ -60,6 +60,8 @@ class ArticleRepo extends BaseRepo
             'translation',
             'catalog.translation',
             'tags.translation',
+            'relatedArticles.relatedArticle.translation',
+            'products.translation',
         ]);
 
         $slug = $filters['slug'] ?? '';
@@ -151,6 +153,12 @@ class ArticleRepo extends BaseRepo
             $tagIds = $data['tag_ids'] ?? [];
             $article->tags()->sync($tagIds);
 
+            // Handle related articles
+            $this->handleRelatedArticles($article, $data);
+
+            // Handle related products
+            $this->handleRelatedProducts($article, $data);
+
             DB::commit();
 
             return $article;
@@ -178,12 +186,58 @@ class ArticleRepo extends BaseRepo
     {
         return [
             'catalog_id' => $data['catalog_id'] ?? 0,
-            'slug'       => $data['slug']       ?? null,
-            'position'   => $data['position']   ?? 0,
-            'viewed'     => $data['viewed']     ?? 0,
-            'author'     => $data['author']     ?? '',
+            'slug'       => $data['slug'] ?? null,
+            'position'   => $data['position'] ?? 0,
+            'viewed'     => $data['viewed'] ?? 0,
+            'author'     => $data['author'] ?? '',
+            'image'      => $data['image'] ?? '',
             'active'     => (bool) $data['active'],
         ];
+    }
+
+    /**
+     * Handle related articles
+     * @param  Article  $article
+     * @param  array  $data
+     * @return void
+     */
+    private function handleRelatedArticles(Article $article, array $data): void
+    {
+        // Delete existing relations
+        $article->relatedArticles()->delete();
+
+        // Handle related_article_ids array format
+        if (isset($data['related_article_ids'])) {
+            foreach ($data['related_article_ids'] as $articleId) {
+                if ($articleId && $articleId != $article->id) {
+                    $article->relatedArticles()->create([
+                        'relation_id' => $articleId,
+                    ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle related products
+     * @param  Article  $article
+     * @param  array  $data
+     * @return void
+     */
+    private function handleRelatedProducts(Article $article, array $data): void
+    {
+        $productIds = [];
+
+        // Handle product_ids array format
+        if (isset($data['product_ids'])) {
+            foreach ($data['product_ids'] as $productId) {
+                if ($productId) {
+                    $productIds[] = $productId;
+                }
+            }
+        }
+
+        $article->products()->sync($productIds);
     }
 
     /**
@@ -242,6 +296,54 @@ class ArticleRepo extends BaseRepo
             ->with('translation')
             ->whereIn('id', $ArticleIDs)
             ->orderByRaw('FIELD(id, '.implode(',', $ArticleIDs).')')
+            ->get();
+    }
+
+    /**
+     * 获取文章的相关文章
+     * @param  Article  $article
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function getRelatedArticles(Article $article, int $limit = 5): mixed
+    {
+        // 获取相关文章（通过关联表）
+        $relatedArticles = $article->relatedArticles()->with('relatedArticle.translation')
+            ->whereHas('relatedArticle', function ($query) {
+                $query->where('active', true);
+            })
+            ->limit($limit)
+            ->get()
+            ->pluck('relatedArticle');
+
+        // 如果相关文章不足，按分类获取更多
+        if ($relatedArticles->count() < $limit && $article->catalog_id) {
+            $additionalArticles = $this->builder([
+                'active'     => true,
+                'catalog_id' => $article->catalog_id,
+            ])
+                ->where('id', '!=', $article->id)
+                ->whereNotIn('id', $relatedArticles->pluck('id'))
+                ->limit($limit - $relatedArticles->count())
+                ->get();
+
+            $relatedArticles = $relatedArticles->merge($additionalArticles);
+        }
+
+        return $relatedArticles;
+    }
+
+    /**
+     * 获取文章的相关商品
+     * @param  Article  $article
+     * @param  int  $limit
+     * @return mixed
+     */
+    public function getRelatedProducts(Article $article, int $limit = 8): mixed
+    {
+        return $article->products()->where('active', true)
+            ->with(['translation', 'masterSku'])
+            ->limit($limit)
             ->get();
     }
 }

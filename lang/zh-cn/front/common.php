@@ -36,6 +36,7 @@ return [
     'no'                => '否',
     'out_of_stock'      => '缺货',
     'page_total_show'   => '显示第 :first 到第 :last 项，共 :total 项',
+    'pagination_info'   => '共 :pages 页，共 :total 项',
     'pages'             => '单页',
     'password'          => '密码',
     'please_choose'     => '请选择',

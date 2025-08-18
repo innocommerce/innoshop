@@ -18,4 +18,3 @@ return [
     'success_title'               => 'Betaling geslaagd',
     'view_order'                  => 'Bekijk bestelling',
 ];
-

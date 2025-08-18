@@ -31,4 +31,5 @@ return [
     'related_product'       => 'Related',
     'have_reviewed'         => 'You have reviewed this product',
     'bundle_includes'       => 'Bundle Includes',
+    'view_more_products'    => 'View More Products',
 ];

@@ -18,4 +18,3 @@ return [
     'max_file_size'         => 'Maximale bestandsgrootte',
     'supported_formats'     => 'Ondersteunde formaten',
 ];
-

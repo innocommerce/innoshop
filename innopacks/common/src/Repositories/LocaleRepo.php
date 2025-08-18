@@ -81,10 +81,10 @@ class LocaleRepo extends BaseRepo
             $result[] = [
                 'code'     => $localeCode,
                 'name'     => $name,
-                'id'       => $languages[$localeCode]['id']       ?? 0,
-                'image'    => $languages[$localeCode]['image']    ?? "images/flag/$localeCode.png",
+                'id'       => $languages[$localeCode]['id'] ?? 0,
+                'image'    => $languages[$localeCode]['image'] ?? "images/flag/$localeCode.png",
                 'position' => $languages[$localeCode]['position'] ?? 0,
-                'active'   => $languages[$localeCode]['active']   ?? true,
+                'active'   => $languages[$localeCode]['active'] ?? true,
             ];
         }
 

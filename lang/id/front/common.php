@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'Stok Habis',
     'page_total_show'   => 'Tampilkan :first sampai :last dari :total total',
     'pages'             => 'Ek pṛṣṭh',
+    'pagination_info'   => 'Total: halaman, total',
     'password'          => 'kode',
     'please_choose'     => 'Silakan Pilih',
     'products'          => 'Produk',

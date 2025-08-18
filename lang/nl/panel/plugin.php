@@ -46,4 +46,3 @@ return [
     'view_token'             => 'Bekijk Token',
     'views'                  => 'Bekijk aantal',
 ];
-

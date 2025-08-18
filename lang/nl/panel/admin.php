@@ -16,4 +16,3 @@ return [
     'roles'           => 'Rollen',
     'system_language' => 'Systeemtaal',
 ];
-

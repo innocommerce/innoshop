@@ -107,9 +107,9 @@ class WithdrawalController extends BaseController
                 'amount'         => $validated['amount'],
                 'account_type'   => $validated['account_type'],
                 'account_number' => $validated['account_number'],
-                'bank_name'      => $validated['bank_name']    ?? null,
+                'bank_name'      => $validated['bank_name'] ?? null,
                 'bank_account'   => $validated['bank_account'] ?? null,
-                'comment'        => $validated['comment']      ?? null,
+                'comment'        => $validated['comment'] ?? null,
                 'status'         => Withdrawal::STATUS_PENDING,
             ];
 

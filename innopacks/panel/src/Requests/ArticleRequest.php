@@ -39,10 +39,11 @@ class ArticleRequest extends FormRequest
         $defaultLocale = setting_locale_code();
 
         return [
-            'catalog_id' => 'required|integer',
+            'catalog_id' => 'nullable|integer',
             'slug'       => $slugRule,
             'position'   => 'integer',
             'viewed'     => 'integer',
+            'image'      => 'nullable|string|max:500',
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.title"   => 'required',
@@ -52,6 +53,14 @@ class ArticleRequest extends FormRequest
             'translations.*.meta_title'       => 'max:500',
             'translations.*.meta_keywords'    => 'max:500',
             'translations.*.meta_description' => 'max:1000',
+
+            // Related articles validation
+            'related_articles'              => 'nullable|array',
+            'related_articles.*.related_id' => 'required|integer|exists:articles,id',
+
+            // Related products validation
+            'article_products'              => 'nullable|array',
+            'article_products.*.product_id' => 'required|integer|exists:products,id',
         ];
     }
 

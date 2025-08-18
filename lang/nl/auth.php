@@ -12,4 +12,3 @@ return [
     'password' => 'Wachtwoord is onjuist.',
     'throttle' => 'Te veel inlogpogingen. Probeer het opnieuw over :seconds seconden.',
 ];
-

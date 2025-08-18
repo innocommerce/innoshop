@@ -8,8 +8,11 @@
  */
 
 return [
-    'name'         => 'Name',
-    'parent'       => 'Parent',
-    'content'      => 'Content',
-    'has_children' => 'Category has children, cannot be destroyed',
+    'content'           => 'Description',
+    'has_children'      => 'Category has children, cannot be destroyed',
+    'image'             => 'Category Image',
+    'image_description' => 'Main category image for display purposes',
+    'name'              => 'Name',
+    'parent'            => 'Parent',
+    'summary'           => 'Summary',
 ];

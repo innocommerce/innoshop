@@ -47,7 +47,7 @@
     @foreach (locales() as $locale)
       @php($localeCode = $locale->code)
       @php($localeName = $locale->name)
-      <div class="input-group">
+      <div class="input-group mb-2">
         <div class="input-group-text">
           <div class="d-flex align-items-center wh-20">
             <img src="{{ image_origin($locale->image) }}"
@@ -68,6 +68,8 @@
 
   <x-common-form-images title="{{ __('panel/common.image') }}" name="images"
                         :values="old('images', $product->images ?? [])"/>
+
+  @include('panel::products.form._form_video')
 
   <div class="row mt-5 mb-4">
     <div class="col-12">

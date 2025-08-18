@@ -168,8 +168,8 @@ class OSSService implements FileManagerInterface
                     'thumb'         => $this->isImagePath($object['Key']) ? $url : url('/images/icons/file.png'),
                     'url'           => $url,  // 这里应该返回完整的 URL
                     'mime'          => $this->getMimeType($object['Key']) ?? 'application/octet-stream',
-                    'size'          => $object['Size']                    ?? 0,
-                    'last_modified' => $object['LastModified']            ?? null,
+                    'size'          => $object['Size'] ?? 0,
+                    'last_modified' => $object['LastModified'] ?? null,
                 ];
             }, $result['Contents'] ?? []);
 

@@ -116,7 +116,7 @@ class ProductController extends Controller
         $page    = $request->get('page', 1);
         $reviews = ReviewRepo::getInstance()->getListByProduct($product, 10, $page);
 
-        $html = view('products._review_list', [
+        $html = view('products.components._review_list', [
             'reviews' => $reviews,
         ])->render();
 

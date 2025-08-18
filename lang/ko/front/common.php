@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => '품절',
     'page_total_show'   => ':first번째부터 :last번째까지, 총 :total개',
     'pages'             => '페이지',
+    'pagination_info'   => '총 페이지:총 페이지:total 항목',
     'password'          => '암호',
     'please_choose'     => '선택해주세요',
     'products'          => '상품',

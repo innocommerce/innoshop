@@ -8,12 +8,16 @@
  */
 
 return [
-    'category'     => 'Product Category',
-    'default'      => 'Default',
-    'sales_volume' => 'Sales Volume',
-    'low'          => 'Low',
-    'high'         => 'High',
-    'name'         => 'Name',
-    'price'        => 'Price',
-    'sales'        => 'Sales Volume',
+    'category'       => 'Product Category',
+    'content'        => 'Detailed Description',
+    'default'        => 'Default',
+    'high'           => 'High',
+    'low'            => 'Low',
+    'name'           => 'Name',
+    'price'          => 'Price',
+    'products_count' => 'products',
+    'sales'          => 'Sales Volume',
+    'sales_volume'   => 'Sales Volume',
+    'subcategories'  => 'Subcategories',
+    'summary'        => 'Category Introduction',
 ];

@@ -121,6 +121,7 @@ class PluginServiceProvider extends ServiceProvider
             $this->loadPluginMigrations($pluginCode);
             $this->loadPluginViews($pluginCode);
             $this->loadPluginTranslations($pluginCode);
+            $this->loadPluginHelpers($pluginCode);
             $commands = array_merge($commands, $this->loadPluginCommands($pluginCode));
         }
         $this->runPluginCommands($commands);
@@ -198,9 +199,14 @@ class PluginServiceProvider extends ServiceProvider
      */
     private function loadPluginMigrations($pluginCode): void
     {
-        $migrationPath = "$this->pluginBasePath/$pluginCode/Migrations";
-        if (is_dir($migrationPath)) {
-            $this->loadMigrationsFrom($migrationPath);
+        $pluginPath = $this->pluginBasePath.'/'.$pluginCode.'/';
+
+        if (is_dir($pluginPath.'Migrations')) {
+            $this->loadMigrationsFrom($pluginPath.'Migrations');
+        }
+
+        if (is_dir($pluginPath.'Database/Migrations')) {
+            $this->loadMigrationsFrom($pluginPath.'Database/Migrations');
         }
     }
 
@@ -393,6 +399,21 @@ class PluginServiceProvider extends ServiceProvider
             foreach ($panelMiddlewares as $adminMiddleware) {
                 $router->pushMiddlewareToGroup('panel', $adminMiddleware);
             }
+        }
+    }
+
+    /**
+     * Load plugin helpers.
+     *
+     * @param  $pluginCode
+     * @return void
+     */
+    private function loadPluginHelpers($pluginCode): void
+    {
+        $pluginBasePath = $this->pluginBasePath;
+        $helpersPath    = "$pluginBasePath/$pluginCode/helpers.php";
+        if (file_exists($helpersPath)) {
+            require_once $helpersPath;
         }
     }
 

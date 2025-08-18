@@ -16,4 +16,3 @@ return [
     'price'    => 'Prijs',
     'sales'    => 'Verkoop',
 ];
-

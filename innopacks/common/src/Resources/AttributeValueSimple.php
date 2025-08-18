@@ -27,7 +27,7 @@ class AttributeValueSimple extends JsonResource
         $data = [
             'id'     => $this->id,
             'locale' => $this->translation->locale ?? '',
-            'name'   => $this->translation->name   ?? '',
+            'name'   => $this->translation->name ?? '',
         ];
 
         return fire_hook_filter('resource.attribute_value.simple', $data);

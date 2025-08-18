@@ -35,28 +35,29 @@
           <div class="content">
             @hookinsert('article.show.content.before')
 
+            <div class="mt-5 mb-5">
             {!! $article->translation->content !!}
+            </div>
 
             @hookinsert('article.show.content.after')
           </div>
         </div>
+
+        @include('articles.partials.related-products', ['relatedProducts' => $relatedProducts])
+
       </div>
       <div class="col-12 col-md-3">
         <div class="newes-sidebar">
-          <div class="search-box">
+          <div class="search-box mb-4">
             <div class="input-group input-group-lg">
               <input type="text" class="form-control" value="{{ request('keyword') }}" placeholder="{{ __('front/article.keyword')}}">
               <button class="btn btn-primary" type="button">{{ __('front/article.search') }}</button>
             </div>
           </div>
-          <div class="sidebar-title">{{ __('front/article.news_classification' )}}</div>
-          <div class="sidebar-list">
-            <ul>
-              @foreach($catalogs as $catalog)
-                <li><a href="{{ $catalog->url }}">{{ $catalog->translation->title ?? '' }}</a></li>
-              @endforeach
-            </ul>
-          </div>
+          
+          @include('articles.partials.catalogs', ['catalogs' => $catalogs])
+          
+          @include('articles.partials.related-articles', ['relatedArticles' => $relatedArticles])
         </div>
       </div>
     </div>

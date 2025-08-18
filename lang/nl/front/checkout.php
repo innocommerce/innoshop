@@ -27,4 +27,3 @@ return [
     'shipping_quote_error'  => 'Implementeer de methode in de plugin :classname: public function getQuotes($checkoutService)',
     'throttle'              => 'Je hebt te veel inlogpogingen gedaan. Probeer het over :seconds seconden opnieuw.',
 ];
-

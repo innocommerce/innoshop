@@ -1,0 +1,18 @@
+{
+    "code": "paypal",
+    "name": {
+        "zh-cn": "PayPal",
+        "en": "PayPal"
+    },
+    "description": {
+        "zh-cn": "PayPal是一个全球领先的在线支付平台，支持多种货币和支付方式。",
+        "en": "PayPal is a global leader in online payment solutions, supporting multiple currencies and payment methods."
+    },
+    "type": "billing",
+    "version": "v1.2.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}

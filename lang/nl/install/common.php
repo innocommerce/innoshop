@@ -57,4 +57,3 @@ return [
     'visit_backend'          => 'Bezoek backend',
     'visit_frontend'         => 'Bezoek frontend',
 ];
-

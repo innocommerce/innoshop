@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'about_us'          => 'អំពីយើង',
+    'action'            => 'សកម្មភាព',
+    'add'               => 'បន្ថែម',
+    'all'               => 'ទាំងអស់',
+    'back_page'         => 'ត្រឡប់ក្រោយ',
+    'brands'            => 'ម៉ាក',
+    'cancel'            => 'បោះបង់',
+    'confirm'           => 'បញ្ជាក់',
+    'created_at'        => 'បានបង្កើតនៅ',
+    'date'              => 'កាលបរិច្ឆេទ',
+    'default'           => 'លំនាំដើម',
+    'delete'            => 'លុប',
+    'delete_confirm'    => 'តើអ្នកប្រាកដជាចង់លុបវាមែនទេ?',
+    'deleted_success'   => 'បានលុបជោគជ័យ',
+    'edit'              => 'កែសម្រួល',
+    'error_required'    => 'សូមបំពេញ :name',
+    'home'              => 'ទំព័រដើម',
+    'image'             => 'រូបភាព',
+    'in_stock'          => 'មានស្តុក',
+    'load_more'         => 'ផ្ទុកបន្ថែម',
+    'loading'           => 'កំពុងផ្ទុក',
+    'login'             => 'ចូល',
+    'logo'              => 'ឡូហ្គោ',
+    'name'              => 'ឈ្មោះ',
+    'news'              => 'ព័ត៌មាន',
+    'no'                => 'ទេ',
+    'out_of_stock'      => 'អស់ស្តុក',
+    'page_total_show'   => 'បង្ហាញ :first ដល់ :last នៃ :total ធាតុ',
+    'pagination_info'   => 'សរុប :pages ទំព័រ :total ធាតុ',
+    'pages'             => 'ទំព័រ',
+    'password'          => 'ពាក្យសម្ងាត់',
+    'please_choose'     => 'សូមជ្រើសរើស',
+    'products'          => 'ផលិតផល',
+    'read_success'      => 'បានទទួលជោគជ័យ',
+    'register'          => 'ចុះឈ្មោះ',
+    'saved_success'     => 'បានរក្សាទុកជោគជ័យ',
+    'search'            => 'ស្វែងរក',
+    'show'              => 'បង្ហាញ',
+    'sort'              => 'តម្រៀប',
+    'specials'          => 'ពិសេស',
+    'status'            => 'ស្ថានភាព',
+    'stock_not_enough'  => 'ស្តុកមិនគ្រប់គ្រាន់',
+    'submit'            => 'ដាក់ស្នើ',
+    'submitted_success' => 'បានដាក់ស្នើជោគជ័យ',
+    'telephone'         => 'លេខទូរស័ព្ទ',
+    'text_hint'         => 'ព័ត៌មាន',
+    'updated_success'   => 'បានធ្វើបច្ចុប្បន្នភាពជោគជ័យ',
+    'view'              => 'មើល',
+    'yes'               => 'បាទ/ចាស',
+];

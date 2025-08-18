@@ -12,8 +12,6 @@ namespace InnoShop\Front\Middleware;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use InnoShop\Front\Repositories\FooterMenuRepo;
-use InnoShop\Front\Repositories\HeaderMenuRepo;
 
 class GlobalFrontData
 {
@@ -37,8 +35,6 @@ class GlobalFrontData
         }
 
         view()->share('current_locale', current_locale());
-        view()->share('header_menus', HeaderMenuRepo::getInstance()->getMenus());
-        view()->share('footer_menus', FooterMenuRepo::getInstance()->getMenus());
         view()->share('customer', $customer);
         view()->share('fav_total', $favTotal);
 

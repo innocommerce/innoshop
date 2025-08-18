@@ -14,4 +14,3 @@ return [
     'withdraw'    => 'Opnemen',
     'commission'  => 'Commissie',
 ];
-

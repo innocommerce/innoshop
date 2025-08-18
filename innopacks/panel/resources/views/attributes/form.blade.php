@@ -123,6 +123,9 @@
 
     $(document).on('click', '.delete-value', function () {
       const id = $(this).closest('tr').data('id');
+      
+      layer.load(2, { shade: [0.3, '#fff'] });
+      
       $.ajax({
         url: urls.base_url + '/attribute_values/' + id,
         method: 'DELETE',
@@ -133,6 +136,9 @@
         },
         error: (err) => {
           inno.msg(err.message)
+        },
+        complete: () => {
+          layer.closeAll('loading');
         }
       });
     });
@@ -140,6 +146,9 @@
     inno.validateAndSubmitForm('.values-input-wrap', (response) => {
       let url = id ? `${urls.base_url}/attribute_values/${id}` : `${urls.base_url}/attribute_values`;
       let method = id ? 'PUT' : 'POST';
+
+      // 显示加载层
+      layer.load(2, { shade: [0.3, '#fff'] });
 
       $.ajax({
         url: url,
@@ -153,6 +162,10 @@
         },
         error: (err) => {
           inno.msg(err.message)
+        },
+        complete: () => {
+          // 关闭加载层
+          layer.closeAll('loading');
         }
       });
     });

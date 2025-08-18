@@ -14,4 +14,3 @@ return [
     'token'     => 'Het wachtwoordreset-token is ongeldig.',
     'user'      => 'Geen gebruiker gevonden met dit e-mailadres.',
 ];
-

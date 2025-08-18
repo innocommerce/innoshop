@@ -247,4 +247,3 @@ return [
     'weight_classes_edit'         => 'Gewichtseenheid bewerken',
     'weight_classes_active'       => 'Gewichtseenheid inschakelen',
 ];
-

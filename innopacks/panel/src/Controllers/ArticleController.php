@@ -17,6 +17,8 @@ use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Panel\Requests\ArticleRequest;
+use InnoShop\Panel\Resources\ArticleNameResource;
+use InnoShop\Panel\Resources\ProductNameResource;
 use Throwable;
 
 class ArticleController extends BaseController
@@ -84,10 +86,35 @@ class ArticleController extends BaseController
      */
     public function form($article): mixed
     {
+        // Preload related article relationships
+        if ($article->id) {
+            $article->load([
+                'relatedArticles.relatedArticle.translation',
+                'products.translation',
+            ]);
+        }
+
+        $selectedRelatedArticles = [];
+        if ($article->id && $article->relatedArticles) {
+            $relatedArticles         = $article->relatedArticles->pluck('relatedArticle')->filter();
+            $selectedRelatedArticles = ArticleNameResource::collection(
+                $relatedArticles
+            )->toArray(request());
+        }
+
+        $selectedRelatedProducts = [];
+        if ($article->id && $article->products) {
+            $selectedRelatedProducts = ProductNameResource::collection(
+                $article->products
+            )->toArray(request());
+        }
+
         $catalogs = CatalogSimple::collection(CatalogRepo::getInstance()->all(['active' => 1]))->jsonSerialize();
         $data     = [
-            'article'  => $article,
-            'catalogs' => $catalogs,
+            'article'                 => $article,
+            'catalogs'                => $catalogs,
+            'selectedRelatedArticles' => $selectedRelatedArticles,
+            'selectedRelatedProducts' => $selectedRelatedProducts,
         ];
 
         return inno_view('panel::articles.form', $data);

@@ -41,7 +41,6 @@ class ProductRequest extends FormRequest
         $rules = [
             'catalog_id' => 'integer',
             'slug'       => $slugRule,
-            'active'     => 'bool',
             'type'       => 'required|in:normal,bundle,virtual,card',
             'weight'     => 'nullable|numeric|min:0',
 

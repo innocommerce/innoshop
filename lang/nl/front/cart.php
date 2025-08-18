@@ -23,4 +23,3 @@ return [
     'total'       => 'Totaal',
     'view_cart'   => 'Bekijk winkelwagen',
 ];
-

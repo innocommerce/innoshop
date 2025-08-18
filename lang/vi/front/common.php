@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'Hết hàng',
     'page_total_show'   => 'Hiển thị từ :first đến :last trên :total mục',
     'pages'             => 'Trang',
+    'pagination_info'   => 'Tổng cộng :pages, tổng cộng là tổng số',
     'password'          => 'Mật khẩu',
     'please_choose'     => 'Vui lòng chọn',
     'products'          => 'Sản phẩm',

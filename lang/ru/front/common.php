@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'нет в наличии',
     'page_total_show'   => 'показать с :first по :last из :total',
     'pages'             => 'страницы',
+    'pagination_info'   => 'В общей сложности: страница pages, статья total',
     'password'          => 'код',
     'please_choose'     => 'пожалуйста, выберите',
     'products'          => 'товары',

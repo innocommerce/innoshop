@@ -186,9 +186,9 @@ class ReviewRepo extends BaseRepo
 
         return [
             'customer_id'   => $requestData['customer_id'] ?? 0,
-            'product_id'    => $requestData['product_id']  ?? ($orderItem->product_id ?? 0),
+            'product_id'    => $requestData['product_id'] ?? ($orderItem->product_id ?? 0),
             'order_item_id' => $orderItemID,
-            'rating'        => $requestData['rating']  ?? 0,
+            'rating'        => $requestData['rating'] ?? 0,
             'content'       => $requestData['content'] ?? '',
             'like'          => 0,
             'dislike'       => 0,

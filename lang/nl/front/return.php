@@ -19,4 +19,3 @@ return [
     'quantity'     => 'Aantal geretourneerd',
     'status'       => 'Status',
 ];
-

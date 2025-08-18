@@ -10,22 +10,22 @@
   @csrf
   @method('put')
   <div class="row">
-    <div class="col-3">
-      <div class="card h-min-600" id="setting-menu">
+    <div class="col-md-3">
+      <div class="card" id="setting-menu">
         <div class="card-header">{{ __('panel/menu.settings') }}</div>
         <div class="card-body">
           <ul class="nav flex-column settings-nav">
             <a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-basics">{{ __('panel/setting.basic') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel/setting.website_data') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting.email_setting') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-content-ai">{{ __('panel/setting.content_ai') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-ai">{{ __('panel/setting.ai_setting') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-logistics-information">{{ __('panel/setting.express_company') }}</a>
             @hookinsert('panel.settings.tab.nav.bottom')
         </ul>
         </div>
       </div>
     </div>
-    <div class="col-9">
+    <div class="col-md-9">
       <div class="card h-min-600">
         <div class="card-header setting-header">{{ __('panel/setting.basic') }}</div>
         <div class="card-body">
@@ -33,7 +33,7 @@
             @include('panel::settings._basic_setting')
             @include('panel::settings._web_data')
             @include('panel::settings._email_setting')
-            @include('panel::settings._content_ai')
+            @include('panel::settings._ai_setting')
             @include('panel::settings._logistics_information')
             @hookinsert('panel.settings.tab.pane.bottom')
           </div>

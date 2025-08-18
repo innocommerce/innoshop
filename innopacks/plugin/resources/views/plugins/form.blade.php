@@ -36,23 +36,46 @@
         </div>
       </div>
     </div>
-    <form class="needs-validation" id="app-form" novalidate action="{{ panel_route('plugins.update', [$plugin->getCode()]) }}" method="POST">
-      @csrf
-      {{ method_field('put') }}
-      <div class="row">
-        <div class="col-12 col-md-7">
-          @include('plugin::plugins.fields', ['fields' => $fields, 'errors' => $errors])
-        </div>
+    
+    <ul class="nav nav-tabs mt-4" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#config-tab" role="tab">
+          <i class="bi bi-gear"></i> {{ trans('panel/plugin.config_settings') }}
+        </button>
+      </li>
+      @if($plugin->getReadmeHtml())
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#readme-tab" role="tab">
+          <i class="bi bi-book"></i> {{ trans('panel/plugin.usage_documentation') }}
+        </button>
+      </li>
+      @endif
+    </ul>
+
+    <!-- 选项卡内容 -->
+    <div class="tab-content mt-3">
+      <!-- 配置选项卡 -->
+      <div class="tab-pane fade show active" id="config-tab" role="tabpanel">
+        <form class="needs-validation" id="app-form" novalidate action="{{ panel_route('plugins.update', [$plugin->getCode()]) }}" method="POST">
+          @csrf
+          {{ method_field('put') }}
+          <div class="row">
+            <div class="col-12 col-md-8">
+              @include('plugin::plugins.fields', ['fields' => $fields, 'errors' => $errors])
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
-    @if($plugin->getReadmeHtml())
-      <div class="card mt-4">
-        <div class="card-header">插件说明文档</div>
-        <div class="card-body markdown-body">
+
+      <!-- 说明文档选项卡 -->
+      @if($plugin->getReadmeHtml())
+      <div class="tab-pane fade" id="readme-tab" role="tabpanel">
+        <div class="markdown-body">
           {!! $plugin->getReadmeHtml() !!}
         </div>
       </div>
-    @endif
+      @endif
+    </div>
   </div>
 </div>
 @endsection
@@ -67,7 +90,7 @@
       padding: 24px;
       background: #fff;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 14px;
     }
     .plugin-header-bar {
       border-bottom: 1.5px solid #eee;

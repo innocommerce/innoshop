@@ -17,7 +17,9 @@
       endpoint: '{{ $config['endpoint'] }}',
       bucket: '{{ $config['bucket'] }}',
       baseUrl: '{{ $config['baseUrl'] }}',
-      enableCrop: {{ system_setting('file_manager_enable_crop', false) ? 'true' : 'false' }}
+      enableCrop: {{ system_setting('file_manager_enable_crop', false) ? 'true' : 'false' }},
+      uploadMaxFileSize: '{{ $uploadMaxFileSize ?? "unknown" }}',
+      postMaxSize: '{{ $postMaxSize ?? "unknown" }}'
     };
   </script>
 
@@ -317,14 +319,12 @@
     .el-button--primary {
       background-color: #8446df;
       border-color: #8446df;
-      color: #fff;
     }
 
     .el-button--primary:hover,
     .el-button--primary:focus {
       background: #9969e5;
       border-color: #9969e5;
-      color: #fff;
     }
 
     .el-button--primary:active {
@@ -1398,6 +1398,15 @@
                 <i class="el-icon-document-copy"></i> 复制到
               </el-button>
             </el-button-group>
+            <!-- 排序选择器 -->
+            <el-select v-model="sortField" size="small" style="width:110px;margin-left:10px;" @change="onSortChange">
+              <el-option label="按时间" value="created"></el-option>
+              <el-option label="按名称" value="name"></el-option>
+            </el-select>
+            <el-select v-model="sortOrder" size="small" style="width:90px;margin-left:5px;" @change="onSortChange">
+              <el-option label="降序" value="desc"></el-option>
+              <el-option label="升序" value="asc"></el-option>
+            </el-select>
           </el-col>
         </el-row>
       </div>
@@ -1503,13 +1512,15 @@
     </el-dialog>
 
     <!-- 上传文件对话框 -->
-    <el-dialog title="上传文件" :visible.sync="uploadDialog.visible" width="500px">
+    <el-dialog title="上传文件" :visible.sync="uploadDialog.visible" width="500px" @open="onUploadDialogOpen">
       <el-upload class="file-uploader" drag multiple :action="uploadUrl" :headers="uploadHeaders"
         :data="uploadData" :before-upload="beforeUpload" :on-success="handleUploadSuccess"
         :on-error="handleUploadError" :on-progress="handleUploadProgress">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">支持 jpg、jpeg、png、gif 格式的图片文件</div>
+        <div class="el-upload__tip" slot="tip">支持 jpg、jpeg、png、gif、webp、mp4 格式的文件</div>
+        <div class="el-upload__tip" slot="tip">服务器最大上传文件大小: {{ $uploadMaxFileSize ?? '未知' }}</div>
+        <div class="el-upload__tip" slot="tip">POST数据最大大小: {{ $postMaxSize ?? '未知' }}</div>
       </el-upload>
     </el-dialog>
 
@@ -1704,6 +1715,9 @@
 
         // 获取当前存储配置
         this.getStorageConfig();
+        
+        // 确保上传路径正确初始化
+        this.updateUploadPath();
       },
       data() {
         return {
@@ -1736,7 +1750,7 @@
             'Authorization': 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content')
           },
           uploadData: {
-            path: '/demo',
+            path: '/',
             type: 'images' // 默认上传路径
           },
           cropperOptions: {
@@ -1765,6 +1779,8 @@
             visible: false,
             targetPath: null
           },
+          sortField: 'created', // 默认按时间排序
+          sortOrder: 'desc',    // 默认降序
           contextMenu: {
             visible: false,
             style: {
@@ -1813,8 +1829,18 @@
         }
       },
       methods: {
+        updateUploadPath() {
+          // 更新上传路径，确保始终有有效值
+          this.uploadData.path = this.currentFolder ? this.currentFolder.path : '/';
+          console.log('Upload path updated:', this.uploadData.path);
+        },
+        onUploadDialogOpen() {
+          // 对话框打开时确保路径正确
+          this.updateUploadPath();
+        },
         uploadFile() {
-          this.uploadData.path = this.currentFolder ? this.currentFolder.id : '/demo';
+          // 确保路径正确设置
+          this.updateUploadPath();
           this.uploadDialog.visible = true;
         },
         createFolder() {
@@ -1914,6 +1940,8 @@
         handleNodeClick(data) {
           this.currentFolder = data;
           this.loadFiles(data.path);
+          // 更新上传路径
+          this.updateUploadPath();
         },
         loadFiles(path = null) {
           this.loading = true;
@@ -1922,7 +1950,9 @@
           const params = {
             page: this.pagination.page,
             per_page: this.pagination.per_page,
-            base_folder: currentPath
+            base_folder: currentPath,
+            sort: this.sortField,
+            order: this.sortOrder
           };
 
           http.get('file_manager/files', {
@@ -1965,6 +1995,12 @@
 
         // 上传文件方法
         uploadFileToServer(file, path, type) {
+          // 验证路径参数
+          if (!path) {
+            this.$message.error('上传路径未定义');
+            return Promise.reject(new Error('上传路径未定义'));
+          }
+
           const formData = new FormData();
           formData.append('file', file);
           formData.append('path', path);
@@ -1975,6 +2011,8 @@
               if (res.success) {
                 this.$message.success('上传成功');
                 this.uploadDialog.visible = false;
+                // 上传成功后，重置到第一页并重新加载文件列表，确保新上传的文件显示在最前面
+                this.pagination.page = 1;
                 this.loadFiles();
               } else {
                 this.$message.error(res.message || '上传失败');
@@ -1986,6 +2024,12 @@
         },
 
         beforeUpload(file) {
+          // 验证路径参数
+          if (!this.uploadData.path) {
+            this.$message.error('上传路径未定义，请重新选择文件夹');
+            return false;
+          }
+
           const isImage = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type);
           const isVideo = ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type)
           const isDoc = ['application/pdf', 'application/msword',
@@ -1998,9 +2042,36 @@
             return false;
           }
 
-          const isLt2M = file.size / 1024 / 1024 < 8;
-          if (!isLt2M) {
-            this.$message.error('文件大小不能超过 8MB！');
+          // 将PHP ini格式的大小转换为字节
+          function iniSizeToBytes(size) {
+            if (!size || size === 'unknown') return 0;
+            
+            const unit = size.slice(-1).toUpperCase();
+            const value = parseInt(size.slice(0, -1));
+            
+            switch (unit) {
+              case 'K':
+                return value * 1024;
+              case 'M':
+                return value * 1024 * 1024;
+              case 'G':
+                return value * 1024 * 1024 * 1024;
+              default:
+                return parseInt(size);
+            }
+          }
+          
+          // 获取服务器配置的上传限制
+          const uploadMaxFileSizeBytes = iniSizeToBytes(window.fileManagerConfig.uploadMaxFileSize);
+          const postMaxSizeBytes = iniSizeToBytes(window.fileManagerConfig.postMaxSize);
+          
+          // 使用较小的限制值
+          const serverMaxSizeBytes = Math.min(uploadMaxFileSizeBytes, postMaxSizeBytes);
+          
+          // 检查文件大小
+          if (serverMaxSizeBytes > 0 && file.size > serverMaxSizeBytes) {
+            const maxSizeMB = (serverMaxSizeBytes / 1024 / 1024).toFixed(2);
+            this.$message.error(`文件大小不能超过 ${maxSizeMB}MB！`);
             return false;
           }
           if (isVideo || isDoc) {
@@ -2054,6 +2125,11 @@
 
               canvas.toBlob((blob) => {
                 this.uploadFileToServer(blob, this.uploadData.path, 'images')
+                  .then(() => {
+                    // 上传成功后，重置到第一页并重新加载文件列表，确保新上传的文件显示在最前面
+                    this.pagination.page = 1;
+                    this.loadFiles();
+                  })
                   .finally(() => {
                     this.cleanupDialog(dialog, mask);
                     this.uploadDialog.visible = false;
@@ -2073,7 +2149,8 @@
         handleUploadSuccess(response, file, fileList) {
           if (response.success) {
             this.$message.success('上传成功');
-            // 刷新文件列表
+            // 上传成功后，重置到第一页并重新加载文件列表，确保新上传的文件显示在最前面
+            this.pagination.page = 1;
             this.loadFiles();
           } else {
             this.$message.error(response.message || '上传失败');
@@ -2992,6 +3069,10 @@
                 cdn_domain: ''
               };
             });
+        },
+        onSortChange() {
+          this.pagination.page = 1;
+          this.loadFiles();
         },
       },
       beforeDestroy() {

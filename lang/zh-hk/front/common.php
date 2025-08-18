@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => '缺貨',
     'page_total_show'   => '顯示第 :first 到第 :last 項，共 :total 項',
     'pages'             => '單頁',
+    'pagination_info'   => '共 :pages 頁，共 :total 項',
     'password'          => '密碼',
     'please_choose'     => '請選擇',
     'products'          => '商品',

@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'สินค้าหมด',
     'page_total_show'   => 'แสดงจาก :first ถึง :last รายการ ทั้งหมด :total รายการ',
     'pages'             => 'หน้า',
+    'pagination_info'   => 'หน้าข้อความ ที่ใช้ร่วมกัน:',
     'password'          => 'รหัสผ่าน',
     'please_choose'     => 'กรุณาเลือก',
     'products'          => 'สินค้า',

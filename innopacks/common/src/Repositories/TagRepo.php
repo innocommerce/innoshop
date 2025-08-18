@@ -169,7 +169,7 @@ class TagRepo extends BaseRepo
     private function handleData($data): array
     {
         return [
-            'slug'     => $data['slug']     ?? null,
+            'slug'     => $data['slug'] ?? null,
             'position' => $data['position'] ?? 0,
             'active'   => (bool) ($data['active'] ?? true),
         ];

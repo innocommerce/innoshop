@@ -12,6 +12,10 @@
   <script src="{{ asset('vendor/photoswipe/umd/photoswipe.umd.min.js') }}"></script>
   <script src="{{ asset('vendor/photoswipe/umd/photoswipe-lightbox.umd.min.js') }}"></script>
   <link rel="stylesheet" href="{{ asset('vendor/photoswipe/photoswipe.css') }}">
+  
+  <script src="{{ asset('vendor/video-js/video.min.js') }}"></script>
+  <link href="{{ asset('vendor/video-js/video-js.css') }}" rel="stylesheet">
+  
 @endpush
 
 @section('content')
@@ -24,35 +28,8 @@
     <div class="page-product-top">
       <div class="row">
         <div class="col-12 col-lg-6 product-left-col">
-         
           <div class="product-images">
-
-            @if(is_array($product->images))
-              <div class="sub-product-img">
-                <div class="swiper" id="sub-product-img-swiper">
-                  <div class="swiper-wrapper">
-                    @foreach($product->images as $image)
-                      <div class="swiper-slide">
-                        <a href="{{ image_resize($image, 600, 600) }}" data-pswp-width="800"
-                           data-pswp-height="800">
-                          <img src="{{ image_resize($image) }}" class="img-fluid">
-                        </a>
-                      </div>
-                    @endforeach
-                  </div>
-                  <div class="sub-product-btn">
-                    <div class="sub-product-prev"><i class="bi bi-chevron-compact-up"></i></div>
-                    <div class="sub-product-next"><i class="bi bi-chevron-compact-down"></i></div>
-                  </div>
-                  <div class="swiper-pagination sub-product-pagination"></div>
-                </div>
-              </div>
-            @endif
-
-            <div class="main-product-img position-relative">
-              @hookinsert('front.product.show.image.before')
-              <img src="{{ $product->image_url }}" class="img-fluid">
-            </div>
+            @include('products.components._images')
           </div>
         </div>
 
@@ -80,7 +57,7 @@
 
             <div class="sub-product-title">{{ $product->fallbackName('summary') }}</div>
 
-            @include('products._bundle_items')
+            @include('products.components._bundle_items')
 
             <ul class="product-param">
               <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span
@@ -108,7 +85,7 @@
               @hookinsert('product.detail.brand.after')
             </ul>
 
-            @include('products._variants')
+            @include('products.components._variants')
 
             @if(!system_setting('disable_online_order'))
               <div class="product-info-bottom">
@@ -132,7 +109,7 @@
               </div>
             @endif
 
-            <div class="add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}"
+            <div class="add-wishlist mb-3" data-in-wishlist="{{ $product->hasFavorite() }}"
                  data-id="{{ $product->id }}"
                  data-price="{{ $product->masterSku->price }}">
               <i
@@ -175,6 +152,7 @@
             {!! parsedown($product->fallbackName('selling_point')) !!}
           @endif
           {!! $product->fallbackName('content') !!}
+          @hookinsert('product.detail.description.after')
         </div>
 
         @if($attributes)
@@ -200,7 +178,7 @@
         @endif
 
         <div class="tab-pane fade" id="product-review" role="tabpanel">
-          @include('products.review')
+          @include('products.components._review_section')
         </div>
         <div class="tab-pane fade" id="product-description-correlation">
           <div class="row gx-3 gx-lg-4">
@@ -223,43 +201,6 @@
 
 @push('footer')
   <script>
-    const isMobile = window.innerWidth < 992;
-
-    if (isMobile) {
-      $('.sub-product-img .swiper-slide').each(function () {
-        $(this).find('a > img').attr('src', $(this).find('a').attr('href'));
-      });
-    }
-
-    let subProductSwiper = new Swiper('#sub-product-img-swiper', {
-      direction: !isMobile ? 'vertical' : 'horizontal',
-      autoHeight: !isMobile ? true : false,
-      slidesPerView: !isMobile ? 5 : 1,
-      spaceBetween: !isMobile ? 10 : 0,
-      navigation: {
-        nextEl: '.sub-product-next',
-        prevEl: '.sub-product-prev',
-      },
-      pagination: {
-        el: '.sub-product-pagination',
-        clickable: true,
-      },
-      observer: true,
-      observeParents: true,
-    });
-
-    let lightbox = new PhotoSwipeLightbox({
-      gallery: '#sub-product-img-swiper',
-      children: 'a',
-      // dynamic import is not supported in UMD version
-      pswpModule: PhotoSwipe
-    });
-    lightbox.init();
-
-    $('.main-product-img').on('click', function () {
-      $('#sub-product-img-swiper .swiper-slide').eq(0).find('a').get(0).click();
-    });
-
     $('.quantity-wrap .plus, .quantity-wrap .minus').on('click', function () {
       if ($(this).parent().hasClass('disabled')) {
         return;

@@ -25,17 +25,21 @@ class AutocompleteList extends Component
 
     public string $placeholder;
 
+    public array $selectedItems;
+
     /**
      * Create a new component instance.
+     * Supports passing complete data of selected items to avoid additional API calls
      */
-    public function __construct(string $name, array $value, string $api, string $placeholder = '请搜索', bool $required = false, string $title = '搜索结果')
+    public function __construct(string $name, array $value, string $api, array $selectedItems = [], string $placeholder = 'Please search', bool $required = false, string $title = 'Search Results')
     {
-        $this->name        = $name;
-        $this->value       = $value;
-        $this->title       = $title;
-        $this->api         = $api;
-        $this->placeholder = $placeholder;
-        $this->required    = $required;
+        $this->name          = $name;
+        $this->value         = $value;
+        $this->title         = $title;
+        $this->api           = $api;
+        $this->selectedItems = $selectedItems;
+        $this->placeholder   = $placeholder;
+        $this->required      = $required;
     }
 
     /**

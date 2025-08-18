@@ -11,7 +11,9 @@
       bucket: '{{ $config['bucket'] }}',
       baseUrl: '{{ $config['baseUrl'] }}',
       multiple: {{ $multiple ? 'true' : 'false' }},
-      type: '{{ $type }}'
+      type: '{{ $type }}',
+      uploadMaxFileSize: '{{ $uploadMaxFileSize ?? "unknown" }}',
+      postMaxSize: '{{ $postMaxSize ?? "unknown" }}'
     });
     console.log('File manager config initialized in iframe:', window.fileManagerConfig);
   </script>

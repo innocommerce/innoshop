@@ -15,4 +15,3 @@ return [
     'bestseller'           => 'Bestsellers',
     'new_arrival'          => 'Nieuwe aankomsten',
 ];
-

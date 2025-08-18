@@ -47,7 +47,7 @@ class CustomerRepo extends BaseRepo
     }
 
     /**
-     * 获取客户来源数据
+     * Get customer source data
      *
      * @return array
      */
@@ -63,12 +63,12 @@ class CustomerRepo extends BaseRepo
         $data        = [];
         $fromOptions = \InnoShop\Common\Repositories\CustomerRepo::getFromList();
 
-        // 遍历所有可能的来源类型
+        // Iterate through all possible source types
         foreach ($fromOptions as $option) {
             $key   = $option['key'];
             $label = $option['value'];
 
-            // 基本数据
+            // Basic data
             $total    = isset($sourceData[$key]) ? $sourceData[$key]->total : 0;
             $labels[] = $label;
             $data[]   = $total;

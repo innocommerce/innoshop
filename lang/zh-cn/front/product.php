@@ -31,4 +31,5 @@ return [
     'related_product'       => '相关商品',
     'have_reviewed'         => '您已评论过该商品',
     'bundle_includes'       => '组合包含',
+    'view_more_products'    => '查看更多商品',
 ];

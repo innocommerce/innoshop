@@ -62,6 +62,8 @@ return new class extends Migration
             $table->integer('article_id')->index('ap_article_id')->comment('Article ID');
             $table->integer('product_id')->index('ap_product_id')->comment('Product ID');
             $table->timestamps();
+
+            $table->unique(['article_id', 'product_id'], 'unique_article_product');
         });
 
         Schema::create('article_tags', function (Blueprint $table) {
@@ -240,7 +242,8 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->index('category_id')->comment('Category ID');
             $table->string('locale')->comment('Locale Code');
             $table->string('name')->comment('Name');
-            $table->longText('content')->comment('Content');
+            $table->text('summary')->nullable()->comment('Category Summary');
+            $table->longText('content')->nullable()->comment('Content');
             $table->string('meta_title', 500)->nullable()->comment('Meta Title');
             $table->string('meta_description', 1000)->nullable()->comment('meta  Translation');
             $table->string('meta_keywords', 500)->nullable()->comment('Meta Keywords');

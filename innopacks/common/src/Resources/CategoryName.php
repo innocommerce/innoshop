@@ -25,10 +25,13 @@ class CategoryName extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'id'     => $this->id,
-            'slug'   => $this->slug,
-            'name'   => $this->translation->name,
-            'active' => (bool) $this->active,
+            'id'           => $this->id,
+            'slug'         => $this->slug,
+            'name'         => $this->translation->name,
+            'active'       => (bool) $this->active,
+            'image'        => $this->image,
+            'image_small'  => image_resize($this->image, 100, 100),
+            'image_origin' => image_origin($this->image),
         ];
 
         return fire_hook_filter('resource.category.name', $data);

@@ -12,83 +12,45 @@
     @method($category->id ? 'PUT' : 'POST')
 
     <div class="row">
-      <div class="col-12 col-md-9">
+      <div class="col-12">
         <div class="card mb-3">
-          <div class="card-header">
-            <h5 class="card-title mb-0">{{ __('panel/common.basic_info') }}</h5>
-          </div>
           <div class="card-body">
-            <div class="accordion accordion-flush locales-accordion" id="data-locales">
-              @foreach (locales() as $locale)
-                @php($localeCode = $locale->code)
-                @php($localeName = $locale->name)
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button"
-                      data-bs-toggle="collapse" data-bs-target="#data-locale-{{ $localeCode }}"
-                      aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
-                      aria-controls="data-locale-{{ $localeCode }}">
-                      <div class="wh-20 me-2">
-                        <img src="{{ image_origin($locale->image) }}" class="img-fluid">
-                      </div>
-                      {{ $localeName }}
-                    </button>
-                  </h2>
-                  <div id="data-locale-{{ $localeCode }}"
-                    class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" data-bs-parent="#data-locales">
-                    <div class="accordion-body">
-                      <input name="translations[{{ $localeCode }}][locale]" value="{{ $localeCode }}"
-                        class="d-none">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic-tab-pane"
+                  type="button" role="tab" aria-controls="basic-tab-pane"
+                  aria-selected="true">{{ __('panel/common.basic_info') }}</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="content-tab" data-bs-toggle="tab" data-bs-target="#content-tab-pane"
+                  type="button" role="tab" aria-controls="content-tab-pane"
+                  aria-selected="false">分类描述</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="extra-tab" data-bs-toggle="tab" data-bs-target="#extra-tab-pane"
+                  type="button" role="tab" aria-controls="extra-tab-pane"
+                  aria-selected="false">扩展信息</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo-tab-pane"
+                  type="button" role="tab" aria-controls="seo-tab-pane"
+                  aria-selected="false">{{ __('panel/product.seo') }}</button>
+              </li>
+              @hookinsert('panel.category.edit.tab.nav.bottom')
+            </ul>
 
-                      <x-common-form-input title="{{ panel_trans('category.name') }}"
-                        name="translations[{{ $localeCode }}][name]" :translate="true"
-                        value="{{ old('translations.' . $localeCode . '.name', $category->translate($localeCode, 'name')) }}"
-                        required placeholder="{{ panel_trans('category.name') }}" />
+            <div class="tab-content" id="myTabContent">
+              @include('panel::categories.panes.tab_pane_basic', $category)
+              @include('panel::categories.panes.tab_pane_content', $category)
+              @include('panel::categories.panes.tab_pane_extra', $category)
+              @include('panel::categories.panes.tab_pane_seo', $category)
 
-                      <x-common-form-textarea title="{{ panel_trans('category.content') }}"
-                        name="translations[{{ $localeCode }}][content]" :translate="true"
-                        value="{{ old('translations.' . $localeCode . '.content', $category->translate($localeCode, 'content')) }}"
-                        placeholder="{{ panel_trans('category.content') }}" />
-
-                      <x-common-form-input title="Meta Title" name="translations[{{ $localeCode }}][meta_title]"
-                        :translate="true"
-                        value="{{ old('translations.' . $localeCode . '.meta_title', $category->translate($localeCode, 'meta_title')) }}"
-                        placeholder="Meta Title" />
-
-                      <x-common-form-input title="Meta Keywords" name="translations[{{ $localeCode }}][meta_keywords]"
-                        :translate="true"
-                        value="{{ old('translations.' . $localeCode . '.meta_keywords', $category->translate($localeCode, 'meta_keywords')) }}"
-                        placeholder="Meta Keywords" />
-
-                      <x-common-form-input title="Meta Description"
-                        name="translations[{{ $localeCode }}][meta_description]" :translate="true"
-                        value="{{ old('translations.' . $localeCode . '.meta_description', $category->translate($localeCode, 'meta_description')) }}"
-                        placeholder="Meta Description" />
-                    </div>
-                  </div>
-                </div>
-              @endforeach
+              @hookinsert('panel.category.edit.tab.pane.bottom')
             </div>
-          </div>
         </div>
       </div>
 
-      <div class="col-12 col-md-3 ps-md-0">
-        <div class="card">
-          <div class="card-body">
-            <x-common-form-input title="{{ panel_trans('common.slug') }}" name="slug" :value="old('slug', $category->slug ?? '')"
-              placeholder="{{ panel_trans('common.slug') }}" />
-            <x-common-form-image title="{{ panel_trans('common.image') }}" name="image"
-              value="{{ old('image', $category->image) }}" />
-            <x-common-form-select title="{{ panel_trans('category.parent') }}" name="parent_id" :value="old('parent_id', $category->parent_id ?? 0)"
-              :options="$categories" key="id" label="name" />
-            <x-common-form-input title="{{ panel_trans('common.position') }}" name="position" :value="old('position', $category->position ?? 0)"
-              placeholder="{{ panel_trans('common.position') }}" />
-            <x-common-form-switch-radio title="{{ panel_trans('common.whether_enable') }}" name="active"
-              :value="old('active', $category->active ?? true)" placeholder="{{ panel_trans('common.whether_enable') }}" />
-          </div>
-        </div>
-      </div>
+
     </div>
   </form>
 @endsection

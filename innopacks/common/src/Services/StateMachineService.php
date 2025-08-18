@@ -458,9 +458,9 @@ class StateMachineService
     private function addShipment($oldCode, $newCode): void
     {
         $shipment       = $this->shipment;
-        $expressCode    = $shipment['express_code']    ?? '';
+        $expressCode    = $shipment['express_code'] ?? '';
         $expressCompany = $shipment['express_company'] ?? '';
-        $expressNumber  = $shipment['express_number']  ?? '';
+        $expressNumber  = $shipment['express_number'] ?? '';
         if ($expressCode && $expressCompany && $expressNumber) {
             $orderShipment = new Order\Shipment([
                 'order_id'        => $this->orderId,

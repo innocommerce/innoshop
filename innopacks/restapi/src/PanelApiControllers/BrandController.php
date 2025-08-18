@@ -56,6 +56,6 @@ class BrandController extends BaseController
     {
         $categories = BrandRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
 
-        return BrandName::collection($categories);
+        return BrandSimple::collection($categories);
     }
 }

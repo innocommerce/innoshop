@@ -152,7 +152,7 @@ class Sidebar extends Component
                 continue;
             }
 
-            $topUrl   = $link['url']   ?? '';
+            $topUrl   = $link['url'] ?? '';
             $topRoute = $link['route'] ?? '';
             if (empty($topUrl) && $topRoute) {
                 $link['url'] = panel_route($topRoute);
@@ -378,11 +378,12 @@ class Sidebar extends Component
         }
 
         // Add settings to the end
+        /*
         $routes[] = [
             'route'  => 'plugins.settings',
             'title'  => __('panel/menu.plugin_settings'),
             'active' => $this->currentRoute === 'plugins.settings',
-        ];
+        ];*/
 
         return fire_hook_filter('panel.component.sidebar.plugin.routes', $routes);
     }

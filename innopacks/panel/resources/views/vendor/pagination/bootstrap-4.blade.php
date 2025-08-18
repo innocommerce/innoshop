@@ -44,7 +44,8 @@
           @endif
       </ul>
   </nav>
-  <div class="text-secondary">共{{ $paginator->lastPage() }}页，</div>
-  <div class="text-secondary">共{{ $paginator->total() }}项</div>
+  <div class="d-none d-md-block">
+    <div class="text-secondary">{{ __('front/common.pagination_info', ['pages' => $paginator->lastPage(), 'total' => $paginator->total()]) }}</div>
+  </div>
 </div>
 @endif

@@ -21,24 +21,57 @@ body.page-product {
     .product-images {
       display: flex;
 
-      @media (max-width: 992px) {
+      @media (max-width: 991px) {
         margin-bottom: 10px;
+        flex-direction: column;
       }
 
-      .sub-product-img {
-        width: 100%;
+              .sub-product-img {
+          width: 100%;
+          position: relative;
 
-        @media (min-width: 992px) {
-          width: 100px;
-          flex: 0 0 100px;
-          margin-right: 20px;
+          @media (min-width: 992px) {
+            width: 100px;
+            height: 560px;
+            flex: 0 0 100px;
+            margin-right: 20px;
 
-          &:hover {
-            .swiper .sub-product-btn {
-              display: block;
+            &:hover {
+              .swiper .sub-product-btn {
+                display: block;
+              }
+            }
+
+            // Hover scroll area indicators
+            &::before,
+            &::after {
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              height: 30px;
+              background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+              pointer-events: none;
+              opacity: 0;
+              transition: opacity 0.3s ease;
+              z-index: 10;
+            }
+
+            &::before {
+              top: 0;
+              background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+            }
+
+            &::after {
+              bottom: 0;
+              background: linear-gradient(to top, rgba(0,0,0,0.1), transparent);
+            }
+
+            &:hover::before,
+            &:hover::after {
+              opacity: 1;
             }
           }
-        }
 
         .swiper {
           @media (min-width: 992px) {
@@ -49,14 +82,37 @@ body.page-product {
             display: flex;
             justify-content: center;
 
-            @media (min-width: 992px) {
-              width: 100px;
+            .thumbnail-item {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 2px solid transparent;
+              border-radius: 4px;
+              transition: all 0.3s ease;
               cursor: pointer;
+              
               img {
                 border: 1px solid #eee;
+                border-radius: 2px;
+                transition: border-color 0.3s ease;
               }
-              &:hover img {
-                border-color: $primary;
+            }
+
+            @media (min-width: 992px) {
+              width: 100px;
+              height: 100px;
+              
+              .thumbnail-item {
+                &:hover {
+                  border-color: $primary;
+                }
+                
+                &.active {
+                  border-color: $primary;
+                  background-color: rgba($primary, 0.1);
+                }
               }
             }
           }
@@ -100,8 +156,56 @@ body.page-product {
 
       .main-product-img {
         cursor: pointer;
-        @media (max-width: 992px) {
-          display: none;
+        
+        @media (max-width: 991px) {
+          margin-top: 15px;
+        }
+      }
+      
+      // 手机版slideshow样式
+      .mobile-product-slideshow {
+        .swiper {
+          .swiper-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            .video-play-overlay {
+              cursor: pointer;
+              transition: transform 0.3s ease;
+              
+              &:hover {
+                transform: scale(1.1);
+              }
+            }
+          }
+        }
+        
+        .mobile-product-pagination {
+          position: absolute;
+          bottom: 15px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 1001;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          
+          .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.6);
+            opacity: 1;
+            margin: 0 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            
+            &.swiper-pagination-bullet-active {
+              background-color: $primary;
+              transform: scale(1.2);
+            }
+          }
         }
       }
     }

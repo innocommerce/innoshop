@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => '在庫切れ',
     'page_total_show'   => '第～を表示する:first',
     'pages'             => 'ページ',
+    'pagination_info'   => '共:pagesページ,共:total項目です',
     'password'          => 'パスワードです',
     'please_choose'     => '選択してください',
     'products'          => '商品',

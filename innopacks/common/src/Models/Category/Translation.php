@@ -18,7 +18,7 @@ class Translation extends BaseModel
     protected $table = 'category_translations';
 
     protected $fillable = [
-        'category_id', 'locale', 'name', 'content', 'meta_title', 'meta_description', 'meta_keywords',
+        'category_id', 'locale', 'name', 'summary', 'content', 'meta_title', 'meta_description', 'meta_keywords',
     ];
 
     /**

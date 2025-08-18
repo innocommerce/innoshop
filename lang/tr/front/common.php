@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'Stokta Yok',
     'page_total_show'   => ':first ile :last arasında :total öğe gösteriliyor',
     'pages'             => 'Sayfalar',
+    'pagination_info'   => 'Toplam :p sayfa, toplam :toplam öğe',
     'password'          => 'cipher',
     'please_choose'     => 'Lütfen Seçiniz',
     'products'          => 'Ürünler',

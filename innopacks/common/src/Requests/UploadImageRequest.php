@@ -35,8 +35,20 @@ class UploadImageRequest extends FormRequest
         $allowedMimes = 'jpg,png,jpeg,gif,webp';
 
         // Dynamic file size limits based on context
-        if (request()->is('panel/*') || is_admin()) {
-            $maxSize = 8192; // 8MB for admin/panel
+        if (request()->is('panel/*') || request()->is('api/panel/*') || is_admin()) {
+            // For admin/panel, use server's PHP ini settings
+            $uploadMaxFileSize = ini_get('upload_max_filesize');
+            $postMaxSize       = ini_get('post_max_size');
+
+            // Convert to bytes and then to KB (Laravel validation uses KB)
+            $uploadMaxFileSizeBytes = ini_size_to_bytes($uploadMaxFileSize);
+            $postMaxSizeBytes       = ini_size_to_bytes($postMaxSize);
+
+            // Use the smaller of the two values
+            $maxSizeBytes = min($uploadMaxFileSizeBytes, $postMaxSizeBytes);
+
+            // Convert to KB for Laravel validation
+            $maxSize = (int) ($maxSizeBytes / 1024);
         } else {
             $maxSize = 2048; // 2MB for regular users
         }

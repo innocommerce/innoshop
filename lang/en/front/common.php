@@ -36,6 +36,7 @@ return [
     'no'                => 'no',
     'out_of_stock'      => 'Out of Stock',
     'page_total_show'   => 'Showing :first to :last of :total items',
+    'pagination_info'   => 'Total :pages pages, :total items',
     'pages'             => 'Pages',
     'password'          => 'cipher',
     'please_choose'     => 'Please Choose',

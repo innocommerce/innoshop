@@ -125,9 +125,9 @@ class BrandRepo extends BaseRepo
             'name'     => $data['name'],
             'slug'     => $data['slug'],
             'first'    => $data['first'],
-            'logo'     => $data['logo']     ?? '',
+            'logo'     => $data['logo'] ?? '',
             'position' => $data['position'] ?? 0,
-            'active'   => $data['active']   ?? true,
+            'active'   => $data['active'] ?? true,
         ];
     }
 

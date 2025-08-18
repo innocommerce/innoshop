@@ -14,4 +14,3 @@ return [
     'from_wechat_official' => 'Officiële WeChat-account',
     'from_app'             => 'APP-toepassing',
 ];
-

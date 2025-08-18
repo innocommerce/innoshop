@@ -8,12 +8,16 @@
  */
 
 return [
-    'category'     => 'Categoría de productos',
-    'default'      => 'Por defecto',
-    'high'         => 'Alto',
-    'low'          => 'Bajo',
-    'name'         => 'Nombre',
-    'price'        => 'Precio',
-    'sales'        => 'ventas de españo',
-    'sales_volume' => 'Volumen de ventas',
+    'category'       => 'Categoría de producto',
+    'content'        => 'Descripción detallada',
+    'default'        => 'Por defecto',
+    'high'           => 'Alto',
+    'low'            => 'Bajo',
+    'name'           => 'Nombre',
+    'price'          => 'Precio',
+    'products_count' => 'productos',
+    'sales'          => 'Ventas',
+    'sales_volume'   => 'Volumen de ventas',
+    'subcategories'  => 'Subcategorías',
+    'summary'        => 'Resumen',
 ];

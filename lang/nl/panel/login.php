@@ -15,4 +15,3 @@ return [
     'password'    => 'Wachtwoord',
     'title'       => 'InnoShop Backend Beheer',
 ];
-

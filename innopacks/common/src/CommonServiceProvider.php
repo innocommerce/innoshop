@@ -150,6 +150,7 @@ class CommonServiceProvider extends ServiceProvider
             'file'         => Forms\File::class,
             'date'         => Forms\Date::class,
             'switch-radio' => Forms\SwitchRadio::class,
+            'model-switch' => Forms\ModelSwitch::class,
         ]);
     }
 

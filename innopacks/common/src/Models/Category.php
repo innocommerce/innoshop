@@ -27,6 +27,33 @@ class Category extends BaseModel
     ];
 
     /**
+     * Model validation rules to prevent circular references
+     */
+    protected static function booted(): void
+    {
+        static::saving(function ($category) {
+            // Check parent cannot be itself
+            if ($category->parent_id && $category->parent_id == $category->id) {
+                throw new \Exception(trans('panel/common.category_parent_self'));
+            }
+
+            // Check for circular references
+            if ($category->parent_id && $category->parent_id > 0) {
+                $visited       = [$category->id];
+                $currentParent = self::find($category->parent_id);
+
+                while ($currentParent) {
+                    if (in_array($currentParent->id, $visited)) {
+                        throw new \Exception(trans('panel/common.category_circular_reference'));
+                    }
+                    $visited[]     = $currentParent->id;
+                    $currentParent = $currentParent->parent;
+                }
+            }
+        });
+    }
+
+    /**
      * @return BelongsTo
      */
     public function parent(): BelongsTo
@@ -95,5 +122,15 @@ class Category extends BaseModel
     public function getImageUrl(int $with = 600, int $height = 600): string
     {
         return image_resize($this->image ?? '', $with, $height);
+    }
+
+    /**
+     * Get product count
+     *
+     * @return int
+     */
+    public function getProductsCountAttribute(): int
+    {
+        return $this->products()->count();
     }
 }

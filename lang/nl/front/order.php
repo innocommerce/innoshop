@@ -51,4 +51,3 @@ return [
     'view'            => 'Bekijk',
     'bundle_includes' => 'Bundel bevat',
 ];
-

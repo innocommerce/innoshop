@@ -12,6 +12,7 @@ namespace InnoShop\Plugin\Controllers;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\SettingRepo;
 use InnoShop\Plugin\Resources\PluginResource;
@@ -54,6 +55,7 @@ class PluginController
             $code   = $request->get('code');
             $plugin = app('plugin')->getPluginOrFail($code);
             PluginService::getInstance()->installPlugin($plugin);
+            Artisan::call('view:clear');
 
             return json_success(panel_trans('common.saved_success'));
         } catch (Exception $e) {
@@ -70,6 +72,7 @@ class PluginController
         try {
             $plugin = app('plugin')->getPluginOrFail($code);
             PluginService::getInstance()->uninstallPlugin($plugin);
+            Artisan::call('view:clear');
 
             return json_success(panel_trans('common.deleted_success'));
         } catch (Exception $e) {
@@ -122,6 +125,7 @@ class PluginController
             }
         }
         SettingRepo::getInstance()->updateValues($fields, $code);
+        Artisan::call('view:clear');
         $currentUrl = panel_route('plugins.edit', [$code]);
 
         return redirect($currentUrl)
@@ -140,6 +144,7 @@ class PluginController
             $enabled = $request->get('enabled');
             app('plugin')->getPluginOrFail($code);
             SettingRepo::getInstance()->updatePluginValue($code, 'active', $enabled);
+            Artisan::call('view:clear');
 
             return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {

@@ -44,7 +44,7 @@ class ShippingTraceService
             throw new Exception('Empty trace driver');
         }
 
-        $code   = $this->shipment->express_code   ?? '';
+        $code   = $this->shipment->express_code ?? '';
         $number = $this->shipment->express_number ?? '';
 
         return (new $traceDriver)->getTraces($code, $number);

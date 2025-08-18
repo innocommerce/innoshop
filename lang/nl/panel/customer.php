@@ -27,4 +27,3 @@ return [
     'balance_manage' => 'Balansbeheer',
     'customer_info'  => 'Klantinformatie',
 ];
-

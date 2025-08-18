@@ -89,7 +89,7 @@ class StateRepo extends BaseRepo
      */
     public function handleData($requestData): array
     {
-        $countryID   = $requestData['country_id']   ?? 0;
+        $countryID   = $requestData['country_id'] ?? 0;
         $countryCode = $requestData['country_code'] ?? '';
         if (empty($countryID) && $countryCode) {
             $country   = Country::query()->where('code', $countryCode)->first();
@@ -101,8 +101,8 @@ class StateRepo extends BaseRepo
             'country_code' => $countryCode,
             'name'         => $requestData['name'],
             'code'         => $requestData['code'],
-            'position'     => $requestData['position']   ?? 0,
-            'active'       => $requestData['active']     ?? true,
+            'position'     => $requestData['position'] ?? 0,
+            'active'       => $requestData['active'] ?? true,
             'created_at'   => $requestData['created_at'] ?? now(),
             'updated_at'   => $requestData['updated_at'] ?? now(),
         ];

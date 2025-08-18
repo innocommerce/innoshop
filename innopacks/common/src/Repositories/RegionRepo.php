@@ -111,7 +111,7 @@ class RegionRepo extends BaseRepo
             'name'        => $requestData['name'],
             'description' => $requestData['description'],
             'position'    => $requestData['position'] ?? 0,
-            'active'      => $requestData['active']   ?? true,
+            'active'      => $requestData['active'] ?? true,
         ];
     }
 }

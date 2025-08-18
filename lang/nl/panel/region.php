@@ -14,4 +14,3 @@ return [
     'position'      => 'Positie',
     'region_states' => 'Gehuisveste regio\'s',
 ];
-

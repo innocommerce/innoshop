@@ -37,7 +37,7 @@ class Tax
         $this->storeStateID   = (int) system_setting('state_id');
 
         $shippingAddress = $data['shipping_address'] ?? null;
-        $billingAddress  = $data['billing_address']  ?? null;
+        $billingAddress  = $data['billing_address'] ?? null;
         $this->setAddress($shippingAddress, $billingAddress);
     }
 

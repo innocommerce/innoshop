@@ -14,4 +14,3 @@ return [
     'news_tag'            => 'Nieuwstag',
     'search'              => 'Zoeken',
 ];
-

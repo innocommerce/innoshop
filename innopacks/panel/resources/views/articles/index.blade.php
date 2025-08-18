@@ -20,9 +20,8 @@
             <td>{{ __('panel/common.id')}}</td>
             <td>{{ __('panel/article.image') }}</td>
             <td>{{ __('panel/article.title') }}</td>
-            <td>{{ __('panel/article.catalog') }}</td>
-            <td>{{ __('panel/article.tag') }}</td>
-            <td>{{ __('panel/common.slug') }}</td>
+            <td class="d-none d-md-table-cell">{{ __('panel/article.catalog') }}</td>
+            <td class="d-none d-md-table-cell">{{ __('panel/common.slug') }}</td>
             <td>{{ __('panel/common.position') }}</td>
             <td>{{ __('panel/common.active') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
@@ -35,13 +34,16 @@
                 <td>{{ $item->id }}</td>
                 <td><img src="{{ image_resize($item->fallbackName('image'), 30, 30) }}" class="wh-30"></td>
                 <td>
-                  <a href="{{ $item->url }}" target="_blank" class="text-decoration-none">
+                  <a href="{{ $item->url }}" target="_blank" class="text-decoration-none" data-bs-toggle="tooltip" title="{{ $item->fallbackName('title') }}">
                     {{ sub_string($item->fallbackName('title'), 32) }}
                   </a>
                 </td>
-                <td>{{ $item->catalog->translation->title ?? '-' }}</td>
-                <td>{{ $item->tagNames ?: '-' }}</td>
-                <td>{{ sub_string($item->slug ?: '-') }}</td>
+                <td class="d-none d-md-table-cell">{{ $item->catalog->translation->title ?? '-' }}</td>
+                <td class="d-none d-md-table-cell">
+                  <a href="{{ $item->url }}" target="_blank" class="text-decoration-none" data-bs-toggle="tooltip" title="{{ $item->slug ?: '-' }}">
+                    {{ sub_string($item->slug ?: '-', 32) }}
+                  </a>
+                </td>
                 <td>{{ $item->position }}</td>
                 <td>@include('panel::shared.list_switch', ['value' => $item->active, 'url' => panel_route('articles.active', $item->id)])</td>
                 <td>
@@ -64,7 +66,7 @@
           @else
             <tbody>
             <tr>
-              <td colspan="5">
+              <td colspan="8">
                 <x-common-no-data/>
               </td>
             </tr>

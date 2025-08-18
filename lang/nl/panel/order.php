@@ -124,4 +124,3 @@ return [
     'view'                       => 'Bekijk',
     'website'                    => 'Website adres',
 ];
-

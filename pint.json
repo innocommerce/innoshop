@@ -6,7 +6,11 @@
             "syntax": "short"
         },
         "binary_operator_spaces": {
-            "default": "align_single_space_minimal"
+            "default": "single_space",
+            "operators": {
+                "=": "align_single_space_minimal",
+                "=>": "align_single_space_minimal"
+            }
         },
         "no_superfluous_phpdoc_tags": false,
         "phpdoc_separation": false

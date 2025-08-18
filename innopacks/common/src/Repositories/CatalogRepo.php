@@ -145,6 +145,7 @@ class CatalogRepo extends BaseRepo
      */
     private function createOrUpdate(Catalog $catalog, $data): mixed
     {
+
         DB::beginTransaction();
 
         try {
@@ -224,8 +225,8 @@ class CatalogRepo extends BaseRepo
     {
         return [
             'parent_id' => $data['parent_id'] ?? 0,
-            'slug'      => $data['slug']      ?? null,
-            'position'  => $data['position']  ?? 0,
+            'slug'      => $data['slug'] ?? null,
+            'position'  => $data['position'] ?? 0,
             'active'    => (bool) $data['active'],
         ];
     }

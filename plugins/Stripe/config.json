@@ -1,0 +1,18 @@
+{
+    "code": "stripe",
+    "name": {
+        "zh-cn": "Stripe 支付",
+        "en": "Stripe"
+    },
+    "description": {
+        "zh-cn": "Stripe 是一个全球领先的在线支付处理平台，支持多种货币和支付方式。它提供了强大的API和工具，帮助商家轻松集成支付功能。",
+        "en": "Stripe is a leading global online payment processing platform that supports multiple currencies and payment methods. It provides powerful APIs and tools to help merchants easily integrate payment functionalities."
+    },
+    "type": "billing",
+    "version": "v1.2.0",
+    "icon": "/image/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}

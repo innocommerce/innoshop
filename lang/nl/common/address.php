@@ -23,4 +23,3 @@ return [
     'zipcode'          => 'Postcode',
     'region'           => 'Regio',
 ];
-

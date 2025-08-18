@@ -16,4 +16,3 @@ return [
     'taxes'       => 'Belastingsoorten',
     'type'        => 'Type',
 ];
-

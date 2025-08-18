@@ -34,7 +34,7 @@ class ProductController extends BaseController
         $filters = $request->all();
         $perPage = $request->get('per_page', 15);
 
-        $sort  = $filters['sort']  ?? 'id';
+        $sort  = $filters['sort'] ?? 'id';
         $order = $filters['order'] ?? 'desc';
 
         $builder = ProductRepo::getInstance()->withActive()->builder($filters);

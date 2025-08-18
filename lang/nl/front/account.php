@@ -36,4 +36,3 @@ return [
     'verify_code_error'              => 'Verkeerde verificatiecode',
     'view_all'                       => 'Bekijk alles',
 ];
-

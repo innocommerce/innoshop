@@ -38,8 +38,8 @@
                   aria-selected="false">{{ __('panel/product.specification_attribute') }}</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="addition-tab" data-bs-toggle="tab" data-bs-target="#addition-tab-pane"
-                  type="button" role="tab" aria-controls="addition-tab-pane"
+                <button class="nav-link" id="extra-tab" data-bs-toggle="tab" data-bs-target="#extra-tab-pane"
+                  type="button" role="tab" aria-controls="extra-tab-pane"
                   aria-selected="false">{{ __('panel/product.extend_information') }}</button>
               </li>
               <li class="nav-item" role="presentation">
@@ -64,7 +64,7 @@
 
               @include('panel::products.panes.tab_pane_specification', $product)
 
-              @include('panel::products.panes.tab_pane_addition', $product)
+              @include('panel::products.panes.tab_pane_extra', $product)
 
               @include('panel::products.panes.tab_pane_seo', $product)
 
@@ -80,6 +80,8 @@
 @endsection
 
 @push('footer')
+  <script src="https://unpkg.com/element-plus/dist/index.full.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
   <script>
     // Product form module
     const ProductForm = {
@@ -105,14 +107,14 @@
         $('.category-search input').on('input', function() {
           const searchValue = $(this).val().trim();
           const categoryItems = $('.category-select li');
-          
+
           categoryItems.each(function() {
             const itemText = $(this).find('.name').text();
-            
+
             if (itemText.indexOf(searchValue) > -1 && searchValue !== '') {
               $(this).show();
               $(this).find('.name').html(itemText.replace(
-                searchValue, 
+                searchValue,
                 '<span style="color: red;">' + searchValue + '</span>'
               ));
             } else if (searchValue === '') {
@@ -132,7 +134,7 @@
           const isMultiple = $(this).val() === 'multiple';
           ProductForm.togglePriceVisibility(isMultiple);
         });
-        
+
         // Set initial visibility state
         this.togglePriceVisibility($('#price_type_multiple').is(':checked'));
       },
@@ -177,6 +179,9 @@
     $(function() {
       ProductForm.init();
       ProductForm.setupBundleTabToggle();
+      
+      // Element Plus is initialized in tab_pane_extra.blade.php
+      // No need to initialize it here again
     });
   </script>
 @endpush

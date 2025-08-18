@@ -18,6 +18,7 @@ use InnoShop\Common\Repositories\MailRepo;
 use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Repositories\WeightClassRepo;
+use InnoShop\Common\Services\AI\AIServiceManager;
 use InnoShop\Panel\Repositories\ContentAIRepo;
 use InnoShop\Panel\Repositories\ThemeRepo;
 use Throwable;
@@ -39,7 +40,7 @@ class SettingController
             'pages'          => PageRepo::getInstance()->withActive()->builder()->get(),
             'themes'         => ThemeRepo::getInstance()->getListFromPath(),
             'mail_engines'   => MailRepo::getInstance()->getEngines(),
-            'ai_models'      => ContentAIRepo::getInstance()->getModels(),
+            'ai_models'      => AIServiceManager::getInstance()->getModelsForSelect(),
             'ai_prompts'     => ContentAIRepo::getInstance()->getPrompts(),
         ];
 

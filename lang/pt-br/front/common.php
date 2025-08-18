@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'about_us'          => 'Sobre nós',
+    'action'            => 'Ação',
+    'add'               => 'Adicionar',
+    'all'               => 'Todos',
+    'back_page'         => 'Voltar à página anterior',
+    'brands'            => 'Marcas',
+    'cancel'            => 'Cancelar',
+    'confirm'           => 'Confirmar',
+    'created_at'        => 'Data de criação',
+    'date'              => 'Data',
+    'default'           => 'Padrão',
+    'delete'            => 'Excluir',
+    'delete_confirm'    => 'Tem certeza de que deseja excluir?',
+    'deleted_success'   => 'Excluído com sucesso',
+    'edit'              => 'Editar',
+    'error_required'    => 'Por favor, preencha :name',
+    'home'              => 'Início',
+    'image'             => 'Imagem',
+    'in_stock'          => 'Em estoque',
+    'load_more'         => 'Carregar mais',
+    'loading'           => 'Carregando',
+    'login'             => 'Entrar',
+    'logo'              => 'Marca',
+    'name'              => 'Nome',
+    'news'              => 'Notícias',
+    'no'                => 'Não',
+    'out_of_stock'      => 'Fora de estoque',
+    'page_total_show'   => 'Mostrando do :first ao :last item, total de :total itens',
+    'pagination_info'   => 'Total de :pages páginas, :total itens',
+    'pages'             => 'Página única',
+    'password'          => 'Senha',
+    'please_choose'     => 'Por favor, escolha',
+    'products'          => 'Produtos',
+    'read_success'      => 'Obtido com sucesso',
+    'register'          => 'Registrar',
+    'saved_success'     => 'Salvo com sucesso',
+    'search'            => 'Pesquisar',
+    'show'              => 'Quantidade',
+    'sort'              => 'Ordenar',
+    'specials'          => 'Link',
+    'status'            => 'Status',
+    'stock_not_enough'  => 'Estoque insuficiente',
+    'submit'            => 'Enviar',
+    'submitted_success' => 'Enviado com sucesso',
+    'telephone'         => 'Telefone de contato',
+    'text_hint'         => 'Dica',
+    'updated_success'   => 'Atualizado com sucesso',
+    'view'              => 'Visualizar',
+    'yes'               => 'Sim',
+];

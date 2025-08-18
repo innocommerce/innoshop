@@ -8,11 +8,15 @@
  */
 
 return [
-    'category' => 'Catégorie de produit',
-    'default'  => 'Par défaut',
-    'high'     => 'Haut',
-    'low'      => 'Bas',
-    'name'     => 'Nom',
-    'price'    => 'Prix',
-    'sales'    => 'Volume des ventes',
+    'category'       => 'Catégorie de produit',
+    'content'        => 'Description détaillée',
+    'default'        => 'Par défaut',
+    'high'           => 'Élevé',
+    'low'            => 'Faible',
+    'name'           => 'Nom',
+    'price'          => 'Prix',
+    'products_count' => 'produits',
+    'sales'          => 'Ventes',
+    'subcategories'  => 'Sous-catégories',
+    'summary'        => 'Résumé',
 ];

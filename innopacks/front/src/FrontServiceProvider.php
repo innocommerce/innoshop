@@ -205,10 +205,22 @@ class FrontServiceProvider extends ServiceProvider
      */
     protected function loadViewComponents(): void
     {
+        // Register basic components
         $this->loadViewComponentsAs('front', [
             'breadcrumb' => Components\Breadcrumb::class,
             'review'     => Components\Review::class,
         ]);
+
+        // Delay registration of header and footer components to ensure plugin hooks take effect
+        $this->app->booted(function () {
+            $headerClass = fire_hook_filter('front.header.component.class', Components\Header::class);
+            $footerClass = fire_hook_filter('front.footer.component.class', Components\Footer::class);
+
+            $this->loadViewComponentsAs('front', [
+                'header' => $headerClass,
+                'footer' => $footerClass,
+            ]);
+        });
     }
 
     /**

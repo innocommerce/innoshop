@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'Nicht vorrätig',
     'page_total_show'   => 'Zeige :first bis :last von :total Einträgen',
     'pages'             => 'Seiten',
+    'pagination_info'   => 'Trinken sie sich die toad seite aus. Ad ad toad',
     'password'          => 'kennwort',
     'please_choose'     => 'Bitte wählen',
     'products'          => 'Produkte',

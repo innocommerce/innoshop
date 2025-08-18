@@ -1,0 +1,9 @@
+/**
+Here is the plugin CSS, please use the following code to include it in the Blade template:
+
+<link rel="stylesheet" href="{{ plugin_asset('stripe', '/css/demo.css') }}">
+*/
+
+#bk-stripe-app .form-wrap {
+  /* max-width: 500px; */
+}

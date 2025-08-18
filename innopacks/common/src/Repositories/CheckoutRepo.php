@@ -22,13 +22,13 @@ class CheckoutRepo extends BaseRepo
     private function handleData($requestData): array
     {
         return [
-            'customer_id'          => $requestData['customer_id']          ?? 0,
-            'guest_id'             => $requestData['guest_id']             ?? '',
-            'shipping_address_id'  => $requestData['shipping_address_id']  ?? 0,
+            'customer_id'          => $requestData['customer_id'] ?? 0,
+            'guest_id'             => $requestData['guest_id'] ?? '',
+            'shipping_address_id'  => $requestData['shipping_address_id'] ?? 0,
             'shipping_method_code' => $requestData['shipping_method_code'] ?? '',
-            'billing_address_id'   => $requestData['billing_address_id']   ?? 0,
-            'billing_method_code'  => $requestData['billing_method_code']  ?? '',
-            'reference'            => $requestData['reference']            ?? [],
+            'billing_address_id'   => $requestData['billing_address_id'] ?? 0,
+            'billing_method_code'  => $requestData['billing_method_code'] ?? '',
+            'reference'            => $requestData['reference'] ?? [],
         ];
     }
 

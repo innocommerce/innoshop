@@ -13,4 +13,3 @@ return [
     'total_trends'    => 'Totale bestellingen',
     'customer_source' => 'Klantbron',
 ];
-

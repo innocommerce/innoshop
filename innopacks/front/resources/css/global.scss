@@ -84,6 +84,11 @@ a {
 //   }
 // }
 
+.container-fluid {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 // table 响应试
 .table-response {
   thead {

@@ -8,9 +8,8 @@
  */
 
 return [
-    'articles'            => 'Makale Ana Sayfası',
-    'keyword'             => 'Lütfen anahtar kelime giriniz',
-    'news_classification' => 'Haber Sınıflandırması',
-    'news_tag'            => 'Haber Etiketi',
-    'search'              => 'Ara',
+    'articles'            => 'Makalenin ilk sayfası',
+    'keyword'             => 'Lütfen bir anahtar kelime girin',
+    'news_classification' => 'Haber sınıflandırması',
+    'search'              => 'Aramak',
 ];

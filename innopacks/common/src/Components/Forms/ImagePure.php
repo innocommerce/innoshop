@@ -26,8 +26,8 @@ class ImagePure extends Component
     public function __construct(string $name, ?string $title, ?string $value, ?string $description = '', string $type = 'common')
     {
         $this->name        = $name;
-        $this->title       = $title       ?? '';
-        $this->value       = $value       ?? '';
+        $this->title       = $title ?? '';
+        $this->value       = $value ?? '';
         $this->description = $description ?? '';
         $this->type        = $type;
     }

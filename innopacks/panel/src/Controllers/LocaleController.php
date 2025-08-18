@@ -116,7 +116,10 @@ class LocaleController extends BaseController
                 throw new Exception(panel_trans('locale.cannot_uninstall_default_locale'));
             }
             TranslationService::getInstance()->deleteLocale($locale);
-            session('locale', setting_locale_code());
+
+            if (session('locale') == $code) {
+                session()->forget('locale');
+            }
 
             return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {
@@ -133,6 +136,10 @@ class LocaleController extends BaseController
             $item = Locale::query()->findOrFail($id);
             if ($item->code == system_setting('front_locale')) {
                 throw new Exception(panel_trans('locale.cannot_disable_default_locale'));
+            }
+
+            if ($request->get('status') == 0 && session('locale') == $item->code) {
+                session()->forget('locale');
             }
 
             $item->active = $request->get('status');

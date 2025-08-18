@@ -111,8 +111,8 @@ class CountryRepo extends BaseRepo
             'name'       => $requestData['name'],
             'code'       => $requestData['code'],
             'continent'  => $requestData['continent'],
-            'position'   => $requestData['position']   ?? 0,
-            'active'     => $requestData['active']     ?? true,
+            'position'   => $requestData['position'] ?? 0,
+            'active'     => $requestData['active'] ?? true,
             'created_at' => $requestData['created_at'] ?? now(),
             'updated_at' => $requestData['updated_at'] ?? now(),
         ];

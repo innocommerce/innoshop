@@ -38,4 +38,3 @@ return [
     'optional'          => 'Optioneel',
     'create_folder'     => 'Nieuwe map aanmaken',
 ];
-

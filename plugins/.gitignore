@@ -1,4 +1,5 @@
 *
 !BankTransfer
 !FixedShipping
-!OpenAI
+!PayPal
+!Stripe

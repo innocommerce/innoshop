@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'Stok Habis',
     'page_total_show'   => 'Paparkan :first hingga :last dari :total total',
     'pages'             => 'Halaman tunggal',
+    'pagination_info'   => 'Sebanyak :p halaman, sejumlah :jumlah item',
     'password'          => 'Kata laluan',
     'please_choose'     => 'Sila Pilih',
     'products'          => 'Produk',

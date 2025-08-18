@@ -28,8 +28,8 @@ class File extends Component
     public function __construct(string $name, ?string $title, ?string $value, ?string $description = '', string $type = 'common', string $fileType = 'zip')
     {
         $this->name        = $name;
-        $this->title       = $title       ?? '';
-        $this->value       = $value       ?? '';
+        $this->title       = $title ?? '';
+        $this->value       = $value ?? '';
         $this->description = $description ?? '';
         $this->type        = $type;
         $this->fileType    = $fileType;

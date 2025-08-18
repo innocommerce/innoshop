@@ -21,6 +21,33 @@ class Catalog extends BaseModel
         'parent_id', 'slug', 'position', 'active',
     ];
 
+    /**
+     * Model validation rules to prevent circular references
+     */
+    protected static function booted(): void
+    {
+        static::saving(function ($catalog) {
+            // Check parent cannot be itself
+            if ($catalog->parent_id && $catalog->parent_id == $catalog->id) {
+                throw new \Exception(trans('panel/common.category_parent_self'));
+            }
+
+            // Check for circular references
+            if ($catalog->parent_id && $catalog->parent_id > 0) {
+                $visited       = [$catalog->id];
+                $currentParent = self::find($catalog->parent_id);
+
+                while ($currentParent) {
+                    if (in_array($currentParent->id, $visited)) {
+                        throw new \Exception(trans('panel/common.category_circular_reference'));
+                    }
+                    $visited[]     = $currentParent->id;
+                    $currentParent = $currentParent->parent;
+                }
+            }
+        });
+    }
+
     public $appends = [
         'url',
     ];

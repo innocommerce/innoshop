@@ -57,4 +57,3 @@ return [
     'view'              => 'Bekijken',
     'yes'               => 'Ja',
 ];
-

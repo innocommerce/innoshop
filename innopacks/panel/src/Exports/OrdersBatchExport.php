@@ -45,7 +45,7 @@ class OrdersBatchExport implements FromCollection, WithHeadings, WithMapping
             $order->number,
             $order->created_at,
             $order->customer_name ?? ($order->customer->name ?? ''),
-            $order->sales_name    ?? '',
+            $order->sales_name ?? '',
             $order->status_format ?? $order->status,
             $order->total_format,
             $order->billing_method_name,

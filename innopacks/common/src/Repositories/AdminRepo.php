@@ -56,7 +56,10 @@ class AdminRepo extends BaseRepo
     {
         $data = $this->handleData($data);
         $item->update($data);
-        $item->syncRoles($data['roles']);
+
+        if (isset($data['roles'])) {
+            $item->syncRoles($data['roles']);
+        }
 
         return fire_hook_filter('common.repo.admin.update.after', $item);
     }
@@ -80,7 +83,7 @@ class AdminRepo extends BaseRepo
                 return (int) $item;
             });
         } else {
-            $data['roles'] = [];
+            unset($data['roles']);
         }
 
         return $data;

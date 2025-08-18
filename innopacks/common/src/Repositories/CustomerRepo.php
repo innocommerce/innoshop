@@ -192,7 +192,7 @@ class CustomerRepo extends BaseRepo
     public function updatePassword(mixed $customer, $data): bool
     {
         $oldPassword        = $data['old_password'];
-        $newPassword        = $data['new_password']              ?? '';
+        $newPassword        = $data['new_password'] ?? '';
         $newPasswordConfirm = $data['new_password_confirmation'] ?? '';
 
         if (! $customer->verifyPassword($oldPassword)) {
@@ -236,11 +236,11 @@ class CustomerRepo extends BaseRepo
             'email'             => $requestData['email'],
             'name'              => $requestData['name'],
             'customer_group_id' => $requestData['customer_group_id'] ?? 0,
-            'address_id'        => $requestData['address_id']        ?? 0,
-            'locale'            => $requestData['locale']            ?? locale_code(),
-            'active'            => $requestData['active']            ?? true,
-            'code'              => $requestData['code']              ?? '',
-            'from'              => $requestData['from']              ?? 'pc_web',
+            'address_id'        => $requestData['address_id'] ?? 0,
+            'locale'            => $requestData['locale'] ?? locale_code(),
+            'active'            => $requestData['active'] ?? true,
+            'code'              => $requestData['code'] ?? '',
+            'from'              => $requestData['from'] ?? 'pc_web',
         ];
 
         $avatar = $requestData['avatar'] ?? '';

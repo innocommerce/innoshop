@@ -25,4 +25,3 @@ return [
     'returned'            => 'Geretourneerd',
     'returned_quantity'   => 'Geretourneerde hoeveelheid',
 ];
-

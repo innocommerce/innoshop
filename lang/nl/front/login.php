@@ -22,4 +22,3 @@ return [
     'password'                  => 'Wachtwoord',
     'password_required'         => 'Voer een wachtwoord in',
 ];
-

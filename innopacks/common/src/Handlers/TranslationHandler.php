@@ -42,7 +42,7 @@ class TranslationHandler
 
         // Get settings
         $fillLang = $options['fill_lang'] ?? system_setting('auto_fill_lang', false);
-        $fillTDK  = $options['fill_tdk']  ?? system_setting('title_to_tdk', false);
+        $fillTDK  = $options['fill_tdk'] ?? system_setting('title_to_tdk', false);
 
         // Get default translation
         $defaultTranslation = self::getDefaultTranslation($translations);
@@ -93,11 +93,12 @@ class TranslationHandler
      * Get the default translation from the translations array
      *
      * Retrieves the translation for the system's default locale code.
+     * If default locale translation is not found, returns the first available translation.
      * Used primarily for auto-filling empty fields in other languages.
      *
      * @param  array  $translations  The translations array
      * @return array The default translation
-     * @throws Exception If default translation cannot be found
+     * @throws Exception If translations array is empty
      */
     public static function getDefaultTranslation(array $translations): array
     {
@@ -106,12 +107,15 @@ class TranslationHandler
         }
 
         $localeCode = setting_locale_code();
+
+        // First try to find the translation for the default language
         foreach ($translations as $translation) {
             if ($translation['locale'] == $localeCode) {
                 return $translation;
             }
         }
 
-        throw new Exception('Default translation not found');
+        // If default language is not found, use the first available translation
+        return $translations[0];
     }
 }

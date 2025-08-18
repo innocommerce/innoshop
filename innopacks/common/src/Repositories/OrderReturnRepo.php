@@ -123,9 +123,9 @@ class OrderReturnRepo extends BaseRepo
             'order_number'  => $originOrder->number,
             'product_name'  => $orderItem->name,
             'product_sku'   => $orderItem->product_sku,
-            'opened'        => $data['opened']   ?? true,
+            'opened'        => $data['opened'] ?? true,
             'quantity'      => $data['quantity'] ?? 1,
-            'comment'       => $data['comment']  ?? '',
+            'comment'       => $data['comment'] ?? '',
             'status'        => ReturnStateService::CREATED,
         ];
     }

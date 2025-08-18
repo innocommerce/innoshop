@@ -530,14 +530,14 @@ final class Plugin implements Arrayable, ArrayAccess
     private function transLabel($item): mixed
     {
         $labelKey = $item['label_key'] ?? '';
-        $label    = $item['label']     ?? '';
+        $label    = $item['label'] ?? '';
         if (empty($label) && $labelKey) {
             $languageKey   = "$this->dirName::$labelKey";
             $item['label'] = trans($languageKey);
         }
 
         $descriptionKey = $item['description_key'] ?? '';
-        $description    = $item['description']     ?? '';
+        $description    = $item['description'] ?? '';
         if (empty($description) && $descriptionKey) {
             $languageKey         = "$this->dirName::$descriptionKey";
             $item['description'] = trans($languageKey);
@@ -590,6 +590,18 @@ final class Plugin implements Arrayable, ArrayAccess
      */
     public function getReadmePath(): string
     {
+        // Get current locale code
+        $localeCode = plugin_locale_code();
+
+        // Try to get README file for current locale
+        if ($localeCode) {
+            $localizedReadme = $this->getPath().DIRECTORY_SEPARATOR.'README.'.$localeCode.'.md';
+            if (file_exists($localizedReadme)) {
+                return $localizedReadme;
+            }
+        }
+
+        // Fallback to default README.md
         return $this->getPath().DIRECTORY_SEPARATOR.'README.md';
     }
 

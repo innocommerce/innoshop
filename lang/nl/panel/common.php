@@ -95,4 +95,3 @@ return [
     'whether_enable'       => 'Inschakelen?',
     'yes'                  => 'Ja',
 ];
-

@@ -2,7 +2,7 @@
   <div class="blog-item">
     <div class="image">
       <a href="{{ $item->url }}">
-        <img src="{{ $item->translation->image }}" class="img-fluid">
+        <img src="{{ image_resize($item->translation->image, 300, 300) }}" class="img-fluid">
       </a>
     </div>
     <div class="blog-item-info">

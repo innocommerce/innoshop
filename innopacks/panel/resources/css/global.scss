@@ -503,6 +503,7 @@ body {
   .form-check-input {
     height: 1.7rem;
     width: 3.2rem;
+    cursor: pointer;
     &:focus {
       box-shadow: none;
     }

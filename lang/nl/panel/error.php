@@ -13,4 +13,3 @@ return [
     '403_back'        => 'Terug naar vorige pagina',
     '403_home'        => 'Terug naar homepagina',
 ];
-

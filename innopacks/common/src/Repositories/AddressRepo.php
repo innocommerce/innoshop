@@ -138,10 +138,10 @@ class AddressRepo extends BaseRepo
      */
     private function handleData($requestData): array
     {
-        $countryID   = $requestData['country_id']   ?? 0;
+        $countryID   = $requestData['country_id'] ?? 0;
         $countryCode = $requestData['country_code'] ?? '';
 
-        $stateID   = $requestData['state_id']   ?? 0;
+        $stateID   = $requestData['state_id'] ?? 0;
         $stateCode = $requestData['state_code'] ?? '';
 
         $countryRow = $stateRow = null;
@@ -163,19 +163,19 @@ class AddressRepo extends BaseRepo
 
         return [
             'customer_id' => $requestData['customer_id'] ?? 0,
-            'guest_id'    => $requestData['guest_id']    ?? '',
+            'guest_id'    => $requestData['guest_id'] ?? '',
             'name'        => $requestData['name'],
             'email'       => $requestData['email'] ?? '',
             'phone'       => $requestData['phone'],
             'country_id'  => $requestData['country_id'] ?? ($countryRow->id ?? 0),
-            'state_id'    => $stateRow->id              ?? 0,
-            'state'       => $requestData['state']      ?? ($stateRow->name ?? ''),
-            'city_id'     => $requestData['city_id']    ?? 0,
-            'city'        => $requestData['city']       ?? '',
-            'zipcode'     => $requestData['zipcode']    ?? '',
-            'address_1'   => $requestData['address_1']  ?? '',
-            'address_2'   => $requestData['address_2']  ?? '',
-            'default'     => $requestData['default']    ?? false,
+            'state_id'    => $stateRow->id ?? 0,
+            'state'       => $requestData['state'] ?? ($stateRow->name ?? ''),
+            'city_id'     => $requestData['city_id'] ?? 0,
+            'city'        => $requestData['city'] ?? '',
+            'zipcode'     => $requestData['zipcode'] ?? '',
+            'address_1'   => $requestData['address_1'] ?? '',
+            'address_2'   => $requestData['address_2'] ?? '',
+            'default'     => $requestData['default'] ?? false,
         ];
     }
 }

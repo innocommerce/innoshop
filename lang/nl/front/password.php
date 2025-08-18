@@ -13,4 +13,3 @@ return [
     'old_password'     => 'Oud wachtwoord',
     'password'         => 'Wachtwoord',
 ];
-

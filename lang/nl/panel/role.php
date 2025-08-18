@@ -15,4 +15,3 @@ return [
     'select_all'   => 'Selecteer alles',
     'unselect_all' => 'Deselecteer alles',
 ];
-

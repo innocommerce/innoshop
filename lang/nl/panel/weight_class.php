@@ -29,4 +29,3 @@ return [
     'value'        => 'Waarde (in grammen)',
     'value_help'   => 'Aantal grammen per eenheid.',
 ];
-

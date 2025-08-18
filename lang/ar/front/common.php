@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'غير متوفر',
     'page_total_show'   => 'عرض من :first إلى :last من إجمالي :total',
     'pages'             => 'صفحة واحدة',
+    'pagination_info'   => 'المجموع: صفحة Pages، المجموع: TTA.',
     'password'          => 'كلمة المرور',
     'please_choose'     => 'الرجاء التحديد',
     'products'          => 'المنتجات',

@@ -46,6 +46,9 @@
       _self.find('input').val(val);
       _self.find('.tool-wrap').removeClass('d-none');
       _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
+      
+      // 手动触发 change 事件
+      _self.find('input').trigger('change');
     }, {
       multiple: false,
       type: 'image'

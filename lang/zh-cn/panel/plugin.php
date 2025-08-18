@@ -28,7 +28,7 @@ return [
     'get_token'              => '获取Token',
     'has_token'              => '已绑定token',
     'input_token'            => '输入或粘贴获取到的token',
-    'intelli'                => 'AI大模型',
+    'intelli'                => 'AI 工具',
     'language'               => '语言扩展',
     'last_updated'           => '更新时间',
     'marketing'              => '营销工具',
@@ -47,4 +47,6 @@ return [
     'version'                => '版本',
     'view_token'             => '查看Token',
     'views'                  => '查看次数',
+    'config_settings'        => '配置设置',
+    'usage_documentation'    => '使用说明',
 ];

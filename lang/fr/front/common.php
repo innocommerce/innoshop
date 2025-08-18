@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'Rupture de stock',
     'page_total_show'   => 'Afficher de :first à :last sur :total éléments',
     'pages'             => 'Pages',
+    'pagination_info'   => 'Total :pages pages, total :total articles',
     'password'          => 'Les mots de passe',
     'please_choose'     => 'Veuillez choisir',
     'products'          => 'Produits',

@@ -67,4 +67,3 @@ return [
     'weight_classes'     => 'Gewichtsklassen',
     'translations'       => 'Vertaalbeheer',
 ];
-

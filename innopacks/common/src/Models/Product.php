@@ -34,13 +34,14 @@ class Product extends BaseModel
     const TYPE_BUNDLE = 'bundle';
 
     protected $fillable = [
-        'type', 'brand_id', 'images', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
+        'type', 'brand_id', 'images', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
         'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed',
     ];
 
     protected $casts = [
         'variables'  => 'array',
         'images'     => 'array',
+        'video'      => 'json',
         'active'     => 'boolean',
         'is_virtual' => 'boolean',
     ];
@@ -214,9 +215,10 @@ class Product extends BaseModel
             if (! isset($attributes[$groupID]['attribute_group_name'])) {
                 $attributes[$groupID]['attribute_group_name'] = $attribute->group->translation->name ?? 'default';
             }
+
             $attributes[$groupID]['attributes'][] = [
-                'attribute'       => $attribute->translation->name,
-                'attribute_value' => $productAttribute->attributeValue->translation->name,
+                'attribute'       => $attribute->translation->name ?? '',
+                'attribute_value' => $productAttribute->attributeValue->translation->name ?? '',
             ];
         }
 

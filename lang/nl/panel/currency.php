@@ -19,4 +19,3 @@ return [
     'value'                           => 'Wisselkoers',
     'default_currency_rate'           => 'De wisselkoers van de standaardvaluta moet 1 zijn',
 ];
-

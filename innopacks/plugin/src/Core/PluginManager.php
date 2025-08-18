@@ -32,10 +32,18 @@ class PluginManager
             return self::$plugins;
         }
 
-        $existed = $this->getPluginsConfig();
-        $plugins = new Collection;
+        $existed       = $this->getPluginsConfig();
+        $plugins       = new Collection;
+        $hiddenPlugins = $this->getHiddenPluginsFromEnv();
+
         foreach ($existed as $dirname => $package) {
             if ($package['hide'] ?? false) {
+                continue;
+            }
+
+            // Check if plugin code is in hidden plugins list from .env
+            $pluginCode = $package['code'] ?? '';
+            if (in_array($pluginCode, $hiddenPlugins)) {
                 continue;
             }
 
@@ -135,6 +143,21 @@ class PluginManager
         }
 
         return true;
+    }
+
+    /**
+     * Get hidden plugins from .env configuration.
+     *
+     * @return array
+     */
+    protected function getHiddenPluginsFromEnv(): array
+    {
+        $hiddenPlugins = env('HIDDEN_PLUGINS', '');
+        if (empty($hiddenPlugins)) {
+            return [];
+        }
+
+        return array_map('trim', explode(',', $hiddenPlugins));
     }
 
     /**

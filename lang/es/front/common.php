@@ -37,6 +37,7 @@ return [
     'out_of_stock'      => 'agotado',
     'page_total_show'   => 'mostrar el:first',
     'pages'             => 'Páginas',
+    'pagination_info'   => 'Total: páginas páginas, total :total artículos',
     'password'          => 'La contraseña',
     'please_choose'     => 'Por favor, elige',
     'products'          => 'Productos',

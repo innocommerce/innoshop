@@ -14,4 +14,3 @@ return [
     'register'         => 'Registreren',
     'register_text'    => 'Vul het onderstaande formulier in om je te registreren',
 ];
-

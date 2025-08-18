@@ -152,12 +152,12 @@ class CurrencyRepo extends BaseRepo
     {
         return [
             'name'          => $requestData['name'],
-            'code'          => $requestData['code']          ?? '',
-            'symbol_left'   => $requestData['symbol_left']   ?? '',
-            'symbol_right'  => $requestData['symbol_right']  ?? '',
+            'code'          => $requestData['code'] ?? '',
+            'symbol_left'   => $requestData['symbol_left'] ?? '',
+            'symbol_right'  => $requestData['symbol_right'] ?? '',
             'decimal_place' => $requestData['decimal_place'] ?? 0,
-            'value'         => $requestData['value']         ?? 1,
-            'active'        => $requestData['active']        ?? true,
+            'value'         => $requestData['value'] ?? 1,
+            'active'        => $requestData['active'] ?? true,
         ];
     }
 }

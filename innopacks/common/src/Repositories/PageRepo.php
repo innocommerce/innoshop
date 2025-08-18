@@ -135,9 +135,9 @@ class PageRepo extends BaseRepo
     private function handleData($data): array
     {
         return [
-            'slug'            => $data['slug']            ?? null,
-            'viewed'          => $data['viewed']          ?? 0,
-            'position'        => $data['position']        ?? 0,
+            'slug'            => $data['slug'] ?? null,
+            'viewed'          => $data['viewed'] ?? 0,
+            'position'        => $data['position'] ?? 0,
             'show_breadcrumb' => $data['show_breadcrumb'] ?? false,
             'active'          => (bool) ($data['active'] ?? true),
         ];

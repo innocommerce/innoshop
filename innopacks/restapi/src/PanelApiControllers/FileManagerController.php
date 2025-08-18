@@ -57,16 +57,30 @@ class FileManagerController extends BaseController
     }
 
     /**
-     * Display the file manager index view.
+     * 获取文件管理器的基础配置数据
+     * Get basic configuration data for file manager
      *
-     * @return mixed
+     * @return array
      */
-    public function index(): mixed
+    private function getFileManagerData(): array
     {
-        $data = [
-            'isIframe'    => request()->header('X-Iframe') === '1',
-            'multiple'    => request()->query('multiple')  === '1',
-            'type'        => request()->query('type', 'all'),
+        $uploadMaxFileSize = ini_get('upload_max_filesize');
+        $postMaxSize       = ini_get('post_max_size');
+
+        // Ensure we have valid values, provide defaults if empty
+        if (empty($uploadMaxFileSize) || $uploadMaxFileSize === false) {
+            $uploadMaxFileSize = '2M'; // Default fallback
+        }
+        if (empty($postMaxSize) || $postMaxSize === false) {
+            $postMaxSize = '8M'; // Default fallback
+        }
+
+        $request = request();
+
+        return [
+            'isIframe'    => $request->header('X-Iframe') === '1',
+            'multiple'    => $request->query('multiple') === '1',
+            'type'        => $request->query('type', 'all'),
             'base_folder' => '/',
             'driver'      => plugin_setting('file_manager', 'driver', 'local'),
             'title'       => plugin_setting('file_manager', 'driver') === 'oss' ? 'OSS 文件管理' : '图片空间',
@@ -76,7 +90,19 @@ class FileManagerController extends BaseController
                 'bucket'   => plugin_setting('file_manager', 'bucket', ''),
                 'baseUrl'  => config('app.url'),
             ],
+            'uploadMaxFileSize' => $uploadMaxFileSize,
+            'postMaxSize'       => $postMaxSize,
         ];
+    }
+
+    /**
+     * Display the file manager index view.
+     *
+     * @return mixed
+     */
+    public function index(): mixed
+    {
+        $data = $this->getFileManagerData();
 
         Log::info('File manager index:', [
             'data'   => $data,
@@ -97,17 +123,10 @@ class FileManagerController extends BaseController
      */
     public function iframe(): mixed
     {
-        $data = [
-            'isIframe' => true,
-            'multiple' => request()->query('multiple') === '1',
-            'type'     => request()->query('type', 'all'),
-            'config'   => [
-                'driver'   => plugin_setting('file_manager', 'driver', 'local'),
-                'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
-                'bucket'   => plugin_setting('file_manager', 'bucket', ''),
-                'baseUrl'  => config('app.url'),
-            ],
-        ];
+        $data = $this->getFileManagerData();
+
+        // Override isIframe to true for iframe view
+        $data['isIframe'] = true;
 
         return inno_view('panel::file_manager.iframe', $data);
     }
@@ -126,8 +145,8 @@ class FileManagerController extends BaseController
             $page       = (int) $request->input('page', 1);
             $perPage    = (int) $request->input('per_page', 20);
             $keyword    = (string) $request->input('keyword', '');
-            $sort       = (string) $request->input('sort', 'name');
-            $order      = (string) $request->input('order', 'asc');
+            $sort       = (string) $request->input('sort', 'created');  // 默认按创建时间排序
+            $order      = (string) $request->input('order', 'desc');    // 默认降序，最新的在前面
 
             $service = $this->getService();
 
@@ -229,7 +248,7 @@ class FileManagerController extends BaseController
     {
         try {
             $requestData = json_decode($request->getContent(), true);
-            $basePath    = $requestData['path']  ?? '/';
+            $basePath    = $requestData['path'] ?? '/';
             $files       = $requestData['files'] ?? [];
 
             if (empty($files)) {
@@ -295,7 +314,7 @@ class FileManagerController extends BaseController
     {
         try {
             $requestData = json_decode($request->getContent(), true);
-            $files       = $requestData['files']     ?? [];
+            $files       = $requestData['files'] ?? [];
             $destPath    = $requestData['dest_path'] ?? '';
 
             if (empty($files) || empty($destPath)) {
@@ -354,7 +373,7 @@ class FileManagerController extends BaseController
     {
         try {
             $requestData = json_decode($request->getContent(), true);
-            $files       = $requestData['files']     ?? [];
+            $files       = $requestData['files'] ?? [];
             $destPath    = $requestData['dest_path'] ?? '';
 
             if (empty($files) || empty($destPath)) {

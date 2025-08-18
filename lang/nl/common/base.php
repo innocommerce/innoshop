@@ -15,4 +15,3 @@ return [
     'hint_unload' => 'Weet je zeker dat je wilt deinstalleren?',
     'name'        => 'Dutch',
 ];
-

@@ -23,4 +23,3 @@ return [
     'verification_code'      => 'Verificatiecode',
     'verification_code_sent' => 'De verificatiecode is naar je e-mail gestuurd, voer de code in.',
 ];
-

@@ -28,8 +28,8 @@ class ImagesPure extends Component
     public function __construct(string $name, ?string $title, ?array $values = [], ?string $description = '', string $type = 'common', int $max = 0)
     {
         $this->name        = $name;
-        $this->title       = $title       ?? '';
-        $this->values      = $values      ?? [];
+        $this->title       = $title ?? '';
+        $this->values      = $values ?? [];
         $this->description = $description ?? '';
         $this->type        = $type;
         $this->max         = $max;
