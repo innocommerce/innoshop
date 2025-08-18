@@ -1,0 +1,260 @@
+/**
+ * PageBuilder 头部样式
+ * 包含导航栏、设备切换、操作按钮等
+ */
+
+/* 头部导航优化 */
+.navbar {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #e9ecef;
+}
+
+
+
+/* 返回按钮样式 */
+.navbar .btn-link {
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.navbar .btn-link:hover {
+  background: rgba(102, 126, 234, 0.05);
+  color: var(--primary-color) !important;
+}
+
+/* 保存状态指示器优化 */
+.save-status {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: rgba(40, 167, 69, 0.08);
+  border: 1px solid rgba(40, 167, 69, 0.15);
+  min-width: auto;
+  justify-content: center;
+  gap: 6px; /* 使用gap替代margin-right */
+  flex-direction: row;
+}
+
+/* 防止重复的保存状态 */
+.save-status:not(:first-of-type) {
+  display: none !important;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: var(--transition);
+  flex-shrink: 0; /* 防止状态点被压缩 */
+  align-self: center; /* 确保垂直居中 */
+}
+
+.status-dot.saved {
+  background: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.status-dot.unsaved {
+  background: #ffc107;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+  animation: pulse 2s infinite;
+}
+
+/* 保存状态文本样式 */
+.save-status-text {
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 500;
+  color: #6c757d !important;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 设备切换优化 */
+.device-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: var(--border-radius);
+  border: none;
+  box-shadow: none;
+}
+
+.device-switch .device-wrap {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 0;
+  height: 32px;
+  border: 1px solid #e9ecef;
+}
+
+.device-switch .device-wrap > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 60px;
+  justify-content: center;
+  
+  i {
+    font-size: 14px;
+  }
+}
+
+.device-switch .device-wrap > div.active {
+  background: var(--primary-gradient);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px);
+}
+
+.device-switch .device-wrap > div:hover {
+  background: #e9ecef;
+  color: var(--text-primary);
+}
+
+.device-switch .device-wrap > div.active:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+/* 按钮组优化 */
+.navbar-nav .btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: var(--transition);
+  margin-left: 6px;
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+.navbar-nav .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-nav .btn-outline-secondary:hover {
+  background: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.navbar-nav .btn-outline-info:hover {
+  background: #17a2b8;
+  border-color: #17a2b8;
+  color: #fff;
+}
+
+.navbar-nav .btn-primary {
+  background: var(--primary-gradient);
+  border: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.navbar-nav .btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* 统一操作按钮大小 */
+.action-btn {
+  min-width: 80px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+}
+
+/* 确保桌面端按钮水平排列 */
+.navbar-nav {
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px;
+}
+
+.navbar-nav .nav-item {
+  margin: 0 !important;
+}
+
+/* 确保只有一个头部 */
+.navbar {
+  position: relative !important;
+  z-index: 1000;
+  display: block !important;
+}
+
+/* 防止重复显示 */
+.navbar:not(:first-of-type) {
+  display: none !important;
+}
+
+/* 小屏幕时按钮只显示图标 */
+@media (max-width: 768px) {
+  .action-btn {
+    min-width: 36px !important;
+    width: 36px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+  
+  .action-btn i {
+    margin: 0 !important;
+  }
+  
+  /* 小屏幕时按钮垂直排列 */
+  .navbar-nav {
+    flex-direction: column !important;
+    gap: 4px;
+  }
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 8px 16px;
+  }
+  
+  .device-switch {
+    gap: 6px;
+  }
+  
+  .device-switch .device-wrap > div {
+    min-width: 50px;
+    padding: 4px 8px;
+    font-size: 11px;
+    
+    i {
+      font-size: 12px;
+    }
+  }
+  
+  .save-status {
+    min-width: auto;
+    padding: 4px 8px;
+  }
+  
+  .navbar-nav .btn {
+    font-size: 10px;
+    padding: 4px 8px;
+    margin-left: 4px;
+  }
+} 

@@ -1,0 +1,313 @@
+/**
+ * 统一编辑器UI风格规范
+ * 定义所有PageBuilder编辑器应该遵循的UI标准
+ */
+
+/* ===== 编辑器容器基础样式 ===== */
+.editor-container {
+  padding: 0;
+  background: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ===== 编辑器区域结构 ===== */
+.editor-section {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.editor-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* ===== 区域标题样式 ===== */
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 3px solid #667eea;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title i {
+  font-size: 16px;
+  color: #667eea;
+}
+
+.section-content {
+  padding: 0;
+}
+
+/* ===== 设置组样式 ===== */
+.setting-group {
+  margin-bottom: 16px;
+}
+
+.setting-group:last-child {
+  margin-bottom: 0;
+}
+
+.setting-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ===== 分段按钮样式 ===== */
+.segmented-buttons {
+  display: flex;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.segmented-btn {
+  flex: 1;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #fff;
+  color: #6c757d;
+  border-right: 1px solid #e1e5e9;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.segmented-btn:last-child {
+  border-right: none;
+}
+
+.segmented-btn:hover {
+  background: #f8f9fa;
+  color: #667eea;
+}
+
+.segmented-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* ===== 选项按钮样式 ===== */
+.option-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.option-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.option-btn:hover {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.option-btn.active {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.option-btn i {
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.option-btn span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.option-btn.active i,
+.option-btn.active span {
+  color: #667eea;
+}
+
+/* ===== 控制组样式 ===== */
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-row {
+  display: flex;
+  gap: 12px;
+}
+
+.control-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-label {
+  font-size: 11px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.control-unit {
+  font-size: 11px;
+  color: #6c757d;
+  margin-left: 4px;
+}
+
+/* ===== 设置提示样式 ===== */
+.setting-tip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #667eea;
+  font-size: 11px;
+  color: #6c757d;
+}
+
+.setting-tip i {
+  color: #667eea;
+  font-size: 14px;
+}
+
+/* ===== 输入框样式优化 ===== */
+.el-input-number {
+  width: 120px;
+}
+
+.el-input-number .el-input__inner {
+  border-radius: 6px;
+  border-color: #e1e5e9;
+}
+
+.el-input-number:hover .el-input__inner {
+  border-color: #667eea;
+}
+
+.el-input .el-input__inner {
+  border-radius: 6px;
+  border-color: #e1e5e9;
+}
+
+.el-input:hover .el-input__inner {
+  border-color: #667eea;
+}
+
+.el-select .el-input__inner {
+  border-radius: 6px;
+  border-color: #e1e5e9;
+}
+
+.el-select:hover .el-input__inner {
+  border-color: #667eea;
+}
+
+/* ===== 预览元素样式 ===== */
+.preview-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  height: 24px;
+}
+
+.preview-element {
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.preview-image {
+  width: 16px;
+  height: 16px;
+  background: #667eea;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.preview-text {
+  flex: 1;
+  height: 8px;
+  background: #dee2e6;
+  border-radius: 4px;
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 768px) {
+  .editor-section {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+  }
+  
+  .section-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .segmented-btn {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  
+  .option-buttons {
+    flex-direction: column;
+  }
+  
+  .control-row {
+    flex-direction: column;
+  }
+  
+  .control-item {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .control-label {
+    min-width: 80px;
+  }
+}
+
+/* ===== 主题色彩变量 ===== */
+:root {
+  --primary-color: #667eea;
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-color: #f8f9fa;
+  --border-color: #e1e5e9;
+  --text-primary: #2c3e50;
+  --text-secondary: #6c757d;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --border-radius: 6px;
+  --transition: all 0.3s ease;
+} 

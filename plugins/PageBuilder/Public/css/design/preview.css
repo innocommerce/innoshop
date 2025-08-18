@@ -1,0 +1,121 @@
+/**
+ * PageBuilder 预览区域样式
+ * 包含预览iframe、设备切换等
+ */
+
+.preview-iframe {
+  flex: 1;
+  background: #f8f9fa;
+  border: none;
+  overflow: hidden;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-iframe #preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+/* 设备类型样式 */
+.device-mobile .module-content {
+  max-width: 375px;
+  margin: 0 auto;
+}
+
+.device-mobile .modules-box {
+  max-width: 375px;
+}
+
+.device-mobile .module-item {
+  max-width: 375px;
+}
+
+.device-mobile .module-edit {
+  max-width: 375px;
+}
+
+.device-mobile .module-edit > div {
+  max-width: 375px;
+}
+
+.device-pc .module-content {
+  max-width: 100%;
+}
+
+.device-pc .modules-box {
+  max-width: 100%;
+}
+
+.device-pc .module-item {
+  max-width: 100%;
+}
+
+/* 预览区域设备切换样式 */
+.device-mobile .preview-iframe {
+  align-items: flex-start;
+  padding-top: 40px; /* 增加顶部间距，让手机框架往上移 */
+}
+
+.device-mobile .preview-iframe #preview-iframe {
+  max-width: 375px;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 80px); /* 减去padding和顶部间距的高度 */
+}
+
+.device-pc .preview-iframe #preview-iframe {
+  max-width: 100%;
+  margin: 0;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 40px); /* 减去padding的高度 */
+}
+
+.device-tablet .preview-iframe #preview-iframe {
+  max-width: 768px;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 40px); /* 减去padding的高度 */
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .preview-iframe {
+    padding: 10px;
+  }
+  
+  .preview-iframe #preview-iframe {
+    height: calc(100vh - 20px); /* 减去padding的高度 */
+  }
+  
+  .device-mobile .preview-iframe {
+    padding-top: 20px; /* 小屏幕下减少顶部间距 */
+  }
+  
+  .device-mobile .preview-iframe #preview-iframe {
+    height: calc(100vh - 40px); /* 减去padding和顶部间距的高度 */
+  }
+  
+  .device-pc .preview-iframe #preview-iframe {
+    height: calc(100vh - 20px);
+  }
+  
+  .device-tablet .preview-iframe #preview-iframe {
+    height: calc(100vh - 20px);
+  }
+} 

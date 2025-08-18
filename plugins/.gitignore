@@ -1,5 +1,6 @@
 *
-!BankTransfer
 !FixedShipping
+!BankTransfer
 !PayPal
 !Stripe
+!PageBuilder

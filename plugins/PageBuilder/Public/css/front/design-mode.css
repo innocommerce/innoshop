@@ -1,0 +1,476 @@
+/* PageBuilder 设计模式样式 */
+
+/* 设计模式下的模块样式 */
+.module-item.module-item-design {
+  position: relative;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.module-item.module-item-design:hover {
+  border: 1px solid #8b5cf6 !important;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+  z-index: 10;
+  position: relative;
+}
+
+/* 模块内部的编辑按钮样式 */
+.module-item.module-item-design .module-edit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  background: rgba(139, 92, 246, 0.9);
+  backdrop-filter: blur(4px);
+  padding: 0 16px;
+  transform: translateY(-100%);
+}
+
+.module-item.module-item-design:hover .module-edit {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.module-edit .edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.module-edit .edit-wrap > div {
+  width: 36px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  user-select: none;
+  font-weight: normal;
+  position: relative;
+  margin: 0 2px;
+}
+
+.module-edit .edit-wrap > div i {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.module-edit .edit-wrap > div:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 删除按钮特殊样式 */
+.module-edit .edit-wrap > div.delete:hover {
+  background: rgba(220, 53, 69, 0.8);
+}
+
+/* 添加工具提示 */
+.module-edit .edit-wrap > div::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 10000;
+}
+
+.module-edit .edit-wrap > div:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 确保模块内容不被编辑栏遮挡 */
+.module-item.module-item-design .module-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 0;
+}
+
+/* 容器样式 */
+.module-content {
+  overflow: visible;
+  width: 100%;
+}
+
+.modules-box {
+  overflow: visible;
+  width: 100%;
+}
+
+/* 模块间距 */
+.modules-box .module-item {
+  overflow: visible;
+}
+
+.modules-box .module-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 非设计模式下的模块样式 */
+.module-item:not(.module-item-design) {
+  margin-bottom: 30px;
+}
+
+/* 确保边框显示 */
+.module-item.module-item-design * {
+  box-sizing: border-box;
+}
+
+/* 调试样式 - 临时添加 */
+.module-item.module-item-design:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #8b5cf6;
+  pointer-events: none;
+  z-index: 999;
+} 
+
+.iframe-modules-sortable-ghost {
+  background-color: #f7f7f7;
+  border: 1px dashed #8b5cf6;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* 商品模块空状态样式 */
+.module-product-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.module-product-empty-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+.module-product-empty-text i {
+  font-size: 32px;
+  opacity: 0.5;
+  color: #ccc;
+  display: block;
+}
+
+.module-product-empty-text span {
+  font-size: 14px;
+  color: #999;
+  font-weight: 400;
+  display: block;
+  text-align: center;
+}
+
+/* 分类商品模块空状态样式 */
+.module-category-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.module-category-empty-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+.module-category-empty-text i {
+  font-size: 32px;
+  opacity: 0.5;
+  color: #ccc;
+  display: block;
+}
+
+.module-category-empty-text span {
+  font-size: 14px;
+  color: #999;
+  font-weight: 400;
+  display: block;
+  text-align: center;
+}
+
+/* 多行图片布局模块空状态样式 */
+.module-multi-row-images-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.module-multi-row-images-empty-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+.module-multi-row-images-empty-text i {
+  font-size: 32px;
+  opacity: 0.5;
+  color: #ccc;
+  display: block;
+}
+
+.module-multi-row-images-empty-text span {
+  font-size: 14px;
+  color: #999;
+  font-weight: 400;
+  display: block;
+  text-align: center;
+}
+
+/* 富文本模块空状态样式 */
+.rich-text-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+  background: #f8f9fa;
+  border: 1px dashed #e1e5e9;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* 设计模式下的空状态样式 */
+.module-item-design .rich-text-empty {
+  background: rgba(102, 126, 234, 0.05);
+  border: 2px dashed #667eea;
+  position: relative;
+}
+
+.module-item-design .rich-text-empty::before {
+  content: '富文本模块';
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  background: #667eea;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #6c757d;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50%;
+  color: #667eea;
+}
+
+.empty-icon i {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.empty-text h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.empty-text p {
+  margin: 0;
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+/* 模块未配置提示样式 */
+.module-not-configured {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+  background: #fff3cd;
+  border: 1px dashed #ffc107;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* 设计模式下的未配置提示样式 */
+.module-item-design .module-not-configured {
+  background: rgba(255, 193, 7, 0.1);
+  border: 2px dashed #ffc107;
+  position: relative;
+}
+
+.module-item-design .module-not-configured::before {
+  content: '未配置模块';
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  background: #ffc107;
+  color: #856404;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.not-configured-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #856404;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+.not-configured-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 50%;
+  color: #ffc107;
+}
+
+.not-configured-icon i {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.not-configured-text h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #856404;
+}
+
+.not-configured-text p {
+  margin: 0;
+  font-size: 13px;
+  color: #856404;
+  line-height: 1.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .rich-text-empty,
+  .module-not-configured {
+    min-height: 100px;
+    padding: 30px 16px;
+    margin: 16px 0;
+  }
+  
+  .empty-content,
+  .not-configured-content {
+    gap: 12px;
+  }
+  
+  .empty-icon,
+  .not-configured-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .empty-icon i,
+  .not-configured-icon i {
+    font-size: 20px;
+  }
+  
+  .empty-text h4,
+  .not-configured-text h4 {
+    font-size: 14px;
+  }
+  
+  .empty-text p,
+  .not-configured-text p {
+    font-size: 12px;
+  }
+}

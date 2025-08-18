@@ -1,0 +1,18 @@
+{
+    "code": "page_builder",
+    "name": {
+        "zh-cn": "页面构建器",
+        "en": "Page Builder"
+    },
+    "description": {
+        "zh-cn": "强大的可视化页面构建工具，轻松创建自定义页面",
+        "en": "Powerful visual page building tool for easily creating custom pages"
+    },
+    "type": "feature",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
+}

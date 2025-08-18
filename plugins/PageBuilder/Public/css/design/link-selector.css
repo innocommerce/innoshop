@@ -1,0 +1,478 @@
+/* ===== 统一颜色变量 ===== */
+:root {
+  --link-selector-primary: #667eea;
+  --link-selector-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --link-selector-primary-hover: #5a6fd8;
+  --link-selector-border: #e1e5e9;
+  --link-selector-border-hover: #667eea;
+  --link-selector-bg-hover: #f8f9ff;
+  --link-selector-text-primary: #2c3e50;
+  --link-selector-text-secondary: #6c757d;
+  --link-selector-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+  --link-selector-shadow-hover: 0 4px 12px rgba(102, 126, 234, 0.25);
+}
+.link-selector-wrap{
+  position: relative;
+  z-index: 1000;
+}
+.link-selector-wrap .selector-type {
+  position: relative;
+  cursor: pointer;
+}
+
+.link-selector-wrap .selector-type .title {
+  padding: 8px 12px;
+  border: 1px solid var(--link-selector-border);
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+  color: var(--link-selector-text-primary);
+  transition: all 0.3s ease;
+}
+
+.link-selector-wrap .selector-type .title:hover {
+  border-color: var(--link-selector-border-hover);
+  box-shadow: var(--link-selector-shadow);
+}
+
+.link-selector-wrap .selector-type .selector-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--link-selector-border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  z-index: 99999;
+  display: none;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: var(--link-selector-shadow-hover);
+}
+
+/* 当选择器在底部时，向上弹出 */
+.link-selector-wrap .selector-type .selector-content.bottom-up {
+  top: auto;
+  bottom: 100%;
+  border-top: 1px solid var(--link-selector-border);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+
+.link-selector-wrap .selector-type .selector-content.active {
+  display: block;
+}
+
+.link-selector-wrap .selector-type .selector-content div {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.link-selector-wrap .selector-type .selector-content div i {
+  font-size: 14px;
+  color: var(--link-selector-text-secondary);
+  width: 16px;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.link-selector-wrap .selector-type .selector-content div:hover {
+  background: var(--link-selector-bg-hover);
+}
+
+.link-selector-wrap .selector-type .selector-content div:hover i {
+  color: var(--link-selector-primary);
+}
+
+/* 确保在对话框内部使用时也能正确显示 */
+.el-dialog .link-selector-wrap .selector-type .selector-content {
+  z-index: 999999;
+}
+
+/* 确保在模态框内部使用时也能正确显示 */
+.v-modal + .link-selector-wrap .selector-type .selector-content {
+  z-index: 999999;
+}
+
+/* 确保在任何情况下都能正确显示 */
+.link-selector-wrap .selector-type .selector-content {
+  z-index: 999999 !important;
+}
+
+/* 确保下拉菜单在滚动容器中也能正确显示 */
+.link-selector-wrap .selector-type {
+  position: relative;
+  z-index: 1;
+}
+
+/* 防止父容器的overflow:hidden影响下拉菜单显示 */
+.link-selector-wrap .selector-type .selector-content {
+  position: absolute !important;
+}
+
+/* 确保在对话框内部使用时也能正确显示 */
+.el-dialog .link-selector-wrap .selector-type .selector-content {
+  z-index: 999999 !important;
+  position: absolute !important;
+}
+
+.link-dialog-box .link-dialog-header {
+  background: var(--link-selector-primary-gradient) !important;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 6px 6px 0 0;
+}
+
+.link-dialog-box .link-dialog-header .title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.link-dialog-box .link-dialog-header .input-with-select {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.link-dialog-box .link-dialog-header .input-with-select .form-control {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.link-dialog-box .link-dialog-header .input-with-select .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.link-dialog-box .link-dialog-header .input-with-select .form-control:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.link-dialog-box .link-dialog-header .input-with-select .el-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.link-dialog-box .link-dialog-header .input-with-select .el-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.link-dialog-box .link-dialog-content .product-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-bottom: 1px solid var(--link-selector-border);
+}
+
+.link-dialog-box .link-dialog-content .product-search .link-top-new {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--link-selector-text-primary);
+  font-size: 14px;
+}
+
+.link-dialog-box .link-dialog-content .product-search a {
+  color: var(--link-selector-primary);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.link-dialog-box .link-dialog-content .product-search a:hover {
+  color: var(--link-selector-primary-hover);
+  text-decoration: underline;
+}
+
+/* 产品信息区域 */
+.link-dialog-box .link-dialog-content .product-info {
+  width: 100%;
+  margin: 0;
+}
+
+/* 产品列表标题 - 表格头部 */
+.link-dialog-box .link-dialog-content .product-info .product-info-title {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--link-selector-border);
+  font-weight: 600;
+  background: var(--link-selector-bg-hover);
+  color: var(--link-selector-text-primary);
+  font-size: 13px;
+  border-radius: 6px 6px 0 0;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-info-title span:first-child {
+  flex: 1;
+  text-align: left;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-info-title span:last-child {
+  width: 60px;
+  text-align: center;
+}
+
+/* 产品列表 - 表格主体 */
+.link-dialog-box .link-dialog-content .product-info .product-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--link-selector-border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+}
+
+/* 产品列表项 - 表格行 */
+.link-dialog-box .link-dialog-content .product-info .product-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--link-selector-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li:hover {
+  background: var(--link-selector-bg-hover);
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li.no-status {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li:last-child {
+  border-bottom: none;
+}
+
+/* 内容单元格 - 表格左侧列 */
+.link-dialog-box .link-dialog-content .product-info .product-list li .content-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+/* 单选按钮样式 */
+.link-dialog-box .link-dialog-content .product-info .product-list li .content-cell .radio-plus {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--link-selector-border);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li .content-cell .radio-plus.active {
+  border-color: var(--link-selector-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li .content-cell .radio-plus.active:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--link-selector-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li .content-cell .radio-plus.no-status {
+  opacity: 0.5;
+}
+
+/* 产品图片 */
+.link-dialog-box .link-dialog-content .product-info .product-list li .content-cell .img-responsive {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  margin-right: 12px;
+  border: 1px solid var(--link-selector-border);
+}
+
+/* 产品名称 */
+.link-dialog-box .link-dialog-content .product-info .product-list li .content-cell .product-name {
+  font-size: 14px;
+  color: var(--link-selector-text-primary);
+  line-height: 1.4;
+  flex: 1;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: 500;
+}
+
+/* 状态单元格 - 表格右侧列 */
+.link-dialog-box .link-dialog-content .product-info .product-list li .status-cell {
+  font-size: 12px;
+  width: 60px;
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 60px;
+  font-weight: 500;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li .status-cell.ok {
+  color: #10b981;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-list li .status-cell.no {
+  color: #ef4444;
+}
+
+/* 无数据状态 */
+.link-dialog-box .link-dialog-content .product-info .product-info-no {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-info-no .icon {
+  font-size: 48px;
+  color: var(--link-selector-text-secondary);
+  margin-bottom: 15px;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-info-no .no-text {
+  color: var(--link-selector-text-secondary);
+  font-size: 14px;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-info-no .no-text a {
+  color: var(--link-selector-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.link-dialog-box .link-dialog-content .product-info .product-info-no .no-text a:hover {
+  color: var(--link-selector-primary-hover);
+  text-decoration: underline;
+}
+
+/* 静态列表特殊处理 */
+.product-list.static li .content-cell {
+  width: 100%;
+}
+
+.product-list.static li .status-cell {
+  display: none;
+}
+
+/* Element UI按钮样式覆盖 */
+.el-button--primary {
+  color: #FFF;
+  background: var(--link-selector-primary-gradient);
+  border-color: var(--link-selector-primary);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: var(--link-selector-shadow);
+}
+
+.el-button--primary:hover {
+  background: var(--link-selector-primary-hover);
+  border-color: var(--link-selector-primary-hover);
+  box-shadow: var(--link-selector-shadow-hover);
+}
+
+.el-dialog__header{
+  padding: 0;
+}
+
+.link-dialog-box .el-dialog__header .el-dialog__headerbtn{
+  font-size: 20px;
+  top: 12px;
+  right: 15px;
+}
+
+.link-dialog-box .el-dialog__header .el-dialog__headerbtn i{
+  color: #fff;
+}
+
+/* 弹窗整体样式优化 */
+.link-dialog-box .el-dialog {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.link-dialog-box .el-dialog__body {
+  padding: 0;
+}
+
+.link-dialog-box .el-dialog__footer {
+  padding: 15px 20px;
+  border-top: 1px solid var(--link-selector-border);
+  background: #fafbfc;
+}
+
+/* 开关样式优化 */
+.link-dialog-box .el-switch__core {
+  border-color: var(--link-selector-border);
+}
+
+.link-dialog-box .el-switch.is-checked .el-switch__core {
+  border-color: var(--link-selector-primary);
+  background-color: var(--link-selector-primary);
+}
+
+.link-dialog-box .linkDialog-custom {
+  padding: 15px;
+}
+
+/* 自定义链接输入框样式 */
+.link-dialog-box .linkDialog-custom .el-input__inner {
+  border: 1px solid var(--link-selector-border);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.link-dialog-box .linkDialog-custom .el-input__inner:focus {
+  border-color: var(--link-selector-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 自定义名称区域样式 */
+.link-dialog-box .link-text {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: var(--link-selector-bg-hover);
+  border-radius: 6px;
+  border: 1px solid var(--link-selector-border);
+}
+
+.link-dialog-box .link-text .module-edit-title {
+  font-weight: 600;
+  color: var(--link-selector-text-primary);
+  margin-bottom: 10px;
+  font-size: 14px;
+}
