@@ -22,10 +22,6 @@ class Category extends BaseModel
 
     protected $fillable = ['parent_id', 'slug', 'position', 'image', 'active'];
 
-    public $appends = [
-        'url',
-    ];
-
     /**
      * Model validation rules to prevent circular references
      */
