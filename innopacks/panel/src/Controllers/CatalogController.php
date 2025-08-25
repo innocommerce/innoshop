@@ -13,7 +13,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Catalog;
 use InnoShop\Common\Repositories\CatalogRepo;
-use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Panel\Requests\CatalogRequest;
 
 class CatalogController extends BaseController
@@ -83,8 +82,27 @@ class CatalogController extends BaseController
      */
     public function form($catalog): mixed
     {
-        $catalogs = CatalogSimple::collection(CatalogRepo::getInstance()->all(['active' => 1]))->jsonSerialize();
-        $data     = [
+        $filters = ['active' => 1];
+
+        // Exclude current catalog from parent options to prevent self-reference
+        if ($catalog->id) {
+            $filters['exclude_id'] = $catalog->id;
+        }
+
+        $hierarchicalCatalogs = CatalogRepo::getInstance()->getHierarchicalCatalogs($filters);
+
+        // Convert hierarchical catalogs to the format expected by the select component
+        $catalogs   = [];
+        $catalogs[] = ['id' => 0, 'name' => __('panel/catalog.root_catalog')];
+
+        foreach ($hierarchicalCatalogs as $hierarchicalCatalog) {
+            $catalogs[] = [
+                'id'   => $hierarchicalCatalog['id'],
+                'name' => $hierarchicalCatalog['title'],
+            ];
+        }
+
+        $data = [
             'catalog'  => $catalog,
             'catalogs' => $catalogs,
         ];

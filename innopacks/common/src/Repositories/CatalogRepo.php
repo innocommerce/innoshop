@@ -104,6 +104,11 @@ class CatalogRepo extends BaseRepo
             $builder->where('active', (bool) $filters['active']);
         }
 
+        $excludeId = $filters['exclude_id'] ?? null;
+        if ($excludeId) {
+            $builder->where('id', '!=', $excludeId);
+        }
+
         $title = $filters['title'] ?? '';
         if ($title) {
             $builder->whereHas('translation', function ($query) use ($title) {
@@ -256,6 +261,61 @@ class CatalogRepo extends BaseRepo
 
         // Process translations using TranslationHandler
         return TranslationHandler::process($translations, $fieldMap);
+    }
+
+    /**
+     * Get hierarchical catalogs with breadcrumb-style display
+     *
+     * @param  array  $filters
+     * @return array
+     */
+    public function getHierarchicalCatalogs(array $filters = []): array
+    {
+        $catalogs     = $this->all($filters);
+        $hierarchical = [];
+
+        // Build hierarchy starting from root catalogs (parent_id = 0 or null)
+        $rootCatalogs = $catalogs->filter(function ($catalog) {
+            return empty($catalog->parent_id);
+        })->sortBy('position');
+
+        foreach ($rootCatalogs as $catalog) {
+            $this->buildHierarchy($catalog, $catalogs, $hierarchical, '', 0);
+        }
+
+        return $hierarchical;
+    }
+
+    /**
+     * Recursively build hierarchy with breadcrumb paths
+     *
+     * @param  $catalog
+     * @param  $allCatalogs
+     * @param  &$result
+     * @param  string  $breadcrumb
+     * @param  int  $level
+     * @return void
+     */
+    private function buildHierarchy($catalog, $allCatalogs, &$result, string $breadcrumb = '', int $level = 0): void
+    {
+        // Build breadcrumb path
+        $currentBreadcrumb = $breadcrumb ? $breadcrumb.' > '.$catalog->translation->title : $catalog->translation->title;
+
+        $result[] = [
+            'id'        => $catalog->id,
+            'title'     => $currentBreadcrumb,
+            'level'     => $level,
+            'parent_id' => $catalog->parent_id,
+        ];
+
+        // Find and process children
+        $children = $allCatalogs->filter(function ($item) use ($catalog) {
+            return $item->parent_id == $catalog->id;
+        })->sortBy('position');
+
+        foreach ($children as $child) {
+            $this->buildHierarchy($child, $allCatalogs, $result, $currentBreadcrumb, $level + 1);
+        }
     }
 
     /**

@@ -45,7 +45,7 @@
                         name="translations[{{ $localeCode }}][title]" :translate="true"
                         value="{{ old('translations.' . $localeCode . '.title', $catalog->translate($localeCode, 'title')) }}" />
 
-                      <x-common-form-input title="{{ __('panel/article.summary') }}"
+                      <x-common-form-input title="{{ __('panel/common.summary') }}"
                         name="translations[{{ $localeCode }}][summary]" :translate="true"
                         value="{{ old('translations.' . $localeCode . '.summary', $catalog->translate($localeCode, 'summary')) }}" />
 
@@ -75,7 +75,7 @@
             <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active"
               :value="old('active', $catalog->active ?? true)" />
             <x-common-form-select title="{{ __('panel/catalog.parent') }}" name="parent_id" :value="old('parent_id', $catalog->parent_id ?? 0)"
-              :options="$catalogs" key="id" label="name" />
+              :options="$catalogs" key="id" label="name" :emptyOption=false />
             <x-common-form-input title="{{ __('panel/common.slug') }}" name="slug" :value="old('slug', $catalog->slug ?? '')"
               placeholder="{{ __('panel/common.slug') }}" />
             <x-common-form-input title="{{ __('panel/common.position') }}" name="position" :value="old('position', $catalog->position ?? 0)" />
