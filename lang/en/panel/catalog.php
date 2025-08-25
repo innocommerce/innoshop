@@ -8,6 +8,7 @@
  */
 
 return [
-    'title'  => 'Title',
-    'parent' => 'Parent',
+    'title'        => 'Title',
+    'parent'       => 'Parent',
+    'root_catalog' => 'Root Catalog',
 ];
