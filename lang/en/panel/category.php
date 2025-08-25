@@ -14,5 +14,6 @@ return [
     'image_description' => 'Main category image for display purposes',
     'name'              => 'Name',
     'parent'            => 'Parent',
+    'root_category'     => 'Root Category',
     'summary'           => 'Summary',
 ];

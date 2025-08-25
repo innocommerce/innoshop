@@ -13,5 +13,6 @@ return [
     'image_description' => '分类主图片，用于展示分类的代表性图片',
     'name'              => '分类名',
     'parent'            => '上级分类',
+    'root_category'     => '根分类',
     'summary'           => '分类介绍',
 ];
