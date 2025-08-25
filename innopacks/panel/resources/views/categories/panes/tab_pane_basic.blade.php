@@ -21,7 +21,7 @@
       </div>
     @endforeach
     <div class="mt-1 text-muted small">
-      <i class="bi bi-info-circle me-1"></i>{{ panel_trans('category.name') }}为必填项
+      <i class="bi bi-info-circle me-1"></i>{{ panel_trans('category.name') }}{{ panel_trans('category.name_required') }}
     </div>
   </div>
 
@@ -29,7 +29,7 @@
   <div class="mb-3 col-12 col-md-8">
     <x-common-form-image title="{{ panel_trans('category.image') }}" name="image"
                         value="{{ old('image', $category->image ?? '') }}"/>
-    <div class="form-text">{{ panel_trans('category.image_description') ?? '分类主图片' }}</div>
+    <div class="form-text">{{ panel_trans('category.image_description') }}</div>
   </div>
 
   {{-- 启用状态 --}}
