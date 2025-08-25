@@ -190,8 +190,12 @@ class FileManagerController extends BaseController
     {
         try {
             $folderName = $request->get('name');
-            $service    = $this->getService();
-            $service->createDirectory($folderName);
+            $parentId   = $request->get('parent_id', '/');
+
+            $fullPath = $parentId === '/' ? "/{$folderName}" : "{$parentId}/{$folderName}";
+
+            $service = $this->getService();
+            $service->createDirectory($fullPath);
 
             return create_json_success();
         } catch (Exception $e) {

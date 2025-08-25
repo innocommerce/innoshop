@@ -31,7 +31,8 @@ class FileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
+            'name'      => 'required|string',
+            'parent_id' => 'nullable|string',
         ];
     }
 
