@@ -24,12 +24,12 @@
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="content-tab" data-bs-toggle="tab" data-bs-target="#content-tab-pane"
                   type="button" role="tab" aria-controls="content-tab-pane"
-                  aria-selected="false">分类描述</button>
+                  aria-selected="false">{{ panel_trans('category.description_tab') }}</button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="extra-tab" data-bs-toggle="tab" data-bs-target="#extra-tab-pane"
                   type="button" role="tab" aria-controls="extra-tab-pane"
-                  aria-selected="false">扩展信息</button>
+                  aria-selected="false">{{ panel_trans('category.extra_tab') }}</button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo-tab-pane"
