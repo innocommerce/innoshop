@@ -97,12 +97,17 @@ class CategoryController extends BaseController
             'exclude_ids' => $excludeIDs,
         ];
 
-        $categories    = CategoryRepo::getInstance()->all($filters);
-        $categoryItems = CategorySimple::collection($categories)->jsonSerialize();
+        $hierarchicalCategories = CategoryRepo::getInstance()->getHierarchicalCategories($filters);
+
+        array_unshift($hierarchicalCategories, [
+            'id'    => 0,
+            'name'  => panel_trans('category.root_category'),
+            'level' => 0,
+        ]);
 
         $data = [
             'category'   => $category,
-            'categories' => $categoryItems,
+            'categories' => $hierarchicalCategories,
         ];
 
         return inno_view('panel::categories.form', $data);
