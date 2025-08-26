@@ -562,9 +562,9 @@ class ProductRepo extends BaseRepo
      */
     public function handleProductData($data): array
     {
-        $variables = $data['variables'] ?? ($data['variants'] ?? []);
-        if (is_string($variables)) {
-            $variables = json_decode($variables, true);
+        $images = $data['images'] ?? null;
+        if (is_string($images)) {
+            $images = json_decode($images, true);
         }
 
         $video = $data['video'] ?? null;
@@ -572,12 +572,17 @@ class ProductRepo extends BaseRepo
             $video = json_decode($video, true);
         }
 
+        $variables = $data['variables'] ?? ($data['variants'] ?? []);
+        if (is_string($variables)) {
+            $variables = json_decode($variables, true);
+        }
+
         return [
             'type'         => $data['type'] ?? Product::TYPE_NORMAL,
-            'spu_code'     => $data['spu_code'] ?? null,
+            'spu_code'     => $data['spu_code'] ?: null,
             'slug'         => $data['slug'] ?? null,
             'brand_id'     => $data['brand_id'] ?? 0,
-            'images'       => $data['images'] ?? [],
+            'images'       => $images,
             'video'        => $video,
             'tax_class_id' => $data['tax_class_id'] ?? 0,
             'variables'    => $variables,
