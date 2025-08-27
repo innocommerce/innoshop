@@ -577,10 +577,20 @@ class ProductRepo extends BaseRepo
             $variables = json_decode($variables, true);
         }
 
+        $slug = $data['slug'] ?? null;
+        if (is_string($slug) && empty($slug)) {
+            $slug = null;
+        }
+
+        $spuCode = $data['spu_code'] ?? null;
+        if (is_string($spuCode) && empty($spuCode)) {
+            $spuCode = null;
+        }
+
         return [
             'type'         => $data['type'] ?? Product::TYPE_NORMAL,
-            'spu_code'     => $data['spu_code'] ?: null,
-            'slug'         => $data['slug'] ?? null,
+            'spu_code'     => $spuCode,
+            'slug'         => $slug,
             'brand_id'     => $data['brand_id'] ?? 0,
             'images'       => $images,
             'video'        => $video,
