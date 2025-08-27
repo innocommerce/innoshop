@@ -140,27 +140,27 @@ const UI = {
 
   initAIGenerate: () => {
     $(document).on("click", ".ai-generate", function (e) {
-      // 找到当前按钮所在的 form-row
+      // Find the form-row containing the current button
       const $row = $(this).closest(".form-row");
-      // 在 row 内查找 input 或 textarea
+      // Find input or textarea within the row
       const $input = $row.find("input[data-column], textarea[data-column]");
       if ($input.length === 0) {
-        layer.msg('未找到对应输入框', { icon: 2 });
+        layer.msg('Input field not found', { icon: 2 });
         return;
       }
-      // 获取字段名、语言、当前值
+      // Get field name, language, and current value
       const column = $input.data('column');
       const lang = $input.data('lang');
       const name = $input.attr('name');
       const value = $input.val();
 
-      // 组装请求数据
+      // Assemble request data
       const formData = {
         column: column,
         lang: lang,
         name: name,
         value: value,
-        // 可根据需要添加 product_id 等其它参数
+        // Add product_id and other parameters as needed
       };
 
       layer.load(2, { shade: [0.3, "#fff"] });
@@ -174,7 +174,7 @@ const UI = {
           }
         })
         .catch(function (err) {
-          layer.msg(err.response?.data?.message || 'AI生成失败，请重试', { icon: 2 });
+          layer.msg(err.response?.data?.message || 'AI generation failed, please try again', { icon: 2 });
         })
         .finally(function () {
           layer.closeAll("loading");
@@ -234,7 +234,7 @@ const FileManager = {
 
     layer.open({
       type: 2,
-      title: "文件管理器",
+      title: "File Manager",
       shadeClose: false,
       shade: 0.8,
       area: ["90%", "90%"],
@@ -274,13 +274,25 @@ const Editor = {
       icon: "image",
       onAction: () => {
         FileManager.init(
-          (file) => {
-            const imageUrl = file.origin_url || file.url;
-            if (imageUrl) {
-              ed.insertContent(`<img src="${imageUrl}" class="img-fluid" alt="${file.name || ''}" />`);
+          (files) => {
+            // Support batch image insertion
+            if (Array.isArray(files)) {
+              // Insert multiple images in batch
+              files.forEach(file => {
+                const imageUrl = file.origin_url || file.url;
+                if (imageUrl) {
+                  ed.insertContent(`<img src="${imageUrl}" class="img-fluid" alt="${file.name || ''}" />`);
+                }
+              });
+            } else {
+              // Insert single image
+              const imageUrl = files.origin_url || files.url;
+              if (imageUrl) {
+                ed.insertContent(`<img src="${imageUrl}" class="img-fluid" alt="${files.name || ''}" />`);
+              }
             }
           },
-          { type: "image", multiple: false }
+          { type: "image", multiple: true }
         );
       },
     });
