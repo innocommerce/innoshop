@@ -367,12 +367,7 @@
       },
 
       querySearch(keyword, cb) {
-        if (!keyword.trim()) {
-          cb([]);
-          return;
-        }
-
-        axios.get('api/panel/brands/autocomplete?keyword=' + encodeURIComponent(keyword))
+        axios.get('api/panel/brands/autocomplete?keyword=' + encodeURIComponent(keyword.trim()))
           .then((res) => {
             cb(res.data || []);
           })

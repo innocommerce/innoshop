@@ -56,15 +56,9 @@
   margin: 20px 0;
 }
 
-
-
-
-
 .brands-container {
   overflow: hidden;
 }
-
-
 
 .brand-item {
   text-align: center;
@@ -170,8 +164,8 @@
   display: flex;
   transition: transform 0.5s ease;
 }
-
 @endif
+
 </style>
 
 @if($content['autoplay'] ?? false)
