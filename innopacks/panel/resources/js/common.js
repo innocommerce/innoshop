@@ -5,6 +5,16 @@ export default {
       const input = $(`input[data-locale="${source_locale}"]`);
 
       const text = input.val();
+      
+      const sourceInputName = input.attr('name');
+      let fieldName = 'name';
+      
+      if (sourceInputName) {
+        const fieldMatch = sourceInputName.match(/translations\[[^\]]+\]\[([^\]]+)\]/);
+        if (fieldMatch && fieldMatch[1]) {
+          fieldName = fieldMatch[1];
+        }
+      }
 
       axios
         .post(`${urls.base_url}/translations/translate-text`, {
@@ -15,7 +25,7 @@ export default {
         .then(function (res) {
           res.data.forEach(function (item) {
             const target_input = $(
-              `input[name="translations[${item.locale}][name]"]`
+              `input[name="translations[${item.locale}][${fieldName}]"]`
             );
             target_input.val(item.result);
           });

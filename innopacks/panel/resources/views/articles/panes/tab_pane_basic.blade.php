@@ -2,6 +2,29 @@
 
   <div class="mb-3 col-12 col-md-8">
     <div class="mb-1 fs-6">{{ __('panel/article.title') }}</div>
+    @if(has_translator())
+      <div
+        class="d-flex align-items-center my-3 py-2 px-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3"
+        style="white-space: nowrap;">
+        <div class="d-flex align-items-center me-3">{{ __('panel/product.auto_translate') }}</div>
+        <select id="source-locale" class="form-select form-select-sm">
+          @foreach (locales() as $locale)
+            <option value="{{ $locale->code }}">{{ $locale->name }}</option>
+          @endforeach
+        </select>
+        <div class="px-1"><i class="bi bi-arrow-right"></i></div>
+        <select id="target-locale" class="form-select form-select-sm">
+          <option value="all">{{ __('panel/product.other_all') }}</option>
+          @foreach (locales() as $locale)
+            <option value="{{ $locale->code }}">{{ $locale->name }}</option>
+          @endforeach
+        </select>
+        <button type="button" class="mx-2 btn btn-primary btn-custom-small btn-sm" id="translate-button">
+          {{ __('panel/product.translate') }}
+        </button>
+      </div>
+    @endif
+    
     @foreach (locales() as $locale)
       @php($localeCode = $locale->code)
       @php($localeName = $locale->name)
