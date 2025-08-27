@@ -29,6 +29,7 @@ class BrandSimple extends JsonResource
             'first'         => $this->first,
             'name'          => $this->name,
             'slug'          => $this->slug,
+            'url'           => $this->url,
             'logo_url'      => image_resize($this->logo),
             'logo_original' => $this->logo, // 原图
             'logo_large'    => image_resize($this->logo, 300, 150), // 大图，适合横向logo (2:1比例)
