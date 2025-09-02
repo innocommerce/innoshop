@@ -514,8 +514,8 @@
       // Open file manager to upload variant image
       const upVariantImage = (init_index, index) => {
         inno.fileManagerIframe((file) => {
-          if (file.url) {
-            skus.value[index].image = file.url;
+          if (file.path) {
+            skus.value[index].image = file.path;
           }
         }, {
           type: 'image',
