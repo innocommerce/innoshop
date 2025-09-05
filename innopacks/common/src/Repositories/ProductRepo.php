@@ -404,11 +404,13 @@ class ProductRepo extends BaseRepo
             'productAttributes',
             'relations',
             'bundles',
-            'videos',
         ]);
         $copy = $product->replicate();
 
         $copy->slug .= '-'.rand(0, 99999);
+        if ($copy->spu_code) {
+            $copy->spu_code .= '-'.rand(0, 99999);
+        }
         $copy->push();
 
         foreach ($product->getRelations() as $relation => $entries) {

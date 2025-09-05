@@ -18,7 +18,6 @@ use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
-use InnoShop\Common\Models\Product\Video;
 use InnoShop\Common\Traits\HasPackageFactory;
 use InnoShop\Common\Traits\Replicate;
 use InnoShop\Common\Traits\Translatable;
@@ -81,14 +80,6 @@ class Product extends BaseModel
     public function relations(): HasMany
     {
         return $this->hasMany(Relation::class, 'product_id');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function videos(): HasMany
-    {
-        return $this->hasMany(Video::class, 'product_id');
     }
 
     /**
