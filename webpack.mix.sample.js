@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const fs = require('fs');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,33 +12,192 @@ const mix = require('laravel-mix');
  |
  */
 
-// Internal default theme from innopacks/front
-mix.sass('innopacks/front/resources/css/bootstrap/bootstrap.scss', 'public/build/front/css/bootstrap.css');
-mix.sass('innopacks/front/resources/css/app.scss', 'public/build/front/css/app.css');
-mix.js('innopacks/front/resources/js/app.js', 'public/build/front/js/app.js');
+// Configuration
+const config = {
+    theme: process.env.THEME || 'factory',
+    paths: {
+        themes: 'themes',
+        build: 'public/build',
+        static: 'public/static/themes',
+        front: 'innopacks/front/resources',
+        panel: 'innopacks/panel/resources',
+        install: 'innopacks/install/resources'
+    }
+};
 
-// If you have a custom theme, please change 'theme' to the directory where your current theme is located.
-const theme = '';
-if (theme !== '') {
-  mix.sass('themes/' + theme + '/css/bootstrap/bootstrap.scss', 'public/static/themes/' + theme + '/css/bootstrap.css');
-  mix.sass('themes/' + theme + '/css/app.scss', 'public/static/themes/' + theme + '/css/app.css');
-  mix.js('themes/' + theme + '/js/app.js', 'public/static/themes/' + theme + '/js/app.js');
-}
+// Utility functions
+const utils = {
+    /**
+     * Check if file exists
+     */
+    fileExists: (path) => fs.existsSync(path),
+    
+    /**
+     * Create directory recursively
+     */
+    createDir: (path) => fs.mkdirSync(path, { recursive: true }),
+    
+    /**
+     * Remove directory recursively
+     */
+    removeDir: (path) => fs.rmSync(path, { recursive: true, force: true }),
+    
+    /**
+     * Log with emoji
+     */
+    log: (message, emoji = 'ℹ️') => console.log(`${emoji} ${message}`)
+};
 
-// panel
-mix.sass('innopacks/panel/resources/css/bootstrap/bootstrap.scss', 'public/build/panel/css/bootstrap.css');
-mix.sass('innopacks/panel/resources/css/app.scss', 'public/build/panel/css/app.css');
-mix.js('innopacks/panel/resources/js/app.js', 'public/build/panel/js/app.js');
+// Theme management
+const themeManager = {
+    /**
+     * Clean up theme build directory
+     */
+    cleanup: () => {
+        if (config.theme && config.theme !== 'default') {
+            const themeBuildPath = `${config.paths.static}/${config.theme}`;
+            
+            if (utils.fileExists(themeBuildPath)) {
+                utils.removeDir(themeBuildPath);
+                utils.log(`Cleaned up: ${themeBuildPath}`, '🧹');
+            }
+            
+            utils.createDir(`${themeBuildPath}/css`);
+            utils.createDir(`${themeBuildPath}/js`);
+            utils.log(`Created directories: ${themeBuildPath}/css, ${themeBuildPath}/js`, '📁');
+        }
+    },
+    
+    /**
+     * Compile theme resources
+     */
+    compile: () => {
+        if (!config.theme || config.theme === 'default') return;
+        
+        utils.log(`Compiling theme: ${config.theme}`, '🎨');
+        
+        const themeDir = `${config.paths.themes}/${config.theme}`;
+        const outputDir = `${config.paths.static}/${config.theme}`;
+        
+        // Compile CSS files
+        themeManager.compileCSS(themeDir, outputDir);
+        
+        // Compile JS files
+        themeManager.compileJS(themeDir, outputDir);
+        
+        // Compile Bootstrap
+        themeManager.compileBootstrap(themeDir, outputDir);
+        
+        utils.log(`Theme ${config.theme} compilation completed!`, '✅');
+    },
+    
+    /**
+     * Compile theme CSS files
+     */
+    compileCSS: (themeDir, outputDir) => {
+        const appScss = `${themeDir}/css/app.scss`;
+        if (utils.fileExists(appScss)) {
+            mix.sass(appScss, `${outputDir}/css/app.css`);
+            utils.log(`Compiled: ${appScss}`, '✅');
+        }
+    },
+    
+    /**
+     * Compile theme JS files
+     */
+    compileJS: (themeDir, outputDir) => {
+        const appJs = `${themeDir}/js/app.js`;
+        if (utils.fileExists(appJs)) {
+            mix.js(appJs, `${outputDir}/js/app.js`);
+            utils.log(`Compiled: ${appJs}`, '✅');
+        }
+    },
+    
+    /**
+     * Compile theme Bootstrap
+     */
+    compileBootstrap: (themeDir, outputDir) => {
+        const bootstrapScss = `${themeDir}/css/bootstrap/bootstrap.scss`;
+        if (utils.fileExists(bootstrapScss)) {
+            mix.sass(bootstrapScss, `${outputDir}/css/bootstrap.css`);
+            utils.log(`Compiled: ${bootstrapScss}`, '✅');
+        }
+    }
+};
 
-// install
-mix.sass('innopacks/install/resources/css/app.scss', 'public/build/install/css/app.css');
+// Default resources compilation
+const defaultResources = {
+    /**
+     * Compile frontend resources
+     */
+    frontend: () => {
+        const { front, build } = config.paths;
+        
+        mix.sass(`${front}/css/bootstrap/bootstrap.scss`, `${build}/front/css/bootstrap.css`);
+        mix.sass(`${front}/css/app.scss`, `${build}/front/css/app.css`);
+        mix.js(`${front}/js/app.js`, `${build}/front/js/app.js`);
+    },
+    
+    /**
+     * Compile panel resources
+     */
+    panel: () => {
+        const { panel, build } = config.paths;
+        
+        mix.sass(`${panel}/css/bootstrap/bootstrap.scss`, `${build}/panel/css/bootstrap.css`);
+        mix.sass(`${panel}/css/app.scss`, `${build}/panel/css/app.css`);
+        mix.js(`${panel}/js/app.js`, `${build}/panel/js/app.js`);
+    },
+    
+    /**
+     * Compile install resources
+     */
+    install: () => {
+        const { install, build } = config.paths;
+        
+        mix.sass(`${install}/css/app.scss`, `${build}/install/css/app.css`);
+    }
+};
 
-if (mix.inProduction()) {
-  mix.version();
-}
+// Build process
+const buildProcess = {
+    /**
+     * Initialize build process
+     */
+    init: () => {
+        themeManager.cleanup();
+    },
+    
+    /**
+     * Compile all resources
+     */
+    compile: () => {
+        // Compile default resources
+        defaultResources.frontend();
+        defaultResources.panel();
+        defaultResources.install();
+        
+        // Compile theme resources
+        themeManager.compile();
+    },
+    
+    /**
+     * Apply production optimizations
+     */
+    optimize: () => {
+        if (mix.inProduction()) {
+            mix.version();
+        }
+        
+        mix.options({
+            terser: {
+                extractComments: false,
+            },
+        });
+    }
+};
 
-mix.options({
-  terser: {
-    extractComments: false,
-  },
-});
+// Execute build process
+buildProcess.init();
+buildProcess.compile();
+buildProcess.optimize();
