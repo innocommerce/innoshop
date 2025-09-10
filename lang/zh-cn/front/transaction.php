@@ -19,6 +19,7 @@ return [
     'frozen'               => '冻结余额',
     'input_balance_total'  => '输入的余额应小于商品价格',
     'input_should_balance' => '输入的余额应小于或等于可用余额',
+    'no_transactions'      => '暂无交易记录',
     'total'                => '总余额',
     'transaction'          => '我的余额',
     'type'                 => '类型',

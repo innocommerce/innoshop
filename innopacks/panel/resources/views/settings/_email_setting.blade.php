@@ -75,6 +75,7 @@
       <p class="text-muted small mb-0">{{ __('panel/setting.email_notifications_desc') }}</p>
     </div>
     <div class="card-body">
+      <input type="hidden" name="email_notifications[]" value="">
       <div class="row">
         <div class="col-md-6">
           <div class="mb-4">
