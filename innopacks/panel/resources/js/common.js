@@ -169,47 +169,16 @@ export default {
   },
 
   alert(params = {}, callback = null) {
-    let top = 70;
-    let id = Math.random().toString(36).substring(7);
     let msg = typeof params === "string" ? params : params.msg || "";
     let type = params.type || "success";
-    let icon = "bi-check-circle-fill";
-    if (type != "success") {
-      icon = "bi-exclamation-circle-fill";
-    }
-
-    $(".is-alert").each(function () {
-      top += $(this).outerHeight() + 10;
-    });
-
-    let html = "";
-    html += ` <div id="alert-${id}" class="alert alert-${type} alert-dismissible is-alert position-fixed me-4 z-3">`;
-    html += `   <i class="bi ${icon}"></i>`;
-    html += "   " + msg;
-    html +=
-      '   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
-    html += " </div>";
-
-    $("body").append(html);
-
-    $("#alert-" + id)
-      .css({ right: "-100%", top })
-      .animate({ right: "0" }, 200);
-
-    window.setTimeout(function () {
-      $("#alert-" + id).animate({ right: "-100%" }, 200, function () {
-        $(this).remove();
-        top = 40;
-        $(".is-alert").each(function () {
-          $(this).animate({ top }, 100);
-          top += $(this).outerHeight() + 10;
-        });
-
-        if (callback !== null) {
-          callback();
-        }
-      });
-    }, 5000);
+    let icon = type === "success" ? 1 : 2;
+    
+    layer.msg(msg, {
+      icon: icon,
+      shade: 0.3,
+      shadeClose: true,
+      time: 5000
+    }, callback);
   },
 
   imgUploadAjax(file, _self, callback = null) {
