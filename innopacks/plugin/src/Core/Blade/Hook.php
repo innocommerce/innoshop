@@ -149,7 +149,7 @@ class Hook
             $priority = null;
         }
 
-        if (isset($this->watch[$hook][$priority])) {
+        while (isset($this->watch[$hook][$priority])) {
             $priority++;
         }
 
