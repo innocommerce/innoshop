@@ -58,11 +58,23 @@ class Category extends BaseModel
     }
 
     /**
+     * Get all children
+     *
      * @return HasMany
      */
     public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
+
+    /**
+     * Get active children
+     *
+     * @return HasMany
+     */
+    public function activeChildren(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id')->where('active', 1);
     }
 
     /**

@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+namespace InnoShop\Common\Resources;
+
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class CategoryFrontend extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  Request  $request
+     * @return array
+     * @throws Exception
+     */
+    public function toArray(Request $request): array
+    {
+        // Filter out inactive children
+        $activeChildren = $this->children->filter(function ($child) {
+            return $child->active;
+        });
+
+        $data = [
+            'id'       => $this->id,
+            'slug'     => $this->slug,
+            'locale'   => $this->translation->locale ?? '',
+            'name'     => $this->translation->name ?? '',
+            'url'      => $this->url,
+            'image'    => image_resize($this->image, 300, 300),
+            'active'   => (bool) $this->active,
+            'children' => self::collection($activeChildren)->jsonSerialize(),
+        ];
+
+        return fire_hook_filter('resource.category.frontend', $data);
+    }
+}

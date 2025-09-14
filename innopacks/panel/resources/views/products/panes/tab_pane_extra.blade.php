@@ -98,14 +98,8 @@
       };
     },
     mounted() {
-      console.log('Vue instance mounted');
-      console.log('Categories data:', this.source.categories);
-      console.log('Categories data structure:', JSON.stringify(this.source.categories, null, 2));
-      console.log('Vue version:', Vue.version);
-      console.log('Element Plus available:', typeof ElCascader !== 'undefined');
-      // 检查组件是否已渲染
       this.$nextTick(() => {
-        console.log('Cascader component:', this.$refs.refCascader);
+        //console.log('Cascader component:', this.$refs.refCascader);
       });
     },
 

@@ -161,8 +161,9 @@
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="mobile-menu-offcanvas">
       <div class="offcanvas-header">
-        <form action="" method="get" class="search-group">
-          <input type="text" class="form-control" placeholder="Search">
+        <form action="{{ front_route('products.index') }}" method="get" class="search-group">
+          <input type="text" class="form-control" name="keyword" placeholder="{{ __('front/common.search') }}"
+                 value="{{ request('keyword') }}">
           <button type="submit" class="btn"><i class="bi bi-search"></i></button>
         </form>
         <a class="account-icon" href="{{ front_route('account.index') }}">

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
-use InnoShop\Common\Resources\CategorySimple;
+use InnoShop\Common\Resources\CategoryFrontend;
 use Throwable;
 
 class CategoryRepo extends BaseRepo
@@ -42,7 +42,7 @@ class CategoryRepo extends BaseRepo
             ->orderBy('position')
             ->get();
 
-        return CategorySimple::collection($catalogs)->jsonSerialize();
+        return CategoryFrontend::collection($catalogs)->jsonSerialize();
     }
 
     /**

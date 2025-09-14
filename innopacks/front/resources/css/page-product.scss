@@ -317,6 +317,27 @@ body.page-product {
               border: 1px solid #ddd;
               padding: 5px 14px;
               border-radius: 2px;
+              gap: 8px;
+              min-height: 40px;
+
+              .variant-image-container {
+                width: 30px;
+                height: 30px;
+                border-radius: 2px;
+                overflow: hidden;
+                flex-shrink: 0;
+
+                .variant-value-image {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;
+                }
+              }
+
+              .variant-text {
+                font-size: 14px;
+                line-height: 1.2;
+              }
 
               &.disabled {
                 // cursor: not-allowed;
@@ -324,16 +345,22 @@ body.page-product {
                 border-color: #ddd;
                 border-style: dashed;
                 text-decoration: line-through;
+
+                .variant-image-container {
+                  opacity: 0.5;
+                }
               }
 
               &.active {
                 border-color: $primary;
                 color: $primary;
                 border-style: solid;
+                box-shadow: 0 0 0 1px $primary;
               }
 
               &:hover {
                 border-color: $primary;
+                box-shadow: 0 2px 4px rgba(233, 30, 99, 0.2);
               }
             }
           }

@@ -8,7 +8,13 @@
           <div class="variant-values">
             @foreach ($variant['values'] as $vk => $value)
               <div class="variant-value-name" data-variant="{{ $key }}" data-value="{{ $vk }}">
-                {{ $value['name'][front_locale_code()] ?? ($value['name'][setting_locale_code()] ?? '-') }}</div>
+                @if(isset($value['image']) && !empty($value['image']))
+                  <div class="variant-image-container">
+                    <img src="{{ image_resize($value['image'], 30, 30) }}" alt="{{ $value['name'][front_locale_code()] ?? ($value['name'][setting_locale_code()] ?? '-') }}" class="variant-value-image">
+                  </div>
+                @endif
+                <span class="variant-text">{{ $value['name'][front_locale_code()] ?? ($value['name'][setting_locale_code()] ?? '-') }}</span>
+              </div>
             @endforeach
         </div>
       </div>

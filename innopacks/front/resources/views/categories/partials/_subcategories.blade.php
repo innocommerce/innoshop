@@ -1,5 +1,5 @@
 {{-- Subcategories section --}}
-@if($category->children && $category->children->count() > 0)
+@if($category->activeChildren && $category->activeChildren->count() > 0)
   <div class="subcategories-section mb-3">
     <div class="card border-0 shadow-sm">
       <div class="card-body p-3">
@@ -9,7 +9,7 @@
         </h4>
         
         <div class="row g-2">
-          @foreach($category->children as $subcategory)
+          @foreach($category->activeChildren as $subcategory)
             <div class="col-6 col-md-4 col-lg-3">
               <a href="{{ $subcategory->url }}" class="text-decoration-none">
                 <div class="subcategory-card h-100 border rounded-2 p-2 hover-shadow transition-all d-flex align-items-center">

@@ -37,6 +37,7 @@ return [
     'default'                      => 'acquiesce',
     'delete'                       => 'Delete',
     'delete_confirm'               => 'You sure you want to delete it?',
+    'confirm_delete'               => 'Confirm Delete',
     'deleted_success'              => 'Deleted successfully',
     'desc'                         => 'Descending order',
     'description'                  => 'Description',

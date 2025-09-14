@@ -53,6 +53,7 @@ class CategoryController extends Controller
      */
     public function show(Request $request, Category $category): mixed
     {
+        $category->load('activeChildren');
         $keyword = $request->get('keyword');
 
         return $this->renderShow($category, $keyword, $request);
@@ -67,7 +68,7 @@ class CategoryController extends Controller
      */
     public function slugShow(Request $request): mixed
     {
-        $category = CategoryRepo::getInstance()->withActive()->builder(['slug' => $request->slug])->firstOrFail();
+        $category = CategoryRepo::getInstance()->withActive()->builder(['slug' => $request->slug])->with('activeChildren')->firstOrFail();
         $keyword  = $request->get('keyword');
 
         return $this->renderShow($category, $keyword, $request);

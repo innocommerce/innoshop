@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\Category\TreeRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
-use InnoShop\Common\Resources\CategorySimple;
+use InnoShop\Common\Resources\CategoryFrontend;
 
 class CategoryController extends BaseController
 {
@@ -29,7 +29,7 @@ class CategoryController extends BaseController
 
         $categories = CategoryRepo::getInstance()->withActive()->builder($filters)->paginate($perPage);
 
-        return CategorySimple::collection($categories);
+        return CategoryFrontend::collection($categories);
     }
 
     /**

@@ -39,6 +39,7 @@ return [
     'default'                      => '默認',
     'delete'                       => '刪除',
     'delete_confirm'               => '確定要刪除嗎？',
+    'confirm_delete'               => '確認刪除',
     'deleted_success'              => '刪除成功',
     'desc'                         => '降序',
     'description'                  => '描述',
