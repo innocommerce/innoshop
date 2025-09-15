@@ -1,4 +1,4 @@
-@if (!empty($content['products']) && $content['products']->count() > 0 || request('design'))
+@if (!empty($content['products']) && count($content['products']) > 0 || request('design'))
   <section class="module-line">
     <div class="module-product">
       <div class="{{ pb_get_width_class($content['width'] ?? 'wide') }}">
