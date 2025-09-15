@@ -1,4 +1,8 @@
 export default {
+  /**
+   * Initialize translation functionality for the admin panel
+   * Handles text translation, HTML content translation, and individual field translation
+   */
   getTranslate() {
     $("#translate-button").click(function () {
       const source_locale = $("#source-locale").val();
@@ -86,14 +90,14 @@ export default {
       const inputarea = localeCodeContainer.find("input");
 
       let current_source;
-      // 首先尝试从locale-code的data属性获取
+      // First try to get from locale-code data attribute
       const localeCodeData = $(this)
         .closest(".locale-code")
         .data("locale-code");
       if (localeCodeData && localeCodeData !== "undefined") {
         current_source = localeCodeData;
       } else {
-        // 如果data属性不存在或为undefined，则从输入框的name属性中获取
+        // If data attribute doesn't exist or is undefined, get from input name attribute
         const inputName = textarea.length
           ? textarea.attr("name")
           : inputarea.attr("name");
@@ -152,6 +156,12 @@ export default {
         });
     });
   },
+  
+  /**
+   * Generate a random string of specified length
+   * @param {number} length - The length of the random string (default: 32)
+   * @returns {string} - Generated random string containing letters and numbers
+   */
   randomString(length = 32) {
     let str = "";
     const chars =
@@ -162,12 +172,22 @@ export default {
     return str;
   },
 
+  /**
+   * Display a message using layer.js
+   * @param {string|object} params - Message string or configuration object
+   * @param {function} callback - Optional callback function to execute after message is shown
+   */
   msg(params = {}, callback = null) {
     let msg = typeof params === "string" ? params : params.msg || "";
     let time = params.time || 2000;
     layer.msg(msg, { time }, callback);
   },
 
+  /**
+   * Display an alert message with icon using layer.js
+   * @param {string|object} params - Message string or configuration object
+   * @param {function} callback - Optional callback function to execute after alert is shown
+   */
   alert(params = {}, callback = null) {
     let msg = typeof params === "string" ? params : params.msg || "";
     let type = params.type || "success";
@@ -181,9 +201,15 @@ export default {
     }, callback);
   },
 
+  /**
+   * Upload image file via AJAX
+   * @param {File} file - The image file to upload
+   * @param {jQuery} _self - jQuery object of the upload container element
+   * @param {function} callback - Callback function to handle upload response
+   */
   imgUploadAjax(file, _self, callback = null) {
     if (file.type.indexOf("image") === -1) {
-      alert("请上传图片文件");
+      alert("Please upload an image file");
       return;
     }
 
@@ -205,7 +231,11 @@ export default {
       });
   },
 
-  // bootstrap 表单验证, js 验证
+  /**
+   * Bootstrap form validation and submission handler
+   * @param {string} form - CSS selector for the form element
+   * @param {function} callback - Callback function to execute when form is valid
+   */
   validateAndSubmitForm(form, callback) {
     $(document).on("click", `${form} .form-submit`, function (event) {
       if ($(form)[0].checkValidity() === false) {
@@ -228,11 +258,10 @@ export default {
   },
 
   /**
-   * 删除确认 弹出框
-   * @param {string} api 删除接口
-   * @param {boolean} handleResponseInternally 是否内部处理响应
-   * @returns {Promise}
-   * @example
+   * Show confirmation dialog for delete operations
+   * @param {string} api - The API endpoint for delete operation
+   * @param {boolean} handleResponseInternally - Whether to handle response internally (default: true)
+   * @returns {Promise} - Promise that resolves with response or rejects with error
    */
   confirmDelete(api, handleResponseInternally = true) {
     return new Promise((resolve, reject) => {
@@ -262,11 +291,54 @@ export default {
       );
     });
   },
-  // 获取url中的参数, url 传入的url，name 要获取的参数名
+  
+  /**
+   * Get query string parameter from URL
+   * @param {string} name - The parameter name to retrieve
+   * @param {string} url - The URL to parse (default: current page URL)
+   * @returns {string|null} - The parameter value or null if not found
+   */
   getQueryString(name, url = window.location.href) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     var r = url.split("?")[1] ? url.split("?")[1].match(reg) : null;
     if (r != null) return unescape(r[2]);
     return null;
   },
+
+  /**
+   * Format string to slug format
+   * @param {string} str - String to be formatted
+   * @returns {string} - Formatted slug
+   */
+  formatSlug(str) {
+    if (!str) return '';
+    
+    return str
+      .toLowerCase() // Convert to lowercase
+      .replace(/[^a-z0-9\-\s]/g, '-') // Replace non-alphanumeric characters (except hyphens and spaces) with hyphens
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-'); // Replace multiple consecutive hyphens with single hyphen
+  },
+
+  /**
+   * Initialize auto-formatting functionality for slug input fields
+   */
+  initSlugFormatting() {
+    // Bind keyboard events to all input fields with name="slug"
+    $(document).on('input keyup', 'input[name="slug"], input[name^="slug["]', function() {
+      const $input = $(this);
+      const cursorPosition = this.selectionStart;
+      const originalValue = $input.val();
+      const formattedValue = inno.formatSlug(originalValue);
+      
+      // Only update when value changes to avoid cursor position issues
+      if (originalValue !== formattedValue) {
+        $input.val(formattedValue);
+        
+        // Try to maintain cursor position
+        const newCursorPosition = Math.min(cursorPosition, formattedValue.length);
+        this.setSelectionRange(newCursorPosition, newCursorPosition);
+      }
+    });
+  }
 };

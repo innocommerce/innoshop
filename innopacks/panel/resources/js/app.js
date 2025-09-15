@@ -363,6 +363,7 @@ $(function() {
   Editor.init();
 
   inno.getTranslate();
+  inno.initSlugFormatting();
 });
 
 window.inno = common;
