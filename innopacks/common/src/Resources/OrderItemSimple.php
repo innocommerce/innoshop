@@ -24,6 +24,21 @@ class OrderItemSimple extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // 获取选项值信息
+        $options = [];
+        if ($this->optionValues) {
+            foreach ($this->optionValues as $optionValue) {
+                $options[] = [
+                    'option_id'               => $optionValue->option_id,
+                    'option_value_id'         => $optionValue->option_value_id,
+                    'option_name'             => $optionValue->getLocalizedOptionName(),
+                    'option_value_name'       => $optionValue->getLocalizedOptionValueName(),
+                    'price_adjustment'        => $optionValue->price_adjustment,
+                    'price_adjustment_format' => currency_format($optionValue->price_adjustment),
+                ];
+            }
+        }
+
         $data = [
             'id'              => $this->id,
             'order_id'        => $this->order_id,
@@ -45,6 +60,7 @@ class OrderItemSimple extends JsonResource
             'item_type'       => $this->item_type,
             'item_type_label' => $this->item_type_label,
             'reference'       => $this->reference,
+            'options'         => $options,
         ];
 
         return fire_hook_filter('resource.order.item.simple', $data);

@@ -11,6 +11,7 @@ namespace InnoShop\Common\Repositories\Order;
 
 use Exception;
 use InnoShop\Common\Models\Order;
+use InnoShop\Common\Models\OrderItemOption;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Repositories\BaseRepo;
 
@@ -49,7 +50,15 @@ class ItemRepo extends BaseRepo
         foreach ($items as $item) {
             $orderItems[] = $this->handleItem($order, $item);
         }
-        $order->items()->createMany($orderItems);
+        $createdItems = $order->items()->createMany($orderItems);
+
+        // Save order item option information
+        foreach ($createdItems as $index => $orderItem) {
+            $cartItem = $items[$index];
+            if (isset($cartItem['options']) && ! empty($cartItem['options'])) {
+                $this->saveOrderItemOptions($orderItem, $cartItem['options']);
+            }
+        }
     }
 
     /**
@@ -76,5 +85,27 @@ class ItemRepo extends BaseRepo
             'item_type'     => $requestData['item_type'] ?? 'normal',
             'reference'     => $requestData['reference'] ?? null,
         ];
+    }
+
+    /**
+     * Save order item option information
+     *
+     * @param  $orderItem
+     * @param  array  $options
+     * @return void
+     */
+    private function saveOrderItemOptions($orderItem, array $options): void
+    {
+        // Handle cart option data format, save option information directly
+        foreach ($options as $option) {
+            OrderItemOption::create([
+                'order_item_id'     => $orderItem->id,
+                'option_id'         => $option['option_id'],
+                'option_value_id'   => $option['option_value_id'],
+                'option_name'       => $option['option_name'],
+                'option_value_name' => $option['option_value_name'],
+                'price_adjustment'  => $option['price_adjustment'] ?? 0,
+            ]);
+        }
     }
 }

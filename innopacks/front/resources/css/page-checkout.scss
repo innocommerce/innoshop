@@ -206,7 +206,7 @@ body.page-checkout {
         }
         .product-item {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
 
           .product-image {
             width: 50px;

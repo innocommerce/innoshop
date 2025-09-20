@@ -28,6 +28,23 @@ class CartListItem extends JsonResource
         $subtotal = $this->subtotal;
         $price    = $this->price;
 
+        $optionValues = [];
+        if ($this->optionValues) {
+            foreach ($this->optionValues as $optionValue) {
+                $optionName      = $optionValue->getLocalizedOptionName();
+                $optionValueName = $optionValue->getLocalizedOptionValueName();
+
+                $optionValues[] = [
+                    'option_id'               => $optionValue->option_id, // 正确的选项ID
+                    'option_value_id'         => $optionValue->option_value_id, // 正确的选项值ID
+                    'option_name'             => $optionName, // 使用本地化的选项名称
+                    'option_value_name'       => $optionValueName, // 使用本地化的选项值名称
+                    'price_adjustment'        => $optionValue->price_adjustment,
+                    'price_adjustment_format' => currency_format($optionValue->price_adjustment),
+                ];
+            }
+        }
+
         $data = [
             'id'                  => $this->id,
             'quantity'            => $this->quantity,
@@ -52,6 +69,7 @@ class CartListItem extends JsonResource
             'reference'           => $this->reference,
             'selected'            => (bool) $this->selected,
             'is_stock_enough'     => $this->is_stock_enough,
+            'options'             => $optionValues,
         ];
 
         return fire_hook_filter('resource.cart.item', $data);

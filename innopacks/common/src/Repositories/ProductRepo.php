@@ -18,6 +18,7 @@ use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\Product\BundleRepo;
+use InnoShop\Common\Repositories\Product\OptionValueRepo;
 use InnoShop\Common\Repositories\Product\RelationRepo;
 use InnoShop\Common\Repositories\Product\VariantRepo;
 use Throwable;
@@ -478,6 +479,11 @@ class ProductRepo extends BaseRepo
                 BundleRepo::getInstance()->handleBundles($product, $data['bundles'] ?? []);
             }
 
+            // 处理产品选项配置
+            if (isset($data['product_options'])) {
+                OptionValueRepo::getInstance()->createProductOptionValues($product->id, $data['product_options']);
+            }
+
             $skus = $this->handleSkus($data['skus'] ?? []);
             if (isset($data['price_type']) && $data['price_type'] === 'single' && ! empty($skus)) {
                 $product->update(['variables' => []]);
@@ -547,6 +553,11 @@ class ProductRepo extends BaseRepo
 
             if (isset($data['bundles'])) {
                 BundleRepo::getInstance()->handleBundles($product, $data['bundles']);
+            }
+
+            // 处理产品选项配置
+            if (isset($data['product_options'])) {
+                OptionValueRepo::getInstance()->createProductOptionValues($product->id, $data['product_options']);
             }
 
             DB::commit();

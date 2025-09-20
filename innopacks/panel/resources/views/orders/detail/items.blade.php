@@ -32,6 +32,20 @@
                     @if ($item->item_type_label)
                       <span class="badge bg-danger">{{ $item->item_type_label }}</span>
                     @endif
+                    {{-- 显示订单项选项信息 --}}
+                    @if ($item->options && $item->options->count() > 0)
+                      <div class="item-options mt-1">
+                        @foreach ($item->options as $option)
+                          <div class="option-item small text-muted">
+                            <strong>{{ $option->option_name_localized }}:</strong>
+                            {{ $option->option_value_name_localized }}
+                            @if ($option->price_adjustment != 0)
+                              <span class="text-success">({{ $option->price_adjustment > 0 ? '+' : '' }}{{ $option->price_format }})</span>
+                            @endif
+                          </div>
+                        @endforeach
+                      </div>
+                    @endif
                     @include('panel::orders.bundle.details')
                   </div>
                 </div>

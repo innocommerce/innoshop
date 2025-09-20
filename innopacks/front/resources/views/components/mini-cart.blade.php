@@ -35,6 +35,18 @@
               <div class="text-secondary mt-1">
                 @{{ item.sku_code }}
                 <span v-if="item.variant_label">- @{{ item.variant_label }}</span>
+                <!-- 显示选项值 -->
+                <template v-if="item.options && item.options.length">
+                  <div class="product-options mt-1">
+                    <div v-for="option in item.options" :key="option.option_id" class="option-item small">
+                      <span class="option-name">@{{ option.option_name }}:</span>
+                      <span class="option-value">@{{ option.option_value_name }}</span>
+                      <span v-if="option.price_adjustment != 0" class="price-adjustment text-muted">
+                        (@{{ option.price_adjustment_format }})
+                      </span>
+                    </div>
+                  </div>
+                </template>
                 <span v-if="item.item_type !== 'normal'" class="badge bg-danger ms-2">@{{ item.item_type_label }}</span>
               </div>
               <div class="d-flex justify-content-between align-items-center mt-2">

@@ -16,7 +16,7 @@
                 @if ($article->tags->count())
                 <div class="newes-tags">
                   <i class="bi bi-tags me-1"></i>
-                  <div class="d-flex">
+                  <div class="d-flex flex-wrap">
                     @foreach($article->tags as $tag)
                       <a href="{{ $tag->url }}">{{ $tag->translation->name ?? '' }}</a>
                     @endforeach

@@ -199,6 +199,18 @@
                               @endif
                               x {{ $product['quantity'] }}
                             </div>
+                            @if (!empty($product['options']))
+                              <div class="product-options mt-2">
+                                @foreach ($product['options'] as $option)
+                                  <div class="option-item text-muted small">
+                                    <strong>{{ $option['option_name'] }}:</strong> {{ $option['option_value_name'] }}
+                                    @if ($option['price_adjustment'] != 0)
+                                      <span class="text-primary">({{ $option['price_adjustment'] > 0 ? '+' : '' }}{{ currency_format($option['price_adjustment']) }})</span>
+                                    @endif
+                                  </div>
+                                @endforeach
+                              </div>
+                            @endif
                           </div>
                         </div>
                       </div>

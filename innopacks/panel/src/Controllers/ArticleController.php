@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Article;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
+use InnoShop\Common\Repositories\TagRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Panel\Requests\ArticleRequest;
 use InnoShop\Panel\Resources\ArticleNameResource;
@@ -91,6 +92,7 @@ class ArticleController extends BaseController
             $article->load([
                 'relatedArticles.relatedArticle.translation',
                 'products.translation',
+                'tags.translation',
             ]);
         }
 
@@ -109,12 +111,32 @@ class ArticleController extends BaseController
             )->toArray(request());
         }
 
+        $selectedTags = [];
+        if ($article->id && $article->tags) {
+            $selectedTags = $article->tags->map(function ($tag) {
+                return [
+                    'id'   => $tag->id,
+                    'name' => $tag->translation->name ?? $tag->slug,
+                ];
+            })->toArray();
+        }
+
         $catalogs = CatalogSimple::collection(CatalogRepo::getInstance()->all(['active' => 1]))->jsonSerialize();
-        $data     = [
+
+        $tags = TagRepo::getInstance()->all(['active' => 1])->map(function ($tag) {
+            return [
+                'id'   => $tag->id,
+                'name' => $tag->translation->name ?? $tag->slug,
+            ];
+        })->toArray();
+
+        $data = [
             'article'                 => $article,
             'catalogs'                => $catalogs,
+            'tags'                    => $tags,
             'selectedRelatedArticles' => $selectedRelatedArticles,
             'selectedRelatedProducts' => $selectedRelatedProducts,
+            'selectedTags'            => $selectedTags,
         ];
 
         return inno_view('panel::articles.form', $data);

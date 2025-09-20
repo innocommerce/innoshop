@@ -11,6 +11,7 @@ namespace InnoShop\Common\Repositories;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Artisan;
 use InnoShop\Common\Models\Currency;
 use InnoShop\Common\Models\Setting;
 use Throwable;
@@ -74,6 +75,9 @@ class SettingRepo extends BaseRepo
             $this->checkDefaultCurrencyRate($name, $value, $space);
             $this->updateValue($name, $value, $space);
         }
+
+        // Clear config cache after updating settings
+        $this->clearConfigCache();
     }
 
     /**
@@ -84,7 +88,12 @@ class SettingRepo extends BaseRepo
      */
     public function updateSystemValue($name, $value): mixed
     {
-        return $this->updateValue($name, $value, 'system');
+        $result = $this->updateValue($name, $value, 'system');
+
+        // Clear config cache after updating system setting
+        $this->clearConfigCache();
+
+        return $result;
     }
 
     /**
@@ -96,7 +105,12 @@ class SettingRepo extends BaseRepo
      */
     public function updatePluginValue($code, $name, $value): mixed
     {
-        return $this->updateValue($name, $value, $code);
+        $result = $this->updateValue($name, $value, $code);
+
+        // Clear config cache after updating plugin setting
+        $this->clearConfigCache();
+
+        return $result;
     }
 
     /**
@@ -153,5 +167,23 @@ class SettingRepo extends BaseRepo
         }
 
         return $setting;
+    }
+
+    /**
+     * Clear config cache to ensure settings are reloaded
+     *
+     * @return void
+     */
+    private function clearConfigCache(): void
+    {
+        // Clear the 'inno' config key that stores all settings
+        config(['inno' => null]);
+
+        // Clear Laravel's config cache if it exists
+        try {
+            Artisan::call('config:clear');
+        } catch (Exception $e) {
+            // Ignore if config:clear fails (e.g., in testing environment)
+        }
     }
 }

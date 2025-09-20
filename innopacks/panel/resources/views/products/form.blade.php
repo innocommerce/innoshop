@@ -38,6 +38,11 @@
                   aria-selected="false">{{ __('panel/product.specification_attribute') }}</button>
               </li>
               <li class="nav-item" role="presentation">
+                <button class="nav-link" id="options-tab" data-bs-toggle="tab" data-bs-target="#options-tab-pane"
+                  type="button" role="tab" aria-controls="options-tab-pane"
+                  aria-selected="false">{{ __('panel/product.product_options') }}</button>
+              </li>
+              <li class="nav-item" role="presentation">
                 <button class="nav-link" id="extra-tab" data-bs-toggle="tab" data-bs-target="#extra-tab-pane"
                   type="button" role="tab" aria-controls="extra-tab-pane"
                   aria-selected="false">{{ __('panel/product.extend_information') }}</button>
@@ -63,6 +68,8 @@
               @include('panel::products.panes.tab_pane_content', $product)
 
               @include('panel::products.panes.tab_pane_specification', $product)
+
+              @include('panel::products.panes.tab_pane_options', $product)
 
               @include('panel::products.panes.tab_pane_extra', $product)
 

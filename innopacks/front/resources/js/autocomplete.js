@@ -1,4 +1,5 @@
 $(function() {
+  // Autocomplete plugin
   $.fn.autocomplete = function(option) {
     return this.each(function() {
       this.timer = null;
@@ -8,22 +9,22 @@ $(function() {
 
       $(this).attr('autocomplete', 'off');
 
-      // Focus
+      // Focus event
       $(this).on('focus', function() {
         this.request();
       });
 
-      // Blur
+      // Blur event
       $(this).on('blur', function() {
         setTimeout(function(object) {
           object.hide();
         }, 200, this);
       });
 
-      // Keydown
+      // Keydown event
       $(this).on('keydown', function(event) {
         switch(event.keyCode) {
-          case 27: // escape
+          case 27: // ESC key
             this.hide();
             break;
           default:
@@ -32,7 +33,7 @@ $(function() {
         }
       });
 
-      // Click
+      // Click event handler
       this.click = function(event) {
         event.preventDefault();
 
@@ -43,7 +44,7 @@ $(function() {
         }
       }
 
-      // Show
+      // Show dropdown menu
       this.show = function() {
         var pos = $(this).position();
 
@@ -55,12 +56,12 @@ $(function() {
         $(this).siblings('ul.dropdown-menu').show();
       }
 
-      // Hide
+      // Hide dropdown menu
       this.hide = function() {
         $(this).siblings('ul.dropdown-menu').hide();
       }
 
-      // Request
+      // Send request
       this.request = function() {
         clearTimeout(this.timer);
 
@@ -69,7 +70,7 @@ $(function() {
         }, 200, this);
       }
 
-      // Response
+      // Handle response data
       this.response = function(json) {
         let hasFocus = $(this).is(':focus');
         if (!hasFocus) return;
@@ -77,17 +78,19 @@ $(function() {
         var html = '';
 
         if (json.length) {
+          // Store all item data
           for (var i = 0; i < json.length; i++) {
             this.items[json[i]['value']] = json[i];
           }
 
+          // Handle items without categories
           for (var i = 0; i < json.length; i++) {
             if (!json[i]['category']) {
               html += '<li data-value="' + json[i]['value'] + '"><a href="#" class="dropdown-item">' + json[i]['label'] + '</a></li>';
             }
           }
 
-          // Get all the ones with a categories
+          // Get all items with categories
           var category = new Array();
 
           for (var i = 0; i < json.length; i++) {
@@ -102,6 +105,7 @@ $(function() {
             }
           }
 
+          // Render category items
           for (var i in category) {
             html += '<li class="dropdown-header">' + category[i]['name'] + '</li>';
 
@@ -111,6 +115,7 @@ $(function() {
           }
         }
 
+        // Show or hide dropdown menu
         if (html) {
           this.show();
         } else {
@@ -120,6 +125,7 @@ $(function() {
         $(this).siblings('ul.dropdown-menu').html(html);
       }
 
+      // Initialize dropdown menu
       $(this).after('<ul class="dropdown-menu"></ul>');
       $(this).siblings('ul.dropdown-menu').delegate('a', 'click', $.proxy(this.click, this));
     });

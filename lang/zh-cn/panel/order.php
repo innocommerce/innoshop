@@ -123,4 +123,5 @@ return [
     'user_agent'                 => '浏览器',
     'view'                       => '查看',
     'website'                    => '网站地址',
+    'shipment_status'            => '配送状态',
 ];

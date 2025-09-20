@@ -42,6 +42,8 @@ return [
     'pages'           => '单页管理',
     'plugin_settings' => '插件设置',
     'product'         => '产品',
+    'options'         => '选项管理',
+    'option_values'   => '选项值管理',
     'products'        => '产品管理',
     'regions'         => '区域分组',
     'reviews'         => '评论管理',

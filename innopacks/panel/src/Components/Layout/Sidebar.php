@@ -76,7 +76,7 @@ class Sidebar extends Component
             [
                 'title'    => __('panel/menu.top_product'),
                 'icon'     => 'bi-bag',
-                'prefixes' => ['products'],
+                'prefixes' => ['products', 'options', 'option_values'],
                 'children' => $this->getProductSubRoutes(),
             ],
             [
@@ -297,6 +297,7 @@ class Sidebar extends Component
             ['route' => 'brands.index', 'title' => __('panel/menu.brands')],
             ['route' => 'attributes.index', 'title' => __('panel/menu.attributes')],
             ['route' => 'attribute_groups.index', 'title' => __('panel/menu.attribute_groups')],
+            ['route' => 'options.index', 'title' => __('panel/menu.options')],
             ['route' => 'reviews.index', 'title' => __('panel/menu.reviews')],
         ];
 

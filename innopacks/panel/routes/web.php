@@ -53,6 +53,14 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/attribute_values', Controllers\AttributeValueController::class);
 
+        Route::get('/options/available', [Controllers\OptionController::class, 'available'])->name('options.available');
+        Route::get('/options/{optionId}/values', [Controllers\OptionController::class, 'valuesByOptionId'])->name('options.values');
+        Route::resource('/options', Controllers\OptionController::class);
+        Route::put('/options/{option}/active', [Controllers\OptionController::class, 'active'])->name('options.active');
+
+        Route::resource('/option_values', Controllers\OptionValueController::class);
+        Route::put('/option_values/{option_value}/active', [Controllers\OptionValueController::class, 'active'])->name('option_values.active');
+
         Route::resource('/brands', Controllers\BrandController::class);
         Route::put('/brands/{currency}/active', [Controllers\BrandController::class, 'active'])->name('brands.active');
 

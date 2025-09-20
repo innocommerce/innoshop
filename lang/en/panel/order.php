@@ -123,4 +123,5 @@ return [
     'user_agent'                 => 'User Agent',
     'view'                       => 'View',
     'website'                    => 'Website',
+    'shipment_status'            => 'Shipment Status',
 ];

@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -52,6 +53,14 @@ class CartItem extends BaseModel
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
+    /**
+     * 获取购物车项的选项值
+     */
+    public function optionValues(): HasMany
+    {
+        return $this->hasMany(\InnoShop\Common\Models\Cart\OptionValue::class, 'cart_item_id', 'id');
+    }
+
     public function getSubtotalAttribute(): float
     {
         return round($this->price * $this->quantity, 2);
@@ -65,6 +74,13 @@ class CartItem extends BaseModel
     public function getPriceAttribute(): float
     {
         $price = $this->productSku->getFinalPrice();
+
+        // 添加选项值的价格调整
+        if ($this->optionValues) {
+            foreach ($this->optionValues as $optionValue) {
+                $price += $optionValue->price_adjustment;
+            }
+        }
 
         return fire_hook_filter('model.cart.item.price', [
             'price' => $price,

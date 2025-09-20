@@ -87,6 +87,51 @@ class ProductController extends BaseController
     }
 
     /**
+     * 处理产品选项数据，为Vue3组件准备JSON格式数据
+     *
+     * @param  $product
+     * @return array
+     */
+    private function prepareProductOptionsData(Product $product): array
+    {
+        $existingProductOptions = [];
+        $existingOptionValues   = [];
+
+        if ($product->id) {
+            // Prepare existing product option data - use correct relationships
+            if ($product->productOptions && $product->productOptions->count() > 0) {
+                foreach ($product->productOptions as $productOption) {
+                    $existingProductOptions[] = [
+                        'option_id'           => $productOption->option_id,
+                        'name'                => $productOption->option->getLocalizedName(),
+                        'type'                => $productOption->option->type,
+                        'option_values_count' => $productOption->option->optionValues->count(),
+                        'required'            => $productOption->option->required,
+                        'position'            => $productOption->position,
+                    ];
+                }
+            }
+
+            // Prepare existing option value configuration data
+            if ($product->productOptionValues && $product->productOptionValues->count() > 0) {
+                foreach ($product->productOptionValues as $productOptionValue) {
+                    $existingOptionValues[] = [
+                        'option_id'        => $productOptionValue->option_id,
+                        'option_value_id'  => $productOptionValue->option_value_id,
+                        'price_adjustment' => $productOptionValue->price_adjustment,
+                        'stock_quantity'   => $productOptionValue->quantity,
+                    ];
+                }
+            }
+        }
+
+        return [
+            'existingProductOptions' => $existingProductOptions,
+            'existingOptionValues'   => $existingOptionValues,
+        ];
+    }
+
+    /**
      * @param  $product
      * @return mixed
      * @throws Exception
@@ -97,6 +142,9 @@ class ProductController extends BaseController
         if ($product->id) {
             $product->load([
                 'relations.relationProduct.translation',
+                'productOptions.option.optionValues',
+                'productOptionValues.option',
+                'productOptionValues.optionValue',
             ]);
         }
 
@@ -114,6 +162,9 @@ class ProductController extends BaseController
             )->toArray(request());
         }
 
+        // Prepare product option data
+        $productOptionsData = $this->prepareProductOptionsData($product);
+
         $data = [
             'product'                 => $product,
             'skus'                    => $skus,
@@ -124,6 +175,8 @@ class ProductController extends BaseController
             'attribute_count'         => $product->productAttributes->count(),
             'all_attributes'          => $attributeData,
             'selectedRelatedProducts' => $selectedRelatedProducts,
+            'existingProductOptions'  => $productOptionsData['existingProductOptions'],
+            'existingOptionValues'    => $productOptionsData['existingOptionValues'],
         ];
 
         return inno_view('panel::products.form', $data);

@@ -73,6 +73,9 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/attributes', [PanelApiControllers\AttributeController::class, 'index'])->name('attributes.index');
     Route::get('/attribute_values', [PanelApiControllers\AttributeValueController::class, 'index'])->name('attribute_values.index');
 
+    Route::get('/options/available', [PanelApiControllers\OptionController::class, 'available'])->name('options.available');
+    Route::get('/options/{option}/values', [PanelApiControllers\OptionController::class, 'values'])->name('options.values');
+
     Route::get('/customers', [PanelApiControllers\CustomerController::class, 'index'])->name('customers.index');
     Route::get('/customers/names', [PanelApiControllers\CustomerController::class, 'names'])->name('customers.name');
     Route::get('/customers/autocomplete', [PanelApiControllers\CustomerController::class, 'autocomplete'])->name('customers.autocomplete');

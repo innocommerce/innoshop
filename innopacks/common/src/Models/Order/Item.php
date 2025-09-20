@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Order;
+use InnoShop\Common\Models\OrderItemOption;
 use InnoShop\Common\Models\OrderReturn;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Sku;
@@ -77,6 +78,22 @@ class Item extends BaseModel
     public function returns(): HasMany
     {
         return $this->hasMany(OrderReturn::class, 'order_item_id', 'id');
+    }
+
+    /**
+     * 获取订单项的选项值
+     */
+    public function optionValues(): HasMany
+    {
+        return $this->hasMany(OptionValue::class, 'order_item_id', 'id');
+    }
+
+    /**
+     * 获取订单项的选项（兼容旧版本）
+     */
+    public function options(): HasMany
+    {
+        return $this->hasMany(OrderItemOption::class, 'order_item_id', 'id');
     }
 
     /**

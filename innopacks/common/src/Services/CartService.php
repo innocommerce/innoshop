@@ -121,8 +121,26 @@ class CartService
             throw new Exception(trans('front/common.stock_not_enough'));
         }
 
+        // 验证产品选项
+        if (! empty($data['options'])) {
+            $productSku = \InnoShop\Common\Models\Product\Sku::find($data['sku_id']);
+            if ($productSku && $productSku->product) {
+                $optionService = \InnoShop\Common\Services\ProductOptionService::getInstance($productSku->product);
+                $validation    = $optionService->validateOptions($data['options']);
+
+                if (! $validation['valid']) {
+                    throw new Exception(implode('; ', $validation['errors']));
+                }
+            }
+        }
+
         $data     = $this->mergeAuthId($data);
         $cartItem = CartItemRepo::getInstance()->create($data);
+
+        // 保存选项信息
+        if (! empty($data['options']) && $cartItem) {
+            $this->saveCartItemOptions($cartItem, $data['options']);
+        }
 
         // Trigger hook after adding item to cart
         fire_hook_action('service.cart.add.after', [
@@ -283,6 +301,55 @@ class CartService
                 'selected' => true,
             ];
             $this->addCart($data);
+        }
+    }
+
+    /**
+     * 保存购物车项选项值
+     *
+     * @param  CartItem  $cartItem
+     * @param  array  $options  格式: [option_id => [option_value_id, ...], ...]
+     * @return void
+     */
+    private function saveCartItemOptions(CartItem $cartItem, array $options): void
+    {
+        // 先删除已有的选项值
+        \InnoShop\Common\Models\Cart\OptionValue::where('cart_item_id', $cartItem->id)->delete();
+
+        // 保存新的选项值
+        foreach ($options as $optionId => $optionValueIds) {
+            if (! is_array($optionValueIds)) {
+                $optionValueIds = [$optionValueIds];
+            }
+
+            foreach ($optionValueIds as $optionValueId) {
+                // 获取选项和选项值信息
+                $option      = \InnoShop\Common\Models\Option::find($optionId);
+                $optionValue = \InnoShop\Common\Models\OptionValue::find($optionValueId);
+
+                if (! $option || ! $optionValue) {
+                    continue;
+                }
+
+                // 获取产品选项值配置中的价格调整
+                $productOptionValue = \InnoShop\Common\Models\Product\OptionValue::where([
+                    'product_id'      => $cartItem->product_id,
+                    'option_id'       => $optionId,
+                    'option_value_id' => $optionValueId,
+                ])->first();
+
+                $priceAdjustment = $productOptionValue ? $productOptionValue->price_adjustment : 0;
+
+                // 创建购物车选项值记录
+                \InnoShop\Common\Models\Cart\OptionValue::create([
+                    'cart_item_id'      => $cartItem->id,
+                    'option_id'         => $optionId,
+                    'option_value_id'   => $optionValueId,
+                    'option_name'       => $option->name,
+                    'option_value_name' => $optionValue->name,
+                    'price_adjustment'  => $priceAdjustment,
+                ]);
+            }
         }
     }
 

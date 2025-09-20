@@ -91,16 +91,23 @@ class ProductController extends Controller
         $customerID = current_customer_id();
         $variables  = ProductVariable::collection($product->variables)->jsonSerialize();
 
+        // 获取产品选项数据，包含选项组和选项值
+        $product->load(['productOptions.option.optionValues', 'productOptionValues']);
+        $productOptions      = $product->productOptions;
+        $productOptionValues = $product->productOptionValues;
+
         $data = [
-            'product'      => $product,
-            'sku'          => (new SkuListItem($sku))->jsonSerialize(),
-            'skus'         => SkuListItem::collection($product->skus)->jsonSerialize(),
-            'variants'     => $variables,
-            'attributes'   => $product->groupedAttributes(),
-            'reviews'      => $reviews,
-            'reviewed'     => ReviewRepo::productReviewed($customerID, $product->id),
-            'related'      => $product->relationProducts,
-            'bundle_items' => ProductRepo::getInstance()->getBundleItems($product),
+            'product'             => $product,
+            'sku'                 => (new SkuListItem($sku))->jsonSerialize(),
+            'skus'                => SkuListItem::collection($product->skus)->jsonSerialize(),
+            'variants'            => $variables,
+            'attributes'          => $product->groupedAttributes(),
+            'reviews'             => $reviews,
+            'reviewed'            => ReviewRepo::productReviewed($customerID, $product->id),
+            'related'             => $product->relationProducts,
+            'bundle_items'        => ProductRepo::getInstance()->getBundleItems($product),
+            'productOptions'      => $productOptions,
+            'productOptionValues' => $productOptionValues,
         ];
 
         return inno_view('products.show', $data);

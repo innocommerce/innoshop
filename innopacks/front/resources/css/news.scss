@@ -55,15 +55,32 @@ body.page-news {
 
 .newes-tags {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 10px;
+  
+  @media (max-width: 768px) {
+    align-items: flex-start;
+  }
+  
   i {
     color: #666;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  > div {
+    gap: 6px;
+    flex-wrap: wrap;
+    
+    @media (max-width: 768px) {
+      gap: 4px;
+    }
   }
 
   a {
     color: #444;
     margin-right: 10px;
+    margin-bottom: 6px;
     display: inline-block;
     padding: 1px 4px;
     border: 1px solid #cad8ff;
@@ -71,6 +88,14 @@ body.page-news {
     font-size: 12px;
     transition: all 0.3s;
     background-color: #e5f0fe;
+    
+    @media (max-width: 768px) {
+      margin-right: 6px;
+      margin-bottom: 4px;
+      font-size: 11px;
+      padding: 2px 6px;
+    }
+    
     &:hover {
       color: #fff;
       background-color: $primary;

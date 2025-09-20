@@ -8,7 +8,7 @@ const ProductSelector = {
 
     const finalOptions = { ...defaultOptions, ...options };
 
-    // 直接注册全局回调
+    // Register global callback directly
     window.productSelectorCallback = function(product) {
       if (typeof callback === "function") {
         callback(product);
@@ -27,4 +27,4 @@ const ProductSelector = {
   }
 };
 
-export default ProductSelector; 
+export default ProductSelector;

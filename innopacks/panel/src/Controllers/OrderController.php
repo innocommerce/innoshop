@@ -15,8 +15,7 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\StateMachineService;
-use InnoShop\Panel\Exports\OrdersBatchExport;
-use Maatwebsite\Excel\Facades\Excel;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class OrderController extends BaseController
 {
@@ -43,7 +42,7 @@ class OrderController extends BaseController
      */
     public function show(Order $order): mixed
     {
-        $order->load(['items', 'fees', 'payments']);
+        $order->load(['items.options', 'fees', 'payments']);
 
         return $this->form($order);
     }
@@ -55,7 +54,7 @@ class OrderController extends BaseController
      */
     public function edit(Order $order): mixed
     {
-        $order->load(['items', 'fees', 'payments']);
+        $order->load(['items.options', 'fees', 'payments']);
 
         return $this->form($order);
     }
@@ -131,6 +130,24 @@ class OrderController extends BaseController
     {
         $orders = OrderRepo::getInstance()->builder($request->all())->get();
 
-        return Excel::download(new OrdersBatchExport($orders), 'orders.xlsx');
+        $exportData = collect();
+
+        foreach ($orders as $order) {
+            $exportData->push([
+                panel_trans('order.number')                 => $order->number,
+                panel_trans('order.created_at')             => $order->created_at,
+                panel_trans('order.customer_name')          => $order->customer_name ?? ($order->customer->name ?? ''),
+                panel_trans('order.status')                 => $order->status_format ?? $order->status,
+                panel_trans('order.total')                  => $order->total_format,
+                panel_trans('order.billing_method_name')    => $order->billing_method_name,
+                panel_trans('order.shipping_method_name')   => $order->shipping_method_name,
+                panel_trans('order.shipping_customer_name') => $order->shipping_customer_name,
+                panel_trans('order.shipping_telephone')     => $order->shipping_telephone,
+                panel_trans('order.shipping_address')       => $order->shipping_address_1.' '.$order->shipping_city.' '.$order->shipping_state.' '.$order->shipping_country,
+                panel_trans('order.comment')                => $order->comment,
+            ]);
+        }
+
+        return (new FastExcel($exportData))->download('orders.xlsx');
     }
 }

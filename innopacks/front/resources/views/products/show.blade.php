@@ -86,6 +86,8 @@
             </ul>
 
             @include('products.components._variants')
+            
+            @include('products.components._options')
 
             @if(!system_setting('disable_online_order'))
               <div class="product-info-bottom">
@@ -217,11 +219,66 @@
     });
 
     $('.add-cart, .buy-now').on('click', function () {
+      // 验证必需选项是否已选择
+      if (typeof validateRequiredOptions === 'function' && !validateRequiredOptions()) {
+        // 滚动到第一个错误的选项组
+        const $firstError = $('.option-group.has-error').first();
+        if ($firstError.length) {
+          $('html, body').animate({
+            scrollTop: $firstError.offset().top - 100
+          }, 500);
+        }
+        
+        if (window.inno && window.inno.alert) {
+          window.inno.alert({msg: '{{ __("front/product.please_select_required_options") }}', type: 'warning'});
+        } else {
+          alert('{{ __("front/product.please_select_required_options") }}');
+        }
+        return;
+      }
+
       const quantity = $('.product-quantity').val();
       const skuId = $('.product-quantity').data('sku-id');
       const isBuyNow = $(this).hasClass('buy-now');
 
-      inno.addCart({skuId, quantity, isBuyNow}, this, function (res) {
+      // 收集选中的选项
+      const productOptions = {};
+      
+      // 收集下拉选择框的选项
+      $('.option-select').each(function() {
+        const optionId = $(this).data('option-id');
+        const selectedValue = $(this).val();
+        if (selectedValue) {
+          productOptions[optionId] = [selectedValue];
+        }
+      });
+      
+      // 收集单选按钮的选项
+      $('.option-radio-item input[type="radio"]:checked').each(function() {
+        const optionId = $(this).data('option-id');
+        const optionValue = $(this).val();
+        productOptions[optionId] = [optionValue];
+      });
+      
+      // 收集多选复选框的选项
+      $('.option-checkbox-item input[type="checkbox"]:checked').each(function() {
+        const optionId = $(this).data('option-id');
+        const optionValue = $(this).val();
+        if (!productOptions[optionId]) {
+          productOptions[optionId] = [];
+        }
+        productOptions[optionId].push(optionValue);
+      });
+
+      // 准备请求数据
+      const requestData = {
+        skuId, 
+        quantity, 
+        isBuyNow,
+        options: productOptions
+      };
+      
+      inno.addCart(requestData, this, function (res) {
         if (isBuyNow) {
           window.location.href = '{{ front_route('carts.index') }}';
         }

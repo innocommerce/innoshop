@@ -40,6 +40,8 @@ return [
     'pages'             => 'Pages',
     'plugin_settings'   => 'Plugin Settings',
     'product'           => 'Product',
+    'options'           => 'Options',
+    'option_values'     => 'Option Values',
     'products'          => 'Products',
     'regions'           => 'Regions',
     'reviews'           => 'Reviews',

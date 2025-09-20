@@ -15,24 +15,24 @@ if (token) {
 
 axios.interceptors.request.use(
   config => {
-    // 在发送请求之前显示加载层
+    // Show loading layer before sending request
     layer.load(2, { shade: [0.3, '#fff'] });
     return config;
   },
   error => {
-    // 对请求错误做些什么
-    layer.closeAll('loading'); // 确保请求失败时关闭加载层
+    // Handle request error
+    layer.closeAll('loading'); // Ensure loading layer is closed on request failure
     return Promise.reject(error);
   }
 );
 axios.interceptors.response.use(
   response => {
-    // 在响应成功时关闭加载层
+    // Close loading layer on successful response
     layer.closeAll('loading');
     return response.data;
   },
   error => {
-    // 在响应失败时也关闭加载层
+    // Close loading layer on response failure
     layer.closeAll('loading');
     return Promise.reject(error);
   }

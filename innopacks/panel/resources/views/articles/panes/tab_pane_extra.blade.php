@@ -7,6 +7,7 @@
 
       <x-panel-form-autocomplete-list name="tag_ids[]"
                                       :value="old('tag_ids', $article->tags->pluck('id')->toArray() ?? [])"
+                                      :selectedItems="$selectedTags ?? []"
                                       placeholder="{{ __('panel/article.tag_search') }}"
                                       title="{{ __('panel/article.tag') }}"
                                       api="/api/panel/tags" />

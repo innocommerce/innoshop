@@ -70,6 +70,11 @@
         $('.product-price .price').text(masterSku.price_format);
         $('.product-price .old-price').text(masterSku.origin_price_format);
         $('.product-quantity').data('sku-id', masterSku.id)
+        
+        // 更新选项组件的基础价格并重新计算总价
+        if (typeof window.updateBasePrice === 'function') {
+          window.updateBasePrice(masterSku.price);
+        }
 
         if (masterSku.origin_image_url) {
           $('.main-product-img img').attr('src', masterSku.origin_image_url);

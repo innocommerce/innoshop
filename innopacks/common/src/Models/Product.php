@@ -164,6 +164,40 @@ class Product extends BaseModel
     }
 
     /**
+     * 获取产品的选项关联
+     */
+    public function productOptions(): HasMany
+    {
+        return $this->hasMany(\InnoShop\Common\Models\Product\Option::class, 'product_id', 'id');
+    }
+
+    /**
+     * 获取产品的选项值配置
+     */
+    public function productOptionValues(): HasMany
+    {
+        return $this->hasMany(\InnoShop\Common\Models\Product\OptionValue::class, 'product_id', 'id');
+    }
+
+    /**
+     * 获取产品关联的所有选项（通过产品选项值配置）
+     */
+    public function options(): BelongsToMany
+    {
+        return $this->belongsToMany(Option::class, 'product_options', 'product_id', 'option_id')
+            ->distinct();
+    }
+
+    /**
+     * 获取产品关联的所有选项值（通过产品选项值配置）
+     */
+    public function optionValues(): BelongsToMany
+    {
+        return $this->belongsToMany(OptionValue::class, 'product_option_values', 'product_id', 'option_value_id')
+            ->withPivot(['price_adjustment', 'quantity', 'subtract_stock', 'sku', 'weight_adjustment']);
+    }
+
+    /**
      * @return mixed
      */
     public function totalQuantity(): int
