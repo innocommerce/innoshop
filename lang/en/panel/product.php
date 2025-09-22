@@ -50,6 +50,8 @@ return [
     'expand_all'                => 'Expand All',
     'extend_information'        => 'Extended',
     'group_by'                  => 'Group By...',
+    'hover_image'               => 'Hover Image',
+    'hover_image_help'          => 'Image displayed when hovering over the product, used for social media sharing',
     'increase_price'            => 'Increase Product Price',
     'increase_quantity'         => 'Increase Product Quantity',
     'input_price'               => 'Please enter price',

@@ -50,6 +50,8 @@ return [
     'expand_all'                => '全部展开',
     'extend_information'        => '扩展信息',
     'group_by'                  => '通过...分组',
+    'hover_image'               => '悬停图片',
+    'hover_image_help'          => '鼠标悬停时显示的图片，用于展示产品的不同角度或细节',
     'increase_price'            => '增加商品价格',
     'increase_quantity'         => '增加商品库存',
     'input_price'               => '请输入价格',

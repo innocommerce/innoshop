@@ -69,6 +69,10 @@
   <x-common-form-images title="{{ __('panel/common.image') }}" name="images"
                         :values="old('images', $product->images ?? [])"/>
 
+  <x-common-form-image title="{{ __('panel/product.hover_image') }}" name="hover_image"
+                       :value="old('hover_image', $product->hover_image ?? '')"
+                       help="{{ __('panel/product.hover_image_help') }}"/>
+
   @include('panel::products.form._form_video')
 
   <div class="row mt-5 mb-4">

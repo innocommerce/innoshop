@@ -33,7 +33,7 @@ class Product extends BaseModel
     const TYPE_BUNDLE = 'bundle';
 
     protected $fillable = [
-        'type', 'brand_id', 'images', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
+        'type', 'brand_id', 'images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
         'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed',
     ];
 
@@ -270,6 +270,33 @@ class Product extends BaseModel
     public function getImageUrlAttribute(): string
     {
         return $this->getImageUrl();
+    }
+
+    /**
+     * 获取hover图片URL
+     *
+     * @param  int  $width  图片宽度
+     * @param  int  $height  图片高度
+     * @return string
+     * @throws Exception
+     */
+    public function getHoverImageUrl(int $width = 600, int $height = 600): string
+    {
+        if (empty($this->hover_image)) {
+            return '';
+        }
+
+        return image_resize($this->hover_image, $width, $height);
+    }
+
+    /**
+     * 检查是否有hover图片
+     *
+     * @return bool
+     */
+    public function hasHoverImage(): bool
+    {
+        return ! empty($this->hover_image);
     }
 
     /**

@@ -595,6 +595,7 @@ class ProductRepo extends BaseRepo
             'slug'         => $slug,
             'brand_id'     => $data['brand_id'] ?? 0,
             'images'       => $images,
+            'hover_image'  => $data['hover_image'] ?? '',
             'video'        => $video,
             'tax_class_id' => $data['tax_class_id'] ?? 0,
             'variables'    => $variables,

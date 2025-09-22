@@ -81,6 +81,29 @@ class MetaInfo
     }
 
     /**
+     * 获取OG图片URL
+     * @return string
+     */
+    public function getOgImage(): string
+    {
+        $object = $this->object;
+        $type   = $this->type;
+
+        if ($type == 'product') {
+            // 优先使用hover图片作为OG图片
+            if (! empty($object->hover_image)) {
+                return image_origin($object->hover_image);
+            }
+            // 如果没有hover图片，使用主图片
+            if (! empty($object->image_url)) {
+                return image_origin($object->image_url);
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * @return string
      */
     public function getName(): string

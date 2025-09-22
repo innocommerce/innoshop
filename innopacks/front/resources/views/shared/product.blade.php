@@ -4,7 +4,10 @@
     <div class="image position-relative">
     @hookinsert('product.list_item.image.before')
       <a href="{{ $product->url }}">
-        <img src="{{ $product->image_url }}" class="img-fluid">
+        <img src="{{ $product->image_url }}" class="img-fluid product-main-image">
+        @if($product->hasHoverImage())
+          <img src="{{ $product->getHoverImageUrl() }}" class="img-fluid product-hover-image">
+        @endif
       </a>
       <div class="wishlist-container add-wishlist" data-in-wishlist="{{ $product->hasFavorite() }}"
            data-id="{{ $product->id }}" data-price="{{ $product->masterSku->price }}">
