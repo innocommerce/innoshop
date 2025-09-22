@@ -32,7 +32,7 @@ class OptionController extends BaseController
     public function index(Request $request): mixed
     {
         $filters       = $request->all();
-        $option_groups = OptionRepo::getInstance()->list($filters);
+        $option_groups = OptionRepo::getInstance()->all($filters);
 
         // 选项组数据已经包含JSON格式的多语言字段，无需额外加载
         $data = [
