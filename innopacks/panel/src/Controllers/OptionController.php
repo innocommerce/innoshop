@@ -217,9 +217,9 @@ class OptionController extends BaseController
     {
         $filters              = $request->all();
         $filters['option_id'] = $optionId;
-        $filters['active']    = 1; // 只获取激活的选项值
+        $filters['active']    = 1;
 
-        $optionValues = OptionValueRepo::getInstance()->list($filters);
+        $optionValues = OptionValueRepo::getInstance()->all($filters);
 
         // 格式化数据
         $formattedValues = [];
