@@ -32,12 +32,11 @@ class OptionController extends BaseController
     public function index(Request $request): mixed
     {
         $filters       = $request->all();
-        $option_groups = OptionRepo::getInstance()->all($filters);
+        $option_groups = OptionRepo::getInstance()->list($filters);
 
-        // 选项组数据已经包含JSON格式的多语言字段，无需额外加载
         $data = [
             'option_groups'      => $option_groups,
-            'option_groups_data' => $option_groups, // 用于JavaScript
+            'option_groups_data' => $option_groups,
         ];
 
         return inno_view('panel::options.index', $data);
@@ -134,7 +133,6 @@ class OptionController extends BaseController
     public function show(Option $option): JsonResponse
     {
         try {
-            // 加载选项组的翻译数据
             $option->load('translations');
 
             return response()->json([
@@ -179,9 +177,9 @@ class OptionController extends BaseController
     public function available(Request $request): JsonResponse
     {
         $filters           = $request->all();
-        $filters['active'] = 1; // 只获取激活的选项
+        $filters['active'] = 1;
 
-        $options = OptionRepo::getInstance()->list($filters);
+        $options = OptionRepo::getInstance()->all($filters);
 
         // 格式化数据，包含选项值数量
         $formattedOptions = [];
