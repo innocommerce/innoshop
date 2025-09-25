@@ -1,5 +1,6 @@
 <x-panel::form.row :title="$title">
-    <div class="is-up-file-pure text-start" data-img-max="{{ $max }}" data-type="{{ $type }}">
+    <div class="multi-images-pure-upload-wrapper">
+        <div class="is-up-file-pure text-start" data-img-max="{{ $max }}" data-type="{{ $type }}">
         <div class="d-flex flex-wrap">
             @foreach ($values as $v)
                 <div
@@ -34,6 +35,7 @@
     </span>
         {{ $slot }}
     </div>
+    </div>
 </x-panel::form.row>
 
 @pushOnce('footer')
@@ -50,7 +52,7 @@
     </div>
 
     <script>
-        $('.img-upload-trigger').click(function () {
+        $('.multi-images-pure-upload-wrapper .img-upload-trigger').click(function () {
             const _self = $(this);
             $('#form-upload').remove();
             $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" accept="image/*" multiple name="file" /></form>');
@@ -62,20 +64,20 @@
         })
 
         // 允许拖拽上传
-        $('.is-up-file-pure').on('dragover', function (e) {
+        $('.multi-images-pure-upload-wrapper .is-up-file-pure').on('dragover', function (e) {
             e.preventDefault();
             e.stopPropagation();
             $(this).addClass('border-primary');
         });
 
         // dragleave
-        $('.is-up-file-pure').on('dragleave', function (e) {
+        $('.multi-images-pure-upload-wrapper .is-up-file-pure').on('dragleave', function (e) {
             e.preventDefault();
             e.stopPropagation();
             $(this).removeClass('border-primary');
         });
 
-        $('.is-up-file-pure').on('drop', function (e) {
+        $('.multi-images-pure-upload-wrapper .is-up-file-pure').on('drop', function (e) {
             e.preventDefault();
             e.stopPropagation();
             let file = e.originalEvent.dataTransfer.files;
@@ -83,13 +85,13 @@
             $(this).removeClass('border-primary');
         });
 
-        $('.is-up-file-pure').on('click', '.delete-img', function () {
+        $('.multi-images-pure-upload-wrapper .is-up-file-pure').on('click', '.delete-img', function () {
             let count = $(this).parents('.is-up-file-pure').find('.imgs-count');
             count.text(count.text() * 1 - 1);
             $(this).parent().parent().remove();
         });
 
-        $('.is-up-file-pure').on('click', '.show-img', function () {
+        $('.multi-images-pure-upload-wrapper .is-up-file-pure').on('click', '.show-img', function () {
             let src = $(this).parent().next().find('img').data('origin-img');
             let img = '<img src="' + src + '" class="img-fluid">';
             $('#modal-show-imgs .modal-body').html(img);

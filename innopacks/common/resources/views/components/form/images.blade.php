@@ -1,5 +1,6 @@
 <x-panel::form.row :title="$title">
-  <div class="is-up-file text-start" data-img-max="{{ $max }}" data-type="{{ $type }}">
+  <div class="multi-images-upload-wrapper">
+    <div class="is-up-file text-start" data-img-max="{{ $max }}" data-type="{{ $type }}">
     <!-- Add sortable container -->
     <div class="img-sortable-container d-flex flex-wrap" data-sortable="true">
       @foreach ($values as $v)
@@ -42,6 +43,7 @@
     </span>
     {{ $slot }}
   </div>
+  </div>
 </x-panel::form.row>
 
 @pushOnce('footer')
@@ -67,7 +69,7 @@
       this.bindPreview();
     },
     initSortable() {
-      $('.img-sortable-container').each((_, el) => {
+      $('.multi-images-upload-wrapper .img-sortable-container').each((_, el) => {
         new Sortable(el, {
           animation: 150,
           handle: '.drag-handle',
@@ -77,7 +79,7 @@
       });
     },
     bindUploadTrigger() {
-      $('.img-upload-trigger').off('click').on('click', function () {
+      $('.multi-images-upload-wrapper .img-upload-trigger').off('click').on('click', function () {
         const _self = $(this);
         const upFile = _self.parents('.is-up-file');
         const imgMax = upFile.data('img-max');
@@ -114,14 +116,14 @@
       });
     },
     bindDelete() {
-      $('.is-up-file').off('click.delete-img').on('click.delete-img', '.delete-img', function () {
+      $('.multi-images-upload-wrapper .is-up-file').off('click.delete-img').on('click.delete-img', '.delete-img', function () {
         let count = $(this).parents('.is-up-file').find('.imgs-count');
         count.text(count.text() * 1 - 1);
         $(this).parent().parent().remove();
       });
     },
     bindPreview() {
-      $('.is-up-file').off('click.show-img').on('click.show-img', '.show-img', function () {
+      $('.multi-images-upload-wrapper .is-up-file').off('click.show-img').on('click.show-img', '.show-img', function () {
         let src = $(this).parent().next().find('img').data('origin-img');
         let img = '<img src="' + src + '" class="img-fluid">';
         $('#modal-show-imgs .modal-body').html(img);
