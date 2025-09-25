@@ -29,7 +29,7 @@ class OptionRepo extends BaseRepo
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
-        return $this->builder($filters)->paginate();
+        return $this->builder($filters)->orderBy('id', 'desc')->paginate();
     }
 
     /**

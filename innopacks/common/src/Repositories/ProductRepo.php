@@ -393,6 +393,8 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * Copy product and related data
+     *
      * @param  Product  $product
      * @return mixed
      */
@@ -405,6 +407,8 @@ class ProductRepo extends BaseRepo
             'productAttributes',
             'relations',
             'bundles',
+            'productOptions',
+            'productOptionValues',
         ]);
         $copy = $product->replicate();
 
@@ -425,6 +429,10 @@ class ProductRepo extends BaseRepo
                     continue;
                 } elseif ($relation == 'bundles') {
                     continue;
+                } elseif ($relation == 'productOptions') {
+                    $newEntry->product_id = $copy->id;
+                } elseif ($relation == 'productOptionValues') {
+                    $newEntry->product_id = $copy->id;
                 }
                 if ($newEntry->push()) {
                     $copy->{$relation}()->save($newEntry);

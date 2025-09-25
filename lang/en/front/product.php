@@ -33,4 +33,11 @@ return [
     'bundle_includes'                => 'Bundle Includes',
     'view_more_products'             => 'View More Products',
     'please_select_required_options' => 'Please select all required options',
+    'custom_options'                 => 'Custom Options',
+    'current_selection'              => 'Current Selection',
+    'price_adjustment'               => 'Price Adjustment',
+    'required_option'                => 'Required',
+    'optional'                       => 'Optional',
+    'option_group_required'          => 'Option group ":name" is required',
+    'total_price'                    => 'Total Price',
 ];

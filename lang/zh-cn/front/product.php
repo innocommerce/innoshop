@@ -33,4 +33,11 @@ return [
     'bundle_includes'                => '组合包含',
     'view_more_products'             => '查看更多商品',
     'please_select_required_options' => '请选择所有必选项',
+    'custom_options'                 => '自定义扩展选项',
+    'current_selection'              => '当前选择',
+    'price_adjustment'               => '价格调整',
+    'required_option'                => '必选项',
+    'optional'                       => '可选',
+    'option_group_required'          => '选项组 ":name" 是必选的',
+    'total_price'                    => '产品总价',
 ];

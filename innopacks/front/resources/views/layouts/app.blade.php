@@ -34,6 +34,13 @@
 
     let config = {
       isLogin: !!{{ current_customer()->id ?? 'null' }},
+      currency: {
+        code: '{{ current_currency_code() }}',
+        symbol_left: '{{ default_currency()->symbol_left ?? "$" }}',
+        symbol_right: '{{ default_currency()->symbol_right ?? "" }}',
+        decimal_place: {{ default_currency()->decimal_place ?? 2 }},
+        rate: {{ default_currency()->value ?? 1 }}
+      }
     }
 
     let asset_url = '{{ asset('') }}';

@@ -91,8 +91,16 @@ class ProductController extends Controller
         $customerID = current_customer_id();
         $variables  = ProductVariable::collection($product->variables)->jsonSerialize();
 
-        // 获取产品选项数据，包含选项组和选项值
-        $product->load(['productOptions.option.optionValues', 'productOptionValues']);
+        $product->load([
+            'productOptions' => function ($query) {
+                $query->join('options', 'product_options.option_id', '=', 'options.id')
+                    ->orderBy('options.position');
+            },
+            'productOptionValues' => function ($query) {
+                $query->join('option_values', 'product_option_values.option_value_id', '=', 'option_values.id')
+                    ->orderBy('option_values.position');
+            },
+        ]);
         $productOptions      = $product->productOptions;
         $productOptionValues = $product->productOptionValues;
 

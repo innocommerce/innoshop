@@ -1,16 +1,17 @@
 @if($productOptions && $productOptions->count() > 0)
   <div class="product-options">
-    <h6 class="options-title">自定义扩展选项</h6>
+    <h6 class="options-title">{{ __('front/product.custom_options') }}</h6>
     
     @foreach($productOptions as $productOption)
       @php
         $option = $productOption->option;
-        $optionValues = $option->optionValues ?? collect();
+        $productOptionValues = $product->productOptionValues
+          ->where('option_id', $option->id);
         $optionType = $option->type ?? 'select';
         $isRequired = $option->required ?? false;
       @endphp
       
-      @if($option && $optionValues->count() > 0)
+      @if($option && $productOptionValues->count() > 0)
         <div class="option-group mb-3" data-option-id="{{ $option->id }}" data-option-type="{{ $optionType }}" data-required="{{ $isRequired ? 'true' : 'false' }}">
           <label class="option-label">
             {{ $option->currentName }}
@@ -25,11 +26,9 @@
                     name="option_{{ $option->id }}" 
                     data-option-id="{{ $option->id }}">
               <option value="">{{ __('front/common.please_choose') }}</option>
-              @foreach($optionValues as $optionValue)
+              @foreach($productOptionValues as $productOptionValue)
                 @php
-                  $productOptionValue = $product->productOptionValues
-                    ->where('option_value_id', $optionValue->id)
-                    ->first();
+                  $optionValue = $productOptionValue->optionValue;
                   $priceAdjustment = $productOptionValue->price_adjustment ?? 0;
                   $quantity = $productOptionValue->quantity ?? 0;
                   $isOutOfStock = $quantity <= 0;
@@ -43,7 +42,7 @@
                     ({{ $priceAdjustment > 0 ? '+' : '' }}{{ currency_format($priceAdjustment) }})
                   @endif
                   @if($isOutOfStock)
-                    - 缺货
+                    - {{ __('front/product.out_stock') }}
                   @endif
                 </option>
               @endforeach
@@ -52,11 +51,9 @@
           @elseif($optionType === 'radio')
             {{-- 单选按钮 --}}
             <div class="option-values radio-group mt-2 d-flex flex-wrap gap-2">
-              @foreach($optionValues as $optionValue)
+              @foreach($productOptionValues as $productOptionValue)
                 @php
-                  $productOptionValue = $product->productOptionValues
-                    ->where('option_value_id', $optionValue->id)
-                    ->first();
+                  $optionValue = $productOptionValue->optionValue;
                   $priceAdjustment = $productOptionValue->price_adjustment ?? 0;
                   $quantity = $productOptionValue->quantity ?? 0;
                   $isOutOfStock = $quantity <= 0;
@@ -64,7 +61,7 @@
                 <div class="form-check option-radio-item mobile-option-item {{ $isOutOfStock ? 'out-of-stock' : '' }}">
                   @if($optionValue->image)
                     <div class="option-image mb-1">
-                      <img src="{{ $optionValue->image }}" alt="{{ $optionValue->currentName }}" class="img-thumbnail">
+                      <img src="{{ image_resize($optionValue->image) }}" alt="{{ $optionValue->currentName }}" class="img-thumbnail">
                     </div>
                   @endif
                   
@@ -85,7 +82,7 @@
                       </span>
                     @endif
                     @if($isOutOfStock)
-                      <span class="out-of-stock-text d-block">缺货</span>
+                      <span class="out-of-stock-text d-block">{{ __('front/product.out_stock') }}</span>
                     @endif
                   </label>
                 </div>
@@ -95,11 +92,9 @@
           @elseif($optionType === 'checkbox')
             {{-- 多选复选框 --}}
             <div class="option-values checkbox-group mt-2 d-flex flex-wrap gap-2">
-              @foreach($optionValues as $optionValue)
+              @foreach($productOptionValues as $productOptionValue)
                 @php
-                  $productOptionValue = $product->productOptionValues
-                    ->where('option_value_id', $optionValue->id)
-                    ->first();
+                  $optionValue = $productOptionValue->optionValue;
                   $priceAdjustment = $productOptionValue->price_adjustment ?? 0;
                   $quantity = $productOptionValue->quantity ?? 0;
                   $isOutOfStock = $quantity <= 0;
@@ -107,7 +102,7 @@
                 <div class="form-check option-checkbox-item mobile-option-item {{ $isOutOfStock ? 'out-of-stock' : '' }}">
                   @if($optionValue->image)
                     <div class="option-image mb-1">
-                      <img src="{{ $optionValue->image }}" alt="{{ $optionValue->currentName }}" class="img-thumbnail">
+                      <img src="{{ image_resize($optionValue->image) }}" alt="{{ $optionValue->currentName }}" class="img-thumbnail">
                     </div>
                   @endif
                   
@@ -128,7 +123,7 @@
                       </span>
                     @endif
                     @if($isOutOfStock)
-                      <span class="out-of-stock-text d-block">缺货</span>
+                      <span class="out-of-stock-text d-block">{{ __('front/product.out_stock') }}</span>
                     @endif
                   </label>
                 </div>
@@ -153,7 +148,7 @@
       <div class="card">
         <div class="card-body p-3">
           <h6 class="card-title mb-2">
-            <i class="fas fa-check-circle text-success me-2"></i>当前选择
+            <i class="fas fa-check-circle text-success me-2"></i>{{ __('front/product.current_selection') }}
           </h6>
           <div class="selected-options-list mb-3">
             <!-- 动态显示选中的选项 -->
@@ -161,7 +156,7 @@
           <div class="total-price-display">
             <div class="row align-items-center">
               <div class="col">
-                <strong class="text-primary">产品总价：</strong>
+                <strong class="text-primary">{{ __('front/product.total_price') }}：</strong>
               </div>
               <div class="col-auto">
                 <span class="badge bg-primary fs-6 current-total-price">
@@ -312,16 +307,10 @@
         
         const finalPrice = basePrice + totalAdjustment;
         
-        // 更新显示的价格
-        if (window.inno && window.inno.currencyFormat) {
-          $('.product-price .price').text(window.inno.currencyFormat(finalPrice));
-          $('.current-total-price').text(window.inno.currencyFormat(finalPrice));
-        } else {
-          // 备用格式化方法
-          const currencySymbol = '{{ setting("currency_symbol", "$") }}';
-          $('.product-price .price').text(currencySymbol + finalPrice.toFixed(2));
-          $('.current-total-price').text(currencySymbol + finalPrice.toFixed(2));
-        }
+        // 使用全局货币格式化函数
+        const formattedPrice = window.inno.formatCurrency(finalPrice);
+        $('.product-price .price').text(formattedPrice);
+        $('.current-total-price').text(formattedPrice);
         
         // 更新当前选择显示
         updateCurrentSelectionDisplay();
@@ -343,10 +332,14 @@
           
           if (selectedOption.val()) {
             hasSelections = true;
+            const priceAdjustment = parseFloat(selectedOption.data('price-adjustment')) || 0;
+            const priceText = priceAdjustment !== 0 ? 
+              ` (${priceAdjustment > 0 ? '+' : ''}${window.inno.formatCurrency(priceAdjustment)})` : '';
+            
             $selectionList.append(`
               <div class="selected-option-item mb-2">
                 <span class="badge bg-light text-dark me-2">${optionName}</span>
-                <span class="option-value">${selectedOption.text()}</span>
+                <span class="option-value">${selectedOption.text().split('(')[0].trim()}${priceText}</span>
               </div>
             `);
           }
@@ -358,12 +351,15 @@
           const optionName = $input.closest('.option-group').find('.option-label').text().trim().replace('*', '');
           const optionValueName = $input.closest('.option-radio-item').find('.option-name').text() || 
                                   $input.closest('.option-radio-item').find('label').text();
+          const priceAdjustment = parseFloat($input.data('price-adjustment')) || 0;
+          const priceText = priceAdjustment !== 0 ? 
+            ` (${priceAdjustment > 0 ? '+' : ''}${window.inno.formatCurrency(priceAdjustment)})` : '';
 
           hasSelections = true;
           $selectionList.append(`
             <div class="selected-option-item mb-2">
               <span class="badge bg-light text-dark me-2">${optionName}</span>
-              <span class="option-value">${optionValueName}</span>
+              <span class="option-value">${optionValueName}${priceText}</span>
             </div>
           `);
         });
@@ -374,12 +370,15 @@
           const optionName = $input.closest('.option-group').find('.option-label').text().trim().replace('*', '');
           const optionValueName = $input.closest('.option-checkbox-item').find('.option-name').text() || 
                                   $input.closest('.option-checkbox-item').find('label').text();
+          const priceAdjustment = parseFloat($input.data('price-adjustment')) || 0;
+          const priceText = priceAdjustment !== 0 ? 
+            ` (${priceAdjustment > 0 ? '+' : ''}${window.inno.formatCurrency(priceAdjustment)})` : '';
           
           hasSelections = true;
           $selectionList.append(`
             <div class="selected-option-item mb-2">
               <span class="badge bg-light text-dark me-2">${optionName}</span>
-              <span class="option-value">${optionValueName}</span>
+              <span class="option-value">${optionValueName}${priceText}</span>
             </div>
           `);
         });
@@ -394,7 +393,6 @@
       
       // 验证必选项
       function validateRequiredOptions() {
-        console.log('=== 开始验证必选项 ===');
         let allValid = true;
         let hasRequiredOptions = false;
         let missingOptions = [];
@@ -406,8 +404,6 @@
           const isRequired = $group.data('required');
           const optionName = $group.find('.option-label').text().trim().replace('*', '');
           
-          console.log(`选项组: ${optionName}, ID: ${optionId}, 类型: ${optionType}, 必填: ${isRequired}`);
-          
           // 移除之前的错误消息
           $group.find('.option-error-message').remove();
           
@@ -418,15 +414,12 @@
             if (optionType === 'select') {
               const selectValue = $group.find('.option-select').val();
               hasSelection = selectValue !== '';
-              console.log(`下拉选择框值: "${selectValue}", 有选择: ${hasSelection}`);
             } else if (optionType === 'radio') {
               const checkedRadios = $group.find('input[type="radio"]:checked');
               hasSelection = checkedRadios.length > 0;
-              console.log(`单选按钮选中数量: ${checkedRadios.length}, 有选择: ${hasSelection}`);
             } else if (optionType === 'checkbox') {
               const checkedBoxes = $group.find('input[type="checkbox"]:checked');
               hasSelection = checkedBoxes.length > 0;
-              console.log(`复选框选中数量: ${checkedBoxes.length}, 有选择: ${hasSelection}`);
             }
             
             if (!hasSelection) {
@@ -440,10 +433,8 @@
                 请选择 ${optionName}
               </div>`;
               $group.append(errorMessage);
-              console.log(`添加错误提示: ${optionName}`);
             } else {
               $group.removeClass('has-error');
-              console.log(`选项验证通过: ${optionName}`);
             }
           } else {
             // 非必选项移除错误状态
@@ -451,24 +442,18 @@
           }
         });
         
-        console.log(`有必选项: ${hasRequiredOptions}, 全部有效: ${allValid}, 缺失选项: [${missingOptions.join(', ')}]`);
-        
         // 如果没有必选项，则总是返回true
         if (!hasRequiredOptions) {
           allValid = true;
-          console.log('没有必选项，验证通过');
         }
         
         // 更新购买按钮状态和提示
         if (allValid) {
           $('.add-cart, .buy-now').removeClass('disabled').attr('title', '');
-          console.log('按钮启用');
         } else {
           $('.add-cart, .buy-now').addClass('disabled').attr('title', `请先选择：${missingOptions.join('、')}`);
-          console.log('按钮禁用，提示:', `请先选择：${missingOptions.join('、')}`);
         }
         
-        console.log('=== 验证结束，返回:', allValid, ' ===');
         return allValid;
       }
       
@@ -607,7 +592,7 @@
       .mobile-option-item {
         width: auto;
         min-width: 120px;
-        max-width: 150px;
+        max-width: 140px;
       }
     }
     
