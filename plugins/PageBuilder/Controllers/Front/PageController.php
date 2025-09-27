@@ -67,6 +67,6 @@ class PageController extends Controller
             'modules' => $processedModules,
         ];
 
-        return view('PageBuilder::front.page', $data);
+        return view('WebBuilder::front.page', $data);
     }
 }

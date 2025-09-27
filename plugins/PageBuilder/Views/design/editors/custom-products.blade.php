@@ -254,7 +254,11 @@
         if (!this.form.products.length) return;
         this.loading = true;
 
-        axios.get('api/panel/products/names?ids=' + this.form.products.map(e => e.id).join(','), {
+        const productIds = this.form.products.map(e => {
+          return typeof e === 'object' ? e.id : e;
+        }).join(',');
+
+        axios.get('api/panel/products/names?ids=' + productIds, {
           hload: true
         }).then((res) => {
           this.loading = false;

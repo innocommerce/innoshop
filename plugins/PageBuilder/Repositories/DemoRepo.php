@@ -80,41 +80,8 @@ class DemoRepo
                         'zh-cn' => '',
                         'en'    => '',
                     ],
-                    'products' => [
-                        [
-                            'id'           => 1,
-                            'name'         => '都市精英风尚西装外套经典剪裁',
-                            'image_big'    => asset('images/demo/product/1-600x600.png'),
-                            'image_format' => '',
-                            'price_format' => '$123.50',
-                            'active'       => true,
-                        ],
-                        [
-                            'id'           => 2,
-                            'name'         => '银河流光璀璨晚礼服闪耀全场',
-                            'image_big'    => asset('images/demo/product/2-600x600.png'),
-                            'image_format' => '',
-                            'price_format' => '$123.50',
-                            'active'       => true,
-                        ],
-                        [
-                            'id'           => 3,
-                            'name'         => '晨曦漫步轻盈薄款风衣春意盎然',
-                            'image_big'    => asset('images/demo/product/3-600x600.png'),
-                            'image_format' => '',
-                            'price_format' => '$123.50',
-                            'active'       => true,
-                        ],
-                        [
-                            'id'           => 4,
-                            'name'         => '极简风格主义经典衬衫简约不简单',
-                            'image_big'    => asset('images/demo/product/4-600x600.png'),
-                            'image_format' => '',
-                            'price_format' => '$123.50',
-                            'active'       => true,
-                        ],
-                    ],
-                    'title' => [
+                    'products' => [1, 2, 3, 4],
+                    'title'    => [
                         'zh-cn' => '推荐商品',
                         'en'    => 'Hot Items',
                     ],

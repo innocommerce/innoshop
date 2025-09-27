@@ -40,4 +40,6 @@
     </section>
   </div>
 
+  @hookinsert('home.content.bottom')
+  
 @endsection
