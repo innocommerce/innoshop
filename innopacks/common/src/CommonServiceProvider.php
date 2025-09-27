@@ -114,11 +114,11 @@ class CommonServiceProvider extends ServiceProvider
             Config::set('mail.mailers.smtp', [
                 'transport'  => 'smtp',
                 'host'       => system_setting('smtp_host'),
-                'port'       => system_setting('smtp_port'),
+                'port'       => (int) system_setting('smtp_port', 587),
                 'encryption' => strtolower(system_setting('smtp_encryption')),
                 'username'   => system_setting('smtp_username'),
                 'password'   => system_setting('smtp_password'),
-                'timeout'    => system_setting('smtp_timeout'),
+                'timeout'    => (int) system_setting('smtp_timeout', 60),
             ]);
         }
     }
