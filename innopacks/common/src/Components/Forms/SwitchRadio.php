@@ -19,11 +19,14 @@ class SwitchRadio extends Component
 
     public string $title;
 
-    public function __construct(string $name, ?bool $value, string $title)
+    public string $description;
+
+    public function __construct(string $name, ?bool $value, string $title, string $description = '')
     {
-        $this->name  = $name;
-        $this->title = $title;
-        $this->value = (bool) $value;
+        $this->name        = $name;
+        $this->title       = $title;
+        $this->value       = (bool) $value;
+        $this->description = $description;
     }
 
     /**

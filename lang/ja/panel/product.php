@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'バリアント名、例: 色',
     'variant_switch_confirm'      => '複数仕様に切り替えると、単一仕様情報は無視されます。続けますか？',
     'variant_value'               => 'バリアント値',
+    'variant_value_edit_tip'      => '仕様値をダブルクリックして編集できます。',
     'variant_value_help'          => 'バリアント値、例: 赤',
     'video'                       => '動画',
     'video_custom'                => 'カスタム',

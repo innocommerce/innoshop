@@ -60,7 +60,9 @@
                    @endif @if($readonly) readonly @endif />
           @endif
           @if ($description)
-            <div class="text-secondary"><small>{!! $description !!}</small></div>
+            <div class="mt-2 text-muted small">
+              <i class="bi bi-info-circle me-1"></i>{!! $description !!}
+            </div>
           @endif
 
           <span class="invalid-feedback" role="alert">

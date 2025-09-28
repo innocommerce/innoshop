@@ -1,27 +1,27 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-product-option-group')
-@section('title', '选项管理')
+@section('title', panel_trans('options.option_management'))
 
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
-      <!-- 导航链接 -->
+      <!-- Navigation links -->
       <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
           <a class="nav-link active" href="{{ panel_route('options.index') }}">
-            <i class="bi bi-collection"></i> 选项组管理
+            <i class="bi bi-collection"></i> {{ panel_trans('options.option_group_management') }}
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ panel_route('option_values.index') }}">
-            <i class="bi bi-list-ul"></i> 选项值管理
+            <i class="bi bi-list-ul"></i> {{ panel_trans('options.option_value_management') }}
           </a>
         </li>
       </ul>
 
-      <!-- 选项组管理内容 -->
+      <!-- Option group management content -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">选项组管理</h5>
+        <h5 class="mb-0">{{ panel_trans('options.option_group_management') }}</h5>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#optionGroupModal" onclick="openCreateModal()">
           <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
         </button>
@@ -29,7 +29,7 @@
 
       <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('options.index')" />
 
-      <!-- 选项组列表 -->
+      <!-- Option group list -->
       @if ($option_groups->count())
         <div class="table-responsive">
           <table class="table align-middle">
@@ -37,10 +37,10 @@
             <tr>
               <th>{{ __('panel/common.id') }}</th>
               <th>{{ __('panel/common.name') }}</th>
-              <th>描述</th>
-              <th>类型</th>
-              <th>是否必填</th>
-              <th>排序</th>
+              <th>{{ panel_trans('options.description') }}</th>
+              <th>{{ panel_trans('options.type') }}</th>
+              <th>{{ panel_trans('options.is_required') }}</th>
+              <th>{{ panel_trans('options.sort') }}</th>
               <th>{{ __('panel/common.active') }}</th>
               <th>{{ __('panel/common.created_at') }}</th>
               <th>{{ __('panel/common.actions') }}</th>
@@ -54,25 +54,25 @@
                 <td>
                   <div class="text-muted small" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
                        title="{{ $optionGroup->getLocalizedDescription() }}">
-                    {{ $optionGroup->getLocalizedDescription() ?: '暂无描述' }}
+                    {{ $optionGroup->getLocalizedDescription() ?: panel_trans('options.no_description') }}
                   </div>
                 </td>
                 <td>
                   @switch($optionGroup->type)
                     @case('select')
-                      <span class="badge bg-primary">下拉选择</span>
+                      <span class="badge bg-primary">{{ panel_trans('options.dropdown_select') }}</span>
                       @break
                     @case('radio')
-                      <span class="badge bg-info">单选按钮</span>
+                      <span class="badge bg-info">{{ panel_trans('options.radio_button') }}</span>
                       @break
                     @case('checkbox')
-                      <span class="badge bg-success">多选框</span>
+                      <span class="badge bg-success">{{ panel_trans('options.checkbox') }}</span>
                       @break
                     @case('text')
-                      <span class="badge bg-warning">文本输入</span>
+                      <span class="badge bg-warning">{{ panel_trans('options.text_input') }}</span>
                       @break
                     @case('textarea')
-                      <span class="badge bg-secondary">文本域</span>
+                      <span class="badge bg-secondary">{{ panel_trans('options.textarea') }}</span>
                       @break
                     @default
                       <span class="badge bg-light text-dark">{{ $optionGroup->type }}</span>
@@ -80,9 +80,9 @@
                 </td>
                 <td>
                   @if($optionGroup->required)
-                    <span class="badge bg-danger">必填</span>
+                    <span class="badge bg-danger">{{ panel_trans('options.required') }}</span>
                   @else
-                    <span class="badge bg-secondary">可选</span>
+                    <span class="badge bg-secondary">{{ panel_trans('options.optional') }}</span>
                   @endif
                 </td>
                 <td>{{ $optionGroup->position }}</td>
@@ -108,7 +108,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-outline-danger" 
-                                onclick="return confirm('确定要删除这个选项组吗？')">
+                                onclick="return confirm('{{ panel_trans('options.confirm_delete_option_group') }}')">
                           {{ __('panel/common.delete') }}
                         </button>
                       </form>
@@ -128,12 +128,12 @@
     </div>
   </div>
 
-  <!-- 选项组编辑模态框 -->
+  <!-- Option group edit modal -->
   <div class="modal fade" id="optionGroupModal" tabindex="-1" aria-labelledby="optionGroupModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="optionGroupModalLabel">创建选项组</h5>
+          <h5 class="modal-title" id="optionGroupModalLabel">{{ panel_trans('options.create_option_group') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="optionGroupForm" method="POST">
@@ -141,32 +141,32 @@
           <input type="hidden" name="_method" value="POST" id="form-method">
           <div class="modal-body">
             <div class="row">
-              <!-- 基本信息 -->
+              <!-- Basic information -->
               <div class="col-12">
-                <h6 class="mb-3">基本信息</h6>
+                <h6 class="mb-3">{{ panel_trans('options.basic_info') }}</h6>
               </div>
               
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label for="type" class="form-label">选项类型 <span class="text-danger">*</span></label>
+                  <label for="type" class="form-label">{{ panel_trans('options.option_type') }} <span class="text-danger">*</span></label>
                   <select class="form-select" id="type" name="type" required>
-                    <option value="select" selected>下拉选择</option>
-                    <option value="radio">单选按钮</option>
-                    <option value="checkbox">复选框</option>
+                    <option value="select" selected>{{ panel_trans('options.dropdown_select') }}</option>
+                    <option value="radio">{{ panel_trans('options.radio_button') }}</option>
+                    <option value="checkbox">{{ panel_trans('options.checkbox') }}</option>
                   </select>
                 </div>
               </div>
 
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label for="position" class="form-label">排序</label>
+                  <label for="position" class="form-label">{{ panel_trans('options.sort') }}</label>
                   <input type="number" class="form-control" id="position" name="position" value="0">
                 </div>
               </div>
 
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label class="form-label">是否必填</label>
+                  <label class="form-label">{{ panel_trans('options.is_required') }}</label>
                   <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="required" name="required" value="1">
                   </div>
@@ -175,18 +175,18 @@
 
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label class="form-label">是否启用</label>
+                  <label class="form-label">{{ panel_trans('options.is_enabled') }}</label>
                   <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="active" name="active" value="1" checked>
                   </div>
                 </div>
               </div>
 
-              <!-- 多语言信息 -->
+              <!-- Multilingual information -->
               <div class="col-12">
-                <h6 class="mb-3 mt-3">多语言信息</h6>
+                <h6 class="mb-3 mt-3">{{ panel_trans('options.multilingual_info') }}</h6>
                 
-                <!-- 多语言Tab导航 -->
+                <!-- Multilingual tab navigation -->
                 <ul class="nav nav-tabs mb-3" id="languageTab" role="tablist">
                   @foreach (locales() as $locale)
                     <li class="nav-item" role="presentation">
@@ -208,7 +208,7 @@
                   @endforeach
                 </ul>
                 
-                <!-- 多语言Tab内容 -->
+                <!-- Multilingual tab content -->
                 <div class="tab-content" id="languageTabContent">
                   @foreach (locales() as $locale)
                     <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" 
@@ -219,7 +219,7 @@
                         <div class="col-12">
                           <div class="mb-3">
                             <label for="name_{{ $locale['code'] }}" class="form-label">
-                              选项组名称 
+                              {{ panel_trans('options.option_group_name') }}
                               <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" 
@@ -230,12 +230,12 @@
                         </div>
                         <div class="col-12">
                           <div class="mb-3">
-                            <label for="description_{{ $locale['code'] }}" class="form-label">选项组描述</label>
+                            <label for="description_{{ $locale['code'] }}" class="form-label">{{ panel_trans('options.option_group_description') }}</label>
                             <textarea class="form-control" 
                                       id="description_{{ $locale['code'] }}" 
                                       name="translations[{{ $locale['code'] }}][description]"
                                       rows="3" 
-                                      placeholder="请输入选项组的描述信息，用于说明该选项的作用"></textarea>
+                                      placeholder="{{ panel_trans('options.option_group_description_placeholder') }}"></textarea>
                           </div>
                         </div>
                       </div>
@@ -246,8 +246,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-            <button type="submit" class="btn btn-primary">保存</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ panel_trans('options.cancel') }}</button>
+            <button type="submit" class="btn btn-primary">{{ panel_trans('options.save') }}</button>
           </div>
         </form>
       </div>
@@ -275,7 +275,7 @@ $(document).ready(function() {
         
         // Reset form
         $('#optionGroupForm')[0].reset();
-        $('#optionGroupModalLabel').text('创建选项组');
+        $('#optionGroupModalLabel').text('{{ panel_trans('options.create_option_group') }}');
         $('#optionGroupForm').attr('action', '{{ panel_route("options.store") }}');
         $('#form-method').val('POST'); // Set to POST method
         
@@ -338,7 +338,7 @@ $(document).ready(function() {
             }
         }
         
-        $('#optionGroupModalLabel').text('编辑选项组');
+        $('#optionGroupModalLabel').text('{{ panel_trans('options.edit_option_group') }}');
         // Show modal
         $('#optionGroupModal').modal('show');
     };
@@ -360,7 +360,7 @@ $(document).ready(function() {
         // Show loading state
         const submitBtn = $(this).find('button[type="submit"]');
         const originalText = submitBtn.text();
-        submitBtn.prop('disabled', true).text('处理中...');
+        submitBtn.prop('disabled', true).text('{{ panel_trans('options.processing') }}');
         
         $.ajax({
             url: $(this).attr('action'),
@@ -376,7 +376,7 @@ $(document).ready(function() {
                 $('#optionGroupModal').modal('hide');
                 
                 // Use layer to show success message
-                layer.msg(response.message || '操作成功', {
+                layer.msg(response.message || '{{ panel_trans('options.operation_success') }}', {
                     icon: 1,
                     time: 2000
                 }, function() {
@@ -388,7 +388,7 @@ $(document).ready(function() {
                 // Close loading state (if operation fails but no error is thrown)
                 submitBtn.prop('disabled', false).text(originalText);
                 
-                let errorMessage = '操作失败';
+                let errorMessage = '{{ panel_trans('options.operation_failed') }}';
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMessage = xhr.responseJSON.message;
                 } else if (xhr.responseJSON && xhr.responseJSON.errors) {

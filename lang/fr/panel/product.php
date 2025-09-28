@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'Nom de la variante, par exemple : Couleur',
     'variant_switch_confirm'      => 'Après avoir basculé vers plusieurs spécifications, les informations de la spécification unique seront ignorées. Voulez-vous continuer?',
     'variant_value'               => 'Valeur de la variante',
+    'variant_value_edit_tip'      => 'Double-cliquez sur la valeur de spécification pour éditer',
     'variant_value_help'          => 'Valeur de la variante, par exemple : Rouge',
     'video'                       => 'Vidéo',
     'video_custom'                => 'Personnalisé',

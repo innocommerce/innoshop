@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'tên biến thể, ví dụ: màu sắc',
     'variant_switch_confirm'      => 'Sau khi chuyển sang nhiều quy cách, thông tin quy cách đơn sẽ bị bỏ qua. Bạn có muốn tiếp tục không?',
     'variant_value'               => 'giá trị biến thể',
+    'variant_value_edit_tip'      => 'Nhấp đôi vào giá trị kỹ thuật để sửa đổi',
     'variant_value_help'          => 'giá trị biến thể, ví dụ: đỏ',
     'video'                       => 'video',
     'video_custom'                => 'Tùy chỉnh',

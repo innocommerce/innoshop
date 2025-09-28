@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'Nama varian, seperti: Warna',
     'variant_switch_confirm'      => 'Setelah beralih ke beberapa spesifikasi, informasi spesifikasi tunggal akan diabaikan. Apakah Anda ingin melanjutkan?',
     'variant_value'               => 'Nilai Varian',
+    'variant_value_edit_tip'      => 'Kacamata klik ganda bisa di edit',
     'variant_value_help'          => 'Nilai varian, seperti: Merah',
     'video'                       => 'video',
     'video_custom'                => 'khusus',

@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'Nombre de la variante, por ejemplo: color',
     'variant_switch_confirm'      => 'Después de cambiar a múltiples variantes, la información de la variante única se ignorará. ¿Desea continuar?',
     'variant_value'               => 'Valor de variante',
+    'variant_value_edit_tip'      => 'Haga doble clic en el valor de especificación para editar',
     'variant_value_help'          => 'Valor de la variante, por ejemplo: rojo',
     'video'                       => 'Vídeo',
     'video_custom'                => 'Personalizado',

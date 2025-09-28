@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'Contoh Nama Varian: Warna',
     'variant_switch_confirm'      => 'Selepas bertukar kepada pelbagai spesifikasi, maklumat spesifikasi tunggal akan diabaikan. Adakah anda mahu meneruskan?',
     'variant_value'               => 'Nilai Varian',
+    'variant_value_edit_tip'      => 'Klik dua kali nilai spesifikasi untuk mengeditnya',
     'variant_value_help'          => 'Contoh Nilai Varian: Merah',
     'video'                       => 'Video',
     'video_custom'                => 'Penyesuaian',

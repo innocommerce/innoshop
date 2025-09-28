@@ -16,7 +16,9 @@
     @if($product->id)
       <input type="hidden" name="type" value="{{ old('type', $product->type ?? 'normal') }}">
     @endif
-    <div class="form-text">{{ __('panel/product.type_hint') }}</div>
+    <div class="mt-2 text-muted small">
+      <i class="bi bi-info-circle me-1"></i>{{ __('panel/product.type_hint') }}
+    </div>
   </div>
 
   <div class="mb-3 col-12 col-md-5">
@@ -71,7 +73,7 @@
 
   <x-common-form-image title="{{ __('panel/product.hover_image') }}" name="hover_image"
                        :value="old('hover_image', $product->hover_image ?? '')"
-                       help="{{ __('panel/product.hover_image_help') }}"/>
+                       :description="__('panel/product.hover_image_help')"/>
 
   @include('panel::products.form._form_video')
 

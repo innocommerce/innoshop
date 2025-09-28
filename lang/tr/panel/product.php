@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'Varyant Adı, örneğin: renk',
     'variant_switch_confirm'      => 'Birden fazla spesifikasyona geçtikten sonra tekli spesifikasyon bilgileri görmezden gelinecektir. Devam etmek istiyor musunuz?',
     'variant_value'               => 'Değer',
+    'variant_value_edit_tip'      => 'Düzenlemek için belirtim değerini çift tıklatın',
     'variant_value_help'          => 'Varyant Değeri, örneğin: kırmızı',
     'video'                       => 'Video',
     'video_custom'                => 'Özel',

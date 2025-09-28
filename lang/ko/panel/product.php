@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => '옵션명, 예: 색상',
     'variant_switch_confirm'      => '다중 옵션으로 전환하면 단일 옵션 정보가 무시됩니다. 계속하시겠습니까?',
     'variant_value'               => '옵션값',
+    'variant_value_edit_tip'      => '사양을 두 번 누르면 편집할 수 있습니다',
     'variant_value_help'          => '옵션값, 예: 빨강',
     'video'                       => '동영상',
     'video_custom'                => '사용자 정의',

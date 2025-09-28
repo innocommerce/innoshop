@@ -1,27 +1,27 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-product-option-value')
-@section('title', '选项值管理')
+@section('title', panel_trans('options.option_value_management'))
 
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
-      <!-- 导航链接 -->
+      <!-- Navigation links -->
       <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
           <a class="nav-link" href="{{ panel_route('options.index') }}">
-            <i class="bi bi-collection"></i> 选项组管理
+            <i class="bi bi-collection"></i> {{ panel_trans('options.option_group_management') }}
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="{{ panel_route('option_values.index') }}">
-            <i class="bi bi-list-ul"></i> 选项值管理
+            <i class="bi bi-list-ul"></i> {{ panel_trans('options.option_value_management') }}
           </a>
         </li>
       </ul>
 
-      <!-- 选项值管理内容 -->
+      <!-- Option value management content -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">选项值管理</h5>
+        <h5 class="mb-0">{{ panel_trans('options.option_value_management') }}</h5>
         <button type="button" class="btn btn-primary" onclick="openCreateModal()">
           <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
         </button>
@@ -29,7 +29,7 @@
 
       <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('option_values.index')" />
 
-      <!-- 选项值列表 -->
+      <!-- Option value list -->
       @if ($optionValues->count())
         <div class="table-responsive">
           <table class="table align-middle">
@@ -37,9 +37,9 @@
             <tr>
               <th>{{ __('panel/common.id') }}</th>
               <th>{{ __('panel/common.name') }}</th>
-              <th>选项组</th>
-              <th>图片</th>
-              <th>排序</th>
+              <th>{{ panel_trans('options.option_group') }}</th>
+              <th>{{ panel_trans('options.image') }}</th>
+              <th>{{ panel_trans('options.sort') }}</th>
               <th>{{ __('panel/common.active') }}</th>
               <th>{{ __('panel/common.created_at') }}</th>
               <th>{{ __('panel/common.actions') }}</th>
@@ -59,7 +59,7 @@
                 </td>
                 <td>
                   @if($optionValue->image)
-                    <img src="{{ $optionValue->getImageUrl() }}" alt="选项值图片" class="img-thumbnail" style="width: 40px; height: 40px;">
+                    <img src="{{ $optionValue->getImageUrl() }}" alt="{{ panel_trans('options.option_value_image') }}" class="img-thumbnail" style="width: 40px; height: 40px;">
                   @else
                     <span class="text-muted">-</span>
                   @endif
@@ -77,7 +77,7 @@
                   <button type="button" class="btn btn-outline-primary btn-sm" onclick="openEditModal({{ $optionValue->id }})">
                     <i class="bi bi-pencil-square"></i> {{ __('panel/common.edit') }}
                   </button>
-                  <button type="button" class="btn btn-outline-danger btn-sm" onclick="if(confirm('确定要删除这个选项值吗？')) { document.getElementById('delete-form-{{ $optionValue->id }}').submit(); }">
+                  <button type="button" class="btn btn-outline-danger btn-sm" onclick="if(confirm('{{ panel_trans('options.confirm_delete_option_value') }}')) { document.getElementById('delete-form-{{ $optionValue->id }}').submit(); }">
                     <i class="bi bi-trash"></i> {{ __('panel/common.delete') }}
                   </button>
                   <form id="delete-form-{{ $optionValue->id }}" action="{{ panel_route('option_values.destroy', $optionValue) }}" method="POST" style="display: none;">
@@ -100,33 +100,33 @@
     </div>
   </div>
 
-  <!-- 选项值编辑模态框 -->
+  <!-- Option value edit modal -->
   <div class="modal fade" id="optionValueModal" tabindex="-1" aria-labelledby="optionValueModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="optionValueModalLabel">添加选项值</h5>
+          <h5 class="modal-title" id="optionValueModalLabel">{{ panel_trans('options.add_option_value') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="optionValueForm" method="POST">
           @csrf
           <input type="hidden" name="_method" value="POST" id="form-method">
           
-          <!-- 错误信息显示区域 -->
+          <!-- Error message display area -->
           <div id="form-errors" class="alert alert-danger d-none mx-3 mt-3" role="alert">
             <ul class="mb-0" id="error-list"></ul>
           </div>
           
           <div class="modal-body">
             <div class="row">
-              <!-- 基本信息 -->
+              <!-- Basic information -->
               <div class="col-12">
-                <h6 class="mb-3">基本信息</h6>
+                <h6 class="mb-3">{{ panel_trans('options.basic_info') }}</h6>
               </div>
               
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label for="option_id" class="form-label">选项组 <span class="text-danger">*</span></label>
+                  <label for="option_id" class="form-label">{{ panel_trans('options.option_group') }} <span class="text-danger">*</span></label>
                   <select name="option_id" id="option_id" class="form-select" required>
                     @foreach($allOptionGroups as $group)
                       <option value="{{ $group->id }}">{{ $group->currentName }} ({{ $group->type }})</option>
@@ -137,7 +137,7 @@
               
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label for="image" class="form-label">图片</label>
+                  <label for="image" class="form-label">{{ panel_trans('options.image') }}</label>
                   <div class="is-up-file" data-type="image">
                     <div class="img-upload-item bg-light wh-80 rounded border d-flex justify-content-center align-items-center me-2 mb-2 position-relative cursor-pointer overflow-hidden">
                       <div class="position-absolute tool-wrap d-none d-flex top-0 start-0 w-100 bg-primary bg-opacity-75">
@@ -150,20 +150,20 @@
                       <input type="hidden" value="" name="image" id="image">
                     </div>
                   </div>
-                  <div class="form-text">可选，选项值的图片</div>
+                  <div class="form-text">{{ panel_trans('options.optional_option_value_image') }}</div>
                 </div>
               </div>
               
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label for="position" class="form-label">排序</label>
+                  <label for="position" class="form-label">{{ panel_trans('options.sort') }}</label>
                   <input type="number" name="position" id="position" class="form-control" value="0">
                 </div>
               </div>
               
               <div class="col-12 col-md-6">
                 <div class="mb-3">
-                  <label class="form-label">状态</label>
+                  <label class="form-label">{{ panel_trans('options.status') }}</label>
                   <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" name="active" id="active" value="1" checked>
                   </div>
@@ -171,9 +171,9 @@
               </div>
             </div>
             
-            <!-- 多语言信息 -->
+            <!-- Multilingual information -->
             <div class="mt-4">
-              <h6 class="mb-3">多语言信息</h6>
+              <h6 class="mb-3">{{ panel_trans('options.multilingual_info') }}</h6>
               <ul class="nav nav-tabs" id="languageTab" role="tablist">
                 @foreach (locales() as $index => $locale)
                   <li class="nav-item" role="presentation">
@@ -200,7 +200,7 @@
                        role="tabpanel">
                     <div class="mb-3">
                       <label for="name_{{ $locale['code'] }}" class="form-label">
-                        选项名称 ({{ $locale['name'] }})
+                        {{ panel_trans('options.option_name') }} ({{ $locale['name'] }})
                         @if($locale['code'] == locale_code())
                           <span class="text-danger">*</span>
                         @endif
@@ -217,8 +217,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-            <button type="submit" class="btn btn-primary">保存</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ panel_trans('options.cancel') }}</button>
+            <button type="submit" class="btn btn-primary">{{ panel_trans('options.save') }}</button>
           </div>
         </form>
       </div>
@@ -233,67 +233,67 @@
   let currentOptionValueId = null;
 
   /**
-   * 打开创建选项值模态框
+   * Open create option value modal
    */
   function openCreateModal() {
     isEditMode = false;
     currentOptionValueId = null;
     
-    // 重置表单
+    // Reset form
     $('#optionValueForm')[0].reset();
     
-    // 设置模态框标题
-    $('#optionValueModalLabel').text('创建选项值');
+    // Set modal title
+    $('#optionValueModalLabel').text('{{ panel_trans('options.create_option_value') }}');
     
-    // 设置表单action和method
+    // Set form action and method
     $('#optionValueForm').attr('action', '{{ panel_route("option_values.store") }}');
-    $('#form-method').val('POST'); // 设置为POST方法
+    $('#form-method').val('POST'); // Set to POST method
     
-    // 清空表单字段
+    // Clear form fields
     $('#option_group_id').val('');
     $('#price').val('');
     $('#position').val('0');
     $('#active').prop('checked', true);
     
-    // 清空多语言字段
+    // Clear multilingual fields
     @foreach (locales() as $locale)
       $('#name_{{ $locale['code'] }}').val('');
     @endforeach
     
-    // 显示模态框
+    // Show modal
     $('#optionValueModal').modal('show');
   }
 
   /**
-   * 打开编辑选项值模态框
-   * @param {number} optionValueId - 选项值ID
+   * Open edit option value modal
+   * @param {number} optionValueId - Option value ID
    */
   function openEditModal(optionValueId) {
     isEditMode = true;
     currentOptionValueId = optionValueId;
     
-    // 设置模态框标题
-    $('#optionValueModalLabel').text('编辑选项值');
+    // Set modal title
+    $('#optionValueModalLabel').text('{{ panel_trans('options.edit_option_value') }}');
     
-    // 设置表单action和method
+    // Set form action and method
     $('#optionValueForm').attr('action', '{{ panel_route("option_values.update", ":id") }}'.replace(':id', optionValueId));
-    $('#form-method').val('PUT'); // 设置为PUT方法
+    $('#form-method').val('PUT'); // Set to PUT method
     
-    // 显示加载状态
+    // Show loading state
     $('#optionValueModal').modal('show');
     
-    // 获取选项值数据
+    // Get option value data
     $.get('{{ panel_route("option_values.show", ":id") }}'.replace(':id', optionValueId))
       .done(function(data) {
-        // 调试：打印获取到的数据
-        console.log('获取到的选项值数据:', data);
+        // Debug: print retrieved data
+        console.log('Retrieved option value data:', data);
         
-        // 填充基本信息
+        // Fill basic information
         $('#option_id').val(data.option_id);
         $('#position').val(data.position);
         $('#active').prop('checked', data.active == 1);
         
-        // 填充图片字段
+        // Fill image field
         if (data.image) {
           const imageContainer = $('.is-up-file .img-upload-item');
           const imageUrl = data.image.indexOf('http') === 0 ? data.image : '{{ asset("") }}' + data.image;
@@ -301,29 +301,29 @@
           imageContainer.find('.tool-wrap').removeClass('d-none');
           imageContainer.find('.img-info').html('<img src="' + imageUrl + '" class="img-fluid" data-origin-img="' + imageUrl + '">');
         } else {
-          // 重置图片组件为默认状态
+          // Reset image component to default state
           const imageContainer = $('.is-up-file .img-upload-item');
           imageContainer.find('input[name="image"]').val('');
           imageContainer.find('.tool-wrap').addClass('d-none');
           imageContainer.find('.img-info').html('<i class="bi bi-plus fs-1 text-secondary opacity-75"></i>');
         }
         
-        // 填充多语言数据
+        // Fill multilingual data
         if (data.name) {
-          console.log('多语言数据:', data.name);
+          console.log('Multilingual data:', data.name);
           @foreach (locales() as $locale)
             $('#name_{{ $locale['code'] }}').val(data.name['{{ $locale['code'] }}'] || '');
           @endforeach
         }
       })
       .fail(function() {
-        layer.msg('获取选项值数据失败', {icon: 2});
+        layer.msg('{{ panel_trans('options.get_option_value_data_failed') }}', {icon: 2});
         $('#optionValueModal').modal('hide');
       });
   }
 
   /**
-   * 处理表单提交
+   * Handle form submission
    */
   $('#optionValueForm').on('submit', function(e) {
     e.preventDefault();
@@ -332,8 +332,8 @@
     const submitBtn = $(this).find('button[type="submit"]');
     const originalText = submitBtn.text();
     
-    // 显示加载状态
-    submitBtn.prop('disabled', true).text('保存中...');
+    // Show loading state
+    submitBtn.prop('disabled', true).text('{{ panel_trans('options.saving') }}');
     
     $.ajax({
       url: $(this).attr('action'),
@@ -342,27 +342,27 @@
       processData: false,
       contentType: false,
       success: function(response) {
-        layer.msg(isEditMode ? '选项值更新成功' : '选项值创建成功', {icon: 1});
+        layer.msg(isEditMode ? '{{ panel_trans('options.option_value_update_success') }}' : '{{ panel_trans('options.option_value_create_success') }}', {icon: 1});
         $('#optionValueModal').modal('hide');
         
-        // 刷新页面
+        // Refresh page
         setTimeout(function() {
           window.location.reload();
         }, 1000);
       },
       error: function(xhr) {
-        // 清空之前的错误信息
+        // Clear previous error messages
         $('#form-errors').addClass('d-none');
         $('#error-list').empty();
         
-        let errorMessage = '操作失败';
+        let errorMessage = '{{ panel_trans('options.operation_failed') }}';
         let hasErrors = false;
         
         if (xhr.responseJSON && xhr.responseJSON.errors) {
           const errors = xhr.responseJSON.errors;
           hasErrors = true;
           
-          // 显示所有验证错误
+          // Show all validation errors
           Object.keys(errors).forEach(function(field) {
             const fieldErrors = errors[field];
             if (Array.isArray(fieldErrors)) {
@@ -380,20 +380,20 @@
           hasErrors = true;
         }
         
-        // 如果没有具体错误信息，使用layer.msg显示通用错误
+        // If no specific error messages, use layer.msg to show generic error
         if (!hasErrors) {
           layer.msg(errorMessage, {icon: 2});
         }
       },
       complete: function() {
-        // 恢复按钮状态
+        // Restore button state
         submitBtn.prop('disabled', false).text(originalText);
       }
     });
   });
 
   /**
-   * 模态框关闭时重置表单
+   * Reset form when modal is closed
    */
   $('#optionValueModal').on('hidden.bs.modal', function() {
     $('#optionValueForm')[0].reset();
@@ -402,28 +402,28 @@
     isEditMode = false;
     currentOptionValueId = null;
     
-    // 重置图片组件
+    // Reset image component
     $('.is-up-file .img-upload-item .img-info').html('<i class="bi bi-plus fs-1 text-secondary opacity-75"></i>');
     $('.is-up-file .img-upload-item .tool-wrap').addClass('d-none');
     $('.is-up-file input[name="image"]').val('');
   });
 
   /**
-   * 文件管理器组件事件处理
+   * File manager component event handling
    */
   $(document).on('click', '.is-up-file .img-upload-item', function () {
     const _self = $(this);
 
-    // 调用文件管理器
+    // Call file manager
     window.inno.fileManagerIframe((file) => {
-      // 处理选中的文件
+      // Handle selected file
       let val = file.path;
       let url = file.url;
       _self.find('input').val(val);
       _self.find('.tool-wrap').removeClass('d-none');
       _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
       
-      // 手动触发 change 事件
+      // Manually trigger change event
       _self.find('input').trigger('change');
     }, {
       multiple: false,
@@ -431,7 +431,7 @@
     });
   });
 
-  // 删除图片
+  // Delete image
   $(document).on('click', '.is-up-file .delete-img', function (e) {
     e.stopPropagation();
     let _self = $(this).parent().parent();
@@ -440,13 +440,13 @@
     _self.find('.img-info').html('<i class="bi bi-plus fs-1 text-secondary opacity-75"></i>');
   });
 
-  // 预览图片
+  // Preview image
   $(document).on('click', '.is-up-file .show-img', function (e) {
     e.stopPropagation();
     let src = $(this).parent().siblings('.img-info').find('img').data('origin-img');
     if (src) {
       let img = '<img src="' + src + '" class="img-fluid">';
-      // 创建预览模态框（如果不存在）
+      // Create preview modal (if not exists)
       if ($('#modal-show-img').length === 0) {
         $('body').append(`
           <div class="modal fade" id="modal-show-img">
@@ -454,7 +454,7 @@
               <div class="modal-content">
                 <div class="modal-body"></div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ panel_trans('options.close') }}</button>
                 </div>
               </div>
             </div>

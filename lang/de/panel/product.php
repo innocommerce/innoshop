@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'Variantenname, z.B. Farbe',
     'variant_switch_confirm'      => 'Nach dem Wechsel zu mehreren Varianten werden die Informationen für die einzelne Variante ignoriert. Möchten Sie fortfahren?',
     'variant_value'               => 'Variantenwert',
+    'variant_value_edit_tip'      => 'Doppelklick können bearbeitet werden',
     'variant_value_help'          => 'Variantenwert, z.B. Rot',
     'video'                       => 'Video',
     'video_custom'                => 'Benutzerdefiniert',

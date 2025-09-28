@@ -56,6 +56,12 @@
                       <i class="bi bi-plus-circle"></i>
                     </div>
                   </div>
+                  <div class="mt-2">
+                    <small class="text-muted">
+                      <i class="bi bi-info-circle me-1"></i>
+                      {{ __('panel/product.variant_value_edit_tip') }}
+                    </small>
+                  </div>
                 </div>
               </div>
             </div>

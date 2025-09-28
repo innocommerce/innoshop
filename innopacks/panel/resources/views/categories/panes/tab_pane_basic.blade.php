@@ -29,7 +29,9 @@
   <div class="mb-3 col-12 col-md-8">
     <x-common-form-image title="{{ panel_trans('category.image') }}" name="image"
                         value="{{ old('image', $category->image ?? '') }}"/>
-    <div class="form-text">{{ panel_trans('category.image_description') }}</div>
+    <div class="mt-2 text-muted small">
+      <i class="bi bi-info-circle me-1"></i>{{ panel_trans('category.image_description') }}
+    </div>
   </div>
 
   {{-- 启用状态 --}}

@@ -26,7 +26,9 @@
           <label class="form-label">{{ panel_trans('category.summary') }}</label>
           <textarea rows="3" name="translations[{{ $locale->code }}][summary]" class="form-control"
             placeholder="{{ panel_trans('category.summary') }}">{{ old('translations.' . $locale->code . '.summary', $category->translate($locale->code, 'summary')) }}</textarea>
-          <div class="form-text">{{ panel_trans('category.summary_description') }}</div>
+          <div class="mt-2 text-muted small">
+            <i class="bi bi-info-circle me-1"></i>{{ panel_trans('category.summary_description') }}
+          </div>
         </div>
 
         {{-- 分类详细描述 --}}
@@ -37,7 +39,9 @@
                                    value="{{ old('translations.' . $locale->code . '.content', $category->translate($locale->code, 'content')) }}"
                                    placeholder="{{ panel_trans('category.content') }}"
                                    data-locale="{{ $locale->code }}"/>
-          <div class="form-text">{{ panel_trans('category.content_description') }}</div>
+          <div class="mt-2 text-muted small">
+            <i class="bi bi-info-circle me-1"></i>{{ panel_trans('category.content_description') }}
+          </div>
         </div>
 
 

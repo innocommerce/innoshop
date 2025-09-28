@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => 'Nome variante, es: Colore',
     'variant_switch_confirm'      => 'Dopo aver commutato alle specifiche multiple, le informazioni della specifica singola saranno ignorate. Vuoi continuare?',
     'variant_value'               => 'Valore variante',
+    'variant_value_edit_tip'      => 'I valori delle specifiche relative ai doppi clic possono essere modificati',
     'variant_value_help'          => 'Valore variante, es: Rosso',
     'video'                       => 'video',
     'video_custom'                => 'autodefinizione',

@@ -12,39 +12,44 @@
           <small class="text-muted">{{ __('panel/product.product_options_description') }}</small>
         </div>
         <div class="card-body">
-          <!-- 隐藏字段用于表单提交 -->
+          <!-- Hidden field for form submission -->
           <input type="hidden" name="product_options" :value="JSON.stringify(getFormData())">
           
           <div class="row">
-            <!-- 左侧：可用选项 -->
+            <!-- Left side: Available options -->
             <div class="col-md-6">
               <div class="border rounded p-3 h-100">
-                <h6 class="mb-3">
-                  <i class="bi bi-list-ul me-2"></i>可用选项
-                  <span class="badge bg-secondary ms-2">@{{ availableOptionsFiltered.length }}</span>
+                <h6 class="mb-3 d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="bi bi-list-ul me-2"></i>{{ __('panel/product.available_options') }}
+                    <span class="badge bg-secondary ms-2">@{{ availableOptionsFiltered.length }}</span>
+                  </span>
+                  <a href="{{ panel_route('options.index') }}" class="btn btn-sm btn-outline-primary" target="_blank" title="{{ __('panel/options.option_management') }}">
+                    <i class="bi bi-gear me-1"></i>{{ __('panel/options.option_management') }}
+                  </a>
                 </h6>
                 
-                <!-- 搜索框 -->
+                <!-- Search box -->
                 <div class="mb-3">
                   <div class="input-group">
                     <span class="input-group-text">
                       <i class="bi bi-search"></i>
                     </span>
                     <input type="text" class="form-control" v-model="searchTerm" 
-                           placeholder="搜索选项...">
+                           placeholder="{{ __('panel/product.search_placeholder_options') }}">
                   </div>
                 </div>
 
-                <!-- 可用选项列表 -->
+                <!-- Available options list -->
                 <div style="max-height: 500px; overflow-y: auto;">
                   <div v-if="loading" class="text-center py-4">
                     <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                    <span>加载中...</span>
+                    <span>{{ __('common.loading') }}...</span>
                   </div>
                   
                   <div v-else-if="availableOptionsFiltered.length === 0" class="text-center py-4 text-muted">
                     <i class="bi bi-inbox display-6 d-block mb-2"></i>
-                    <p class="mb-0">暂无可用选项</p>
+                    <p class="mb-0">{{ __('panel/product.no_options_available') }}</p>
                   </div>
                   
                   <div v-else>
@@ -60,7 +65,7 @@
                                 @{{ option.name }}
                               </label>
                               <div class="text-muted small">
-                                @{{ option.type }} • @{{ option.option_values_count || 0 }} 个选项值
+                                @{{ option.type }} • @{{ option.option_values_count || 0 }} {{ __('panel/product.option_values_count') }}
                               </div>
                             </div>
                           </div>
@@ -72,20 +77,20 @@
               </div>
             </div>
 
-            <!-- 右侧：已选项 -->
+            <!-- Right side: Selected options -->
             <div class="col-md-6">
               <div class="border rounded p-3 h-100">
                 <h6 class="mb-3">
-                  <i class="bi bi-check-square me-2"></i>已选项
+                  <i class="bi bi-check-square me-2"></i>{{ __('panel/product.configured_options') }}
                   <span class="badge bg-primary ms-2">@{{ selectedOptions.length }}</span>
                 </h6>
 
-                <!-- 已选项列表 -->
+                <!-- Selected options list -->
                 <div style="max-height: 500px; overflow-y: auto;">
                   <div v-if="selectedOptions.length === 0" class="text-center py-4 text-muted">
                     <i class="bi bi-inbox display-6 d-block mb-2"></i>
-                    <p class="mb-0">暂无选项</p>
-                    <small>从左侧选择选项</small>
+                    <p class="mb-0">{{ __('panel/common.no_data') }}</p>
+                    <small>{{ __('panel/product.select_option') }}</small>
                   </div>
                   
                   <div v-else>
@@ -112,9 +117,9 @@
                                              :indeterminate="isSomeValuesSelected(option)"
                                              @change="toggleAllValues(option)">
                                     </th>
-                                    <th>选项值</th>
-                                    <th width="120">加价金额</th>
-                                    <th width="100">库存</th>
+                                    <th>{{ __('panel/product.option_values') }}</th>
+                                    <th width="120">{{ __('panel/product.price_adjustment') }}</th>
+                                    <th width="100">{{ __('panel/product.stock_quantity') }}</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -169,7 +174,7 @@
 
 @push('footer')
 <script>
-// 产品选项页面的Vue应用 - 使用唯一的应用名称避免冲突
+// Vue application for product options page - using unique app name to avoid conflicts
 const { 
   createApp: createOptionsApp, 
   ref: optionsRef, 
@@ -179,19 +184,19 @@ const {
 
 createOptionsApp({
   setup() {
-    // 响应式数据
+    // Reactive data
     const availableOptions = optionsRef([]);
     const selectedOptions = optionsRef([]);
     const searchTerm = optionsRef('');
     const loading = optionsRef(false);
 
-    // 计算属性
+    // Computed properties
     const availableOptionsFiltered = optionsComputed(() => {
       const selectedIds = selectedOptions.value.map(opt => opt.id);
-      // 过滤掉已选择的选项和没有选项值的选项
+      // Filter out selected options and options without values
       const filtered = availableOptions.value.filter(opt => 
         !selectedIds.includes(opt.id) && 
-        opt.option_values_count > 0  // 只显示有选项值的选项
+        opt.option_values_count > 0  // Only show options with values
       );
       
       if (!searchTerm.value) {
@@ -203,13 +208,13 @@ createOptionsApp({
       );
     });
 
-    // 初始化数据
+    // Initialize data
     optionsOnMounted(() => {
       loadAvailableOptions();
       loadSelectedOptions();
     });
 
-    // 加载可用选项
+    // Load available options
     const loadAvailableOptions = async () => {
       loading.value = true;
       try {
@@ -225,20 +230,20 @@ createOptionsApp({
         if (data.success) {
           availableOptions.value = data.data.options || [];
         } else {
-          showError('加载选项失败');
+          showError('{{ __("panel/product.load_options_error") }}');
         }
       } catch (error) {
         console.error('Error loading options:', error);
-        showError('加载选项失败');
+        showError('{{ __("panel/product.load_options_error") }}');
       } finally {
         loading.value = false;
       }
     };
 
-    // 预先准备已存在的产品选项数据（从控制器传递）
+    // Pre-prepared existing product options data (passed from controller)
     const existingProductOptions = @json($existingProductOptions ?? []);
 
-    // 加载已选项（从现有产品数据）
+    // Load selected options (from existing product data)
     const loadSelectedOptions = async () => {
       for (const productOption of existingProductOptions) {
         const option = {
@@ -249,16 +254,16 @@ createOptionsApp({
           values: []
         };
         
-        // 加载选项值
+        // Load option values
         await loadOptionValues(option);
         selectedOptions.value.push(option);
       }
     };
 
-    // 预先准备已存在的选项值配置数据（从控制器传递）
+    // Pre-prepared existing option values configuration data (passed from controller)
     const existingOptionValues = @json($existingOptionValues ?? []);
 
-    // 加载选项值
+    // Load option values
     const loadOptionValues = async (option) => {
       try {
         const response = await fetch(urls.base_url + '/options/' + option.id + '/values', {
@@ -272,7 +277,7 @@ createOptionsApp({
         const data = await response.json();
         if (data.success) {
           option.values = data.data.option_values.map(value => {
-            // 检查是否已存在的选项值配置
+            // Check if existing option value configuration exists
             const existingValue = existingOptionValues.find(pov => 
               pov.option_value_id === value.id && pov.option_id === option.id
             );
@@ -299,19 +304,19 @@ createOptionsApp({
       }
     };
 
-    // 选择选项
+    // Select option
     const selectOption = async (option) => {
       const newOption = { ...option, values: [] };
       await loadOptionValues(newOption);
       selectedOptions.value.push(newOption);
     };
 
-    // 移除选项
+    // Remove option
     const removeOption = (optionId) => {
       selectedOptions.value = selectedOptions.value.filter(opt => opt.id !== optionId);
     };
 
-    // 切换选项值输入框状态
+    // Toggle value input status
     const toggleValueInputs = (value) => {
       if (!value.selected) {
         value.price_adjustment = 0;
@@ -319,18 +324,18 @@ createOptionsApp({
       }
     };
 
-    // 检查是否所有选项值都被选中
+    // Check if all option values are selected
     const isAllValuesSelected = (option) => {
       return option.values.length > 0 && option.values.every(value => value.selected);
     };
 
-    // 检查是否部分选项值被选中
+    // Check if some option values are selected
     const isSomeValuesSelected = (option) => {
       const selectedCount = option.values.filter(value => value.selected).length;
       return selectedCount > 0 && selectedCount < option.values.length;
     };
 
-    // 全选/取消全选选项值
+    // Select all/deselect all option values
     const toggleAllValues = (option) => {
       const allSelected = isAllValuesSelected(option);
       option.values.forEach(value => {
@@ -342,7 +347,7 @@ createOptionsApp({
       });
     };
 
-    // 获取表单数据
+    // Get form data
     const getFormData = () => {
       return selectedOptions.value.map(option => ({
         option_id: option.id,
@@ -354,7 +359,7 @@ createOptionsApp({
       }));
     };
 
-    // 显示错误信息
+    // Show error message
     const showError = (message) => {
       if (typeof inno !== 'undefined' && inno.msg) {
         inno.msg(message, 'error');

@@ -148,6 +148,7 @@ return [
     'variant_name_help'           => '規格名稱, 如: 顏色',
     'variant_switch_confirm'      => '切換到多規格後，單規格資訊將被忽略，是否繼續？',
     'variant_value'               => '規格值',
+    'variant_value_edit_tip'      => '雙擊規格值可以編輯',
     'variant_value_help'          => '規格值, 如: 紅色',
     'video'                       => '視頻',
     'video_custom'                => '自定義',
