@@ -127,12 +127,9 @@ class AttributeSeeder extends Seeder
     private function getAttributes(): array
     {
         return [
-            ['attribute_group_id' => 2, 'category_id' => 1, 'position' => 0],
-            ['attribute_group_id' => 2, 'category_id' => 1, 'position' => 0],
-            ['attribute_group_id' => 2, 'category_id' => 1, 'position' => 0],
-            ['attribute_group_id' => 3, 'category_id' => 1, 'position' => 0],
-            ['attribute_group_id' => 4, 'category_id' => 1, 'position' => 0],
-            ['attribute_group_id' => 4, 'category_id' => 1, 'position' => 0],
+            ['attribute_group_id' => 2, 'category_id' => 1, 'position' => 0], // Features
+            ['attribute_group_id' => 2, 'category_id' => 1, 'position' => 0], // Fabric
+            ['attribute_group_id' => 2, 'category_id' => 1, 'position' => 0], // Style
         ];
     }
 
@@ -145,41 +142,24 @@ class AttributeSeeder extends Seeder
             ['attribute_id' => 2, 'locale' => 'en', 'name' => 'Fabric'],
             ['attribute_id' => 3, 'locale' => 'zh-cn', 'name' => '样式'],
             ['attribute_id' => 3, 'locale' => 'en', 'name' => 'Style'],
-            ['attribute_id' => 4, 'locale' => 'zh-cn', 'name' => '缓震'],
-            ['attribute_id' => 4, 'locale' => 'en', 'name' => 'Cushioning'],
-            ['attribute_id' => 5, 'locale' => 'zh-cn', 'name' => 'CUP'],
-            ['attribute_id' => 5, 'locale' => 'en', 'name' => 'CUP'],
-            ['attribute_id' => 6, 'locale' => 'zh-cn', 'name' => '内存'],
-            ['attribute_id' => 6, 'locale' => 'en', 'name' => 'Memory'],
         ];
     }
 
     private function getAttributeValues(): array
     {
         return [
-            ['attribute_id' => 2],
-            ['attribute_id' => 2],
-            ['attribute_id' => 1],
-            ['attribute_id' => 3],
-            ['attribute_id' => 2],
-            ['attribute_id' => 2],
-            ['attribute_id' => 2],
-            ['attribute_id' => 3],
-            ['attribute_id' => 3],
-            ['attribute_id' => 3],
-            ['attribute_id' => 1],
-            ['attribute_id' => 1],
-            ['attribute_id' => 4],
-            ['attribute_id' => 4],
-            ['attribute_id' => 4],
-            ['attribute_id' => 4],
-            ['attribute_id' => 4],
-            ['attribute_id' => 5],
-            ['attribute_id' => 5],
-            ['attribute_id' => 5],
-            ['attribute_id' => 5],
-            ['attribute_id' => 6],
-            ['attribute_id' => 6],
+            ['attribute_id' => 2], // Cotton
+            ['attribute_id' => 2], // Linen
+            ['attribute_id' => 1], // Waterproof
+            ['attribute_id' => 3], // Crew neck
+            ['attribute_id' => 2], // Silk
+            ['attribute_id' => 2], // Wool
+            ['attribute_id' => 2], // Synthetic fiber
+            ['attribute_id' => 3], // Collarless
+            ['attribute_id' => 3], // Short-sleeve
+            ['attribute_id' => 3], // T-shirt
+            ['attribute_id' => 1], // Thermal
+            ['attribute_id' => 1], // UV protection
         ];
     }
 
@@ -189,103 +169,58 @@ class AttributeSeeder extends Seeder
             ['attribute_value_id' => 1, 'locale' => 'zh-cn', 'name' => '棉'],
             ['attribute_value_id' => 1, 'locale' => 'en', 'name' => 'Cotton'],
             ['attribute_value_id' => 2, 'locale' => 'zh-cn', 'name' => '麻'],
-            ['attribute_value_id' => 2, 'locale' => 'en', 'name' => 'Numb'],
-            ['attribute_value_id' => 5, 'locale' => 'en', 'name' => 'Silk'],
-            ['attribute_value_id' => 5, 'locale' => 'zh-cn', 'name' => '丝'],
-            ['attribute_value_id' => 6, 'locale' => 'en', 'name' => 'Hair'],
-            ['attribute_value_id' => 6, 'locale' => 'zh-cn', 'name' => '毛'],
-            ['attribute_value_id' => 7, 'locale' => 'zh-cn', 'name' => '化纤'],
-            ['attribute_value_id' => 7, 'locale' => 'en', 'name' => 'Chemical fiber'],
+            ['attribute_value_id' => 2, 'locale' => 'en', 'name' => 'Linen'],
+            ['attribute_value_id' => 3, 'locale' => 'zh-cn', 'name' => '防水'],
+            ['attribute_value_id' => 3, 'locale' => 'en', 'name' => 'Waterproof'],
             ['attribute_value_id' => 4, 'locale' => 'zh-cn', 'name' => '圆领'],
-            ['attribute_value_id' => 4, 'locale' => 'en', 'name' => 'Round neck'],
-            ['attribute_value_id' => 8, 'locale' => 'en', 'name' => 'Collarless'],
+            ['attribute_value_id' => 4, 'locale' => 'en', 'name' => 'Crew neck'],
+            ['attribute_value_id' => 5, 'locale' => 'zh-cn', 'name' => '丝'],
+            ['attribute_value_id' => 5, 'locale' => 'en', 'name' => 'Silk'],
+            ['attribute_value_id' => 6, 'locale' => 'zh-cn', 'name' => '毛'],
+            ['attribute_value_id' => 6, 'locale' => 'en', 'name' => 'Wool'],
+            ['attribute_value_id' => 7, 'locale' => 'zh-cn', 'name' => '化纤'],
+            ['attribute_value_id' => 7, 'locale' => 'en', 'name' => 'Synthetic fiber'],
             ['attribute_value_id' => 8, 'locale' => 'zh-cn', 'name' => '无领'],
-            ['attribute_value_id' => 9, 'locale' => 'en', 'name' => 'Short sleeve'],
+            ['attribute_value_id' => 8, 'locale' => 'en', 'name' => 'Collarless'],
             ['attribute_value_id' => 9, 'locale' => 'zh-cn', 'name' => '短袖'],
+            ['attribute_value_id' => 9, 'locale' => 'en', 'name' => 'Short-sleeve'],
             ['attribute_value_id' => 10, 'locale' => 'zh-cn', 'name' => 'T恤'],
             ['attribute_value_id' => 10, 'locale' => 'en', 'name' => 'T-shirt'],
-            ['attribute_value_id' => 3, 'locale' => 'zh-cn', 'name' => '防水'],
-            ['attribute_value_id' => 3, 'locale' => 'en', 'name' => 'Water proof'],
             ['attribute_value_id' => 11, 'locale' => 'zh-cn', 'name' => '保暖'],
-            ['attribute_value_id' => 11, 'locale' => 'en', 'name' => 'keep warm'],
+            ['attribute_value_id' => 11, 'locale' => 'en', 'name' => 'Thermal'],
             ['attribute_value_id' => 12, 'locale' => 'zh-cn', 'name' => '防晒'],
-            ['attribute_value_id' => 12, 'locale' => 'en', 'name' => 'Sun protection'],
-            ['attribute_value_id' => 13, 'locale' => 'zh-cn', 'name' => 'Zoom气垫'],
-            ['attribute_value_id' => 13, 'locale' => 'en', 'name' => 'Zoom Air Cushion'],
-            ['attribute_value_id' => 14, 'locale' => 'zh-cn', 'name' => 'Max气垫'],
-            ['attribute_value_id' => 14, 'locale' => 'en', 'name' => 'Max Air Cushion'],
-            ['attribute_value_id' => 15, 'locale' => 'zh-cn', 'name' => 'Boost缓震材料'],
-            ['attribute_value_id' => 15, 'locale' => 'en', 'name' => 'Boost cushioning material'],
-            ['attribute_value_id' => 16, 'locale' => 'zh-cn', 'name' => 'Lightstrike科技'],
-            ['attribute_value_id' => 16, 'locale' => 'en', 'name' => 'Lightstrike Technology'],
-            ['attribute_value_id' => 17, 'locale' => 'en', 'name' => 'Fuel Cell Technology'],
-            ['attribute_value_id' => 17, 'locale' => 'zh-cn', 'name' => 'FuelCell科技'],
-            ['attribute_value_id' => 18, 'locale' => 'zh-cn', 'name' => 'i3'],
-            ['attribute_value_id' => 18, 'locale' => 'en', 'name' => 'i3'],
-            ['attribute_value_id' => 19, 'locale' => 'zh-cn', 'name' => 'i5'],
-            ['attribute_value_id' => 19, 'locale' => 'en', 'name' => 'i5'],
-            ['attribute_value_id' => 20, 'locale' => 'zh-cn', 'name' => 'i7'],
-            ['attribute_value_id' => 20, 'locale' => 'en', 'name' => 'i7'],
-            ['attribute_value_id' => 21, 'locale' => 'zh-cn', 'name' => 'i9'],
-            ['attribute_value_id' => 21, 'locale' => 'en', 'name' => 'i9'],
-            ['attribute_value_id' => 22, 'locale' => 'zh-cn', 'name' => 'DDR3'],
-            ['attribute_value_id' => 22, 'locale' => 'en', 'name' => 'DDR3'],
-            ['attribute_value_id' => 23, 'locale' => 'zh-cn', 'name' => 'DDR4'],
-            ['attribute_value_id' => 23, 'locale' => 'en', 'name' => 'DDR4'],
+            ['attribute_value_id' => 12, 'locale' => 'en', 'name' => 'UV protection'],
         ];
     }
 
     private function productAttributes(): array
     {
         return [
-            ['product_id' => 1, 'attribute_id' => 1, 'attribute_value_id' => 3],
-            ['product_id' => 1, 'attribute_id' => 2, 'attribute_value_id' => 1],
-            ['product_id' => 1, 'attribute_id' => 4, 'attribute_value_id' => 15],
-            ['product_id' => 1, 'attribute_id' => 3, 'attribute_value_id' => 10],
-            ['product_id' => 1, 'attribute_id' => 5, 'attribute_value_id' => 21],
-            ['product_id' => 1, 'attribute_id' => 6, 'attribute_value_id' => 22],
-            ['product_id' => 2, 'attribute_id' => 1, 'attribute_value_id' => 3],
-            ['product_id' => 2, 'attribute_id' => 2, 'attribute_value_id' => 1],
-            ['product_id' => 2, 'attribute_id' => 3, 'attribute_value_id' => 4],
-            ['product_id' => 2, 'attribute_id' => 4, 'attribute_value_id' => 13],
-            ['product_id' => 2, 'attribute_id' => 5, 'attribute_value_id' => 18],
-            ['product_id' => 2, 'attribute_id' => 6, 'attribute_value_id' => 22],
-            ['product_id' => 3, 'attribute_id' => 1, 'attribute_value_id' => 12],
-            ['product_id' => 3, 'attribute_id' => 2, 'attribute_value_id' => 5],
-            ['product_id' => 3, 'attribute_id' => 4, 'attribute_value_id' => 14],
-            ['product_id' => 3, 'attribute_id' => 5, 'attribute_value_id' => 20],
-            ['product_id' => 3, 'attribute_id' => 6, 'attribute_value_id' => 23],
-            ['product_id' => 4, 'attribute_id' => 1, 'attribute_value_id' => 11],
-            ['product_id' => 4, 'attribute_id' => 2, 'attribute_value_id' => 7],
-            ['product_id' => 4, 'attribute_id' => 3, 'attribute_value_id' => 10],
-            ['product_id' => 4, 'attribute_id' => 5, 'attribute_value_id' => 21],
-            ['product_id' => 4, 'attribute_id' => 6, 'attribute_value_id' => 23],
-            ['product_id' => 5, 'attribute_id' => 1, 'attribute_value_id' => 11],
-            ['product_id' => 5, 'attribute_id' => 2, 'attribute_value_id' => 5],
-            ['product_id' => 5, 'attribute_id' => 5, 'attribute_value_id' => 20],
-            ['product_id' => 5, 'attribute_id' => 6, 'attribute_value_id' => 23],
-            ['product_id' => 5, 'attribute_id' => 3, 'attribute_value_id' => 10],
-            ['product_id' => 6, 'attribute_id' => 3, 'attribute_value_id' => 8],
-            ['product_id' => 6, 'attribute_id' => 2, 'attribute_value_id' => 1],
-            ['product_id' => 6, 'attribute_id' => 6, 'attribute_value_id' => 23],
-            ['product_id' => 6, 'attribute_id' => 4, 'attribute_value_id' => 14],
-            ['product_id' => 7, 'attribute_id' => 1, 'attribute_value_id' => 11],
-            ['product_id' => 7, 'attribute_id' => 3, 'attribute_value_id' => 10],
-            ['product_id' => 7, 'attribute_id' => 5, 'attribute_value_id' => 21],
-            ['product_id' => 7, 'attribute_id' => 2, 'attribute_value_id' => 5],
-            ['product_id' => 7, 'attribute_id' => 6, 'attribute_value_id' => 23],
-            ['product_id' => 8, 'attribute_id' => 1, 'attribute_value_id' => 12],
-            ['product_id' => 8, 'attribute_id' => 4, 'attribute_value_id' => 14],
-            ['product_id' => 8, 'attribute_id' => 5, 'attribute_value_id' => 21],
-            ['product_id' => 8, 'attribute_id' => 6, 'attribute_value_id' => 22],
-            ['product_id' => 8, 'attribute_id' => 3, 'attribute_value_id' => 9],
-            ['product_id' => 8, 'attribute_id' => 2, 'attribute_value_id' => 5],
-            ['product_id' => 9, 'attribute_id' => 1, 'attribute_value_id' => 3],
-            ['product_id' => 9, 'attribute_id' => 2, 'attribute_value_id' => 1],
-            ['product_id' => 9, 'attribute_id' => 3, 'attribute_value_id' => 8],
-            ['product_id' => 9, 'attribute_id' => 6, 'attribute_value_id' => 22],
-            ['product_id' => 9, 'attribute_id' => 4, 'attribute_value_id' => 16],
-            ['product_id' => 9, 'attribute_id' => 5, 'attribute_value_id' => 19],
+            ['product_id' => 1, 'attribute_id' => 1, 'attribute_value_id' => 3], // Waterproof feature
+            ['product_id' => 1, 'attribute_id' => 2, 'attribute_value_id' => 1], // Cotton fabric
+            ['product_id' => 1, 'attribute_id' => 3, 'attribute_value_id' => 10], // T-shirt style
+            ['product_id' => 2, 'attribute_id' => 1, 'attribute_value_id' => 3], // Waterproof feature
+            ['product_id' => 2, 'attribute_id' => 2, 'attribute_value_id' => 1], // Cotton fabric
+            ['product_id' => 2, 'attribute_id' => 3, 'attribute_value_id' => 4], // Crew neck style
+            ['product_id' => 3, 'attribute_id' => 1, 'attribute_value_id' => 12], // UV protection feature
+            ['product_id' => 3, 'attribute_id' => 2, 'attribute_value_id' => 5], // Silk fabric
+            ['product_id' => 4, 'attribute_id' => 1, 'attribute_value_id' => 11], // Thermal feature
+            ['product_id' => 4, 'attribute_id' => 2, 'attribute_value_id' => 7], // Synthetic fiber fabric
+            ['product_id' => 4, 'attribute_id' => 3, 'attribute_value_id' => 10], // T-shirt style
+            ['product_id' => 5, 'attribute_id' => 1, 'attribute_value_id' => 11], // Thermal feature
+            ['product_id' => 5, 'attribute_id' => 2, 'attribute_value_id' => 5], // Silk fabric
+            ['product_id' => 5, 'attribute_id' => 3, 'attribute_value_id' => 10], // T-shirt style
+            ['product_id' => 6, 'attribute_id' => 3, 'attribute_value_id' => 8], // Collarless style
+            ['product_id' => 6, 'attribute_id' => 2, 'attribute_value_id' => 1], // Cotton fabric
+            ['product_id' => 7, 'attribute_id' => 1, 'attribute_value_id' => 11], // Thermal feature
+            ['product_id' => 7, 'attribute_id' => 3, 'attribute_value_id' => 10], // T-shirt style
+            ['product_id' => 7, 'attribute_id' => 2, 'attribute_value_id' => 5], // Silk fabric
+            ['product_id' => 8, 'attribute_id' => 1, 'attribute_value_id' => 12], // UV protection feature
+            ['product_id' => 8, 'attribute_id' => 3, 'attribute_value_id' => 9], // Short-sleeve style
+            ['product_id' => 8, 'attribute_id' => 2, 'attribute_value_id' => 5], // Silk fabric
+            ['product_id' => 9, 'attribute_id' => 1, 'attribute_value_id' => 3], // Waterproof feature
+            ['product_id' => 9, 'attribute_id' => 2, 'attribute_value_id' => 1], // Cotton fabric
+            ['product_id' => 9, 'attribute_id' => 3, 'attribute_value_id' => 8], // Collarless style
         ];
     }
 }

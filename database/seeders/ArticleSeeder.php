@@ -59,7 +59,7 @@ class ArticleSeeder extends Seeder
             [
                 'id'         => 2,
                 'catalog_id' => 1,
-                'slug'       => null,
+                'slug'       => 'new-generation-ecommerce-system',
                 'position'   => 0,
                 'viewed'     => 16,
                 'author'     => 'InnoShop',
@@ -68,7 +68,7 @@ class ArticleSeeder extends Seeder
             [
                 'id'         => 3,
                 'catalog_id' => 2,
-                'slug'       => null,
+                'slug'       => 'ecommerce-integrated-with-ai',
                 'position'   => 0,
                 'viewed'     => 16,
                 'author'     => null,
@@ -77,7 +77,7 @@ class ArticleSeeder extends Seeder
             [
                 'id'         => 4,
                 'catalog_id' => 2,
-                'slug'       => null,
+                'slug'       => 'new-version-released',
                 'position'   => 0,
                 'viewed'     => 16,
                 'author'     => 'InnoShop',
@@ -117,7 +117,7 @@ class ArticleSeeder extends Seeder
             [
                 'article_id'       => 2,
                 'locale'           => 'zh-cn',
-                'title'            => 'InnoShop - 创新电商，智选未来',
+                'title'            => '新一代电商系统',
                 'summary'          => 'InnoShop，一个以创新为核心的开源电商平台，致力于提供灵活、可扩展的电商解决方案。我们的产品管理功能全面，包括产品分类、添加、库存及价格管理等，旨在帮助商家轻松管理商品，提升运营效率。',
                 'image'            => 'images/demo/news/2.jpg',
                 'content'          => '欢迎访问 <a href="https://www.innoshop.cn/" target="_blank" rel="noopener">InnoShop 中文官方网站</a> 了解更多信息。',
@@ -139,7 +139,7 @@ class ArticleSeeder extends Seeder
             [
                 'article_id'       => 3,
                 'locale'           => 'zh-cn',
-                'title'            => 'InnoShop - 创新电商，智选未来',
+                'title'            => '集成AI的电商平台',
                 'summary'          => 'InnoShop，一个以创新为核心的开源电商平台，致力于提供灵活、可扩展的电商解决方案。我们的产品管理功能全面，包括产品分类、添加、库存及价格管理等，旨在帮助商家轻松管理商品，提升运营效率。',
                 'image'            => 'images/demo/news/3.jpg',
                 'content'          => '欢迎访问 <a href="https://www.innoshop.cn/" target="_blank" rel="noopener">InnoShop 中文官方网站</a> 了解更多信息。',
@@ -161,7 +161,7 @@ class ArticleSeeder extends Seeder
             [
                 'article_id'       => 4,
                 'locale'           => 'zh-cn',
-                'title'            => 'InnoShop - 创新电商，智选未来',
+                'title'            => '新版本发布！',
                 'summary'          => 'InnoShop，一个以创新为核心的开源电商平台，致力于提供灵活、可扩展的电商解决方案。我们的产品管理功能全面，包括产品分类、添加、库存及价格管理等，旨在帮助商家轻松管理商品，提升运营效率。',
                 'image'            => 'images/demo/news/4.jpg',
                 'content'          => '欢迎访问 <a href="https://www.innoshop.cn/" target="_blank" rel="noopener">InnoShop 中文官方网站</a> 了解更多信息。',

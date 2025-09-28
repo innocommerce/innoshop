@@ -40,16 +40,45 @@ class CategorySeeder extends Seeder
                 'slug'         => 'women-clothing',
                 'position'     => 1,
                 'active'       => 1,
+                'image'        => 'images/demo/categories/women-cate.png',
                 'translations' => [
                     [
                         'locale'  => 'zh-cn',
                         'name'    => '女装',
-                        'content' => '女性时尚服装',
+                        'summary' => '时尚女装，优雅品质，展现独特魅力',
+                        'content' => '<div class="category-description">
+                            <h3>精选女性时尚服装</h3>
+                            <p>我们为现代女性精心挑选各种风格的时尚服装，包含：</p>
+                            <ul>
+                                <li><strong>休闲装系列</strong> - 舒适自然，适合日常穿搭</li>
+                                <li><strong>正装系列</strong> - 优雅大方，职场与正式场合首选</li>
+                                <li><strong>连衣裙系列</strong> - 浪漫迷人，展现女性柔美气质</li>
+                                <li><strong>时尚外套</strong> - 百搭实用，四季必备单品</li>
+                            </ul>
+                            <p>我们坚持使用<em>优质面料</em>，注重每一个<em>剪裁细节</em>，为您打造舒适、时尚、优雅的着装体验。无论是日常生活还是特殊场合，都能让您展现独特的女性魅力。</p>
+                            <blockquote>
+                                <p>"时尚不仅是外表，更是内在自信的体现"</p>
+                            </blockquote>
+                        </div>',
                     ],
                     [
                         'locale'  => 'en',
                         'name'    => 'Women',
-                        'content' => 'Fashion clothing for women',
+                        'summary' => 'Elegant fashion for modern women, showcasing unique charm',
+                        'content' => '<div class="category-description">
+                            <h3>Curated Women\'s Fashion Collection</h3>
+                            <p>We carefully select fashionable clothing for modern women, featuring:</p>
+                            <ul>
+                                <li><strong>Casual Wear Collection</strong> - Comfortable and natural, perfect for everyday styling</li>
+                                <li><strong>Formal Attire Collection</strong> - Elegant and sophisticated, ideal for workplace and formal occasions</li>
+                                <li><strong>Dress Collection</strong> - Romantic and charming, showcasing feminine grace</li>
+                                <li><strong>Fashion Outerwear</strong> - Versatile and practical, essential pieces for all seasons</li>
+                            </ul>
+                            <p>We are committed to using <em>premium fabrics</em> and paying attention to every <em>tailoring detail</em>, creating comfortable, fashionable, and elegant clothing experiences for you. Whether for daily life or special occasions, you can showcase your unique feminine charm.</p>
+                            <blockquote>
+                                <p>"Fashion is not just about appearance, but the embodiment of inner confidence"</p>
+                            </blockquote>
+                        </div>',
                     ],
                 ],
                 'children' => [
