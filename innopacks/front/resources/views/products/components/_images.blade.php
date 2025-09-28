@@ -92,11 +92,11 @@
 
 @push('footer')
   <script>
-    // 全局变量定义
+    // Global variable definitions
     let swiper, mobileSwiper, isMobile = window.innerWidth < 992, autoScrollTimer, scrollDirection = 0, resizeTimer;
     
     /**
-     * 根据设备类型更新缩略图图片源
+     * Update thumbnail image sources based on device type
      */
     function updateThumbnailImages() {
       $('.sub-product-img .swiper-slide').each(function() {
@@ -108,7 +108,7 @@
     }
     
     /**
-     * 处理视频播放器状态 - 暂停并隐藏视频
+     * Handle video player state - pause and hide video
      */
     function pauseAndHideVideo() {
       if (window.pVideo) {
@@ -120,8 +120,8 @@
     }
     
     /**
-     * 处理视频控制按钮的显示/隐藏
-     * @param {boolean} isVideo - 是否为视频内容
+     * Handle video control button show/hide
+     * @param {boolean} isVideo - Whether it's video content
      */
     function handleVideoControls(isVideo) {
       const $playButton = $('.main-product-img .video-play-overlay');
@@ -136,7 +136,7 @@
     }
     
     /**
-     * 初始化桌面端Swiper轮播组件
+     * Initialize desktop Swiper carousel component
      */
     function initDesktopSwiper() {
       if (swiper) swiper.destroy(true, true);
@@ -165,7 +165,7 @@
     }
     
     /**
-     * 处理移动端滑动切换事件
+     * Handle mobile slide change events
      */
     function handleMobileSlideChange() {
       const activeSlide = this.slides[this.activeIndex];
@@ -174,7 +174,7 @@
     }
     
     /**
-     * 初始化移动端Swiper轮播组件
+     * Initialize mobile Swiper carousel component
      */
     function initMobileSwiper() {
       if (mobileSwiper) mobileSwiper.destroy(true, true);
@@ -204,13 +204,13 @@
           }
         });
         
-        // 设置移动端默认状态
+        // Set mobile default state
         setTimeout(setDefaultThumbnail, 100);
       }
     }
     
     /**
-     * 开始自动滚动
+     * Start auto scroll
      */
     function startAutoScroll() {
       if (autoScrollTimer) return;
@@ -229,7 +229,7 @@
     }
     
     /**
-     * 停止自动滚动
+     * Stop auto scroll
      */
     function stopAutoScroll() {
       if (autoScrollTimer) {
@@ -240,8 +240,8 @@
     }
     
     /**
-     * 处理鼠标移动事件以控制自动滚动
-     * @param {Event} e - 鼠标事件对象
+     * Handle mouse move events to control auto scroll
+     * @param {Event} e - Mouse event object
      */
     function handleMouseMove(e) {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -262,19 +262,19 @@
     }
     
     /**
-     * 更新缩略图选中状态和视频控制
-     * @param {jQuery} $thumbnail - 缩略图jQuery对象
-     * @param {boolean} updateMainImage - 是否更新主图
+     * Update thumbnail selection state and video controls
+     * @param {jQuery} $thumbnail - Thumbnail jQuery object
+     * @param {boolean} updateMainImage - Whether to update main image
      */
     function updateThumbnailSelection($thumbnail, updateMainImage = true) {
       const isVideo = $thumbnail.data('is-video');
       
-      // 更新主图
+      // Update main image
       if (updateMainImage) {
         $('.main-image').attr('src', $thumbnail.data('large-image'));
       }
       
-      // 更新缩略图选中样式
+      // Update thumbnail selection styles
       $('.thumbnail-item')
         .removeClass('active border-danger')
         .addClass('border-transparent');
@@ -282,15 +282,15 @@
         .addClass('active border-danger')
         .removeClass('border-transparent');
       
-      // 处理视频控制
+      // Handle video controls
       handleVideoControls(isVideo);
     }
     
     /**
-     * 设置默认选中的缩略图
+     * Set default selected thumbnail
      */
     function setDefaultThumbnail() {
-      // 优先选择视频缩略图，否则选择第一张图片
+      // Prioritize video thumbnails, otherwise select the first image
       let $defaultThumbnail = $('.thumbnail-item[data-is-video="true"]').first();
       if ($defaultThumbnail.length === 0) {
         $defaultThumbnail = $('.thumbnail-item').first();
@@ -302,44 +302,44 @@
     }
     
     /**
-     * 处理缩略图鼠标悬停事件
+     * Handle thumbnail mouse hover events
      */
     function handleThumbnailHover() {
       const $this = $(this);
       
-      // 更新主图和播放按钮显示状态
+      // Update main image and play button display state
       updateThumbnailSelection($this, true);
       
-      // 防止图片缩放问题
+      // Prevent image scaling issues
       $this.find('img').css('transform', 'scale(1)');
     }
     
     /**
-     * 绑定缩略图和滚动事件
+     * Bind thumbnail and scroll events
      */
     function bindThumbnailEvents() {
-      // 清除之前的事件绑定
+      // Clear previous event bindings
       $('.thumbnail-item').off('click mouseenter');
       $('.sub-product-img').off('mouseenter mousemove mouseleave');
       $('#mobile-product-swiper .swiper-slide').off('click');
       
       if (!isMobile) {
-        // 桌面端事件绑定
+        // Desktop event bindings
         $('.thumbnail-item')
           .on('click', function() {
             updateThumbnailSelection($(this), true);
           })
           .on('mouseenter', handleThumbnailHover);
         
-        // 绑定自动滚动事件
+        // Bind auto scroll events
         $('.sub-product-img')
           .on('mouseenter mousemove', handleMouseMove)
           .on('mouseleave', stopAutoScroll);
           
-        // 设置默认选中状态
+        // Set default selected state
         setTimeout(setDefaultThumbnail, 100);
       } else {
-        // 移动端幻灯片点击事件
+        // Mobile slide click events
         $('#mobile-product-swiper .swiper-slide').on('click', function() {
           const $thumbnail = $(this).find('.thumbnail-item');
           if ($thumbnail.length > 0) {
@@ -350,7 +350,7 @@
     }
     
     /**
-     * 处理响应式布局变化
+     * Handle responsive layout changes
      */
     function handleResponsiveChange() {
       const wasMobile = isMobile;
@@ -365,7 +365,7 @@
     }
     
     /**
-     * 初始化所有组件
+     * Initialize all components
      */
     function initializeComponents() {
       updateThumbnailImages();
@@ -374,10 +374,10 @@
       bindThumbnailEvents();
     }
 
-    // 页面加载时初始化
+    // Initialize on page load
     initializeComponents();
 
-    // 窗口大小变化时的防抖处理
+    // Debounced handling for window resize
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(handleResponsiveChange, 250);

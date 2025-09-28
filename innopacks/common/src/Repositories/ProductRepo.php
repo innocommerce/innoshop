@@ -487,7 +487,7 @@ class ProductRepo extends BaseRepo
                 BundleRepo::getInstance()->handleBundles($product, $data['bundles'] ?? []);
             }
 
-            // 处理产品选项配置
+            // Handle product option configuration
             if (isset($data['product_options'])) {
                 OptionValueRepo::getInstance()->createProductOptionValues($product->id, $data['product_options']);
             }
@@ -563,7 +563,7 @@ class ProductRepo extends BaseRepo
                 BundleRepo::getInstance()->handleBundles($product, $data['bundles']);
             }
 
-            // 处理产品选项配置
+            // Handle product option configuration
             if (isset($data['product_options'])) {
                 OptionValueRepo::getInstance()->createProductOptionValues($product->id, $data['product_options']);
             }
@@ -742,118 +742,18 @@ class ProductRepo extends BaseRepo
 
         $filters = array_merge($this->filters, $filters);
 
-        $categoryId = $filters['category_id'] ?? 0;
-        if ($categoryId) {
-            $builder->whereHas('categories', function (Builder $query) use ($categoryId) {
-                $query->where('category_id', $categoryId);
-            });
-        }
+        // Use ProductQueryBuilder to handle filtering logic
+        $queryBuilder = new \InnoShop\Common\Services\ProductQueryBuilder;
 
-        $categorySlug = $filters['category_slug'] ?? '';
-        if ($categorySlug) {
-            $category = Category::query()->where('slug', $categorySlug)->first();
-            if ($category) {
-                $categories = CategoryRepo::getInstance()->builder(['parent_id' => $category->id])->get();
-
-                $filters['category_ids']   = $categories->pluck('id');
-                $filters['category_ids'][] = $category->id;
-            }
-        }
-
-        $categoryIds = $filters['category_ids'] ?? [];
-        if ($categoryIds instanceof Collection) {
-            $categoryIds = $categoryIds->toArray();
-        }
-        $categoryIds = array_unique($categoryIds);
-        if ($categoryIds) {
-            $builder->whereHas('categories', function (Builder $query) use ($categoryIds) {
-                $query->whereIn('category_id', $categoryIds);
-            });
-        }
-
-        $attr = $filters['attr'] ?? [];
-        if ($attr) {
-            $attributes = parse_attr_filters($attr);
-            foreach ($attributes as $attribute) {
-                $builder->whereHas('productAttributes', function ($query) use ($attribute) {
-                    $query->where('attribute_id', $attribute['attr'])
-                        ->whereIn('attribute_value_id', $attribute['value']);
-                });
-            }
-        }
-
-        $attributeValueIds = parse_int_filters($filters['attribute_value_ids'] ?? []);
-        if ($attributeValueIds) {
-            $builder->whereHas('productAttributes', function (Builder $query) use ($attributeValueIds) {
-                $query->whereIn('attribute_value_id', $attributeValueIds);
-            });
-        }
-
-        $keyword = $filters['keyword'] ?? '';
-        if ($keyword) {
-            $builder->whereHas('translation', function (Builder $query) use ($keyword) {
-                $query->where('name', 'like', "%$keyword%");
-            })->orWhereHas('skus', function (Builder $query) use ($keyword) {
-                $query->where('code', 'like', "%$keyword%");
-            });
-        }
-
-        $brandID = $filters['brand_id'] ?? 0;
-        if ($brandID) {
-            $builder->where('brand_id', $brandID);
-        }
-
-        $slug = $filters['slug'] ?? '';
-        if ($slug) {
-            $builder->where('slug', $slug);
-        }
-
-        $productIDs = $filters['product_ids'] ?? [];
-        if ($productIDs) {
-            $builder->whereIn('products.id', $productIDs);
-        }
-
-        if (isset($filters['active'])) {
-            $builder->where('products.active', (bool) $filters['active']);
-        }
-
-        $createdStart = $filters['created_at_start'] ?? '';
-        if ($createdStart) {
-            $builder->where('created_at', '>', $createdStart);
-        }
-
-        $createdEnd = $filters['created_at_end'] ?? '';
-        if ($createdEnd) {
-            $builder->where('created_at', '<', $createdEnd);
-        }
-
-        $priceStart = $filters['price_start'] ?? '';
-        if ($priceStart) {
-            $builder->whereHas('masterSku', function (Builder $query) use ($priceStart) {
-                $query->where('price', '>', $priceStart);
-            });
-        }
-
-        $priceEnd = $filters['price_end'] ?? '';
-        if ($priceEnd) {
-            $builder->whereHas('masterSku', function (Builder $query) use ($priceEnd) {
-                $query->where('price', '<', $priceEnd);
-            });
-        }
-
-        $skuCode = $filters['sku_code'] ?? '';
-        if ($skuCode) {
-            $builder->whereHas('skus', function (Builder $query) use ($skuCode) {
-                $query->where('code', 'like', "%$skuCode%");
-            });
-        }
-
-        $skuId = $filters['sku_id'] ?? '';
-        if ($skuId) {
-            $builder->whereHas('skus', function (Builder $query) use ($skuId) {
-                $query->where('id', $skuId);
-            });
-        }
+        $builder = $queryBuilder->applyCategoryFilters($builder, $filters);
+        $builder = $queryBuilder->applyAttributeFilters($builder, $filters);
+        $builder = $queryBuilder->applyBrandFilters($builder, $filters);
+        $builder = $queryBuilder->applyPriceFilters($builder, $filters);
+        $builder = $queryBuilder->applyStockFilters($builder, $filters);
+        $builder = $queryBuilder->applySearchFilters($builder, $filters);
+        $builder = $queryBuilder->applySkuFilters($builder, $filters);
+        $builder = $queryBuilder->applyBasicFilters($builder, $filters);
+        $builder = $queryBuilder->applyDateFilters($builder, $filters);
 
         return fire_hook_filter('repo.product.builder', $builder);
     }

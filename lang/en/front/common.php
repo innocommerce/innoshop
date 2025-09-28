@@ -57,4 +57,5 @@ return [
     'updated_success'   => 'Updated successfully',
     'view'              => 'View',
     'yes'               => 'yes',
+    'filter'            => 'Filter',
 ];

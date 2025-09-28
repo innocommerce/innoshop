@@ -1,4 +1,4 @@
-// 产品选项样式
+// Product options styles
 .product-options-box {
   margin: 20px 0;
   
@@ -123,7 +123,7 @@
   }
 }
 
-// 响应式设计
+// Responsive design
 @media (max-width: 768px) {
   .product-options-box {
     .option-values {
@@ -153,7 +153,7 @@
   }
 }
 
-// 深色主题支持
+// Dark theme support
 @media (prefers-color-scheme: dark) {
   .product-options-box {
     .options-title {

@@ -2,7 +2,7 @@
 @section('body-class', 'page-categories')
 
 @section('content')
-  <x-front-breadcrumb type="route" value="products.index" title="{{ __('front/product.products') }}"/>
+  <x-front-breadcrumb type="route" value="products.index" title="{{ __('front/product.products') }}" :showFilter="true"/>
 
   @hookinsert('product.index.top')
 

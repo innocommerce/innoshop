@@ -24,7 +24,7 @@
             <x-common-alert type="danger" msg="{{ session('error') }}" class="mt-3"/>
           @endif
 
-          <!-- 余额信息 -->
+          <!-- Balance information -->
           <div class="wallet-balance-overview">
             <div class="balance-header">
               <i class="bi bi-wallet2"></i>
@@ -200,8 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   accountTypeSelect.addEventListener('change', toggleBankInfo);
   
-  // 初始化显示状态
+  // Initialize display state
   toggleBankInfo();
 });
 </script>
-@endpush 
+@endpush

@@ -71,7 +71,7 @@
         $('.product-price .old-price').text(masterSku.origin_price_format);
         $('.product-quantity').data('sku-id', masterSku.id)
         
-        // 更新选项组件的基础价格并重新计算总价
+        // Update option component base price and recalculate total price
         if (typeof window.updateBasePrice === 'function') {
           window.updateBasePrice(masterSku.price);
         }

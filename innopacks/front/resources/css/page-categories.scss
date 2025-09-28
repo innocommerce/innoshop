@@ -82,6 +82,7 @@ body.page-categories {
 }
 
 .filter-sidebar {
+  
   .filter-sidebar-item {
     margin-bottom: 20px;
 
@@ -94,6 +95,124 @@ body.page-categories {
       font-size: 20px;
       margin-bottom: 14px;
     }
+   // 价格筛选样式
+   .price-range {
+    .price-slider {
+      position: relative;
+      height: 40px;
+      margin-bottom: 15px;
+
+      .slider-track {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: #ff6b35;
+        border-radius: 3px;
+        transform: translateY(-50%);
+      }
+
+      input[type="range"] {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 6px;
+        background: transparent;
+        pointer-events: none;
+        appearance: none;
+        transform: translateY(-50%);
+
+        &::-webkit-slider-thumb {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          background: #ff6b35;
+          border-radius: 50%;
+          cursor: pointer;
+          pointer-events: auto;
+          border: 3px solid #fff;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        &::-moz-range-thumb {
+          width: 20px;
+          height: 20px;
+          background: #ff6b35;
+          border-radius: 50%;
+          cursor: pointer;
+          pointer-events: auto;
+          border: 3px solid #fff;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        &.slider-min {
+          z-index: 2;
+        }
+
+        &.slider-max {
+          z-index: 1;
+        }
+      }
+    }
+
+    .price-inputs {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+
+      .price-input-group {
+        flex: 1;
+
+        label {
+          display: block;
+          font-size: 13px;
+          color: #6c757d;
+          margin-bottom: 6px;
+          font-weight: normal;
+        }
+
+        input {
+          width: 100%;
+          padding: 8px 10px;
+          border: 1px solid #ced4da;
+          border-radius: 4px;
+          font-size: 14px;
+          background: #fff;
+
+          &:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.25);
+          }
+
+          &::placeholder {
+            color: #adb5bd;
+          }
+        }
+      }
+    }
+
+    .btn {
+      width: 100%;
+      background-color: #ff6b35;
+      border-color: #ff6b35;
+      font-size: 14px;
+      padding: 10px 16px;
+      font-weight: 500;
+
+      &:hover {
+        background-color: #e55a2b;
+        border-color: #e55a2b;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.25);
+      }
+    }
+  }
 
     #filter-category {
       > .accordion-item {

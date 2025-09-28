@@ -56,7 +56,7 @@
             }
           }
         }).catch(function (error) {
-          console.error('加载评论失败:', error);
+          console.error('Failed to load reviews:', error);
           button.prop('disabled', false).text('{{ __('front/product.load_more') }}');
           inno.msg('{{ __('front/product.load_failed') }}');
         });

@@ -1,6 +1,6 @@
 <div class="breadcrumb-wrap">
-  <div class="container {{ count($breadcrumbs) > 0 ? 'd-flex justify-content-between' : 'justify-content-center' }}">
-    <ul class="breadcrumb">
+  <div class="container {{ count($breadcrumbs) > 0 ? 'd-flex justify-content-start align-items-center' : 'justify-content-center' }}">
+    <ul class="breadcrumb mb-0">
       @foreach ($breadcrumbs as $index=>$breadcrumb)
         @if (isset($breadcrumb['url']) && $breadcrumb['url'])
           <li>
@@ -15,8 +15,13 @@
       @endforeach
     </ul>
 
-    @if (count($breadcrumbs) > 0 && ($showFilter))
-      <li class="d-block d-md-none" id="toggleFilterSidebar"><i class="fs-4 bi bi-funnel"></i></li>
+    @if (count($breadcrumbs) > 0 && isset($showFilter) && $showFilter)
+      <div class="breadcrumb-filter-btn d-block d-md-none">
+        <button class="btn btn-outline-primary btn-sm d-flex align-items-center" id="toggleFilterSidebar">
+          <i class="bi bi-funnel me-1"></i>
+          <span class="filter-text">{{ __('front/common.filter') }}</span>
+        </button>
+      </div>
     @endif
   </div>
 </div>

@@ -23,9 +23,10 @@ class Breadcrumb extends Component
      * @param  $type
      * @param  $value
      * @param  string  $title
+     * @param  bool  $showFilter
      * @throws Exception
      */
-    public function __construct($type, $value, string $title = '')
+    public function __construct($type, $value, string $title = '', bool $showFilter = false)
     {
         $this->breadcrumbs[] = [
             'title' => front_trans('common.home'),
@@ -58,7 +59,17 @@ class Breadcrumb extends Component
 
         $this->breadcrumbs[] = $breadcrumbLib->getTrail($type, $value, $title);
 
-        if (equal_route_name('front.categories.slug_show') || equal_route_name('front.categories.slug_show') || equal_route_name('front.products.index')) {
+        $routes = [
+            'products.index',
+            'categories.slug_show',
+            'categories.show',
+            'brands.show',
+            'brands.slug_show',
+        ];
+
+        if ($showFilter) {
+            $this->showFilter = true;
+        } elseif (in_array(pure_route_name(), $routes)) {
             $this->showFilter = true;
         }
     }

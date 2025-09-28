@@ -3,6 +3,7 @@
 
   @media (min-width: 992px) {
     margin-bottom: 30px;
+    padding-bottom: 10px;
 
     &:hover {
       .product-bottom-btns {
@@ -86,7 +87,7 @@
 
     .product-name {
       padding: 0 5px;
-      font-size: 1rem;
+      font-size: 0.875rem;
       margin-top: 1rem;
       margin-bottom: .5rem;
       font-weight: bold;

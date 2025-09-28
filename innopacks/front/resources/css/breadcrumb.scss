@@ -4,17 +4,16 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 20px 0;
   margin-bottom: 14px;
 
   @media (min-width: 768px) {
-    padding: 15px 0;
+    padding: 20px 0;
     margin-bottom: 30px;
   }
 
   .breadcrumb {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 0;
 

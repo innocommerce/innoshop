@@ -155,7 +155,7 @@
       getZones(countryId);
     });
 
-    // 获取所有国家数据
+    // Get all country data
     function getCountries() {
       axios.get('{{ front_route('countries.index') }}').then(function (res) {
         var countries = res.data;

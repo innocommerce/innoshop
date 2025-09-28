@@ -1,4 +1,4 @@
-{{-- 产品排序和筛选控制区域 --}}
+{{-- Product sorting and filter control area --}}
 <div class="category-wrap">
   <div class="top-order-wrap">
     <div class="d-none d-md-block">

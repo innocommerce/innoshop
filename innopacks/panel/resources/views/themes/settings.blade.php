@@ -116,7 +116,7 @@
                                    value="{{ $item->id }}"
                                    id="header-catalog-{{ $item->id }}" {{ in_array($item->id, old('menu_header_catalogs', system_setting('menu_header_catalogs', []) ?: [])) ? 'checked' : '' }}>
                             <label class="form-check ps-0"
-                                   for="header-catalog-{{ $item->id }}">{{ $item->translation->title }}</label>
+                                   for="header-catalog-{{ $item->id }}">{{ $item->fallbackName('title') }}</label>
                           </div>
                         @endforeach
                       </div>

@@ -57,4 +57,5 @@ return [
     'updated_success'   => '更新成功',
     'view'              => '查看',
     'yes'               => '是',
+    'filter'            => '筛选',
 ];

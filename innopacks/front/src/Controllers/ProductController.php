@@ -18,24 +18,48 @@ use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\ReviewRepo;
 use InnoShop\Common\Resources\ProductVariable;
 use InnoShop\Common\Resources\SkuListItem;
+use InnoShop\Front\Traits\FilterSidebarTrait;
 
 class ProductController extends Controller
 {
+    use FilterSidebarTrait;
+
     /**
+     * Product list page with filter support
      * @param  Request  $request
      * @return mixed
      * @throws Exception
      */
     public function index(Request $request): mixed
     {
-        $filters  = $request->all();
-        $products = ProductRepo::getInstance()->withActive()->list($filters);
+        // Use RequestFilterParser to extract filter conditions
+        $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
+        $filters      = $filterParser->extractFilters($request, [
+            'keyword',
+            'sort',
+            'order',
+            'per_page',
+            'price_from',
+            'price_to',
+            'brand_ids',
+            'attribute_values',
+            'in_stock',
+        ]);
+
+        // Get product list
+        $products = ProductRepo::getInstance()->getFrontList($filters);
+
+        // Use Trait method to get filter sidebar data
+        $filterData = $this->getFilterSidebarData($request);
 
         $data = [
             'products'       => $products,
             'categories'     => CategoryRepo::getInstance()->getTwoLevelCategories(),
             'per_page_items' => CategoryRepo::getInstance()->getPerPageItems(),
         ];
+
+        // Merge filter data
+        $data = array_merge($data, $filterData);
 
         return inno_view('products.index', $data);
     }

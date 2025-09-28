@@ -15,30 +15,47 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Front\Traits\FilterSidebarTrait;
 
 class CategoryController extends Controller
 {
+    use FilterSidebarTrait;
+
     /**
+     * Category index page with product list and filters
      * @param  Request  $request
      * @return mixed
      * @throws Exception
      */
     public function index(Request $request): mixed
     {
-        $filters = [
-            'keyword'  => $request->get('keyword'),
-            'sort'     => $request->get('sort', 'position'),
-            'order'    => $request->get('order', 'asc'),
-            'per_page' => $request->get('per_page', 15),
-        ];
+        // Use RequestFilterParser to extract filter conditions
+        $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
+        $filters      = $filterParser->extractFilters($request, [
+            'keyword',
+            'sort',
+            'order',
+            'per_page',
+            'price_from',
+            'price_to',
+            'brand_ids',
+            'attribute_values',
+            'in_stock',
+        ]);
 
-        $products = ProductRepo::getInstance()->withActive()->list($filters);
+        $products = ProductRepo::getInstance()->getFrontList($filters);
+
+        // Use Trait method to get filter sidebar data
+        $filterData = $this->getFilterSidebarData($request);
 
         $data = [
             'products'       => $products,
             'categories'     => CategoryRepo::getInstance()->getTwoLevelCategories(),
             'per_page_items' => CategoryRepo::getInstance()->getPerPageItems(),
         ];
+
+        // Merge filter data
+        $data = array_merge($data, $filterData);
 
         return inno_view('products.index', $data);
     }
@@ -75,6 +92,7 @@ class CategoryController extends Controller
     }
 
     /**
+     * Render category show page with products and filters
      * @param  Category  $category
      * @param  $keyword
      * @param  Request  $request
@@ -85,14 +103,30 @@ class CategoryController extends Controller
     {
         $categories = CategoryRepo::getInstance()->getTwoLevelCategories();
 
-        $filters = [
-            'category_id' => $category->id,
-            'keyword'     => $keyword,
-            'sort'        => $request->get('sort', 'position'),
-            'order'       => $request->get('order', 'asc'),
-            'per_page'    => $request->get('per_page', 15),
-        ];
+        // Use RequestFilterParser to handle filter logic
+        $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
+        $filters      = $filterParser->extractFilters($request, [
+            'keyword',
+            'sort',
+            'order',
+            'per_page',
+            'price_from',
+            'price_to',
+            'brand_ids',
+            'attribute_values',
+            'in_stock',
+        ]);
+
+        // Add category specific filters
+        $filters['category_id'] = $category->id;
+        if ($keyword) {
+            $filters['keyword'] = $keyword;
+        }
+
         $products = ProductRepo::getInstance()->getFrontList($filters);
+
+        // Use Trait method to get filter sidebar data
+        $filterData = $this->getFilterSidebarData($request);
 
         $data = [
             'slug'           => $category->slug ?? '',
@@ -101,6 +135,9 @@ class CategoryController extends Controller
             'products'       => $products,
             'per_page_items' => CategoryRepo::getInstance()->getPerPageItems(),
         ];
+
+        // Merge filter data
+        $data = array_merge($data, $filterData);
 
         return inno_view('categories.show', $data)->render();
     }
