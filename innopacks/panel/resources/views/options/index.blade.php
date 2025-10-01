@@ -2,11 +2,17 @@
 @section('body-class', 'page-product-option-group')
 @section('title', panel_trans('options.option_management'))
 
+@section('page-title-right')
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#optionGroupModal" onclick="openCreateModal()">
+  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+</button>
+@endsection
+
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
       <!-- Navigation links -->
-      <ul class="nav nav-tabs mb-4">
+      <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
           <a class="nav-link active" href="{{ panel_route('options.index') }}">
             <i class="bi bi-collection"></i> {{ panel_trans('options.option_group_management') }}
@@ -18,14 +24,6 @@
           </a>
         </li>
       </ul>
-
-      <!-- Option group management content -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">{{ panel_trans('options.option_group_management') }}</h5>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#optionGroupModal" onclick="openCreateModal()">
-          <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
-        </button>
-      </div>
 
       <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('options.index')" />
 

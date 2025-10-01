@@ -1,15 +1,29 @@
 @extends('panel::layouts.app')
-@section('body-class', 'page-page')
+@section('body-class', 'page-attribute-management')
 
 @section('title', __('panel/menu.attributes'))
 @section('page-title-right')
-<a href="{{ panel_route('attributes.create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> {{
-  __('panel/common.create') }}</a>
+<a href="{{ panel_route('attributes.create') }}" class="btn btn-primary">
+  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+</a>
 @endsection
 
 @section('content')
 <div class="card h-min-600" id="app">
   <div class="card-body">
+    <!-- Navigation links -->
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <a class="nav-link active" href="{{ panel_route('attributes.index') }}">
+          <i class="bi bi-tags"></i> {{ __('panel/menu.attributes') }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ panel_route('attribute_groups.index') }}">
+          <i class="bi bi-collection"></i> {{ __('panel/menu.attribute_groups') }}
+        </a>
+      </li>
+    </ul>
 
     <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('attributes.index')" />
 

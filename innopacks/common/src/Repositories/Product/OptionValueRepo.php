@@ -137,12 +137,11 @@ class OptionValueRepo extends BaseRepo
             $option   = \InnoShop\Common\Models\Option::find($optionId);
             $required = $option ? $option->required : false;
 
-            // Create product option record
+            // Create product option record (match table columns)
             \InnoShop\Common\Models\Product\Option::create([
                 'product_id' => $productId,
                 'option_id'  => $optionId,
-                'required'   => $required, // Use required status from options table
-                'sort_order' => 0,         // Default sort order
+                'position'   => 0,
             ]);
 
             // Handle each option value configuration

@@ -1,7 +1,12 @@
 @extends('panel::layouts.app')
-@section('body-class', '')
+@section('body-class', 'page-attribute-management')
 
 @section('title', __('panel/menu.attribute_groups'))
+@section('page-title-right')
+<button type="button" class="btn btn-primary btn-add" onclick="app.create()">
+  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+</button>
+@endsection
 
 @push('header')
   <script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
@@ -9,14 +14,22 @@
   <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
 @endpush
 
-@section('page-title-right')
-<button type="button" class="btn btn-primary btn-add" onclick="app.create()"><i class="bi bi-plus-square"></i>
-  {{ __('panel/common.create') }}</button>
-@endsection
-
 @section('content')
 <div class="card h-min-600" id="app">
   <div class="card-body">
+    <!-- Navigation links -->
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ panel_route('attributes.index') }}">
+          <i class="bi bi-tags"></i> {{ __('panel/menu.attributes') }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{{ panel_route('attribute_groups.index') }}">
+          <i class="bi bi-collection"></i> {{ __('panel/menu.attribute_groups') }}
+        </a>
+      </li>
+    </ul>
 
     <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('attribute_groups.index')" />
 
