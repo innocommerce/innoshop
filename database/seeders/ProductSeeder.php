@@ -36,19 +36,38 @@ class ProductSeeder extends Seeder
     {
         return [
             [
-                'brand_id'     => 1,
-                'spu_code'     => 'galaxy-glow-evening-gown',
-                'slug'         => 'galaxy-glow-evening-gown',
-                'images'       => ['images/demo/product/1.png'],
+                'brand_id' => 1,
+                'spu_code' => 'galaxy-glow-evening-gown',
+                'slug'     => 'galaxy-glow-evening-gown',
+                'images'   => [
+                    'images/demo/product/1.png',
+                    'images/demo/product/3.png',
+                    'images/demo/product/4.png',
+                    'images/demo/product/5.png',
+                    'images/demo/product/6.png',
+                ],
+                'hover_image'  => 'images/demo/product/7.png',
                 'active'       => true,
                 'translations' => [
                     [
-                        'locale' => 'zh-cn',
-                        'name'   => '银河流光璀璨晚礼服闪耀全场',
+                        'locale'           => 'zh-cn',
+                        'name'             => '银河流光璀璨晚礼服闪耀全场',
+                        'summary'          => '灵感来源于星河流光，细腻亮片织就璀璨光泽，优雅版型衬托气质。',
+                        'content'          => '以银河为灵感的晚礼服，采用细密亮片面料与柔和垂坠剪裁，行走间光影流转，尽显高雅与自信。适合宴会、典礼等正式场合。',
+                        'selling_point'    => '星光流动质感、轻盈垂坠剪裁、灵动闪耀气场',
+                        'meta_title'       => '银河流光璀璨晚礼服 | 典雅闪耀',
+                        'meta_description' => '以星河为灵感的璀璨晚礼服，亮片质感与优雅剪裁，闪耀全场。',
+                        'meta_keywords'    => '晚礼服, 亮片, 高定, 银河, 闪耀',
                     ],
                     [
-                        'locale' => 'en',
-                        'name'   => 'Galaxy Glittering Evening Gown Shines Everywhere',
+                        'locale'           => 'en',
+                        'name'             => 'Galaxy Glittering Evening Gown Shines Everywhere',
+                        'summary'          => 'Inspired by the galaxy glow, shimmering sequins and elegant silhouette elevate your presence.',
+                        'content'          => 'A galaxy-inspired evening gown crafted with fine shimmering sequins and a soft draping cut. With light flowing as you move, it exudes grace and confidence—perfect for banquets and ceremonies.',
+                        'selling_point'    => 'Shimmering texture, airy drape, radiant aura',
+                        'meta_title'       => 'Galaxy Glow Evening Gown | Elegant & Radiant',
+                        'meta_description' => 'Galaxy-inspired shimmering evening gown with refined sequins and elegant tailoring to shine everywhere.',
+                        'meta_keywords'    => 'evening gown, glitter, galaxy, sequins, elegant',
                     ],
                 ],
                 'skus' => [
@@ -71,7 +90,7 @@ class ProductSeeder extends Seeder
                     ],
                     [
                         'code'         => 'GGE003',
-                        'image'        => 'images/demo/product/1.png',
+                        'image'        => 'images/demo/product/7.png',
                         'price'        => 333.00,
                         'origin_price' => 334.00,
                         'quantity'     => 50,
@@ -79,7 +98,7 @@ class ProductSeeder extends Seeder
                     ],
                     [
                         'code'         => 'GGE004',
-                        'image'        => 'images/demo/product/1.png',
+                        'image'        => 'images/demo/product/7.png',
                         'price'        => 444.00,
                         'origin_price' => 445.00,
                         'quantity'     => 50,
@@ -87,7 +106,7 @@ class ProductSeeder extends Seeder
                     ],
                     [
                         'code'         => 'GGE005',
-                        'image'        => 'images/demo/product/1.png',
+                        'image'        => 'images/demo/product/3.png',
                         'price'        => 555.00,
                         'origin_price' => 556.00,
                         'quantity'     => 50,
@@ -95,7 +114,7 @@ class ProductSeeder extends Seeder
                     ],
                     [
                         'code'         => 'GGE006',
-                        'image'        => 'images/demo/product/1.png',
+                        'image'        => 'images/demo/product/3.png',
                         'price'        => 666.00,
                         'origin_price' => 667.00,
                         'quantity'     => 50,
@@ -106,9 +125,9 @@ class ProductSeeder extends Seeder
                     [
                         'name'   => ['en' => 'Color', 'zh-cn' => '颜色'],
                         'values' => [
-                            ['image' => '', 'name' => ['en' => 'Red', 'zh-cn' => '红色']],
-                            ['image' => '', 'name' => ['en' => 'Green', 'zh-cn' => '绿色']],
-                            ['image' => '', 'name' => ['en' => 'Blue', 'zh-cn' => '蓝色']],
+                            ['image' => 'images/demo/product/1.png', 'name' => ['en' => 'Red', 'zh-cn' => '红色']],
+                            ['image' => 'images/demo/product/7.png', 'name' => ['en' => 'White', 'zh-cn' => '白色']],
+                            ['image' => 'images/demo/product/3.png', 'name' => ['en' => 'Pink', 'zh-cn' => '粉色']],
                         ],
                     ],
                     [
@@ -116,6 +135,30 @@ class ProductSeeder extends Seeder
                         'values' => [
                             ['image' => '', 'name' => ['en' => 'Big', 'zh-cn' => '大']],
                             ['image' => '', 'name' => ['en' => 'Small', 'zh-cn' => '小']],
+                        ],
+                    ],
+                ],
+
+                'product_options' => [
+                    [
+                        'option_id' => 1, // Gift Wrap
+                        'values'    => [
+                            ['option_value_id' => 1, 'price_adjustment' => 5.00,  'stock_quantity' => 100],  // Standard Wrap
+                            ['option_value_id' => 2, 'price_adjustment' => 20.00, 'stock_quantity' => 100],  // Premium Gift Box
+                        ],
+                    ],
+                    [
+                        'option_id' => 2, // Accessories
+                        'values'    => [
+                            ['option_value_id' => 3, 'price_adjustment' => 15.00, 'stock_quantity' => 100], // Brooch
+                            ['option_value_id' => 4, 'price_adjustment' => 10.00, 'stock_quantity' => 100], // Belt
+                        ],
+                    ],
+                    [
+                        'option_id' => 3, // Express Customization
+                        'values'    => [
+                            ['option_value_id' => 5, 'price_adjustment' => 0.00,  'stock_quantity' => 100],   // No Rush
+                            ['option_value_id' => 6, 'price_adjustment' => 50.00, 'stock_quantity' => 100],   // Next-day Shipping
                         ],
                     ],
                 ],

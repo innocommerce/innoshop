@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             CustomerGroupSeeder::class,
             PageSeeder::class,
+            OptionSeeder::class,
             ProductSeeder::class,
             StateSeeder::class,
             TagSeeder::class,
