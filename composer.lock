@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8d2ac60826c19d4453d20d6da2b4e77",
+    "content-hash": "910f813a7d68c9f40c7f620d3111dd74",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4318,16 +4318,16 @@
         },
         {
             "name": "openai-php/client",
-            "version": "v0.15.0",
+            "version": "v0.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openai-php/client.git",
-                "reference": "4db080738104be6a1144fa9f203c428ea4e58128"
+                "reference": "e79ab01f1237b9b8e69fdcacdaaabf81b1a2a6f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openai-php/client/zipball/4db080738104be6a1144fa9f203c428ea4e58128",
-                "reference": "4db080738104be6a1144fa9f203c428ea4e58128",
+                "url": "https://api.github.com/repos/openai-php/client/zipball/e79ab01f1237b9b8e69fdcacdaaabf81b1a2a6f3",
+                "reference": "e79ab01f1237b9b8e69fdcacdaaabf81b1a2a6f3",
                 "shasum": ""
             },
             "require": {
@@ -4389,7 +4389,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openai-php/client/issues",
-                "source": "https://github.com/openai-php/client/tree/v0.15.0"
+                "source": "https://github.com/openai-php/client/tree/v0.17.0"
             },
             "funding": [
                 {
@@ -4405,7 +4405,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-04T17:44:21+00:00"
+            "time": "2025-10-02T10:29:48+00:00"
         },
         {
             "name": "openspout/openspout",
