@@ -27,11 +27,20 @@ body.page-checkout-success {
       th, td {
         padding: 10px 0;
       }
+
+      td:last-child {
+        font-size: 1.25rem;
+        font-weight: bold;
+        text-align: center;
+        color: #28a745;
+        text-transform: uppercase;
+      }
     }
 
     .checkout-success-title {
       margin-bottom: 20px;
       text-align: center;
+      font-size: 1.5rem;
 
       @media (min-width: 768px) {
         margin-bottom: 30px;
@@ -44,6 +53,22 @@ body.page-checkout-success {
         @media (min-width: 768px) {
           font-size: 30px;
         }
+      }
+    }
+
+    .payment-status-highlight {
+      background-color: #d4edda;
+      border: 2px solid #28a745;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1.5rem;
+      margin: 2rem auto;
+      max-width: 500px;
+
+      strong {
+        color: #155724;
+        font-size: 1.75rem;
       }
     }
   }

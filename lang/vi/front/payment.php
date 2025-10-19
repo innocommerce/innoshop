@@ -8,13 +8,16 @@
  */
 
 return [
-    'bank_transfer_success_title' => 'Đơn đặt hàng đã được gửi, xin vui lòng chờ cho người quản trị xem xét',
-    'cancel_desc'                 => 'Bạn đã hủy bỏ thanh toán, nếu bạn có bất kỳ thắc mắc, xin vui lòng liên hệ với dịch vụ khách hàng.',
-    'cancel_title'                => 'Bạn đã hủy bỏ thanh toán',
+    'already_paid_message'        => 'Đơn hàng này đã được thanh toán thành công',
+    'bank_transfer_success_title' => 'Đơn hàng đã được gửi, vui lòng chờ quản trị viên xem xét',
+    'cancel_desc'                 => 'Bạn đã hủy thanh toán, vui lòng liên hệ dịch vụ khách hàng nếu có bất kỳ câu hỏi nào',
+    'cancel_title'                => 'Bạn đã hủy thanh toán',
+    'cannot_pay_order_status'     => 'Không thể thực hiện thanh toán, trạng thái đơn hàng hiện tại: :status',
     'continue_shopping'           => 'Tiếp tục mua sắm',
     'fail_desc'                   => 'Tôi xin lỗi vì khoản thanh toán của ông không thành công. Hãy thử lại hoặc liên lạc với dịch vụ khách hàng.',
     'fail_title'                  => 'Thanh toán thất bại',
-    'no_order'                    => 'Không tìm thấy thông tin đơn đặt hàng',
+    'no_order'                    => 'Không tìm thấy thông tin đơn hàng',
+    'payment_completed'           => 'Đã hoàn thành thanh toán',
     'success_title'               => 'Thanh toán thành công',
-    'view_order'                  => 'Xem đơn đặt hàng',
+    'view_order'                  => 'Xem đơn hàng',
 ];

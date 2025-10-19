@@ -287,4 +287,16 @@ class StripeService extends PaymentService
 
         return $this->stripeClient->checkout->sessions->create($sessionOptions);
     }
+
+    /**
+     * 获取 Stripe Checkout Session
+     *
+     * @param  string  $sessionId
+     * @return \Stripe\Checkout\Session
+     * @throws ApiErrorException
+     */
+    public function retrieveCheckoutSession(string $sessionId): \Stripe\Checkout\Session
+    {
+        return $this->stripeClient->checkout->sessions->retrieve($sessionId);
+    }
 }

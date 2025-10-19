@@ -32,6 +32,10 @@ return [
     'error_year'    => 'Please select the year',
     'error_month'   => 'Please select a month',
 
-    'capture_success' => 'Capture Successfully',
-    'capture_fail'    => 'Capture Failed',
+    'capture_success'   => 'Capture Successfully',
+    'capture_fail'      => 'Capture Failed',
+    'already_paid'      => 'This order has already been paid',
+    'order_not_found'   => 'Order not found',
+    'checkout_success'  => 'Payment completed successfully',
+    'checkout_cancel'   => 'Payment was cancelled',
 ];

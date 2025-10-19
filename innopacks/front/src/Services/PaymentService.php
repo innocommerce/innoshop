@@ -46,7 +46,14 @@ class PaymentService
     {
         try {
             if ($this->order->status != 'unpaid') {
-                throw new Exception("Order status must be unpaid, now is {$this->order->status}!");
+                if ($this->order->status == 'paid') {
+                    return view('orders.pay', [
+                        'order' => $this->order,
+                        'success' => trans('front/payment.already_paid_message') ?? 'This order has already been paid successfully.'
+                    ]);
+                }
+
+                throw new Exception(trans('front/payment.cannot_pay_order_status', ['status' => $this->order->status_format]) ?? "Cannot process payment. Order status is currently: {$this->order->status_format}");
             }
             $originCode  = $this->billingMethodCode;
             $paymentCode = Str::studly($originCode);

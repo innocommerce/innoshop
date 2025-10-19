@@ -141,30 +141,72 @@
         }
       },
 
-      checkedBtnCheckoutConfirm() {
+      checkedBtnCheckoutConfirm(e) {
         // 判断 stripeForm.errors 里面的值是否都为空
         if (stripeForm.form.cardholder_Name == '') {
           stripeForm.errors.cardholderName = 'Please fill out a cardholder name.'
+          return;
         }
 
-        // if (Object.values(stripeForm.errors).every(e => e == '')) {
+        const submitButton = e.target;
+        submitButton.disabled = true;
+
+        // Create loading text
+        const originalText = submitButton.textContent;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...';
+
         const options = {
           name: stripeForm.form.cardholder_Name,
         };
 
-        //layer.load(2, {shade: [0.3, '#fff']})
-
         stripe.createToken(cardNumberElement, options).then(function (stripeResult) {
           if (stripeResult.error) {
-            layer.msg(stripeResult.error.message, () => {
-            })
-            layer.closeAll('loading')
+            // Re-enable button on error
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+
+            if (typeof layer !== 'undefined') {
+              layer.msg(stripeResult.error.message, () => {})
+            } else {
+              alert(stripeResult.error.message);
+            }
           } else {
-            axios.post(`{{ front_route('stripe_capture') }}`, {token: stripeResult.token.id, order_number: orderNumber}).then(function (pay) {
-              if (pay.status === 'success') {
-                location = "{{ front_route('stripe_capture') }} checkout/success?order_number=" + orderNumber
+            axios.post(`{{ front_route('stripe_capture') }}`, {
+              token: stripeResult.token.id,
+              order_number: orderNumber
+            }).then(function (res) {
+              const responseData = res;
+              const isSuccess = responseData && responseData.success === true;
+
+              if (isSuccess) {
+                const successUrl = "{{ front_route('payment.success') }}?order_number=" + orderNumber;
+                console.log('Redirecting to:', successUrl);
+                window.location.href = successUrl;
+
+                return;
               } else {
-                layer.msg(pay.message, () => {})
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+
+                const errorMsg = (responseData && responseData.message) || 'Payment failed';
+                console.log('Showing error message:', errorMsg);
+
+                if (typeof layer !== 'undefined') {
+                  layer.msg(errorMsg, () => {})
+                } else {
+                  alert(errorMsg);
+                }
+              }
+            }).catch(function (error) {
+              // Re-enable button on error
+              submitButton.disabled = false;
+              submitButton.textContent = originalText;
+
+              const errorMsg = error.response?.data?.message || error.message || 'An error occurred';
+              if (typeof layer !== 'undefined') {
+                layer.msg(errorMsg, () => {})
+              } else {
+                alert(errorMsg);
               }
             })
           }

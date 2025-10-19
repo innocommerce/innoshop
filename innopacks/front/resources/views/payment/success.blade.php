@@ -18,6 +18,13 @@
         @else
           <div class="checkout-success-title"><span>{{ trans('front/payment.success_title') }}</span></div>
         @endif
+
+        @if($order && $order->status === 'paid')
+          <div class="payment-status-highlight">
+            {{ trans('front/payment.payment_completed') ?? 'Payment Completed' }} - <strong>{{ trans('front/order.order_status') }}: {{ $order->status_format }}</strong>
+          </div>
+        @endif
+
         <table class="table w-max-700 mx-auto mb-3 mb-md-5 checkout-success-table">
           <thead>
           <tr>

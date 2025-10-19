@@ -8,13 +8,16 @@
  */
 
 return [
+    'already_paid_message'        => 'Bu sipariş başarıyla ödendi',
     'bank_transfer_success_title' => 'Sipariş gönderildi, lütfen yöneticinin incelemesini bekleyin',
-    'cancel_desc'                 => 'Ödemenizi iptal ettiniz, herhangi bir sorunuz varsa lütfen müşteri hizmetleri ile iletişime geçin.',
+    'cancel_desc'                 => 'Ödemeyi iptal ettiniz, lütfen herhangi bir sorunuz varsa müşteri hizmetleriyle iletişime geçin',
     'cancel_title'                => 'Ödemeyi iptal ettiniz',
-    'continue_shopping'           => 'Alışverişe devam edin',
+    'cannot_pay_order_status'     => 'Ödeme yapılamıyor, mevcut sipariş durumu: :status',
+    'continue_shopping'           => 'Alışverişe devam et',
     'fail_desc'                   => 'Üzgünüz, ödemeniz başarılı olmadı. Lütfen tekrar deneyin veya müşteri hizmetleri ile iletişime geçin.',
-    'fail_title'                  => 'Ödeme başarısız oldu',
+    'fail_title'                  => 'Ödeme başarısız',
     'no_order'                    => 'Sipariş bilgisi bulunamadı',
-    'success_title'               => 'Ödeme başarılı oldu',
+    'payment_completed'           => 'Ödeme tamamlandı',
+    'success_title'               => 'Ödeme başarılı',
     'view_order'                  => 'Siparişi görüntüle',
 ];
