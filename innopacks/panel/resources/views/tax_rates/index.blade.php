@@ -164,7 +164,7 @@
     }
     )
   .then(() => {
-  const deletUrl = urls.base_url + '/tax_rates/' + itemId;
+  const deletUrl = urls.panel_base + '/tax_rates/' + itemId;
   deleteForm.value.action = deletUrl;
   deleteForm.value.submit();
   })

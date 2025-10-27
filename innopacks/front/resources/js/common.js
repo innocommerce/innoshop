@@ -42,7 +42,7 @@ export default {
       requestData.options = options;
     }
 
-    axios.post(urls.cart_add, requestData).then((res) => {
+    axios.post(urls.front_cart_add, requestData).then((res) => {
       if (!isBuyNow) {
         layer.msg(res.message)
       }
@@ -70,7 +70,7 @@ export default {
 
     if (isWishlist) {
       $btn.html(loadHtml).prop('disabled', true);
-      axios.post(`${urls.favorite_cancel}`, {product_id: id}).then((res) => {
+      axios.post(`${urls.front_favorite_cancel}`, {product_id: id}).then((res) => {
         layer.msg(res.message)
         $btn.attr('data-in-wishlist', 0);
         if (callback) {
@@ -81,7 +81,7 @@ export default {
       })
     } else {
       $btn.html(loadHtml).prop('disabled', true);
-      axios.post(`${urls.favorites}`, {product_id: id}).then((res) => {
+      axios.post(`${urls.front_favorites}`, {product_id: id}).then((res) => {
         layer.msg(res.message)
         $btn.attr('data-in-wishlist', 1);
         $btn.html(btnHtml).prop('disabled', false).find('i.bi').prop('class', 'bi bi-heart-fill')
@@ -96,7 +96,7 @@ export default {
 
   // Get cart information
   getCarts() {
-    axios.get(urls.cart_mini).then((res) => {
+    axios.get(urls.front_cart_mini).then((res) => {
       $('.header-cart-icon .icon-quantity').text(res.data.total_format)
     })
   },
@@ -171,7 +171,7 @@ export default {
       type: 2,
       title: '',
       area: area,
-      content: `${urls.login}?iframe=true`,
+      content: `${urls.front_login}?iframe=true`,
       success: function(layero, index) {
         var iframe = $(layero).find('iframe');
         iframe.css('height', iframe[0].contentDocument.body.offsetHeight + 20);

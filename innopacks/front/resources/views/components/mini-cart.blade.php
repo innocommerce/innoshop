@@ -9,7 +9,7 @@
     <div v-if="isEmpty" class="text-center py-5">
       <img :src="asset_url + 'images/icons/empty-cart.svg'" class="img-fluid" style="max-width: 200px;" class="mb-4">
       <h5>{{ __('front/cart.empty_cart') }}</h5>
-      <a class="btn btn-primary mt-3" :href="urls.base_url">{{ __('front/cart.continue') }}</a>
+      <a class="btn btn-primary mt-3" :href="urls.front_base">{{ __('front/cart.continue') }}</a>
     </div>
 
     <!-- Cart content -->
@@ -90,10 +90,10 @@
             <span class="fs-5 text-primary ms-2">@{{ totalAmount }}</span>
           </div>
         </div>
-        <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :href="urls.checkout">
+        <a class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :href="urls.front_checkout">
           {{ __('front/cart.go_checkout') }}
         </a>
-        <a class="btn btn-outline-secondary btn-lg fw-bold w-100 mt-2" :href="urls.cart">
+        <a class="btn btn-outline-secondary btn-lg fw-bold w-100 mt-2" :href="urls.front_cart">
           {{ __('front/cart.view_cart') }}
         </a>
       </div>
@@ -123,7 +123,7 @@ if (!window.cartApp) {
       // Methods
       const loadCart = async () => {
         try {
-          const response = await axios.get(urls.cart_mini)
+          const response = await axios.get(urls.front_cart_mini)
           if (response.success) {
             cartItems.value = response.data.list || []
             totalAmount.value = response.data.amount_format
@@ -144,7 +144,7 @@ if (!window.cartApp) {
         if (!normalIds.length) return
 
         try {
-          const response = await axios.post(`${urls.cart_add}/${selected ? 'select' : 'unselect'}`, {
+          const response = await axios.post(`${urls.front_cart_add}/${selected ? 'select' : 'unselect'}`, {
             cart_ids: normalIds
           })
           if (response.success) {
@@ -167,7 +167,7 @@ if (!window.cartApp) {
         if (quantity < 1) return
         
         try {
-          const response = await axios.put(`${urls.cart_add}/${id}`, { quantity })
+          const response = await axios.put(`${urls.front_cart_add}/${id}`, { quantity })
           if (response.success) {
             inno.msg(response.message)
             await loadCart()
@@ -182,7 +182,7 @@ if (!window.cartApp) {
 
       const deleteItem = async (id) => {
         try {
-          const response = await axios.delete(`${urls.cart_add}/${id}`)
+          const response = await axios.delete(`${urls.front_cart_add}/${id}`)
           if (response.success) {
             inno.msg(response.message)
             await loadCart()

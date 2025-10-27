@@ -22,7 +22,7 @@ const ProductSelector = {
       shadeClose: false,
       shade: 0.8,
       area: ["800px", "800px"],
-      content: urls.base_url + '/products/selector',
+      content: urls.panel_base + '/products/selector',
     });
   }
 };

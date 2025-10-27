@@ -212,7 +212,7 @@
         </div>
         <div class="d-flex justify-content-center mt-4">
           <a href="{{ url('/') }}" class="btn btn-primary me-3">{{ __('install/common.visit_frontend') }}</a>
-          <a href="{{ url('/panel') }}" class="btn btn-primary">{{ __('install/common.visit_backend') }}</a>
+          <a href="{{ panel_route('home.index') }}" class="btn btn-primary">{{ __('install/common.visit_backend') }}</a>
         </div>
       </div>
     </div>

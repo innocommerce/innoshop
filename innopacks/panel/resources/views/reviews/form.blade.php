@@ -103,7 +103,7 @@
       'source': function (request, response) {
         const keyword = encodeURIComponent(request.term);
         var name = document.getElementById('product-autocomplete').value;
-        axios.get(`${urls.api_base}/products/autocomplete?keyword=${name}`, null, {hload: true})
+        axios.get(`${urls.panel_api}/products/autocomplete?keyword=${name}`, null, {hload: true})
           .then((res) => {
             response($.map(res.data, function (item) {
               return {label: item['name'], value: item['id']};
@@ -123,7 +123,7 @@
       'source': function (request, response) {
         const keyword = encodeURIComponent(request.term);
         var name = document.getElementById('customer-autocomplete').value;
-        axios.get(`${urls.api_base}/customers/autocomplete?keyword=${name}`, null, {hload: true})
+        axios.get(`${urls.panel_api}/customers/autocomplete?keyword=${name}`, null, {hload: true})
           .then((res) => {
             response($.map(res.data, function (item) {
               return {label: item['name'], value: item['id']};

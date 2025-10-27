@@ -190,7 +190,7 @@
           if (!item || item.item_type !== 'normal' || quantity < 1) return
 
           try {
-            const res = await axios.put(`${urls.cart_add}/${id}`, { quantity })
+            const res = await axios.put(`${urls.front_cart_add}/${id}`, { quantity })
             if (res.success) {
               inno.msg(res.message)
               updateCartState(res.data)
@@ -209,7 +209,7 @@
           if (!normalIds.length) return
 
           try {
-            const res = await axios.post(`${urls.cart_add}/${selected ? 'select' : 'unselect'}`, {
+            const res = await axios.post(`${urls.front_cart_add}/${selected ? 'select' : 'unselect'}`, {
               cart_ids: normalIds
             })
             if (res.success) {
@@ -233,7 +233,7 @@
           if (!item || item.item_type !== 'normal') return
 
           try {
-            const res = await axios.delete(`${urls.cart_add}/${id}`)
+            const res = await axios.delete(`${urls.front_cart_add}/${id}`)
             if (res.success) {
               inno.msg(res.message)
               if (list.value.length === 1) {
@@ -252,7 +252,7 @@
             inno.msg('Please select the product to checkout!')
             return
           }
-          window.location.href = urls.checkout
+          window.location.href = urls.front_checkout
         }
 
         // Return reactive state and methods

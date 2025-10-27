@@ -305,7 +305,7 @@
           // View shipment details
           $(document).on('click', '[id^="view-shipment-"]', function () {
             const shipmentId = $(this).data('id')
-            axios.get(`${urls.api_base}/panel/shipments/${shipmentId}/traces`)
+            axios.get(`${urls.front_api}/panel/shipments/${shipmentId}/traces`)
               .then(response => {
                 const traces = response.data.traces
                 const tbody = $('#newShipmentModal .modal-body table tbody').last()
@@ -325,7 +325,7 @@
           // Mark order as shipped
           $(document).on('click', '.btn-shipped', function () {
             const orderNumber = $(this).data('number')
-            axios.post(`${urls.api_base}/orders/${orderNumber}/complete`, {
+            axios.post(`${urls.front_api}/orders/${orderNumber}/complete`, {
               number: orderNumber
             })
               .then(() => {
@@ -353,7 +353,7 @@
                 shade: [0.3, "#fff"]
               })
 
-              axios.post(`${urls.api_base}/orders/${orderNumber}/cancel`, {
+              axios.post(`${urls.front_api}/orders/${orderNumber}/cancel`, {
                 number: orderNumber
               })
                 .then(() => {

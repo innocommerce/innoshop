@@ -168,7 +168,7 @@
         var button = $(this);
         var number = $(this).data('number');
 
-        axios.post(`${urls.api_base}/orders/${number}/complete`, {
+        axios.post(`${urls.front_api}/orders/${number}/complete`, {
           number: number
         }).then(function (response) {
           inno.msg(__('front/account.signed_success'));

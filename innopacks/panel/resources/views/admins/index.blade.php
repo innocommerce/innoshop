@@ -84,7 +84,7 @@
       }
       )
       .then(() => {
-      const deleteUrl =urls.base_url+'/admins/'+index;
+      const deleteUrl =urls.panel_base+'/admins/'+index;
       deleteForm.value.action=deleteUrl;
       deleteForm.value.submit();
       })

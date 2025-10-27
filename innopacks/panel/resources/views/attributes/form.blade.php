@@ -127,7 +127,7 @@
       layer.load(2, { shade: [0.3, '#fff'] });
       
       $.ajax({
-        url: urls.base_url + '/attribute_values/' + id,
+        url: urls.panel_base + '/attribute_values/' + id,
         method: 'DELETE',
         dataType: 'json',
         success: (res) => {
@@ -144,7 +144,7 @@
     });
 
     inno.validateAndSubmitForm('.values-input-wrap', (response) => {
-      let url = id ? `${urls.base_url}/attribute_values/${id}` : `${urls.base_url}/attribute_values`;
+      let url = id ? `${urls.panel_base}/attribute_values/${id}` : `${urls.panel_base}/attribute_values`;
       let method = id ? 'PUT' : 'POST';
 
       // 显示加载层

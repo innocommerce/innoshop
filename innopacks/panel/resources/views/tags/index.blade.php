@@ -84,7 +84,7 @@
         }
       )
       .then(() => {
-      const deleturl =urls.base_url+'/tags/'+index;
+      const deleturl =urls.panel_base+'/tags/'+index;
       deleteForm.value.action=deleturl;
       deleteForm.value.submit();
       })
