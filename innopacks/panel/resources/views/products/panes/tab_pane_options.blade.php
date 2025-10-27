@@ -218,7 +218,7 @@ createOptionsApp({
     const loadAvailableOptions = async () => {
       loading.value = true;
       try {
-        const response = await fetch(urls.base_url + '/options/available', {
+        const response = await fetch(urls.panel_base + '/options/available', {
           method: 'GET',
           headers: {
             'X-Requested-With': 'XMLHttpRequest',
@@ -266,7 +266,7 @@ createOptionsApp({
     // Load option values
     const loadOptionValues = async (option) => {
       try {
-        const response = await fetch(urls.base_url + '/options/' + option.id + '/values', {
+        const response = await fetch(urls.panel_base + '/options/' + option.id + '/values', {
           method: 'GET',
           headers: {
             'X-Requested-With': 'XMLHttpRequest',

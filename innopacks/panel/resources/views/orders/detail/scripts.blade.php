@@ -7,7 +7,7 @@
         event.preventDefault();
         var comment = $(this).val();
         var orderId = $(this).data('order-id');
-        var apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
+        var apiUrl = `${urls.panel_api}/orders/${orderId}/notes`;
         axios.post(apiUrl, {
             admin_note: comment,
           })
@@ -31,7 +31,7 @@
 
     // View shipment details function
     window.viewShipmentDetails = function(shipmentId) {
-      axios.get(`${urls.api_base}/shipments/${shipmentId}/traces`)
+      axios.get(`${urls.panel_api}/shipments/${shipmentId}/traces`)
         .then(function(response) {
           if (response.data && response.data.traces) {
             const tbody = $('#newShipmentModal .modal-body table tbody').last();
@@ -58,7 +58,7 @@
     let elment = $('.admin-comment-input');
     let comment = elment.val();
     let orderId = elment.data('order-id');
-    let apiUrl = `${urls.api_base}/orders/${orderId}/notes`;
+    let apiUrl = `${urls.panel_api}/orders/${orderId}/notes`;
     axios.post(apiUrl, {
         admin_note: comment,
       })
@@ -79,7 +79,7 @@
     const trackingNumber = $('#trackingNumber').val();
     const selectedCompanyName = $('#logisticsCompany option:selected').text();
     const orderId = {{ $order->id }};
-    axios.post(`${urls.api_base}/orders/${orderId}/shipments`, {
+    axios.post(`${urls.panel_api}/orders/${orderId}/shipments`, {
       express_code: logisticsCompany,
       express_company: selectedCompanyName,
       express_number: trackingNumber,
@@ -94,7 +94,7 @@
 
   // Delete shipment function
   function deleteShipment(shipmentId) {
-    const apiUrl = `${urls.api_base}/shipments/${shipmentId}`;
+    const apiUrl = `${urls.panel_api}/shipments/${shipmentId}`;
     axios.delete(apiUrl)
       .then(function(response) {
         inno.msg('{{ __('panel/order.delete_successfully') }}');

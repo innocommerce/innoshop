@@ -98,7 +98,7 @@
               type: 'warning',
             }
           ).then(() => {
-            deleteForm.value.action = urls.base_url + '/articles/' + index;
+            deleteForm.value.action = urls.panel_base + '/articles/' + index;
             deleteForm.value.submit();
           }).catch(() => {
           });

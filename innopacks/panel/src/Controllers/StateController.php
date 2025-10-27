@@ -102,21 +102,17 @@ class StateController extends BaseController
     /**
      * @param  StateRequest  $request
      * @param  State  $state
-     * @return RedirectResponse
+     * @return mixed
      */
-    public function update(StateRequest $request, State $state): RedirectResponse
+    public function update(StateRequest $request, State $state): mixed
     {
         try {
             $data = $request->all();
             StateRepo::getInstance()->update($state, $data);
 
-            return redirect(panel_route('states.index'))
-                ->with('instance', $state)
-                ->with('success', panel_trans('common.updated_success'));
+            return json_success(panel_trans('common.updated_success'));
         } catch (Exception $e) {
-            return redirect(panel_route('states.index'))
-                ->withInput()
-                ->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 

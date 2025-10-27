@@ -264,7 +264,7 @@
             }
           )
             .then(() => {
-              const deleteUrl = urls.base_url + '/regions/' + itemId;
+              const deleteUrl = urls.panel_base + '/regions/' + itemId;
               deleteForm.value.action = deleteUrl;
               deleteForm.value.submit();
             })

@@ -21,7 +21,7 @@ export default {
       }
 
       axios
-        .post(`${urls.base_url}/translations/translate-text`, {
+        .post(`${urls.panel_base}/translations/translate-text`, {
           source: source_locale,
           target: $("#target-locale").val(),
           text: text,
@@ -53,7 +53,7 @@ export default {
       tinymce.triggerSave();
       let content = editor.getContent();
       axios
-        .post(`${urls.base_url}/translations/translate-html`, {
+        .post(`${urls.panel_base}/translations/translate-html`, {
           source: source_tab_code,
           target: $("#target-tab").val(),
           text: content,
@@ -122,7 +122,7 @@ export default {
       }
 
       axios
-        .post(`${urls.base_url}/translations/translate-text`, {
+        .post(`${urls.panel_base}/translations/translate-text`, {
           source: current_source,
           target: selectedOptionValue,
           text: textareaValue,
@@ -219,7 +219,7 @@ export default {
     _self.find(".img-loading").removeClass("d-none");
 
     axios
-      .post(urls.upload_images, formData, {})
+      .post(urls.panel_upload, formData, {})
       .then(function (res) {
         callback(res);
       })

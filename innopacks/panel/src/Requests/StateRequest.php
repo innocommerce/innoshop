@@ -31,18 +31,19 @@ class StateRequest extends FormRequest
     public function rules(): array
     {
         if ($this->state) {
-            $slugRule = 'alpha_dash|unique:states,code,'.$this->state->id;
+            // 更新时：在同一个国家内，code 必须唯一，但排除当前记录
+            $codeRule = 'alpha_dash|unique:states,code,'.$this->state->id.',id,country_id,'.$this->input('country_id');
         } else {
-            $slugRule = 'alpha_dash|unique:states,code';
+            // 创建时：在同一个国家内，code 必须唯一
+            $codeRule = 'alpha_dash|unique:states,code,NULL,id,country_id,'.$this->input('country_id');
         }
 
         return [
-            'country_id'   => 'integer|required',
-            'country_code' => 'string|required|max:2',
-            'name'         => 'string|required|max:32',
-            'code'         => $slugRule,
-            'position'     => 'string',
-            'active'       => 'bool',
+            'name'       => 'required|string|max:64',
+            'code'       => $codeRule,
+            'country_id' => 'required|integer',
+            'position'   => 'integer',
+            'active'     => 'boolean',
         ];
     }
 }

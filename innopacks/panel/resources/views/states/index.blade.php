@@ -142,6 +142,26 @@
             drawer.value = false
             inno.msg(res.message)
             window.location.reload()
+          }).catch((error) => {
+            // 处理验证错误
+            if (error.response && error.response.data) {
+              const errorData = error.response.data;
+              if (errorData.errors) {
+                // Laravel 验证错误格式
+                let errorMessage = '';
+                for (const field in errorData.errors) {
+                  errorMessage += errorData.errors[field].join(', ') + '\n';
+                }
+                inno.msg(errorMessage.trim(), 'error');
+              } else if (errorData.message) {
+                // 单个错误消息
+                inno.msg(errorData.message, 'error');
+              } else {
+                inno.msg('{{ __("common/base.error") }}', 'error');
+              }
+            } else {
+              inno.msg('{{ __("common/base.error") }}', 'error');
+            }
           })
         }
 
@@ -171,7 +191,7 @@
             }
           )
             .then(() => {
-              const deletUrl = urls.base_url + '/states/' + itemId;
+              const deletUrl = urls.panel_base + '/states/' + itemId;
               deleteForm.value.action = deletUrl;
               deleteForm.value.submit();
             })

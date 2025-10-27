@@ -15,7 +15,7 @@
       <x-common-form-input title="名称" name="name" :value="old('name', $state->name ?? '')" required placeholder="名称" />
       <x-common-form-input title="编码" name="code" :value="old('code', $state->code ?? '')" required placeholder="编码" />
       <x-common-form-image title="标识" name="image" :value="old('image', $state->image ?? '')" placeholder="image" />
-      <x-common-form-input title="排序" name="position" :value="old('position', $state->slug ?? '')" required placeholder="排序" />
+      <x-common-form-input title="排序" name="position" :value="old('position', $state->position ?? 0)" required placeholder="排序" />
       <x-common-form-input title="启用" name="active" :value="old('active', $state->active ?? '')" placeholder="启用" />
 
       <div class="form-row mt-5 d-flex">

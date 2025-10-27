@@ -98,7 +98,7 @@
       }
       )
     .then(() => {
-             const deleteUrl = urls.base_url + '/brands/' + itemId;
+             const deleteUrl = urls.panel_base + '/brands/' + itemId;
                deleteForm.value.action = deleteUrl;
               deleteForm.value.submit()
     })

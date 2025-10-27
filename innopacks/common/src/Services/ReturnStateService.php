@@ -319,7 +319,7 @@ class ReturnStateService
         if (! $this->notify) {
             return;
         }
-        //$this->orderReturn->notifyNewOrder();
+        // $this->orderReturn->notifyNewOrder();
     }
 
     /**
@@ -334,6 +334,6 @@ class ReturnStateService
         if (! $this->notify) {
             return;
         }
-        //$this->orderReturn->notifyUpdateOrder($oldCode);
+        // $this->orderReturn->notifyUpdateOrder($oldCode);
     }
 }

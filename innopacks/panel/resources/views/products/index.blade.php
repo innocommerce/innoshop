@@ -146,7 +146,7 @@
               type: 'warning',
             }
           ).then(() => {
-            deleteForm.value.action = urls.base_url + '/products/' + index;
+            deleteForm.value.action = urls.panel_base + '/products/' + index;
             deleteForm.value.submit();
           }).catch(() => {
           });

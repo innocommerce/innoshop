@@ -165,7 +165,7 @@ const UI = {
 
       layer.load(2, { shade: [0.3, "#fff"] });
       axios
-        .post(urls.ai_generate, formData, {})
+        .post(urls.panel_ai, formData, {})
         .then(function (res) {
           if (res.data && res.data.generated_text) {
             $input.val(res.data.generated_text);
@@ -238,7 +238,7 @@ const FileManager = {
       shadeClose: false,
       shade: 0.8,
       area: ["90%", "90%"],
-      content: `/panel/file_manager/iframe?type=${finalOptions.type}&multiple=${finalOptions.multiple ? "1" : "0"}`,
+      content: `${urls.panel_base}/file_manager/iframe?type=${finalOptions.type}&multiple=${finalOptions.multiple ? "1" : "0"}`,
     });
   }
 };
@@ -315,7 +315,7 @@ const Editor = {
         layer.load(2, { shade: [0.3, "#fff"] });
 
         axios
-          .post("api/panel/file_manager/upload", formData)
+          .post(`${urls.panel_api}/file_manager/upload`, formData)
           .then((response) => {
             if (response.data.url) {
               ed.insertContent(`<img src="${response.data.url}" class="img-fluid" />`);

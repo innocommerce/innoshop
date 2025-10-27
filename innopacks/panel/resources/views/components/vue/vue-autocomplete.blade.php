@@ -41,16 +41,16 @@
         let url = '';
         switch (props.type) {
           case 'product':
-            url = urls.api_base + '/products/autocomplete?keyword=';
+            url = urls.panel_api + '/products/autocomplete?keyword=';
             break;
           case 'category':
-            url = urls.api_base + '/categories/autocomplete?keyword=';
+            url = urls.panel_api + '/categories/autocomplete?keyword=';
             break;
           case 'brand':
-            url = urls.api_base + '/brands/autocomplete?keyword=';
+            url = urls.panel_api + '/brands/autocomplete?keyword=';
             break;
           case 'page':
-            url = urls.api_base + '/pages/autocomplete?keyword=';
+            url = urls.panel_api + '/pages/autocomplete?keyword=';
             break;
           default:
             return;

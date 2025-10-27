@@ -24,12 +24,12 @@
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script src="{{ mix('build/panel/js/app.js') }}"></script>
   <script>
-    let urls = {
-      api_base: '{{ route('api.panel.base.index') }}',
-      base_url: '{{ panel_route('home.index') }}',
-      upload_images: '{{ panel_route('upload.images') }}',
-      ai_generate: '{{ panel_route('content_ai.generate') }}',
-    }
+    const urls = {
+      panel_api: '{{ route('api.panel.base.index') }}',
+      panel_base: '{{ panel_route('home.index') }}',
+      panel_upload: '{{ panel_route('upload.images') }}',
+      panel_ai: '{{ panel_route('content_ai.generate') }}',
+    };
 
     const lang = {
       hint: '{{ __('panel/common.hint') }}',
