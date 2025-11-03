@@ -32,7 +32,7 @@
         "spatie/laravel-permission": "^6.7",
         "spatie/laravel-sitemap": "^7.3",
         "srmklive/paypal": "^3.0",
-        "stripe/stripe-php": "^15.10",
+        "stripe/stripe-php": "^18.0",
         "tormjens/eventy": "^0.9.3",
         "w7corp/easywechat": "^6.7",
         "wikimedia/composer-merge-plugin": "^2.1"
