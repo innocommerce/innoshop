@@ -1,14 +1,7 @@
 .module-swiper {
   .swiper-slide {
-    // 设置幻灯片容器的高度
-    height: 400px; // 桌面端默认高度
-    overflow: hidden;
-    
     img {
       width: 100%;
-      height: 100%;
-      object-fit: cover; // 保持图片比例，裁剪多余部分
-      object-position: center; // 居中显示
     }
   }
 
@@ -19,19 +12,6 @@
 
     .swiper-pagination-bullet-active {
       background: $primary !important;
-    }
-  }
-
-  // 响应式设计 - 移动端调整高度
-  @media (max-width: 768px) {
-    .swiper-slide {
-      height: 250px; // 移动端较小高度
-    }
-  }
-
-  @media (max-width: 480px) {
-    .swiper-slide {
-      height: 200px; // 小屏幕设备更小高度
     }
   }
 }

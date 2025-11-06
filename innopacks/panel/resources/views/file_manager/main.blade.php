@@ -2,6 +2,17 @@
     <script src="{{ asset('vendor/vue/2.7/vue.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('vendor/element-ui/element-ui.css') }}">
     <script src="{{ asset('vendor/element-ui/element-ui.js') }}"></script>
+    <!-- Element UI 英文语言包（根据当前语言切换） -->
+    <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+    <script>
+      // 根据系统语言设置 Element UI 的语言
+      (function(){
+        var currentLocale = '{{ locale_code() }}';
+        if (window.ELEMENT && currentLocale === 'en' && window.ELEMENT.lang && window.ELEMENT.lang.en) {
+          window.ELEMENT.locale(window.ELEMENT.lang.en);
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="{{  asset('vendor/cropper/cropper.min.css') }}">
     <script src="{{ asset('vendor/cropper/cropper.min.js') }}"></script>
     <script src="{{ asset('vendor/vuedraggable/vuedraggable.umd.min.js') }}"></script>
@@ -1364,48 +1375,48 @@
           <el-col :span="12">
             <el-button-group>
               <el-button type="primary" size="small" @click="uploadFile">
-                <i class="el-icon-upload2"></i> 上传文件
+                <i class="el-icon-upload2"></i> {{ __('panel/file_manager.upload') }}
               </el-button>
               <el-button size="small" @click="createFolder">
-                <i class="el-icon-folder-add"></i> 新建文件夹
+                <i class="el-icon-folder-add"></i> {{ __('panel/file_manager.create_folder') }}
               </el-button>
               <el-button size="small" data-bs-toggle="modal" data-bs-target="#storageConfigModal">
                 <i class="el-icon-setting"></i> {{ __('panel/file_manager.storage_config') }}
               </el-button>
               <el-button size="small" :type="isMultiSelectMode ? 'primary' : 'default'" @click="toggleMultiSelectMode">
-                <i class="el-icon-check"></i> 多选模式
+                <i class="el-icon-check"></i> {{ __('panel/file_manager.multi_select_mode') }}
               </el-button>
               <el-button v-if="isMultiSelectMode" size="small" @click="selectAll">
-                <i class="el-icon-finished"></i> 全选
+                <i class="el-icon-finished"></i> {{ __('panel/file_manager.select_all') }}
               </el-button>
 
-              <el-button type="primary" size="small"@click="handleConfirm">选择提交</el-button>
+              <el-button type="primary" size="small" @click="handleConfirm">{{ __('panel/file_manager.select_submit') }}</el-button>
 
             </el-button-group>
           </el-col>
           <el-col :span="12" style="text-align: right">
             <el-button-group>
               <el-button size="small" :disabled="selectedFiles.length !== 1" @click="renameSelectedFile">
-                <i class="el-icon-edit"></i> 重命
+                <i class="el-icon-edit"></i> {{ __('panel/file_manager.rename') }}
               </el-button>
               <el-button size="small" :disabled="!selectedFiles.length" @click="deleteFiles">
-                <i class="el-icon-delete"></i> 删除
+                <i class="el-icon-delete"></i> {{ __('panel/file_manager.delete') }}
               </el-button>
               <el-button size="small" :disabled="!selectedFiles.length" @click="moveFiles">
-                <i class="el-icon-folder"></i> 移动到
+                <i class="el-icon-folder"></i> {{ __('panel/file_manager.move_to') }}
               </el-button>
               <el-button size="small" :disabled="!selectedFiles.length" @click="copyFiles">
-                <i class="el-icon-document-copy"></i> 复制到
+                <i class="el-icon-document-copy"></i> {{ __('panel/file_manager.copy_to') }}
               </el-button>
             </el-button-group>
             <!-- 排序选择器 -->
             <el-select v-model="sortField" size="small" style="width:110px;margin-left:10px;" @change="onSortChange">
-              <el-option label="按时间" value="created"></el-option>
-              <el-option label="按名称" value="name"></el-option>
+              <el-option label="{{ __('panel/file_manager.sort_by_time') }}" value="created"></el-option>
+              <el-option label="{{ __('panel/file_manager.sort_by_name') }}" value="name"></el-option>
             </el-select>
             <el-select v-model="sortOrder" size="small" style="width:90px;margin-left:5px;" @change="onSortChange">
-              <el-option label="降序" value="desc"></el-option>
-              <el-option label="升序" value="asc"></el-option>
+              <el-option label="{{ __('panel/file_manager.sort_desc') }}" value="desc"></el-option>
+              <el-option label="{{ __('panel/file_manager.sort_asc') }}" value="asc"></el-option>
             </el-select>
           </el-col>
         </el-row>
@@ -1486,11 +1497,12 @@
                 <div class="pagination-container">
                   <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                     :current-page="pagination.page" :page-sizes="[20, 40, 60, 80]" :page-size="pagination.per_page"
+                    prev-text="{{ __('panel/file_manager.prev') }}" next-text="{{ __('panel/file_manager.next') }}"
                     layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
                   </el-pagination>
                 </div>
                 <!-- 添加空状态 -->
-                <el-empty v-else description="暂无文件" :image-size="120"></el-empty>
+                <el-empty v-else :description="'{{ __('panel/file_manager.empty') }}'" :image-size="120"></el-empty>
               </div>
             </div>
           </div>
@@ -1669,7 +1681,7 @@
                 <div class="mb-3">
                   <label for="ossEndpoint" class="form-label">{{ __('panel/file_manager.endpoint') }}</label>
                   <input type="text" class="form-control" id="ossEndpoint" v-model="storageConfig.endpoint"
-                    placeholder="例如: https://innoshop.oss-cn-hangzhou.aliyuncs.com">
+                    placeholder="{{ __('panel/file_manager.endpoint_example') }}">
                 </div>
 
                 <div class="mb-3">
@@ -1680,14 +1692,14 @@
                 <div class="mb-3">
                   <label for="ossRegion" class="form-label">{{ __('panel/file_manager.region') }}</label>
                   <input type="text" class="form-control" id="ossRegion" v-model="storageConfig.region"
-                    placeholder="例如: cn-hangzhou">
+                    placeholder="{{ __('panel/file_manager.region_example') }}">
                 </div>
 
                 <div class="mb-3">
                   <label for="ossCdnDomain" class="form-label">{{ __('panel/file_manager.cdn_domain') }} <small
                       class="text-muted">({{ __('panel/file_manager.optional') }})</small></label>
                   <input type="text" class="form-control" id="ossCdnDomain" v-model="storageConfig.cdn_domain"
-                    placeholder="例如: https://cdn.example.com">
+                    placeholder="{{ __('panel/file_manager.cdn_domain_example') }}">
                 </div>
               </div>
             </form>
@@ -1848,7 +1860,7 @@
         },
         submitCreateFolder() {
           if (!this.folderDialog.form.name) {
-            this.$message.warning('请输入文件夹名称');
+            this.$message.warning("{{ __('panel/file_manager.prompt_enter_folder_name') }}");
             return;
           }
 
@@ -1857,24 +1869,24 @@
             parent_id: this.currentFolder ? this.currentFolder.path : '/'
           }).then(res => {
             if (res.success) {
-              this.$message.success('创建成功');
+              this.$message.success("{{ __('panel/file_manager.create_success') }}");
               this.folderDialog.visible = false;
               this.folderDialog.form.name = '';
               // 重新加载文件夹树
               this.loadFolders();
             } else {
-              this.$message.error(res.message || '创建失败');
+              this.$message.error(res.message || "{{ __('panel/file_manager.create_fail') }}");
             }
           }).catch(err => {
-            this.$message.error('创建失败：' + err.message);
+            this.$message.error("{{ __('panel/file_manager.create_fail_prefix') }}" + err.message);
           });
         },
         deleteFiles() {
           if (!this.selectedFiles.length) return;
 
-          this.$confirm('确认删除选中的文件?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+          this.$confirm("{{ __('panel/file_manager.confirm_delete_selected_files') }}", "{{ __('panel/file_manager.prompt') }}", {
+            confirmButtonText: "{{ __('panel/file_manager.ok') }}",
+            cancelButtonText: "{{ __('panel/file_manager.cancel') }}",
             type: 'warning'
           }).then(() => {
             const currentPath = this.currentFolder ? this.currentFolder.path : '/';
@@ -2190,7 +2202,7 @@
 
             this.folders = [{
               id: '/',
-              name: '图片空间',
+              name: "{{ __('panel/file_manager.root_name') }}",
               path: '/',
               isRoot: true,
               children: folders.map(folder => ({
@@ -2209,7 +2221,7 @@
             // 默认选中根目录
             this.currentFolder = {
               id: '/',
-              name: '图片空间',
+              name: "{{ __('panel/file_manager.root_name') }}",
               path: '/'
             };
 
@@ -2219,7 +2231,7 @@
             // 加载根目录的文件
             this.loadFiles('/');
           }).catch(err => {
-            this.$message.error('获取文件夹失败：' + err.message);
+            this.$message.error("{{ __('panel/file_manager.error_load_folders_prefix') }}" + err.message);
           });
         },
 
@@ -2255,7 +2267,7 @@
         // 提交重命名
         submitRename() {
           if (!this.renameDialog.form.newName) {
-            this.$message.warning('请输入新名称');
+            this.$message.warning("{{ __('panel/file_manager.enter_new_name') }}");
             return;
           }
 
@@ -2269,7 +2281,7 @@
             new_name: newFullName
           }).then(res => {
             if (res.success) {
-              this.$message.success('重命名成功');
+              this.$message.success("{{ __('panel/file_manager.rename_success') }}");
               this.renameDialog.visible = false;
               this.loadFiles(currentPath);
             }
@@ -2279,9 +2291,9 @@
         // 删除单个文件
         deleteFile() {
           const file = this.contextMenu.file;
-          this.$confirm('确认删除该文件?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+          this.$confirm("{{ __('panel/file_manager.delete_file_confirm') }}", "{{ __('panel/file_manager.prompt') }}", {
+            confirmButtonText: "{{ __('panel/file_manager.ok') }}",
+            cancelButtonText: "{{ __('panel/file_manager.cancel') }}",
             type: 'warning'
           }).then(() => {
             const currentPath = this.currentFolder ? this.currentFolder.path : '/';
@@ -2292,7 +2304,7 @@
               }
             }).then(res => {
               if (res.success) {
-                this.$message.success('删除成功');
+                this.$message.success("{{ __('panel/file_manager.delete_success') }}");
                 this.selectedFiles = [];
                 this.loadFiles(currentPath);
               }
@@ -2318,7 +2330,7 @@
         // 提交移动
         submitMove() {
           if (!this.moveDialog.targetPath) {
-            this.$message.warning('请选择目标文件夹');
+            this.$message.warning("{{ __('panel/file_manager.select_target_folder') }}");
             return;
           }
 
@@ -2334,7 +2346,7 @@
             dest_path: this.moveDialog.targetPath
           }).then(res => {
             if (res.success) {
-              this.$message.success('移动成功');
+              this.$message.success("{{ __('panel/file_manager.move_success') }}");
               this.moveDialog.visible = false;
               this.selectedFiles = [];
               this.loadFiles(currentPath);
@@ -2381,7 +2393,7 @@
         // 提交复制
         submitCopy() {
           if (!this.copyDialog.targetPath) {
-            this.$message.warning('请选择目标文件夹');
+            this.$message.warning("{{ __('panel/file_manager.select_target_folder') }}");
             return;
           }
 
@@ -2397,7 +2409,7 @@
             dest_path: this.copyDialog.targetPath
           }).then(res => {
             if (res.success) {
-              this.$message.success('复制成功');
+              this.$message.success("{{ __('panel/file_manager.copy_success') }}");
               this.copyDialog.visible = false;
               this.selectedFiles = [];
               this.loadFiles(currentPath);
@@ -2473,7 +2485,7 @@
         // 提交文件夹重命名
         submitFolderRename() {
           if (!this.folderRenameDialog.form.newName) {
-            this.$message.warning('请输入新名称');
+            this.$message.warning("{{ __('panel/file_manager.enter_new_name') }}");
             return;
           }
 
@@ -2483,7 +2495,7 @@
             new_name: this.folderRenameDialog.form.newName
           }).then(res => {
             if (res.success) {
-              this.$message.success('重命名成功');
+              this.$message.success("{{ __('panel/file_manager.rename_success') }}");
               this.folderRenameDialog.visible = false;
               // 重新加载文件夹树
               this.loadFolders();
@@ -2494,9 +2506,9 @@
         // 删除文件夹
         deleteFolder() {
           const folder = this.folderContextMenu.folder;
-          this.$confirm('确认删除该文件夹?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+          this.$confirm("{{ __('panel/file_manager.delete_folder_confirm') }}", "{{ __('panel/file_manager.prompt') }}", {
+            confirmButtonText: "{{ __('panel/file_manager.ok') }}",
+            cancelButtonText: "{{ __('panel/file_manager.cancel') }}",
             type: 'warning'
           }).then(() => {
             http.delete('file_manager/directories', {
@@ -2505,7 +2517,7 @@
               }
             }).then(res => {
               if (res.success) {
-                this.$message.success('删除成功');
+                this.$message.success("{{ __('panel/file_manager.delete_success') }}");
                 this.loadFolders();
               }
             });
@@ -2526,7 +2538,7 @@
           // 不能移动到自己或自己的子文件夹下
           if (data.path === this.folderMoveDialog.folder.path ||
             data.path.startsWith(this.folderMoveDialog.folder.path + '/')) {
-            this.$message.warning('不能移动到自己或自己的子文件夹下');
+            this.$message.warning("{{ __('panel/file_manager.cannot_move_to_self') }}");
             return;
           }
           this.folderMoveDialog.targetPath = data.path;
@@ -2535,7 +2547,7 @@
         // 提交文件夹移动
         submitFolderMove() {
           if (!this.folderMoveDialog.targetPath) {
-            this.$message.warning('请选择目标文件夹');
+            this.$message.warning("{{ __('panel/file_manager.select_target_folder') }}");
             return;
           }
 
@@ -2545,7 +2557,7 @@
             dest_path: this.folderMoveDialog.targetPath
           }).then(res => {
             if (res.success) {
-              this.$message.success('移动成功');
+              this.$message.success("{{ __('panel/file_manager.move_success') }}");
               this.folderMoveDialog.visible = false;
               // 重新加载文件夹树
               this.loadFolders();
@@ -2647,7 +2659,7 @@
             }
           }).catch(err => {
             this.loadFolders();
-            this.$message.error(err.message || '移动失败');
+            this.$message.error(err.message || "{{ __('panel/file_manager.move_fail') }}");
           });
         },
 

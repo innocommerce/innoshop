@@ -21,7 +21,7 @@
 
 @section('page-bottom-btns')
   <div class="page-bottom-btns" id="bottom-btns">
-    <button class="btn btn-primary" @click="handleConfirm">选择提交</button>
+    <button class="btn btn-primary" @click="handleConfirm">{{ __('panel/file_manager.select_submit') }}</button>
   </div>
 @endsection
 
