@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Nilai Atribut',
     'name'            => 'Nama properti',
     'set_attribute'   => 'Setel Atribut',
+    'fill_one_language' => 'Silakan isi minimal satu nilai bahasa.',
 ];

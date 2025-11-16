@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Öznitelik Değeri',
     'name'            => 'Mülkün adı',
     'set_attribute'   => 'Öznitelik Ayarla',
+    'fill_one_language' => 'Lütfen en az bir dil değeri girin.',
 ];

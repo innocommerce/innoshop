@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Valeur de l\'attribut',
     'name'            => 'Nom de propriété',
     'set_attribute'   => 'Définir l\'attribut',
+    'fill_one_language' => 'Veuillez saisir au moins une valeur dans une langue.',
 ];

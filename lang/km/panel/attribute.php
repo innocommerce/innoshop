@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Attribute Value',
     'name'            => 'Attribute name',
     'set_attribute'   => 'Set Attribute',
+    'fill_one_language' => 'សូមបញ្ចូលតម្លៃភាសាដោយយ៉ាងហោចណាស់មួយ។',
 ];

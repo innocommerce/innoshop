@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Valor do Atributo',
     'name'            => 'Nome da propriedade',
     'set_attribute'   => 'Configurar Atributos',
+    'fill_one_language' => 'Introduza pelo menos um valor numa das línguas.',
 ];

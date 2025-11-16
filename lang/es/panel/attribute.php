@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Valor de atributo',
     'name'            => 'Nombre de propiedad',
     'set_attribute'   => 'Establecer atributos',
+    'fill_one_language' => 'Por favor ingresa al menos un valor en algún idioma.',
 ];

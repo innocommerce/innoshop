@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Giá trị thuộc tính',
     'name'            => 'Thuộc tính tên',
     'set_attribute'   => 'Thiết lập thuộc tính',
+    'fill_one_language' => 'Vui lòng nhập giá trị cho ít nhất một ngôn ngữ.',
 ];

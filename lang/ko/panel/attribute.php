@@ -12,4 +12,5 @@ return [
     'attribute_value' => '속성 값',
     'name'            => '속성 이름',
     'set_attribute'   => '속성 설정',
+    'fill_one_language' => '최소한 한 개의 언어 값을 입력하세요.',
 ];

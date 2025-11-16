@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'قيمة السمة',
     'name'            => 'اسم الملكية',
     'set_attribute'   => 'تعيين السمة',
+    'fill_one_language' => 'يرجى إدخال قيمة لغة واحدة على الأقل.',
 ];

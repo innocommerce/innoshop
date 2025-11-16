@@ -12,4 +12,5 @@ return [
     'name'            => '属性名',
     'attribute_value' => '属性值',
     'set_attribute'   => '设置属性',
+    'fill_one_language' => '请至少填写一种语言的属性值。',
 ];

@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Nilai atribut',
     'name'            => 'Nama harta tanah',
     'set_attribute'   => 'Tetapkan atribut',
+    'fill_one_language' => 'Sila masukkan sekurang-kurangnya satu nilai bahasa.',
 ];

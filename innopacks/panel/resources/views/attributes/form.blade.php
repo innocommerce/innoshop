@@ -85,7 +85,7 @@
         <div class="modal-body">
           <form class="values-input-wrap" action="">
             <input type="hidden" name="attribute_id" value="{{ $attribute->id ?? '' }}">
-            <x-common-form-input title="" :multiple="true" name="values" value="" required
+            <x-common-form-input title="" :multiple="true" name="values" value=""
                                  placeholder="{{ __('panel/common.name') }}"/>
 
             <div class="mt-4 d-flex justify-content-center">
@@ -103,6 +103,7 @@
     const attributeValues = @json($attribute->values ?? []);
     let id = null;
     let attribute_id = @json($attribute->id ?? 0);
+    const fillOneLanguageMessage = @json(__('panel/attribute.fill_one_language'));
 
     $(document).on('click', '.edit-value', function () {
       const tr = $(this).closest('tr');
@@ -144,6 +145,12 @@
     });
 
     inno.validateAndSubmitForm('.values-input-wrap', (response) => {
+      const inputs = document.querySelectorAll('.values-input-wrap input[name^="values["]');
+      const hasAny = Array.from(inputs).some(i => (i.value || '').trim().length > 0);
+      if (!hasAny) {
+        inno.msg(fillOneLanguageMessage);
+        return;
+      }
       let url = id ? `${urls.base_url}/attribute_values/${id}` : `${urls.base_url}/attribute_values`;
       let method = id ? 'PUT' : 'POST';
 

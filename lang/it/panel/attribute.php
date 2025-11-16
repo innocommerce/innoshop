@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Valore dell\'attributo',
     'name'            => 'Nome degli attributi',
     'set_attribute'   => 'Imposta attributi',
+    'fill_one_language' => 'Inserisci almeno un valore in una lingua.',
 ];

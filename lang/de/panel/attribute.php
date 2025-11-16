@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Attributwert',
     'name'            => 'eigenschaft',
     'set_attribute'   => 'Attribut festlegen',
+    'fill_one_language' => 'Bitte geben Sie mindestens einen Sprachwert ein.',
 ];
