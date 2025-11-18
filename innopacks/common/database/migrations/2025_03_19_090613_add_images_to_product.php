@@ -30,13 +30,22 @@ return new class extends Migration
         }
 
         if (Schema::hasColumn('products', 'product_image_id')) {
-            Schema::dropColumns('products', 'product_image_id');
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropIndex('p_pi_id');
+                $table->dropColumn('product_image_id');
+            });
         }
         if (Schema::hasColumn('products', 'product_video_id')) {
-            Schema::dropColumns('products', 'product_video_id');
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropIndex('p_pv_id');
+                $table->dropColumn('product_video_id');
+            });
         }
         if (Schema::hasColumn('products', 'product_sku_id')) {
-            Schema::dropColumns('products', 'product_sku_id');
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropIndex('p_ps_id');
+                $table->dropColumn('product_sku_id');
+            });
         }
     }
 
