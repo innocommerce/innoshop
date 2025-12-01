@@ -40,19 +40,56 @@ class FileManagerService implements FileManagerInterface
         $baseFolder = FileSecurityValidator::validateDirectoryPath($baseFolder);
 
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
-        $directories     = glob("$currentBasePath/*", GLOB_ONLYDIR);
+
+        // Ensure currentBasePath is within allowed directory
+        $realBasePath = realpath($this->fileBasePath);
+        if ($realBasePath === false) {
+            return [];
+        }
+
+        $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
+        if ($directories === false) {
+            return [];
+        }
 
         $result = [];
         foreach ($directories as $directory) {
+            // Verify the directory path is within allowed base path
+            $realDirectory = realpath($directory);
+            if ($realDirectory === false) {
+                continue;
+            }
+
+            // Ensure directory is within the allowed base path
+            if (! str_starts_with($realDirectory, $realBasePath)) {
+                continue;
+            }
+
             $baseName = basename($directory);
             $dirName  = str_replace($this->fileBasePath, '', $directory);
-            if (is_dir($directory)) {
-                $item           = $this->handleFolder($dirName, $baseName);
-                $subDirectories = $this->getDirectories($dirName);
-                if (! empty($subDirectories)) {
-                    $item['children'] = $subDirectories;
+
+            // Ensure dirName starts with / for proper path handling
+            if (! str_starts_with($dirName, '/')) {
+                $dirName = '/'.$dirName;
+            }
+
+            try {
+                if (is_dir($realDirectory)) {
+                    $item           = $this->handleFolder($dirName, $baseName);
+                    $subDirectories = $this->getDirectories($dirName);
+                    if (! empty($subDirectories)) {
+                        $item['children'] = $subDirectories;
+                    }
+                    $result[] = $item;
                 }
-                $result[] = $item;
+            } catch (\Exception $e) {
+                // Skip directories that cause open_basedir errors
+                Log::warning('Skipping directory due to access restriction:', [
+                    'directory' => $directory,
+                    'error'     => $e->getMessage(),
+                ]);
+
+                continue;
             }
         }
 
@@ -78,37 +115,99 @@ class FileManagerService implements FileManagerInterface
 
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
 
-        $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
-        $folders     = [];
-        foreach ($directories as $directory) {
-            $baseName  = basename($directory);
-            $dirPath   = str_replace($this->fileBasePath, '', $directory);
-            $folders[] = [
-                'id'           => $dirPath,
-                'name'         => $baseName,
-                'path'         => $dirPath,
-                'is_dir'       => true,
-                'thumb'        => asset('images/icons/folder.png'),
-                'url'          => '',
-                'mime'         => 'directory',
-                'created_time' => filemtime($directory),
+        // Ensure currentBasePath is within allowed directory
+        $realBasePath = realpath($this->fileBasePath);
+        if ($realBasePath === false) {
+            return [
+                'images'      => [],
+                'image_total' => 0,
+                'image_page'  => $page,
             ];
         }
 
-        $files  = glob($currentBasePath.'/*');
+        $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
+        if ($directories === false) {
+            $directories = [];
+        }
+
+        $folders = [];
+        foreach ($directories as $directory) {
+            // Verify the directory path is within allowed base path
+            $realDirectory = realpath($directory);
+            if ($realDirectory === false || ! str_starts_with($realDirectory, $realBasePath)) {
+                continue;
+            }
+
+            try {
+                $baseName = basename($directory);
+                $dirPath  = str_replace($this->fileBasePath, '', $directory);
+
+                // Ensure dirPath starts with / for proper path handling
+                if (! str_starts_with($dirPath, '/')) {
+                    $dirPath = '/'.$dirPath;
+                }
+
+                $folders[] = [
+                    'id'           => $dirPath,
+                    'name'         => $baseName,
+                    'path'         => $dirPath,
+                    'is_dir'       => true,
+                    'thumb'        => asset('images/icons/folder.png'),
+                    'url'          => '',
+                    'mime'         => 'directory',
+                    'created_time' => @filemtime($realDirectory) ?: time(),
+                ];
+            } catch (\Exception $e) {
+                // Skip directories that cause open_basedir errors
+                Log::warning('Skipping directory due to access restriction:', [
+                    'directory' => $directory,
+                    'error'     => $e->getMessage(),
+                ]);
+
+                continue;
+            }
+        }
+
+        $files = glob($currentBasePath.'/*');
+        if ($files === false) {
+            $files = [];
+        }
+
         $images = [];
         foreach ($files as $file) {
-            if (! is_file($file)) {
+            // Verify the file path is within allowed base path
+            $realFile = realpath($file);
+            if ($realFile === false || ! str_starts_with($realFile, $realBasePath)) {
                 continue;
             }
-            $baseName = basename($file);
-            if ($baseName === 'index.html' || ($keyword && ! str_contains($baseName, $keyword))) {
+
+            try {
+                if (! is_file($realFile)) {
+                    continue;
+                }
+                $baseName = basename($file);
+                if ($baseName === 'index.html' || ($keyword && ! str_contains($baseName, $keyword))) {
+                    continue;
+                }
+                $fileName = str_replace($this->fileBasePath, '', $file);
+
+                // Ensure fileName starts with / for proper path handling
+                if (! str_starts_with($fileName, '/')) {
+                    $fileName = '/'.$fileName;
+                }
+
+                $fileInfo                 = $this->handleImage($fileName, $baseName);
+                $fileInfo['created_time'] = @filemtime($realFile) ?: time();
+                $images[]                 = $fileInfo;
+            } catch (\Exception $e) {
+                // Skip files that cause open_basedir errors
+                Log::warning('Skipping file due to access restriction:', [
+                    'file'  => $file,
+                    'error' => $e->getMessage(),
+                ]);
+
                 continue;
             }
-            $fileName                 = str_replace($this->fileBasePath, '', $file);
-            $fileInfo                 = $this->handleImage($fileName, $baseName);
-            $fileInfo['created_time'] = filemtime($file);
-            $images[]                 = $fileInfo;
         }
 
         $allItems = array_merge($folders, $images);
@@ -678,6 +777,21 @@ class FileManagerService implements FileManagerInterface
      */
     protected function getFullPath(string $path): string
     {
-        return public_path("$this->basePath/$path");
+        // Normalize path to prevent issues with double slashes
+        $normalizedPath = ltrim($path, '/');
+        $fullPath       = public_path("$this->basePath/$normalizedPath");
+
+        // Resolve real path to prevent symlink issues
+        $realPath = realpath($fullPath);
+        if ($realPath !== false) {
+            // Verify the resolved path is within the allowed base path
+            $realBasePath = realpath($this->fileBasePath);
+            if ($realBasePath !== false && str_starts_with($realPath, $realBasePath)) {
+                return $realPath;
+            }
+        }
+
+        // Return normalized path even if realpath fails (for new directories)
+        return rtrim($fullPath, '/');
     }
 }

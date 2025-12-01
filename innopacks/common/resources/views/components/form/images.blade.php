@@ -50,9 +50,9 @@
 <!-- Add SortableJS library -->
 
 <div class="modal fade" id="modal-show-imgs">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
-      <div class="modal-body"></div>
+      <div class="modal-body text-center p-4" style="min-height: 200px; display: flex; align-items: center; justify-content: center;"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/upload.close') }}</button>
       </div>
@@ -123,9 +123,15 @@
       });
     },
     bindPreview() {
-      $('.multi-images-upload-wrapper .is-up-file').off('click.show-img').on('click.show-img', '.show-img', function () {
-        let src = $(this).parent().next().find('img').data('origin-img');
-        let img = '<img src="' + src + '" class="img-fluid">';
+      $('.multi-images-upload-wrapper .is-up-file').off('click.show-img').on('click.show-img', '.show-img', function (e) {
+        e.stopPropagation();
+        const imgElement = $(this).closest('.img-upload-item').find('.img-info img');
+        let src = imgElement.data('origin-img') || imgElement.attr('src');
+        if (!src) {
+          console.error('Image source not found');
+          return;
+        }
+        let img = '<img src="' + src + '" class="img-fluid" style="max-width: 100%; max-height: 70vh; height: auto; border-radius: 4px;">';
         $('#modal-show-imgs .modal-body').html(img);
         $('#modal-show-imgs').modal('show');
       });

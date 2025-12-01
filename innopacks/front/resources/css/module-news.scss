@@ -10,6 +10,23 @@
     overflow: hidden;
     border-radius: 6px;
     margin-bottom: 12px;
+    transition: box-shadow 0.3s ease-in-out;
+
+    &:hover {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      display: block;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    &:hover img {
+      transform: scale(1.02);
+    }
   }
 
   .blog-item-info {
@@ -23,10 +40,19 @@
       font-size: 14px;
       font-weight: bold;
       margin-bottom: 10px;
-      color: #333;
 
       @media (min-width: 768px) {
         font-size: 18px;
+      }
+
+      a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: $primary;
+        }
       }
     }
 

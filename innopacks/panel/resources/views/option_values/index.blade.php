@@ -448,9 +448,9 @@
       if ($('#modal-show-img').length === 0) {
         $('body').append(`
           <div class="modal fade" id="modal-show-img">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
               <div class="modal-content">
-                <div class="modal-body"></div>
+                <div class="modal-body text-center p-4" style="min-height: 200px; display: flex; align-items: center; justify-content: center;"></div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ panel_trans('options.close') }}</button>
                 </div>
@@ -459,7 +459,8 @@
           </div>
         `);
       }
-      $('#modal-show-img .modal-body').html(img);
+      let previewImg = '<img src="' + src + '" class="img-fluid" style="max-width: 100%; max-height: 70vh; height: auto; border-radius: 4px;">';
+      $('#modal-show-img .modal-body').html(previewImg);
       $('#modal-show-img').modal('show');
     }
   });

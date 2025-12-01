@@ -31,13 +31,16 @@ class ProductDetail extends JsonResource
 
         $images = [];
         foreach ($this->images as $image) {
-            $images[] = image_resize($image, 600, 600);
+            $resizedImage = image_resize($image, 600, 600);
+            if ($resizedImage) {
+                $images[] = $resizedImage;
+            }
         }
 
         $skuImagePath = $sku->image;
         if ($skuImagePath) {
             $imageUrl = image_resize($skuImagePath, 600, 600);
-            if (! in_array($imageUrl, $images)) {
+            if ($imageUrl && ! in_array($imageUrl, $images)) {
                 $images[] = $imageUrl;
             }
         }
