@@ -22,6 +22,21 @@ class FileManagerService implements FileManagerInterface
 
     protected string $basePath = '';
 
+    /**
+     * Excluded files from listing
+     */
+    protected const EXCLUDED_FILES = ['index.html'];
+
+    /**
+     * Default sort field
+     */
+    protected const SORT_FIELD_CREATED = 'created';
+
+    /**
+     * Default sort order
+     */
+    protected const SORT_ORDER_DESC = 'desc';
+
     public function __construct()
     {
         $this->basePath     = '/'.$this->mediaDir;
@@ -36,60 +51,20 @@ class FileManagerService implements FileManagerInterface
      */
     public function getDirectories(string $baseFolder = '/'): array
     {
-        // Validate path security
-        $baseFolder = FileSecurityValidator::validateDirectoryPath($baseFolder);
-
-        $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
-
-        // Ensure currentBasePath is within allowed directory
-        $realBasePath = realpath($this->fileBasePath);
+        $baseFolder   = FileSecurityValidator::validateDirectoryPath($baseFolder);
+        $realBasePath = $this->getRealBasePath();
         if ($realBasePath === false) {
             return [];
         }
 
-        $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
-        if ($directories === false) {
-            return [];
-        }
+        $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
+        $directories     = glob("$currentBasePath/*", GLOB_ONLYDIR) ?: [];
 
         $result = [];
         foreach ($directories as $directory) {
-            // Verify the directory path is within allowed base path
-            $realDirectory = realpath($directory);
-            if ($realDirectory === false) {
-                continue;
-            }
-
-            // Ensure directory is within the allowed base path
-            if (! str_starts_with($realDirectory, $realBasePath)) {
-                continue;
-            }
-
-            $baseName = basename($directory);
-            $dirName  = str_replace($this->fileBasePath, '', $directory);
-
-            // Ensure dirName starts with / for proper path handling
-            if (! str_starts_with($dirName, '/')) {
-                $dirName = '/'.$dirName;
-            }
-
-            try {
-                if (is_dir($realDirectory)) {
-                    $item           = $this->handleFolder($dirName, $baseName);
-                    $subDirectories = $this->getDirectories($dirName);
-                    if (! empty($subDirectories)) {
-                        $item['children'] = $subDirectories;
-                    }
-                    $result[] = $item;
-                }
-            } catch (\Exception $e) {
-                // Skip directories that cause open_basedir errors
-                Log::warning('Skipping directory due to access restriction:', [
-                    'directory' => $directory,
-                    'error'     => $e->getMessage(),
-                ]);
-
-                continue;
+            $processed = $this->processDirectory($directory, $realBasePath);
+            if ($processed !== null) {
+                $result[] = $processed;
             }
         }
 
@@ -108,147 +83,23 @@ class FileManagerService implements FileManagerInterface
      * @return array Paginated file list with metadata
      * @throws Exception If an error occurs during retrieval
      */
-    public function getFiles(string $baseFolder, string $keyword = '', string $sort = 'created', string $order = 'desc', int $page = 1, int $perPage = 20): array
+    public function getFiles(string $baseFolder, string $keyword = '', string $sort = self::SORT_FIELD_CREATED, string $order = self::SORT_ORDER_DESC, int $page = 1, int $perPage = 20): array
     {
-        // Validate path security
-        $baseFolder = FileSecurityValidator::validateDirectoryPath($baseFolder);
+        $baseFolder   = FileSecurityValidator::validateDirectoryPath($baseFolder);
+        $realBasePath = $this->getRealBasePath();
+        if ($realBasePath === false) {
+            return $this->getEmptyFileList($page);
+        }
 
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
-
-        // Ensure currentBasePath is within allowed directory
-        $realBasePath = realpath($this->fileBasePath);
-        if ($realBasePath === false) {
-            return [
-                'images'      => [],
-                'image_total' => 0,
-                'image_page'  => $page,
-            ];
-        }
-
-        $directories = glob("$currentBasePath/*", GLOB_ONLYDIR);
-        if ($directories === false) {
-            $directories = [];
-        }
-
-        $folders = [];
-        foreach ($directories as $directory) {
-            // Verify the directory path is within allowed base path
-            $realDirectory = realpath($directory);
-            if ($realDirectory === false || ! str_starts_with($realDirectory, $realBasePath)) {
-                continue;
-            }
-
-            try {
-                $baseName = basename($directory);
-                $dirPath  = str_replace($this->fileBasePath, '', $directory);
-
-                // Ensure dirPath starts with / for proper path handling
-                if (! str_starts_with($dirPath, '/')) {
-                    $dirPath = '/'.$dirPath;
-                }
-
-                $folders[] = [
-                    'id'           => $dirPath,
-                    'name'         => $baseName,
-                    'path'         => $dirPath,
-                    'is_dir'       => true,
-                    'thumb'        => asset('images/icons/folder.png'),
-                    'url'          => '',
-                    'mime'         => 'directory',
-                    'created_time' => @filemtime($realDirectory) ?: time(),
-                ];
-            } catch (\Exception $e) {
-                // Skip directories that cause open_basedir errors
-                Log::warning('Skipping directory due to access restriction:', [
-                    'directory' => $directory,
-                    'error'     => $e->getMessage(),
-                ]);
-
-                continue;
-            }
-        }
-
-        $files = glob($currentBasePath.'/*');
-        if ($files === false) {
-            $files = [];
-        }
-
-        $images = [];
-        foreach ($files as $file) {
-            // Verify the file path is within allowed base path
-            $realFile = realpath($file);
-            if ($realFile === false || ! str_starts_with($realFile, $realBasePath)) {
-                continue;
-            }
-
-            try {
-                if (! is_file($realFile)) {
-                    continue;
-                }
-                $baseName = basename($file);
-                if ($baseName === 'index.html' || ($keyword && ! str_contains($baseName, $keyword))) {
-                    continue;
-                }
-                $fileName = str_replace($this->fileBasePath, '', $file);
-
-                // Ensure fileName starts with / for proper path handling
-                if (! str_starts_with($fileName, '/')) {
-                    $fileName = '/'.$fileName;
-                }
-
-                $fileInfo                 = $this->handleImage($fileName, $baseName);
-                $fileInfo['created_time'] = @filemtime($realFile) ?: time();
-                $images[]                 = $fileInfo;
-            } catch (\Exception $e) {
-                // Skip files that cause open_basedir errors
-                Log::warning('Skipping file due to access restriction:', [
-                    'file'  => $file,
-                    'error' => $e->getMessage(),
-                ]);
-
-                continue;
-            }
-        }
+        $folders         = $this->collectFolders($currentBasePath, $realBasePath);
+        $images          = $this->collectFiles($currentBasePath, $realBasePath, $keyword);
 
         $allItems = array_merge($folders, $images);
+        $allItems = $this->sortItems($allItems, $sort, $order);
+        $allItems = $this->removeTemporaryFields($allItems);
 
-        if ($sort === 'created') {
-            usort($allItems, function ($a, $b) use ($order) {
-                $timeA = $a['created_time'] ?? 0;
-                $timeB = $b['created_time'] ?? 0;
-
-                return ($order === 'desc') ? $timeB - $timeA : $timeA - $timeB;
-            });
-        } else {
-            // folders always in front of files
-            usort($allItems, function ($a, $b) use ($order) {
-                if (($a['is_dir'] ?? false) && ! ($b['is_dir'] ?? false)) {
-                    return -1;
-                }
-                if (! ($a['is_dir'] ?? false) && ($b['is_dir'] ?? false)) {
-                    return 1;
-                }
-
-                return ($order === 'desc') ?
-                    strcasecmp($b['name'], $a['name']) :
-                    strcasecmp($a['name'], $b['name']);
-            });
-        }
-
-        $allItems = array_map(function ($item) {
-            unset($item['created_time']);
-
-            return $item;
-        }, $allItems);
-
-        $collection   = collect($allItems);
-        $currentItems = $collection->forPage($page, $perPage);
-
-        return [
-            'images'      => $currentItems->values(),
-            'image_total' => $collection->count(),
-            'image_page'  => $page,
-        ];
+        return $this->paginateItems($allItems, $page, $perPage);
     }
 
     /**
@@ -292,32 +143,16 @@ class FileManagerService implements FileManagerInterface
     public function moveDirectory(string $sourcePath, string $destPath): bool
     {
         try {
-            if (empty($sourcePath) || empty($destPath)) {
-                throw new Exception(trans('panel/file_manager.empty_path'));
-            }
+            $this->validatePathsNotEmpty($sourcePath, $destPath);
+            $this->validateNotMovingToSubdirectory($sourcePath, $destPath);
 
             $sourceDirPath = $this->getFullPath($sourcePath);
             $destDirPath   = $this->getFullPath($destPath);
-            $folderName    = basename($sourcePath);
-            $destFullPath  = rtrim($destDirPath, '/').'/'.$folderName;
+            $destFullPath  = rtrim($destDirPath, '/').'/'.basename($sourcePath);
 
-            // confirm origin folder exists
-            if (! is_dir($sourceDirPath)) {
-                throw new Exception(trans('panel/file_manager.source_dir_not_exist'));
-            }
-
-            // confirm target folder exists
-            if (! is_dir($destDirPath)) {
-                throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
-            }
-
-            if (is_dir($destFullPath)) {
-                throw new Exception(trans('panel/file_manager.target_dir_exist'));
-            }
-
-            if (str_starts_with($destPath, $sourcePath.'/')) {
-                throw new Exception(trans('panel/file_manager.cannot_move_to_subdirectory'));
-            }
+            $this->ensureDirectoryExists($sourceDirPath);
+            $this->ensureDirectoryExists($destDirPath);
+            $this->ensurePathDoesNotExist($destFullPath);
 
             Log::info('Moving directory:', [
                 'from' => $sourceDirPath,
@@ -333,8 +168,7 @@ class FileManagerService implements FileManagerInterface
 
             return true;
         } catch (Exception $e) {
-            Log::error('Move directory failed:', [
-                'error'       => $e->getMessage(),
+            $this->logError('Move directory failed', $e, [
                 'source'      => $sourcePath,
                 'destination' => $destPath,
             ]);
@@ -353,67 +187,20 @@ class FileManagerService implements FileManagerInterface
     public function moveFiles(array $files, string $destPath): bool
     {
         try {
-            if (empty($files)) {
-                throw new Exception(trans('panel/file_manager.no_files_selected'));
-            }
-
-            // Validate destination path security
+            $this->validateFilesNotEmpty($files);
             $destPath = FileSecurityValidator::validateDirectoryPath($destPath);
-
-            // Validate all source file paths
-            $validatedFiles = [];
-            foreach ($files as $file) {
-                $validatedFiles[] = FileSecurityValidator::validateDirectoryPath($file);
-            }
-            $files = $validatedFiles;
+            $files    = $this->validateFilePaths($files);
 
             $destFullPath = $this->getFullPath($destPath);
-            if (! is_dir($destFullPath)) {
-                throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
-            }
+            $this->ensureDirectoryExists($destFullPath);
 
             foreach ($files as $fileName) {
-                $sourcePath   = $this->getFullPath($fileName);
-                $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
-
-                Log::info('Moving file:', [
-                    'source'      => $sourcePath,
-                    'destination' => $destFilePath,
-                    'fileName'    => $fileName,
-                    'destPath'    => $destPath,
-                ]);
-
-                if (file_exists($sourcePath)) {
-                    if (file_exists($destFilePath)) {
-                        @unlink($destFilePath);
-                    }
-
-                    if (! @rename($sourcePath, $destFilePath)) {
-                        Log::error('Failed to move file:', [
-                            'source'      => $sourcePath,
-                            'destination' => $destFilePath,
-                            'error'       => error_get_last(),
-                        ]);
-                        throw new Exception(trans('panel/file_manager.move_failed'));
-                    } else {
-                        Log::info('File moved successfully:', [
-                            'from' => $sourcePath,
-                            'to'   => $destFilePath,
-                        ]);
-                    }
-                } else {
-                    Log::warning('Source file not found:', ['path' => $sourcePath]);
-                    throw new Exception(trans('panel/file_manager.source_file_not_exist'));
-                }
+                $this->moveSingleFile($fileName, $destFullPath, $destPath);
             }
 
             return true;
         } catch (Exception $e) {
-            Log::error('Move files failed:', [
-                'error'       => $e->getMessage(),
-                'files'       => $files,
-                'destination' => $destPath,
-            ]);
+            $this->logError('Move files failed', $e, ['files' => $files, 'destination' => $destPath]);
             throw $e;
         }
     }
@@ -428,9 +215,7 @@ class FileManagerService implements FileManagerInterface
     public function deleteDirectoryOrFile(string $path): bool
     {
         try {
-            // Validate path security
-            $path = FileSecurityValidator::validateDirectoryPath($path);
-
+            $path     = FileSecurityValidator::validateDirectoryPath($path);
             $fullPath = $this->getFullPath($path);
 
             Log::info('Deleting path:', [
@@ -439,42 +224,17 @@ class FileManagerService implements FileManagerInterface
             ]);
 
             if (is_dir($fullPath)) {
-                // Check if directory is empty
-                $files = glob($fullPath.'/*');
-                if ($files) {
-                    throw new Exception(trans('panel/file_manager.directory_not_empty'));
-                }
-
-                // Delete directory
-                if (! @rmdir($fullPath)) {
-                    Log::error('Failed to delete directory:', [
-                        'path'  => $fullPath,
-                        'error' => error_get_last(),
-                    ]);
-                    throw new Exception(trans('panel/file_manager.delete_failed'));
-                }
+                $this->deleteDirectory($fullPath);
             } elseif (file_exists($fullPath)) {
-                // Delete file
-                if (! @unlink($fullPath)) {
-                    Log::error('Failed to delete file:', [
-                        'path'  => $fullPath,
-                        'error' => error_get_last(),
-                    ]);
-                    throw new Exception(trans('panel/file_manager.delete_failed'));
-                }
+                $this->deleteFile($fullPath);
             } else {
-                Log::warning('Path not found:', [
-                    'path' => $fullPath,
-                ]);
+                Log::warning('Path not found:', ['path' => $fullPath]);
                 throw new Exception(trans('panel/file_manager.file_not_exist'));
             }
 
             return true;
         } catch (Exception $e) {
-            Log::error('Delete path failed:', [
-                'error' => $e->getMessage(),
-                'path'  => $path,
-            ]);
+            $this->logError('Delete path failed', $e, ['path' => $path]);
             throw $e;
         }
     }
@@ -490,38 +250,23 @@ class FileManagerService implements FileManagerInterface
     public function deleteFiles(string $basePath, array $files): bool
     {
         try {
-            if (empty($files)) {
-                throw new Exception(trans('panel/file_manager.no_files_selected'));
-            }
+            $this->validateFilesNotEmpty($files);
 
             foreach ($files as $file) {
                 $filePath = $this->getFullPath("$basePath/$file");
 
-                Log::info('Deleting file:', [
-                    'path' => $filePath,
-                ]);
+                Log::info('Deleting file:', ['path' => $filePath]);
 
                 if (file_exists($filePath)) {
-                    if (! @unlink($filePath)) {
-                        Log::error('Failed to delete file:', [
-                            'path'  => $filePath,
-                            'error' => error_get_last(),
-                        ]);
-                        throw new Exception(trans('panel/file_manager.delete_failed'));
-                    }
+                    $this->deleteFile($filePath);
                 } else {
-                    Log::warning('File not found:', [
-                        'path' => $filePath,
-                    ]);
+                    Log::warning('File not found:', ['path' => $filePath]);
                 }
             }
 
             return true;
         } catch (Exception $e) {
-            Log::error('Delete files failed:', [
-                'error' => $e->getMessage(),
-                'files' => $files,
-            ]);
+            $this->logError('Delete files failed', $e, ['files' => $files]);
             throw $e;
         }
     }
@@ -652,7 +397,6 @@ class FileManagerService implements FileManagerInterface
      * @param  string  $filePath  Path to the image file
      * @param  string  $baseName  Base filename
      * @return array Image metadata
-     * @throws Exception If processing fails
      */
     protected function handleImage(string $filePath, string $baseName): array
     {
@@ -670,6 +414,7 @@ class FileManagerService implements FileManagerInterface
         }
 
         return [
+            'id'         => $filePath,
             'path'       => '/'.$path,
             'name'       => $baseName,
             'origin_url' => image_origin($path),
@@ -705,66 +450,20 @@ class FileManagerService implements FileManagerInterface
     public function copyFiles(array $files, string $destPath): bool
     {
         try {
-            if (empty($files)) {
-                throw new Exception(trans('panel/file_manager.no_files_selected'));
-            }
-
-            // Validate destination path security
+            $this->validateFilesNotEmpty($files);
             $destPath = FileSecurityValidator::validateDirectoryPath($destPath);
-
-            // Validate all source file paths
-            $validatedFiles = [];
-            foreach ($files as $file) {
-                $validatedFiles[] = FileSecurityValidator::validateDirectoryPath($file);
-            }
-            $files = $validatedFiles;
+            $files    = $this->validateFilePaths($files);
 
             $destFullPath = $this->getFullPath($destPath);
-            if (! is_dir($destFullPath)) {
-                throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
-            }
+            $this->ensureDirectoryExists($destFullPath);
 
             foreach ($files as $fileName) {
-                $sourcePath   = $this->getFullPath($fileName);
-                $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
-
-                Log::info('Copying file:', [
-                    'source'      => $sourcePath,
-                    'destination' => $destFilePath,
-                ]);
-
-                if (file_exists($sourcePath)) {
-                    if (file_exists($destFilePath)) {
-                        $newName      = $this->getUniqueFileName($destPath, basename($fileName));
-                        $destFilePath = rtrim($destFullPath, '/').'/'.$newName;
-                    }
-
-                    if (! @copy($sourcePath, $destFilePath)) {
-                        Log::error('Failed to copy file:', [
-                            'source'      => $sourcePath,
-                            'destination' => $destFilePath,
-                            'error'       => error_get_last(),
-                        ]);
-                        throw new Exception(trans('panel/file_manager.copy_failed'));
-                    } else {
-                        Log::info('File copied successfully:', [
-                            'from' => $sourcePath,
-                            'to'   => $destFilePath,
-                        ]);
-                    }
-                } else {
-                    Log::warning('Source file not found:', ['path' => $sourcePath]);
-                    throw new Exception(trans('panel/file_manager.source_file_not_exist'));
-                }
+                $this->copySingleFile($fileName, $destFullPath, $destPath);
             }
 
             return true;
         } catch (Exception $e) {
-            Log::error('Copy files failed:', [
-                'error'       => $e->getMessage(),
-                'files'       => $files,
-                'destination' => $destPath,
-            ]);
+            $this->logError('Copy files failed', $e, ['files' => $files, 'destination' => $destPath]);
             throw $e;
         }
     }
@@ -777,21 +476,509 @@ class FileManagerService implements FileManagerInterface
      */
     protected function getFullPath(string $path): string
     {
-        // Normalize path to prevent issues with double slashes
         $normalizedPath = ltrim($path, '/');
         $fullPath       = public_path("$this->basePath/$normalizedPath");
 
-        // Resolve real path to prevent symlink issues
         $realPath = realpath($fullPath);
         if ($realPath !== false) {
-            // Verify the resolved path is within the allowed base path
             $realBasePath = realpath($this->fileBasePath);
             if ($realBasePath !== false && str_starts_with($realPath, $realBasePath)) {
                 return $realPath;
             }
         }
 
-        // Return normalized path even if realpath fails (for new directories)
         return rtrim($fullPath, '/');
+    }
+
+    // ==================== Helper Methods ====================
+
+    /**
+     * Get the real base path, ensuring it's accessible.
+     *
+     * @return string|false The real base path or false if not accessible
+     */
+    protected function getRealBasePath()
+    {
+        return realpath($this->fileBasePath);
+    }
+
+    /**
+     * Normalize a relative path to ensure it starts with '/'.
+     *
+     * @param  string  $path  Path to normalize
+     * @return string Normalized path
+     */
+    protected function normalizeRelativePath(string $path): string
+    {
+        return str_starts_with($path, '/') ? $path : '/'.$path;
+    }
+
+    /**
+     * Process a directory entry and return folder metadata if valid.
+     *
+     * @param  string  $directory  Directory path
+     * @param  string  $realBasePath  Real base path for validation
+     * @return array|null Folder metadata or null if invalid
+     */
+    protected function processDirectory(string $directory, string $realBasePath): ?array
+    {
+        $realDirectory = realpath($directory);
+        if ($realDirectory === false) {
+            return null;
+        }
+
+        if (! str_starts_with($realDirectory, $realBasePath)) {
+            return null;
+        }
+
+        $baseName = basename($directory);
+        $dirName  = str_replace($this->fileBasePath, '', $directory);
+
+        if (! str_starts_with($dirName, '/')) {
+            $dirName = '/'.$dirName;
+        }
+
+        try {
+            if (! is_dir($realDirectory)) {
+                return null;
+            }
+
+            $item           = $this->handleFolder($dirName, $baseName);
+            $subDirectories = $this->getDirectories($dirName);
+            if (! empty($subDirectories)) {
+                $item['children'] = $subDirectories;
+            }
+
+            return $item;
+        } catch (\Exception $e) {
+            Log::warning('Skipping directory due to access restriction:', [
+                'directory' => $directory,
+                'error'     => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
+    /**
+     * Collect folders from a directory path.
+     *
+     * @param  string  $currentBasePath  Current base path
+     * @param  string  $realBasePath  Real base path for validation
+     * @return array Array of folder metadata
+     */
+    protected function collectFolders(string $currentBasePath, string $realBasePath): array
+    {
+        $directories = glob("$currentBasePath/*", GLOB_ONLYDIR) ?: [];
+        $folders     = [];
+
+        foreach ($directories as $directory) {
+            $realDirectory = realpath($directory);
+            if ($realDirectory === false || ! str_starts_with($realDirectory, $realBasePath)) {
+                continue;
+            }
+
+            try {
+                $baseName = basename($directory);
+                $dirPath  = $this->normalizeRelativePath(str_replace($this->fileBasePath, '', $directory));
+
+                $folders[] = [
+                    'id'           => $dirPath,
+                    'name'         => $baseName,
+                    'path'         => $dirPath,
+                    'is_dir'       => true,
+                    'thumb'        => asset('images/icons/folder.png'),
+                    'url'          => '',
+                    'mime'         => 'directory',
+                    'created_time' => @filemtime($realDirectory) ?: time(),
+                ];
+            } catch (\Exception $e) {
+                Log::warning('Skipping directory due to access restriction:', [
+                    'directory' => $directory,
+                    'error'     => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return $folders;
+    }
+
+    /**
+     * Collect files from a directory path.
+     *
+     * @param  string  $currentBasePath  Current base path
+     * @param  string  $realBasePath  Real base path for validation
+     * @param  string  $keyword  Search keyword
+     * @return array Array of file metadata
+     */
+    protected function collectFiles(string $currentBasePath, string $realBasePath, string $keyword = ''): array
+    {
+        $files  = glob($currentBasePath.'/*') ?: [];
+        $images = [];
+
+        foreach ($files as $file) {
+            $realFile = realpath($file);
+            if ($realFile === false || ! str_starts_with($realFile, $realBasePath)) {
+                continue;
+            }
+
+            try {
+                if (! is_file($realFile)) {
+                    continue;
+                }
+
+                $baseName = basename($file);
+                if ($this->shouldSkipFile($baseName, $keyword)) {
+                    continue;
+                }
+
+                $fileName = $this->normalizeRelativePath(str_replace($this->fileBasePath, '', $file));
+
+                $fileInfo                 = $this->handleImage($fileName, $baseName);
+                $fileInfo['created_time'] = @filemtime($realFile) ?: time();
+                $images[]                 = $fileInfo;
+            } catch (\Exception $e) {
+                Log::warning('Skipping file due to access restriction:', [
+                    'file'  => $file,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return $images;
+    }
+
+    /**
+     * Check if a file should be skipped based on exclusion rules or keyword filter.
+     *
+     * @param  string  $baseName  Base filename
+     * @param  string  $keyword  Search keyword
+     * @return bool True if file should be skipped
+     */
+    protected function shouldSkipFile(string $baseName, string $keyword): bool
+    {
+        if (in_array($baseName, self::EXCLUDED_FILES, true)) {
+            return true;
+        }
+
+        return $keyword !== '' && ! str_contains($baseName, $keyword);
+    }
+
+    /**
+     * Sort items by specified field and order.
+     *
+     * @param  array  $items  Items to sort
+     * @param  string  $sort  Sort field (created or name)
+     * @param  string  $order  Sort order (asc or desc)
+     * @return array Sorted items
+     */
+    protected function sortItems(array $items, string $sort, string $order): array
+    {
+        if ($sort === self::SORT_FIELD_CREATED) {
+            usort($items, function ($a, $b) use ($order) {
+                $timeA = $a['created_time'] ?? 0;
+                $timeB = $b['created_time'] ?? 0;
+
+                return ($order === self::SORT_ORDER_DESC) ? $timeB - $timeA : $timeA - $timeB;
+            });
+        } else {
+            usort($items, function ($a, $b) use ($order) {
+                if (($a['is_dir'] ?? false) && ! ($b['is_dir'] ?? false)) {
+                    return -1;
+                }
+                if (! ($a['is_dir'] ?? false) && ($b['is_dir'] ?? false)) {
+                    return 1;
+                }
+
+                return ($order === self::SORT_ORDER_DESC) ?
+                    strcasecmp($b['name'], $a['name']) :
+                    strcasecmp($a['name'], $b['name']);
+            });
+        }
+
+        return $items;
+    }
+
+    /**
+     * Remove temporary fields from items.
+     *
+     * @param  array  $items  Items to process
+     * @return array Items without temporary fields
+     */
+    protected function removeTemporaryFields(array $items): array
+    {
+        return array_map(function ($item) {
+            unset($item['created_time']);
+
+            return $item;
+        }, $items);
+    }
+
+    /**
+     * Paginate items and return formatted result.
+     *
+     * @param  array  $items  Items to paginate
+     * @param  int  $page  Current page number
+     * @param  int  $perPage  Items per page
+     * @return array Paginated result
+     */
+    protected function paginateItems(array $items, int $page, int $perPage): array
+    {
+        $collection   = collect($items);
+        $currentItems = $collection->forPage($page, $perPage);
+
+        return [
+            'images'      => $currentItems->values(),
+            'image_total' => $collection->count(),
+            'image_page'  => $page,
+        ];
+    }
+
+    /**
+     * Get empty file list result.
+     *
+     * @param  int  $page  Current page number
+     * @return array Empty file list structure
+     */
+    protected function getEmptyFileList(int $page): array
+    {
+        return [
+            'images'      => [],
+            'image_total' => 0,
+            'image_page'  => $page,
+        ];
+    }
+
+    /**
+     * Validate that files array is not empty.
+     *
+     * @param  array  $files  Files array
+     * @return void
+     * @throws Exception If files array is empty
+     */
+    protected function validateFilesNotEmpty(array $files): void
+    {
+        if (empty($files)) {
+            throw new Exception(trans('panel/file_manager.no_files_selected'));
+        }
+    }
+
+    /**
+     * Validate and normalize file paths.
+     *
+     * @param  array  $files  Array of file paths
+     * @return array Validated file paths
+     */
+    protected function validateFilePaths(array $files): array
+    {
+        $validatedFiles = [];
+        foreach ($files as $file) {
+            $validatedFiles[] = FileSecurityValidator::validateDirectoryPath($file);
+        }
+
+        return $validatedFiles;
+    }
+
+    /**
+     * Ensure directory exists, throw exception if not.
+     *
+     * @param  string  $dirPath  Directory path
+     * @return void
+     * @throws Exception If directory does not exist
+     */
+    protected function ensureDirectoryExists(string $dirPath): void
+    {
+        if (! is_dir($dirPath)) {
+            throw new Exception(trans('panel/file_manager.target_dir_not_exist'));
+        }
+    }
+
+    /**
+     * Move a single file to destination directory.
+     *
+     * @param  string  $fileName  Source file name/path
+     * @param  string  $destFullPath  Destination full path
+     * @param  string  $destPath  Destination relative path (for logging)
+     * @return void
+     * @throws Exception If move operation fails
+     */
+    protected function moveSingleFile(string $fileName, string $destFullPath, string $destPath): void
+    {
+        $sourcePath   = $this->getFullPath($fileName);
+        $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
+
+        Log::info('Moving file:', [
+            'source'      => $sourcePath,
+            'destination' => $destFilePath,
+            'fileName'    => $fileName,
+            'destPath'    => $destPath,
+        ]);
+
+        if (! file_exists($sourcePath)) {
+            Log::warning('Source file not found:', ['path' => $sourcePath]);
+            throw new Exception(trans('panel/file_manager.source_file_not_exist'));
+        }
+
+        if (file_exists($destFilePath)) {
+            @unlink($destFilePath);
+        }
+
+        if (! @rename($sourcePath, $destFilePath)) {
+            Log::error('Failed to move file:', [
+                'source'      => $sourcePath,
+                'destination' => $destFilePath,
+                'error'       => error_get_last(),
+            ]);
+            throw new Exception(trans('panel/file_manager.move_failed'));
+        }
+
+        Log::info('File moved successfully:', [
+            'from' => $sourcePath,
+            'to'   => $destFilePath,
+        ]);
+    }
+
+    /**
+     * Copy a single file to destination directory.
+     *
+     * @param  string  $fileName  Source file name/path
+     * @param  string  $destFullPath  Destination full path
+     * @param  string  $destPath  Destination relative path
+     * @return void
+     * @throws Exception If copy operation fails
+     */
+    protected function copySingleFile(string $fileName, string $destFullPath, string $destPath): void
+    {
+        $sourcePath   = $this->getFullPath($fileName);
+        $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
+
+        Log::info('Copying file:', [
+            'source'      => $sourcePath,
+            'destination' => $destFilePath,
+        ]);
+
+        if (! file_exists($sourcePath)) {
+            Log::warning('Source file not found:', ['path' => $sourcePath]);
+            throw new Exception(trans('panel/file_manager.source_file_not_exist'));
+        }
+
+        if (file_exists($destFilePath)) {
+            $newName      = $this->getUniqueFileName($destPath, basename($fileName));
+            $destFilePath = rtrim($destFullPath, '/').'/'.$newName;
+        }
+
+        if (! @copy($sourcePath, $destFilePath)) {
+            Log::error('Failed to copy file:', [
+                'source'      => $sourcePath,
+                'destination' => $destFilePath,
+                'error'       => error_get_last(),
+            ]);
+            throw new Exception(trans('panel/file_manager.copy_failed'));
+        }
+
+        Log::info('File copied successfully:', [
+            'from' => $sourcePath,
+            'to'   => $destFilePath,
+        ]);
+    }
+
+    /**
+     * Validate that paths are not empty.
+     *
+     * @param  string  $sourcePath  Source path
+     * @param  string  $destPath  Destination path
+     * @return void
+     * @throws Exception If any path is empty
+     */
+    protected function validatePathsNotEmpty(string $sourcePath, string $destPath): void
+    {
+        if (empty($sourcePath) || empty($destPath)) {
+            throw new Exception(trans('panel/file_manager.empty_path'));
+        }
+    }
+
+    /**
+     * Validate that destination is not a subdirectory of source.
+     *
+     * @param  string  $sourcePath  Source path
+     * @param  string  $destPath  Destination path
+     * @return void
+     * @throws Exception If destination is a subdirectory of source
+     */
+    protected function validateNotMovingToSubdirectory(string $sourcePath, string $destPath): void
+    {
+        if (str_starts_with($destPath, $sourcePath.'/')) {
+            throw new Exception(trans('panel/file_manager.cannot_move_to_subdirectory'));
+        }
+    }
+
+    /**
+     * Ensure path does not exist, throw exception if it does.
+     *
+     * @param  string  $path  Path to check
+     * @return void
+     * @throws Exception If path exists
+     */
+    protected function ensurePathDoesNotExist(string $path): void
+    {
+        if (is_dir($path) || file_exists($path)) {
+            throw new Exception(trans('panel/file_manager.target_dir_exist'));
+        }
+    }
+
+    /**
+     * Delete a directory.
+     *
+     * @param  string  $dirPath  Directory path
+     * @return void
+     * @throws Exception If directory is not empty or deletion fails
+     */
+    protected function deleteDirectory(string $dirPath): void
+    {
+        $files = glob($dirPath.'/*');
+        if ($files) {
+            throw new Exception(trans('panel/file_manager.directory_not_empty'));
+        }
+
+        if (! @rmdir($dirPath)) {
+            Log::error('Failed to delete directory:', [
+                'path'  => $dirPath,
+                'error' => error_get_last(),
+            ]);
+            throw new Exception(trans('panel/file_manager.delete_failed'));
+        }
+    }
+
+    /**
+     * Delete a file.
+     *
+     * @param  string  $filePath  File path
+     * @return void
+     * @throws Exception If deletion fails
+     */
+    protected function deleteFile(string $filePath): void
+    {
+        if (! @unlink($filePath)) {
+            Log::error('Failed to delete file:', [
+                'path'  => $filePath,
+                'error' => error_get_last(),
+            ]);
+            throw new Exception(trans('panel/file_manager.delete_failed'));
+        }
+    }
+
+    /**
+     * Log error with context.
+     *
+     * @param  string  $message  Error message
+     * @param  Exception  $exception  Exception object
+     * @param  array  $context  Additional context
+     * @return void
+     */
+    protected function logError(string $message, Exception $exception, array $context = []): void
+    {
+        Log::error($message, array_merge([
+            'error' => $exception->getMessage(),
+        ], $context));
     }
 }
