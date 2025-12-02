@@ -412,16 +412,14 @@
   $(document).on('click', '.is-up-file .img-upload-item', function () {
     const _self = $(this);
 
-    // Call file manager
     window.inno.fileManagerIframe((file) => {
-      // Handle selected file
       let val = file.path;
-      let url = file.url;
+      let url = file.url; // Thumbnail for display
+      let originUrl = file.origin_url || file.url; // Original image for preview
       _self.find('input').val(val);
       _self.find('.tool-wrap').removeClass('d-none');
-      _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
+      _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + originUrl + '">');
       
-      // Manually trigger change event
       _self.find('input').trigger('change');
     }, {
       multiple: false,

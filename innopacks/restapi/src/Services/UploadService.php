@@ -30,12 +30,14 @@ class UploadService extends BaseService
         // Unified security validation - this is the single point of validation
         FileSecurityValidator::validateFile($file->getClientOriginalName());
 
-        $filePath = $file->store("/{$type}", $disk);
-        $realPath = "{$pathPrefix}/$filePath";
+        $filePath  = $file->store("/{$type}", $disk);
+        $realPath  = "{$pathPrefix}/$filePath";
+        $originUrl = asset($realPath);
 
         return [
-            'url'   => asset($realPath),
-            'value' => $realPath,
+            'url'        => $originUrl, // Use original image as thumbnail is not generated yet
+            'origin_url' => $originUrl, // Original image URL
+            'value'      => $realPath,
         ];
     }
 

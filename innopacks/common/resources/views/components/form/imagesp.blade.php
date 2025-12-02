@@ -126,11 +126,12 @@
                     .then(function (response) {
                         if (response.success) {
                             const val = response.data.value;
-                            const url = response.data.url;
+                            const url = response.data.url; // Thumbnail for display
+                            const originUrl = response.data.origin_url || response.data.url; // Original image for preview
                             let item = '<div class="img-upload-item wh-80 position-relative d-flex justify-content-center rounded overflow-hidden align-items-center border border-1 mb-1 me-1">';
                             item += '<div class="position-absolute tool-wrap d-flex top-0 start-0 w-100 bg-primary bg-opacity-75"><div class="show-img w-100 text-center"><i class="bi bi-eye text-white"></i></div><div class="w-100 delete-img text-center"><i class="bi bi-trash text-white"></i></div></div>';
                             item += '<div class="img-info d-flex justify-content-center align-items-center h-100 w-80 bg-white">';
-                            item += '<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">';
+                            item += '<img src="' + url + '" class="img-fluid" data-origin-img="' + originUrl + '">';
                             item += '</div>';
                             item += '<input class="d-none" name="{{ $name }}[]" value="' + val + '">';
                             item += '</div>';

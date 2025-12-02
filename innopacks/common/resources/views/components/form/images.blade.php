@@ -90,7 +90,8 @@
           fileArray.forEach((file, index) => {
             if (imgMax && (currentCount + index) >= imgMax) return;
             let val = file.path;
-            let url = file.url;
+            let url = file.url; // Thumbnail for display
+            let originUrl = file.origin_url || file.url; // Original image for preview
             let item = '' +
               '<div class="img-upload-item wh-80 position-relative d-flex justify-content-center rounded overflow-hidden align-items-center border border-1 mb-1 me-1" data-sortable-item>' +
                 '<div class="position-absolute tool-wrap d-flex top-0 start-0 w-100 bg-primary bg-opacity-75">' +
@@ -101,7 +102,7 @@
                   '<i class="bi bi-arrows-move text-white"></i>' +
                 '</div>' +
                 '<div class="img-info d-flex justify-content-center align-items-center h-100 w-80 bg-white">' +
-                  '<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">' +
+                  '<img src="' + url + '" class="img-fluid" data-origin-img="' + originUrl + '">' +
                 '</div>' +
                 '<input class="d-none" name="{{ $name }}[]" value="' + val + '">' +
               '</div>';

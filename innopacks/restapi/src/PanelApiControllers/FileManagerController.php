@@ -30,16 +30,9 @@ class FileManagerController extends BaseController
     {
         try {
             $driver = plugin_setting('file_manager', 'driver');
-            Log::info('Getting file manager service:', [
-                'driver'     => $driver,
-                'key_exists' => ! empty(plugin_setting('file_manager', 'key')),
-                'endpoint'   => plugin_setting('file_manager', 'endpoint'),
-                'bucket'     => plugin_setting('file_manager', 'bucket'),
-            ]);
 
             if ($driver === 'oss') {
                 $service = new OSSService;
-                Log::info('Created OSS service');
 
                 return fire_hook_filter('file_manager.service', $service);
             }
@@ -51,8 +44,6 @@ class FileManagerController extends BaseController
         }
 
         // default local file service
-        Log::info('Created local file service');
-
         return fire_hook_filter('file_manager.service', new FileManagerService);
     }
 
@@ -420,18 +411,6 @@ class FileManagerController extends BaseController
                 'region'     => plugin_setting('file_manager', 'region', ''),
                 'cdn_domain' => plugin_setting('file_manager', 'cdn_domain', ''),
             ];
-
-            Log::info('Get storage configs:', [
-                'config'   => array_merge($config, ['secret' => '***']),
-                'settings' => [
-                    'driver'     => plugin_setting('file_manager', 'driver'),
-                    'key'        => plugin_setting('file_manager', 'key'),
-                    'endpoint'   => plugin_setting('file_manager', 'endpoint'),
-                    'bucket'     => plugin_setting('file_manager', 'bucket'),
-                    'region'     => plugin_setting('file_manager', 'region'),
-                    'cdn_domain' => plugin_setting('file_manager', 'cdn_domain'),
-                ],
-            ]);
 
             return json_success('获取存储配置成功', $config);
         } catch (\Exception $e) {

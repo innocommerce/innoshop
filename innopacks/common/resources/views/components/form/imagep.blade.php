@@ -105,10 +105,11 @@
                 .then(function (response) {
                     if (response.success) {
                         const val = response.data.value;
-                        const url = response.data.url;
+                        const url = response.data.url; // Thumbnail for display
+                        const originUrl = response.data.origin_url || response.data.url; // Original image for preview
                         _self.find('input').val(val);
                         _self.find('.tool-wrap').removeClass('d-none');
-                        _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
+                        _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + originUrl + '">');
                     } else {
                         layer.msg(response.message || '上传失败', {icon: 2});
                     }

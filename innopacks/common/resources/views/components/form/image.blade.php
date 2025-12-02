@@ -42,16 +42,14 @@
   $('.single-image-upload-wrapper .is-up-file .img-upload-item').click(function () {
     const _self = $(this);
 
-    // 调用文件管理器
     window.inno.fileManagerIframe((file) => {
-      // 处理选中的文件
       let val = file.path;
-      let url = file.url;
+      let url = file.url; // Thumbnail for display
+      let originUrl = file.origin_url || file.url; // Original image for preview
       _self.find('input').val(val);
       _self.find('.tool-wrap').removeClass('d-none');
-      _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + url + '">');
+      _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + originUrl + '">');
       
-      // 手动触发 change 事件
       _self.find('input').trigger('change');
     }, {
       multiple: false,
@@ -59,7 +57,6 @@
     });
   });
 
-  // 删除图片
   $('.single-image-upload-wrapper .is-up-file .delete-img').on('click', function (e) {
     e.stopPropagation();
     let _self = $(this).parent().parent();
@@ -68,7 +65,6 @@
     _self.find('.img-info').html('<i class="bi bi-plus fs-1 text-secondary opacity-75"></i>');
   });
 
-  // 预览图片
   $('.single-image-upload-wrapper .is-up-file .show-img').on('click', function (e) {
     e.stopPropagation();
     const imgElement = $(this).closest('.img-upload-item').find('.img-info img');
