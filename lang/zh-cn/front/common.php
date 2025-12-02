@@ -58,4 +58,9 @@ return [
     'view'              => '查看',
     'yes'               => '是',
     'filter'            => '筛选',
+    'view_more'         => '查看更多',
+    'search_results'    => '搜索结果',
+    'found_categories'  => '找到 :count 个分类',
+    'found_suppliers'   => '找到 :count 个供应商',
+    'no_search_results' => '没有找到相关结果',
 ];

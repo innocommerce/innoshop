@@ -133,6 +133,13 @@ class CategoryRepo extends BaseRepo
             $builder->where('active', (bool) $filters['active']);
         }
 
+        $keyword = $filters['keyword'] ?? '';
+        if ($keyword) {
+            $builder->whereHas('translation', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            });
+        }
+
         return fire_hook_filter('repo.category.builder', $builder);
     }
 

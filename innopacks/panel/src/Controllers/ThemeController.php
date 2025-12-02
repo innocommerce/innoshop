@@ -49,6 +49,9 @@ class ThemeController extends BaseController
             'themes'     => ThemeRepo::getInstance()->getListFromPath(),
         ];
 
+        // 允许通过 Hook 扩展数据
+        $data = fire_hook_filter('panel.themes.settings.data', $data);
+
         return inno_view('panel::themes.settings', $data);
     }
 

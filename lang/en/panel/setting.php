@@ -8,6 +8,7 @@
  */
 
 return [
+    'add_category'                        => 'Add Category',
     'advanced_settings'                   => 'Advanced Settings',
     'advanced_settings_desc'              => 'Configure the background access path, record number, and custom script',
     'ai_content_settings'                 => 'AI content Settings',
@@ -101,6 +102,10 @@ return [
     'front_logo'                          => 'Frontend Logo',
     'header_menu'                         => 'Header Menu',
     'hide_url_locale'                     => 'Single language hides language code',
+    'home_categories'                     => 'Home Categories',
+    'home_categories_desc'                => 'Configure categories to display on the homepage',
+    'home_categories_hint'                => 'Check categories on the left, they will be displayed in the homepage categories section',
+    'hot_products'                        => 'Hot Products',
     'hide_url_locale_desc'                => 'When enabled, the URL does not display the language code in a single language. For example, /en/products changes to /products',
     'icp_number'                          => 'ICP registration number',
     'js_code'                             => 'Third-party JS code',
@@ -120,6 +125,7 @@ return [
     'meta_keywords'                       => 'Meta Keywords',
     'meta_title'                          => 'Meta Title',
     'new_order'                           => 'Order creation',
+    'no_categories_selected'              => 'No Categories Selected',
     'order_status_update'                 => 'Order status change',
     'page'                                => 'Page',
     'panel_name'                          => 'Panel Path Name',
@@ -132,6 +138,7 @@ return [
     'registration'                        => 'New user registration',
     'seo_settings'                        => 'SEO Settings',
     'seo_settings_desc'                   => 'Configure the SEO-related information of the website',
+    'selected_categories'                 => 'Selected Categories',
     'setting'                             => 'System Settings',
     'shop_address'                        => 'Store Address',
     'slideshow'                           => 'Home Slideshow',

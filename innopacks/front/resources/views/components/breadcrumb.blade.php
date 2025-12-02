@@ -7,10 +7,14 @@
             @if($index == 0)
               <i class="bi bi-house-door-fill home-icon"></i>
             @endif
-            <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['title'] }}</a>
+            <a href="{{ $breadcrumb['url'] }}" @if(isset($breadcrumb['full_title'])) title="{{ $breadcrumb['full_title'] }}" @endif>
+              {{ $breadcrumb['display_title'] ?? $breadcrumb['title'] }}
+            </a>
           </li>
         @else
-          <li class="breadcrumb-item active" aria-current="page">{{ $breadcrumb['title'] }}</li>
+          <li class="breadcrumb-item active" aria-current="page" @if(isset($breadcrumb['full_title'])) title="{{ $breadcrumb['full_title'] }}" @endif>
+            {{ $breadcrumb['display_title'] ?? $breadcrumb['title'] }}
+          </li>
         @endif
       @endforeach
     </ul>

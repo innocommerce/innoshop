@@ -20,4 +20,5 @@ return [
     'sales_volume'   => 'Sales Volume',
     'subcategories'  => 'Subcategories',
     'summary'        => 'Category Introduction',
+    'categories'     => 'Categories',
 ];

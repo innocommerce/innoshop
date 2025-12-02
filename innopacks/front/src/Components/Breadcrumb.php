@@ -28,10 +28,10 @@ class Breadcrumb extends Component
      */
     public function __construct($type, $value, string $title = '', bool $showFilter = false)
     {
-        $this->breadcrumbs[] = [
+        $this->breadcrumbs[] = $this->formatBreadcrumb([
             'title' => front_trans('common.home'),
             'url'   => front_route('home.index'),
-        ];
+        ]);
 
         $breadcrumbLib = BreadcrumbLib::getInstance();
 
@@ -46,18 +46,18 @@ class Breadcrumb extends Component
         ];
 
         if (in_array($type, ['order', 'order_return']) || in_array($value, $accountRoutes)) {
-            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.index', front_trans('account.account'));
+            $this->breadcrumbs[] = $this->formatBreadcrumb($breadcrumbLib->getTrail('route', 'account.index', front_trans('account.account')));
         }
 
         if ($type == 'order') {
-            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.orders.index', front_trans('account.orders'));
+            $this->breadcrumbs[] = $this->formatBreadcrumb($breadcrumbLib->getTrail('route', 'account.orders.index', front_trans('account.orders')));
         } elseif ($type == 'order_return') {
-            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'account.order_returns.index', front_trans('account.order_returns'));
+            $this->breadcrumbs[] = $this->formatBreadcrumb($breadcrumbLib->getTrail('route', 'account.order_returns.index', front_trans('account.order_returns')));
         } elseif ($type == 'brand') {
-            $this->breadcrumbs[] = $breadcrumbLib->getTrail('route', 'brands.index', front_trans('product.brand'));
+            $this->breadcrumbs[] = $this->formatBreadcrumb($breadcrumbLib->getTrail('route', 'brands.index', front_trans('product.brand')));
         }
 
-        $this->breadcrumbs[] = $breadcrumbLib->getTrail($type, $value, $title);
+        $this->breadcrumbs[] = $this->formatBreadcrumb($breadcrumbLib->getTrail($type, $value, $title));
 
         $routes = [
             'products.index',
@@ -72,6 +72,27 @@ class Breadcrumb extends Component
         } elseif (in_array(pure_route_name(), $routes)) {
             $this->showFilter = true;
         }
+    }
+
+    /**
+     * Format breadcrumb title with truncation
+     *
+     * @param  array  $breadcrumb
+     * @return array
+     */
+    private function formatBreadcrumb(array $breadcrumb): array
+    {
+        $maxLength = 30;
+        $title     = $breadcrumb['title'] ?? '';
+
+        if (mb_strlen($title) > $maxLength) {
+            $breadcrumb['display_title'] = mb_substr($title, 0, $maxLength).'...';
+            $breadcrumb['full_title']    = $title;
+        } else {
+            $breadcrumb['display_title'] = $title;
+        }
+
+        return $breadcrumb;
     }
 
     /**

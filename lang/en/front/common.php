@@ -58,4 +58,9 @@ return [
     'view'              => 'View',
     'yes'               => 'yes',
     'filter'            => 'Filter',
+    'view_more'         => 'View More',
+    'search_results'    => 'Search Results',
+    'found_categories'  => 'Found :count categories',
+    'found_suppliers'   => 'Found :count suppliers',
+    'no_search_results' => 'No results found',
 ];

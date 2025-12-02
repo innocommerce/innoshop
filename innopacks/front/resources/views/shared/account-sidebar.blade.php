@@ -38,6 +38,11 @@
     </li>
     @hookinsert('front.account.sidebar.reviews.after')
 
+    <li class="{{ equal_account_route_name(['inquiries.index','inquiries.show']) ? 'active' : '' }}">
+      <a href="{{ account_route('inquiries.index') }}"><i class="bi bi-question-circle"></i>{{ __('front/inquiry.inquiries') }}</a>
+    </li>
+    @hookinsert('front.account.sidebar.inquiries.after')
+
     <li class="{{ equal_account_route_name('addresses.index') ? 'active' : '' }}">
       <a href="{{ account_route('addresses.index') }}"><i
             class="bi bi-geo-alt"></i>{{ front_trans('account.addresses') }}</a>

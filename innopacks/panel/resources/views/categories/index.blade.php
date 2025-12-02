@@ -6,6 +6,7 @@
 @section('page-title-right')
   <a href="{{ panel_route('categories.create') }}" class="btn btn-primary"><i
         class="bi bi-plus-square"></i> {{ __('panel/common.create') }}</a>
+  @hookinsert('panel.categories.index.page-title-right')
 @endsection
 
 @section('content')

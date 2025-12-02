@@ -79,6 +79,7 @@ return [
     'please_choose'                => '请选择',
     'position'                     => '排序',
     'preview'                      => '预览',
+    'product_count'                => '商品数量',
     'read_success'                 => '获取成功',
     'reset'                        => '重置',
     'save'                         => '保存',
@@ -103,6 +104,7 @@ return [
     'verify_required'              => '请填写',
     'view'                         => '查看',
     'viewed'                       => '已查看',
+    'admin'                        => '管理员',
     'whether_enable'               => '是否启用',
     'yes'                          => '是',
 ];

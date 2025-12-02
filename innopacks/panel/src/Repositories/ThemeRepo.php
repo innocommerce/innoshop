@@ -66,7 +66,7 @@ class ThemeRepo
     public function updateSetting($settings): void
     {
         foreach (self::SETTING_KEYS as $key) {
-            $settings[$key] = $settings[$key] ?? [];
+            $settings[$key] = is_array($settings[$key] ?? null) ? $settings[$key] : [];
         }
         SettingRepo::getInstance()->updateValues($settings);
     }

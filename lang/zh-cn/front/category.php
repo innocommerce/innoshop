@@ -19,4 +19,5 @@ return [
     'sales'          => '销量',
     'subcategories'  => '子分类',
     'summary'        => '分类介绍',
+    'categories'     => '分类',
 ];

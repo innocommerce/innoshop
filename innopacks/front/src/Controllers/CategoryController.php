@@ -23,13 +23,37 @@ class CategoryController extends Controller
 
     /**
      * Category index page with product list and filters
+     * If keyword is provided, search categories by name and display category list
+     * Otherwise, display product list
      * @param  Request  $request
      * @return mixed
      * @throws Exception
      */
     public function index(Request $request): mixed
     {
-        // Use RequestFilterParser to extract filter conditions
+        $keyword = $request->get('keyword');
+
+        // If keyword is provided, search categories by name
+        if ($keyword) {
+            $filters = [
+                'keyword' => $keyword,
+                'active'  => true,
+            ];
+
+            $categories = CategoryRepo::getInstance()
+                ->builder($filters)
+                ->orderBy('position')
+                ->paginate(12);
+
+            $data = [
+                'categories' => $categories,
+                'keyword'    => $keyword,
+            ];
+
+            return inno_view('categories.index', $data);
+        }
+
+        // Otherwise, display product list (original behavior)
         $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
         $filters      = $filterParser->extractFilters($request, [
             'keyword',
