@@ -79,7 +79,13 @@ class ImageService
      *
      * @param  int  $width
      * @param  int  $height
-     * @param  string|null  $mode  Resize mode: cover, contain, resize, fit, scale, crop, pad
+     * @param  string|null  $mode  Resize mode: cover, contain, resize, pad, width-cover, height-cover
+     *                             - cover: Maintain aspect ratio, crop to fill (default)
+     *                             - contain: Maintain aspect ratio, fit within bounds (may have padding)
+     *                             - resize: Stretch to exact dimensions (may distort)
+     *                             - pad: Maintain aspect ratio, fill padding with background color
+     *                             - width-cover: Stretch to width, crop/pad height
+     *                             - height-cover: Stretch to height, crop/pad width
      * @return string
      */
     public function resize(int $width = 100, int $height = 100, ?string $mode = null): string
@@ -227,7 +233,7 @@ class ImageService
             $mode = system_setting('image_resize_mode', 'cover');
         }
 
-        $validModes = ['cover', 'contain', 'resize', 'fit', 'scale', 'crop', 'pad'];
+        $validModes = ['cover', 'contain', 'resize', 'pad', 'width-cover', 'height-cover'];
         if (! in_array($mode, $validModes)) {
             return 'cover';
         }
@@ -323,20 +329,16 @@ class ImageService
                 $image->resize($width, $height);
                 break;
 
-            case 'fit':
-                $this->applyFitMode($image, $width, $height, $originalWidth, $originalHeight);
-                break;
-
-            case 'scale':
-                $this->applyScaleMode($image, $width, $height, $originalWidth, $originalHeight);
-                break;
-
-            case 'crop':
-                $image->cover($width, $height);
-                break;
-
             case 'pad':
                 $this->applyPadMode($image, $width, $height, $originalWidth, $originalHeight);
+                break;
+
+            case 'width-cover':
+                $this->applyWidthCoverMode($image, $width, $height, $originalWidth, $originalHeight);
+                break;
+
+            case 'height-cover':
+                $this->applyHeightCoverMode($image, $width, $height, $originalWidth, $originalHeight);
                 break;
 
             case 'cover':
@@ -344,44 +346,6 @@ class ImageService
                 $image->cover($width, $height);
                 break;
         }
-    }
-
-    /**
-     * Apply fit mode: scale down only, maintain aspect ratio
-     *
-     * @param  mixed  $image
-     * @param  int  $width
-     * @param  int  $height
-     * @param  int  $originalWidth
-     * @param  int  $originalHeight
-     * @return void
-     */
-    private function applyFitMode($image, int $width, int $height, int $originalWidth, int $originalHeight): void
-    {
-        $ratio = min($width / $originalWidth, $height / $originalHeight);
-        if ($ratio < 1) {
-            $newWidth  = (int) ($originalWidth * $ratio);
-            $newHeight = (int) ($originalHeight * $ratio);
-            $image->resize($newWidth, $newHeight);
-        }
-    }
-
-    /**
-     * Apply scale mode: maintain aspect ratio, scale proportionally
-     *
-     * @param  mixed  $image
-     * @param  int  $width
-     * @param  int  $height
-     * @param  int  $originalWidth
-     * @param  int  $originalHeight
-     * @return void
-     */
-    private function applyScaleMode($image, int $width, int $height, int $originalWidth, int $originalHeight): void
-    {
-        $ratio     = min($width / $originalWidth, $height / $originalHeight);
-        $newWidth  = (int) ($originalWidth * $ratio);
-        $newHeight = (int) ($originalHeight * $ratio);
-        $image->resize($newWidth, $newHeight);
     }
 
     /**
@@ -404,6 +368,60 @@ class ImageService
 
         $padColor = $this->getPadColor();
         $image->contain($width, $height, $padColor);
+    }
+
+    /**
+     * Apply width-cover mode: stretch to target width, crop height to fit
+     *
+     * @param  mixed  $image
+     * @param  int  $width
+     * @param  int  $height
+     * @param  int  $originalWidth
+     * @param  int  $originalHeight
+     * @return void
+     */
+    private function applyWidthCoverMode($image, int $width, int $height, int $originalWidth, int $originalHeight): void
+    {
+        // First, resize to target width while maintaining aspect ratio
+        $widthRatio = $width / $originalWidth;
+        $newHeight  = (int) ($originalHeight * $widthRatio);
+        $image->resize($width, $newHeight);
+
+        // Then crop height to target height (center crop)
+        if ($newHeight > $height) {
+            $image->cover($width, $height);
+        } elseif ($newHeight < $height) {
+            // If height is less than target, pad with background color
+            $padColor = $this->getPadColor();
+            $image->contain($width, $height, $padColor);
+        }
+    }
+
+    /**
+     * Apply height-cover mode: stretch to target height, crop width to fit
+     *
+     * @param  mixed  $image
+     * @param  int  $width
+     * @param  int  $height
+     * @param  int  $originalWidth
+     * @param  int  $originalHeight
+     * @return void
+     */
+    private function applyHeightCoverMode($image, int $width, int $height, int $originalWidth, int $originalHeight): void
+    {
+        // First, resize to target height while maintaining aspect ratio
+        $heightRatio = $height / $originalHeight;
+        $newWidth    = (int) ($originalWidth * $heightRatio);
+        $image->resize($newWidth, $height);
+
+        // Then crop width to target width (center crop)
+        if ($newWidth > $width) {
+            $image->cover($width, $height);
+        } elseif ($newWidth < $width) {
+            // If width is less than target, pad with background color
+            $padColor = $this->getPadColor();
+            $image->contain($width, $height, $padColor);
+        }
     }
 
     /**

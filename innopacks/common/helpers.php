@@ -681,16 +681,17 @@ if (! function_exists('image_resize')) {
      * @param  ?string  $image
      * @param  int  $width
      * @param  int  $height
+     * @param  string|null  $mode  Resize mode: cover, contain, resize, fit, scale, crop, pad
      * @return string
      * @throws Exception
      */
-    function image_resize(?string $image = '', int $width = 100, int $height = 100): string
+    function image_resize(?string $image = '', int $width = 100, int $height = 100, ?string $mode = null): string
     {
         if (Str::startsWith($image, 'http')) {
             return $image;
         }
 
-        return (new ImageService((string) $image))->resize($width, $height);
+        return (new ImageService((string) $image))->resize($width, $height, $mode);
     }
 }
 
@@ -1146,10 +1147,10 @@ if (! function_exists('theme_image')) {
         $fileExists = should_copy_static_file($sourceFile, $destFile);
 
         if (! $fileExists) {
-            return image_resize('', $width, $height);
+            return image_resize('', $width, $height, 'contain');
         }
 
-        return image_resize($destThemePath, $width, $height);
+        return image_resize($destThemePath, $width, $height, 'contain');
     }
 }
 

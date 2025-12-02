@@ -15,9 +15,8 @@
         ['value' => 'contain', 'label' => __('panel/setting.image_resize_mode_contain')],
         ['value' => 'pad', 'label' => __('panel/setting.image_resize_mode_pad')],
         ['value' => 'resize', 'label' => __('panel/setting.image_resize_mode_resize')],
-        ['value' => 'fit', 'label' => __('panel/setting.image_resize_mode_fit')],
-        ['value' => 'scale', 'label' => __('panel/setting.image_resize_mode_scale')],
-        ['value' => 'crop', 'label' => __('panel/setting.image_resize_mode_crop')]
+        ['value' => 'width-cover', 'label' => __('panel/setting.image_resize_mode_width_cover')],
+        ['value' => 'height-cover', 'label' => __('panel/setting.image_resize_mode_height_cover')]
       ]"
       key="value"
       label="label"
@@ -52,9 +51,8 @@
         <strong>{{ __('panel/setting.image_resize_mode_contain') }}:</strong> {{ __('panel/setting.image_resize_mode_contain_desc') }}<br>
         <strong>{{ __('panel/setting.image_resize_mode_pad') }}:</strong> {{ __('panel/setting.image_resize_mode_pad_desc') }}<br>
         <strong>{{ __('panel/setting.image_resize_mode_resize') }}:</strong> {{ __('panel/setting.image_resize_mode_resize_desc') }}<br>
-        <strong>{{ __('panel/setting.image_resize_mode_fit') }}:</strong> {{ __('panel/setting.image_resize_mode_fit_desc') }}<br>
-        <strong>{{ __('panel/setting.image_resize_mode_scale') }}:</strong> {{ __('panel/setting.image_resize_mode_scale_desc') }}<br>
-        <strong>{{ __('panel/setting.image_resize_mode_crop') }}:</strong> {{ __('panel/setting.image_resize_mode_crop_desc') }}
+        <strong>{{ __('panel/setting.image_resize_mode_width_cover') }}:</strong> {{ __('panel/setting.image_resize_mode_width_cover_desc') }}<br>
+        <strong>{{ __('panel/setting.image_resize_mode_height_cover') }}:</strong> {{ __('panel/setting.image_resize_mode_height_cover_desc') }}
       </small>
     </div>
   </div>
