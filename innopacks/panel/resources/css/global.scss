@@ -562,6 +562,69 @@ body {
   }
 }
 
+// Vue Autocomplete Component Styles (similar to autocomplete-list)
+.vue-autocomplete-wrapper {
+  margin-top: 15px;
+  width: 100%;
+
+  .vue-autocomplete-input-box {
+    .el-autocomplete {
+      width: 100%;
+
+      .el-input__wrapper {
+        border-radius: 4px 4px 0 0;
+      }
+    }
+  }
+
+  .vue-autocomplete-list {
+    height: 180px;
+    overflow-y: auto;
+    background-color: #f4f4f4;
+    border: 1px solid #eee;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 8px;
+  }
+
+  .vue-autocomplete-item {
+    padding: 10px 12px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #f8f9fa;
+    }
+
+    .vue-autocomplete-name {
+      flex: 1;
+      font-size: 14px;
+      color: #212529;
+      word-break: break-word;
+    }
+
+    .btn-close {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      margin-left: 12px;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 .settings-nav {
   a.nav-link {
     color: #333;
