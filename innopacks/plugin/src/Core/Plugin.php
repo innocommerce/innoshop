@@ -624,6 +624,10 @@ final class Plugin implements Arrayable, ArrayAccess
     {
         $readme = $this->getReadme();
 
-        return parsedown($readme);
+        if (empty($readme)) {
+            return '';
+        }
+
+        return parsedown($readme, false);
     }
 }

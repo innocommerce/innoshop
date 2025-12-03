@@ -1,14 +1,25 @@
 $(function () {
   const forms = document.querySelectorAll(".needs-validation");
 
-  // Trigger form submission
   $(document).on('click', '.submit-form', function(event) {
-    const form = $(this).attr('form');
+    const formId = $(this).attr('form');
+    const form = $(`form#${formId}`);
 
-    if ($(`form#${form}`).find('button[type="submit"]').length > 0) {
-      $(`form#${form}`).find('button[type="submit"]')[0].click();
+    // Allow plugins to intercept submit button click
+    const customEvent = $.Event('before-form-submit', {
+      formId: formId,
+      form: form[0]
+    });
+    $(document).trigger(customEvent);
+
+    if (customEvent.isDefaultPrevented()) {
+      return;
+    }
+
+    if (form.find('button[type="submit"]').length > 0) {
+      form.find('button[type="submit"]')[0].click();
     } else {
-      $(`form#${form}`).submit();
+      form.submit();
     }
   });
 
