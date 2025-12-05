@@ -286,22 +286,26 @@
       // 更新产品价格和选择显示
       function updateProductPrice() {
         let totalAdjustment = 0;
+        let hasSelectedOptions = false;
         
         // 计算下拉选择框的价格调整
         $('.option-select').each(function() {
           const selectedOption = $(this).find('option:selected');
           if (selectedOption.val()) {
+            hasSelectedOptions = true;
             totalAdjustment += parseFloat(selectedOption.data('price-adjustment')) || 0;
           }
         });
         
         // 计算单选按钮的价格调整
         $('.option-radio-item input[type="radio"]:checked').each(function() {
+          hasSelectedOptions = true;
           totalAdjustment += parseFloat($(this).data('price-adjustment')) || 0;
         });
         
         // 计算多选复选框的价格调整
         $('.option-checkbox-item input[type="checkbox"]:checked').each(function() {
+          hasSelectedOptions = true;
           totalAdjustment += parseFloat($(this).data('price-adjustment')) || 0;
         });
         
@@ -311,6 +315,13 @@
         const formattedPrice = window.inno.formatCurrency(finalPrice);
         $('.product-price .price').text(formattedPrice);
         $('.current-total-price').text(formattedPrice);
+        
+        // 如果有选项被选中，隐藏划线价；否则显示划线价
+        if (hasSelectedOptions) {
+          $('.product-price .old-price').hide();
+        } else {
+          $('.product-price .old-price').show();
+        }
         
         // 更新当前选择显示
         updateCurrentSelectionDisplay();
