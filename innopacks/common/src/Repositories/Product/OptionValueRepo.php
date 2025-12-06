@@ -274,6 +274,10 @@ class OptionValueRepo extends BaseRepo
      */
     public function checkStock(int $productId, array $optionIds, int $quantity): bool
     {
+        if (system_setting('allow_out_of_stock', false)) {
+            return true;
+        }
+
         $optionValue = OptionValue::where('product_id', $productId)
             ->whereIn('option_id', $optionIds)
             ->first();

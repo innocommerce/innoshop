@@ -45,6 +45,8 @@ class Breadcrumb extends Component
             'account.password.index',
         ];
 
+        $accountRoutes = fire_hook_filter('front.component.breadcrumb.account_routes', $accountRoutes);
+
         if (in_array($type, ['order', 'order_return']) || in_array($value, $accountRoutes)) {
             $this->breadcrumbs[] = $this->formatBreadcrumb($breadcrumbLib->getTrail('route', 'account.index', front_trans('account.account')));
         }

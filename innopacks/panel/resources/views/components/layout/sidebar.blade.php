@@ -8,7 +8,7 @@
         </div>
       @else
         <div class="accordion-item">
-          @if(!$menuLink['has_children'])
+          @if(!isset($menuLink['has_children']) || !$menuLink['has_children'])
             @if(($menuLink['url'] ?? ''))
               <a class="accordion-button {{ $menuLink['active'] ? '' : 'collapsed' }}" href="{{ $menuLink['url'] }}">
                 <span class="icon"><i
