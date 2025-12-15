@@ -12,10 +12,10 @@
         <i class="bi bi-grid me-1"></i><span>{{ __('panel/common.market') }}</span>
       </span>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="{{ panel_route('plugin_market.index') }}">
+        <li><a class="dropdown-item" href="{{ panel_route('plugin-market.index') }}">
           <i class="bi bi-puzzle me-2"></i>{{ __('panel/common.market_plugin') }}
         </a></li>
-        <li><a class="dropdown-item" href="{{ panel_route('theme_market.index') }}">
+        <li><a class="dropdown-item" href="{{ panel_route('theme-market.index') }}">
           <i class="bi bi-palette me-2"></i>{{ __('panel/common.market_theme') }}
         </a></li>
       </ul>

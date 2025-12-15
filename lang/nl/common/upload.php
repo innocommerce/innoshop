@@ -8,13 +8,22 @@
  */
 
 return [
-    'upload_success'        => 'Upload succesvol',
-    'upload_failed'         => 'Upload mislukt',
+    'click_or_drag'         => 'Click "Upload" or drag the file here',
+    'close'                 => '"Close',
+    'current_count'         => 'Current quantity',
+    'drag_and_drop'         => 'Sleep bestand hierheen',
+    'drag_to_reorder'       => 'Drag the pictures to adjust their order',
     'file_too_large'        => 'Bestand te groot',
     'file_type_not_allowed' => 'Niet ondersteund bestandstype',
-    'upload_in_progress'    => 'Bezig met uploaden...',
-    'select_file'           => 'Selecteer bestand',
-    'drag_and_drop'         => 'Sleep bestand hierheen',
+    'image_unit'            => 'zhang',
     'max_file_size'         => 'Maximale bestandsgrootte',
+    'max_upload_count'      => 'Maximum upload',
+    'recommended_size'      => 'It is recommended that the size be square, for example, 800*800',
+    'select_file'           => 'Selecteer bestand',
     'supported_formats'     => 'Ondersteunde formaten',
+    'upload_failed'         => 'Upload mislukt',
+    'upload_hint'           => 'Click to upload or drag the picture. It is recommended that the size be square (such as 800×800). You can drag the picture to adjust the order',
+    'upload_image_text'     => 'Click to upload the picture',
+    'upload_in_progress'    => 'Bezig met uploaden...',
+    'upload_success'        => 'Upload succesvol',
 ];

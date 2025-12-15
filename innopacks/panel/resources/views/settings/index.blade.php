@@ -150,6 +150,42 @@
   $('.settings-nav').on('click', 'a', function() {
     var text = $(this).text();
     $('.setting-header').text(text);
+    
+    // Update active tab
+    $('.settings-nav a').removeClass('active');
+    $(this).addClass('active');
+    
+    // Show corresponding tab pane
+    var target = $(this).data('bs-target');
+    $('.tab-pane').removeClass('show active');
+    $(target).addClass('show active');
+  });
+
+  // Handle tab parameter from URL
+  var urlParams = new URLSearchParams(window.location.search);
+  var tabParam = urlParams.get('tab');
+  if (tabParam) {
+    var tabTarget = '#tab-setting-' + tabParam;
+    var $tabLink = $('.settings-nav a[data-bs-target="' + tabTarget + '"]');
+    if ($tabLink.length) {
+      $tabLink.trigger('click');
+    }
+  }
+
+  // Add hidden input to form to preserve current tab on submit
+  $('#app-form').on('submit', function() {
+    var $activeTab = $('.settings-nav a.active');
+    if ($activeTab.length) {
+      var target = $activeTab.data('bs-target');
+      if (target) {
+        var tabId = target.replace('#tab-setting-', '');
+        if ($('#current_tab').length === 0) {
+          $(this).append('<input type="hidden" name="tab" id="current_tab" value="' + tabId + '">');
+        } else {
+          $('#current_tab').val(tabId);
+        }
+      }
+    }
   });
 </script>
 @endpush

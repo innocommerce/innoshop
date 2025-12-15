@@ -35,8 +35,9 @@
               <th>{{ __('panel/common.name') }}</th>
               <th>{{ __('panel/product.price') }}</th>
               <th>{{ __('panel/product.quantity') }}</th>
-              <th>{{ __('panel/common.created_at') }}</th>
+              <th>{{ __('panel/common.created_and_updated') }}</th>
               <th>{{ __('panel/common.active') }}</th>
+              @hookinsert('panel.product.list.table.header.after')
               <th>{{ __('panel/common.actions') }}</th>
             </tr>
             </thead>
@@ -57,7 +58,7 @@
                 <td>
                   <a href="{{ $product->url }}" class="text-decoration-none" target="_blank" data-bs-toggle="tooltip"
                      title="{{ $product->fallbackName() }}">
-                    {{ sub_string($product->fallbackName(),28) }}
+                    {{ sub_string($product->fallbackName(),20) }}
                   </a>
                   @if($product->isMultiple())
                     &nbsp;<span class="text-bg-success px-1">M</span>
@@ -65,8 +66,14 @@
                 </td>
                 <td>{{ currency_format($product->masterSku->price ?? 0) }}</td>
                 <td>{{ $product->totalQuantity() }}</td>
-                <td>{{ $product->created_at }}</td>
+                <td>
+                    <div class="d-flex flex-column">
+                        <div class="small">{{ \Carbon\Carbon::parse($product->created_at)->format('Y-m-d') }}</div>
+                        <div class="small text-muted">{{ \Carbon\Carbon::parse($product->updated_at)->format('Y-m-d') }}</div>
+                    </div>
+                </td>
                 <td>@include('panel::shared.list_switch', ['value' => $product->active, 'url' =>panel_route('products.active', $product->id)])</td>
+                @hookinsert('panel.product.list.table.row.after', $product)
                 <td>
                   <div class="d-flex gap-2">
                     <div>
@@ -361,6 +368,14 @@
     });
     app.use(ElementPlus);
     app.mount('#app');
+    
+    // Initialize Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    });
   </script>
 
 @endpush

@@ -19,12 +19,14 @@ Route::get('/plugins/settings', [SettingController::class, 'index'])->name('plug
 Route::put('/plugins/settings', [SettingController::class, 'update'])->name('plugins.settings.update');
 Route::resource('/plugins', PluginController::class);
 
-Route::get('/plugin_market', [PluginMarketController::class, 'index'])->name('plugin_market.index');
-Route::get('/plugin_market/{slug}', [PluginMarketController::class, 'show'])->name('plugin_market.show');
+Route::get('/plugin-market', [PluginMarketController::class, 'index'])->name('plugin-market.index');
+Route::get('/plugin-market/{slug}', [PluginMarketController::class, 'show'])->name('plugin-market.show');
 
-Route::get('/theme_market', [ThemeMarketController::class, 'index'])->name('theme_market.index');
-Route::get('/theme_market/{slug}', [ThemeMarketController::class, 'show'])->name('theme_market.show');
+Route::get('/theme-market', [ThemeMarketController::class, 'index'])->name('theme-market.index');
+Route::get('/theme-market/{slug}', [ThemeMarketController::class, 'show'])->name('theme-market.show');
 
 Route::get('/marketplaces/{id}/download', [MarketplaceController::class, 'download'])->name('marketplaces.download');
 Route::post('/marketplaces/quick_checkout', [MarketplaceController::class, 'quickCheckout'])->name('marketplaces.quick_checkout');
 Route::put('/marketplaces/domain_token', [MarketplaceController::class, 'updateDomainToken'])->name('marketplaces.domain_token');
+Route::get('/marketplaces/get_token', [MarketplaceController::class, 'getToken'])->name('marketplaces.get_token');
+Route::post('/marketplaces/clear_cache', [MarketplaceController::class, 'clearCache'])->name('marketplaces.clear_cache');

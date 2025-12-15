@@ -145,7 +145,7 @@ class CartService
         // Trigger hook after adding item to cart
         fire_hook_action('service.cart.add.after', [
             'cart_item' => $cartItem,
-            'quantity'  => $data['quantity'],
+            'quantity'  => $data['quantity'] ?? 1,
         ]);
 
         return $this->handleResponse();

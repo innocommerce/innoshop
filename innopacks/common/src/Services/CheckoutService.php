@@ -306,6 +306,21 @@ class CheckoutService
      */
     public function validateCheckoutData(): void
     {
+        $checkout              = $this->getCheckout();
+        $skipAddressValidation = ($checkout->reference['skip_address_validation'] ?? false) && $this->checkIsVirtual();
+
+        // Skip address validation for virtual product quick checkout
+        if ($skipAddressValidation) {
+            $billingMethods = BillingService::getInstance()->getMethods();
+            $billingCodes   = collect($billingMethods)->pluck('code')->toArray();
+            if (! in_array($this->checkoutData['billing_method_code'], $billingCodes)) {
+                $this->updateValues(['billing_method_code' => $billingMethods[0]['code'] ?? '']);
+            }
+            $this->checkoutData = $this->freshCheckoutData();
+
+            return;
+        }
+
         $shippingService    = ShippingService::getInstance()->setCheckoutService($this);
         $shippingMethods    = $shippingService->getMethods();
         $shippingQuoteCodes = $shippingService->getQuoteCodes();
@@ -438,6 +453,13 @@ class CheckoutService
     {
         $checkout = $this->getCheckout();
 
+        // If skip address validation flag is set, save it to checkout's reference
+        if (isset($values['skip_address_validation']) && $values['skip_address_validation']) {
+            $reference                            = $checkout->reference ?? [];
+            $reference['skip_address_validation'] = true;
+            $values['reference']                  = $reference;
+        }
+
         return CheckoutRepo::getInstance()->update($checkout, $values);
     }
 
@@ -454,6 +476,31 @@ class CheckoutService
                 throw new Exception(trans('front/common.stock_not_enough'));
             }
         }
+    }
+
+    /**
+     * Quick confirm checkout for virtual products (skip address validation)
+     * This is the core method for virtual product quick checkout
+     *
+     * @param  array  $checkoutData
+     * @return mixed
+     * @throws Exception|Throwable
+     */
+    public function quickConfirmVirtualProduct(array $checkoutData = []): mixed
+    {
+        // Verify that all products in cart are virtual products
+        if (! $this->checkIsVirtual()) {
+            throw new Exception('Only virtual products support quick checkout');
+        }
+
+        // Update checkout data (skip address validation)
+        if (! empty($checkoutData)) {
+            $checkoutData['skip_address_validation'] = true;
+            $this->updateValues($checkoutData);
+        }
+
+        // Confirm order
+        return $this->confirm();
     }
 
     /**

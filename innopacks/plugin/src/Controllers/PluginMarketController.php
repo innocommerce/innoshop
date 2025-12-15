@@ -9,7 +9,6 @@
 
 namespace InnoShop\Plugin\Controllers;
 
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use InnoShop\Plugin\Services\MarketplaceService;
 
@@ -20,43 +19,71 @@ class PluginMarketController
      *
      * @param  Request  $request
      * @return mixed
-     * @throws ConnectionException
      */
     public function index(Request $request): mixed
     {
-        $categorySlug  = $request->get('category');
-        $marketService = MarketplaceService::getInstance()
-            ->setPage($request->get('page', 1))
-            ->setPerPage($request->get('per_page', 8));
+        try {
+            $categorySlug = $request->get('category');
+            $search       = $request->get('search');
+            $tab          = $request->get('tab', 'all');
 
-        if ($categorySlug) {
-            $products = $marketService->getMarketProducts($categorySlug);
-        } else {
-            $products = $marketService->getPluginProducts();
+            $marketService = MarketplaceService::getInstance()
+                ->setPage($request->get('page', 1))
+                ->setPerPage($request->get('per_page', 12));
+
+            // Build query parameters
+            // Use parent_slug=plugins to filter only plugins
+            // The server-side MarketplaceService will handle the conversion
+            $params = ['parent_slug' => 'plugins'];
+            if ($categorySlug) {
+                $params['category_slug'] = $categorySlug;
+            }
+            if ($search) {
+                $params['search'] = $search;
+            }
+            if ($tab && $tab !== 'all') {
+                $params['tab'] = $tab;
+            }
+
+            // Always use getMarketProductsWithParams to ensure type filtering
+            $products = $marketService->getMarketProductsWithParams($params);
+
+            $data = [
+                'categories' => $marketService->getPluginCategories(),
+                'products'   => $products,
+            ];
+
+            return inno_view('plugin::plugin_market.index', $data);
+        } catch (\Exception $e) {
+            return inno_view('plugin::plugin_market.index', [
+                'categories' => ['data' => []],
+                'products'   => ['data' => []],
+                'error'      => $e->getMessage(),
+            ])->with('error', $e->getMessage());
         }
-
-        $data = [
-            'categories' => $marketService->getPluginCategories(),
-            'products'   => $products,
-        ];
-
-        return inno_view('plugin::plugin_market.index', $data);
     }
 
     /**
      * @param  int  $slug
      * @return mixed
-     * @throws ConnectionException
      */
     public function show(int $slug): mixed
     {
-        $marketService = MarketplaceService::getInstance();
+        try {
+            $marketService = MarketplaceService::getInstance();
 
-        $data = [
-            'categories' => $marketService->getPluginCategories(),
-            'product'    => $marketService->getProductDetail($slug),
-        ];
+            $data = [
+                'categories' => $marketService->getPluginCategories(),
+                'product'    => $marketService->getProductDetail($slug),
+            ];
 
-        return inno_view('plugin::plugin_market.detail', $data);
+            return inno_view('plugin::plugin_market.detail', $data);
+        } catch (\Exception $e) {
+            return inno_view('plugin::plugin_market.detail', [
+                'categories' => ['data' => []],
+                'product'    => null,
+                'error'      => $e->getMessage(),
+            ])->with('error', $e->getMessage());
+        }
     }
 }

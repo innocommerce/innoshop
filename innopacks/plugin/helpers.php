@@ -8,6 +8,7 @@
  */
 
 use Barryvdh\Debugbar\Facades\Debugbar;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InnoShop\Common\Services\ImageService;
 use InnoShop\Plugin\Core\Blade\Hook;
@@ -270,5 +271,76 @@ if (! function_exists('plugin_caller_priority')) {
         $plugin     = app('plugin')->getPlugin($pluginCode);
 
         return (int) ($plugin ? $plugin->getPriority() : 0);
+    }
+}
+
+if (! function_exists('add_model_relation')) {
+    /**
+     * Add a dynamic relation to a model.
+     *
+     * @param  string  $modelClass  The model class name (e.g., Product::class)
+     * @param  string  $relationName  The name of the relation (e.g., 'seller')
+     * @param  \Closure  $callback  The closure that defines the relation
+     * @param  array  $options  Additional options:
+     *                          - 'override' (bool): Allow overriding existing relation (default: false)
+     * @return bool Returns true if relation was added successfully, false otherwise
+     * @throws \InvalidArgumentException
+     */
+    function add_model_relation(string $modelClass, string $relationName, \Closure $callback, array $options = []): bool
+    {
+        if (! class_exists($modelClass)) {
+            throw new \InvalidArgumentException("Model class {$modelClass} does not exist");
+        }
+
+        if (! is_subclass_of($modelClass, \Illuminate\Database\Eloquent\Model::class)) {
+            throw new \InvalidArgumentException("{$modelClass} must be an Eloquent Model");
+        }
+
+        $allowOverride = $options['override'] ?? false;
+        if (method_exists($modelClass, $relationName) && ! $allowOverride) {
+            if (config('app.debug')) {
+                Log::warning("Relation {$relationName} already exists on {$modelClass}. Use 'override' => true to override.");
+            }
+
+            return false;
+        }
+
+        if (method_exists($modelClass, 'resolveRelationUsing')) {
+            $modelClass::resolveRelationUsing($relationName, $callback);
+
+            return true;
+        }
+
+        return false;
+    }
+}
+
+if (! function_exists('add_model_relations')) {
+    /**
+     * Add multiple relations to a model at once.
+     *
+     * @param  string  $modelClass  The model class name
+     * @param  array  $relations  Array of relations: ['relationName' => Closure, ...]
+     * @param  array  $options  Options passed to add_model_relation
+     * @return array Returns array of results: ['relationName' => bool, ...]
+     */
+    function add_model_relations(string $modelClass, array $relations, array $options = []): array
+    {
+        $results = [];
+
+        foreach ($relations as $relationName => $callback) {
+            if (! ($callback instanceof \Closure)) {
+                if (config('app.debug')) {
+                    Log::warning("Invalid callback for relation {$relationName} on {$modelClass}");
+                }
+                $results[$relationName] = false;
+
+                continue;
+            }
+
+            $results[$relationName] = add_model_relation($modelClass, $relationName, $callback, $options);
+        }
+
+        return $results;
     }
 }

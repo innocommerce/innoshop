@@ -29,12 +29,27 @@ class ProductQueryBuilder
      */
     public function applyCategoryFilters(Builder $builder, array $filters): Builder
     {
+        // Collect all category filter conditions
+        $typeCategoryIds     = [];
+        $specificCategoryIds = [];
+
+        // Parent slug filter (for filtering by parent category like 'plugins' or 'themes')
+        $parentSlug = $filters['parent_slug'] ?? '';
+        if ($parentSlug) {
+            $parentCategory = Category::query()->where('slug', $parentSlug)->first();
+            if ($parentCategory) {
+                // Get all child categories under the parent category
+                $childCategories = CategoryRepo::getInstance()->builder(['parent_id' => $parentCategory->id])->get();
+                $typeCategoryIds = array_merge($typeCategoryIds, $childCategories->pluck('id')->toArray());
+                // Include the parent category itself
+                $typeCategoryIds[] = $parentCategory->id;
+            }
+        }
+
         // Single category ID filter
         $categoryId = $filters['category_id'] ?? 0;
         if ($categoryId) {
-            $builder->whereHas('categories', function (Builder $query) use ($categoryId) {
-                $query->where('category_id', $categoryId);
-            });
+            $specificCategoryIds[] = $categoryId;
         }
 
         // Category slug filter
@@ -42,21 +57,45 @@ class ProductQueryBuilder
         if ($categorySlug) {
             $category = Category::query()->where('slug', $categorySlug)->first();
             if ($category) {
-                $categories                = CategoryRepo::getInstance()->builder(['parent_id' => $category->id])->get();
-                $filters['category_ids']   = $categories->pluck('id');
-                $filters['category_ids'][] = $category->id;
+                $categories            = CategoryRepo::getInstance()->builder(['parent_id' => $category->id])->get();
+                $childCategoryIds      = $categories->pluck('id')->toArray();
+                $specificCategoryIds   = array_merge($specificCategoryIds, $childCategoryIds);
+                $specificCategoryIds[] = $category->id;
             }
         }
 
-        // Multiple category IDs filter
-        $categoryIds = $filters['category_ids'] ?? [];
-        if ($categoryIds instanceof Collection) {
-            $categoryIds = $categoryIds->toArray();
+        // Multiple category IDs filter (from filters array)
+        $filterCategoryIds = $filters['category_ids'] ?? [];
+        if ($filterCategoryIds instanceof Collection) {
+            $filterCategoryIds = $filterCategoryIds->toArray();
         }
-        $categoryIds = array_unique($categoryIds);
-        if ($categoryIds) {
-            $builder->whereHas('categories', function (Builder $query) use ($categoryIds) {
-                $query->whereIn('category_id', $categoryIds);
+        if ($filterCategoryIds) {
+            $specificCategoryIds = array_merge($specificCategoryIds, $filterCategoryIds);
+        }
+
+        // Apply filters: if both type and specific categories exist, use intersection (AND)
+        // Otherwise, use union (OR)
+        if (! empty($typeCategoryIds) && ! empty($specificCategoryIds)) {
+            // Intersection: product must belong to both type categories AND specific categories
+            $intersectionIds = array_intersect($typeCategoryIds, $specificCategoryIds);
+            if (! empty($intersectionIds)) {
+                $builder->whereHas('categories', function (Builder $query) use ($intersectionIds) {
+                    $query->whereIn('category_id', $intersectionIds);
+                });
+            } else {
+                // No intersection, return empty result
+                $builder->whereRaw('1 = 0');
+            }
+        } elseif (! empty($typeCategoryIds)) {
+            // Only type filter: product must belong to any of the type categories
+            $builder->whereHas('categories', function (Builder $query) use ($typeCategoryIds) {
+                $query->whereIn('category_id', $typeCategoryIds);
+            });
+        } elseif (! empty($specificCategoryIds)) {
+            // Only specific filter: product must belong to any of the specific categories
+            $specificCategoryIds = array_unique($specificCategoryIds);
+            $builder->whereHas('categories', function (Builder $query) use ($specificCategoryIds) {
+                $query->whereIn('category_id', $specificCategoryIds);
             });
         }
 
@@ -213,7 +252,8 @@ class ProductQueryBuilder
      */
     public function applySearchFilters(Builder $builder, array $filters): Builder
     {
-        $keyword = $filters['keyword'] ?? '';
+        // Support both 'keyword' and 'search' parameters
+        $keyword = $filters['keyword'] ?? $filters['search'] ?? '';
         if ($keyword) {
             $builder->whereHas('translation', function (Builder $query) use ($keyword) {
                 $query->where('name', 'like', "%$keyword%");

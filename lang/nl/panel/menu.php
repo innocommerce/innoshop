@@ -3,14 +3,11 @@
  * Copyright (c) Since 2024 InnoShop - All Rights Reserved
  *
  * @link       https://www.innoshop.com
- * @author     iszmxw <mail@54zm.com>
+ * @author     InnoShop <team@innoshop.com>
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
 return [
-    'divider_operation'  => 'Operationeel beheer',
-    'divider_system'     => 'Systeembeheer',
-    'transactions'       => 'Klantenbalans',
     'account'            => 'Persoonlijke informatie',
     'admins'             => 'Backend gebruikers',
     'analytics'          => 'Websitegegevens',
@@ -24,21 +21,25 @@ return [
     'brands'             => 'Productmerken',
     'catalogs'           => 'Artikelcategorieën',
     'categories'         => 'Productcategorieën',
-    'content_ai'         => 'AI-contentgeneratie',
     'countries'          => 'Land of regio',
     'currencies'         => 'Valutakoersen',
     'currency'           => 'Valuta-instellingen',
     'customer_groups'    => 'Klantgroepen',
     'customers'          => 'Klantbeheer',
     'dashboard'          => 'Dashboard',
+    'divider_operation'  => 'Operationeel beheer',
+    'divider_system'     => 'Systeembeheer',
     'file_manager'       => 'Bestandsbeheer',
     'locale'             => 'Taalbeheer',
     'locales'            => 'Taalinstellingen',
     'localization'       => 'Lokalisatie',
     'marketplaces'       => 'Applicatiemarkt',
+    'option_values'      => 'Option value management',
+    'options'            => 'Option Management',
     'order_returns'      => 'Retourbeheer',
     'orders'             => 'Orderbeheer',
     'pages'              => 'Pagina\'s beheer',
+    'plugin_market'      => 'Plugin market',
     'plugin_settings'    => 'Plugininstellingen',
     'product'            => 'Product',
     'products'           => 'Productbeheer',
@@ -52,6 +53,7 @@ return [
     'tags'               => 'Artikeltags',
     'tax_classes'        => 'Belastingklassen',
     'tax_rates'          => 'Belastingtarieven',
+    'theme_market'       => 'Theme market',
     'themes'             => 'Thema\'s',
     'themes_settings'    => 'Interface-instellingen',
     'top_analytic'       => 'Analyse',
@@ -63,7 +65,9 @@ return [
     'top_plugin'         => 'Plugin',
     'top_product'        => 'Product',
     'top_setting'        => 'Instellingen',
+    'transactions'       => 'Klantenbalans',
+    'translations'       => 'Vertaalbeheer',
     'upload'             => 'Uploadfunctie',
     'weight_classes'     => 'Gewichtsklassen',
-    'translations'       => 'Vertaalbeheer',
+    'withdrawals'        => 'Customer withdrawal',
 ];

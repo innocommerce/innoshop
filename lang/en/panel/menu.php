@@ -69,4 +69,6 @@ return [
     'upload'            => 'Upload',
     'weight_classes'    => 'Weight Units',
     'withdrawals'       => 'Withdrawals',
+    'plugin_market'     => 'Plugin Market',
+    'theme_market'      => 'Theme Market',
 ];

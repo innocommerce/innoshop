@@ -66,7 +66,7 @@ class ProductController extends BaseController
             $data    = $request->all();
             $product = ProductRepo::getInstance()->create($data);
 
-            return redirect(panel_route('products.index'))
+            return redirect(panel_route('products.index', ['sort' => 'updated_at', 'order' => 'desc']))
                 ->with('instance', $product)
                 ->with('success', panel_trans('common.saved_success'));
         } catch (Exception $e) {
@@ -194,7 +194,7 @@ class ProductController extends BaseController
             $data = $request->all();
             ProductRepo::getInstance()->update($product, $data);
 
-            return redirect(panel_route('products.index'))
+            return redirect(panel_route('products.index', ['sort' => 'updated_at', 'order' => 'desc']))
                 ->with('instance', $product)
                 ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {

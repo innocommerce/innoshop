@@ -29,7 +29,7 @@ return [
     'ai_prompt_product_summary'           => '产品摘要提示语',
     'ai_setting'                          => 'AI 设置',
     'allow_out_of_stock'                  => '允许负库存下单',
-    'allow_out_of_stock_desc'             => '开启后，即使库存不足，用户仍可以下单',
+    'allow_out_of_stock_desc'             => '开启后，系统将完全不考虑库存，所有商品都不会缺货，用户可以购买任意数量',
     'anthropic_api_key'                   => 'Anthropic API 密钥',
     'anthropic_description'               => 'Anthropic Claude 提供安全、有用且准确的 AI 对话服务。',
     'api_configuration'                   => 'API 配置',

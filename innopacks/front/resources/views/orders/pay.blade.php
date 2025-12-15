@@ -7,7 +7,7 @@
 
   @hookinsert('order.pay.top')
 
-  <div class="container">
+  <div class="container mb-5">
     @error('error')
     <div class="alert alert-danger">
       {{ $message }}

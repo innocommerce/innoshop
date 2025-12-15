@@ -55,6 +55,7 @@ class SettingController
     public function update(Request $request): mixed
     {
         $settings = $request->all();
+        $tab      = $request->get('tab'); // Get current tab from request
 
         try {
             SettingRepo::getInstance()->updateValues($settings);
@@ -62,11 +63,21 @@ class SettingController
             $newAdminName = $settings['panel_name'] ?? 'panel';
             $settingUrl   = str_replace($oldAdminName, $newAdminName, panel_route('settings.index'));
 
+            // Add tab parameter if provided
+            if ($tab) {
+                $settingUrl .= '?tab='.$tab;
+            }
+
             return redirect($settingUrl)
                 ->with('instance', $settings)
                 ->with('success', panel_trans('common.updated_success'));
         } catch (Exception $e) {
-            return redirect(panel_route('settings.index'))->withInput()->withErrors(['error' => $e->getMessage()]);
+            $errorUrl = panel_route('settings.index');
+            if ($tab) {
+                $errorUrl .= '?tab='.$tab;
+            }
+
+            return redirect($errorUrl)->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

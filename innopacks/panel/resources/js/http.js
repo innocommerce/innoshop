@@ -15,8 +15,14 @@ if (token) {
 
 axios.interceptors.request.use(
   config => {
-    // Show loading layer before sending request
-    layer.load(2, { shade: [0.3, '#fff'] });
+    // Skip loading if hload option is set in config
+    // Check both config.hload and config.headers['X-Skip-Loading']
+    const skipLoading = config.hload === true || (config.headers && config.headers['X-Skip-Loading']);
+    
+    if (!skipLoading) {
+      // Show loading layer before sending request
+      layer.load(2, { shade: [0.3, '#fff'] });
+    }
     return config;
   },
   error => {

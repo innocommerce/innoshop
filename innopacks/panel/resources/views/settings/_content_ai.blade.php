@@ -13,7 +13,7 @@
           <a class="btn btn-primary me-3" href="{{ panel_route('plugins.index', ['type'=>'intelli']) }}" target="_blank">
             {{ __('panel/common.setting') }}
           </a>
-          <a class="btn btn-primary" href="{{ panel_route('plugin_market.index', ['type'=>'intelli']) }}" target="_blank">
+          <a class="btn btn-primary" href="{{ panel_route('plugin-market.index', ['type'=>'intelli']) }}" target="_blank">
             {{ __('panel/common.get_more') }}
           </a>
         </div>

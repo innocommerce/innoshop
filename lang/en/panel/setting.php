@@ -26,7 +26,7 @@ return [
     'ai_prompt_product_slug'              => 'Product Slug Prompt',
     'ai_prompt_product_summary'           => 'Product Summary Prompt',
     'allow_out_of_stock'                  => 'Negative inventory orders are allowed',
-    'allow_out_of_stock_desc'             => 'After activation, even if the inventory is insufficient, users can still place orders',
+    'allow_out_of_stock_desc'             => 'When enabled, the system will completely ignore stock checks, all products will never be out of stock, users can purchase any quantity',
     'auto_fill_lang'                      => 'Autofill language',
     'auto_fill_lang_desc'                 => 'Automatically populate content in other languages for multilingual sites',
     'backend_logo'                        => 'Backend logo',

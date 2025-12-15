@@ -65,6 +65,7 @@ class PluginServiceProvider extends ServiceProvider
 
         $this->registerPanelRoutes();
         $this->loadViewTemplates();
+        $this->registerMarketplaceSettingsHook();
 
         $this->pluginBasePath = base_path('plugins');
         $this->bootAllPlugins();
@@ -503,6 +504,17 @@ class PluginServiceProvider extends ServiceProvider
                 echo $output;
                 ?>';
         });
+    }
+
+    /**
+     * Register marketplace settings hook
+     *
+     * @return void
+     */
+    private function registerMarketplaceSettingsHook(): void
+    {
+        $hook = new \InnoShop\Plugin\Hooks\MarketplaceSettingsHook;
+        $hook->init();
     }
 
     /**
