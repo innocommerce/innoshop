@@ -878,6 +878,27 @@ class ProductRepo extends BaseRepo
      */
     public static function getCategoryOptions(): array
     {
-        return CategoryRepo::formatCategoriesForCascader(Category::tree());
+        // Get only active categories and build tree structure
+        $activeCategories = Category::where('active', true)
+            ->with(['translation', 'children.translation'])
+            ->orderBy('position')
+            ->get();
+
+        // Build tree structure manually since we need to filter by active status
+        $tree = collect();
+        $itemsById = $activeCategories->keyBy('id');
+
+        foreach ($activeCategories as $category) {
+            if ($category->parent_id && isset($itemsById[$category->parent_id])) {
+                if (!isset($itemsById[$category->parent_id]->children)) {
+                    $itemsById[$category->parent_id]->children = collect();
+                }
+                $itemsById[$category->parent_id]->children->push($category);
+            } else {
+                $tree->push($category);
+            }
+        }
+
+        return CategoryRepo::formatCategoriesForCascader($tree);
     }
 }
