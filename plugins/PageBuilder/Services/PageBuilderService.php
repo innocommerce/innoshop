@@ -21,15 +21,14 @@ use Throwable;
 class PageBuilderService
 {
     /**
-     * 获取页面构建器数据
+     * Get page builder data
      *
-     * @param  string|null  $page  页面标识，'home' 表示首页，其他为页面ID或slug，null表示首页
+     * @param  string|null  $page  Page identifier, 'home' for home page, others are page ID or slug, null means home page
      * @return array
      * @throws Exception
      */
     public function getPageData(?string $page = null): array
     {
-        // 如果没有传入page参数或page为null，默认为首页
         if ($page === null) {
             $page = 'home';
         }
@@ -46,7 +45,7 @@ class PageBuilderService
             'page'         => $page,
             'is_home_page' => $isHomePage,
             'demo_data'    => DemoRepo::getHomeDemoData(),
-            'pages'        => PageRepo::getInstance()->all(),
+            'pages'        => PageRepo::getInstance()->builder(['active' => true])->with('translation')->get(),
             'source'       => [
                 'modules' => ModuleRepo::getModules(),
             ],
@@ -57,7 +56,7 @@ class PageBuilderService
     }
 
     /**
-     * 获取首页设置
+     * Get home page settings
      *
      * @return array
      */
@@ -65,7 +64,6 @@ class PageBuilderService
     {
         $design_settings = plugin_setting('page_builder', 'modules');
 
-        // 如果没有模块数据，使用演示数据
         if (empty($design_settings) || empty($design_settings['modules'])) {
             $demo_data       = DemoRepo::getHomeDemoData();
             $design_settings = [
@@ -80,7 +78,6 @@ class PageBuilderService
                 }, $demo_data),
             ];
 
-            // 保存演示数据
             SettingRepo::getInstance()->updatePluginValue('page_builder', 'modules', $design_settings);
         }
 
@@ -88,9 +85,9 @@ class PageBuilderService
     }
 
     /**
-     * 获取单页设置
+     * Get single page settings
      *
-     * @param  string  $page  页面标识
+     * @param  string  $page  Page identifier
      * @return array
      * @throws Exception
      */
@@ -98,10 +95,9 @@ class PageBuilderService
     {
         $pageModel = $this->findPage($page);
         if (! $pageModel) {
-            abort(404, '页面不存在');
+            abort(404, 'Page not found');
         }
 
-        // 获取单页的模块数据
         $pageModule = PageModule::query()->where('page_id', $pageModel->id)->first();
 
         return [
@@ -110,16 +106,15 @@ class PageBuilderService
     }
 
     /**
-     * 保存页面模块数据
+     * Save page module data
      *
-     * @param  array  $modules  模块数据
-     * @param  string|null  $page  页面标识，null表示首页
+     * @param  array  $modules  Module data
+     * @param  string|null  $page  Page identifier, null means home page
      * @return array
      * @throws Throwable
      */
     public function savePageModules(array $modules, ?string $page = null): array
     {
-        // 如果没有传入page参数或page为null，默认为首页
         if ($page === null) {
             $page = 'home';
         }
@@ -127,13 +122,11 @@ class PageBuilderService
         $moduleData = DesignService::getInstance()->handleRequestModules(['modules' => $modules]);
 
         if ($page === 'home') {
-            // 首页数据保存到插件设置
             SettingRepo::getInstance()->updatePluginValue('page_builder', 'modules', $moduleData);
         } else {
-            // 单页数据保存到 PageModule
             $pageModel = $this->findPage($page);
             if (! $pageModel) {
-                throw new Exception('页面不存在');
+                throw new Exception('Page not found');
             }
 
             $pageModule = PageModule::query()->where('page_id', $pageModel->id)->first();
@@ -154,21 +147,20 @@ class PageBuilderService
     }
 
     /**
-     * 导入演示数据
+     * Import demo data
      *
-     * @param  string|null  $page  页面标识，null表示首页
+     * @param  string|null  $page  Page identifier, null means home page
      * @return array
      * @throws Exception
      */
     public function importDemoData(?string $page = null): array
     {
-        // 如果没有传入page参数或page为null，默认为首页
         if ($page === null) {
             $page = 'home';
         }
 
         if ($page !== 'home') {
-            throw new Exception('演示数据仅支持首页');
+            throw new Exception('Demo data is only supported for home page');
         }
 
         $demo_data  = DemoRepo::getHomeDemoData();
@@ -192,14 +184,13 @@ class PageBuilderService
     }
 
     /**
-     * 查找页面 - 支持ID或slug
+     * Find page - support ID or slug
      *
-     * @param  string  $page  页面ID或slug
+     * @param  string  $page  Page ID or slug
      * @return Page|null
      */
-    private function findPage(string $page): ?Page
+    public function findPage(string $page): ?Page
     {
-        // 先尝试按ID查找
         if (is_numeric($page)) {
             $pageModel = Page::find($page);
             if ($pageModel) {
@@ -207,7 +198,6 @@ class PageBuilderService
             }
         }
 
-        // 再尝试按slug查找
         return Page::where('slug', $page)->first();
     }
 }

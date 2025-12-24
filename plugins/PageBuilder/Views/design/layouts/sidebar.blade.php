@@ -12,7 +12,7 @@
             <div v-if="isIcon(getCurrentModuleIcon())" v-html="getCurrentModuleIcon()"></div>
             <div class="img-icon" v-else><img :src="getCurrentModuleIcon()" class="img-fluid"></div>
           </div>
-          <div class="module-name">@{{ form.modules[design.editingModuleIndex].name || form.modules[design.editingModuleIndex].title || lang.module_edit }}</div>
+          <div class="module-name">@{{ getModuleName(form.modules[design.editingModuleIndex].code) || form.modules[design.editingModuleIndex].name || form.modules[design.editingModuleIndex].title || lang.module_edit }}</div>
         </div>
       </div>
       <div class="nav-right">
@@ -40,19 +40,16 @@
           <i class="el-icon-collection"></i> @{{ lang.module_library }}
         </div>
         
-        {{-- 搜索框 --}}
         <div class="modules-search">
           <el-input
             v-model="moduleSearch"
             placeholder="{{ __('PageBuilder::common.search_modules') }}"
             size="small"
-            {{-- prefix-icon="el-icon-search" --}}
             clearable
           ></el-input>
         </div>
       </div>
       
-      {{-- 分类标签 --}}
       <div class="modules-categories">
         <el-tag
           v-for="category in moduleCategories"
@@ -76,14 +73,13 @@
                 <div v-if="isIcon(item.icon)" v-html="item.icon"></div>
                 <div class="img-icon" v-else><img :src="item.icon" class="img-fluid"></div>
               </div>
-              <div class="name">@{{ item.title || item.name }}</div>
+              <div class="name">@{{ getModuleName(item.code) || item.title || item.name }}</div>
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
     
-    {{-- 无搜索结果提示 --}}
     <div v-if="filteredModules.length === 0 && (moduleSearch || selectedCategory !== 'all')" class="no-results">
       <i class="el-icon-search"></i>
       <p>@{{ lang.no_matching_modules }}</p>

@@ -32,7 +32,7 @@
             <source src="{{ $content['videoUrl'] }}" type="video/mp4">
             <source src="{{ $content['videoUrl'] }}" type="video/webm">
             <source src="{{ $content['videoUrl'] }}" type="video/ogg">
-            您的浏览器不支持视频播放。
+            {{ __('PageBuilder::common.browser_not_support_video') }}
           </video>
           
         @elseif($content['videoType'] === 'youtube' && !empty($content['videoUrl']))
@@ -64,7 +64,7 @@
             </div>
           @else
             <div class="video-error">
-              <p>YouTube视频链接格式不正确</p>
+              <p>{{ __('PageBuilder::common.youtube_url_invalid') }}</p>
             </div>
           @endif
           
@@ -94,7 +94,7 @@
             </div>
           @else
             <div class="video-error">
-              <p>Vimeo视频链接格式不正确</p>
+              <p>{{ __('PageBuilder::common.vimeo_url_invalid') }}</p>
             </div>
           @endif
           
@@ -104,18 +104,19 @@
             <div class="video-placeholder" style="position: relative; border-radius: 8px; overflow: hidden;">
               <img 
                 src="{{ $content['coverImage'][$locale] ?? ($content['coverImage'] ?? image_resize()) }}" 
-                alt="视频封面"
+                alt="{{ __('PageBuilder::common.video_cover') }}"
                 style="width: 100%; height: auto; display: block;"
               >
               <div class="play-button-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                 <i class="bi bi-play-fill" style="color: white; font-size: 32px; margin-left: 5px;"></i>
               </div>
             </div>
-          @else
-            <div class="video-placeholder" style="background: #f5f5f5; border-radius: 8px; padding: 60px 20px; text-align: center; color: #999;">
-              <i class="bi bi-camera-video" style="font-size: 48px; margin-bottom: 16px; display: block;"></i>
-              <p>请添加视频内容</p>
-            </div>
+          @elseif(request('design'))
+            @include('PageBuilder::front.partials.module-empty', [
+                'moduleClass' => 'video',
+                'icon' => 'bi-camera-video',
+                'message' => __('PageBuilder::modules.add_video_content'),
+            ])
           @endif
         @endif
       </div>

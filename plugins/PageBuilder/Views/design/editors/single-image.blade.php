@@ -5,26 +5,26 @@
     
     {{-- 模块宽度设置 --}}
     <div class="editor-section">
-      <div class="section-title">模块宽度</div>
+      <div class="section-title">@{{ lang.module_width }}</div>
       <div class="section-content">
         <div class="segmented-buttons">
           <div 
             :class="['segmented-btn', { active: module.width === 'narrow' }]" 
             @click="setModuleWidth('narrow')"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'wide' }]" 
             @click="setModuleWidth('wide')"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'full' }]" 
             @click="setModuleWidth('full')"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
 
     {{-- 图片内容 --}}
     <div class="editor-section">
-      <div class="section-title">图片设置</div>
+      <div class="section-title">@{{ lang.image_settings }}</div>
       <div class="section-content">
         <div class="image-selector-wrapper">
           <single-image-selector 
@@ -42,14 +42,14 @@
             :targetHeight="480"
             @change="onChange"
           ></single-image-selector>
-          <div class="image-tips">建议尺寸(宽×高): 1000 x 480</div>
+          <div class="image-tips">@{{ lang.recommended_size }}: 1000 x 480</div>
         </div>
       </div>
     </div>
 
     {{-- 链接设置 --}}
     <div class="editor-section">
-      <div class="section-title">选择链接</div>
+      <div class="section-title">@{{ lang.select_link }}</div>
       <div class="section-content">
         <link-selector 
           :hide-types="['catalog', 'static']" 

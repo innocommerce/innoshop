@@ -1,19 +1,19 @@
 <template id="single-image-selector">
   <div class="image-selector">
     <div class="image-preview" @click="openSelector">
-      <img v-if="displayImage" :src="displayImage" class="preview-img" alt="预览图">
+      <img v-if="displayImage" :src="displayImage" class="preview-img" :alt="lang.preview_image">
       <div v-else class="placeholder">
         <i class="el-icon-picture"></i>
-        <span>点击选择图片</span>
+        <span>@{{ lang.click_select_image }}</span>
       </div>
     </div>
     
     <div class="image-controls">
       <el-button type="primary" size="mini" @click="openSelector">
-        <i class="el-icon-picture"></i> 选择图片
+        <i class="el-icon-picture"></i> @{{ lang.select_image }}
       </el-button>
       <el-button v-if="displayImage" type="danger" size="mini" @click="clearImage">
-        <i class="el-icon-delete"></i> 清除
+        <i class="el-icon-delete"></i> @{{ lang.clear }}
       </el-button>
     </div>
     
@@ -23,18 +23,18 @@
         <el-tab-pane v-for="lang in languages" :key="lang.code" :label="lang.name" :name="lang.code">
           <div class="lang-image-selector">
             <div class="image-preview" @click="openSelector(lang.code)">
-              <img v-if="getLangImage(lang.code)" :src="getLangImage(lang.code)" class="preview-img" alt="预览图">
+              <img v-if="getLangImage(lang.code)" :src="getLangImage(lang.code)" class="preview-img" :alt="lang.preview_image">
               <div v-else class="placeholder">
                 <i class="el-icon-picture"></i>
-                <span>点击选择图片</span>
+                <span>@{{ lang.click_select_image }}</span>
               </div>
             </div>
             <div class="image-controls">
               <el-button type="primary" size="mini" @click="openSelector(lang.code)">
-                <i class="el-icon-picture"></i> 选择图片
+                <i class="el-icon-picture"></i> @{{ lang.select_image }}
               </el-button>
               <el-button v-if="getLangImage(lang.code)" type="danger" size="mini" @click="clearLangImage(lang.code)">
-                <i class="el-icon-delete"></i> 清除
+                <i class="el-icon-delete"></i> @{{ lang.clear }}
               </el-button>
             </div>
           </div>
@@ -126,7 +126,7 @@ Vue.component('single-image-selector', {
         });
       } else {
         console.error('File manager not available');
-        this.$message.error('文件管理器不可用');
+        this.$message.error(lang.file_manager_unavailable);
       }
     },
     

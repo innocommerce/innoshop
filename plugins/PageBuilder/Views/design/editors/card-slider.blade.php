@@ -5,26 +5,26 @@
     
     {{-- 模块宽度设置 --}}
     <div class="editor-section">
-      <div class="section-title">模块宽度</div>
+      <div class="section-title">@{{ lang.module_width }}</div>
       <div class="section-content">
         <div class="segmented-buttons">
           <div 
             :class="['segmented-btn', { active: form.width === 'narrow' }]" 
             @click="form.width = 'narrow'"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'wide' }]" 
             @click="form.width = 'wide'"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'full' }]" 
             @click="form.width = 'full'"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -32,63 +32,63 @@
 
     {{-- 模块标题 --}}
     <div class="editor-section">
-      <div class="section-title">模块标题</div>
+      <div class="section-title">@{{ lang.module_title }}</div>
       <div class="section-content">
-        <text-i18n v-model="form.title" @change="onChange" placeholder="请输入模块标题"></text-i18n>
+        <text-i18n v-model="form.title" @change="onChange" :placeholder="lang.enter_module_title"></text-i18n>
       </div>
     </div>
 
     {{-- 显示设置 --}}
     <div class="editor-section">
-      <div class="section-title">显示设置</div>
+      <div class="section-title">@{{ lang.display_settings }}</div>
       <div class="section-content">
         {{-- 每行显示数量设置 --}}
         <div class="setting-group">
-          <div class="setting-label">每行显示数量</div>
+          <div class="setting-label">@{{ lang.items_per_row }}</div>
           <div class="segmented-buttons">
             <div 
               :class="['segmented-btn', { active: form.items_per_row === 2 }]" 
               @click="form.items_per_row = 2"
             >
-              2个
+              @{{ lang.items_2 }}
             </div>
             <div 
               :class="['segmented-btn', { active: form.items_per_row === 3 }]" 
               @click="form.items_per_row = 3"
             >
-              3个
+              @{{ lang.items_3 }}
             </div>
             <div 
               :class="['segmented-btn', { active: form.items_per_row === 4 }]" 
               @click="form.items_per_row = 4"
             >
-              4个
+              @{{ lang.items_4 }}
             </div>
             <div 
               :class="['segmented-btn', { active: form.items_per_row === 6 }]" 
               @click="form.items_per_row = 6"
             >
-              6个
+              @{{ lang.items_6 }}
             </div>
           </div>
         </div>
 
         {{-- 自动轮播设置 --}}
         <div class="setting-group">
-          <div class="setting-label">自动轮播</div>
+          <div class="setting-label">@{{ lang.autoplay }}</div>
           <div class="switch-wrapper">
             <el-switch 
               v-model="form.autoplay" 
               @change="onChange"
               :disabled="form.screens.length > 1" 
-              active-text="启用" 
-              inactive-text="禁用"
+              :active-text="lang.enable" 
+              :inactive-text="lang.disable"
               size="small"
             ></el-switch>
           </div>
           <div v-if="form.screens.length > 1" class="form-tip">
             <i class="el-icon-info"></i>
-            请先删除多余的屏幕才能禁用轮播
+            @{{ lang.delete_extra_screens_to_disable }}
           </div>
         </div>
       </div>
@@ -96,27 +96,27 @@
 
     {{-- 商品内容 --}}
     <div class="editor-section">
-      <div class="section-title">商品内容</div>
+      <div class="section-title">@{{ lang.product_content }}</div>
       <div class="section-content">
         <div class="tab-container">
           <el-tabs v-model="activeTab" type="card" @tab-click="handleTabClick" class="custom-tabs">
             <el-tab-pane 
               v-for="(screen, index) in form.screens" 
               :key="index" 
-              :label="'屏幕 ' + (index + 1)"
+              :label="lang.screen + ' ' + (index + 1)"
               :name="index"
             >
               <div class="screen-content">
                 {{-- 商品搜索 --}}
                 <div class="search-section">
-                  <div class="section-subtitle">添加商品</div>
+                  <div class="section-subtitle">@{{ lang.add_products }}</div>
                   <el-autocomplete 
                     class="search-input" 
                     v-model="keyword" 
                     value-key="name" 
                     size="small"
                     :fetch-suggestions="querySearch" 
-                    placeholder="请输入关键字搜索商品" 
+                    :placeholder="lang.search_products_placeholder" 
                     :highlight-first-item="true"
                     @select="handleSelect"
                     style="width: 100%;"
@@ -125,7 +125,7 @@
 
                 {{-- 商品列表 --}}
                 <div class="products-section">
-                  <div class="section-subtitle">已选商品</div>
+                  <div class="section-subtitle">@{{ lang.selected_products }}</div>
                   <div class="products-list" v-loading="loading">
                     <template v-if="screen.products.length">
                       <draggable 
@@ -144,8 +144,8 @@
                               <img :src="thumbnail(item.image_big)" class="preview-img">
                             </div>
                             <div class="product-details">
-                              <div class="product-name">${ item.name }</div>
-                              <div class="product-price">${ item.price_format }</div>
+                              <div class="product-name">@{{ item.name }}</div>
+                              <div class="product-price">@{{ item.price_format }}</div>
                             </div>
                           </div>
                           <div class="product-actions">
@@ -162,7 +162,7 @@
                     </template>
                     <div v-else class="empty-state">
                       <i class="el-icon-shopping-cart-2"></i>
-                      <p>暂无商品，请在上方搜索并添加</p>
+                      <p>@{{ lang.no_products_search }}</p>
                     </div>
                   </div>
                 </div>
@@ -179,7 +179,7 @@
               :disabled="!form.autoplay"
               icon="el-icon-plus"
             >
-              添加屏幕
+              @{{ lang.add_screen }}
             </el-button>
             <el-button 
               type="danger" 
@@ -188,7 +188,7 @@
               :disabled="form.screens.length <= 1"
               icon="el-icon-delete"
             >
-              删除当前屏幕
+              @{{ lang.delete_current_screen }}
             </el-button>
           </div>
         </div>
@@ -200,7 +200,6 @@
 {{-- 商品编辑模块脚本 --}}
 <script type="text/javascript">
   Vue.component('module-editor-card-slider', {
-    delimiters: ['${', '}'],
     template: '#module-editor-card-slider-template',
     props: ['module'],
     data: function() {
@@ -345,7 +344,7 @@
 
       removeProduct(index) {
         if (this.form.screens[this.activeTab].products.length <= 1) {
-          this.$message.warning('每个屏幕至少需要保留一个商品');
+          this.$message.warning(lang.keep_at_least_one_product);
           return;
         }
         this.form.screens[this.activeTab].products.splice(index, 1);
@@ -366,7 +365,7 @@
 
       removeScreen() {
         if (this.form.screens.length <= 1) {
-          this.$message.warning('至少需要保留一个屏幕');
+          this.$message.warning(lang.keep_at_least_one_screen);
           return;
         }
         this.form.screens.splice(this.activeTab, 1);

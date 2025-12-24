@@ -29,10 +29,12 @@ class DesignService
     }
 
     /**
-     * @param  $modulesData
+     * Handle and normalize request modules data
+     *
+     * @param  array  $modulesData  Modules data from request
      * @return array
      */
-    public function handleRequestModules($modulesData): array
+    public function handleRequestModules(array $modulesData): array
     {
         $modulesData = $modulesData['modules'];
         if (empty($modulesData)) {
@@ -57,54 +59,205 @@ class DesignService
     }
 
     /**
+     * Handle module content based on module code
+     *
+     * @param  string  $moduleCode  Module code identifier
+     * @param  array  $content  Module content data
+     * @return array
      * @throws Exception
      */
-    public function handleModuleContent($moduleCode, $content)
+    public function handleModuleContent(string $moduleCode, array $content): array
     {
         $content['module_code'] = $moduleCode;
-        if ($moduleCode == 'slideshow') {
-            $content = $this->handleSlideShow($content);
-        } elseif (in_array($moduleCode, ['image401', 'image402', 'single-image', 'image200', 'image300', 'image301'])) {
-            $content = $this->handleImage401($content);
-        } elseif ($moduleCode == 'brand') {
-            $content = $this->handleBrand($content);
-        } elseif ($moduleCode == 'image-text-list') {
-            $content = $this->handleImageTextList($content);
-        } elseif ($moduleCode == 'brands') {
-            $content = $this->handleBrands($content);
-        } elseif ($moduleCode == 'tab_product') {
-            $content = $this->handleTabProducts($content);
-        } elseif ($moduleCode == 'custom-products') {
-            $content = $this->handleProducts($content);
-        } elseif ($moduleCode == 'category-products') {
-            $content = $this->handleCategoryProducts($content);
-        } elseif ($moduleCode == 'brand-products') {
-            $content = $this->handleBrandProducts($content);
-        } elseif ($moduleCode == 'latest-products') {
-            $content = $this->handleLatest($content);
-        } elseif ($moduleCode == 'icons') {
-            $content = $this->handleIcons($content);
-        } elseif ($moduleCode == 'rich_text') {
-            $content = $this->handleRichText($content);
-        } elseif ($moduleCode == 'page') {
-            $content = $this->handlePage($content);
-        } elseif ($moduleCode == 'article') {
-            $content = $this->handleArticle($content);
+
+        $handlerMap = $this->getModuleHandlerMap();
+        
+        if (isset($handlerMap[$moduleCode])) {
+            $handlerMethod = $handlerMap[$moduleCode];
+            if (method_exists($this, $handlerMethod)) {
+                $content = $this->$handlerMethod($content);
+            }
         }
 
+        $content = $this->normalizeMultilingualFields($content);
         $content['width_class'] = pb_get_width_class($content['width'] ?? 'wide');
 
         return fire_hook_filter('service.design.module.content', $content);
     }
 
     /**
+     * Get module handler method mapping
+     *
+     * @return array
+     */
+    private function getModuleHandlerMap(): array
+    {
+        return [
+            'slideshow' => 'handleSlideShow',
+            'image401' => 'handleImage401',
+            'image402' => 'handleImage401',
+            'single-image' => 'handleImage401',
+            'image200' => 'handleImage401',
+            'image300' => 'handleImage401',
+            'image301' => 'handleImage401',
+            'brand' => 'handleBrand',
+            'image-text-list' => 'handleImageTextList',
+            'brands' => 'handleBrands',
+            'tab_product' => 'handleTabProducts',
+            'custom-products' => 'handleProducts',
+            'category-products' => 'handleCategoryProducts',
+            'brand-products' => 'handleBrandProducts',
+            'latest-products' => 'handleLatest',
+            'icons' => 'handleIcons',
+            'rich_text' => 'handleRichText',
+            'page' => 'handlePage',
+            'article' => 'handleArticle',
+        ];
+    }
+
+    /**
+     * Normalize multilingual fields, convert array format to current language string
+     *
+     * @param  array  $content
+     * @return array
+     */
+    private function normalizeMultilingualFields(array $content): array
+    {
+        $topFields = ['title', 'subtitle', 'floor', 'description', 'content', 'button_text', 'text', 'sub_text'];
+        foreach ($topFields as $field) {
+            if (isset($content[$field])) {
+                $content[$field] = $this->getMultilingualValue($content[$field]);
+            }
+        }
+
+        $content = $this->normalizeNestedArrays($content);
+
+        $content = $this->normalizeCountFields($content);
+
+        return $content;
+    }
+
+    /**
+     * Get multilingual field value
+     *
+     * @param  mixed  $value
+     * @return string
+     */
+    private function getMultilingualValue($value): string
+    {
+        if (is_array($value) && ! $this->isNumericArray($value)) {
+            $locale      = locale_code();
+            $frontLocale = front_locale_code();
+
+            return $value[$locale] ?? ($value[$frontLocale] ?? ($value[array_key_first($value)] ?? ''));
+        }
+
+        if (! is_string($value) && ! is_object($value)) {
+            return (string) $value;
+        }
+
+        return $value ?? '';
+    }
+
+    /**
+     * Normalize multilingual fields in nested arrays
+     *
+     * @param  array  $content
+     * @return array
+     */
+    private function normalizeNestedArrays(array $content): array
+    {
+        $locale      = locale_code();
+        $frontLocale = front_locale_code();
+
+        if (isset($content['images']) && is_array($content['images'])) {
+            foreach ($content['images'] as $index => $image) {
+                if (is_array($image)) {
+                    if (isset($image['image'])) {
+                        $content['images'][$index]['image'] = $this->getMultilingualValue($image['image']);
+                    }
+                    foreach (['title', 'subtitle', 'button_text', 'text', 'sub_text', 'description'] as $field) {
+                        if (isset($image[$field])) {
+                            $content['images'][$index][$field] = $this->getMultilingualValue($image[$field]);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (isset($content['imageTextItems']) && is_array($content['imageTextItems'])) {
+            foreach ($content['imageTextItems'] as $index => $item) {
+                if (is_array($item)) {
+                    foreach (['title', 'subtitle', 'text', 'sub_text', 'description'] as $field) {
+                        if (isset($item[$field])) {
+                            $content['imageTextItems'][$index][$field] = $this->getMultilingualValue($item[$field]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $content;
+    }
+
+    /**
+     * Normalize count fields for collections and arrays
+     *
+     * @param  array  $content
+     * @return array
+     */
+    private function normalizeCountFields(array $content): array
+    {
+        if (isset($content['products'])) {
+            $products = $content['products'];
+            if (is_object($products) && method_exists($products, 'count')) {
+                $content['products_count'] = $products->count();
+            } elseif (is_array($products)) {
+                $content['products']       = collect($products);
+                $content['products_count'] = count($products);
+            } else {
+                $content['products']       = collect();
+                $content['products_count'] = 0;
+            }
+        } else {
+            $content['products']       = collect();
+            $content['products_count'] = 0;
+        }
+
+        $content['images_count'] = isset($content['images']) && is_array($content['images'])
+            ? count($content['images'])
+            : 0;
+
+        $content['imageTextItems_count'] = isset($content['imageTextItems']) && is_array($content['imageTextItems'])
+            ? count($content['imageTextItems'])
+            : 0;
+
+        return $content;
+    }
+
+    /**
+     * Check if array is numeric indexed
+     *
+     * @param  array  $array
+     * @return bool
+     */
+    private function isNumericArray(array $array): bool
+    {
+        if (empty($array)) {
+            return false;
+        }
+
+        return array_keys($array) === range(0, count($array) - 1);
+    }
+
+    /**
      * Handle slideshow module
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleSlideShow($content): array
+    private function handleSlideShow(array $content): array
     {
         $images = $content['images'] ?? [];
         if (empty($images)) {
@@ -121,18 +274,17 @@ class DesignService
     /**
      * Handle brand module
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleBrand($content): array
+    private function handleBrand(array $content): array
     {
         $brandIds   = $content['brands'] ?? [];
         $brandItems = BrandRepo::getInstance()->getListByBrandIDs($brandIds);
         $brands     = BrandSimple::collection($brandItems)->jsonSerialize();
 
         $content['brands'] = $brands;
-        $content['title']  = $content['title'][locale_code()] ?? '';
 
         return $content;
     }
@@ -140,24 +292,19 @@ class DesignService
     /**
      * Handle image text list module
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleImageTextList($content): array
+    private function handleImageTextList(array $content): array
     {
-        $content['title'] = $content['title'][locale_code()] ?? '';
-
-        // 处理图文项数据
         $imageTextItems = $content['imageTextItems'] ?? [];
         if (! empty($imageTextItems)) {
             foreach ($imageTextItems as $index => $item) {
-                // 处理图片
                 if (isset($item['image'])) {
                     $imageTextItems[$index]['image'] = image_origin($item['image']);
                 }
 
-                // 处理链接
                 if (isset($item['link']) && ! empty($item['link']['value'])) {
                     $imageTextItems[$index]['url'] = $this->handleLink($item['link']['type'] ?? '', $item['link']['value'] ?? '');
                 }
@@ -166,7 +313,6 @@ class DesignService
 
         $content['imageTextItems'] = $imageTextItems;
 
-        // 确保样式设置存在
         $content['itemHeight']   = $content['itemHeight'] ?? 120;
         $content['padding']      = $content['padding'] ?? 16;
         $content['borderRadius'] = $content['borderRadius'] ?? 8;
@@ -180,11 +326,11 @@ class DesignService
     /**
      * Handle image four in line module
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleImage401($content): array
+    private function handleImage401(array $content): array
     {
         $images = $content['images'] ?? [];
         if (empty($images)) {
@@ -203,14 +349,12 @@ class DesignService
     /**
      * Handle icons module
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleIcons($content): array
+    private function handleIcons(array $content): array
     {
-        $content['title'] = $content['title'][locale_code()] ?? '';
-
         $images = $content['images'] ?? [];
         if (empty($images)) {
             $content['images'] = [];
@@ -222,8 +366,8 @@ class DesignService
         foreach ($images as $image) {
             $processedImages[] = [
                 'image'    => image_origin($image['image'] ?? ''),
-                'text'     => $image['text'][locale_code()] ?? '',
-                'sub_text' => $image['sub_text'][locale_code()] ?? '',
+                'text'     => $image['text'] ?? '',
+                'sub_text' => $image['sub_text'] ?? '',
                 'link'     => $image['link'] ?? [],
                 'url'      => $this->handleLink($image['link']['type'] ?? '', $image['link']['value'] ?? ''),
             ];
@@ -237,13 +381,23 @@ class DesignService
     /**
      * Handle rich text module
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleRichText($content): array
+    private function handleRichText(array $content): array
     {
-        $content['data'] = $content['text'][locale_code()] ?? '';
+        if (isset($content['text'])) {
+            if (is_array($content['text']) && ! $this->isNumericArray($content['text'])) {
+                $locale          = locale_code();
+                $frontLocale     = front_locale_code();
+                $content['data'] = $content['text'][$locale] ?? ($content['text'][$frontLocale] ?? ($content['text'][array_key_first($content['text'])] ?? ''));
+            } else {
+                $content['data'] = is_string($content['text']) ? $content['text'] : '';
+            }
+        } else {
+            $content['data'] = '';
+        }
 
         return $content;
     }
@@ -251,11 +405,11 @@ class DesignService
     /**
      * Handle tab products
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleTabProducts($content): array
+    private function handleTabProducts(array $content): array
     {
         $tabs = $content['tabs'] ?? [];
         if (empty($tabs)) {
@@ -263,37 +417,14 @@ class DesignService
         }
 
         foreach ($tabs as $index => $tab) {
-            $tabs[$index]['title'] = $tab['title'][locale_code()] ?? '';
-            $productsIds           = $tab['products'] ?? [];
-
-            if ($productsIds) {
-                // 处理产品ID数组，确保是一维数组
-                $productIds = [];
-                if (is_array($productsIds)) {
-                    foreach ($productsIds as $product) {
-                        if (is_array($product) && isset($product['id'])) {
-                            $productIds[] = $product['id'];
-                        } elseif (is_numeric($product)) {
-                            $productIds[] = $product;
-                        }
-                    }
-                } else {
-                    $productIds = [$productsIds];
-                }
-
-                $productItems = ProductRepo::getInstance()->getListByProductIDs($productIds);
-
-                // 过滤掉非活跃状态的商品
-                $productItems = $productItems->filter(function ($product) {
-                    return $product->active;
-                });
-
-                // 保持为 Product 对象集合，不转换为数组
-                $tabs[$index]['products'] = $productItems;
+            $productIds = $this->extractIds($tab['products'] ?? []);
+            if ($productIds) {
+                $productItems             = ProductRepo::getInstance()->getListByProductIDs($productIds);
+                $tabs[$index]['products'] = $productItems->filter(fn ($product) => $product->active);
             }
         }
-        $content['tabs']  = $tabs;
-        $content['title'] = $content['title'][locale_code()] ?? '';
+
+        $content['tabs'] = $tabs;
 
         return $content;
     }
@@ -301,34 +432,16 @@ class DesignService
     /**
      * Handle article
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleArticle($content): array
+    private function handleArticle(array $content): array
     {
-        $content['title']    = $content['title'][locale_code()] ?? '';
-        $content['subtitle'] = $content['subtitle'][locale_code()] ?? '';
-
-        // 从 articles 字段获取文章ID数组
-        $articleIds = [];
-        if (! empty($content['articles'])) {
-            foreach ($content['articles'] as $article) {
-                if (is_array($article) && isset($article['id'])) {
-                    $articleIds[] = $article['id'];
-                } elseif (is_numeric($article)) {
-                    $articleIds[] = $article;
-                }
-            }
-        }
-
-        if (! empty($articleIds)) {
-            // 获取完整的文章对象，保持为对象集合而不是数组
-            $articleItems        = ArticleRepo::getInstance()->getListByArticleIDs($articleIds);
-            $content['articles'] = $articleItems;
-        } else {
-            $content['articles'] = collect();
-        }
+        $articleIds          = $this->extractIds($content['articles'] ?? []);
+        $content['articles'] = $articleIds
+            ? ArticleRepo::getInstance()->getListByArticleIDs($articleIds)
+            : collect();
 
         return $content;
     }
@@ -336,15 +449,12 @@ class DesignService
     /**
      * Handle page
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handlePage($content): array
+    private function handlePage(array $content): array
     {
-        $content['title'] = $content['title'][locale_code()] ?? '';
-
-        // 检查 items 键是否存在，如果不存在则初始化为空数组
         $pageIds = $content['items'] ?? [];
         if (! empty($pageIds)) {
             $content['items'] = PageRepo::getInstance()->getListByPageIDs($pageIds)->jsonSerialize();
@@ -356,141 +466,72 @@ class DesignService
     }
 
     /**
-     * Handle category products - 根据分类ID和排序条件动态获取最新数据
+     * Handle category products - dynamically fetch latest data based on category ID and sort conditions
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleCategoryProducts($content): array
+    private function handleCategoryProducts(array $content): array
     {
         $categoryId = $content['category_id'] ?? 0;
-        $limit      = $content['limit'] ?? 8;
-        $sort       = $content['sort'] ?? 'sales';
-        $order      = $content['order'] ?? 'asc';
-
-        if ($categoryId) {
-            // 构建查询条件
-            $filters = [
-                'category_id' => $categoryId,
-                'active'      => 1,
-                'per_page'    => $limit,
-                'page'        => 1,
-            ];
-
-            // 添加排序条件
-            if ($sort) {
-                $sortParts = explode('_', $sort);
-                $sortField = $sortParts[0];
-                $sortOrder = $sortParts[1] ?? 'desc';
-
-                // 特殊字段映射
-                $mappedField = $sortField;
-                if ($sortField === 'price') {
-                    $mappedField = 'ps.price';
-                } elseif ($sortField === 'created') {
-                    $mappedField = 'created_at';
-                } elseif ($sortField === 'updated') {
-                    $mappedField = 'updated_at';
-                }
-
-                $filters['sort']  = $mappedField;
-                $filters['order'] = $sortOrder;
-            }
-
-            // 根据分类ID和排序条件获取最新数据
-            $productItems = ProductRepo::getInstance()->withActive()->list($filters);
-
-            // 保持为 Product 对象集合，不转换为数组
-            $content['products'] = $productItems;
-        } else {
+        if (! $categoryId) {
             $content['products'] = collect();
+
+            return $content;
         }
 
-        $content['title']    = $content['title'][locale_code()] ?? '';
-        $content['subtitle'] = $content['subtitle'][locale_code()] ?? '';
+        $filters = $this->buildProductFilters([
+            'category_id' => $categoryId,
+            'limit'       => $content['limit'] ?? 8,
+            'sort'        => $content['sort'] ?? 'sales',
+            'order'       => $content['order'] ?? 'asc',
+        ]);
+
+        $content['products'] = ProductRepo::getInstance()->withActive()->list($filters);
 
         return $content;
     }
 
     /**
-     * Handle brand products - 根据品牌ID获取商品数据
+     * Handle brand products - get product data by brand ID
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleBrandProducts($content): array
+    private function handleBrandProducts(array $content): array
     {
         $brandId = $content['brand_id'] ?? 0;
-        $limit   = $content['limit'] ?? 8;
-        $sort    = $content['sort'] ?? 'sales_desc';
-
-        if ($brandId) {
-            // 构建查询条件
-            $filters = [
-                'brand_id' => $brandId,
-                'active'   => 1,
-                'per_page' => $limit,
-                'page'     => 1,
-            ];
-
-            // 添加排序条件
-            if ($sort) {
-                $sortParts = explode('_', $sort);
-                $sortField = $sortParts[0];
-                $sortOrder = $sortParts[1] ?? 'desc';
-
-                // 特殊字段映射
-                $mappedField = $sortField;
-                if ($sortField === 'price') {
-                    $mappedField = 'ps.price';
-                } elseif ($sortField === 'created') {
-                    $mappedField = 'created_at';
-                } elseif ($sortField === 'updated') {
-                    $mappedField = 'updated_at';
-                } elseif ($sortField === 'sales') {
-                    $mappedField = 'sales_count';
-                } elseif ($sortField === 'rating') {
-                    $mappedField = 'rating';
-                } elseif ($sortField === 'viewed') {
-                    $mappedField = 'viewed_count';
-                } elseif ($sortField === 'position') {
-                    $mappedField = 'position';
-                }
-
-                $filters['sort']  = $mappedField;
-                $filters['order'] = $sortOrder;
-            }
-
-            // 根据品牌ID和排序条件获取商品数据
-            $productItems = ProductRepo::getInstance()->withActive()->list($filters);
-
-            // 保持为 Product 对象集合，不转换为数组
-            $content['products'] = $productItems;
-        } else {
+        if (! $brandId) {
             $content['products'] = collect();
+
+            return $content;
         }
 
-        $content['title']    = $content['title'][locale_code()] ?? '';
-        $content['subtitle'] = $content['subtitle'][locale_code()] ?? '';
+        $filters = $this->buildProductFilters([
+            'brand_id' => $brandId,
+            'limit'    => $content['limit'] ?? 8,
+            'sort'     => $content['sort'] ?? 'sales_desc',
+        ]);
+
+        $content['products'] = ProductRepo::getInstance()->withActive()->list($filters);
 
         return $content;
     }
 
     /**
-     * Handle latest products - 动态获取最新商品数据
+     * Handle latest products - dynamically fetch latest product data
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleLatest($content): array
+    private function handleLatest(array $content): array
     {
         $limit   = $content['limit'] ?? 8;
         $columns = $content['columns'] ?? 4;
 
-        // 构建查询条件
         $filters = [
             'active'   => 1,
             'per_page' => $limit,
@@ -499,13 +540,9 @@ class DesignService
             'order'    => 'desc',
         ];
 
-        // 获取最新商品数据
         $productItems = ProductRepo::getInstance()->withActive()->list($filters);
 
-        // 保持为 Product 对象集合，不转换为数组
         $content['products'] = $productItems;
-        $content['title']    = $content['title'][locale_code()] ?? '';
-        $content['subtitle'] = $content['subtitle'][locale_code()] ?? '';
 
         return $content;
     }
@@ -513,39 +550,19 @@ class DesignService
     /**
      * Handle products
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleProducts($content): array
+    private function handleProducts(array $content): array
     {
-        // 处理产品ID数组，确保是一维数组
-        $productIds = [];
-        if (! empty($content['products'])) {
-            if (is_array($content['products'])) {
-                foreach ($content['products'] as $product) {
-                    if (is_array($product) && isset($product['id'])) {
-                        $productIds[] = $product['id'];
-                    } elseif (is_numeric($product)) {
-                        $productIds[] = $product;
-                    }
-                }
-            } else {
-                $productIds = [$content['products']];
-            }
+        $productIds = $this->extractIds($content['products'] ?? []);
+        if ($productIds) {
+            $productItems        = ProductRepo::getInstance()->getListByProductIDs($productIds);
+            $content['products'] = $productItems->filter(fn ($product) => $product->active);
+        } else {
+            $content['products'] = collect();
         }
-
-        $productItems = ProductRepo::getInstance()->getListByProductIDs($productIds);
-
-        // 过滤掉非活跃状态的商品
-        $productItems = $productItems->filter(function ($product) {
-            return $product->active;
-        });
-
-        // 保持为 Product 对象集合，不转换为数组
-        $content['products'] = $productItems;
-        $content['title']    = $content['title'][locale_code()] ?? '';
-        $content['subtitle'] = $content['subtitle'][locale_code()] ?? '';
 
         return $content;
     }
@@ -561,25 +578,31 @@ class DesignService
             return [];
         }
 
+        $locale      = locale_code();
+        $frontLocale = front_locale_code();
+
         foreach ($images as $index => $image) {
-            $imagePath = is_array($image['image']) ? $image['image'][locale_code()] ?? '' : $image['image'] ?? '';
+            if (isset($image['image'])) {
+                if (is_array($image['image']) && ! $this->isNumericArray($image['image'])) {
+                    $imagePath = $image['image'][$locale] ?? ($image['image'][$frontLocale] ?? ($image['image'][array_key_first($image['image'])] ?? ''));
+                } else {
+                    $imagePath = is_string($image['image']) ? $image['image'] : '';
+                }
+                $images[$index]['image'] = image_origin($imagePath);
+            }
 
-            $images[$index]['image'] = image_origin($imagePath);
-
-            // 处理图片链接
-            $link = $image['link'];
+            $link = $image['link'] ?? null;
             if (! empty($link)) {
                 $type  = $link['type'] ?? '';
-                $value = $link['type'] == 'custom' ? $link['value'] : ((int) $link['value'] ?? 0);
+                $value = $link['type'] == 'custom' ? ($link['value'] ?? '') : ((int) ($link['value'] ?? 0));
 
                 $images[$index]['link']['link'] = $this->handleLink($type, $value);
             }
 
-            // 处理按钮链接
             $buttonLink = $image['button_link'] ?? null;
             if (! empty($buttonLink)) {
                 $type  = $buttonLink['type'] ?? '';
-                $value = $buttonLink['type'] == 'custom' ? $buttonLink['value'] : ((int) $buttonLink['value'] ?? 0);
+                $value = $buttonLink['type'] == 'custom' ? ($buttonLink['value'] ?? '') : ((int) ($buttonLink['value'] ?? 0));
 
                 $images[$index]['button_link']['link'] = $this->handleLink($type, $value);
             }
@@ -591,15 +614,12 @@ class DesignService
     /**
      * Handle brands module
      *
-     * @param  $content
+     * @param  array  $content
      * @return array
      * @throws Exception
      */
-    private function handleBrands($content): array
+    private function handleBrands(array $content): array
     {
-        $content['title'] = $content['title'][locale_code()] ?? '';
-
-        // 确保样式设置存在
         $content['itemHeight']   = $content['itemHeight'] ?? 80;
         $content['padding']      = $content['padding'] ?? 12;
         $content['borderRadius'] = $content['borderRadius'] ?? 8;
@@ -613,13 +633,107 @@ class DesignService
     /**
      * Handle links
      *
-     * @param  $type
-     * @param  $value
+     * @param  string  $type
+     * @param  mixed  $value
      * @return string
      * @throws Exception
      */
-    private function handleLink($type, $value): string
+    private function handleLink(string $type, $value): string
     {
         return Link::getInstance()->link($type, $value);
+    }
+
+    /**
+     * Build product query filters
+     *
+     * @param  array  $params
+     * @return array
+     */
+    private function buildProductFilters(array $params): array
+    {
+        $filters = [
+            'active'   => 1,
+            'per_page' => $params['limit'] ?? 8,
+            'page'     => 1,
+        ];
+
+        if (isset($params['category_id'])) {
+            $filters['category_id'] = $params['category_id'];
+        }
+        if (isset($params['brand_id'])) {
+            $filters['brand_id'] = $params['brand_id'];
+        }
+
+        if (! empty($params['sort'])) {
+            $sortInfo         = $this->parseSortField($params['sort'], $params['order'] ?? 'desc');
+            $filters['sort']  = $sortInfo['field'];
+            $filters['order'] = $sortInfo['order'];
+        }
+
+        return $filters;
+    }
+
+    /**
+     * Parse sort field, return mapped field name and sort direction
+     *
+     * @param  string  $sort
+     * @param  string  $defaultOrder
+     * @return array
+     */
+    private function parseSortField(string $sort, string $defaultOrder = 'desc'): array
+    {
+        $sortParts = explode('_', $sort);
+        $sortField = $sortParts[0];
+        $sortOrder = $sortParts[1] ?? $defaultOrder;
+
+        $fieldMap = [
+            'price'    => 'ps.price',
+            'created'  => 'created_at',
+            'updated'  => 'updated_at',
+            'sales'    => 'sales_count',
+            'viewed'   => 'viewed_count',
+            'position' => 'position',
+        ];
+
+        // If field is not in map or is 'rating' (removed field), use default sales sorting
+        if (!isset($fieldMap[$sortField]) || $sortField === 'rating') {
+            return [
+                'field' => 'sales_count',
+                'order' => 'desc',
+            ];
+        }
+
+        return [
+            'field' => $fieldMap[$sortField],
+            'order' => $sortOrder,
+        ];
+    }
+
+    /**
+     * Extract ID array from mixed format
+     *
+     * @param  mixed  $items
+     * @return array
+     */
+    private function extractIds($items): array
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        $ids = [];
+        if (is_array($items)) {
+            foreach ($items as $item) {
+                if (is_array($item) && isset($item['id'])) {
+                    $ids[] = $item['id'];
+                } elseif (is_numeric($item)) {
+                    $ids[] = $item;
+                }
+            }
+        } elseif (is_numeric($items)) {
+            $ids = [$items];
+        }
+
+        return $ids;
     }
 }

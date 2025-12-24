@@ -7,7 +7,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-monitor"></i>
-        模块宽度
+        @{{ lang.module_width }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -16,21 +16,21 @@
             @click="form.width = 'narrow'"
           >
             <i class="el-icon-copy-document"></i>
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'wide' }]" 
             @click="form.width = 'wide'"
           >
             <i class="el-icon-copy-document"></i>
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'full' }]" 
             @click="form.width = 'full'"
           >
             <i class="el-icon-full-screen"></i>
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -40,10 +40,10 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-edit"></i>
-        模块标题
+        @{{ lang.module_title }}
       </div>
       <div class="section-content">
-        <text-i18n v-model="form.title" @change="onChange" placeholder="请输入模块标题"></text-i18n>
+        <text-i18n v-model="form.title" @change="onChange" :placeholder="lang.enter_module_title"></text-i18n>
       </div>
     </div>
 
@@ -51,33 +51,33 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-setting"></i>
-        显示设置
+        @{{ lang.display_settings }}
       </div>
       <div class="section-content">
         {{-- 每行显示数量设置 --}}
         <div class="setting-group">
-          <div class="setting-label">每行显示数量</div>
+          <div class="setting-label">@{{ lang.items_per_row }}</div>
           <div class="segmented-buttons">
             <div 
               :class="['segmented-btn', { active: form.columns === 3 }]" 
               @click="form.columns = 3"
             >
               <i class="el-icon-grid"></i>
-              3个
+              @{{ lang.items_3 }}
             </div>
             <div 
               :class="['segmented-btn', { active: form.columns === 4 }]" 
               @click="form.columns = 4"
             >
               <i class="el-icon-grid"></i>
-              4个
+              @{{ lang.items_4 }}
             </div>
             <div 
               :class="['segmented-btn', { active: form.columns === 6 }]" 
               @click="form.columns = 6"
             >
               <i class="el-icon-grid"></i>
-              6个
+              @{{ lang.items_6 }}
             </div>
           </div>
         </div>
@@ -88,12 +88,12 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-shopping-cart-2"></i>
-        商品设置
+        @{{ lang.product_settings }}
       </div>
       <div class="section-content">
         {{-- 商品搜索 --}}
         <div class="setting-group">
-          <div class="setting-label">搜索商品</div>
+          <div class="setting-label">@{{ lang.search_products }}</div>
           <div class="autocomplete-group-wrapper">
             <el-autocomplete 
               class="inline-input" 
@@ -101,7 +101,7 @@
               value-key="name" 
               size="small"
               :fetch-suggestions="querySearch" 
-              placeholder="请输入关键字搜索商品" 
+              :placeholder="lang.search_products_placeholder" 
               :highlight-first-item="true"
               @select="handleSelect"
               style="width: 100%;"
@@ -109,13 +109,13 @@
           </div>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            搜索并添加您想要展示的商品
+            @{{ lang.search_and_add_products }}
           </div>
         </div>
 
         {{-- 已选商品列表 --}}
         <div class="setting-group">
-          <div class="setting-label">已选商品</div>
+          <div class="setting-label">@{{ lang.selected_products }}</div>
           <div class="products-list" v-loading="loading">
             <template v-if="productData.length">
               <draggable 
@@ -134,8 +134,8 @@
                       <img :src="thumbnail(item.image_big)" class="preview-img">
                     </div>
                     <div class="product-details">
-                      <div class="product-name">${ item.name }</div>
-                      <div class="product-price">${ item.price_format }</div>
+                      <div class="product-name">@{{ item.name }}</div>
+                      <div class="product-price">@{{ item.price_format }}</div>
                     </div>
                   </div>
                   <div class="product-actions">
@@ -152,7 +152,7 @@
             </template>
             <div v-else class="empty-state">
               <i class="el-icon-shopping-cart-2"></i>
-              <p>暂无商品，请在上方搜索并添加</p>
+              <p>@{{ lang.no_products_search }}</p>
             </div>
           </div>
         </div>
@@ -164,7 +164,6 @@
 {{-- 自定义商品编辑模块脚本 --}}
 <script type="text/javascript">
   Vue.component('module-editor-custom-products', {
-    delimiters: ['${', '}'],
     template: '#module-editor-custom-products-template',
     props: ['module'],
     data: function() {

@@ -19,6 +19,7 @@ class Boot extends BaseBoot
     public function init(): void
     {
         $this->addPanelMenus();
+        $this->addPageDesignButton();
     }
 
     /**
@@ -34,6 +35,22 @@ class Boot extends BaseBoot
             ];
 
             return $data;
+        });
+    }
+
+    /**
+     * Add design button to page list
+     *
+     * @return void
+     */
+    private function addPageDesignButton(): void
+    {
+        listen_blade_insert('panel.page.list.table.row.actions.before', function ($data) {
+            $item = $data['item'] ?? null;
+            if ($item) {
+                return view('PageBuilder::panel.pages.design-button', ['item' => $item])->render();
+            }
+            return null;
         });
     }
 }

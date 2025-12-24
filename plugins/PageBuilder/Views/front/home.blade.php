@@ -5,6 +5,8 @@
 @push('header')
   <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
   <link rel="stylesheet" href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}">
+  <link rel="stylesheet" href="{{ plugin_asset('PageBuilder', 'css/front/rich-text-responsive.css') }}">
+  <link rel="stylesheet" href="{{ plugin_asset('PageBuilder', 'css/front/multi-row-images-responsive.css') }}">
   @if (request()->get('design'))
     <link rel="stylesheet" href="{{ plugin_asset('PageBuilder', 'css/front/design-mode.css') }}">
   @endif
@@ -33,7 +35,7 @@
           @endforeach
         @else
           <div class="text-center py-5">
-            <p>暂无模块数据</p>
+            <p>{{ __('PageBuilder::modules.no_modules_data') }}</p>
           </div>
         @endif
       </div>
@@ -41,5 +43,5 @@
   </div>
 
   @hookinsert('home.content.bottom')
-  
+
 @endsection

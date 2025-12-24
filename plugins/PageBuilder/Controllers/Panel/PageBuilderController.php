@@ -26,9 +26,9 @@ class PageBuilderController extends BaseController
     }
 
     /**
-     * 页面编辑主页面 - 统一处理首页和单页
+     * Page editor main page - unified handling for home page and single pages
      *
-     * @param  string|null  $page  页面标识，'home' 表示首页，其他为页面ID或slug，null表示首页
+     * @param  string|null  $page  Page identifier, 'home' for home page, others are page ID or slug, null means home page
      * @return mixed
      * @throws Exception
      */
@@ -36,15 +36,22 @@ class PageBuilderController extends BaseController
     {
         $data           = $this->pageBuilderService->getPageData($page);
         $data['plugin'] = plugin('PageBuilder');
+        
+        // Get page model for preview URL generation
+        if ($page && $page !== 'home') {
+            $data['pageModel'] = $this->pageBuilderService->findPage($page);
+        } else {
+            $data['pageModel'] = null;
+        }
 
         return view('PageBuilder::design.index', $data);
     }
 
     /**
-     * 预览模块HTML
+     * Preview module HTML
      *
      * @param  Request  $request
-     * @param  string|null  $page  页面标识，null表示首页
+     * @param  string|null  $page  Page identifier, null means home page
      * @return string
      * @throws Exception
      */
@@ -62,7 +69,6 @@ class PageBuilderController extends BaseController
             $viewPath = "PageBuilder::front.modules.{$moduleCode}";
         }
 
-        // 使用 DesignService 统一处理模块数据，确保与前台页面一致
         $processedContent = DesignService::getInstance()->handleModuleContent($moduleCode, $content);
 
         $viewData = [
@@ -73,7 +79,6 @@ class PageBuilderController extends BaseController
             'design'    => $design,
         ];
 
-        // 返回完整的section HTML，包括编辑按钮
         return view('PageBuilder::front.partials.module-section', [
             'module'    => $module,
             'content'   => $viewData['content'],
@@ -83,10 +88,10 @@ class PageBuilderController extends BaseController
     }
 
     /**
-     * 保存页面模块数据
+     * Save page module data
      *
      * @param  Request  $request
-     * @param  string|null  $page  页面标识，null表示首页
+     * @param  string|null  $page  Page identifier, null means home page
      * @return JsonResponse
      */
     public function update(Request $request, ?string $page = null): JsonResponse
@@ -95,16 +100,16 @@ class PageBuilderController extends BaseController
             $modules = $request->input('modules', []);
             $this->pageBuilderService->savePageModules($modules, $page);
 
-            return json_success('保存成功');
+            return json_success(trans('PageBuilder::common.saved_successfully'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
 
     /**
-     * 导入演示数据
+     * Import demo data
      *
-     * @param  string|null  $page  页面标识，null表示首页
+     * @param  string|null  $page  Page identifier, null means home page
      * @return JsonResponse
      */
     public function importDemo(?string $page = null): JsonResponse
@@ -112,7 +117,7 @@ class PageBuilderController extends BaseController
         try {
             $moduleData = $this->pageBuilderService->importDemoData($page);
 
-            return json_success('演示数据导入成功', $moduleData);
+            return json_success(trans('PageBuilder::common.demo_imported_successfully'), $moduleData);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

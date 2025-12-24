@@ -6,7 +6,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-monitor"></i>
-        模块宽度
+        @{{ lang.module_width }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -14,19 +14,19 @@
             :class="['segmented-btn', { active: module.width === 'narrow' }]" 
             @click="module.width = 'narrow'"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'wide' }]" 
             @click="module.width = 'wide'"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'full' }]" 
             @click="module.width = 'full'"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-picture"></i>
-        幻灯片管理
+        @{{ lang.slideshow_management }}
       </div>
       <div class="slideshow-list">
         <draggable
@@ -59,7 +59,7 @@
                   <span v-if="getTitleText(item)">
                     @{{ getTitleText(item) }}
                   </span>
-                  <span v-else>未设置标题</span>
+                  <span v-else>@{{ lang.title_not_set }}</span>
                 </div>
               </div>
               
@@ -81,11 +81,11 @@
               <div class="content-section">
                 <div class="section-subtitle">
                   <i class="el-icon-picture-outline"></i>
-                  图片设置
+                  @{{ lang.image_settings }}
                 </div>
                 <div class="image-selector-wrapper">
                   <single-image-selector v-model="item.image" @change="onChange"></single-image-selector>
-                  <div class="image-tips">建议尺寸(宽x高): 1920 x 600</div>
+                  <div class="image-tips">@{{ lang.recommended_size }}: 1920 x 600</div>
                 </div>
               </div>
 
@@ -93,7 +93,7 @@
               <div class="content-section">
                 <div class="section-subtitle">
                   <i class="el-icon-link"></i>
-                  链接设置
+                  @{{ lang.link_settings }}
                 </div>
                 <link-selector v-model="item.link" @change="onChange" ></link-selector>
               </div>
@@ -102,16 +102,16 @@
               <div class="content-section">
                 <div class="section-subtitle">
                   <i class="el-icon-edit"></i>
-                  标题设置
+                  @{{ lang.title_settings }}
                 </div>
-                <text-i18n v-model="item.title" @change="onChange" placeholder="请输入标题"></text-i18n>
+                <text-i18n v-model="item.title" @change="onChange" :placeholder="lang.enter_title"></text-i18n>
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label">标题颜色</label>
+                    <label class="form-label">@{{ lang.title_color }}</label>
                     <el-color-picker v-model="item.title_color" @change="onChange" show-alpha size="small"></el-color-picker>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">标题大小</label>
+                    <label class="form-label">@{{ lang.title_size }}</label>
                     <el-input-number v-model="item.title_size" @change="onChange" :min="12" :max="72" :step="2" size="small"></el-input-number>
                   </div>
                 </div>
@@ -121,16 +121,16 @@
               <div class="content-section">
                 <div class="section-subtitle">
                   <i class="el-icon-document"></i>
-                  副标题设置
+                  @{{ lang.subtitle_settings }}
                 </div>
-                <text-i18n v-model="item.subtitle" @change="onChange" placeholder="请输入副标题"></text-i18n>
+                <text-i18n v-model="item.subtitle" @change="onChange" :placeholder="lang.enter_subtitle"></text-i18n>
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label">副标题颜色</label>
+                    <label class="form-label">@{{ lang.subtitle_color }}</label>
                     <el-color-picker v-model="item.subtitle_color" @change="onChange" show-alpha size="small"></el-color-picker>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">副标题大小</label>
+                    <label class="form-label">@{{ lang.subtitle_size }}</label>
                     <el-input-number v-model="item.subtitle_size" @change="onChange" :min="12" :max="48" :step="2" size="small"></el-input-number>
                   </div>
                 </div>
@@ -140,23 +140,23 @@
               <div class="content-section">
                 <div class="section-subtitle">
                   <i class="el-icon-mouse"></i>
-                  按钮设置
+                  @{{ lang.button_settings }}
                 </div>
-                <text-i18n v-model="item.button_text" @change="onChange" placeholder="请输入按钮文本"></text-i18n>
+                <text-i18n v-model="item.button_text" @change="onChange" :placeholder="lang.enter_button_text"></text-i18n>
                 <div class="setting-group mt-3">
                   <div class="section-subtitle">
                     <i class="el-icon-link"></i>
-                    按钮链接
+                    @{{ lang.button_link }}
                   </div>
                   <link-selector v-model="item.button_link" @change="onChange"></link-selector>
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label">按钮背景色</label>
+                    <label class="form-label">@{{ lang.button_bg_color }}</label>
                     <el-color-picker v-model="item.button_color" @change="onChange" show-alpha size="small"></el-color-picker>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">按钮文字色</label>
+                    <label class="form-label">@{{ lang.button_text_color }}</label>
                     <el-color-picker v-model="item.button_text_color" @change="onChange" show-alpha size="small"></el-color-picker>
                   </div>
                 </div>
@@ -166,10 +166,10 @@
               <div class="content-section">
                 <div class="section-subtitle">
                   <i class="el-icon-s-grid"></i>
-                  位置设置
+                  @{{ lang.position_settings }}
                 </div>
                 <div class="setting-group">
-                  <label class="form-label">内容位置</label>
+                  <label class="form-label">@{{ lang.content_position }}</label>
                   <div style="display: flex; gap: 10px; margin-top: 10px;">
                     <el-button 
                       :type="item.title_align === 'left' ? 'primary' : 'default'"
@@ -177,7 +177,7 @@
                       @click="item.title_align = 'left'; onChange()"
                       icon="el-icon-s-fold"
                     >
-                      左侧
+                      @{{ lang.left }}
                     </el-button>
                     <el-button 
                       :type="item.title_align === 'center' ? 'primary' : 'default'"
@@ -185,7 +185,7 @@
                       @click="item.title_align = 'center'; onChange()"
                       icon="el-icon-s-operation"
                     >
-                      居中
+                      @{{ lang.center }}
                     </el-button>
                     <el-button 
                       :type="item.title_align === 'right' ? 'primary' : 'default'"
@@ -193,7 +193,7 @@
                       @click="item.title_align = 'right'; onChange()"
                       icon="el-icon-s-unfold"
                     >
-                      右侧
+                      @{{ lang.right }}
                     </el-button>
                   </div>
                 </div>
@@ -205,13 +205,13 @@
         {{-- 空状态 --}}
         <div v-if="!module.images || module.images.length === 0" class="empty-state">
           <i class="el-icon-picture-outline"></i>
-          <p>暂无幻灯片，点击下方按钮添加</p>
+          <p>@{{ lang.no_slideshow_add }}</p>
         </div>
 
         {{-- 添加按钮 --}}
         <div class="add-button-wrapper">
           <el-button type="primary" size="small" @click="addImage" icon="el-icon-plus">
-            添加幻灯片
+            @{{ lang.add_slideshow }}
           </el-button>
         </div>
       </div>
@@ -332,13 +332,13 @@ Vue.component('module-editor-slideshow', {
     },
 
     removeImage(index) {
-      this.$confirm('确定要删除这个幻灯片吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(lang.confirm_delete_slideshow, lang.hint, {
+        confirmButtonText: lang.confirm,
+        cancelButtonText: lang.cancel,
         type: 'warning'
       }).then(() => {
         this.module.images.splice(index, 1);
-        this.$message.success('删除成功');
+        this.$message.success(lang.delete_success);
       }).catch(() => {});
     },
 
@@ -391,7 +391,7 @@ Vue.component('module-editor-slideshow', {
         show: true
       });
       
-      this.$message.success('添加幻灯片成功');
+      this.$message.success(lang.add_slideshow_success);
     },
     
     languagesFill(text) {

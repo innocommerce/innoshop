@@ -146,17 +146,11 @@
           </div>
         @endif
         
-        <div class="text-center py-5">
-          <div class="d-inline-block">
-            <div class="mb-3">
-              <i class="el-icon-shopping-cart-2" style="font-size: 48px; color: #dee2e6;"></i>
-            </div>
-            <div>
-              <p class="text-muted mb-1">暂无商品数据</p>
-              <p class="text-muted small">请在后台编辑器中添加商品</p>
-            </div>
-          </div>
-        </div>
+        @include('PageBuilder::front.partials.module-empty', [
+            'moduleClass' => 'card-slider',
+            'icon' => 'bi-box',
+            'message' => __('PageBuilder::modules.no_products'),
+        ])
       </div>
     </div>
   </section>

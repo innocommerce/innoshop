@@ -34,18 +34,12 @@
         </div>
         @endforeach
       </div>
-    @else
-      <div class="brands-empty">
-        <div class="empty-content">
-          <div class="empty-icon">
-            <i class="bi bi-award"></i>
-          </div>
-          <div class="empty-text">
-            <h4>品牌模块</h4>
-            <p>请选择要展示的品牌</p>
-          </div>
-        </div>
-      </div>
+    @elseif(request('design'))
+      @include('PageBuilder::front.partials.module-empty', [
+          'moduleClass' => 'brands',
+          'icon' => 'bi-award',
+          'message' => __('PageBuilder::modules.no_brands'),
+      ])
     @endif
   </div>
   </div>
@@ -120,13 +114,6 @@
   text-align: center;
 }
 
-.brands-empty {
-  text-align: center;
-  padding: 40px 20px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 2px dashed #dee2e6;
-}
 
 /* 响应式设计 */
 @media (max-width: 767px) {

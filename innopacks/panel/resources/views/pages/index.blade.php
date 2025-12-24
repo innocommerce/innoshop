@@ -37,9 +37,11 @@
               $item->id)])</td>
             <td>
               <div class="d-flex gap-1">
+                @hookinsert('panel.page.list.table.row.actions.before', $item)
                 <a href="{{ panel_route('pages.edit', [$item->id]) }}">
                   <el-button size="small" plain type="primary">{{ __('panel/common.edit')}}</el-button>
                 </a>
+                @hookinsert('panel.page.list.table.row.actions.after', $item)
                 <form ref="deleteForm" action="{{ panel_route('pages.destroy', [$item->id]) }}" method="POST"
                   class="d-inline">
                   @csrf

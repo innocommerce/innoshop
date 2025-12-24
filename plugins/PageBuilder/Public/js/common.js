@@ -65,7 +65,7 @@ export default {
     formData.append('image', file);
     formData.append('type', _self.parents('.is-up-file').data('type'));
     _self.find('.img-loading').removeClass('d-none');
-    axios.post(urls.upload_images, formData, {}).then(function (res) {
+    axios.post(urls.panel_upload, formData, {}).then(function (res) {
       callback(res);
     }).catch(function (err) {
       inno.msg(err.response.data.message);

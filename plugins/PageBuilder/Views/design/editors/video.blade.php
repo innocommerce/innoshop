@@ -7,7 +7,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-monitor"></i>
-        模块宽度
+        @{{ lang.module_width }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -15,19 +15,19 @@
             :class="['segmented-btn', { active: module.width === 'narrow' }]" 
             @click="setModuleWidth('narrow')"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'wide' }]" 
             @click="setModuleWidth('wide')"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'full' }]" 
             @click="setModuleWidth('full')"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-video-camera"></i>
-        视频类型
+        @{{ lang.video_type }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -45,19 +45,19 @@
             :class="['segmented-btn', { active: module.videoType === 'local' }]" 
             @click="setVideoType('local')"
           >
-            本地视频
+            @{{ lang.local_video }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.videoType === 'youtube' }]" 
             @click="setVideoType('youtube')"
           >
-            YouTube
+            @{{ lang.youtube }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.videoType === 'vimeo' }]" 
             @click="setVideoType('vimeo')"
           >
-            Vimeo
+            @{{ lang.vimeo }}
           </div>
         </div>
       </div>
@@ -67,15 +67,15 @@
     <div class="editor-section" v-if="module.videoType === 'local'">
       <div class="section-title">
         <i class="el-icon-upload"></i>
-        视频文件
+        @{{ lang.video_file }}
       </div>
       <div class="section-content">
         <div class="video-upload-wrapper">
           <div class="upload-area" @click="openVideoSelector">
             <div v-if="!module.videoUrl" class="upload-placeholder">
               <i class="el-icon-video-camera"></i>
-              <p>点击选择视频文件</p>
-              <span class="upload-tip">支持 MP4, WebM, OGV 格式</span>
+              <p>@{{ lang.click_select_video }}</p>
+              <span class="upload-tip">@{{ lang.video_formats_supported }}</span>
             </div>
             <div v-else class="video-preview">
               <video 
@@ -103,7 +103,7 @@
     <div class="editor-section" v-if="module.videoType === 'youtube' || module.videoType === 'vimeo'">
       <div class="section-title">
         <i class="el-icon-link"></i>
-        视频链接
+        @{{ lang.video_url }}
       </div>
       <div class="section-content">
         <div class="video-url-wrapper">
@@ -128,7 +128,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-picture"></i>
-        视频封面
+        @{{ lang.cover_image }}
       </div>
       <div class="section-content">
         <div class="cover-image-wrapper">
@@ -141,7 +141,7 @@
           ></single-image-selector>
           <div class="cover-tips">
             <i class="el-icon-info"></i>
-            建议尺寸: 1280 x 720 (16:9比例)
+            @{{ lang.recommended_size }}: 1280 x 720 (16:9)
           </div>
         </div>
       </div>
@@ -151,19 +151,19 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-setting"></i>
-        播放控制
+        @{{ lang.video_controls }}
       </div>
       <div class="section-content">
         <div class="control-settings">
           {{-- 自动播放 --}}
           <div class="setting-item">
-            <div class="setting-label">自动播放</div>
+            <div class="setting-label">@{{ lang.autoplay }}</div>
             <div class="setting-control">
               <el-switch 
                 v-model="module.autoplay" 
                 @change="onChange"
-                active-text="启用" 
-                inactive-text="禁用"
+                :active-text="lang.enable" 
+                :inactive-text="lang.disable"
                 size="small"
               ></el-switch>
             </div>
@@ -171,13 +171,13 @@
 
           {{-- 循环播放 --}}
           <div class="setting-item">
-            <div class="setting-label">循环播放</div>
+            <div class="setting-label">@{{ lang.loop }}</div>
             <div class="setting-control">
               <el-switch 
                 v-model="module.loop" 
                 @change="onChange"
-                active-text="启用" 
-                inactive-text="禁用"
+                :active-text="lang.enable" 
+                :inactive-text="lang.disable"
                 size="small"
               ></el-switch>
             </div>
@@ -185,13 +185,13 @@
 
           {{-- 静音播放 --}}
           <div class="setting-item">
-            <div class="setting-label">静音播放</div>
+            <div class="setting-label">@{{ lang.muted }}</div>
             <div class="setting-control">
               <el-switch 
                 v-model="module.muted" 
                 @change="onChange"
-                active-text="启用" 
-                inactive-text="禁用"
+                :active-text="lang.enable" 
+                :inactive-text="lang.disable"
                 size="small"
               ></el-switch>
             </div>
@@ -199,13 +199,13 @@
 
           {{-- 显示控制栏 --}}
           <div class="setting-item">
-            <div class="setting-label">显示控制栏</div>
+            <div class="setting-label">@{{ lang.show_controls }}</div>
             <div class="setting-control">
               <el-switch 
                 v-model="module.controls" 
                 @change="onChange"
-                active-text="显示" 
-                inactive-text="隐藏"
+                :active-text="lang.show" 
+                :inactive-text="lang.hide"
                 size="small"
               ></el-switch>
             </div>
@@ -218,13 +218,13 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-edit"></i>
-        视频标题
+        @{{ lang.video_title }}
       </div>
       <div class="section-content">
         <text-i18n 
           v-model="module.title" 
           @change="onChange" 
-          placeholder="请输入视频标题"
+          :placeholder="lang.enter_video_title"
         ></text-i18n>
       </div>
     </div>
@@ -233,13 +233,13 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-document"></i>
-        视频描述
+        @{{ lang.video_description }}
       </div>
       <div class="section-content">
         <text-i18n 
           v-model="module.description" 
           @change="onChange" 
-          placeholder="请输入视频描述"
+          :placeholder="lang.enter_video_description"
           type="textarea"
           :rows="3"
         ></text-i18n>

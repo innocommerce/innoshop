@@ -7,7 +7,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-monitor"></i>
-        模块宽度
+        @{{ lang.module_width }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -15,19 +15,19 @@
             :class="['segmented-btn', { active: module.width === 'narrow' }]" 
             @click="setModuleWidth('narrow')"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'wide' }]" 
             @click="setModuleWidth('wide')"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'full' }]" 
             @click="setModuleWidth('full')"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -37,13 +37,13 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-edit"></i>
-        模块标题
+        @{{ lang.module_title }}
       </div>
       <div class="section-content">
         <text-i18n 
           v-model="module.title" 
           @change="onChange" 
-          placeholder="请输入模块标题"
+          :placeholder="lang.enter_module_title"
         ></text-i18n>
       </div>
     </div>
@@ -52,11 +52,11 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-picture"></i>
-        内容设置
+        @{{ lang.content_settings }}
       </div>
       <div class="section-content">
         <div class="setting-group">
-          <div class="setting-label">选择品牌</div>
+          <div class="setting-label">@{{ lang.select_brands }}</div>
           <div class="search-section">
             <el-autocomplete 
               class="search-input" 
@@ -64,14 +64,14 @@
               value-key="name" 
               size="small"
               :fetch-suggestions="querySearch" 
-              placeholder="请输入关键字搜索品牌" 
+              :placeholder="lang.search_brand_placeholder" 
               :highlight-first-item="true"
               @select="handleSelect"
               style="width: 100%;"
             ></el-autocomplete>
           </div>
           <div class="products-section">
-            <div class="section-subtitle">已选品牌</div>
+            <div class="section-subtitle">@{{ lang.selected_brands }}</div>
             <div class="products-list" v-loading="loading">
               <template v-if="module.brands.length">
                 <div v-for="(brand, index) in module.brands" :key="brand.id" class="product-item">
@@ -80,7 +80,7 @@
                       <img :src="brand.logo_url" :alt="brand.name" class="preview-img">
                     </div>
                     <div class="product-details">
-                      <div class="product-name">${brand.name}</div>
+                      <div class="product-name">@{{ brand.name }}</div>
                     </div>
                   </div>
                   <div class="product-actions">
@@ -96,7 +96,7 @@
               </template>
               <div v-else class="empty-state">
                 <i class="el-icon-award"></i>
-                <p>暂无品牌，请在上方搜索并添加</p>
+                <p>@{{ lang.no_brands_search }}</p>
               </div>
             </div>
           </div>
@@ -108,47 +108,47 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-brush"></i>
-        样式设置
+        @{{ lang.style_settings }}
       </div>
       <div class="section-content">
         <div class="setting-group">
-          <div class="setting-label">显示列数</div>
+          <div class="setting-label">@{{ lang.display_columns }}</div>
           <div class="segmented-buttons">
             <div 
               :class="['segmented-btn', { active: module.columns === 3 }]" 
               @click="setColumns(3)"
             >
-              3个
+              @{{ lang.items_3 }}
             </div>
             <div 
               :class="['segmented-btn', { active: module.columns === 4 }]" 
               @click="setColumns(4)"
             >
-              4个
+              @{{ lang.items_4 }}
             </div>
             <div 
               :class="['segmented-btn', { active: module.columns === 6 }]" 
               @click="setColumns(6)"
             >
-              6个
+              @{{ lang.items_6 }}
             </div>
           </div>
         </div>
 
         <div class="setting-group">
-          <div class="setting-label">自动轮播</div>
+          <div class="setting-label">@{{ lang.autoplay }}</div>
           <div class="switch-wrapper">
             <el-switch 
               v-model="module.autoplay" 
               @change="onChange"
-              active-text="启用" 
-              inactive-text="禁用"
+              :active-text="lang.enable" 
+              :inactive-text="lang.disable"
               size="small"
             ></el-switch>
           </div>
         </div>
         <div class="setting-group" v-if="module.autoplay">
-          <div class="setting-label">轮播间隔时间</div>
+          <div class="setting-label">@{{ lang.autoplay_interval }}</div>
           <el-input-number 
             v-model="module.autoplaySpeed" 
             @change="onChange"
@@ -160,23 +160,23 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：毫秒，建议设置 3000-5000
+            @{{ lang.autoplay_interval_tip }}
           </div>
         </div>
         <div class="setting-group">
-          <div class="setting-label">显示品牌名称</div>
+          <div class="setting-label">@{{ lang.show_brand_names }}</div>
           <div class="switch-wrapper">
             <el-switch 
               v-model="module.showNames" 
               @change="onChange"
-              active-text="显示" 
-              inactive-text="隐藏"
+              :active-text="lang.show" 
+              :inactive-text="lang.hide"
               size="small"
             ></el-switch>
           </div>
         </div>
         <div class="setting-group">
-          <div class="setting-label">图片高度</div>
+          <div class="setting-label">@{{ lang.image_height }}</div>
           <el-input-number 
             v-model="module.itemHeight" 
             @change="onChange"
@@ -188,11 +188,11 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，建议设置 60-120
+            @{{ lang.image_height_tip }}
           </div>
         </div>
         <div class="setting-group">
-          <div class="setting-label">内边距</div>
+          <div class="setting-label">@{{ lang.padding }}</div>
           <el-input-number 
             v-model="module.padding" 
             @change="onChange"
@@ -204,11 +204,11 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，0为无内边距，控制图片与卡片边缘的间距
+            @{{ lang.padding_tip }}
           </div>
         </div>
         <div class="setting-group">
-          <div class="setting-label">边框圆角</div>
+          <div class="setting-label">@{{ lang.border_radius }}</div>
           <el-input-number 
             v-model="module.borderRadius" 
             @change="onChange"
@@ -220,11 +220,11 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，0为直角，建议设置 4-16
+            @{{ lang.border_radius_tip }}
           </div>
         </div>
         <div class="setting-group">
-          <div class="setting-label">边框宽度</div>
+          <div class="setting-label">@{{ lang.border_width }}</div>
           <el-input-number 
             v-model="module.borderWidth" 
             @change="onChange"
@@ -236,11 +236,11 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，0为无边框
+            @{{ lang.border_width_tip }}
           </div>
         </div>
         <div class="setting-group">
-          <div class="setting-label">边框颜色</div>
+          <div class="setting-label">@{{ lang.border_color }}</div>
           <el-color-picker 
             v-model="module.borderColor" 
             @change="onChange"
@@ -250,17 +250,17 @@
           ></el-color-picker>
         </div>
         <div class="setting-group">
-          <div class="setting-label">边框样式</div>
+          <div class="setting-label">@{{ lang.border_style }}</div>
           <el-select 
             v-model="module.borderStyle" 
             @change="onChange"
             size="small"
             style="width: 100%;"
           >
-            <el-option label="实线" value="solid"></el-option>
-            <el-option label="虚线" value="dashed"></el-option>
-            <el-option label="点线" value="dotted"></el-option>
-            <el-option label="双线" value="double"></el-option>
+            <el-option :label="lang.solid" value="solid"></el-option>
+            <el-option :label="lang.dashed" value="dashed"></el-option>
+            <el-option :label="lang.dotted" value="dotted"></el-option>
+            <el-option :label="lang.double" value="double"></el-option>
           </el-select>
         </div>
       </div>
@@ -290,7 +290,6 @@
 
 <script type="text/javascript">
   Vue.component('module-editor-brands', {
-    delimiters: ['${', '}'],
     template: '#module-editor-brands-template',
     props: ['module'],
     data: function() {

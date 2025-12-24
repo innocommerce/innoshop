@@ -5,26 +5,26 @@
     
     {{-- 模块宽度设置 --}}
     <div class="editor-section">
-      <div class="section-title">模块宽度</div>
+      <div class="section-title">@{{ lang.module_width }}</div>
       <div class="section-content">
         <div class="segmented-buttons">
           <div 
             :class="['segmented-btn', { active: form.width === 'narrow' }]" 
             @click="form.width = 'narrow'"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'wide' }]" 
             @click="form.width = 'wide'"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'full' }]" 
             @click="form.width = 'full'"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -32,27 +32,27 @@
 
     {{-- 模块标题 --}}
     <div class="editor-section">
-      <div class="section-title">模块标题</div>
+      <div class="section-title">@{{ lang.module_title }}</div>
       <div class="section-content">
-        <text-i18n v-model="form.title" @change="onChange" placeholder="请输入模块标题"></text-i18n>
+        <text-i18n v-model="form.title" @change="onChange" :placeholder="lang.enter_module_title"></text-i18n>
       </div>
     </div>
 
     {{-- 副标题 --}}
     <div class="editor-section">
-      <div class="section-title">副标题</div>
+      <div class="section-title">@{{ lang.subtitle }}</div>
       <div class="section-content">
-        <text-i18n v-model="form.subtitle" @change="onChange" placeholder="请输入副标题"></text-i18n>
+        <text-i18n v-model="form.subtitle" @change="onChange" :placeholder="lang.enter_subtitle"></text-i18n>
       </div>
     </div>
 
     {{-- 图片设置 --}}
     <div class="editor-section">
-      <div class="section-title">图片设置</div>
+      <div class="section-title">@{{ lang.image_settings }}</div>
       <div class="section-content">
         <div class="setting-tip">
           <i class="el-icon-info"></i>
-          建议上传相同尺寸的图片，支持拖拽排序
+          @{{ lang.recommended_same_size_drag }}
         </div>
 
         <draggable ghost-class="dragabble-ghost" :list="form.images"
@@ -60,14 +60,14 @@
           <div class="image-item" v-for="(item, index) in form.images" :key="index">
             <div class="image-header" @click="itemShow(index)">
               <div class="image-info">
-                <el-tooltip class="drag-handle" effect="dark" content="拖动排序" placement="left">
+                <el-tooltip class="drag-handle" effect="dark" :content="lang.drag_sort" placement="left">
                   <i class="el-icon-rank"></i>
                 </el-tooltip>
                 <img :src="thumbnail(item.image)" class="image-preview">
-                <span class="image-label">图片 @{{ index + 1 }}</span>
+                <span class="image-label">@{{ lang.image }} @{{ index + 1 }}</span>
               </div>
               <div class="image-actions">
-                <el-tooltip effect="dark" content="删除" placement="left">
+                <el-tooltip effect="dark" :content="lang.delete" placement="left">
                   <div class="remove-btn" @click.stop="removeImage(index)">
                     <i class="el-icon-delete"></i>
                   </div>
@@ -79,15 +79,15 @@
               <div class="image-upload-section">
                 <single-image-selector v-model="item.image" :aspectRatio="1" :targetWidth="400"
                   :targetHeight="400" @change="onChange"></single-image-selector>
-                <div class="upload-tip">建议尺寸: 400 x 400，图片比例1:1</div>
+                <div class="upload-tip">@{{ lang.recommended_size_400 }}</div>
               </div>
               <div class="image-settings">
                 <div class="setting-group">
-                  <div class="setting-label">图片说明</div>
-                  <text-i18n v-model="item.description" @change="onChange" placeholder="请输入图片说明"></text-i18n>
+                  <div class="setting-label">@{{ lang.image_description }}</div>
+                  <text-i18n v-model="item.description" @change="onChange" :placeholder="lang.enter_image_description"></text-i18n>
                 </div>
                 <div class="setting-group">
-                  <div class="setting-label">图片链接</div>
+                  <div class="setting-label">@{{ lang.image_link }}</div>
                   <link-selector :hide-types="['catalog', 'static']" v-model="item.link" @change="onChange"></link-selector>
                 </div>
               </div>
@@ -97,7 +97,7 @@
 
         <div class="add-image-section" v-if="form.images.length < 4">
           <el-button type="primary" size="small" @click="addImage" icon="el-icon-circle-plus-outline">
-            添加图片 (@{{ form.images.length }}/4)
+            @{{ lang.add_image }} (@{{ form.images.length }}/4)
           </el-button>
         </div>
       </div>
@@ -190,7 +190,7 @@
       },
       addImage() {
         if (this.form.images.length >= 4) {
-          this.$message.warning('最多只能添加4张图片');
+          this.$message.warning(lang.max_4_images_warning);
           return;
         }
         this.form.images.push({

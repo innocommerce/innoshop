@@ -51,12 +51,11 @@
             </div>
           @endforeach
         @elseif (request('design'))
-          <div class="module-multi-row-images-empty">
-            <div class="module-multi-row-images-empty-text">
-              <i class="bi bi-grid-3x3"></i>
-              <span>暂无图片，请配置图片内容</span>
-            </div>
-          </div>
+          @include('PageBuilder::front.partials.module-empty', [
+              'moduleClass' => 'multi-row-images',
+              'icon' => 'bi-grid-3x3',
+              'message' => __('PageBuilder::modules.no_images'),
+          ])
         @endif
       </div>
     </div>

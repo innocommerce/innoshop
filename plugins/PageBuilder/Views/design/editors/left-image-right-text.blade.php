@@ -7,7 +7,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-monitor"></i>
-        模块宽度
+        @{{ lang.module_width }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -15,19 +15,19 @@
             :class="['segmented-btn', { active: form.width === 'narrow' }]" 
             @click="form.width = 'narrow'"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'wide' }]" 
             @click="form.width = 'wide'"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'full' }]" 
             @click="form.width = 'full'"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -37,11 +37,11 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-setting"></i>
-        基础设置
+        @{{ lang.basic_settings }}
       </div>
       <div class="section-content">
         <div class="setting-group">
-          <div class="setting-label">图片位置</div>
+          <div class="setting-label">@{{ lang.image_position }}</div>
           <div class="option-buttons">
             <div 
               :class="['option-btn', { active: form.image_position === 'left' }]" 
@@ -51,7 +51,7 @@
                 <div class="preview-image"></div>
                 <div class="preview-text"></div>
               </div>
-              <span>左图右文</span>
+              <span>@{{ lang.left_image_right_text }}</span>
             </div>
             <div 
               :class="['option-btn', { active: form.image_position === 'right' }]" 
@@ -61,7 +61,7 @@
                 <div class="preview-text"></div>
                 <div class="preview-image"></div>
               </div>
-              <span>右图左文</span>
+              <span>@{{ lang.right_image_left_text }}</span>
             </div>
           </div>
         </div>
@@ -72,47 +72,47 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-edit"></i>
-        内容设置
+        @{{ lang.content_settings }}
       </div>
       <div class="section-content">
         <div class="setting-group">
-          <div class="setting-label">模块标题</div>
-          <text-i18n v-model="form.title" placeholder="请输入模块标题"></text-i18n>
+          <div class="setting-label">@{{ lang.module_title }}</div>
+          <text-i18n v-model="form.title" :placeholder="lang.enter_module_title"></text-i18n>
         </div>
         
         <div class="setting-group">
-          <div class="setting-label">副标题</div>
-          <text-i18n v-model="form.subtitle" placeholder="请输入副标题"></text-i18n>
+          <div class="setting-label">@{{ lang.subtitle }}</div>
+          <text-i18n v-model="form.subtitle" :placeholder="lang.enter_subtitle"></text-i18n>
         </div>
         
         <div class="setting-group">
-          <div class="setting-label">描述内容</div>
-          <text-i18n v-model="form.description" placeholder="请输入描述内容"></text-i18n>
+          <div class="setting-label">@{{ lang.description_content }}</div>
+          <text-i18n v-model="form.description" :placeholder="lang.enter_description"></text-i18n>
         </div>
         
         <div class="setting-group">
-          <div class="setting-label">文字对齐方式</div>
+          <div class="setting-label">@{{ lang.text_alignment }}</div>
           <div class="option-buttons">
             <div 
               :class="['option-btn', { active: form.text_align === 'left' }]" 
               @click="form.text_align = 'left'"
             >
               <i class="el-icon-s-fold"></i>
-              <span>居左</span>
+              <span>@{{ lang.align_left }}</span>
             </div>
             <div 
               :class="['option-btn', { active: form.text_align === 'center' }]" 
               @click="form.text_align = 'center'"
             >
               <i class="el-icon-s-operation"></i>
-              <span>居中</span>
+              <span>@{{ lang.align_center }}</span>
             </div>
             <div 
               :class="['option-btn', { active: form.text_align === 'end' }]" 
               @click="form.text_align = 'end'"
             >
               <i class="el-icon-s-unfold"></i>
-              <span>居右</span>
+              <span>@{{ lang.align_right }}</span>
             </div>
           </div>
         </div>
@@ -123,15 +123,15 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-position"></i>
-        边距设置
+        @{{ lang.margin_settings }}
       </div>
       <div class="section-content">
         <div class="setting-group">
-          <div class="setting-label">整体边距</div>
+          <div class="setting-label">@{{ lang.overall_margin }}</div>
           <div class="control-group">
             <div class="control-row">
               <div class="control-item">
-                <div class="control-label">左边距</div>
+                <div class="control-label">@{{ lang.left_margin }}</div>
                 <el-input-number 
                   v-model="form.content_margin_left" 
                   :min="0" 
@@ -142,7 +142,7 @@
                 <span class="control-unit">px</span>
               </div>
               <div class="control-item">
-                <div class="control-label">右边距</div>
+                <div class="control-label">@{{ lang.right_margin }}</div>
                 <el-input-number 
                   v-model="form.content_margin_right" 
                   :min="0" 
@@ -155,7 +155,7 @@
             </div>
             <div class="control-row">
               <div class="control-item">
-                <div class="control-label">上边距</div>
+                <div class="control-label">@{{ lang.top_margin }}</div>
                 <el-input-number 
                   v-model="form.content_margin_top" 
                   :min="0" 
@@ -166,7 +166,7 @@
                 <span class="control-unit">px</span>
               </div>
               <div class="control-item">
-                <div class="control-label">下边距</div>
+                <div class="control-label">@{{ lang.bottom_margin }}</div>
                 <el-input-number 
                   v-model="form.content_margin_bottom" 
                   :min="0" 
@@ -186,13 +186,13 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-s-grid"></i>
-        内容间距
+        @{{ lang.content_spacing }}
       </div>
       <div class="section-content">
         <div class="setting-group">
           <div class="control-group">
             <div class="control-item">
-              <div class="control-label">标题间距</div>
+              <div class="control-label">@{{ lang.title_spacing }}</div>
               <el-input-number 
                 v-model="form.title_spacing" 
                 :min="0" 
@@ -203,7 +203,7 @@
               <span class="control-unit">px</span>
             </div>
             <div class="control-item">
-              <div class="control-label">副标题间距</div>
+              <div class="control-label">@{{ lang.subtitle_spacing }}</div>
               <el-input-number 
                 v-model="form.subtitle_spacing" 
                 :min="0" 
@@ -214,7 +214,7 @@
               <span class="control-unit">px</span>
             </div>
             <div class="control-item">
-              <div class="control-label">描述间距</div>
+              <div class="control-label">@{{ lang.description_spacing }}</div>
               <el-input-number 
                 v-model="form.description_spacing" 
                 :min="0" 
@@ -233,11 +233,11 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-picture"></i>
-        图片设置
+        @{{ lang.image_settings }}
       </div>
       <div class="section-content">
         <div class="setting-group">
-          <div class="setting-label">图片选择</div>
+          <div class="setting-label">@{{ lang.image_selection }}</div>
           <single-image-selector 
             v-model="form.image" 
             :aspectRatio="16 / 9" 
@@ -246,16 +246,16 @@
           ></single-image-selector>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            建议尺寸: 800 x 450，图片比例16:9
+            @{{ lang.recommended_size_800_450 }}
           </div>
         </div>
         
         <div class="setting-group">
-          <div class="setting-label">图片内边距</div>
+          <div class="setting-label">@{{ lang.image_padding }}</div>
           <div class="control-group">
             <div class="control-row">
               <div class="control-item">
-                <div class="control-label">左右内边距</div>
+                <div class="control-label">@{{ lang.horizontal_padding }}</div>
                 <el-input-number 
                   v-model="form.image_padding_x" 
                   :min="0" 
@@ -266,7 +266,7 @@
                 <span class="control-unit">px</span>
               </div>
               <div class="control-item">
-                <div class="control-label">上下内边距</div>
+                <div class="control-label">@{{ lang.vertical_padding }}</div>
                 <el-input-number 
                   v-model="form.image_padding_y" 
                   :min="0" 
@@ -286,16 +286,16 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-link"></i>
-        按钮设置
+        @{{ lang.button_settings }}
       </div>
       <div class="section-content">
         <div class="setting-group">
-          <div class="setting-label">按钮文字</div>
-          <text-i18n v-model="form.button_text" placeholder="请输入按钮文字"></text-i18n>
+          <div class="setting-label">@{{ lang.button_text }}</div>
+          <text-i18n v-model="form.button_text" :placeholder="lang.enter_button_text_placeholder"></text-i18n>
         </div>
         
         <div class="setting-group">
-          <div class="setting-label">按钮链接</div>
+          <div class="setting-label">@{{ lang.button_link }}</div>
           <link-selector 
             :hide-types="['catalog', 'static']" 
             v-model="form.link"

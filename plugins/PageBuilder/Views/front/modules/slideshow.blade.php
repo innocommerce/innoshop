@@ -80,7 +80,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       }
 
-      /* 响应式设计 - 移动端优化 */
+      /* Responsive design - Mobile optimization */
       @media (max-width: 768px) {
         .swiper-slide img {
           max-height: 300px;
@@ -137,42 +137,25 @@
           @foreach ($content['images'] as $image)
             <div class="swiper-slide">
               <a href="{{ $image['link']['link'] ?? 'javascript:void(0)' }}" class="slideshow-link">
-                @php
-                  $imageUrl = '';
-                  if (isset($image['image'][front_locale_code()])) {
-                      $imageUrl = $image['image'][front_locale_code()];
-                  } elseif (isset($image['image'])) {
-                      if (is_array($image['image'])) {
-                          $imageUrl = reset($image['image']);
-                      } else {
-                          $imageUrl = $image['image'];
-                      }
-                  }
-                @endphp
-                <img src="{{ $imageUrl }}" class="img-fluid" alt="">
+                <img src="{{ $image['image'] ?? '' }}" class="img-fluid" alt="">
 
                 <div class="slideshow-content position-{{ $image['title_align'] ?? 'center' }}"
                      style="margin: {{ $image['content_margin_top'] ?? 0 }}px {{ $image['content_margin_right'] ?? 0 }}px {{ $image['content_margin_bottom'] ?? 0 }}px {{ $image['content_margin_left'] ?? 0 }}px;">
-                  @if ($image['title'] ?? false)
+                  @if (!empty($image['title']))
                     <h2 class="slideshow-title mb-4"
                         style="color: {{ $image['title_color'] ?? '#ffffff' }};
                              font-size: {{ $image['title_size'] ?? 32 }}px;">
-                      {{ $image['title'][front_locale_code()] ?? ($image['title'][array_key_first($image['title'])] ?? '') }}
+                      {{ $image['title'] }}
                     </h2>
                   @endif
-                  @if ($image['subtitle'] ?? false)
+                  @if (!empty($image['subtitle']))
                     <h3 class="slideshow-subtitle mb-4"
                         style="color: {{ $image['subtitle_color'] ?? '#ffffff' }};
                              font-size: {{ $image['subtitle_size'] ?? 24 }}px;">
-                      {{ $image['subtitle'][front_locale_code()] ?? ($image['subtitle'][array_key_first($image['subtitle'])] ?? '') }}
+                      {{ $image['subtitle'] }}
                     </h3>
                   @endif
-                  @if (
-                      ($image['button_text'] ?? false) &&
-                          !empty(trim(
-                                  $image['button_text'][front_locale_code()] ??
-                                      ($image['button_text'][array_key_first($image['button_text'])] ?? ''))
-                          ))
+                  @if (!empty($image['button_text']))
                     @if (!empty($image['button_link']['link']) && $image['button_link']['link'] !== 'javascript:void(0)')
                       <a href="{{ $image['button_link']['link'] }}" class="btn"
                          style="background-color: {{ $image['button_color'] ?? '#409EFF' }};
@@ -185,7 +168,7 @@
                                text-decoration: none;
                                border-radius: 4px;"
                          onclick="event.stopPropagation();">
-                        {{ $image['button_text'][front_locale_code()] ?? ($image['button_text'][array_key_first($image['button_text'])] ?? '') }}
+                        {{ $image['button_text'] }}
                       </a>
                     @else
                       <span class="btn"
@@ -198,7 +181,7 @@
                                padding: 10px 20px;
                                text-decoration: none;
                                border-radius: 4px;">
-                        {{ $image['button_text'][front_locale_code()] ?? ($image['button_text'][array_key_first($image['button_text'])] ?? '') }}
+                        {{ $image['button_text'] }}
                       </span>
                     @endif
                   @endif
@@ -214,12 +197,12 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       new Swiper('#module-swiper-{{ $module_id }}', {
-        loop: {{ count($content['images']) > 1 ? 'true' : 'false' }},
+        loop: {{ ($content['images_count'] ?? 0) > 1 ? 'true' : 'false' }},
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
         },
-        autoplay: {{ count($content['images']) > 1 ? '{delay: 3000, disableOnInteraction: false}' : 'false' }},
+        autoplay: {{ ($content['images_count'] ?? 0) > 1 ? '{delay: 3000, disableOnInteraction: false}' : 'false' }},
       });
     });
   </script>

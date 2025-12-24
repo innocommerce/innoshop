@@ -22,22 +22,28 @@ class HomeController extends BaseController
     public function index(): mixed
     {
         $modules = plugin_setting('page_builder', 'modules');
-        $device  = request()->get('device', 'pc'); // 获取设备类型参数
+        $device  = request()->get('device', 'pc');
 
         if (empty($modules) || empty($modules['modules'])) {
-            // 如果没有模块数据，使用演示数据
             $demoData         = \Plugin\PageBuilder\Repositories\DemoRepo::getHomeDemoData();
-            $processedModules = array_map(function ($demo) {
-                return [
-                    'code'      => $demo['code'],
-                    'content'   => $demo['content'],
-                    'module_id' => $demo['module_id'] ?? uniqid(),
-                    'name'      => $demo['title'],
-                    'view_path' => '',
-                ];
-            }, $demoData);
+            $processedModules = [];
+            foreach ($demoData as $demo) {
+                $moduleCode = $demo['code'] ?? '';
+                $content    = $demo['content'] ?? [];
+
+                if ($moduleCode && $content) {
+                    $processedContent = DesignService::getInstance()->handleModuleContent($moduleCode, $content);
+
+                    $processedModules[] = [
+                        'code'      => $moduleCode,
+                        'content'   => $processedContent,
+                        'module_id' => $demo['module_id'] ?? uniqid('module-'),
+                        'name'      => $demo['title'] ?? '',
+                        'view_path' => '',
+                    ];
+                }
+            }
         } else {
-            // 使用 DesignService 处理每个模块，确保与预览一致
             $processedModules = [];
             foreach ($modules['modules'] as $module) {
                 $moduleCode = $module['code'] ?? '';

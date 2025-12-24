@@ -24,12 +24,11 @@
                     @endforeach
                 </div>
             @elseif(request('design'))
-            <div class="module-category-empty">
-                <div class="module-category-empty-text">
-                  <i class="bi bi-collection"></i>
-                  <span>暂无文章,请配置文章</span>
-                </div>
-            </div>
+                @include('PageBuilder::front.partials.module-empty', [
+                    'moduleClass' => 'article',
+                    'icon' => 'bi-collection',
+                    'message' => __('PageBuilder::modules.no_articles'),
+                ])
             @endif
         </div>
     </div>

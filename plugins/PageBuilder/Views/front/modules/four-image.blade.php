@@ -1,38 +1,46 @@
-@if(!empty($content['images']))
-<section class="module-line">
-    <div class="module-four-image">
-        <div class="{{ $content['width_class'] ?? 'container' }}">
-            @if(!empty($content['title']))
-                <div class="module-title-wrap text-center mb-4">
-                    <div class="module-title h3">{{ $content['title'][front_locale_code()] ?? '' }}</div>
-                    @if(!empty($content['subtitle']))
-                        <div class="module-sub-title text-muted">{{ $content['subtitle'][front_locale_code()] ?? '' }}</div>
-                    @endif
-                </div>
-            @endif
+@php
+  $hasImages = !empty($content['images']) && ($content['images_count'] ?? 0) > 0;
+@endphp
 
-            <div class="image-grid">
-                @foreach($content['images'] as $image)
-                    <div class="image-item">
-                        <a href="{{ $image['link']['link'] ?? 'javascript:void(0)' }}" class="d-block">
-                            <div class="image-wrap">
-                                <img src="{{ image_resize($image['image']) }}"
-                                     style="object-fit: {{ $image['object_fit'] ?? 'cover' }}"
-                                     alt="">
-                            </div>
-                            @if(!empty($image['text']))
-                                <div class="image-text">{{ $image['text'][front_locale_code()] ?? '' }}</div>
-                            @endif
-                            @if(!empty($image['sub_text']))
-                                <div class="image-sub-text">{{ $image['sub_text'][front_locale_code()] ?? '' }}</div>
-                            @endif
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+@if ($hasImages || request('design'))
+  <section class="module-line">
+    <div class="module-four-image">
+      <div class="{{ $content['width_class'] ?? pb_get_width_class($content['width'] ?? 'wide') }}">
+        @include('PageBuilder::front.partials.module-title', [
+          'title' => $content['title'] ?? '',
+          'subtitle' => $content['subtitle'] ?? '',
+        ])
+
+        @if ($hasImages)
+          <div class="image-grid">
+            @foreach($content['images'] as $image)
+              <div class="image-item">
+                <a href="{{ $image['link']['link'] ?? 'javascript:void(0)' }}" class="d-block">
+                  <div class="image-wrap">
+                    <img src="{{ image_resize($image['image']) }}"
+                         style="object-fit: {{ $image['object_fit'] ?? 'cover' }}"
+                         alt="">
+                  </div>
+                  @if(!empty($image['text']))
+                    <div class="image-text">{{ $image['text'] ?? '' }}</div>
+                  @endif
+                  @if(!empty($image['sub_text']))
+                    <div class="image-sub-text">{{ $image['sub_text'] ?? '' }}</div>
+                  @endif
+                </a>
+              </div>
+            @endforeach
+          </div>
+        @elseif (request('design'))
+          @include('PageBuilder::front.partials.module-empty', [
+            'moduleClass' => 'four-image',
+            'icon' => 'bi-layout-text-window-reverse',
+            'message' => __('PageBuilder::modules.no_images'),
+          ])
+        @endif
+      </div>
     </div>
-</section>
+  </section>
 
 <style>
 .module-four-image {
@@ -98,7 +106,7 @@
         gap: 10px;
     }
     .module-four-image .image-wrap {
-        height: 150px; /* 移动端图片高度减半 */
+        height: 150px; /* Mobile image height halved */
     }
 }
 </style>

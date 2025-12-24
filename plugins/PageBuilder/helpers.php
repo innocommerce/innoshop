@@ -8,31 +8,31 @@
  */
 if (! function_exists('pb_get_bootstrap_columns')) {
     /**
-     * 获取Bootstrap列类名
+     * Get Bootstrap column classes
      *
-     * @param  int  $columns  列数
+     * @param  int  $columns  Number of columns
      * @return string
      */
     function pb_get_bootstrap_columns(int $columns): string
     {
         switch ($columns) {
             case 3:
-                return 'col-6 col-md-6 col-lg-4'; // 手机2列，平板2列，桌面3列
+                return 'col-6 col-md-6 col-lg-4';
             case 4:
-                return 'col-6 col-md-4 col-lg-3'; // 手机2列，平板3列，桌面4列
+                return 'col-6 col-md-4 col-lg-3';
             case 6:
-                return 'col-4 col-md-3 col-lg-2'; // 手机3列，平板4列，桌面6列
+                return 'col-4 col-md-3 col-lg-2';
             default:
-                return 'col-6 col-md-4 col-lg-3'; // 默认4列布局
+                return 'col-6 col-md-4 col-lg-3';
         }
     }
 }
 
 if (! function_exists('pb_get_width_class')) {
     /**
-     * 获取宽度类名
+     * Get width class name
      *
-     * @param  string|null  $width  宽度值
+     * @param  string|null  $width  Width value
      * @return string
      */
     function pb_get_width_class(?string $width = 'wide'): string

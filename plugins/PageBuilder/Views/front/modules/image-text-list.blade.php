@@ -7,15 +7,15 @@
     <div class="{{ pb_get_width_class($content['width'] ?? 'wide') }}">
       
       {{-- 模块标题 --}}
-      @if(!empty($content['title'][$locale] ?? $content['title']))
+      @if(!empty($content['title']))
         <div class="module-title-wrap text-center">
-          <div class="module-title">{{ $content['title'][$locale] ?? $content['title'] }}</div>
+          <div class="module-title">{{ $content['title'] }}</div>
         </div>
       @endif
 
       {{-- 图文列表展示 --}}
       <div class="image-text-showcase">
-        @if(!empty($content['imageTextItems']) && count($content['imageTextItems']) > 0)
+        @if(!empty($content['imageTextItems']) && ($content['imageTextItems_count'] ?? 0) > 0)
           <div class="image-text-grid image-text-grid-{{ $content['columns'] ?? 4 }}" 
                @if($content['autoplay']) 
                  data-autoplay="true" 
@@ -29,8 +29,8 @@
                   @endif
                   
                   <img 
-                    src="{{ $item['image'][$locale] ?? $item['image'] }}" 
-                    alt="{{ $item['name'] }}"
+                    src="{{ $item['image'] ?? '' }}" 
+                    alt="{{ $item['name'] ?? '' }}"
                     class="item-image"
                     loading="lazy"
                   >
@@ -46,13 +46,12 @@
               </div>
             @endforeach
           </div>
-        @else
-          {{-- 空状态 --}}
-          <div class="image-text-empty">
-            <i class="bi bi-grid-3x3-gap"></i>
-            <p>暂无图文项</p>
-            <span>请在后台添加图文项</span>
-          </div>
+        @elseif(request('design'))
+          @include('PageBuilder::front.partials.module-empty', [
+              'moduleClass' => 'image-text-list',
+              'icon' => 'bi-grid-3x3-gap',
+              'message' => __('PageBuilder::modules.no_image_text_items'),
+          ])
         @endif
       </div>
     </div>
@@ -63,11 +62,11 @@
       <div class="edit-wrap">
         <div class="edit" onclick="editModule('{{ $module_id }}')">
           <i class="bi bi-pencil"></i>
-          <span>编辑</span>
+          <span>{{ __('PageBuilder::modules.edit') }}</span>
         </div>
         <div class="delete" onclick="deleteModule('{{ $module_id }}')">
           <i class="bi bi-trash"></i>
-          <span>删除</span>
+          <span>{{ __('PageBuilder::modules.delete') }}</span>
         </div>
         <div class="up" onclick="moveModule('{{ $module_id }}', 'up')">
           <i class="bi bi-arrow-up"></i>
@@ -171,28 +170,6 @@
   line-height: 1.4;
 }
 
-.image-text-empty {
-  text-align: center;
-  padding: 60px 20px;
-  color: #999;
-}
-
-.image-text-empty i {
-  font-size: 48px;
-  margin-bottom: 16px;
-  display: block;
-  color: #ccc;
-}
-
-.image-text-empty p {
-  margin: 0 0 8px 0;
-  font-size: 16px;
-}
-
-.image-text-empty span {
-  font-size: 14px;
-  color: #bbb;
-}
 
 /* 轮播动画 */
 @keyframes imageTextSlide {

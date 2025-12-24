@@ -2,7 +2,7 @@
   <div class="link-selector-wrap">
     <div class="selector-type" @blur="selectorContentShow = false" tabindex="1">
       <div class="title" v-if="!link.type || link.type === '' || !value.value"
-        @click="toggleSelector">请选择链接类型
+        @click="toggleSelector">@{{ lang.select_link_type }}
       </div>
       <div class="title" @click="toggleSelector" v-else :title="name"
         v-loading="nameLoading">@{{ selectorTitle }}: @{{ name[0]?.name ?? '' }}
@@ -10,7 +10,7 @@
       <div :class="'selector-content ' + (selectorContentShow ? 'active' : '') + (shouldShowUpward ? ' bottom-up' : '')">
         <div @click="selectorType()">
           <i class="el-icon-close"></i>
-          无
+          @{{ lang.none }}
         </div>
         <div v-for="(type, index) in types" :key="index" @click="selectorType(type.type)">
           <i :class="getTypeIcon(type.type)"></i>
@@ -24,31 +24,31 @@
       <div slot="title" class="link-dialog-header">
         <div class="title">选择@{{ dialogTitle }}</div>
         <div class="input-with-select" v-if="link.type != 'custom'">
-          <input type="text" placeholder="请输入关键字搜索" v-model="keyword" @keyup.enter="searchProduct"
+          <input type="text" :placeholder="lang.enter_keyword_search" v-model="keyword" @keyup.enter="searchProduct"
             class="form-control">
-          <el-button @click="searchProduct"><i class="el-icon-search"></i> 搜索</el-button>
+          <el-button @click="searchProduct"><i class="el-icon-search"></i> @{{ lang.search }}</el-button>
         </div>
       </div>
       <div class="link-dialog-content">
         <div class="product-search">
           <div class="link-top-new">
-            <span>是新窗口打开:</span>
+            <span>@{{ lang.new_window_open }}</span>
             <el-switch :width="36" @change="linksNewBack" v-model="link.new_window"></el-switch>
           </div>
 
           <a :href="linkTypeAdmin" target="_blank"
-            v-if="link.type != 'custom' && link.type != 'static'">管理@{{ dialogTitle }}</a>
+            v-if="link.type != 'custom' && link.type != 'static'">@{{ lang.manage }}@{{ dialogTitle }}</a>
         </div>
 
         <div class="link-text" v-if="isCustomName">
           <div class="module-edit-group edit-group-margin">
-            <div class="module-edit-title">自定义名称</div>
+            <div class="module-edit-title">@{{ lang.custom_name }}</div>
             <text-i18n v-model="link.text"></text-i18n>
           </div>
         </div>
         <template v-if="link.type == 'custom'">
           <div class="linkDialog-custom">
-            <el-input v-model="link.value" placeholder="请输入链接地址"></el-input>
+            <el-input v-model="link.value" :placeholder="lang.enter_link_address"></el-input>
           </div>
         </template>
         <template v-else-if="link.type == 'static'">
@@ -69,8 +69,8 @@
           <div class="product-info" v-loading="loading">
             <template v-if="linkDialog.data.length">
               <div class="product-info-title">
-                <span>内容</span>
-                <span>状态</span>
+                <span>@{{ lang.content }}</span>
+                <span>@{{ lang.status }}</span>
               </div>
 
               <ul class="product-list">
@@ -84,22 +84,22 @@
                     <div class="product-name">@{{ product.name }}</div>
                   </div>
                   <div :class="'status-cell ' + (product.active ? 'ok' : 'no')">
-                    <template v-if="product.active">启用</template>
-                    <template v-else>禁用</template>
+                    <template v-if="product.active">@{{ lang.enabled }}</template>
+                    <template v-else>@{{ lang.disabled }}</template>
                   </div>
                 </li>
               </ul>
             </template>
             <div class="product-info-no" v-if="!linkDialog.data.length && loading === false">
               <div class="icon"><i class="el-icon-warning"></i></div>
-              <div class="no-text">数据不存在或已被删除, <a :href="linkTypeAdmin" target="_blank">去添加@{{ dialogTitle }}</a>
+              <div class="no-text">@{{ lang.data_not_exists }}, <a :href="linkTypeAdmin" target="_blank">@{{ lang.go_add }}@{{ dialogTitle }}</a>
               </div>
             </div>
           </div>
         </template>
       </div>
       <div slot="footer" class="link-dialog-footer">
-        <el-button type="primary" @click="linkDialogConfirm">确 定</el-button>
+        <el-button type="primary" @click="linkDialogConfirm">@{{ lang.confirm_button }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -140,51 +140,51 @@
       return {
         types: [{
             type: 'product',
-            label: '商品链接'
+            label: lang.product_link
           },
           {
             type: 'category',
-            label: '商品分类'
+            label: lang.product_category
           },
           {
             type: 'page',
-            label: '特定页面'
+            label: lang.specific_page
           },
           {
             type: 'catalog',
-            label: '文章分类'
+            label: lang.article_category
           },
           {
             type: 'brand',
-            label: '商品品牌'
+            label: lang.product_brand
           },
           {
             type: 'static',
-            label: '固定连接'
+            label: lang.fixed_link
           },
           {
             type: 'custom',
-            label: '自定义'
+            label: lang.custom
           }
         ],
         static: [{
-            name: '个人中心',
+            name: lang.account_center,
             value: 'account.index'
           },
           {
-            name: '我的收藏',
+            name: lang.my_favorites,
             value: 'account.wishlist.index'
           },
           {
-            name: '我的订单',
+            name: lang.my_orders,
             value: 'account.order.index'
           },
           {
-            name: '最新商品',
+            name: lang.latest_products,
             value: 'account.index'
           },
           {
-            name: '品牌列表',
+            name: lang.brand_list,
             value: 'brands.index'
           },
         ],
@@ -231,34 +231,34 @@
     computed: {
       dialogTitle: function() {
         const foundType = this.types.find(e => e.type == this.link.type);
-        return foundType ? foundType.label : '选择链接';
+        return foundType ? foundType.label : lang.select_link;
       },
       selectorTitle() {
         // 添加安全检查，防止value或value.type为undefined
         if (!this.value || !this.value.type) {
-          return '请选择链接类型';
+          return lang.select_link_type;
         }
         const foundType = this.types.find(e => e.type == this.value.type);
-        return foundType ? foundType.label : '未知类型';
+        return foundType ? foundType.label : lang.select_link_type;
       },
       linkTypeAdmin: function() {
         let url = '';
         switch (this.link.type) {
           case 'product':
-            url = '/panel/products';
-            break;
-          case 'category':
-            url = '/panel/categories';
-            break;
-          case 'brand':
-            url = '/panel/brands';
-            break;
-          case 'page':
-            url = '/panel/pages';
-            break;
-          case 'catalog':
-            url = '/panel/catalogs';
-            break;
+              url = $panelBaseUrl + '/products';
+              break;
+            case 'category':
+              url = $panelBaseUrl + '/categories';
+              break;
+            case 'brand':
+              url = $panelBaseUrl + '/brands';
+              break;
+            case 'page':
+              url = $panelBaseUrl + '/pages';
+              break;
+            case 'catalog':
+              url = $panelBaseUrl + '/catalogs';
+              break;
           default:
             url = '';
         }
@@ -552,13 +552,13 @@
             self.name = res.data;
           } else {
             self.name = [{
-              name: '数据不存在或已被删除'
+              name: lang.data_not_exists
             }];
           }
         }).catch((error) => {
           console.warn('Failed to load link name:', error);
           self.name = [{
-            name: '数据不存在或已被删除'
+            name: lang.data_not_exists
           }];
         }).finally(() => {
           self.nameLoading = false;

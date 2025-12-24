@@ -48,7 +48,20 @@
       @include('PageBuilder::design.layouts.sidebar')
       
       <div class="preview-iframe">
-        <iframe src="{{ front_route('home.index') }}?design=1" frameborder="0" id="preview-iframe" width="100%" height="100%"></iframe>
+        @php
+          $isHomePage = ($page ?? 'home') === 'home';
+          if ($isHomePage) {
+            $previewUrl = front_route('home.index') . '?design=1';
+          } else {
+            $pageModel = $pageModel ?? null;
+            if ($pageModel && $pageModel->slug) {
+              $previewUrl = $pageModel->url . '?design=1';
+            } else {
+              $previewUrl = front_route('home.index') . '?design=1';
+            }
+          }
+        @endphp
+        <iframe src="{{ $previewUrl }}" frameborder="0" id="preview-iframe" width="100%" height="100%"></iframe>
       </div>
     </div>
   </div>

@@ -5,26 +5,26 @@
     
     {{-- 模块宽度设置 --}}
     <div class="editor-section">
-      <div class="section-title">模块宽度</div>
+      <div class="section-title">@{{ lang.module_width }}</div>
       <div class="section-content">
         <div class="segmented-buttons">
           <div 
             :class="['segmented-btn', { active: form.width === 'narrow' }]" 
             @click="form.width = 'narrow'"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'wide' }]" 
             @click="form.width = 'wide'"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'full' }]" 
             @click="form.width = 'full'"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -32,27 +32,27 @@
 
     {{-- 模块标题 --}}
     <div class="editor-section">
-      <div class="section-title">模块标题</div>
+      <div class="section-title">@{{ lang.module_title }}</div>
       <div class="section-content">
-        <text-i18n v-model="form.title" @change="onChange" placeholder="请输入模块标题"></text-i18n>
+        <text-i18n v-model="form.title" @change="onChange" :placeholder="lang.enter_module_title"></text-i18n>
       </div>
     </div>
 
     {{-- 副标题 --}}
     <div class="editor-section">
-      <div class="section-title">副标题</div>
+      <div class="section-title">@{{ lang.subtitle }}</div>
       <div class="section-content">
-        <text-i18n v-model="form.subtitle" @change="onChange" placeholder="请输入副标题"></text-i18n>
+        <text-i18n v-model="form.subtitle" @change="onChange" :placeholder="lang.enter_subtitle"></text-i18n>
       </div>
     </div>
 
     {{-- 图片设置 --}}
     <div class="editor-section">
-      <div class="section-title">图片设置</div>
+      <div class="section-title">@{{ lang.image_settings }}</div>
       <div class="section-content">
         <div class="setting-tip">
           <i class="el-icon-info"></i>
-          建议上传相同尺寸的图片，支持拖拽排序
+          @{{ lang.recommended_same_size_drag }}
         </div>
         
         <div class="row-manager">
@@ -60,17 +60,17 @@
             <div class="row-item" v-for="(row, rowIndex) in form.rows" :key="rowIndex">
               <div class="row-header">
                 <div class="row-info">
-                  <span class="row-title">第 @{{ rowIndex + 1 }} 行</span>
-                  <el-select v-model="row.count" placeholder="每行显示数量" size="small" @change="onChange">
-                    <el-option label="每行3个" :value="3"></el-option>
-                    <el-option label="每行4个" :value="4"></el-option>
-                    <el-option label="每行6个" :value="6"></el-option>
+                  <span class="row-title">@{{ lang.row }} @{{ rowIndex + 1 }}</span>
+                  <el-select v-model="row.count" :placeholder="lang.items_per_row_select" size="small" @change="onChange">
+                    <el-option :label="lang.row_3_items" :value="3"></el-option>
+                    <el-option :label="lang.row_4_items" :value="4"></el-option>
+                    <el-option :label="lang.row_6_items" :value="6"></el-option>
                   </el-select>
                 </div>
                 <div class="row-actions">
                   <el-button type="text" @click="row.collapsed = !row.collapsed" size="small">
                     <i :class="row.collapsed ? 'el-icon-arrow-down' : 'el-icon-arrow-up'"></i>
-                    @{{ row.collapsed ? '展开' : '收起' }}
+                    @{{ row.collapsed ? lang.expand : lang.collapse }}
                   </el-button>
                   <el-button type="text" @click="removeRow(rowIndex)" icon="el-icon-delete" size="small"></el-button>
                 </div>
@@ -88,52 +88,52 @@
 
                     <div class="image-details">
                       <div class="setting-group">
-                        <div class="setting-label">图片说明</div>
-                        <text-i18n v-model="item.description" @change="onChange" placeholder="请输入图片说明"></text-i18n>
+                        <div class="setting-label">@{{ lang.image_description }}</div>
+                        <text-i18n v-model="item.description" @change="onChange" :placeholder="lang.enter_image_description"></text-i18n>
                       </div>
                       
                       <div class="setting-group">
-                        <div class="setting-label">图片链接</div>
+                        <div class="setting-label">@{{ lang.image_link }}</div>
                         <link-selector :hide-types="['catalog', 'static']" v-model="item.link" @change="onChange"></link-selector>
                       </div>
                       
                       <div class="setting-group">
-                        <div class="setting-label">选择图片</div>
+                        <div class="setting-label">@{{ lang.select_image }}</div>
                         <single-image-selector v-model="item.image" :aspectRatio="1" :targetWidth="400"
                           :targetHeight="400" @change="onChange"></single-image-selector>
-                        <div class="upload-tip">建议尺寸: 400 x 400，图片比例1:1</div>
+                        <div class="upload-tip">@{{ lang.recommended_size_400 }}</div>
                       </div>
                       
                       <div class="setting-group">
-                        <div class="setting-label">描述背景色</div>
+                        <div class="setting-label">@{{ lang.desc_bg_color }}</div>
                         <input type="color" v-model="item.descBgColor" @change="onChange" style="width: 40px; height: 24px; border: none; border-radius: 4px;">
                       </div>
                       
                       <div class="setting-group">
-                        <div class="setting-label">描述文字色</div>
+                        <div class="setting-label">@{{ lang.desc_text_color }}</div>
                         <input type="color" v-model="item.descTextColor" @change="onChange" style="width: 40px; height: 24px; border: none; border-radius: 4px;">
                       </div>
                       
-                                              <div class="setting-group">
-                          <div class="setting-label">描述文字大小</div>
-                          <el-input-number v-model="item.descFontSize" :min="10" :max="32" size="small" @change="onChange" style="width: 100%;"></el-input-number>
-                          <div class="setting-tip">
-                            <i class="el-icon-info"></i>
-                            单位：像素，建议设置 12-24
-                          </div>
+                      <div class="setting-group">
+                        <div class="setting-label">@{{ lang.desc_font_size }}</div>
+                        <el-input-number v-model="item.descFontSize" :min="10" :max="32" size="small" @change="onChange" style="width: 100%;"></el-input-number>
+                        <div class="setting-tip">
+                          <i class="el-icon-info"></i>
+                          @{{ lang.desc_font_size_tip }}
                         </div>
+                      </div>
                     </div>
                   </div>
                 </template>
                 
                 <div v-else class="empty-state">
                   <i class="el-icon-picture-outline"></i>
-                  <p>暂无图片，请点击下方按钮添加</p>
+                  <p>@{{ lang.no_images_click_add }}</p>
                 </div>
 
                 <div class="add-image" v-if="!row.images || row.images.length < row.count">
                   <el-button type="primary" size="small" @click="addImage(rowIndex)" icon="el-icon-circle-plus-outline">
-                    添加图片 (@{{ row.images ? row.images.length : 0 }}/@{{ row.count }})
+                    @{{ lang.add_image_with_count }} (@{{ row.images ? row.images.length : 0 }}/@{{ row.count }})
                   </el-button>
                 </div>
               </div>
@@ -142,7 +142,7 @@
 
           <div class="add-row">
             <el-button type="primary" size="small" @click="addRow()" icon="el-icon-circle-plus-outline">
-              添加新行
+              @{{ lang.add_new_row }}
             </el-button>
           </div>
         </div>

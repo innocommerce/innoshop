@@ -7,7 +7,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-monitor"></i>
-        模块宽度
+        @{{ lang.module_width }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -15,19 +15,19 @@
             :class="['segmented-btn', { active: form.width === 'narrow' }]" 
             @click="setModuleWidth('narrow')"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'wide' }]" 
             @click="setModuleWidth('wide')"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: form.width === 'full' }]" 
             @click="setModuleWidth('full')"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -37,13 +37,13 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-edit"></i>
-        模块标题
+        @{{ lang.module_title }}
       </div>
       <div class="section-content">
         <text-i18n 
           v-model="form.title" 
           @change="onChange" 
-          placeholder="请输入模块标题"
+          :placeholder="lang.enter_module_title"
         ></text-i18n>
       </div>
     </div>
@@ -52,13 +52,13 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-edit-outline"></i>
-        副标题
+        @{{ lang.subtitle }}
       </div>
       <div class="section-content">
         <text-i18n 
           v-model="form.subtitle" 
           @change="onChange" 
-          placeholder="请输入副标题"
+          :placeholder="lang.enter_subtitle"
         ></text-i18n>
       </div>
     </div>
@@ -67,24 +67,24 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-setting"></i>
-        显示设置
+        @{{ lang.display_settings }}
       </div>
       <div class="section-content">
         {{-- 每行显示数量设置 --}}
                         <div class="setting-group">
-                  <div class="setting-label">每行显示数量</div>
+                  <div class="setting-label">@{{ lang.items_per_row }}</div>
                   <div class="segmented-buttons">
                     <div
                       :class="['segmented-btn', { active: form.columns === 3 }]"
                       @click="setColumns(3)"
                     >
-                      3个
+                      @{{ lang.items_3 }}
                     </div>
                     <div
                       :class="['segmented-btn', { active: form.columns === 4 }]"
                       @click="setColumns(4)"
                     >
-                      4个
+                      @{{ lang.items_4 }}
                     </div>
                   </div>
                 </div>
@@ -95,12 +95,12 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-document"></i>
-        文章管理
+        @{{ lang.article_management }}
       </div>
       <div class="section-content">
         <div class="setting-tip">
           <i class="el-icon-info"></i>
-          支持拖拽排序，可添加多篇文章
+          @{{ lang.drag_sort_add_multiple }}
         </div>
 
         <div class="search-section">
@@ -109,7 +109,7 @@
             value-key="name" 
             size="small"
             :fetch-suggestions="querySearch" 
-            placeholder="请输入关键字搜索文章" 
+            :placeholder="lang.search_article_placeholder" 
             :highlight-first-item="true"
             @select="handleSelect" 
             style="width: 100%;"
@@ -127,14 +127,14 @@
             >
               <div v-for="(item, index) in articleData" :key="index" class="article-item">
                 <div class="article-info">
-                  <el-tooltip class="drag-handle" effect="dark" content="拖动排序" placement="left">
+                  <el-tooltip class="drag-handle" effect="dark" :content="lang.drag_sort" placement="left">
                     <i class="el-icon-rank"></i>
                   </el-tooltip>
                   <i class="el-icon-document"></i>
                   <span class="article-title">@{{ item.name }}</span>
                 </div>
                 <div class="article-actions">
-                  <el-tooltip effect="dark" content="删除" placement="left">
+                  <el-tooltip effect="dark" :content="lang.delete" placement="left">
                     <div class="remove-btn" @click="removeArticle(index)">
                       <i class="el-icon-delete"></i>
                     </div>
@@ -146,7 +146,7 @@
           <template v-else>
             <div class="empty-state">
               <i class="el-icon-document"></i>
-              <p>暂无文章</p>
+              <p>@{{ lang.no_articles_editor }}</p>
               <span>请搜索并添加文章</span>
             </div>
           </template>

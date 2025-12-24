@@ -12,7 +12,7 @@ namespace Plugin\PageBuilder\Repositories;
 class DemoRepo
 {
     /**
-     * 获取首页演示数据
+     * Get home page demo data
      */
     public static function getHomeDemoData(): array
     {

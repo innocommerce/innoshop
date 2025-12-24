@@ -1,4 +1,8 @@
-@if(!empty($content['images']))
+@php
+  $hasImages = !empty($content['images']) && count($content['images']) > 0;
+@endphp
+
+@if($hasImages || request('design'))
 <section class="module-line">
     <div class="module-four-image-plus">
         <div class="{{ $content['width_class'] ?? 'container' }}">
@@ -11,6 +15,7 @@
                 </div>
             @endif
 
+            @if($hasImages)
             <div class="row g-3">
                 <div class="col-md-6">
                     @if(isset($content['images'][0]))
@@ -55,6 +60,13 @@
                     </div>
                 </div>
             </div>
+            @elseif(request('design'))
+                @include('PageBuilder::front.partials.module-empty', [
+                    'moduleClass' => 'four-image-plus',
+                    'icon' => 'bi-layout-text-window-reverse',
+                    'message' => __('PageBuilder::modules.no_images'),
+                ])
+            @endif
         </div>
     </div>
 </section>

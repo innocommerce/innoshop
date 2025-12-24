@@ -7,7 +7,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-monitor"></i>
-        模块宽度
+        @{{ lang.module_width }}
       </div>
       <div class="section-content">
         <div class="segmented-buttons">
@@ -15,19 +15,19 @@
             :class="['segmented-btn', { active: module.width === 'narrow' }]" 
             @click="setModuleWidth('narrow')"
           >
-            窄屏
+            @{{ lang.narrow_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'wide' }]" 
             @click="setModuleWidth('wide')"
           >
-            宽屏
+            @{{ lang.wide_screen }}
           </div>
           <div 
             :class="['segmented-btn', { active: module.width === 'full' }]" 
             @click="setModuleWidth('full')"
           >
-            全屏
+            @{{ lang.full_screen }}
           </div>
         </div>
       </div>
@@ -37,13 +37,13 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-edit"></i>
-        模块标题
+        @{{ lang.module_title }}
       </div>
       <div class="section-content">
         <text-i18n 
           v-model="module.title" 
           @change="onChange" 
-          placeholder="请输入模块标题"
+          :placeholder="lang.enter_module_title"
         ></text-i18n>
       </div>
     </div>
@@ -52,49 +52,49 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-setting"></i>
-        显示设置
+        @{{ lang.display_settings }}
       </div>
       <div class="section-content">
         {{-- 每行显示数量设置 --}}
         <div class="setting-group">
-          <div class="setting-label">每行显示数量</div>
+          <div class="setting-label">@{{ lang.items_per_row }}</div>
           <div class="segmented-buttons">
             <div 
               :class="['segmented-btn', { active: module.columns === 3 }]" 
               @click="setColumns(3)"
             >
-              3个
+              @{{ lang.items_3 }}
             </div>
             <div 
               :class="['segmented-btn', { active: module.columns === 4 }]" 
               @click="setColumns(4)"
             >
-              4个
+              @{{ lang.items_4 }}
             </div>
             <div 
               :class="['segmented-btn', { active: module.columns === 5 }]" 
               @click="setColumns(5)"
             >
-              5个
+              @{{ lang.items_5 }}
             </div>
             <div 
               :class="['segmented-btn', { active: module.columns === 6 }]" 
               @click="setColumns(6)"
             >
-              6个
+              @{{ lang.items_6 }}
             </div>
           </div>
         </div>
 
         {{-- 自动轮播设置 --}}
         <div class="setting-group">
-          <div class="setting-label">自动轮播</div>
+          <div class="setting-label">@{{ lang.autoplay }}</div>
           <div class="switch-wrapper">
             <el-switch 
               v-model="module.autoplay" 
               @change="onChange"
-              active-text="启用" 
-              inactive-text="禁用"
+              :active-text="lang.enable" 
+              :inactive-text="lang.disable"
               size="small"
             ></el-switch>
           </div>
@@ -102,7 +102,7 @@
 
         {{-- 轮播间隔时间 --}}
         <div class="setting-group" v-if="module.autoplay">
-          <div class="setting-label">轮播间隔时间</div>
+          <div class="setting-label">@{{ lang.autoplay_interval_time }}</div>
           <el-input-number 
             v-model="module.autoplaySpeed" 
             @change="onChange"
@@ -114,19 +114,19 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：毫秒，建议设置 3000-5000
+            @{{ lang.autoplay_interval_tip }}
           </div>
         </div>
 
         {{-- 显示标题 --}}
         <div class="setting-group">
-          <div class="setting-label">显示标题</div>
+          <div class="setting-label">@{{ lang.show_title }}</div>
           <div class="switch-wrapper">
             <el-switch 
               v-model="module.showNames" 
               @change="onChange"
-              active-text="显示" 
-              inactive-text="隐藏"
+              :active-text="lang.show" 
+              :inactive-text="lang.hide"
               size="small"
             ></el-switch>
           </div>
@@ -134,7 +134,7 @@
 
         {{-- 图片高度设置 --}}
         <div class="setting-group">
-          <div class="setting-label">图片高度</div>
+          <div class="setting-label">@{{ lang.image_height }}</div>
           <el-input-number 
             v-model="module.itemHeight" 
             @change="onChange"
@@ -146,13 +146,13 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，建议设置 80-200
+            @{{ lang.image_height_tip }}
           </div>
         </div>
 
         {{-- 内边距设置 --}}
         <div class="setting-group">
-          <div class="setting-label">内边距</div>
+          <div class="setting-label">@{{ lang.padding }}</div>
           <el-input-number 
             v-model="module.padding" 
             @change="onChange"
@@ -164,13 +164,13 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，0为无内边距，控制图片和文字与卡片边缘的间距
+            @{{ lang.padding_tip_image_text }}
           </div>
         </div>
 
         {{-- 边框圆角 --}}
         <div class="setting-group">
-          <div class="setting-label">边框圆角</div>
+          <div class="setting-label">@{{ lang.border_radius }}</div>
           <el-input-number 
             v-model="module.borderRadius" 
             @change="onChange"
@@ -182,13 +182,13 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，0为直角，建议设置 4-16
+            @{{ lang.border_radius_tip }}
           </div>
         </div>
 
         {{-- 边框宽度 --}}
         <div class="setting-group">
-          <div class="setting-label">边框宽度</div>
+          <div class="setting-label">@{{ lang.border_width }}</div>
           <el-input-number 
             v-model="module.borderWidth" 
             @change="onChange"
@@ -200,13 +200,13 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            单位：像素，0为无边框
+            @{{ lang.border_width_tip }}
           </div>
         </div>
 
         {{-- 边框颜色 --}}
         <div class="setting-group">
-          <div class="setting-label">边框颜色</div>
+          <div class="setting-label">@{{ lang.border_color }}</div>
           <el-color-picker 
             v-model="module.borderColor" 
             @change="onChange"
@@ -218,17 +218,17 @@
 
         {{-- 边框样式 --}}
         <div class="setting-group">
-          <div class="setting-label">边框样式</div>
+          <div class="setting-label">@{{ lang.border_style }}</div>
           <el-select 
             v-model="module.borderStyle" 
             @change="onChange"
             size="small"
             style="width: 100%;"
           >
-            <el-option label="实线" value="solid"></el-option>
-            <el-option label="虚线" value="dashed"></el-option>
-            <el-option label="点线" value="dotted"></el-option>
-            <el-option label="双线" value="double"></el-option>
+            <el-option :label="lang.solid" value="solid"></el-option>
+            <el-option :label="lang.dashed" value="dashed"></el-option>
+            <el-option :label="lang.dotted" value="dotted"></el-option>
+            <el-option :label="lang.double" value="double"></el-option>
           </el-select>
         </div>
       </div>
@@ -238,7 +238,7 @@
     <div class="editor-section">
       <div class="section-title">
         <i class="el-icon-picture"></i>
-        图文项管理
+        @{{ lang.image_text_item_management }}
       </div>
       <div class="section-content">
         {{-- 图文项列表 --}}
@@ -289,8 +289,8 @@
           {{-- 空状态 --}}
           <div v-else class="empty-state">
             <i class="el-icon-picture-outline"></i>
-            <p>暂无图文项</p>
-            <span>点击下方按钮添加图文项</span>
+            <p>@{{ lang.no_image_text_items }}</p>
+            <span>@{{ lang.click_add_image_text_item }}</span>
           </div>
         </div>
 
@@ -303,7 +303,7 @@
             size="small"
             style="width: 100%;"
           >
-            添加图文项
+            @{{ lang.add_image_text_item }}
           </el-button>
         </div>
       </div>
@@ -311,7 +311,7 @@
 
     {{-- 图文项编辑对话框 --}}
     <el-dialog 
-      :title="editingItemIndex === -1 ? '添加图文项' : '编辑图文项'" 
+      :title="editingItemIndex === -1 ? lang.add_image_text_item_dialog : lang.edit_image_text_item_dialog" 
       :visible.sync="showItemDialog" 
       width="500px"
       @close="closeItemDialog"
@@ -319,17 +319,17 @@
       <div class="item-form">
         {{-- 标题 --}}
         <div class="form-group">
-          <label>标题</label>
+          <label>@{{ lang.item_title }}</label>
           <el-input 
             v-model="editingItem.name" 
-            placeholder="请输入标题"
+            :placeholder="lang.enter_item_title"
             size="small"
           ></el-input>
         </div>
 
         {{-- 图片 --}}
         <div class="form-group">
-          <label>图片</label>
+          <label>@{{ lang.item_image }}</label>
           <single-image-selector 
             v-model="editingItem.image" 
             :aspectRatio="2/1" 
@@ -338,16 +338,16 @@
           ></single-image-selector>
           <div class="form-tip">
             <i class="el-icon-info"></i>
-            建议尺寸: 200 x 100 (2:1比例)
+            @{{ lang.recommended_size_200_100 }}
           </div>
         </div>
 
         {{-- 链接 --}}
         <div class="form-group">
-          <label>链接 (可选)</label>
+          <label>@{{ lang.item_link_optional }}</label>
           <link-selector 
             v-model="editingItem.link" 
-            placeholder="请选择或输入链接"
+            :placeholder="lang.select_link_type"
             :is-title="false"
           ></link-selector>
           <div class="form-tip" v-if="editingItem.link && editingItem.link.value">
@@ -358,8 +358,8 @@
       </div>
       
       <div slot="footer" class="dialog-footer">
-        <el-button @click="closeItemDialog">取消</el-button>
-        <el-button type="primary" @click="saveItem">确定</el-button>
+        <el-button @click="closeItemDialog">@{{ lang.cancel }}</el-button>
+        <el-button type="primary" @click="saveItem">@{{ lang.confirm_button }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -403,7 +403,7 @@
     created: function() {
       // 初始化默认值
         if (!this.module.title) {
-          this.$set(this.module, 'title', this.languagesFill('图文列表'));
+          this.$set(this.module, 'title', this.languagesFill(''));
         }
       if (!this.module.imageTextItems) {
         this.$set(this.module, 'imageTextItems', []);
