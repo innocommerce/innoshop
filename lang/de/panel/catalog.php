@@ -8,6 +8,7 @@
  */
 
 return [
-    'parent' => 'Übergeordnete Kategorie',
-    'title'  => 'Titel',
+    'parent'       => 'Übergeordnete Kategorie',
+    'root_catalog' => 'Wurzelzeug.',
+    'title'        => 'Titel',
 ];

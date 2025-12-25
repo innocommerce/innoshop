@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Bekukan baki',
     'input_balance_total'  => 'Baki yang dimasukkan hendaklah kurang daripada harga item',
     'input_should_balance' => 'Baki yang dimasukkan hendaklah kurang daripada atau sama dengan baki yang tersedia',
+    'no_transactions'      => 'Tiada rekod transaksi buat masa ini',
     'total'                => 'Jumlah Baki',
     'transaction'          => 'Baki saya',
     'type'                 => 'Jenis',

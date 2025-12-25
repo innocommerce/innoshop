@@ -1,0 +1,8 @@
+@extends('front::layouts.app')
+
+@section('content')
+  <div class="container">
+    {{-- Your theme content here --}}
+  </div>
+@endsection
+

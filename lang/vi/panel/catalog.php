@@ -8,6 +8,7 @@
  */
 
 return [
-    'parent' => 'Phân loại cha',
-    'title'  => 'Tiêu đề',
+    'parent'       => 'Phân loại cha',
+    'root_catalog' => 'Sự phân loại gốc rễ',
+    'title'        => 'Tiêu đề',
 ];

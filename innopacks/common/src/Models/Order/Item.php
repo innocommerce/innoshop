@@ -101,7 +101,10 @@ class Item extends BaseModel
      */
     public function getSubtotalAttribute(): float
     {
-        return round($this->price * $this->quantity, 2);
+        $order   = $this->order;
+        $decimal = currency_decimal_place($order->currency_code ?? '');
+
+        return round($this->price * $this->quantity, $decimal);
     }
 
     /**

@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'ចំណាត់ថ្នាក់',
     'category'       => 'Product Category',
     'content'        => 'Detailed description',
     'default'        => 'Default',

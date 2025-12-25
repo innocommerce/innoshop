@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => '分類',
     'category'       => '產品分類',
     'content'        => '詳細描述',
     'default'        => '預設',

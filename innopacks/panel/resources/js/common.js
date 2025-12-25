@@ -1,9 +1,28 @@
 export default {
   /**
+   * Get panel base URL safely
+   * @returns {string} Panel base URL
+   */
+  getPanelBaseUrl() {
+    if (typeof urls !== 'undefined' && urls.panel_base) {
+      return urls.panel_base;
+    }
+    // Fallback to base tag href or current origin
+    const baseTag = document.querySelector('base');
+    if (baseTag && baseTag.href) {
+      return baseTag.href.replace(/\/$/, '');
+    }
+    return window.location.origin;
+  },
+
+  /**
    * Initialize translation functionality for the admin panel
    * Handles text translation, HTML content translation, and individual field translation
    */
   getTranslate() {
+    const self = this;
+    const getPanelBaseUrl = () => self.getPanelBaseUrl();
+    
     $("#translate-button").click(function () {
       const source_locale = $("#source-locale").val();
       const input = $(`input[data-locale="${source_locale}"]`);
@@ -21,7 +40,7 @@ export default {
       }
 
       axios
-        .post(`${urls.panel_base}/translations/translate-text`, {
+        .post(`${getPanelBaseUrl()}/translations/translate-text`, {
           source: source_locale,
           target: $("#target-locale").val(),
           text: text,
@@ -53,7 +72,7 @@ export default {
       tinymce.triggerSave();
       let content = editor.getContent();
       axios
-        .post(`${urls.panel_base}/translations/translate-html`, {
+        .post(`${getPanelBaseUrl()}/translations/translate-html`, {
           source: source_tab_code,
           target: $("#target-tab").val(),
           text: content,
@@ -122,7 +141,7 @@ export default {
       }
 
       axios
-        .post(`${urls.panel_base}/translations/translate-text`, {
+        .post(`${getPanelBaseUrl()}/translations/translate-text`, {
           source: current_source,
           target: selectedOptionValue,
           text: textareaValue,

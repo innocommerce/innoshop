@@ -37,6 +37,7 @@ class PluginResource extends JsonResource
             'enabled'      => $this->getEnabled(),
             'installed'    => $this->checkInstalled(),
             'edit_url'     => $this->getEditUrl(),
+            'menu_url'     => $this->getMenuUrl(),
             'icon'         => $this->getIconUrl(),
             'type_format'  => $this->getTypeFormat(),
         ];

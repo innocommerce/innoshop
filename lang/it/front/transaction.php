@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Congelamento delle disponibilità',
     'input_balance_total'  => 'Il saldo degli input dovrebbe essere inferiore al prezzo proporzionale',
     'input_should_balance' => 'Il saldo riportato deve essere inferiore o uguale al saldo disponibile',
+    'no_transactions'      => 'Nessuna registrazione delle operazioni in attesa di verifica',
     'total'                => 'Totale saldo',
     'transaction'          => 'I saldo',
     'type'                 => 'tipo',

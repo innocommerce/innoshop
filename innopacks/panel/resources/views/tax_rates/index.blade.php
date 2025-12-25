@@ -35,7 +35,7 @@
           @foreach($tax_rates as $item)
           <tr>
             <td>{{ $item->id }}</td>
-            <td>{{ $item->region->name }}</td>
+            <td>{{ $item->region->name ?? '-' }}</td>
             <td>{{ $item->name }}</td>
             <td>{{ $item->type }}</td>
             <td>{{ $item->rate }}</td>

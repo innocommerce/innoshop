@@ -8,6 +8,7 @@
  */
 
 return [
-    'parent' => 'Kategori Induk',
-    'title'  => 'Judul',
+    'parent'       => 'Kategori Induk',
+    'root_catalog' => 'Klasifikasi root',
+    'title'        => 'Judul',
 ];

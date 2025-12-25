@@ -28,7 +28,7 @@ class Tax extends BaseService
             $taxFee = [
                 'code'         => 'tax',
                 'title'        => TaxRateRepo::getInstance()->getNameByRateId($taxRateId),
-                'total'        => $value,
+                'total'        => round($value, 2),
                 'total_format' => currency_format($value),
             ];
             $this->checkoutService->addFeeList($taxFee);

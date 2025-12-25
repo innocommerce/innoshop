@@ -19,6 +19,7 @@ return [
     'frozen'               => '凍結餘額',
     'input_balance_total'  => '輸入的餘額應小於商品價格',
     'input_should_balance' => '輸入的餘額應小於或等於可用餘額',
+    'no_transactions'      => '暫無交易記錄',
     'total'                => '總餘額',
     'transaction'          => '我的餘額',
     'type'                 => '類型',

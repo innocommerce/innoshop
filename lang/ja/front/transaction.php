@@ -19,6 +19,7 @@ return [
     'frozen'               => '残高を凍結します。',
     'input_balance_total'  => '入力残高は商品価格より小さくなければなりません。',
     'input_should_balance' => '入力残高は利用可能な残高以下でなければなりません。',
+    'no_transactions'      => '取引の記録はまだありません',
     'total'                => '残額総額です',
     'transaction'          => '私の残額です',
     'type'                 => 'タイプです',

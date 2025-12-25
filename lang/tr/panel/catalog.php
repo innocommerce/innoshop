@@ -8,6 +8,7 @@
  */
 
 return [
-    'title'  => 'Başlık',
-    'parent' => 'Ebeveyn',
+    'parent'       => 'Ebeveyn',
+    'root_catalog' => 'Kök sınıflandırması',
+    'title'        => 'Başlık',
 ];

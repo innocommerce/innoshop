@@ -1,0 +1,19 @@
+{
+    "code": "{{ $pluginCode }}",
+    "name": {
+        "zh-cn": "{{ $pluginNameZh }}",
+        "en": "{{ $pluginNameEn }}"
+    },
+    "description": {
+        "zh-cn": "{{ $pluginDescriptionZh }}",
+        "en": "{{ $pluginDescriptionEn }}"
+    },
+    "type": "{{ $pluginType }}",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}
+

@@ -70,6 +70,8 @@ class ProductPriceService
             return $skuPrice;
         }
 
-        return round($skuPrice * $customerGroup->discount_rate / 100, 2);
+        $decimal = currency_decimal_place();
+
+        return round($skuPrice * $customerGroup->discount_rate / 100, $decimal);
     }
 }

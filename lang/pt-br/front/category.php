@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'classificação',
     'category'       => 'Categoria de produtos',
     'content'        => 'Detailed description',
     'default'        => 'Padrão',

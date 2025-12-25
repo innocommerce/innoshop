@@ -29,17 +29,25 @@ class PluginController
      */
     public function index(Request $request): mixed
     {
-        $plugins = app('plugin')->getPlugins();
-        $type    = $request->get('type');
+        $allPlugins = app('plugin')->getPlugins();
+        $type       = $request->get('type');
 
+        $typeCounts = [];
+        foreach (Plugin::TYPES as $pluginType) {
+            $typeCounts[$pluginType] = $allPlugins->where('type', $pluginType)->count();
+        }
+        $typeCounts['all'] = $allPlugins->count();
+
+        $plugins = $allPlugins;
         if ($type && in_array($type, Plugin::TYPES)) {
             $plugins = $plugins->where('type', $type);
         }
 
         $data = [
-            'types'   => Plugin::TYPES,
-            'type'    => $type,
-            'plugins' => array_values(PluginResource::collection($plugins)->jsonSerialize()),
+            'types'      => Plugin::TYPES,
+            'type'       => $type,
+            'plugins'    => array_values(PluginResource::collection($plugins)->jsonSerialize()),
+            'typeCounts' => $typeCounts,
         ];
 
         return inno_view('plugin::plugins.index', $data);
@@ -78,6 +86,17 @@ class PluginController
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Show plugin details (redirects to edit page).
+     *
+     * @param  $code
+     * @return View
+     */
+    public function show($code): View
+    {
+        return $this->edit($code);
     }
 
     /**

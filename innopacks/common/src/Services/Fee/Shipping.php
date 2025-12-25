@@ -23,7 +23,7 @@ class Shipping extends BaseService
      */
     public function addFee(): void
     {
-        $total = $this->getShippingFee();
+        $total = round($this->getShippingFee(), 2);
 
         $shippingFee = [
             'code'         => 'shipping',

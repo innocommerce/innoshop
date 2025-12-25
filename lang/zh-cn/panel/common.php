@@ -102,6 +102,7 @@ return [
     'summary_help'                 => '简要概括产品核心卖点，利于SEO展示。',
     'total_records'                => '共 :total 条记录，当前第 :current/:last 页',
     'uninstall'                    => '卸载',
+    'use'                          => '使用',
     'up_image_text'                => '点击上传，或将文件拖拽至此，建议尺寸为方形，比如 800*800',
     'updated_at'                   => '更新时间',
     'created_and_updated'          => '创建与更新',

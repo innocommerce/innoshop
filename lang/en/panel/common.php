@@ -100,6 +100,7 @@ return [
     'summary_help'                 => 'Briefly summarize the core selling points of the product to help SEO display.',
     'total_records'                => 'There are a total of :total records and the current page is :current/:last',
     'uninstall'                    => 'Uninstall',
+    'use'                          => 'Use',
     'up_image_text'                => 'Click Upload, or drag the file here, the recommended size is a square, such as 800*800',
     'updated_at'                   => 'Updated',
     'created_and_updated'          => 'Created & Updated',

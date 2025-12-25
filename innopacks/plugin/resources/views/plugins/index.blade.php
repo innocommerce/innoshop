@@ -1,11 +1,31 @@
 @extends('panel::layouts.app')
 @section('body-class', 'page-my-plugins')
 
-@section('title', __('panel/plugin.'.$type))
+@section('title', $type ? __('panel/plugin.'.$type) : __('panel/plugin.all'))
 
 @section('content')
   <div class="card h-min-600">
     <div class="card-body">
+      
+      <ul class="nav nav-tabs mb-4" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link {{ !$type ? 'active' : '' }}" 
+             href="{{ panel_route('plugins.index') }}">
+            {{ __('panel/plugin.all') }}
+            <span class="badge ms-1" style="font-size: 0.7em; font-weight: normal; background-color: #e9ecef; color: #6c757d;">{{ $typeCounts['all'] ?? 0 }}</span>
+          </a>
+        </li>
+        @foreach($types as $pluginType)
+          <li class="nav-item" role="presentation">
+            <a class="nav-link {{ $type === $pluginType ? 'active' : '' }}" 
+               href="{{ panel_route('plugins.index', ['type' => $pluginType]) }}">
+              {{ __('panel/plugin.'.$pluginType) }}
+              <span class="badge ms-1" style="font-size: 0.7em; font-weight: normal; background-color: #e9ecef; color: #6c757d;">{{ $typeCounts[$pluginType] ?? 0 }}</span>
+            </a>
+          </li>
+        @endforeach
+      </ul>
+
       <div class="row">
         @if (count($plugins))
         @foreach ($plugins as $plugin)
@@ -21,7 +41,7 @@
               </div>
 
               <div class="plugin-info">
-                <div class="description">{{ $plugin['description'] }}</div>
+                <div class="description" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $plugin['description'] }}">{{ $plugin['description'] }}</div>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="version">
                     <div class="d-flex align-items-center">
@@ -33,6 +53,11 @@
                   </div>
                   <div class="btns">
                     @if ($plugin['installed'])
+                      @if($plugin['menu_url'])
+                        <a href="{{ $plugin['menu_url'] }}" class="btn btn-success btn-sm" title="{{ __('panel/common.use') }}">
+                          <i class="bi bi-box-arrow-up-right"></i> {{ __('panel/common.use') }}
+                        </a>
+                      @endif
                       @if($plugin['edit_url'])
                         <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('panel/common.edit') }}</a>
                       @endif

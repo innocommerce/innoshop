@@ -63,7 +63,9 @@ class CartItem extends BaseModel
 
     public function getSubtotalAttribute(): float
     {
-        return round($this->price * $this->quantity, 2);
+        $decimal = currency_decimal_place();
+
+        return round($this->price * $this->quantity, $decimal);
     }
 
     /**

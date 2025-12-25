@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'Pengkelasan',
     'category'       => 'Kategori produk',
     'content'        => 'Penerangan terperinci',
     'default'        => 'Lalai',

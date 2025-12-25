@@ -14,7 +14,7 @@ const fs = require('fs');
 
 // Configuration
 const config = {
-    theme: process.env.THEME || 'factory',
+    theme: process.env.THEME || '',
     paths: {
         themes: 'themes',
         build: 'public/build',

@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'clasificación',
     'category'       => 'Categoría de producto',
     'content'        => 'Descripción detallada',
     'default'        => 'Por defecto',
@@ -17,7 +18,6 @@ return [
     'price'          => 'Precio',
     'products_count' => 'productos',
     'sales'          => 'Ventas',
-    'sales_volume'   => 'Volumen de ventas',
     'subcategories'  => 'Subcategorías',
     'summary'        => 'Resumen',
 ];

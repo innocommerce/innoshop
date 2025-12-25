@@ -73,8 +73,8 @@
                 </td>
                 <td>{{ $item['product_sku'] }}</td>
                 <td class="text-right">{{ $item['quantity'] }}</td>
-                <td class="text-right">{{ currency_format($item['price']) }}</td>
-                <td class="text-right">{{ currency_format($item['subtotal']) }}</td>
+                <td class="text-right">{{ currency_format($item['price'], $order['currency_code'], $order['currency_value']) }}</td>
+                <td class="text-right">{{ currency_format($item['subtotal'], $order['currency_code'], $order['currency_value']) }}</td>
               </tr>
             @endforeach
           @endif
@@ -99,7 +99,7 @@
             </tr>
           @endforeach
           <tr>
-            <td><b>{{ __('panel/order.total') }}</b>: {{ currency_format($order['total']) }}</td>
+            <td><b>{{ __('panel/order.total') }}</b>: {{ currency_format($order['total'], $order['currency_code'], $order['currency_value']) }}</td>
           </tr>
         </thead>
       </table>

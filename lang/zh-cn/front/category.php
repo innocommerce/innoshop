@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => '分类',
     'category'       => '产品分类',
     'content'        => '详细描述',
     'default'        => '默认',
@@ -19,5 +20,4 @@ return [
     'sales'          => '销量',
     'subcategories'  => '子分类',
     'summary'        => '分类介绍',
-    'categories'     => '分类',
 ];

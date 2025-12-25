@@ -1038,6 +1038,30 @@ if (! function_exists('default_currency')) {
     }
 }
 
+if (! function_exists('currency_decimal_place')) {
+    /**
+     * Get the decimal place for a currency.
+     * This is used for rounding calculations to respect currency precision settings.
+     *
+     * @param  string  $currency  Currency code (e.g., 'USD', 'EUR'). If empty, uses current currency.
+     * @return int Decimal places (e.g., 2 for USD, 0 for JPY, 3 for KWD)
+     */
+    function currency_decimal_place(string $currency = ''): int
+    {
+        if (! $currency) {
+            $currency = is_admin() ? system_setting('currency') : current_currency_code();
+        }
+
+        // Use the cached currencies collection for performance
+        $currencyModel = currencies()->where('code', strtolower($currency))->first();
+        if ($currencyModel) {
+            return (int) $currencyModel->decimal_place;
+        }
+
+        return 2;
+    }
+}
+
 if (! function_exists('theme_path')) {
     /**
      * Generate an asset path for the application.

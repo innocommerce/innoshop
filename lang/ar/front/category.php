@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'تصنيف',
     'category'       => 'تصنيفات المنتجات',
     'content'        => 'الوصف التفصيلي',
     'default'        => 'افتراضي',

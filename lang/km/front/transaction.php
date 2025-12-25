@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Frozen balance',
     'input_balance_total'  => 'The balance entered should be less than the price of the item',
     'input_should_balance' => 'The balance entered should be less than or equal to the available balance',
+    'no_transactions'      => 'មិនមានកំណត់ត្រាប្រតិបត្តិការនៅពេលនេះទេ',
     'total'                => 'Overall balance',
     'transaction'          => 'Transactions',
     'type'                 => 'type',

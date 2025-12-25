@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'Phân loại',
     'category'       => 'Phân loại sản phẩm',
     'content'        => 'Mô tả chi tiết',
     'default'        => 'Mặc định',

@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'pengelompokan',
     'category'       => 'Kategori Produk',
     'content'        => 'Untuk menggambarkan secara rinci',
     'default'        => 'Default',

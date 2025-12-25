@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+namespace Plugin\{{ $pluginName }}\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class {{ $className }} extends Model
+{
+    protected $table = '{{ $tableName }}';
+
+    protected $fillable = [
+        // Add fillable fields here
+    ];
+
+    protected $casts = [
+        // Add casts here
+    ];
+}
+

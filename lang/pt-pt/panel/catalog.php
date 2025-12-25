@@ -8,6 +8,7 @@
  */
 
 return [
-    'parent' => 'Categoria Superior',
-    'title'  => 'Título',
+    'parent'       => 'Categoria Superior',
+    'root_catalog' => 'Classificação das raízes',
+    'title'        => 'Título',
 ];

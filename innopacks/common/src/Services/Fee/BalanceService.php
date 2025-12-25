@@ -29,7 +29,7 @@ class BalanceService extends BaseService
         $subtotalFee = [
             'code'         => 'balance',
             'title'        => 'Balance',
-            'total'        => -$usedBalance,
+            'total'        => round(-$usedBalance, 2),
             'total_format' => currency_format($usedBalance),
         ];
 

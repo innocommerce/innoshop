@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Saldo beku',
     'input_balance_total'  => 'Saldo yang dimasukkan harus lebih rendah dari harga barang',
     'input_should_balance' => 'Saldo yang dimasukkan harus kurang dari atau sama dengan saldo yang tersedia',
+    'no_transactions'      => 'Tidak ada catatan transaksi',
     'total'                => 'Saldo total',
     'transaction'          => 'Saldo saya',
     'type'                 => 'jenis',

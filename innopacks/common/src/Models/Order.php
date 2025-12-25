@@ -135,7 +135,9 @@ class Order extends BaseModel
      */
     public function calcSubtotal(): float
     {
-        return round($this->items->sum('subtotal'), 2);
+        $decimal = currency_decimal_place($this->currency_code);
+
+        return round($this->items->sum('subtotal'), $decimal);
     }
 
     /**
@@ -145,7 +147,9 @@ class Order extends BaseModel
      */
     public function calcTotal(): float
     {
-        return round($this->fees->sum('value'), 2);
+        $decimal = currency_decimal_place($this->currency_code);
+
+        return round($this->fees->sum('value'), $decimal);
     }
 
     /**

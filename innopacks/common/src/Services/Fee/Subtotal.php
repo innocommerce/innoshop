@@ -16,7 +16,7 @@ class Subtotal extends BaseService
      */
     public function addFee(): void
     {
-        $total = $this->getSubtotal();
+        $total = round($this->getSubtotal(), 2);
 
         $subtotalFee = [
             'code'         => 'subtotal',
@@ -34,7 +34,8 @@ class Subtotal extends BaseService
     public function getSubtotal(): float
     {
         $cartList = $this->checkoutService->getCartList();
+        $decimal  = currency_decimal_place();
 
-        return round(collect($cartList)->sum('subtotal'), 4);
+        return round(collect($cartList)->sum('subtotal'), $decimal);
     }
 }

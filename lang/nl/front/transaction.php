@@ -3,7 +3,7 @@
  * Copyright (c) Since 2024 InnoShop - All Rights Reserved
  *
  * @link       https://www.innoshop.com
- * @author     iszmxw <mail@54zm.com>
+ * @author     InnoShop <team@innoshop.com>
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Bevroren saldo',
     'input_balance_total'  => 'Het ingevoerde saldo moet lager zijn dan de prijs van het product',
     'input_should_balance' => 'Het ingevoerde saldo moet kleiner dan of gelijk aan het beschikbare saldo zijn',
+    'no_transactions'      => 'There are no transaction records for the time being',
     'total'                => 'Totaal saldo',
     'transaction'          => 'Mijn saldo',
     'type'                 => 'Type',

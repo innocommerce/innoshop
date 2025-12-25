@@ -371,6 +371,104 @@ final class Plugin implements Arrayable, ArrayAccess
         }
     }
 
+    /**
+     * Get plugin menu URL (if plugin has registered a menu route).
+     *
+     * @return string
+     */
+    public function getMenuUrl(): string
+    {
+        if (! $this->checkInstalled() || ! $this->getEnabled()) {
+            return '';
+        }
+
+        // Allow plugins to register their menu URL via hook
+        // This is the primary method - plugins should use this hook
+        $menuUrl = fire_hook_filter("plugin.{$this->code}.menu.url", '');
+
+        if (! empty($menuUrl)) {
+            return $menuUrl;
+        }
+
+        // Fallback: Try to find menu URL from sidebar routes
+        // This searches through sidebar hooks to find routes that match the plugin code
+        try {
+            $routes = $this->findPluginRoutes();
+            if (! empty($routes)) {
+                // Return the first route found
+                return $routes[0]['url'] ?? '';
+            }
+        } catch (\Exception $e) {
+            // Silently fail
+        }
+
+        return '';
+    }
+
+    /**
+     * Find plugin routes from sidebar hooks.
+     * This is a fallback mechanism when plugins don't explicitly register menu URL.
+     *
+     * @return array
+     */
+    protected function findPluginRoutes(): array
+    {
+        $routes          = [];
+        $pluginCode      = $this->code;
+        $pluginCodeSnake = Str::snake($pluginCode);
+        $pluginCodeCamel = Str::camel($pluginCode);
+
+        // Check all sidebar hook filters
+        $sidebarHooks = [
+            'panel.component.sidebar.product.routes',
+            'panel.component.sidebar.order.routes',
+            'panel.component.sidebar.customer.routes',
+            'panel.component.sidebar.content.routes',
+            'panel.component.sidebar.design.routes',
+            'panel.component.sidebar.analytic.routes',
+            'panel.component.sidebar.marketing.routes',
+            'panel.component.sidebar.setting.routes',
+            'panel.component.sidebar.plugin.routes',
+        ];
+
+        foreach ($sidebarHooks as $hook) {
+            $hookRoutes = fire_hook_filter($hook, []);
+            foreach ($hookRoutes as $route) {
+                $routeName = $route['route'] ?? '';
+
+                // Check if route name contains plugin code in various formats
+                // e.g., 'image_bot.index', 'imageBot.index', 'imagebot.index'
+                $matches = false;
+                if (! empty($routeName)) {
+                    $routeNameLower = strtolower($routeName);
+                    $matches        = str_contains($routeNameLower, strtolower($pluginCodeSnake)) ||
+                               str_contains($routeNameLower, strtolower($pluginCodeCamel)) ||
+                               str_contains($routeNameLower, strtolower($pluginCode));
+                }
+
+                if ($matches) {
+                    $url = $route['url'] ?? '';
+                    if (empty($url) && ! empty($routeName)) {
+                        try {
+                            $url = panel_route($routeName);
+                        } catch (\Exception $e) {
+                            continue;
+                        }
+                    }
+                    if (! empty($url)) {
+                        $routes[] = [
+                            'route' => $routeName,
+                            'url'   => $url,
+                            'title' => $route['title'] ?? '',
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $routes;
+    }
+
     public function checkActive(): bool
     {
         return PluginRepo::getInstance()->checkActive($this->code);
@@ -526,9 +624,20 @@ final class Plugin implements Arrayable, ArrayAccess
     {
         $labelKey = $item['label_key'] ?? '';
         $label    = $item['label'] ?? '';
+
+        // If label is empty and label_key exists, use label_key for translation
         if (empty($label) && $labelKey) {
             $languageKey   = "$this->dirName::$labelKey";
             $item['label'] = trans($languageKey);
+        }
+        // If label looks like a translation key (contains ::), try to translate it
+        elseif (! empty($label) && strpos($label, '::') !== false) {
+            // Check if it's already a valid translation key format
+            $translated = trans($label);
+            // If translation returns something different from the key, use it
+            if ($translated !== $label) {
+                $item['label'] = $translated;
+            }
         }
 
         $descriptionKey = $item['description_key'] ?? '';
@@ -536,6 +645,13 @@ final class Plugin implements Arrayable, ArrayAccess
         if (empty($description) && $descriptionKey) {
             $languageKey         = "$this->dirName::$descriptionKey";
             $item['description'] = trans($languageKey);
+        }
+        // If description looks like a translation key, try to translate it
+        elseif (! empty($description) && strpos($description, '::') !== false) {
+            $translated = trans($description);
+            if ($translated !== $description) {
+                $item['description'] = $translated;
+            }
         }
 
         return $item;

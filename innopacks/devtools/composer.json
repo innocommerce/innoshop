@@ -1,0 +1,33 @@
+{
+    "name": "innoshop/devtools",
+    "description": "InnoShop Developer Tools - Plugin and Theme Development Toolkit",
+    "type": "library",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "InnoShop",
+            "email": "team@innoshop.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^11.0",
+        "illuminate/console": "^11.0",
+        "illuminate/filesystem": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "InnoShop\\DevTools\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "InnoShop\\DevTools\\DevToolsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
+

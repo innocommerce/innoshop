@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => '분류',
     'category'       => '카테고리',
     'content'        => '상세 설명',
     'default'        => '기본',

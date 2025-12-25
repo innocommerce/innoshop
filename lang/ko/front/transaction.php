@@ -19,6 +19,7 @@ return [
     'frozen'               => '잔액을 동결하다',
     'input_balance_total'  => '수입잔액이 상품가격보다 작아야 한다',
     'input_should_balance' => '수입잔액은 사용가능한 잔액보다 작거나 같아야 한다',
+    'no_transactions'      => '잠시 거래 기록이 없다',
     'total'                => '총잔액',
     'transaction'          => '내 잔고',
     'type'                 => '유형',

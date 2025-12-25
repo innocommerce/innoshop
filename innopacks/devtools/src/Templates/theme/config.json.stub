@@ -1,0 +1,17 @@
+{
+    "code": "{{ $themeCode }}",
+    "name": {
+        "zh-cn": "{{ $themeNameZh }}",
+        "en": "{{ $themeNameEn }}"
+    },
+    "description": {
+        "zh-cn": "{{ $themeDescriptionZh }}",
+        "en": "{{ $themeDescriptionEn }}"
+    },
+    "version": "v1.0.0",
+    "author": {
+        "name": "InnoShop",
+        "email": "team@innoshop.com"
+    }
+}
+

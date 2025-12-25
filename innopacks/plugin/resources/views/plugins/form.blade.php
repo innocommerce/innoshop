@@ -23,7 +23,7 @@
         @if($plugin->getLocaleDescription())
           <div class="mb-2 text-secondary plugin-header-desc">{{ $plugin->getLocaleDescription() }}</div>
         @endif
-        <div class="d-flex flex-wrap gap-3">
+        <div class="d-flex flex-wrap gap-3 align-items-center">
           <div class="text-secondary small">
             <i class="bi bi-person"></i> {{ __('panel/plugin.author') }}: {{ $plugin->getAuthorName() }}
             @if($plugin->getAuthorEmail())
@@ -32,6 +32,13 @@
           </div>
           @if($plugin->getType())
             <div class="text-secondary small"><i class="bi bi-tag"></i> {{ __('panel/plugin.type') }}：{{ $plugin->getTypeFormat() }}</div>
+          @endif
+          @if($plugin->checkInstalled() && $plugin->getEnabled() && $plugin->getMenuUrl())
+            <div class="ms-auto">
+              <a href="{{ $plugin->getMenuUrl() }}" class="btn btn-success btn-sm" title="{{ __('panel/common.use') }}">
+                <i class="bi bi-box-arrow-up-right"></i> {{ __('panel/common.use') }}
+              </a>
+            </div>
           @endif
         </div>
       </div>
@@ -66,7 +73,7 @@
             {{ method_field('put') }}
             <div class="row">
               <div class="col-12 col-md-8">
-                @include('plugin::plugins.fields', ['fields' => $fields, 'errors' => $errors])
+                @include('plugin::plugins.fields', ['fields' => $fields, 'errors' => $errors, 'plugin' => $plugin])
               </div>
             </div>
           </form>

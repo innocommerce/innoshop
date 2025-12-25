@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+namespace Plugin\{{ $pluginName }}\Repositories;
+
+use InnoShop\Common\Repositories\BaseRepo;
+use Plugin\{{ $pluginName }}\Models\{{ $modelName }};
+
+class {{ $className }} extends BaseRepo
+{
+    protected string $model = {{ $modelName }}::class;
+
+    /**
+     * Build query with filters.
+     *
+     * @param  array  $filters
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function builder(array $filters = []): \Illuminate\Database\Eloquent\Builder
+    {
+        $builder = $this->modelQuery();
+
+        // Add filter conditions here
+
+        return $builder;
+    }
+}
+

@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Congelar el saldo',
     'input_balance_total'  => 'El saldo ingresado debe ser menor que el precio del artículo',
     'input_should_balance' => 'El saldo ingresado debe ser menor o igual al saldo disponible',
+    'no_transactions'      => 'No hay transacciones registradas todavía',
     'total'                => 'Balance total',
     'transaction'          => 'Mi saldo',
     'type'                 => 'Tipos de',

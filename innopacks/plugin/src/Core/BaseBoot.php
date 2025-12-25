@@ -9,6 +9,7 @@
 
 namespace InnoShop\Plugin\Core;
 
+use Illuminate\Support\Facades\Log;
 use InnoShop\Plugin\Resources\PluginResource;
 
 abstract class BaseBoot
@@ -19,10 +20,21 @@ abstract class BaseBoot
 
     public function __construct()
     {
-        $className            = static::class;
-        $names                = explode('\\', $className);
-        $spaceName            = $names[1];
-        $this->plugin         = app('plugin')->getPlugin($spaceName);
+        $className = static::class;
+        $names     = explode('\\', $className);
+        $spaceName = $names[1];
+
+        $plugin = app('plugin')->getPlugin($spaceName);
+
+        if ($plugin === null) {
+            Log::warning("Plugin not found for namespace: {$spaceName}. Boot class will not be initialized.", [
+                'namespace' => $spaceName,
+                'class'     => $className,
+            ]);
+            throw new \RuntimeException("Plugin not found for namespace: {$spaceName}");
+        }
+
+        $this->plugin         = $plugin;
         $this->pluginResource = new PluginResource($this->plugin);
     }
 

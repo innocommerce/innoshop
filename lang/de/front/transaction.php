@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Einfrieren der kontolage',
     'input_balance_total'  => 'Der saldo ist geringer als der rohstoffpreise',
     'input_should_balance' => 'Der saldo der einschreibung ist kleiner Oder gleich dem verfügbaren saldo zu sein',
+    'no_transactions'      => 'Legen sie den handel fest',
     'total'                => 'gesamtzahlen',
     'transaction'          => 'Meine kontoübersicht',
     'type'                 => 'Typen?',

@@ -256,8 +256,9 @@ class CheckoutService
     public function getAmount(): float
     {
         $feeList = $this->getFeeList();
+        $decimal = currency_decimal_place();
 
-        return round(collect($feeList)->sum('total'), 2);
+        return round(collect($feeList)->sum('total'), $decimal);
     }
 
     /**

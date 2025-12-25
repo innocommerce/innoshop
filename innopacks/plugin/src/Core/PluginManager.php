@@ -47,7 +47,36 @@ class PluginManager
                 continue;
             }
 
+            $normalizedDirname = strtolower(Str::snake($dirname));
+            $normalizedCode    = strtolower(Str::snake($pluginCode));
+
+            if ($normalizedDirname !== $normalizedCode) {
+                Log::warning("Plugin code mismatch: Directory '{$dirname}' does not match config.json code '{$pluginCode}'. Plugin will be skipped.", [
+                    'directory' => $dirname,
+                    'code'      => $pluginCode,
+                    'path'      => $this->getPluginsDir().DIRECTORY_SEPARATOR.$dirname,
+                ]);
+
+                continue;
+            }
+
             $pluginPath = $this->getPluginsDir().DIRECTORY_SEPARATOR.$dirname;
+
+            // Check plugin type before creating plugin instance
+            $pluginType     = $package['type'] ?? '';
+            $normalizedType = strtolower($pluginType);
+            if (! in_array($normalizedType, Plugin::TYPES)) {
+                Log::warning("Plugin invalid type: Directory '{$dirname}' has invalid type '{$pluginType}'. Plugin will be skipped.", [
+                    'directory'   => $dirname,
+                    'type'        => $pluginType,
+                    'path'        => $pluginPath,
+                    'valid_types' => Plugin::TYPES,
+                ]);
+
+                continue;
+            }
+            // Normalize type to lowercase for consistency
+            $package['type'] = $normalizedType;
 
             try {
                 $plugin = new Plugin($pluginPath, $package);
@@ -180,7 +209,19 @@ class PluginManager
                     $config = json_decode(file_get_contents($packageJsonPath), true);
                     if ($config) {
                         $installed[$filename] = $config;
+                    } else {
+                        $jsonError = json_last_error_msg();
+                        Log::warning("Plugin config.json parse failed: Directory '{$filename}' has invalid JSON. Plugin will be skipped.", [
+                            'directory' => $filename,
+                            'path'      => $packageJsonPath,
+                            'error'     => $jsonError,
+                        ]);
                     }
+                } else {
+                    Log::warning("Plugin missing config.json: Directory '{$filename}' exists but has no config.json file. Plugin will be skipped.", [
+                        'directory' => $filename,
+                        'path'      => $path,
+                    ]);
                 }
             }
         }

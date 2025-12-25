@@ -137,10 +137,20 @@ class Currency
     /**
      * @param  $price
      * @param  $rate
+     * @param  string  $currency
      * @return float|int
      */
-    public function convertByRate($price, $rate): float|int
+    public function convertByRate($price, $rate, string $currency = ''): float|int
     {
-        return round($price * $rate, 2);
+        $decimal = 2; // Default decimal
+
+        if ($currency) {
+            $currencyRow = $this->currencies[strtoupper($currency)] ?? ($this->currencies[strtolower($currency)] ?? null);
+            if ($currencyRow) {
+                $decimal = (int) $currencyRow->decimal_place;
+            }
+        }
+
+        return round($price * $rate, $decimal);
     }
 }

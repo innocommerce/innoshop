@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Đóng băng số dư',
     'input_balance_total'  => 'Số dư nhập phải ít hơn giá hàng hóa',
     'input_should_balance' => 'Số dư nhập phải ít hơn hoặc bằng số dư có sẵn',
+    'no_transactions'      => 'Không có ghi chép giao dịch',
     'total'                => 'Tổng số dư',
     'transaction'          => 'Số dư của tôi',
     'type'                 => 'loại',

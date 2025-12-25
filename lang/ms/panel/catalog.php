@@ -8,6 +8,7 @@
  */
 
 return [
-    'parent' => 'Kategori atas',
-    'title'  => 'Tajuk',
+    'parent'       => 'Kategori atas',
+    'root_catalog' => 'Klasifikasi akar',
+    'title'        => 'Tajuk',
 ];

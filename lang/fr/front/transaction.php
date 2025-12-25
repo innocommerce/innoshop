@@ -19,6 +19,7 @@ return [
     'frozen'               => 'Geler le solde',
     'input_balance_total'  => 'Le solde entré doit être inférieur au prix de l\'article',
     'input_should_balance' => 'Le solde inscrit doit être inférieur ou égal au solde disponible',
+    'no_transactions'      => 'Pas encore de transaction enregistrée',
     'total'                => 'Le solde total',
     'transaction'          => 'Mon solde solde',
     'type'                 => 'type',

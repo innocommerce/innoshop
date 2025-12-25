@@ -8,6 +8,7 @@
  */
 
 return [
+    'categories'     => 'Sınıflandırma',
     'category'       => 'Ürün Kategorisi',
     'content'        => 'Detaylı açıklama',
     'default'        => 'Varsayılan',

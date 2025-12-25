@@ -124,6 +124,7 @@ class Sidebar extends Component
             [
                 'title'    => __('panel/menu.top_plugin'),
                 'icon'     => 'bi-puzzle',
+                'prefixes' => ['plugins'],
                 'children' => $this->getPluginSubRoutes(),
             ],
             [
@@ -368,24 +369,49 @@ class Sidebar extends Component
      */
     public function getPluginSubRoutes(): array
     {
-        $routes = [];
+        $routes      = [];
+        $currentType = $this->getCurrentPluginType();
+
+        // Add "All Plugins" link
+        $routes[] = [
+            'route'  => 'plugins.index',
+            'title'  => __('panel/plugin.all'),
+            'url'    => panel_route('plugins.index'),
+            'active' => $this->currentRoute === 'plugins.index' && ! request('type') && ! $currentType,
+        ];
 
         // Add plugin type menus
-        $typeMenus = PluginTypeRepo::getInstance()->getTypeMenus();
-        foreach ($typeMenus as $menu) {
-            $menu['active'] = request('type') === $menu['params']['type'] && $this->currentRoute === 'plugins.index';
-            $routes[]       = $menu;
+        foreach (PluginTypeRepo::getInstance()->getTypeMenus() as $menu) {
+            $type           = $menu['params']['type'] ?? null;
+            $menu['active'] = ($this->currentRoute === 'plugins.index' && request('type') === $type) ||
+                             ($currentType === $type);
+            $routes[] = $menu;
         }
 
-        // Add settings to the end
-        /*
-        $routes[] = [
-            'route'  => 'plugins.settings',
-            'title'  => __('panel/menu.plugin_settings'),
-            'active' => $this->currentRoute === 'plugins.settings',
-        ];*/
-
         return fire_hook_filter('panel.component.sidebar.plugin.routes', $routes);
+    }
+
+    /**
+     * Get current plugin type from route.
+     */
+    private function getCurrentPluginType(): ?string
+    {
+        if (! in_array($this->currentRoute, ['plugins.edit', 'plugins.show'])) {
+            return null;
+        }
+
+        $pluginCode = request()->route('plugin');
+        if (! $pluginCode) {
+            return null;
+        }
+
+        try {
+            $plugin = app('plugin')->getPlugin($pluginCode);
+
+            return $plugin ? $plugin->getType() : null;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
