@@ -1,0 +1,208 @@
+/**
+ * PageBuilder Multi-Row Images Module - Mobile Responsive Styles
+ * Handles image grid layouts with responsive breakpoints
+ */
+
+/* Base module styles */
+.module-four-image .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+}
+
+.module-four-image .row > .col {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Desktop: 4 columns (default Bootstrap behavior) */
+@media (min-width: 992px) {
+    .module-four-image .row > .col {
+        flex: 0 0 auto;
+        width: 25%;
+    }
+}
+
+/* Tablet landscape: 3 columns */
+@media (max-width: 991px) and (min-width: 768px) {
+    .module-four-image .row > .col {
+        flex: 0 0 auto;
+        width: 33.333333%;
+    }
+    
+    /* Hide 4th item if row has exactly 4 items to keep symmetry */
+    .module-four-image .row > .col:nth-child(4):last-child {
+        display: none;
+    }
+}
+
+/* Tablet portrait: 2 columns */
+@media (max-width: 767px) and (min-width: 577px) {
+    .module-four-image .row > .col {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+    
+    .module-four-image .row {
+        gap: 1rem !important;
+    }
+}
+
+/* Mobile: single column */
+@media (max-width: 576px) {
+    .module-four-image .row > .col {
+        flex: 0 0 auto;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .module-four-image .row {
+        gap: 0 !important;
+    }
+    
+    /* Adjust spacing */
+    .module-four-image .row.mb-4 {
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Reduce module padding on mobile */
+    .module-line.py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    
+    /* Adjust title sizes */
+    .module-four-image .module-title.h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .module-four-image .module-sub-title {
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Image description text adjustments */
+    .module-four-image .position-absolute.bottom-0 {
+        font-size: 14px !important;
+        padding: 0.5rem !important;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+    .module-four-image .module-title.h3 {
+        font-size: 1.25rem;
+    }
+    
+    .module-four-image .module-sub-title {
+        font-size: 0.8rem;
+    }
+    
+    .module-four-image .position-absolute.bottom-0 {
+        font-size: 12px !important;
+        padding: 0.4rem !important;
+    }
+}
+
+/* Ensure images maintain aspect ratio and cover properly */
+.module-four-image .ratio {
+    position: relative;
+    width: 100%;
+}
+
+.module-four-image .ratio::before {
+    display: block;
+    padding-top: 100%; /* 1:1 aspect ratio */
+    content: "";
+}
+
+.module-four-image .ratio > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Improve image loading and rendering */
+.module-four-image img {
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.module-four-image a:hover img {
+    transform: scale(1.05);
+}
+
+/* Text overlay improvements for better readability */
+.module-four-image .position-absolute.bottom-0 {
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Container fluid adjustments */
+.module-four-image .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+@media (max-width: 576px) {
+    .module-four-image .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+/* Fix gap utility on older browsers */
+.module-four-image .g-4 {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
+@media (max-width: 576px) {
+    .module-four-image .g-4 {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+}
+
+/* Empty state styling (design mode) */
+.module-multi-row-images-empty {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+}
+
+.module-multi-row-images-empty-text {
+    text-align: center;
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.module-multi-row-images-empty-text i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 576px) {
+    .module-multi-row-images-empty {
+        min-height: 200px;
+    }
+    
+    .module-multi-row-images-empty-text i {
+        font-size: 2rem;
+    }
+    
+    .module-multi-row-images-empty-text {
+        font-size: 0.875rem;
+    }
+}

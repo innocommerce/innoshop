@@ -1,0 +1,143 @@
+/**
+ * PageBuilder Rich Text Module - Mobile Responsive Styles
+ * Handles tables, iframes, and embedded content responsiveness
+ */
+
+/* Base rich text content wrapper */
+.rich-text-content {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Make all tables responsive */
+.rich-text-content table {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-collapse: collapse;
+}
+
+/* Responsive iframe containers */
+.rich-text-content iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Desktop: 3-column layout remains */
+@media (min-width: 992px) {
+    .rich-text-content table td {
+        width: 33.33% !important;
+    }
+}
+
+/* Tablet: 2-column layout */
+@media (max-width: 991px) and (min-width: 577px) {
+    .rich-text-content table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .rich-text-content table tbody {
+        display: block;
+    }
+    
+    .rich-text-content table tr {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .rich-text-content table td {
+        width: 50% !important;
+        display: block;
+        box-sizing: border-box;
+    }
+    
+    /* Title row spans full width */
+    .rich-text-content table tr:first-child td {
+        width: 100% !important;
+    }
+    
+    /* Adjust iframe heights for tablet */
+    .rich-text-content iframe {
+        height: 180px !important;
+    }
+}
+
+/* Mobile: single column stacked layout */
+@media (max-width: 576px) {
+    .rich-text-content table {
+        display: block !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .rich-text-content table tbody,
+    .rich-text-content table tr,
+    .rich-text-content table td {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .rich-text-content table td {
+        padding: 10px 5px !important;
+    }
+    
+    /* Title styling for mobile */
+    .rich-text-content table h2 {
+        font-size: 20px !important;
+        padding: 15px 10px !important;
+    }
+    
+    /* Video container adjustments */
+    .rich-text-content table td > div {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+    
+    /* Responsive iframe height based on 16:9 ratio */
+    .rich-text-content iframe {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9;
+        min-height: 200px;
+    }
+    
+    /* Text content padding */
+    .rich-text-content table p {
+        font-size: 14px !important;
+        padding: 8px 5px !important;
+    }
+    
+    /* Remove excessive shadows on mobile for performance */
+    .rich-text-content table td > div {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+    .rich-text-content table h2 {
+        font-size: 18px !important;
+    }
+    
+    .rich-text-content table p {
+        font-size: 13px !important;
+    }
+    
+    .rich-text-content iframe {
+        min-height: 180px;
+    }
+}
+
+/* Ensure images in rich text are also responsive */
+.rich-text-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Handle nested divs with border-radius and overflow */
+.rich-text-content table td > div {
+    max-width: 100%;
+    overflow: hidden;
+}
