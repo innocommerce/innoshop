@@ -69,6 +69,10 @@ class ArticleController extends Controller
      */
     private function renderArticleDetail(Article $article, array $extraData = []): mixed
     {
+        if (! $article->active) {
+            abort(404);
+        }
+
         $article->increment('viewed');
 
         $articleRepo = ArticleRepo::getInstance();

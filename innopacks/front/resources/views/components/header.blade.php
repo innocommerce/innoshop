@@ -73,7 +73,7 @@
                   <li class="nav-item">
                     <div class="dropdown">
                       @if ($menu['name'])
-                        <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}"
+                        <a class="nav-link {{ (request()->route() && equal_url($menu['url'])) ? 'active' : '' }}"
                            href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
                       @endif
                       <ul class="dropdown-menu">
@@ -88,7 +88,7 @@
                 @else
                   @if ($menu['name'])
                     <li class="nav-item">
-                      <a class="nav-link {{ equal_url($menu['url']) ? 'active' : '' }}"
+                      <a class="nav-link {{ (request()->route() && equal_url($menu['url'])) ? 'active' : '' }}"
                          href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
                     </li>
                   @endif
@@ -179,7 +179,7 @@
         <div class="accordion accordion-flush" id="menu-accordion">
           <div class="accordion-item">
             <div class="nav-item-text">
-              <a class="nav-link {{ equal_route_name('home.index') ? 'active' : '' }}" aria-current="page"
+              <a class="nav-link {{ (request()->route() && equal_route_name('home.index')) ? 'active' : '' }}" aria-current="page"
                  href="{{ front_route('home.index') }}">{{ __('front/common.home') }}</a>
             </div>
           </div>

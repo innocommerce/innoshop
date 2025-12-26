@@ -71,6 +71,10 @@ class PageController extends Controller
      */
     private function renderPage(Page $page): mixed
     {
+        if (! $page->active) {
+            abort(404);
+        }
+
         $page->increment('viewed');
 
         $data = [

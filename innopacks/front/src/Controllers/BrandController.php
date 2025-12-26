@@ -66,6 +66,10 @@ class BrandController extends Controller
      */
     private function renderShow($brand, ?Request $request = null): mixed
     {
+        if (! $brand->active) {
+            abort(404);
+        }
+
         if (! $request) {
             $request = request();
         }

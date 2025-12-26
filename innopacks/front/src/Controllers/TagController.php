@@ -35,6 +35,10 @@ class TagController extends Controller
      */
     public function show(Tag $tag): mixed
     {
+        if (! $tag->active) {
+            abort(404);
+        }
+
         $tags     = TagRepo::getInstance()->list(['active' => true]);
         $articles = ArticleRepo::getInstance()->list(['active' => true, 'tag_id' => $tag->id]);
 
@@ -55,8 +59,13 @@ class TagController extends Controller
      */
     public function slugShow(Request $request): mixed
     {
-        $slug     = $request->slug;
-        $tag      = TagRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
+        $slug = $request->slug;
+        $tag  = TagRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
+
+        if (! $tag->active) {
+            abort(404);
+        }
+
         $tags     = TagRepo::getInstance()->list(['active' => true]);
         $articles = ArticleRepo::getInstance()->list(['active' => true, 'tag_id' => $tag->id]);
 

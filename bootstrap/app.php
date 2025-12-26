@@ -58,6 +58,41 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->dontReportDuplicates();
 
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return json_fail($e->getMessage());
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Not Found'], 404);
+            }
+
+            if (view()->exists('errors.404')) {
+                return response()->view('errors.404', [], 404);
+            }
+
+            return null;
+        });
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return json_fail($e->getMessage());
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], $e->getStatusCode());
+            }
+
+            $statusCode = $e->getStatusCode();
+            $view = "errors.{$statusCode}";
+
+            if (view()->exists($view)) {
+                return response()->view($view, [], $statusCode);
+            }
+
+            return null;
+        });
+
         $exceptions->render(function (Exception $e, Request $request) {
             if ($request->is('api/*')) {
                 return json_fail($e->getMessage());
