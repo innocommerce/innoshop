@@ -71,7 +71,7 @@ class DesignService
         $content['module_code'] = $moduleCode;
 
         $handlerMap = $this->getModuleHandlerMap();
-        
+
         if (isset($handlerMap[$moduleCode])) {
             $handlerMethod = $handlerMap[$moduleCode];
             if (method_exists($this, $handlerMethod)) {
@@ -79,7 +79,7 @@ class DesignService
             }
         }
 
-        $content = $this->normalizeMultilingualFields($content);
+        $content                = $this->normalizeMultilingualFields($content);
         $content['width_class'] = pb_get_width_class($content['width'] ?? 'wide');
 
         return fire_hook_filter('service.design.module.content', $content);
@@ -93,25 +93,25 @@ class DesignService
     private function getModuleHandlerMap(): array
     {
         return [
-            'slideshow' => 'handleSlideShow',
-            'image401' => 'handleImage401',
-            'image402' => 'handleImage401',
-            'single-image' => 'handleImage401',
-            'image200' => 'handleImage401',
-            'image300' => 'handleImage401',
-            'image301' => 'handleImage401',
-            'brand' => 'handleBrand',
-            'image-text-list' => 'handleImageTextList',
-            'brands' => 'handleBrands',
-            'tab_product' => 'handleTabProducts',
-            'custom-products' => 'handleProducts',
+            'slideshow'         => 'handleSlideShow',
+            'image401'          => 'handleImage401',
+            'image402'          => 'handleImage401',
+            'single-image'      => 'handleImage401',
+            'image200'          => 'handleImage401',
+            'image300'          => 'handleImage401',
+            'image301'          => 'handleImage401',
+            'brand'             => 'handleBrand',
+            'image-text-list'   => 'handleImageTextList',
+            'brands'            => 'handleBrands',
+            'tab_product'       => 'handleTabProducts',
+            'custom-products'   => 'handleProducts',
             'category-products' => 'handleCategoryProducts',
-            'brand-products' => 'handleBrandProducts',
-            'latest-products' => 'handleLatest',
-            'icons' => 'handleIcons',
-            'rich_text' => 'handleRichText',
-            'page' => 'handlePage',
-            'article' => 'handleArticle',
+            'brand-products'    => 'handleBrandProducts',
+            'latest-products'   => 'handleLatest',
+            'icons'             => 'handleIcons',
+            'rich_text'         => 'handleRichText',
+            'page'              => 'handlePage',
+            'article'           => 'handleArticle',
         ];
     }
 
@@ -696,7 +696,7 @@ class DesignService
         ];
 
         // If field is not in map or is 'rating' (removed field), use default sales sorting
-        if (!isset($fieldMap[$sortField]) || $sortField === 'rating') {
+        if (! isset($fieldMap[$sortField]) || $sortField === 'rating') {
             return [
                 'field' => 'sales_count',
                 'order' => 'desc',

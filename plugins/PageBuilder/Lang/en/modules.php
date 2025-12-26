@@ -25,33 +25,33 @@ return [
     'four_image_plus'       => 'Four Images Plus Layout',
     'article'               => 'Article',
     'video'                 => 'Video',
-    
+
     // Module actions
-    'move_up'               => 'Move Up',
-    'move_down'             => 'Move Down',
-    'edit'                  => 'Edit',
-    
+    'move_up'   => 'Move Up',
+    'move_down' => 'Move Down',
+    'edit'      => 'Edit',
+
     // Empty state messages
-    'no_products'         => 'No products, please configure products',
+    'no_products'          => 'No products, please configure products',
     'no_category_products' => 'No products, please configure category',
     'no_brand_products'    => 'No products, please configure brand',
-    'no_latest_products'  => 'No latest products',
-    'no_images'           => 'No images, please configure images',
-    'no_content'          => 'No content, please upload rich text content in admin',
-    'no_image'            => 'No image, please configure image',
-    'no_articles'         => 'No articles, please configure articles',
-    'no_brands'           => 'Please select brands to display',
-    'no_image_text_items' => 'No image-text items',
+    'no_latest_products'   => 'No latest products',
+    'no_images'            => 'No images, please configure images',
+    'no_content'           => 'No content, please upload rich text content in admin',
+    'no_image'             => 'No image, please configure image',
+    'no_articles'          => 'No articles, please configure articles',
+    'no_brands'            => 'Please select brands to display',
+    'no_image_text_items'  => 'No image-text items',
     'add_image_text_items' => 'Please add image-text items in admin',
-    'add_video_content'   => 'Please add video content',
-    'no_modules_data'     => 'No modules data',
-    
+    'add_video_content'    => 'Please add video content',
+    'no_modules_data'      => 'No modules data',
+
     // Video related
     'browser_not_support_video' => 'Your browser does not support video playback.',
-    'youtube_url_invalid' => 'Invalid YouTube video URL format',
-    'vimeo_url_invalid'   => 'Invalid Vimeo video URL format',
-    'video_cover'         => 'Video cover',
-    
+    'youtube_url_invalid'       => 'Invalid YouTube video URL format',
+    'vimeo_url_invalid'         => 'Invalid Vimeo video URL format',
+    'video_cover'               => 'Video cover',
+
     // Module categories
-    'brands_module'       => 'Brands',
+    'brands_module' => 'Brands',
 ];

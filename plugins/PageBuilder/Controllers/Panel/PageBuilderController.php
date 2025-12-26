@@ -36,7 +36,7 @@ class PageBuilderController extends BaseController
     {
         $data           = $this->pageBuilderService->getPageData($page);
         $data['plugin'] = plugin('PageBuilder');
-        
+
         // Get page model for preview URL generation
         if ($page && $page !== 'home') {
             $data['pageModel'] = $this->pageBuilderService->findPage($page);

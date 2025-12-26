@@ -25,33 +25,33 @@ return [
     'four_image_plus'       => '四图布局增强版',
     'article'               => '文章模块',
     'video'                 => '视频模块',
-    
+
     // Module actions
-    'move_up'               => '上移',
-    'move_down'             => '下移',
-    'edit'                  => '编辑',
-    
+    'move_up'   => '上移',
+    'move_down' => '下移',
+    'edit'      => '编辑',
+
     // Empty state messages
-    'no_products'         => '暂无商品,请配置商品',
+    'no_products'          => '暂无商品,请配置商品',
     'no_category_products' => '暂无商品,请配置分类',
     'no_brand_products'    => '暂无商品,请配置品牌',
-    'no_latest_products'  => '暂无最新商品',
-    'no_images'           => '暂无图片,请配置图片',
-    'no_content'          => '暂无内容,请在后台上传富文本内容',
-    'no_image'            => '暂无图片,请配置图片',
-    'no_articles'         => '暂无文章,请配置文章',
-    'no_brands'           => '请选择要展示的品牌',
-    'no_image_text_items' => '暂无图文项',
+    'no_latest_products'   => '暂无最新商品',
+    'no_images'            => '暂无图片,请配置图片',
+    'no_content'           => '暂无内容,请在后台上传富文本内容',
+    'no_image'             => '暂无图片,请配置图片',
+    'no_articles'          => '暂无文章,请配置文章',
+    'no_brands'            => '请选择要展示的品牌',
+    'no_image_text_items'  => '暂无图文项',
     'add_image_text_items' => '请在后台添加图文项',
-    'add_video_content'   => '请添加视频内容',
-    'no_modules_data'     => '暂无模块数据',
-    
+    'add_video_content'    => '请添加视频内容',
+    'no_modules_data'      => '暂无模块数据',
+
     // Video related
     'browser_not_support_video' => '您的浏览器不支持视频播放。',
-    'youtube_url_invalid' => 'YouTube视频链接格式不正确',
-    'vimeo_url_invalid'   => 'Vimeo视频链接格式不正确',
-    'video_cover'         => '视频封面',
-    
+    'youtube_url_invalid'       => 'YouTube视频链接格式不正确',
+    'vimeo_url_invalid'         => 'Vimeo视频链接格式不正确',
+    'video_cover'               => '视频封面',
+
     // Module categories
-    'brands_module'       => '品牌模块',
+    'brands_module' => '品牌模块',
 ];

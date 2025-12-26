@@ -26,7 +26,7 @@ class PageController extends Controller
     public function show(Request $request): mixed
     {
         $locale = front_locale_code();
-        $slug = hide_url_locale() 
+        $slug   = hide_url_locale()
             ? trim($request->path(), '/')
             : trim(str_replace("$locale/", '', $request->path()), '/');
 
@@ -36,12 +36,12 @@ class PageController extends Controller
         $page->increment('viewed');
 
         $pageModule = PageModule::query()->where('page_id', $page->id)->first();
-        $modules = $pageModule->module_data ?? [];
+        $modules    = $pageModule->module_data ?? [];
 
         $processedModules = [];
         foreach ($modules as $module) {
             $moduleCode = $module['code'] ?? '';
-            $content = $module['content'] ?? [];
+            $content    = $module['content'] ?? [];
 
             if ($moduleCode && $content) {
                 $processedModules[] = [

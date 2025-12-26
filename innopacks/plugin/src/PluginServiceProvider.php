@@ -46,12 +46,25 @@ class PluginServiceProvider extends ServiceProvider
     }
 
     /**
+     * Flag to prevent duplicate boot execution (important for Laravel Octane)
+     *
+     * @var bool
+     */
+    private static bool $booted = false;
+
+    /**
      * Boot Plugin Service Provider
      *
      * @throws Exception
      */
     public function boot(): void
     {
+        // Prevent duplicate boot execution (especially important for Laravel Octane)
+        if (self::$booted) {
+            return;
+        }
+        self::$booted = true;
+
         $this->registerMigrations();
 
         if (! installed()) {
