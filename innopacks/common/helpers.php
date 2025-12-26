@@ -782,7 +782,7 @@ if (! function_exists('front_route')) {
      */
     function front_route($name, mixed $parameters = [], bool $absolute = true): string
     {
-        if (hide_url_locale()) {
+        if (hide_url_locale() || locales()->isEmpty()) {
             return route('front.'.$name, $parameters, $absolute);
         }
 
@@ -816,7 +816,7 @@ if (! function_exists('has_front_route')) {
      */
     function has_front_route($name): bool
     {
-        if (hide_url_locale()) {
+        if (hide_url_locale() || locales()->isEmpty()) {
             $route = 'front.'.$name;
         } else {
             $route = front_locale_code().'.front.'.$name;
@@ -838,7 +838,7 @@ if (! function_exists('account_route')) {
      */
     function account_route($name, mixed $parameters = [], bool $absolute = true): string
     {
-        if (hide_url_locale()) {
+        if (hide_url_locale() || locales()->isEmpty()) {
             return route('front.account.'.$name, $parameters, $absolute);
         }
 

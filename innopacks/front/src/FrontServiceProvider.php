@@ -124,7 +124,7 @@ class FrontServiceProvider extends ServiceProvider
             });
 
         $locales = locales();
-        if (hide_url_locale()) {
+        if (hide_url_locale() || $locales->isEmpty()) {
             Route::middleware('front')
                 ->name('front.')
                 ->group(function () {
