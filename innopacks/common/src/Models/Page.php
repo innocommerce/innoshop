@@ -26,6 +26,7 @@ class Page extends BaseModel
 
     /**
      * Get slug url link.
+     * Uses page-{slug} pattern to maintain consistency with other resources (product-{slug}, category-{slug}, article-{slug})
      *
      * @return string
      * @throws Exception
@@ -34,7 +35,7 @@ class Page extends BaseModel
     {
         try {
             if ($this->slug) {
-                return front_route('pages.'.$this->slug);
+                return front_route('pages.slug_show', ['slug' => $this->slug]);
             }
 
             return front_route('pages.show', $this);

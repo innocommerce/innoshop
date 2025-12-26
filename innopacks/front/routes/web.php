@@ -8,7 +8,6 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Front\Controllers;
 use InnoShop\Front\Controllers\Account;
 
@@ -81,13 +80,11 @@ Route::get('/tags', [Controllers\TagController::class, 'index'])->name('tags.ind
 Route::get('/tags/{tag}', [Controllers\TagController::class, 'show'])->name('tags.show');
 Route::get('/tag-{slug}', [Controllers\TagController::class, 'slugShow'])->name('tags.slug_show');
 
-// Pages, like product, service, about
-if (installed()) {
-    $pages = PageRepo::getInstance()->withActive()->builder()->get();
-    foreach ($pages as $page) {
-        Route::get($page->slug, [Controllers\PageController::class, 'show'])->name('pages.'.$page->slug);
-    }
-}
+// Pages - Use page-{slug} pattern to maintain consistency with other resources (product-{slug}, category-{slug}, article-{slug})
+// Note: This route is typically overridden by PageBuilder plugin when active
+Route::get('/pages', [Controllers\PageController::class, 'index'])->name('pages.index');
+Route::get('/pages/{page}', [Controllers\PageController::class, 'show'])->name('pages.show');
+Route::get('/page-{slug}', [Controllers\PageController::class, 'slugShow'])->name('pages.slug_show');
 
 Route::get('/login', [Account\LoginController::class, 'index'])->name('login.index');
 Route::post('/login', [Account\LoginController::class, 'store'])->name('login.store');

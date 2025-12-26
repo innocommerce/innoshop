@@ -8,16 +8,12 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use InnoShop\Common\Repositories\PageRepo;
 use Plugin\PageBuilder\Controllers\Front\HomeController;
 use Plugin\PageBuilder\Controllers\Front\PageController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
-// Pages
-if (installed()) {
-    $pages = PageRepo::getInstance()->withActive()->builder()->get();
-    foreach ($pages as $page) {
-        Route::get($page->slug, [PageController::class, 'show'])->name('pages.'.$page->slug);
-    }
-}
+// Pages - Use page-{slug} pattern to maintain consistency with other resources (product-{slug}, category-{slug}, article-{slug})
+Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
+Route::get('/pages/{page}', [PageController::class, 'show'])->name('pages.show');
+Route::get('/page-{slug}', [PageController::class, 'slugShow'])->name('pages.slug_show');
