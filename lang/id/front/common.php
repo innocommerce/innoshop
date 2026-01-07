@@ -11,6 +11,7 @@ return [
     'about_us'          => 'Tentang',
     'action'            => 'Aksi',
     'add'               => 'Tambah',
+    'anonymous'         => 'Anonim',
     'all'               => 'Semua',
     'back_page'         => 'Kembali ke Halaman Sebelumnya',
     'brands'            => 'merek',

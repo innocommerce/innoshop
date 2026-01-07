@@ -11,6 +11,7 @@ return [
     'about_us'          => 'について',
     'action'            => '操作',
     'add'               => '追加',
+    'anonymous'         => '匿名',
     'all'               => 'すべて',
     'back_page'         => '前のページに戻る',
     'brands'            => 'ブランドです',

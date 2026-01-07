@@ -11,6 +11,7 @@ return [
     'about_us'          => '关于',
     'action'            => '操作',
     'add'               => '添加',
+    'anonymous'         => '匿名用户',
     'all'               => '全部',
     'back_page'         => '返回上一页',
     'brands'            => '品牌',

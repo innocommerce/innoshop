@@ -11,6 +11,7 @@ return [
     'about_us'          => 'Về',
     'action'            => 'Hành động',
     'add'               => 'Thêm',
+    'anonymous'         => 'Ẩn danh',
     'all'               => 'Tất cả',
     'back_page'         => 'Quay lại trang trước',
     'brands'            => 'Thương hiệu',

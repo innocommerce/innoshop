@@ -11,6 +11,7 @@ return [
     'about_us'          => 'Sobre',
     'action'            => 'Ação',
     'add'               => 'Adicionar',
+    'anonymous'         => 'Anónimo',
     'all'               => 'Tudo',
     'back_page'         => 'Voltar à Página Anterior',
     'brands'            => 'A marca',

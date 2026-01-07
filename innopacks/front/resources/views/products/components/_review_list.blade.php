@@ -4,7 +4,7 @@
     <hr/>
     <div class="review-list row">
       <div class="row">
-        <h5 class="col-2 mb-3">{{ $review->customer->name }}</h5>
+        <h5 class="col-2 mb-3">{{ $review->customer?->name ?? __('front/common.anonymous') }}</h5>
         <span class="col-4 text-left"><x-front-review :rating="$review->rating"/></span>
         <span class="col-6 text-end date">{{ $review->created_at }}</span>
       </div>

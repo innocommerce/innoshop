@@ -11,6 +11,7 @@ return [
     'about_us'          => 'Over ons',
     'action'            => 'Actie',
     'add'               => 'Toevoegen',
+    'anonymous'         => 'Anoniem',
     'all'               => 'Alles',
     'back_page'         => 'Terug naar vorige pagina',
     'brands'            => 'Merken',

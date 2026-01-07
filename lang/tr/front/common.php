@@ -11,6 +11,7 @@ return [
     'about_us'          => 'Hakkımızda',
     'action'            => 'İşlem',
     'add'               => 'Ekle',
+    'anonymous'         => 'Anonim',
     'all'               => 'Tümü',
     'back_page'         => 'Geri Git',
     'brands'            => 'brand',

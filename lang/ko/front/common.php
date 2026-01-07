@@ -11,6 +11,7 @@ return [
     'about_us'          => '에 대해',
     'action'            => '작업',
     'add'               => '추가',
+    'anonymous'         => '익명',
     'all'               => '전체',
     'back_page'         => '이전 페이지로 돌아가기',
     'brands'            => '브랜드',

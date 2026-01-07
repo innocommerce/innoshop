@@ -11,6 +11,7 @@ return [
     'about_us'          => 'About',
     'action'            => 'Action',
     'add'               => 'Add',
+    'anonymous'         => 'Anonymous',
     'all'               => 'All',
     'back_page'         => 'Go Back',
     'brands'            => 'Brands',
