@@ -8,9 +8,22 @@
  */
 
 return [
-    'have_account'     => 'Hai già un account? Clicca per accedere',
-    'register_submit'  => 'Registrati ora',
-    'register_success' => 'Registrazione completata',
-    'register'         => 'Registrati',
-    'register_text'    => 'Si prega di compilare il modulo sottostante con le informazioni di registrazione',
+    'calling_code'        => 'Numero di telefono',
+    'code_required'       => 'Inserire il captcha',
+    'email_required'      => 'Per abbonarsi, rivolgersi alla mailbox',
+    'have_account'        => 'Hai già un account? Clicca per accedere',
+    'phone_required'      => 'Per favore registratevi con il numero di cellulare',
+    'please_enter_phone'  => 'Digitate il cellulare, per piacere',
+    'register'            => 'Registrati',
+    'register_by_email'   => 'Iscrizione nella mailbox',
+    'register_by_phone'   => 'Registrazione del numero di telefono',
+    'register_submit'     => 'Registrati ora',
+    'register_success'    => 'Registrazione completata',
+    'register_text'       => 'Si prega di compilare il modulo sottostante con le informazioni di registrazione',
+    'select_calling_code' => 'Numero di regioni selezionate',
+    'send_code'           => 'Trasmissione del captcha di verifica',
+    'sending'             => 'In via di spedizione',
+    'sms_code'            => 'Testo di controllo',
+    'sms_code_sent'       => 'Il SMS validity captcha è stato inviato',
+    'telephone'           => 'Numero di telefono',
 ];

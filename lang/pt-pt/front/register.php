@@ -8,9 +8,22 @@
  */
 
 return [
-    'have_account'     => 'Já tem uma conta? Clique para Login',
-    'register_submit'  => 'Registrar Agora',
-    'register_success' => 'Registro bem-sucedido',
-    'register'         => 'Registar',
-    'register_text'    => 'Por favor, preencha o formulário abaixo com as suas informações de registo',
+    'calling_code'        => 'Telefone código de área',
+    'code_required'       => 'Por favor insira o captcha',
+    'email_required'      => 'Por favor use o email para se registrar',
+    'have_account'        => 'Já tem uma conta? Clique para Login',
+    'phone_required'      => 'Por favor, registre-se usando o número de celular',
+    'please_enter_phone'  => 'Por favor insira o número do telemóvel',
+    'register'            => 'Registar',
+    'register_by_email'   => 'Cadastro por email',
+    'register_by_phone'   => 'Registo do número de telemóvel',
+    'register_submit'     => 'Registrar Agora',
+    'register_success'    => 'Registro bem-sucedido',
+    'register_text'       => 'Por favor, preencha o formulário abaixo com as suas informações de registo',
+    'select_calling_code' => 'Selecione o código de área',
+    'send_code'           => 'Enviar código de verificação',
+    'sending'             => 'Enviado em processo',
+    'sms_code'            => 'Código de verificação SMS',
+    'sms_code_sent'       => 'Código de verificação SMS enviado',
+    'telephone'           => 'Número de telefone',
 ];
