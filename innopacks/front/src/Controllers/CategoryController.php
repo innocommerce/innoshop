@@ -125,6 +125,10 @@ class CategoryController extends Controller
      */
     private function renderShow(Category $category, $keyword, Request $request): mixed
     {
+        if (! $category->active) {
+            abort(404);
+        }
+
         $categories = CategoryRepo::getInstance()->getTwoLevelCategories();
 
         // Use RequestFilterParser to handle filter logic

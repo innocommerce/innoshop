@@ -34,6 +34,10 @@ class CatalogController extends Controller
      */
     public function show(Catalog $catalog): mixed
     {
+        if (! $catalog->active) {
+            abort(404);
+        }
+
         $catalogs = CatalogRepo::getInstance()->list(['active' => true]);
         $articles = ArticleRepo::getInstance()->list(['active' => true, 'catalog_id' => $catalog->id]);
 
@@ -53,8 +57,13 @@ class CatalogController extends Controller
      */
     public function slugShow(Request $request): mixed
     {
-        $slug     = $request->slug;
-        $catalog  = CatalogRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
+        $slug    = $request->slug;
+        $catalog = CatalogRepo::getInstance()->builder(['active' => true])->where('slug', $slug)->firstOrFail();
+
+        if (! $catalog->active) {
+            abort(404);
+        }
+
         $catalogs = CatalogRepo::getInstance()->list(['active' => true]);
         $articles = ArticleRepo::getInstance()->list(['active' => true, 'catalog_id' => $catalog->id]);
 

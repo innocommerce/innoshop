@@ -7,7 +7,7 @@
           <div class="newest-item">
             <div class="item-img">
               <a href="{{ $article->url }}">
-                <img src="{{ image_resize($article->translation?->image ?? '', 200, 150) }}" class="img-fluid">
+                <img src="{{ image_resize($article->image, 200, 150) }}" class="img-fluid">
               </a>
             </div>
             <div class="item-content d-flex flex-column justify-content-between">

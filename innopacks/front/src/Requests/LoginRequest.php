@@ -30,10 +30,32 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'email'    => 'required',
-            'password' => 'required',
-        ];
+        $authMethod = system_setting('auth_method', 'both');
+
+        $rules = [];
+
+        if ($authMethod === 'email_only' || $authMethod === 'both') {
+            $rules['email']    = 'required_without_all:calling_code,telephone';
+            $rules['password'] = 'required_with:email';
+        }
+
+        if ($authMethod === 'phone_only' || $authMethod === 'both') {
+            $rules['calling_code'] = 'required_without:email|string|max:10';
+            $rules['telephone']    = 'required_without:email|string|max:20';
+            $rules['code']         = 'required_with:calling_code|string|size:6';
+        }
+
+        // If only one method is allowed, make it required
+        if ($authMethod === 'email_only') {
+            $rules['email']    = 'required';
+            $rules['password'] = 'required';
+        } elseif ($authMethod === 'phone_only') {
+            $rules['calling_code'] = 'required|string|max:10';
+            $rules['telephone']    = 'required|string|max:20';
+            $rules['code']         = 'required|string|size:6';
+        }
+
+        return $rules;
     }
 
     /**

@@ -59,4 +59,25 @@ body.page-login {
       font-weight: bold;
     }
   }
+
+  // Auth method switch styles
+  .auth-method-switch {
+    .btn-outline-primary {
+      &.active {
+        background-color: $primary;
+        border-color: $primary;
+        color: #fff !important;
+      }
+
+      &:not(.active) {
+        color: $primary;
+        background-color: #fff;
+
+        &:hover {
+          background-color: #fff;
+          color: $primary;
+        }
+      }
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import "./http";
 import "./bootstrap-validation";
 import "./autocomplete";
+import "./settings";
 import common from "./common";
 import dominateColor from "./dominate_color";
 import ProductSelector from './product_selector';

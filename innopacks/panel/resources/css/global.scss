@@ -154,6 +154,36 @@ body {
           }
         }
       }
+
+      // Language dropdown menu with scroll for small screens
+      .locale-dropdown-menu {
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        
+        @media (max-width: 992px) {
+          max-height: calc(100vh - 80px);
+        }
+        
+        // Ensure scrollbar styling
+        &::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 3px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+          background: #888;
+          border-radius: 3px;
+          
+          &:hover {
+            background: #555;
+          }
+        }
+      }
     }
   }
 }

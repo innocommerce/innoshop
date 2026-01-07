@@ -20,7 +20,7 @@ class InitPluginGit extends Command
      *
      * @var string
      */
-    protected $signature = 'dev:init-git {plugin : Plugin folder name} {--gitea-url=https://innoshop.work : Gitea server URL} {--gitea-token= : Gitea API token (required for creating repository)} {--org=splugins : Organization name, default is splugins} {--private : Create private repository (default: true)} {--commit-message=Initial commit : Commit message} {--force : Force reinitialize if Git repo exists}';
+    protected $signature = 'dev:init-git {plugin : Plugin folder name} {--gitea-url=https://innoshop.work : Gitea server URL} {--gitea-token= : Gitea API token (required for creating repository)} {--org=splugins : Organization name, default is splugins} {--private : Create private repository} {--public : Create public repository} {--commit-message=Initial commit : Commit message} {--force : Force reinitialize if Git repo exists}';
 
     /**
      * The console command description.
@@ -76,8 +76,9 @@ class InitPluginGit extends Command
             }
         }
 
-        $org           = $this->option('org');
-        $isPrivate     = $this->option('private') ?? true;
+        $org = $this->option('org');
+        // Default to private repository unless --public is explicitly set
+        $isPrivate     = ! $this->option('public');
         $commitMessage = $this->option('commit-message');
         $force         = $this->option('force');
 

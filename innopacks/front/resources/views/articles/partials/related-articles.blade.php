@@ -9,7 +9,7 @@
             @if($relatedArticle->image)
               <div class="related-article-image">
                 <a href="{{ $relatedArticle->url }}">
-                  <img src="{{ $relatedArticle->image }}" alt="{{ $relatedArticle->translation->title }}" class="img-fluid rounded">
+                  <img src="{{ image_resize($relatedArticle->image, 60, 60) }}" alt="{{ $relatedArticle->translation->title }}" class="img-fluid rounded">
                 </a>
               </div>
             @endif

@@ -27,7 +27,7 @@
       <span class="dropdown-toggle" data-bs-toggle="dropdown">
         <span>{{ current_panel_locale()['name'] }}</span>
       </span>
-      <ul class="dropdown-menu dropdown-menu-end">
+      <ul class="dropdown-menu dropdown-menu-end locale-dropdown-menu">
         @foreach (panel_locales() as $locale)
         <li>
           <a class="dropdown-item d-flex align-items-center" href="{{ panel_route('locale.switch', ['code'=> $locale['code']]) }}">

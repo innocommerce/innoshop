@@ -118,6 +118,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::get('/settings', [Controllers\SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [Controllers\SettingController::class, 'update'])->name('settings.update');
+        Route::post('/settings/test-sms', [Controllers\SettingController::class, 'testSms'])->name('settings.test_sms');
 
         Route::post('/content_ai/generate', [Controllers\ContentAIController::class, 'generate'])->name('content_ai.generate');
 

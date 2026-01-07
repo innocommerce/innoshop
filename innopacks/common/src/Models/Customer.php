@@ -40,7 +40,7 @@ class Customer extends AuthUser
 
     protected $fillable = [
         'email', 'password', 'name', 'avatar', 'customer_group_id', 'address_id', 'locale', 'active', 'code', 'from',
-        'deleted_at',
+        'calling_code', 'telephone', 'deleted_at',
     ];
 
     /**

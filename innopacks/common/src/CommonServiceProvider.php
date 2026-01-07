@@ -62,16 +62,6 @@ class CommonServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register common languages.
-     *
-     * @return void
-     */
-    protected function loadTranslations(): void
-    {
-        $this->loadTranslationsFrom($this->basePath.'lang', 'common');
-    }
-
-    /**
      * Register common commands.
      *
      * @return void

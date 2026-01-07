@@ -7,10 +7,12 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use Exception;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -58,9 +60,27 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->dontReportDuplicates();
 
+        // Handle API exceptions
         $exceptions->render(function (Exception $e, Request $request) {
             if ($request->is('api/*')) {
                 return json_fail($e->getMessage());
+            }
+
+            return null;
+        });
+
+        // Handle 404 errors for frontend
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            if ($request->is('panel/*') || $request->is('admin/*')) {
+                return null;
+            }
+
+            if (! $request->is('api/*')) {
+                try {
+                    return response()->view('errors.404', [], 404);
+                } catch (Exception $exception) {
+                    return null;
+                }
             }
 
             return null;

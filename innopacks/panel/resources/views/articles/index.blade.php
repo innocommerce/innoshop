@@ -32,7 +32,7 @@
             @foreach($articles as $item)
               <tr>
                 <td>{{ $item->id }}</td>
-                <td><img src="{{ image_resize($item->fallbackName('image'), 30, 30) }}" class="wh-30"></td>
+                <td><img src="{{ image_resize($item->image, 30, 30) }}" class="wh-30"></td>
                 <td>
                   <a href="{{ $item->url }}" target="_blank" class="text-decoration-none" data-bs-toggle="tooltip" title="{{ $item->fallbackName('title') }}">
                     {{ sub_string($item->fallbackName('title'), 32) }}

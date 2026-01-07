@@ -71,10 +71,6 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product): mixed
     {
-        if (! $product->active) {
-            abort(404);
-        }
-
         $skuId = $request->get('sku_id');
 
         return $this->renderShow($product, $skuId);
@@ -102,6 +98,10 @@ class ProductController extends Controller
      */
     private function renderShow(Product $product, $skuId): mixed
     {
+        if (! $product->active) {
+            abort(404);
+        }
+
         if ($skuId) {
             $sku = Product\Sku::query()->find($skuId);
         }

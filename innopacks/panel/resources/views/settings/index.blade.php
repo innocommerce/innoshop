@@ -19,6 +19,7 @@
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel/setting.website_data') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-image">{{ __('panel/setting.image_settings') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting.email_setting') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-sms">{{ __('panel/setting.sms_setting') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-ai">{{ __('panel/setting.ai_setting') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-logistics-information">{{ __('panel/setting.express_company') }}</a>
             @hookinsert('panel.settings.tab.nav.bottom')
@@ -35,6 +36,7 @@
             @include('panel::settings._web_data')
             @include('panel::settings._image_setting')
             @include('panel::settings._email_setting')
+            @include('panel::settings._sms_setting')
             @include('panel::settings._ai_setting')
             @include('panel::settings._logistics_information')
             @hookinsert('panel.settings.tab.pane.bottom')
@@ -146,46 +148,5 @@
       })
     });
   })
-
-  $('.settings-nav').on('click', 'a', function() {
-    var text = $(this).text();
-    $('.setting-header').text(text);
-    
-    // Update active tab
-    $('.settings-nav a').removeClass('active');
-    $(this).addClass('active');
-    
-    // Show corresponding tab pane
-    var target = $(this).data('bs-target');
-    $('.tab-pane').removeClass('show active');
-    $(target).addClass('show active');
-  });
-
-  // Handle tab parameter from URL
-  var urlParams = new URLSearchParams(window.location.search);
-  var tabParam = urlParams.get('tab');
-  if (tabParam) {
-    var tabTarget = '#tab-setting-' + tabParam;
-    var $tabLink = $('.settings-nav a[data-bs-target="' + tabTarget + '"]');
-    if ($tabLink.length) {
-      $tabLink.trigger('click');
-    }
-  }
-
-  // Add hidden input to form to preserve current tab on submit
-  $('#app-form').on('submit', function() {
-    var $activeTab = $('.settings-nav a.active');
-    if ($activeTab.length) {
-      var target = $activeTab.data('bs-target');
-      if (target) {
-        var tabId = target.replace('#tab-setting-', '');
-        if ($('#current_tab').length === 0) {
-          $(this).append('<input type="hidden" name="tab" id="current_tab" value="' + tabId + '">');
-        } else {
-          $('#current_tab').val(tabId);
-        }
-      }
-    }
-  });
 </script>
 @endpush

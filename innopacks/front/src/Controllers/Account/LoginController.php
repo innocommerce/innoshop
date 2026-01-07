@@ -13,11 +13,14 @@ use App\Http\Controllers\Controller;
 use Exception;
 use InnoShop\Common\Services\CartService;
 use InnoShop\Front\Requests\LoginRequest;
+use InnoShop\Front\Services\AccountService;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class LoginController extends Controller
 {
+    use SendSmsCodeTrait;
+
     /**
      * @return mixed
      * @throws Exception
@@ -28,7 +31,9 @@ class LoginController extends Controller
             return redirect(front_route('account.index'));
         }
 
-        return inno_view('account.login');
+        $authMethod = system_setting('auth_method', 'both');
+
+        return inno_view('account.login', compact('authMethod'));
     }
 
     /**
@@ -40,11 +45,41 @@ class LoginController extends Controller
     public function store(LoginRequest $request): mixed
     {
         try {
+            $authMethod  = system_setting('auth_method', 'both');
             $oldGuestId  = current_guest_id();
             $redirectUri = session('front_redirect_uri');
+            $data        = $request->only(['email', 'password', 'calling_code', 'telephone', 'code']);
 
-            if (! auth('customer')->attempt($request->only('email', 'password'))) {
-                throw new NotAcceptableHttpException(front_trans('login.account_or_password_error'));
+            // Validate auth method
+            if ($authMethod === 'email_only' && (! isset($data['email']) || empty($data['email']))) {
+                throw new NotAcceptableHttpException(front_trans('login.email_required'));
+            }
+
+            if ($authMethod === 'phone_only' && (! isset($data['calling_code']) || ! isset($data['telephone']))) {
+                throw new NotAcceptableHttpException(front_trans('login.phone_required'));
+            }
+
+            // Login by SMS code
+            if (isset($data['calling_code']) && isset($data['telephone'])) {
+                // Clean and format phone data
+                $data['calling_code'] = trim($data['calling_code'] ?? '');
+                $data['telephone']    = trim($data['telephone'] ?? '');
+
+                // Remove any non-digit characters from telephone
+                $data['telephone'] = preg_replace('/[^0-9]/', '', $data['telephone']);
+
+                // Ensure calling_code has + prefix if not empty
+                if (! empty($data['calling_code']) && ! str_starts_with($data['calling_code'], '+')) {
+                    $data['calling_code'] = '+'.ltrim($data['calling_code'], '+');
+                }
+
+                $customer = AccountService::getInstance()->loginBySms($data);
+                auth('customer')->login($customer);
+            } else {
+                // Login by email and password
+                if (! auth('customer')->attempt($request->only('email', 'password'))) {
+                    throw new NotAcceptableHttpException(front_trans('login.account_or_password_error'));
+                }
             }
 
             $customer = current_customer();
@@ -65,5 +100,15 @@ class LoginController extends Controller
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Send SMS verification code for login
+     *
+     * @return mixed
+     */
+    public function sendSmsCode(): mixed
+    {
+        return $this->sendSmsCodeInternal('login');
     }
 }

@@ -88,8 +88,10 @@ Route::get('/page-{slug}', [Controllers\PageController::class, 'slugShow'])->nam
 
 Route::get('/login', [Account\LoginController::class, 'index'])->name('login.index');
 Route::post('/login', [Account\LoginController::class, 'store'])->name('login.store');
+Route::post('/login/sms-code', [Account\LoginController::class, 'sendSmsCode'])->name('login.sms-code');
 Route::get('/register', [Account\RegisterController::class, 'index'])->name('register.index');
 Route::post('/register', [Account\RegisterController::class, 'store'])->name('register.store');
+Route::post('/register/sms-code', [Account\RegisterController::class, 'sendSmsCode'])->name('register.sms-code');
 
 Route::get('/forgotten', [Account\ForgottenController::class, 'index'])->name('forgotten.index');
 Route::post('/forgotten/verify_code', [Account\ForgottenController::class, 'sendVerifyCode'])->name('forgotten.verify_code');
@@ -142,6 +144,7 @@ Route::prefix('account')
 
         Route::get('/edit', [Account\EditController::class, 'index'])->name('edit.index');
         Route::put('/edit', [Account\EditController::class, 'update'])->name('edit.update');
+        Route::post('/edit/sms-code', [Account\EditController::class, 'sendSmsCode'])->name('edit.sms-code');
 
         Route::get('/password', [Account\PasswordController::class, 'index'])->name('password.index');
         Route::put('/password', [Account\PasswordController::class, 'update'])->name('password.update');

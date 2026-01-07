@@ -86,4 +86,22 @@ class Article extends BaseModel
     {
         return panel_route('articles.edit', $this);
     }
+
+    /**
+     * Get article image with fallback logic.
+     * Priority: current locale translation image -> main image
+     *
+     * @return string
+     */
+    public function getImageAttribute(): string
+    {
+        // Get the original image value from database (use attributes to avoid recursion)
+        $originalImage = $this->attributes['image'] ?? '';
+
+        // Try to get image from current locale translation
+        $translationImage = $this->fallbackName('image');
+
+        // Return translation image if exists, otherwise return main image
+        return $translationImage ?: $originalImage;
+    }
 }

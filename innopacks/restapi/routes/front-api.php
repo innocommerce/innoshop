@@ -16,6 +16,7 @@ Route::get('/settings', [FrontApiControllers\SettingController::class, 'index'])
 
 Route::post('/login', [FrontApiControllers\AuthController::class, 'login'])->name('login.index');
 Route::post('/register', [FrontApiControllers\AuthController::class, 'register'])->name('login.register');
+Route::post('/sms-code', [FrontApiControllers\AuthController::class, 'sendSmsCode'])->name('sms-code');
 
 Route::post('/upload/images', [FrontApiControllers\UploadController::class, 'images'])->name('upload.images');
 Route::post('/upload/files', [FrontApiControllers\UploadController::class, 'files'])->name('upload.files');

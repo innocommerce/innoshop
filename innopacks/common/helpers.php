@@ -882,7 +882,15 @@ if (! function_exists('equal_route_name')) {
      */
     function equal_route_name($routeName, ?string $prefix = null): bool
     {
-        $currentRouteName = Route::getCurrentRoute()->getName();
+        $currentRoute = Route::getCurrentRoute();
+        if (! $currentRoute) {
+            return false;
+        }
+
+        $currentRouteName = $currentRoute->getName();
+        if (! $currentRouteName) {
+            return false;
+        }
 
         // Default prefix removal (locale code)
         $defaultPrefix    = front_locale_code().'.';

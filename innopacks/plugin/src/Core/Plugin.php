@@ -528,6 +528,8 @@ final class Plugin implements Arrayable, ArrayAccess
                 $value = (int) $value;
             }
             $this->fields[$index]['value'] = $value;
+
+            $this->fields[$index]['view_path'] = $this->getFieldViewPath($field['type'] ?? 'string');
         }
 
         return $this->fields;
@@ -564,6 +566,31 @@ final class Plugin implements Arrayable, ArrayAccess
         }
 
         return '';
+    }
+
+    /**
+     * Get the view path for a field type.
+     * Priority: plugin custom view > system default view
+     *
+     * @param  string  $fieldType
+     * @return string
+     */
+    public function getFieldViewPath(string $fieldType): string
+    {
+        $pluginCode = $this->dirName ?? '';
+
+        if (empty($pluginCode)) {
+            return "plugin::plugins.fields.{$fieldType}";
+        }
+
+        $customView  = "{$pluginCode}::plugins.fields.{$fieldType}";
+        $defaultView = "plugin::plugins.fields.{$fieldType}";
+
+        if (view()->exists($customView)) {
+            return $customView;
+        }
+
+        return $defaultView;
     }
 
     /**

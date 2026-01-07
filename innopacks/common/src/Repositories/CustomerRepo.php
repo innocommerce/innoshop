@@ -160,13 +160,21 @@ class CustomerRepo extends BaseRepo
      */
     public function updateProfile($item, $data): mixed
     {
-        $data = [
+        $updateData = [
             'avatar' => $data['avatar'] ?? '',
             'name'   => $data['name'],
-            'email'  => $data['email'],
+            'email'  => $data['email'] ?? null,
         ];
 
-        $item->fill($data);
+        // Update phone number if provided
+        if (isset($data['calling_code'])) {
+            $updateData['calling_code'] = $data['calling_code'];
+        }
+        if (isset($data['telephone'])) {
+            $updateData['telephone'] = $data['telephone'];
+        }
+
+        $item->fill($updateData);
         $item->saveOrFail();
 
         return $item;
@@ -179,6 +187,46 @@ class CustomerRepo extends BaseRepo
     public function findByEmail($email): mixed
     {
         return $this->builder()->where('email', $email)->first();
+    }
+
+    /**
+     * Find customer by phone
+     *
+     * @param  string  $callingCode
+     * @param  string  $telephone
+     * @return Customer|null
+     */
+    public function findByPhone(string $callingCode, string $telephone): ?Customer
+    {
+        return $this->builder()
+            ->where('calling_code', $callingCode)
+            ->where('telephone', $telephone)
+            ->first();
+    }
+
+    /**
+     * Find customer by email or phone
+     *
+     * @param  string  $account
+     * @return Customer|null
+     */
+    public function findByEmailOrPhone(string $account): ?Customer
+    {
+        // Try email first
+        $customer = $this->findByEmail($account);
+        if ($customer) {
+            return $customer;
+        }
+
+        // Try phone format: +8613812345678 or 8613812345678
+        if (preg_match('/^(\+?)(\d{1,4})(\d{4,14})$/', $account, $matches)) {
+            $callingCode = $matches[1].$matches[2];
+            $telephone   = $matches[3];
+
+            return $this->findByPhone($callingCode, $telephone);
+        }
+
+        return null;
     }
 
     /**
@@ -233,8 +281,8 @@ class CustomerRepo extends BaseRepo
     private function handleData(array $requestData): array
     {
         $data = [
-            'email'             => $requestData['email'],
-            'name'              => $requestData['name'],
+            'email'             => $requestData['email'] ?? null,
+            'name'              => $requestData['name'] ?? '',
             'customer_group_id' => $requestData['customer_group_id'] ?? 0,
             'address_id'        => $requestData['address_id'] ?? 0,
             'locale'            => $requestData['locale'] ?? locale_code(),
@@ -251,6 +299,14 @@ class CustomerRepo extends BaseRepo
         $password = $requestData['password'] ?? '';
         if ($password) {
             $data['password'] = bcrypt($password);
+        }
+
+        // Handle calling_code and telephone
+        if (isset($requestData['calling_code'])) {
+            $data['calling_code'] = trim($requestData['calling_code']);
+        }
+        if (isset($requestData['telephone'])) {
+            $data['telephone'] = trim($requestData['telephone']);
         }
 
         return $data;

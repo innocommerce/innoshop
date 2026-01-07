@@ -330,7 +330,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->comment('Customer');
             $table->bigIncrements('id')->comment('ID');
-            $table->string('email', 64)->unique()->comment('Email');
+            $table->string('email', 64)->nullable()->unique()->comment('Email');
             $table->string('password')->comment('Password');
             $table->string('name')->comment('Name');
             $table->string('avatar')->default('')->comment('Avatar');
