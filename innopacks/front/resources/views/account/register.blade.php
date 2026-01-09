@@ -44,7 +44,8 @@
             <input id="password" type="password" class="form-control" name="password" 
                    @if($authMethod === 'email_only') required @elseif($authMethod === 'both') data-required-with="email" @endif 
                    autocomplete="new-password" placeholder="{{ __('front/login.password') }}" />
-            <input class="d-none" name="password_confirmation" />
+            <input id="password_confirmation" type="password" class="d-none" name="password_confirmation" 
+                   autocomplete="new-password" />
             <span class="invalid-feedback" role="alert"><strong>{{ __('front/login.password_required') }}</strong></span>
           </div>
         </div>
@@ -163,8 +164,22 @@
     });
   });
 
-  inno.validateAndSubmitForm('.form-wrap', function(data) {
+  inno.validateAndSubmitForm('.form-wrap', function(serializedData) {
     layer.load(2, {shade: [0.3,'#fff'] })
+    
+    // Parse serialized data to object
+    const data = {};
+    serializedData.split('&').forEach(function(item) {
+      const parts = item.split('=');
+      if (parts.length === 2) {
+        data[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+      }
+    });
+    
+    // Ensure password_confirmation matches password
+    if (data.password) {
+      data.password_confirmation = data.password;
+    }
     
     // Remove hidden fields based on auth method
     if (authMethod === 'both') {
@@ -181,9 +196,6 @@
     }
     
     const params = new URLSearchParams(data);
-    if (data.password) {
-      params.set('password_confirmation', $('input[name="password"]').val());
-    }
 
     axios.post($('.form-wrap').attr('action'), params.toString()).then(function(res) {
       if (res.success) {
