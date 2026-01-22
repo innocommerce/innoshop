@@ -49,7 +49,7 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-        $authMethod = system_setting('auth_method', 'both');
+        $authMethod = auth_method();
 
         $rules = [];
 

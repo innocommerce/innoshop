@@ -15,7 +15,7 @@
                                 ['key' => 'phone_only', 'value' => __('panel/setting.auth_method_phone_only')],
                                 ['key' => 'both', 'value' => __('panel/setting.auth_method_both')]
                               ]" key="key" label="value" :empty-option="false"
-                              value="{{ old('auth_method', system_setting('auth_method', 'both')) }}"/>
+                              value="{{ old('auth_method', auth_method()) }}"/>
           <div class="text-secondary"><small>{{ __('panel/setting.auth_method_desc') }}</small></div>
         </div>
       </div>

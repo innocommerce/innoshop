@@ -31,7 +31,7 @@ class LoginController extends Controller
             return redirect(front_route('account.index'));
         }
 
-        $authMethod = system_setting('auth_method', 'both');
+        $authMethod = auth_method();
 
         return inno_view('account.login', compact('authMethod'));
     }
@@ -45,7 +45,7 @@ class LoginController extends Controller
     public function store(LoginRequest $request): mixed
     {
         try {
-            $authMethod  = system_setting('auth_method', 'both');
+            $authMethod  = auth_method();
             $oldGuestId  = current_guest_id();
             $redirectUri = session('front_redirect_uri');
             $data        = $request->only(['email', 'password', 'calling_code', 'telephone', 'code']);

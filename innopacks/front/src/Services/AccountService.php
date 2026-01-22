@@ -26,7 +26,7 @@ class AccountService extends BaseService
      */
     public function register($data): Customer
     {
-        $authMethod = system_setting('auth_method', 'both');
+        $authMethod = auth_method();
 
         // Validate auth method
         if ($authMethod === 'email_only' && (! isset($data['email']) || empty($data['email']))) {

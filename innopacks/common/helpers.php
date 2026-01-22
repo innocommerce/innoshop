@@ -92,6 +92,19 @@ if (! function_exists('system_setting_locale')) {
     }
 }
 
+if (! function_exists('auth_method')) {
+    /**
+     * Get authentication method setting
+     * Returns: 'email_only', 'phone_only', or 'both'
+     *
+     * @return string
+     */
+    function auth_method(): string
+    {
+        return system_setting('auth_method', 'email_only');
+    }
+}
+
 if (! function_exists('locale_image')) {
     /**
      * Get locale image

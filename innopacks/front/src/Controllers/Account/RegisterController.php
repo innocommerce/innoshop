@@ -30,7 +30,7 @@ class RegisterController extends Controller
             return redirect(front_route('account.index'));
         }
 
-        $authMethod = system_setting('auth_method', 'both');
+        $authMethod = auth_method();
 
         return inno_view('account.register', compact('authMethod'));
     }
