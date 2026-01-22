@@ -1182,6 +1182,7 @@ if (! function_exists('theme_image')) {
             return image_resize('', $width, $height, 'contain');
         }
 
+        // ImageService will automatically validate and use placeholder if image is invalid
         return image_resize($destThemePath, $width, $height, 'contain');
     }
 }
@@ -1535,5 +1536,80 @@ if (! function_exists('theme_mix')) {
         }
 
         return asset($path);
+    }
+}
+
+if (! function_exists('smart_log')) {
+    /**
+     * Smart logging function that respects debug mode and log levels
+     *
+     * This function will log messages based on:
+     * - APP_DEBUG setting (debug/info/warning only log when debug is enabled)
+     * - Log level (error/critical/alert/emergency always log)
+     * - LOG_LEVEL configuration (respects minimum log level)
+     *
+     * @param  string  $level  Log level: debug, info, warning, error, critical, alert, emergency
+     * @param  string  $message  Log message
+     * @param  array  $context  Additional context data
+     * @param  bool  $force  Force logging even if debug is disabled (default: false, auto-determined by level)
+     * @return void
+     */
+    function smart_log(string $level, string $message, array $context = [], ?bool $force = null): void
+    {
+        $level       = strtolower($level);
+        $validLevels = ['debug', 'info', 'notice', 'warning', 'error', 'critical', 'alert', 'emergency'];
+
+        if (! in_array($level, $validLevels)) {
+            $level = 'info';
+        }
+
+        // Determine if we should log based on debug mode
+        $isDebug = config('app.debug', false);
+
+        // Critical levels always log regardless of debug mode
+        $criticalLevels = ['error', 'critical', 'alert', 'emergency'];
+        $shouldLog      = false;
+
+        if ($force === true) {
+            // Force logging
+            $shouldLog = true;
+        } elseif ($force === false) {
+            // Force no logging
+            $shouldLog = false;
+        } elseif (in_array($level, $criticalLevels)) {
+            // Critical levels always log
+            $shouldLog = true;
+        } elseif ($isDebug) {
+            // Non-critical levels only log when debug is enabled
+            $shouldLog = true;
+        }
+
+        if (! $shouldLog) {
+            return;
+        }
+
+        // Check LOG_LEVEL configuration to respect minimum log level
+        $logLevel      = strtolower(config('logging.channels.single.level', 'debug'));
+        $levelPriority = [
+            'debug'     => 0,
+            'info'      => 1,
+            'notice'    => 2,
+            'warning'   => 3,
+            'error'     => 4,
+            'critical'  => 5,
+            'alert'     => 6,
+            'emergency' => 7,
+        ];
+
+        $logLevelPriority     = $levelPriority[$logLevel] ?? 0;
+        $messageLevelPriority = $levelPriority[$level] ?? 0;
+
+        // Only log if message level is >= configured log level
+        if ($messageLevelPriority < $logLevelPriority) {
+            return;
+        }
+
+        // Log the message using Laravel's Log facade
+        \Illuminate\Support\Facades\Log::{$level}($message, $context);
     }
 }

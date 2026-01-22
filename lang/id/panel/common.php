@@ -58,6 +58,7 @@ return [
     'image'                        => 'Gambar',
     'import'                       => 'Impor penanda',
     'inactive'                     => 'Nonaktif',
+    'not_used'                     => 'Tidak digunakan',
     'install'                      => 'Instal',
     'invalid_action'               => 'Operasi tidak valid',
     'invalid_parameters'           => 'Parameternya tidak valid',

@@ -38,7 +38,13 @@ class ImageService
         }
         $this->image     = $image ?: $this->placeholderImage;
         $this->imagePath = public_path($this->image);
+
+        // Check if file exists and is a valid image
         if (! is_file($this->imagePath)) {
+            $this->image     = $this->placeholderImage;
+            $this->imagePath = public_path($this->placeholderImage);
+        } elseif (! $this->isValidImage($this->imagePath)) {
+            // File exists but is not a valid image, use placeholder
             $this->image     = $this->placeholderImage;
             $this->imagePath = public_path($this->placeholderImage);
         }
@@ -96,6 +102,13 @@ class ImageService
                 return $this->originUrl();
             }
 
+            // SVG files are vector graphics and don't need resizing
+            // Return original URL directly
+            $extension = strtolower(pathinfo($this->imagePath, PATHINFO_EXTENSION));
+            if ($extension === 'svg') {
+                return $this->originUrl();
+            }
+
             // Get and validate image dimensions
             $dimensions = $this->getImageDimensions();
             if ($dimensions === null) {
@@ -136,6 +149,58 @@ class ImageService
 
             return $this->originUrl();
         }
+    }
+
+    /**
+     * Check if file is a valid image
+     *
+     * @param  string  $filePath
+     * @return bool
+     */
+    private function isValidImage(string $filePath): bool
+    {
+        if (! is_file($filePath) || ! is_readable($filePath)) {
+            return false;
+        }
+
+        // Check file extension
+        $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+
+        // SVG files need special handling as getimagesize() doesn't work well with SVG
+        if ($extension === 'svg') {
+            return $this->isValidSvg($filePath);
+        }
+
+        // For other image formats, use getimagesize() to validate
+        $imageInfo = @getimagesize($filePath);
+
+        return $imageInfo !== false;
+    }
+
+    /**
+     * Check if file is a valid SVG
+     *
+     * @param  string  $filePath
+     * @return bool
+     */
+    private function isValidSvg(string $filePath): bool
+    {
+        // Read first few bytes to check for SVG signature
+        $handle = @fopen($filePath, 'r');
+        if ($handle === false) {
+            return false;
+        }
+
+        $content = @fread($handle, 1024);
+        @fclose($handle);
+
+        if ($content === false) {
+            return false;
+        }
+
+        // Check if content contains SVG tag
+        // SVG can be XML format with <?xml> or direct <svg> tag
+        return preg_match('/<svg\b/i', $content) === 1 || preg_match('/<\?xml[^>]*>\s*<svg\b/i', $content) === 1;
     }
 
     /**

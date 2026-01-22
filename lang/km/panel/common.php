@@ -58,6 +58,7 @@ return [
     'image'                        => 'រូបភាព',
     'import'                       => 'នាំចូល',
     'inactive'                     => 'មិនសកម្ម',
+    'not_used'                     => 'មិនបានប្រើ',
     'install'                      => 'ដំឡើង',
     'invalid_action'               => 'សកម្មភាពមិនត្រឹមត្រូវ',
     'invalid_parameters'           => 'ប៉ារ៉ាម៉ែត្រមិនត្រឹមត្រូវ',

@@ -58,6 +58,7 @@ return [
     'image'                        => 'صورة',
     'import'                       => 'الاستيراد',
     'inactive'                     => 'غير نشط',
+    'not_used'                     => 'غير مستخدم',
     'install'                      => 'تثبيت',
     'invalid_action'               => 'عملية غير صالحة',
     'invalid_parameters'           => 'البارامترات غير صالحة',

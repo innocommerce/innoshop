@@ -58,6 +58,7 @@ return [
     'image'                        => 'Görsel',
     'import'                       => 'To lead into',
     'inactive'                     => 'Pasif',
+    'not_used'                     => 'Kullanılmamış',
     'install'                      => 'Yükle',
     'invalid_action'               => 'Geçersiz eylem',
     'invalid_parameters'           => 'Parametre geçersiz',

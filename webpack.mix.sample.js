@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 /*
  |--------------------------------------------------------------------------
@@ -22,6 +24,10 @@ const config = {
         front: 'innopacks/front/resources',
         panel: 'innopacks/panel/resources',
         install: 'innopacks/install/resources'
+    },
+    permissions: {
+        owner: 'www:www',
+        mode: '755'
     }
 };
 
@@ -159,6 +165,126 @@ const defaultResources = {
     }
 };
 
+// Theme distribution management
+const themeDistributor = {
+    /**
+     * Copy compiled assets to theme's public directory for distribution
+     */
+    copyToThemePublic: () => {
+        if (!config.theme || config.theme === 'default') {
+            utils.log('Skipping theme distribution (default theme)', 'ℹ️');
+            return;
+        }
+        
+        const sourceDir = `${config.paths.static}/${config.theme}`;
+        const targetDir = `${config.paths.themes}/${config.theme}/public`;
+        
+        if (!utils.fileExists(sourceDir)) {
+            utils.log(`Source directory not found: ${sourceDir}`, '⚠️');
+            return;
+        }
+        
+        try {
+            // Create target directory structure
+            utils.createDir(`${targetDir}/css`);
+            utils.createDir(`${targetDir}/js`);
+            
+            // Copy CSS files
+            const cssFiles = ['app.css', 'bootstrap.css'];
+            cssFiles.forEach(file => {
+                const sourceFile = `${sourceDir}/css/${file}`;
+                const targetFile = `${targetDir}/css/${file}`;
+                
+                if (utils.fileExists(sourceFile)) {
+                    fs.copyFileSync(sourceFile, targetFile);
+                    utils.log(`Copied: ${file} → ${targetDir}/css/`, '📦');
+                }
+            });
+            
+            // Copy JS files
+            const jsFile = `${sourceDir}/js/app.js`;
+            const targetJsFile = `${targetDir}/js/app.js`;
+            if (utils.fileExists(jsFile)) {
+                utils.createDir(`${targetDir}/js`);
+                fs.copyFileSync(jsFile, targetJsFile);
+                utils.log(`Copied: app.js → ${targetDir}/js/`, '📦');
+            }
+            
+            // Copy source maps if they exist
+            const mapFiles = [
+                { source: `${sourceDir}/css/app.css.map`, target: `${targetDir}/css/app.css.map` },
+                { source: `${sourceDir}/css/bootstrap.css.map`, target: `${targetDir}/css/bootstrap.css.map` },
+                { source: `${sourceDir}/js/app.js.map`, target: `${targetDir}/js/app.js.map` }
+            ];
+            
+            mapFiles.forEach(({ source, target }) => {
+                if (utils.fileExists(source)) {
+                    const targetDirPath = path.dirname(target);
+                    utils.createDir(targetDirPath);
+                    fs.copyFileSync(source, target);
+                    utils.log(`Copied map: ${path.basename(source)}`, '🗺️');
+                }
+            });
+            
+            utils.log(`Theme assets copied to: ${targetDir}`, '✅');
+        } catch (error) {
+            utils.log(`Error copying theme assets: ${error.message}`, '❌');
+        }
+    }
+};
+
+// Permission management
+const permissionManager = {
+    /**
+     * Set directory permissions recursively
+     * @param {string} path - Directory path
+     */
+    setPermissions: (path) => {
+        try {
+            // Only execute on Linux systems
+            if (process.platform !== 'linux') {
+                utils.log(`Skipping permission setup on ${process.platform}: ${path}`, '⚠️');
+                return;
+            }
+            
+            // Check if directory exists
+            if (!utils.fileExists(path)) {
+                utils.log(`Directory not found: ${path}`, '⚠️');
+                return;
+            }
+            
+            const { owner, mode } = config.permissions;
+            
+            // Set ownership recursively
+            try {
+                execSync(`chown -R ${owner} ${path}`, { stdio: 'pipe' });
+                utils.log(`Set ownership ${owner} on: ${path}`, '🔐');
+            } catch (error) {
+                // If chown fails (e.g., permission denied), log warning but continue
+                utils.log(`Failed to set ownership (may need sudo): ${path}`, '⚠️');
+            }
+            
+            // Set permissions recursively
+            try {
+                execSync(`chmod -R ${mode} ${path}`, { stdio: 'pipe' });
+                utils.log(`Set permissions ${mode} on: ${path}`, '🔐');
+            } catch (error) {
+                utils.log(`Failed to set permissions: ${path}`, '⚠️');
+            }
+        } catch (error) {
+            utils.log(`Error setting permissions for ${path}: ${error.message}`, '❌');
+        }
+    },
+    
+    /**
+     * Set permissions for public directory after compilation
+     */
+    setPublicPermissions: () => {
+        const publicPath = 'public';
+        permissionManager.setPermissions(publicPath);
+    }
+};
+
 // Build process
 const buildProcess = {
     /**
@@ -194,6 +320,29 @@ const buildProcess = {
                 extractComments: false,
             },
         });
+    },
+    
+    /**
+     * Set permissions after compilation
+     */
+    setPermissions: () => {
+        // Use mix.then() to execute after compilation
+        mix.then(() => {
+            utils.log('Compilation completed, setting permissions...', '🔐');
+            permissionManager.setPublicPermissions();
+            utils.log('Permission setup completed!', '✅');
+        });
+    },
+    
+    /**
+     * Copy theme assets to theme's public directory for distribution
+     */
+    distributeTheme: () => {
+        // Use mix.then() to execute after compilation
+        mix.then(() => {
+            utils.log('Copying theme assets to theme public directory...', '📦');
+            themeDistributor.copyToThemePublic();
+        });
     }
 };
 
@@ -201,3 +350,5 @@ const buildProcess = {
 buildProcess.init();
 buildProcess.compile();
 buildProcess.optimize();
+buildProcess.setPermissions();
+buildProcess.distributeTheme();

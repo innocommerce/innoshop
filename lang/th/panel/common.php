@@ -58,6 +58,7 @@ return [
     'image'                        => 'รูปภาพ',
     'import'                       => 'นำเข้า',
     'inactive'                     => 'ไม่ใช้งาน',
+    'not_used'                     => 'ไม่ได้ใช้',
     'install'                      => 'ติดตั้ง',
     'invalid_action'               => 'การกระทำไม่ถูกต้อง',
     'invalid_parameters'           => 'พารามิเตอร์ไม่ถูกต้อง',

@@ -21,7 +21,6 @@ use InnoShop\Front\Middleware\CustomerAuthentication;
 use InnoShop\Front\Middleware\GlobalFrontData;
 use InnoShop\Front\Middleware\MaintenanceMode;
 use InnoShop\Front\Middleware\SetFrontLocale;
-use InnoShop\Panel\Repositories\ThemeRepo;
 
 class FrontServiceProvider extends ServiceProvider
 {
@@ -230,14 +229,16 @@ class FrontServiceProvider extends ServiceProvider
      */
     protected function loadThemeTranslations(): void
     {
-        $themes = ThemeRepo::getInstance()->getListFromPath();
-        foreach ($themes as $theme) {
-            $themeCode     = $theme['code'];
-            $themeLangPath = base_path("themes/{$themeCode}/lang");
-            if (! is_dir($themeLangPath)) {
-                continue;
-            }
-            $this->loadTranslationsFrom($themeLangPath, "theme-$themeCode");
+        $currentTheme = system_setting('theme');
+        if (! $currentTheme) {
+            return;
         }
+
+        $themeLangPath = base_path("themes/{$currentTheme}/lang");
+        if (! is_dir($themeLangPath)) {
+            return;
+        }
+
+        $this->loadTranslationsFrom($themeLangPath, "theme-{$currentTheme}");
     }
 }

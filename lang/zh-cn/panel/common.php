@@ -9,6 +9,7 @@
 
 return [
     'actions'                      => '操作',
+    'activate'                     => '激活',
     'active'                       => '启用',
     'add'                          => '添加',
     'all'                          => '全部',
@@ -30,6 +31,7 @@ return [
     'category_parent_self'         => '分类的父级不能是其自身',
     'clear_selection'              => '清空选择',
     'close'                        => '关闭',
+    'code'                         => '代码',
     'collapse'                     => '折叠',
     'confirm'                      => '确定',
     'copy'                         => '复制',
@@ -57,6 +59,7 @@ return [
     'image'                        => '图片',
     'import'                       => '导入',
     'inactive'                     => '禁用',
+    'not_used'                     => '未使用',
     'install'                      => '安装',
     'invalid_action'               => '无效的操作',
     'invalid_parameters'           => '参数无效',

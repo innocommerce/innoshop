@@ -58,6 +58,7 @@ return [
     'image'                        => 'Imej',
     'import'                       => 'Import',
     'inactive'                     => 'Tidak aktif',
+    'not_used'                     => 'Tidak digunakan',
     'install'                      => 'Pasang',
     'invalid_action'               => 'Tindakan tidak sah',
     'invalid_parameters'           => 'Parameter tidak sah',

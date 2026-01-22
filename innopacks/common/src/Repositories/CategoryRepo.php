@@ -88,6 +88,8 @@ class CategoryRepo extends BaseRepo
      */
     public function builder(array $filters = []): Builder
     {
+        $filters = array_merge($this->filters, $filters);
+
         $builder = Category::query()->with([
             'translation',
             'parent.translation',

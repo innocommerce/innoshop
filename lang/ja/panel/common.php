@@ -58,6 +58,7 @@ return [
     'image'                        => '画像',
     'import'                       => '導入します',
     'inactive'                     => '無効',
+    'not_used'                     => '未使用',
     'install'                      => 'インストール',
     'invalid_action'               => '無効な操作です',
     'invalid_parameters'           => 'パラメータ無効です',

@@ -58,6 +58,7 @@ return [
     'image'                        => 'Hình ảnh',
     'import'                       => 'Nhập khẩu',
     'inactive'                     => 'Không kích hoạt',
+    'not_used'                     => 'Chưa sử dụng',
     'install'                      => 'Cài đặt',
     'invalid_action'               => 'Hoạt động không hiệu quả',
     'invalid_parameters'           => 'Tham số không hợp lệ',

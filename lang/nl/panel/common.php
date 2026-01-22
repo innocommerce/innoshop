@@ -58,6 +58,7 @@ return [
     'image'                        => 'Afbeelding',
     'import'                       => 'Importeren',
     'inactive'                     => 'Uitgeschakeld',
+    'not_used'                     => 'Niet gebruikt',
     'install'                      => 'Installeren',
     'invalid_action'               => 'Ongeldige actie',
     'invalid_parameters'           => 'Ongeldige parameters',

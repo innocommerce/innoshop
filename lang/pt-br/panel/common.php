@@ -58,6 +58,7 @@ return [
     'image'                        => 'Imagem',
     'import'                       => 'Importar',
     'inactive'                     => 'Desativar',
+    'not_used'                     => 'Não usado',
     'install'                      => 'Instalar',
     'invalid_action'               => 'Ação inválida',
     'invalid_parameters'           => 'Parâmetros inválidos',

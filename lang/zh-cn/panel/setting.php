@@ -216,6 +216,8 @@ return [
     'order_status_update'                     => '订单状态变更',
     'page'                                    => '文章单页',
     'panel_name'                              => '后台路径',
+    'panel_name_required'                     => '后台路径不能为空',
+    'panel_name_alpha'                        => '后台路径只能包含字母，且至少需要一个字母',
     'password_reset'                          => '找回密码',
     'placeholder'                             => '缺省图',
     'please_select_country'                   => '请选择国家',

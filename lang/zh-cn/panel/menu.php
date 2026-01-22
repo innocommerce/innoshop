@@ -21,7 +21,7 @@ return [
     'brands'             => '产品品牌',
     'catalogs'           => '文章分类',
     'categories'         => '产品分类',
-    'countries'          => '国家或地区',
+    'countries'          => '国家地区',
     'currencies'         => '货币汇率',
     'currency'           => '汇率设置',
     'customer_groups'    => '客户分组',

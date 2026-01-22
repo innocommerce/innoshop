@@ -41,7 +41,6 @@ class CategoryRequest extends FormRequest
         return [
             'slug'     => $slugRule,
             'position' => 'integer',
-            'active'   => 'bool',
 
             "translations.$defaultLocale.locale" => 'required',
             "translations.$defaultLocale.name"   => 'required',

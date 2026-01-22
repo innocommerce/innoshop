@@ -136,6 +136,8 @@ return [
     'order_status_update'                     => 'Order status change',
     'page'                                    => 'Page',
     'panel_name'                              => 'Panel Path Name',
+    'panel_name_required'                     => 'Panel path name is required',
+    'panel_name_alpha'                        => 'Panel path name must contain only letters and at least one letter',
     'password_reset'                          => 'Retrieve the password',
     'placeholder'                             => 'Placeholder',
     'please_select_country'                   => 'Please select a country',

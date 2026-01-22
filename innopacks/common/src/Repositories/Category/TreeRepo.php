@@ -112,6 +112,7 @@ class TreeRepo
         $categories = Category::query()
             ->with('translation')
             ->select(['id', 'slug', 'parent_id', 'image', 'active'])
+            ->where('active', true)
             ->get();
 
         $result = [];

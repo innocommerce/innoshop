@@ -1,6 +1,6 @@
 <div class="tab-pane fade show active mt-3" id="basic-tab-pane" role="tabpanel" aria-labelledby="basic-tab"
      tabindex="0">
-  <div class="mb-3 col-12 col-md-5">
+  <div class="mb-3 col-12 col-md-6">
     <label class="form-label">{{ __('panel/product.type') }}</label>
     <select class="form-select" name="type" id="product-type" {{ $product->id ? 'disabled' : '' }} required>
       @php
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div class="mb-3 col-12 col-md-5">
+  <div class="mb-3 col-12 col-md-6">
     <div class="mb-1 fs-6">{{ __('panel/product.name') }}</div>
     @if(has_translator())
       <div

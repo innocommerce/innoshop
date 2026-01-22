@@ -58,6 +58,7 @@ return [
     'image'                        => '이미지',
     'import'                       => '가져오기',
     'inactive'                     => '비활성화',
+    'not_used'                     => '미사용',
     'install'                      => '설치',
     'invalid_action'               => '잘못된 동작',
     'invalid_parameters'           => '인자가 잘못됨',

@@ -24,6 +24,36 @@ class ProductRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     * Convert JSON strings to arrays for skus and variants.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        // Convert skus JSON string to array if needed
+        // Single SKU products use skus[0][price] format which Laravel handles automatically as array
+        // Multiple SKU products use hidden field with JSON string that needs to be decoded
+        if ($this->has('skus') && is_string($this->skus)) {
+            $decoded = json_decode($this->skus, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $this->merge(['skus' => $decoded]);
+            } else {
+                // If JSON decode fails, set to empty array to avoid validation error
+                $this->merge(['skus' => []]);
+            }
+        }
+
+        // Convert variants JSON string to array if needed
+        if ($this->has('variants') && is_string($this->variants)) {
+            $decoded = json_decode($this->variants, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $this->merge(['variants' => $decoded]);
+            }
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -51,6 +81,10 @@ class ProductRequest extends FormRequest
             'translations.*.meta_title'       => 'max:500',
             'translations.*.meta_keywords'    => 'max:500',
             'translations.*.meta_description' => 'max:1000',
+
+            'skus'         => 'array',
+            'skus.*.code'  => 'nullable|string|max:32',
+            'skus.*.model' => 'nullable|string|max:32',
         ];
 
         if ($this->type === 'bundle') {
@@ -81,6 +115,9 @@ class ProductRequest extends FormRequest
             "translations.$defaultLocale.meta_title"       => trans('panel/common.meta_title'),
             "translations.$defaultLocale.meta_description" => trans('panel/common.meta_description'),
             "translations.$defaultLocale.meta_keywords"    => trans('panel/common.meta_keywords'),
+
+            'skus.*.code'  => panel_trans('product.sku_code'),
+            'skus.*.model' => panel_trans('product.model'),
 
             'bundles'            => panel_trans('product.bundles'),
             'bundles.*.sku_id'   => panel_trans('product.bundle_sku'),

@@ -58,6 +58,7 @@ return [
     'image'                        => 'Bild',
     'import'                       => 'importiere',
     'inactive'                     => 'Inaktiv',
+    'not_used'                     => 'Nicht verwendet',
     'install'                      => 'Installieren',
     'invalid_action'               => 'Fehlerhafte operationen',
     'invalid_parameters'           => 'Fehlerhafte argumente.',

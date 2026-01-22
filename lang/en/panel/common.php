@@ -9,6 +9,7 @@
 
 return [
     'actions'                      => 'Actions',
+    'activate'                     => 'Activate',
     'active'                       => 'Active',
     'add'                          => 'Add',
     'all'                          => 'All',
@@ -28,6 +29,7 @@ return [
     'category'                     => 'Category',
     'clear_selection'              => 'Clear Selection',
     'close'                        => 'Close',
+    'code'                         => 'Code',
     'collapse'                     => 'Collapse',
     'confirm'                      => 'Confirm',
     'copy'                         => 'Copy',
@@ -57,6 +59,7 @@ return [
     'image'                        => 'Image',
     'import'                       => 'Import',
     'inactive'                     => 'Inactive',
+    'not_used'                     => 'Not Used',
     'install'                      => 'Install',
     'link'                         => 'Link',
     'list'                         => 'List',

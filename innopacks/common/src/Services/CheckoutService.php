@@ -167,10 +167,15 @@ class CheckoutService
             return $this->addressList;
         }
 
-        $filters = [
-            'customer_id' => $this->customerID,
-            'guest_id'    => $this->guestID,
-        ];
+        // For logged-in users, only query by customer_id
+        // For guest users, query by guest_id
+        $filters = [];
+        if ($this->customerID > 0) {
+            $filters['customer_id'] = $this->customerID;
+        } else {
+            $filters['guest_id'] = $this->guestID;
+        }
+
         $addresses = AddressRepo::getInstance()->builder($filters)->get();
 
         return $this->addressList = (AddressListItem::collection($addresses))->jsonSerialize();

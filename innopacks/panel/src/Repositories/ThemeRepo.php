@@ -48,10 +48,10 @@ class ThemeRepo
         foreach ($themePaths as $themePath) {
             $theme    = trim(str_replace($path, '', $themePath), '/');
             $themes[] = [
-                'code'    => $theme,
-                'name'    => Str::studly($theme),
-                'value'   => system_setting('theme') == $theme,
-                'preview' => $this->getPreviewPath($theme),
+                'code'     => $theme,
+                'name'     => Str::studly($theme),
+                'selected' => system_setting('theme') == $theme,
+                'preview'  => $this->getPreviewPath($theme),
             ];
         }
 
@@ -88,5 +88,36 @@ class ThemeRepo
         }
 
         return '';
+    }
+
+    /**
+     * Get all theme directories
+     * @return array
+     */
+    public function getThemeDirs(): array
+    {
+        $path = base_path('themes');
+
+        return glob($path.'/*', GLOB_ONLYDIR) ?: [];
+    }
+
+    /**
+     * Read theme config.json file
+     * @param  string  $dir
+     * @return array
+     * @throws \Exception
+     */
+    public function readConfig(string $dir): array
+    {
+        $configFile = $dir.'/config.json';
+        if (! file_exists($configFile)) {
+            throw new \Exception(__('panel/themes.error_config_not_found', ['file' => $configFile]));
+        }
+        $config = json_decode(file_get_contents($configFile), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception(__('panel/themes.error_config_invalid', ['file' => $configFile]));
+        }
+
+        return $config;
     }
 }
