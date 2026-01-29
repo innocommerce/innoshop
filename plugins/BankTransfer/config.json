@@ -5,11 +5,11 @@
         "en": "Bank Transfer"
     },
     "description": {
-        "zh-cn": "银行转账是一种传统的支付方式，允许用户通过银行进行资金转移。",
-        "en": "Bank Transfer is a traditional payment method that allows users to transfer funds through banks."
+        "zh-cn": "银行转账是一种安全可靠的支付方式，客户通过银行账户直接转账到商户账户。适用于大额交易和需要银行凭证的场景，支持多种货币和银行系统。",
+        "en": "Bank Transfer is a secure and reliable payment method where customers transfer funds directly from their bank account to the merchant's account. Ideal for large transactions and scenarios requiring bank documentation, supporting multiple currencies and banking systems."
     },
     "type": "billing",
-    "version": "v1.0.0",
+    "version": "v1.2.0",
     "icon": "/images/logo.png",
     "author": {
         "name": "InnoShop",
