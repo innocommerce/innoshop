@@ -14,7 +14,7 @@
     </div>
 
     <div class="col-12 col-md-6">
-      <x-common-form-input title="{{ __('panel/common.position') }}" name="position"
+      <x-common-form-input title="{{ __('common/base.position') }}" name="position"
                            :value="old('position', $article->position ?? 0)" />
 
       <x-common-form-input title="{{ __('panel/article.viewed') }}" name="viewed"

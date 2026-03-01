@@ -13,6 +13,7 @@ return [
     'add_successfully'           => '추가 성공!',
     'address'                    => '주소',
     'administrator_remarks'      => '관리자 댓글',
+    'auto_complete_message'      => '시스템은 자동으로 주문을 수행한다',
     'billing_address'            => '청구지 주소',
     'billing_address_1'          => '청구지 주소1',
     'billing_address_2'          => '청구지 주소2',

@@ -8,16 +8,21 @@
  */
 
 return [
-    'customer_quantity' => 'عدد العملاء',
     'frontend'          => 'الواجهة الأمامية',
-    'order_amount'      => 'إجمالي الطلبات',
+    'last_30_days'      => 'ما يقرب من 30 يوما',
+    'new_customers'     => 'عملاء جدد',
     'order_quantity'    => 'عدد الطلبات',
-    'order_trends'      => 'اتجاهات الطلبات',
+    'order_status_dist' => 'توزيع حالة الطلب',
+    'page_views'        => 'التصفح (PVV)',
     'profile'           => 'الصفحة الشخصية',
-    'product'           => 'المنتجات',
-    'product_quantity'  => 'عدد المنتجات',
-    'ranking'           => 'الترتيب',
-    'sales'             => 'المبيعات',
+    'revenue_orders'    => 'التجميع والاوامر',
     'sign_out'          => 'تسجيل الخروج',
+    'today_orders'      => 'أوامر اليوم',
+    'today_revenue'     => 'المخيم اليوم',
+    'today_visits'      => 'زيارة اليوم',
+    'top_customers'     => 'عملاء عالي القيمة',
     'top_products'      => 'المنتجات الأكثر مبيعًا',
+    'traffic_trends'    => 'اتجاهات التدفق',
+    'unique_visitors'   => 'زائر مستقل (UV)',
+    'vs_yesterday'      => 'أكثر من الماضي',
 ];

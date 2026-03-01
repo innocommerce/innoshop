@@ -18,18 +18,18 @@
             <h5 class="card-title mb-0">{{ __('panel/menu.attributes') }}</h5>
           </div>
           <div class="card-body">
-            <x-common-form-input title="{{ __('panel/common.name') }}" :multiple="true" name="name"
+            <x-common-form-input title="{{ __('common/base.name') }}" :multiple="true" name="name"
                                  :value="old('translations', $attribute->translations)"
-                                 placeholder="{{ __('panel/common.name') }}"/>
+                                 placeholder="{{ __('common/base.name') }}"/>
 
             <x-common-form-select title="{{ __('panel/menu.attribute_groups') }}" name="attribute_group_id"
                                   :options="$attribute_groups" key="id" label="name"
                                   value="{{ old('attribute_group_id', $attribute->attribute_group_id) }}" required
                                   placeholder="{{ __('panel/menu.attribute_groups') }}"/>
 
-            <x-common-form-input title="{{ __('panel/common.position') }}" name="position"
+            <x-common-form-input title="{{ __('common/base.position') }}" name="position"
                                  :value="old('position', $attribute->position)" required
-                                 placeholder="{{ __('panel/common.position') }}"/>
+                                 placeholder="{{ __('common/base.position') }}"/>
           </div>
         </div>
       </div>
@@ -40,14 +40,14 @@
             <div class="card-header d-flex justify-content-between">
               <h5 class="card-title mb-0">{{ __('panel/attribute.attribute_value') }}</h5>
               <button type="button"
-                      class="btn btn-sm btn-outline-primary add-value">{{ __('panel/common.add') }}</button>
+                      class="btn btn-sm btn-outline-primary add-value">{{ __('common/base.add') }}</button>
             </div>
             <div class="card-body">
               <table class="table align-middle">
                 <thead>
                 <tr>
-                  <td>{{ __('panel/common.id') }}</td>
-                  <td>{{ __('panel/common.name') }}</td>
+                  <td>{{ __('common/base.id') }}</td>
+                  <td>{{ __('common/base.name') }}</td>
                   <td class="text-end">{{ __('panel/common.actions') }}</td>
                 </tr>
                 </thead>
@@ -58,9 +58,9 @@
                     <td>{{ $item->translation->name }}</td>
                     <td class="text-end">
                       <button type="button"
-                              class="btn btn-sm btn-outline-primary edit-value">{{ __('panel/common.edit') }}</button>
+                              class="btn btn-sm btn-outline-primary edit-value">{{ __('common/base.edit') }}</button>
                       <button type="button"
-                              class="btn btn-sm btn-outline-danger delete-value">{{ __('panel/common.delete') }}</button>
+                              class="btn btn-sm btn-outline-danger delete-value">{{ __('common/base.delete') }}</button>
                     </td>
                   </tr>
                 @endforeach
@@ -86,7 +86,7 @@
           <form class="values-input-wrap" action="">
             <input type="hidden" name="attribute_id" value="{{ $attribute->id ?? '' }}">
             <x-common-form-input title="" :multiple="true" name="values" value="" required
-                                 placeholder="{{ __('panel/common.name') }}"/>
+                                 placeholder="{{ __('common/base.name') }}"/>
 
             <div class="mt-4 d-flex justify-content-center">
               <a type="button" class="btn btn-primary w-50 form-submit">{{ __('panel/common.btn_save') }}</a>

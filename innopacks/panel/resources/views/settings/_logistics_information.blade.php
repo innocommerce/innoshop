@@ -37,8 +37,10 @@
   </div>
 
   <input type="hidden" name="logistics" :value="JSON.stringify(text)" />
+</div>
 
-  <script>
+@push('footer')
+<script>
     document.addEventListener('DOMContentLoaded', function() {
       // Ensure Vue and ElementPlus are available
       if (typeof Vue === 'undefined' || typeof ElementPlus === 'undefined') {
@@ -138,3 +140,4 @@
     });
   </script>
 </div>
+@endpush

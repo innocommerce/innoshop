@@ -100,6 +100,9 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/analytics/order', [Controllers\AnalyticsController::class, 'order'])->name('analytics_order');
         Route::get('/analytics/product', [Controllers\AnalyticsController::class, 'product'])->name('analytics_product');
         Route::get('/analytics/customer', [Controllers\AnalyticsController::class, 'customer'])->name('analytics_customer');
+        Route::get('/analytics/visit', [Controllers\AnalyticsController::class, 'visit'])->name('analytics_visit');
+
+        Route::resource('/visits', Controllers\VisitController::class)->only(['index', 'show']);
 
         Route::get('/locales', [Controllers\LocaleController::class, 'index'])->name('locales.index');
         Route::post('/locales/install', [Controllers\LocaleController::class, 'install'])->name('locales.install');
@@ -121,6 +124,11 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/settings', [Controllers\SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [Controllers\SettingController::class, 'update'])->name('settings.update');
         Route::post('/settings/test-sms', [Controllers\SettingController::class, 'testSms'])->name('settings.test_sms');
+        Route::post('/settings/download-geolite2', [Controllers\SettingController::class, 'downloadGeoLite2'])->name('settings.download_geolite2');
+        Route::get('/settings/geolite2-info', [Controllers\SettingController::class, 'getGeoLite2Info'])->name('settings.geolite2_info');
+
+        Route::get('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'index'])->name('plugin_coordination.index');
+        Route::put('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'update'])->name('plugin_coordination.update');
 
         Route::post('/content_ai/generate', [Controllers\ContentAIController::class, 'generate'])->name('content_ai.generate');
 
@@ -146,6 +154,12 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/weight_classes', Controllers\WeightClassController::class);
         Route::put('/weight_classes/{id}/active', [Controllers\WeightClassController::class, 'active'])->name('weight_classes.active');
+
+        Route::get('/newsletter-subscribers', [Controllers\NewsletterSubscriberController::class, 'index'])->name('newsletter_subscribers.index');
+        Route::get('/newsletter-subscribers/{newsletter_subscriber}', [Controllers\NewsletterSubscriberController::class, 'show'])->name('newsletter_subscribers.show');
+        Route::delete('/newsletter-subscribers/{newsletter_subscriber}', [Controllers\NewsletterSubscriberController::class, 'destroy'])->name('newsletter_subscribers.destroy');
+        Route::put('/newsletter-subscribers/{newsletter_subscriber}/unsubscribe', [Controllers\NewsletterSubscriberController::class, 'unsubscribe'])->name('newsletter_subscribers.unsubscribe');
+        Route::put('/newsletter-subscribers/{newsletter_subscriber}/resubscribe', [Controllers\NewsletterSubscriberController::class, 'resubscribe'])->name('newsletter_subscribers.resubscribe');
 
         Route::get('/file_manager', [InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'index'])->name('file_manager.index');
         Route::get('/file_manager/iframe', [InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'iframe'])->name('file_manager.iframe');

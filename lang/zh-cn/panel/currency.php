@@ -18,4 +18,10 @@ return [
     'symbol_right'                    => '后缀',
     'value'                           => '汇率',
     'default_currency_rate'           => '默认货币的汇率必须为1',
+    'calculator'                      => '汇率计算器',
+    'select_currency'                 => '选择货币',
+    'input_amount'                    => '输入金额',
+    'converted_results'               => '转换结果',
+    'no_results'                      => '请输入金额进行计算',
+    'update_rate'                     => '更新汇率',
 ];

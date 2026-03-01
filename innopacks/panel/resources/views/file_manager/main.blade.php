@@ -1706,7 +1706,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary"
-              data-bs-dismiss="modal">{{ __('panel/common.cancel') }}</button>
+              data-bs-dismiss="modal">{{ __('common/base.cancel') }}</button>
             <button type="button" class="btn btn-primary"
               @click="saveStorageConfig">{{ __('panel/common.btn_save') }}</button>
           </div>

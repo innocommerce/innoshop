@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Berhasil ditambahkan!',
     'address'                    => 'Alamat',
     'administrator_remarks'      => 'Catatan Administrator',
+    'auto_complete_message'      => 'Sistem selesai secara otomatis',
     'billing_address'            => 'Alamat Penagihan',
     'billing_address_1'          => 'Alamat Penagihan 1',
     'billing_address_2'          => 'Alamat Penagihan 2',

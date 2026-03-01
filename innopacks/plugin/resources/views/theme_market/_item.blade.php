@@ -67,7 +67,7 @@
             {{ $product['price_format'] }}
           </div>
           <span class="badge rounded px-3 py-1 product-view-badge">
-            {{ __('panel/common.view') }}
+            {{ __('common/base.view') }}
           </span>
         </div>
       </div>

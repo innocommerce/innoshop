@@ -107,7 +107,7 @@
                 <div class="theme-info-item p-3 bg-light rounded">
                   <div class="text-secondary small text-uppercase mb-2 fw-semibold">
                     <i class="bi bi-info-circle me-1"></i>
-                    {{ __('panel/common.status') }}
+                    {{ __('common/base.status') }}
                   </div>
                   <div>
                     @if($theme['selected'])
@@ -188,7 +188,7 @@
         </div>
       </div>
       <div class="modal-footer border-top">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.close') }}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.close') }}</button>
         @if(!$theme['selected'])
           <button type="button" 
                   class="btn btn-primary theme-enable-btn"

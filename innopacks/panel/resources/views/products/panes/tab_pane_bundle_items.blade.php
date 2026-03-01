@@ -17,7 +17,7 @@
                  name="bundles[{{ $i }}][quantity]" 
                  value="{{ old("bundles.{$i}.quantity", $bundle->quantity) }}" 
                  min="1" required style="width:100px;">
-        <button type="button" class="btn btn-danger btn-sm remove-bundle-item">{{ __('panel/common.delete') }}</button>
+        <button type="button" class="btn btn-danger btn-sm remove-bundle-item">{{ __('common/base.delete') }}</button>
       </div>
     @endforeach
   </div>
@@ -69,7 +69,7 @@ $(function () {
           <input type="hidden" name="bundles[${index}][sku_id]">
         </div>
         <input type="number" class="form-control mx-2" name="bundles[${index}][quantity]" value="1" min="1" required style="width:100px;">
-        <button type="button" class="btn btn-danger btn-sm remove-bundle-item">{{ __('panel/common.delete') }}</button>
+        <button type="button" class="btn btn-danger btn-sm remove-bundle-item">{{ __('common/base.delete') }}</button>
       </div>
     `;
     $('.bundle-items-list').append(html);

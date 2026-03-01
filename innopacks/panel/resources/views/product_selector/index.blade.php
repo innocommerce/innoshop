@@ -195,7 +195,7 @@
     <div class="card-body">
       <div class="input-group mb-3">
         <input type="text" id="searchInput" class="form-control" placeholder="{{ __('panel/product.search_placeholder') }}">   
-        <button class="btn btn-primary" id="searchBtn">{{ __('panel/common.search') }} </button> 
+        <button class="btn btn-primary" id="searchBtn">{{ __('common/base.search') }} </button> 
       </div>
       <div class="table-responsive product-list-container" style="max-height:500px;overflow-y:auto;">
         <table class="table table-hover align-middle mb-0" id="productTable">

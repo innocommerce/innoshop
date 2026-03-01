@@ -92,9 +92,12 @@ class CategoryRepo extends BaseRepo
 
         $builder = Category::query()->with([
             'translation',
+            'translations',
             'parent.translation',
             'children.translation',
+            'children.translations',
             'children.children.translation',
+            'children.children.translations',
         ]);
 
         $slug = $filters['slug'] ?? '';

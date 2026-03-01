@@ -8,16 +8,21 @@
  */
 
 return [
-    'customer_quantity' => 'Totale clienti',
     'frontend'          => 'Home pagina',
-    'order_amount'      => 'Totale ordini',
+    'last_30_days'      => 'Quasi 30 giorni',
+    'new_customers'     => 'Nuovi clienti',
     'order_quantity'    => 'Totale ordini',
-    'order_trends'      => 'Tendenze ordini',
-    'product'           => 'Prodotto',
-    'product_quantity'  => 'Totale prodotti',
+    'order_status_dist' => 'Ripartizione per stato delle ordinazioni',
+    'page_views'        => 'Numero di visite (PVV)',
     'profile'           => 'Profilo',
-    'ranking'           => 'Classifica',
-    'sales'             => 'Vendite',
+    'revenue_orders'    => 'Battiti e ordini',
     'sign_out'          => 'Esci',
+    'today_orders'      => 'Ordine del giorno',
+    'today_revenue'     => 'Nt2 trasporto aereo',
+    'today_visits'      => 'Visita odierna',
+    'top_customers'     => 'Clienti di alto valore',
     'top_products'      => 'Prodotti più venduti',
+    'traffic_trends'    => 'Andamento del traffico',
+    'unique_visitors'   => 'Visitatori indipendenti (UV)',
+    'vs_yesterday'      => 'Più di ieri',
 ];

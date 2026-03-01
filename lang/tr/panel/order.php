@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Başarıyla eklendi!',
     'address'                    => 'Adres',
     'administrator_remarks'      => 'Yönetici Notları',
+    'auto_complete_message'      => 'Sistem otomatik olarak siparişi tamamlar',
     'billing_address'            => 'Fatura Adresi',
     'billing_address_1'          => 'Fatura Adresi 1',
     'billing_address_2'          => 'Fatura Adresi 2',

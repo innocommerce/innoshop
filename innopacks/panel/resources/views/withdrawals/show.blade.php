@@ -175,7 +175,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.cancel') }}</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.cancel') }}</button>
           <button type="submit" form="approveForm" class="btn btn-success">{{ __('panel/withdrawal.approve') }}</button>
         </div>
       </div>
@@ -204,7 +204,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.cancel') }}</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.cancel') }}</button>
           <button type="submit" form="rejectForm" class="btn btn-danger">{{ __('panel/withdrawal.reject') }}</button>
         </div>
       </div>
@@ -232,7 +232,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.cancel') }}</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.cancel') }}</button>
           <button type="submit" form="payForm" class="btn btn-primary">{{ __('panel/withdrawal.pay') }}</button>
         </div>
       </div>

@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'add_to_carts'        => 'Ajouter au panier',
+    'avg_duration'        => 'Durée moyenne du séjour',
+    'basic_info'          => 'Les informations essentielles',
+    'browser'             => 'navigateur',
+    'by_country'          => 'Par pays par',
+    'by_device'           => 'Par équipement',
+    'checkout_starts'     => 'Commencer le checkout',
+    'city'                => 'Les villes',
+    'conversion_checkout' => 'compensation',
+    'conversion_event'    => 'Transformer un événement',
+    'conversion_funnel'   => 'Entonnoir de conversion',
+    'conversion_order'    => 'Ayant passé des commandes',
+    'conversion_payment'  => 'paiement',
+    'conversion_register' => 'l’enregistrement',
+    'country'             => 'pays',
+    'country_code'        => 'Code du pays',
+    'country_name'        => 'Nom du pays',
+    'customer'            => 'Les clients',
+    'daily_trends'        => 'Tendances du jour',
+    'device_desktop'      => 'Ordinateurs de bureau',
+    'device_mobile'       => 'mobiles',
+    'device_tablet'       => 'plat',
+    'device_type'         => 'Type de matériel',
+    'end_date'            => 'Date de fin',
+    'first_visited_at'    => 'Heure de la première visite',
+    'guest'               => 'Les visiteurs',
+    'hour'                => 'heures',
+    'hourly_distribution' => 'Distribution 24 heures',
+    'ip_address'          => 'Votre adresse IP',
+    'last_visited_at'     => 'Heure du dernier accès',
+    'locale'              => 'Langue (S)',
+    'location'            => 'La position',
+    'location_info'       => 'Informations sur l’emplacement',
+    'order_placed'        => 'La commande a été passée',
+    'os'                  => 'Le système d’exploitation',
+    'overall_conversion'  => 'Taux de conversion global',
+    'page_views'          => 'Nombre de pages vues',
+    'payment_completed'   => 'Paiement effectué',
+    'product_views'       => 'Parcourir par marchandise',
+    'referrer'            => 'sources',
+    'session_id'          => 'ID de session',
+    'start_date'          => 'Date de début',
+    'total_visits'        => 'Nombre total de visites',
+    'unique_visitors'     => 'Pour visiteurs uniques',
+    'user_agent'          => 'Un agent utilisateur',
+    'visit_detail'        => 'Accès aux détails',
+    'visit_duration'      => 'Durée de la visite',
+    'visits'              => 'Nombre de visites',
+];

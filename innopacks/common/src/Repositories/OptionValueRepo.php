@@ -21,6 +21,33 @@ use InnoShop\Common\Models\OptionValue;
 class OptionValueRepo extends BaseRepo
 {
     /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('common/base.name')],
+        ];
+
+        return fire_hook_filter('common.repo.option_value.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [];
+
+        return fire_hook_filter('common.repo.option_value.filter_button_options', $filters);
+    }
+
+    /**
      * 构建查询构造器（重写BaseRepo的builder方法）
      *
      * @param  array  $filters

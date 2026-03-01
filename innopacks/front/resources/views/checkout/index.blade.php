@@ -45,7 +45,7 @@
                         </div>
                       </div>
                       <div class="edit-address text-decoration-underline text-secondary" @click.stop="editAddress(index)">
-                        {{ __('front/common.edit') }}
+                        {{ __('common/base.edit') }}
                       </div>
                     </div>
                   </div>
@@ -81,7 +81,7 @@
                           </div>
                         </div>
                         <div class="edit-address text-decoration-underline text-secondary" @click="editAddress(index)">
-                          {{ __('front/common.edit') }}
+                          {{ __('common/base.edit') }}
                         </div>
                       </div>
                     </div>
@@ -264,6 +264,42 @@
               <li><span>{{ __('front/cart.total') }}</span><span>@{{ source.totalAmountFormat }}</span></li>
             </ul>
 
+            @php
+              $newsletterLocations = system_setting('newsletter_display_locations', ['footer']);
+              $newsletterLocations = is_array($newsletterLocations) ? $newsletterLocations : ['footer'];
+              $showCheckoutNewsletter = in_array('checkout', $newsletterLocations);
+              $customer = current_customer();
+            @endphp
+            @if($showCheckoutNewsletter)
+              <div class="border-top pt-3 mb-3">
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" id="newsletterCheckout" v-model="current.newsletter_subscribe">
+                  <label class="form-check-label" for="newsletterCheckout">
+                    {{ __('front/newsletter.subscribe_newsletter') }}
+                  </label>
+                </div>
+                <div v-if="current.newsletter_subscribe" class="newsletter-checkout-form">
+                  @if($customer)
+                    <div class="alert alert-info mb-2">
+                      <i class="bi bi-info-circle me-2"></i>{{ __('front/newsletter.subscribe_with_account_email', ['email' => $customer->email]) }}
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" @click="subscribeNewsletter">
+                      {{ __('front/newsletter.subscribe') }}
+                    </button>
+                  @else
+                    <div class="input-group">
+                      <input type="email" v-model="current.newsletter_email" class="form-control" 
+                             placeholder="{{ __('front/newsletter.email_placeholder') }}" 
+                             :required="current.newsletter_subscribe">
+                      <button type="button" class="btn btn-outline-primary" @click="subscribeNewsletter">
+                        {{ __('front/newsletter.subscribe') }}
+                      </button>
+                    </div>
+                  @endif
+                </div>
+              </div>
+            @endif
+
             @hookinsert('checkout.confirm.before')
             <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :disabled="isCheckout" type="button"
               @click="submitCheckout">{{ __('front/checkout.place_order') }}
@@ -306,9 +342,12 @@
           totalAmountFormat: @json(currency_format($amount)),
           balanceAmount: @json($balance_amount ?? 0),
           balanceAmountFormat: @json($balance_amount_format ?? '0'),
+          newsletterSubscribed: false,
         })
 
         const current = reactive({
+          newsletter_subscribe: false,
+          newsletter_email: @json($customer ? $customer->email : ''),
           shipping_address_id: @json($checkout['shipping_address_id'] ?? 0),
           billing_address_id: @json($checkout['billing_address_id'] ?? 0),
           shipping_method_code: @json($checkout['shipping_method_code'] ?? ''),
@@ -455,6 +494,39 @@
           }
         }
 
+        const subscribeNewsletter = () => {
+          @if($customer)
+            // For logged-in users, use their account email
+            const email = @json($customer->email);
+          @else
+            // For guest users, require email input
+            const email = current.newsletter_email;
+            if (!email) {
+              layer.msg('{{ __('front/newsletter.email_required') }}', {icon: 2});
+              return;
+            }
+          @endif
+
+          axios.post('{{ front_route('newsletter.subscribe') }}', {
+            email: email,
+            source: 'checkout',
+            _token: '{{ csrf_token() }}'
+          }).then(function(res) {
+            if (res.success === true) {
+              layer.msg(res.message || '{{ __('front/newsletter.subscribe_success') }}', {icon: 1});
+              // Clear form after success
+              current.newsletter_subscribe = false;
+              @if(!$customer)
+                current.newsletter_email = '';
+              @endif
+              source.newsletterSubscribed = true;
+            }
+          }).catch(function(error) {
+            const errorMsg = error.response?.data?.message || error.message || '{{ __('front/newsletter.subscribe_failed') }}';
+            console.error('Newsletter subscribe error:', errorMsg);
+          });
+        }
+
         return {
           source,
           login,
@@ -468,6 +540,7 @@
           submitCheckout,
           submitBalance,
           validateInput,
+          subscribeNewsletter,
         }
       }
     }).mount('#app-checkout')

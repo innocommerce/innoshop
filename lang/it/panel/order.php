@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Aggiunto con successo!',
     'address'                    => 'Indirizzo',
     'administrator_remarks'      => 'Osservazioni dell amministratore',
+    'auto_complete_message'      => 'Il sistema esegue automaticamente le ordinazioni',
     'billing_address'            => 'Indirizzo di fatturazione',
     'billing_address_1'          => 'Indirizzo di fatturazione 1',
     'billing_address_2'          => 'Indirizzo di fatturazione 2',

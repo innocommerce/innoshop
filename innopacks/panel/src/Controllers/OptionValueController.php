@@ -41,6 +41,8 @@ class OptionValueController extends BaseController
         $allOptionGroups = OptionRepo::getInstance()->all(['active' => 1]);
 
         $data = [
+            'searchFields'    => OptionValueRepo::getSearchFieldOptions(),
+            'filterButtons'   => OptionValueRepo::getFilterButtonOptions(),
             'optionValues'    => $optionValues, // 选项值数据
             'allOptionGroups' => $allOptionGroups,
         ];
@@ -115,12 +117,12 @@ class OptionValueController extends BaseController
             OptionValueRepo::getInstance()->update($optionValue, $data);
 
             if ($request->ajax()) {
-                return json_success(panel_trans('common.updated_success'), $optionValue);
+                return json_success(common_trans('base.updated_success'), $optionValue);
             }
 
             return redirect(panel_route('option_values.index'))
                 ->with('instance', $optionValue)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             if ($request->ajax()) {
                 return json_fail($e->getMessage());
@@ -145,7 +147,7 @@ class OptionValueController extends BaseController
             OptionValueRepo::getInstance()->destroy($optionValue);
 
             return redirect(panel_route('option_values.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('option_values.index'))
                 ->withErrors(['error' => $e->getMessage()]);

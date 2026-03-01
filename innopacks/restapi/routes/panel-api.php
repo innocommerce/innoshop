@@ -96,4 +96,6 @@ Route::middleware($middlewares)->group(function () {
 
     Route::get('/file_manager/storage_config', [\InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'getStorageConfig']);
     Route::post('/file_manager/storage_config', [\InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'saveStorageConfig']);
+
+    Route::get('/currencies', [PanelApiControllers\CurrencyController::class, 'index'])->name('currencies.index');
 });

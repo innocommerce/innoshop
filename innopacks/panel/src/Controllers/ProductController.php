@@ -35,7 +35,8 @@ class ProductController extends BaseController
         $filters = $request->all();
 
         $data = [
-            'criteria'        => ProductRepo::getCriteria(),
+            'searchFields'    => ProductRepo::getSearchFieldOptions(),
+            'filterButtons'   => ProductRepo::getFilterButtonOptions(),
             'sortOptions'     => ProductRepo::getSortOptions(),
             'products'        => ProductRepo::getInstance()->list($filters),
             'categoryOptions' => ProductRepo::getCategoryOptions(),
@@ -68,7 +69,7 @@ class ProductController extends BaseController
 
             return redirect(panel_route('products.index', ['sort' => 'updated_at', 'order' => 'desc']))
                 ->with('instance', $product)
-                ->with('success', panel_trans('common.saved_success'));
+                ->with('success', common_trans('base.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('products.index'))
                 ->withInput()
@@ -196,7 +197,7 @@ class ProductController extends BaseController
 
             return redirect(panel_route('products.index', ['sort' => 'updated_at', 'order' => 'desc']))
                 ->with('instance', $product)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('products.edit', $product))
                 ->withInput()
@@ -213,7 +214,7 @@ class ProductController extends BaseController
         try {
             ProductRepo::getInstance()->destroy($product);
 
-            return back()->with('success', panel_trans('common.deleted_success'));
+            return back()->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -228,7 +229,7 @@ class ProductController extends BaseController
         try {
             ProductRepo::getInstance()->copy($product);
 
-            return back()->with('success', panel_trans('common.saved_success'));
+            return back()->with('success', common_trans('base.saved_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

@@ -30,7 +30,7 @@
       </div>
       <div class="modal-footer bg-light">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle me-1"></i>{{ __('panel/common.close') }}
+          <i class="bi bi-x-circle me-1"></i>{{ __('common/base.close') }}
         </button>
       </div>
     </div>

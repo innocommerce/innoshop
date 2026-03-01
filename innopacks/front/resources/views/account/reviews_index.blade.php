@@ -24,7 +24,7 @@
                 <th>{{ __('panel/review.product') }}</th>
                 <th>{{ __('front/review.rating') }}</th>
                 <th>{{ __('front/review.review_content') }}</th>
-                <th>{{ __('front/common.date') }}</th>
+                <th>{{ __('common/base.date') }}</th>
                 <th>{{ __('panel/common.actions') }}</th>
               </tr>
               </thead>
@@ -41,7 +41,7 @@
                   <td data-title="Date">{{ $review->created_at->format('Y-m-d') }}</td>
                   <td data-title="Actions">
                     <button type="button" class="btn delete-review btn-sm btn-outline-danger"
-                            data-url="{{ account_route('reviews.destroy', $review->id) }}">{{ __('front/common.delete') }}</button>
+                            data-url="{{ account_route('reviews.destroy', $review->id) }}">{{ __('common/base.delete') }}</button>
                   </td>
                 </tr>
               @endforeach
@@ -65,8 +65,8 @@
   <script>
     $('.delete-review').on('click', function () {
       const url = $(this).data('url');
-      layer.confirm('{{ __('front/common.delete_confirm') }}', {
-        btn: ['{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}']
+      layer.confirm('{{ __('common/base.delete_confirm') }}', {
+        btn: ['{{ __('common/base.confirm') }}', '{{ __('common/base.cancel') }}']
       }, function () {
         axios.delete(url).then(function (res) {
           if (res.success) {

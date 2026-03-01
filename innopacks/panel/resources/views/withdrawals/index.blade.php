@@ -7,14 +7,19 @@
   <div class="card h-min-600" id="app">
     <div class="card-body">
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('withdrawals.index')"/>
+      <x-panel-data-data-search
+        :action="panel_route('withdrawals.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="true"
+      />
 
       @if ($withdrawals->count())
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
             <tr>
-              <td>{{ __('panel/common.id') }}</td>
+              <td>{{ __('common/base.id') }}</td>
               <td>{{ __('panel/withdrawal.customer_name') }}</td>
               <td>{{ __('panel/withdrawal.customer_email') }}</td>
               <td>{{ __('panel/withdrawal.amount') }}</td>

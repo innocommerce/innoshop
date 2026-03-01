@@ -32,7 +32,7 @@
                   <th class="text-center">{{ __('front/transaction.type') }}</th>
                   <th class="text-center">{{ __('front/transaction.amount') }}</th>
                   <th class="text-center">{{ __('front/transaction.comment') }}</th>
-                  <th class="text-center">{{ __('front/common.date') }}</th>
+                  <th class="text-center">{{ __('common/base.date') }}</th>
                 </tr>
                 </thead>
                 <tbody>

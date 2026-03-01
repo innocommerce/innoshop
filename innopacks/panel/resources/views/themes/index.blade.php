@@ -63,7 +63,7 @@
                           data-bs-toggle="modal" 
                           data-bs-target="#themeDetail{{ $theme['code'] }}">
                     <i class="bi bi-eye me-1"></i>
-                    {{ __('panel/common.view') }}
+                    {{ __('common/base.view') }}
                   </button>
                   @include('panel::shared.list_switch', [
                     'value' => $theme['selected'] ?? false, 

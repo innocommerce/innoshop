@@ -4,23 +4,28 @@
 @section('title', __('panel/menu.transactions'))
 @section('page-title-right')
   <a href="{{ panel_route('transactions.create') }}" class="btn btn-primary">
-    <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}</a>
+    <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}</a>
 @endsection
 
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('transactions.index')"/>
+      <x-panel-data-data-search
+        :action="panel_route('transactions.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="true"
+      />
 
       @if ($transactions->count())
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
             <tr>
-              <td>{{ __('panel/common.id') }}</td>
+              <td>{{ __('common/base.id') }}</td>
               <td>{{ __('panel/transaction.customer') }}</td>
-              <td>{{ __('panel/common.email') }}</td>
+              <td>{{ __('common/base.email') }}</td>
               <td>{{ __('panel/transaction.type') }}</td>
               <td>{{ __('panel/transaction.amount') }}</td>
               <td>{{ __('panel/transaction.balance') }}</td>
@@ -43,7 +48,7 @@
                 <td>
                   <div class="d-flex gap-1">
                     <a href="{{ panel_route('transactions.show', [$item->id]) }}" class="btn btn-primary btn-sm">
-                      {{ __('panel/common.view') }}
+                      {{ __('common/base.view') }}
                     </a>
                   </div>
                 </td>

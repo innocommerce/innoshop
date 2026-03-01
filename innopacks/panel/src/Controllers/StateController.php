@@ -28,8 +28,9 @@ class StateController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria' => StateRepo::getCriteria(),
-            'states'   => StateRepo::getInstance()->list($filters),
+            'searchFields'  => StateRepo::getSearchFieldOptions(),
+            'filterButtons' => StateRepo::getFilterButtonOptions(),
+            'states'        => StateRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::states.index', $data);
@@ -68,7 +69,7 @@ class StateController extends BaseController
 
             return redirect(panel_route('states.index'))
                 ->with('instance', $state)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('states.index'))
                 ->withInput()
@@ -110,7 +111,7 @@ class StateController extends BaseController
             $data = $request->all();
             StateRepo::getInstance()->update($state, $data);
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -126,7 +127,7 @@ class StateController extends BaseController
             StateRepo::getInstance()->destroy($state);
 
             return redirect(panel_route('states.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('states.index'))
                 ->withErrors(['error' => $e->getMessage()]);

@@ -4,14 +4,19 @@
 
 @section('page-title-right')
   <a href="{{ panel_route('products.create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> {{
-  __('panel/common.create') }}</a>
+  __('common/base.create') }}</a>
 @endsection
 
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('products.index')"/>
+      <x-panel-data-data-search
+        :action="panel_route('products.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="true"
+      />
 
       <div class="mb-3 p-3 bg-light rounded border" id="products-toolbar">
         <div class="d-flex d-md-flex flex-column flex-md-row justify-content-md-between align-items-start gap-3">
@@ -30,9 +35,9 @@
             <thead>
             <tr>
               <th><input class="form-check-input" @click="checkAll" type="checkbox" ref="checkAllBox"></th>
-              <th>{{ __('panel/common.id') }}</th>
-              <th class="wp-100">{{ __('panel/common.image') }}</th>
-              <th>{{ __('panel/common.name') }}</th>
+              <th>{{ __('common/base.id') }}</th>
+              <th class="wp-100">{{ __('common/base.image') }}</th>
+              <th>{{ __('common/base.name') }}</th>
               <th>{{ __('panel/product.price') }}</th>
               <th>{{ __('panel/product.quantity') }}</th>
               <th>{{ __('panel/common.created_and_updated') }}</th>
@@ -79,13 +84,13 @@
                     <div>
                       <a href="{{ panel_route('products.edit', [$product->id]) }}">
                         <el-button size="small" plain type="primary">{{
-                        __('panel/common.edit')}}</el-button>
+                        __('common/base.edit')}}</el-button>
                       </a>
                     </div>
                     <div>
                       <a href="{{ panel_route('products.copy', [$product->id]) }}">
                         <el-button size="small" plain type="warning">{{
-                        __('panel/common.copy')}}</el-button>
+                        __('common/base.copy')}}</el-button>
                       </a>
                     </div>
                     <div>
@@ -95,7 +100,7 @@
                         @csrf
                         @method('DELETE')
                         <el-button size="small" type="danger" plain @click="open({{$product->id}})">{{
-                        __('panel/common.delete')}}</el-button>
+                        __('common/base.delete')}}</el-button>
                       </form>
                     </div>
                   </div>

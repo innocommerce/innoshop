@@ -34,7 +34,7 @@ class Product extends BaseModel
 
     protected $fillable = [
         'type', 'brand_id', 'images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
-        'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed',
+        'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed', 'created_at', 'updated_at', 'published_at',
     ];
 
     protected $casts = [

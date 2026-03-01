@@ -7,7 +7,7 @@
 @section('content')
 <div class="card h-min-600">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ $review->id ? __('panel/common.edit') : __('panel/common.create') }} {{ __('panel/review.review') }}</h5>
+    <h5 class="card-title mb-0">{{ $review->id ? __('common/base.edit') : __('common/base.create') }} {{ __('panel/review.review') }}</h5>
   </div>
   <div class="card-body">
     <form class="needs-validation" novalidate id="app-form"

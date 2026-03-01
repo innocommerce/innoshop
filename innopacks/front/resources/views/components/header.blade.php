@@ -101,7 +101,7 @@
       </div>
       <div class="right">
         <form action="{{ front_route('products.index') }}" method="get" class="search-group">
-          <input type="text" class="form-control" name="keyword" placeholder="{{ __('front/common.search') }}"
+          <input type="text" class="form-control" name="keyword" placeholder="{{ __('common/base.search') }}"
                  value="{{ request('keyword') }}">
           <button type="submit" class="btn"><i class="bi bi-search"></i></button>
         </form>
@@ -166,7 +166,7 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="mobile-menu-offcanvas">
       <div class="offcanvas-header">
         <form action="{{ front_route('products.index') }}" method="get" class="search-group">
-          <input type="text" class="form-control" name="keyword" placeholder="{{ __('front/common.search') }}"
+          <input type="text" class="form-control" name="keyword" placeholder="{{ __('common/base.search') }}"
                  value="{{ request('keyword') }}">
           <button type="submit" class="btn"><i class="bi bi-search"></i></button>
         </form>

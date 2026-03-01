@@ -7,14 +7,19 @@
   <div class="card h-min-600" id="app">
     <div class="card-body">
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('states.index')"/>
+      <x-panel-data-data-search
+        :action="panel_route('states.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="false"
+      />
 
       @if ($states)
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
             <tr>
-              <th>{{ __('panel/common.id') }}</th>
+              <th>{{ __('common/base.id') }}</th>
               <th>{{ __('panel/state.name') }}</th>
               <th>{{ __('panel/state.code') }}</th>
               <th>{{ __('panel/state.country_code') }}</th>
@@ -29,7 +34,7 @@
                 <td>{{ $item['id'] }}</td>
                 <td>{{ $item['name'] }}
                   @if($item['code'] === system_setting('state_code'))
-                    <span class="badge bg-success">{{ __('panel/common.default') }}</span>
+                    <span class="badge bg-success">{{ __('common/base.default') }}</span>
                   @endif
                 </td>
                 <td>{{ $item['code'] }}</td>
@@ -42,14 +47,14 @@
                 <td>
                   <div class="d-flex gap-1">
                     <el-button size="small" @click="edit({{ $item->id }})" plain
-                               type="primary">{{ __('panel/common.edit')}}
+                               type="primary">{{ __('common/base.edit')}}
                     </el-button>
                     <form ref="deleteForm" action="{{ panel_route('states.destroy', [$item->id]) }}" method="POST"
                           class="d-inline">
                       @csrf
                       @method('DELETE')
                       <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{
-                    __('panel/common.delete')}}</el-button>
+                    __('common/base.delete')}}</el-button>
                     </form>
                   </div>
                 </td>
@@ -69,7 +74,7 @@
         <div class="text-dark fs-4">{{ __('panel/menu.states') }}</div>
       </template>
       <el-form ref="formRef" label-position="top" :model="form" :rules="rules" label-width="auto" status-icon>
-        <el-form-item label="{{ __('panel/common.name') }}" prop="name">
+        <el-form-item label="{{ __('common/base.name') }}" prop="name">
           <el-input v-model="form.name" placeholder="名称"></el-input>
         </el-form-item>
 
@@ -95,7 +100,7 @@
 
       <template #footer>
         <div style="flex: auto">
-          <el-button @click="drawer = false">{{ __('panel/common.close') }}</el-button>
+          <el-button @click="drawer = false">{{ __('common/base.close') }}</el-button>
           <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
         </div>
       </template>

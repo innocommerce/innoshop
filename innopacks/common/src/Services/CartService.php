@@ -142,6 +142,17 @@ class CartService
             $this->saveCartItemOptions($cartItem, $data['options']);
         }
 
+        // Track add to cart event
+        if ($cartItem && $cartItem->productSku && $cartItem->productSku->product) {
+            $eventService = new \InnoShop\Common\Services\EventTrackingService;
+            $eventService->trackAddToCart(
+                $cartItem->productSku->product->id,
+                $cartItem->quantity ?? 1,
+                $cartItem->productSku->price ?? null,
+                request()
+            );
+        }
+
         // Trigger hook after adding item to cart
         fire_hook_action('service.cart.add.after', [
             'cart_item' => $cartItem,

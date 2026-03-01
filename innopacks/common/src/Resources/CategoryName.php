@@ -27,7 +27,7 @@ class CategoryName extends JsonResource
         $data = [
             'id'           => $this->id,
             'slug'         => $this->slug,
-            'name'         => $this->translation->name,
+            'name'         => $this->fallbackName(),
             'active'       => (bool) $this->active,
             'image'        => $this->image,
             'image_small'  => image_resize($this->image, 100, 100),

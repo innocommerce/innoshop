@@ -25,7 +25,7 @@
             <select class="form-select option-select mt-2" 
                     name="option_{{ $option->id }}" 
                     data-option-id="{{ $option->id }}">
-              <option value="">{{ __('front/common.please_choose') }}</option>
+              <option value="">{{ __('common/base.please_choose') }}</option>
               @foreach($productOptionValues as $productOptionValue)
                 @php
                   $optionValue = $productOptionValue->optionValue;

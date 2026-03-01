@@ -61,6 +61,10 @@ class AccountService extends BaseService
 
         $customer = CustomerRepo::getInstance()->create($customerData);
 
+        // Track register event
+        $eventService = new \InnoShop\Common\Services\EventTrackingService;
+        $eventService->trackRegister($customer->id, request());
+
         fire_hook_action('front.service.account.register', $customer);
 
         // Only send registration notification if email is provided
@@ -128,6 +132,10 @@ class AccountService extends BaseService
 
         $customer = $customerRepo->create($customerData);
         $smsService->deleteCode($callingCode, $telephone);
+
+        // Track register event
+        $eventService = new \InnoShop\Common\Services\EventTrackingService;
+        $eventService->trackRegister($customer->id, request());
 
         fire_hook_action('front.service.account.register', $customer);
 

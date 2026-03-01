@@ -32,6 +32,53 @@ class OrderReturnRepo extends BaseRepo
         ];
     }
 
+    /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'number', 'label' => trans('common/rma.return_number')],
+            ['value' => 'order_number', 'label' => trans('common/rma.order_reference')],
+            ['value' => 'product_name', 'label' => trans('common/rma.product_name')],
+        ];
+
+        return fire_hook_filter('common.repo.order_return.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $statuses      = ReturnStateService::getAllStatuses();
+        $statusOptions = [
+            ['value' => '', 'label' => trans('panel/common.all')],
+        ];
+        foreach ($statuses as $status) {
+            $statusOptions[] = [
+                'value' => $status['status'],
+                'label' => $status['name'],
+            ];
+        }
+
+        $filters = [
+            [
+                'name'    => 'status',
+                'label'   => trans('front/return.status'),
+                'type'    => 'button',
+                'options' => $statusOptions,
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.order_return.filter_button_options', $filters);
+    }
+
     protected string $model = OrderReturn::class;
 
     /**
@@ -82,6 +129,40 @@ class OrderReturnRepo extends BaseRepo
             $builder->whereHas('customer', function ($query) use ($customerEmail) {
                 $query->where('email', 'like', "%$customerEmail%");
             });
+        }
+
+        $status = $filters['status'] ?? '';
+        if ($status) {
+            $builder->where('status', $status);
+        }
+
+        // Handle new search filters (keyword + search_field)
+        $keyword     = $filters['keyword'] ?? '';
+        $searchField = $filters['search_field'] ?? '';
+        if ($keyword && $searchField) {
+            $builder->where($searchField, 'like', "%{$keyword}%");
+        } elseif ($keyword) {
+            // Search across all searchable fields
+            $builder->where(function ($query) use ($keyword) {
+                $query->where('number', 'like', "%{$keyword}%")
+                    ->orWhere('order_number', 'like', "%{$keyword}%")
+                    ->orWhere('product_name', 'like', "%{$keyword}%");
+            });
+        }
+
+        // Handle date range filter
+        $dateFilter = $filters['date_filter'] ?? '';
+        $startDate  = $filters['start_date'] ?? '';
+        $endDate    = $filters['end_date'] ?? '';
+
+        if ($dateFilter === 'today') {
+            $builder->whereDate('created_at', today());
+        } elseif ($dateFilter === 'this_week') {
+            $builder->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($dateFilter === 'this_month') {
+            $builder->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
+        } elseif ($dateFilter === 'custom' && $startDate && $endDate) {
+            $builder->whereBetween('created_at', [$startDate.' 00:00:00', $endDate.' 23:59:59']);
         }
 
         $builder = fire_hook_filter('repo.order_return.builder', $builder);

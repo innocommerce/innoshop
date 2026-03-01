@@ -9,13 +9,19 @@
 
 return [
     'active'                          => '是否激活',
+    'calculator'                      => '匯率計算器',
     'cannot_delete_default_currency'  => '唔可以刪除默認貨幣',
     'cannot_disable_default_currency' => '不能禁用默認貨幣',
     'code'                            => '代碼',
+    'converted_results'               => '轉換結果',
     'decimal_place'                   => '小數位數',
     'default_currency_rate'           => '默認貨幣的匯率必須爲1',
+    'input_amount'                    => '輸入金額',
     'name'                            => '名稱',
+    'no_results'                      => '請輸入金額進行計算',
+    'select_currency'                 => '選擇貨幣',
     'symbol_left'                     => '前缀',
     'symbol_right'                    => '後缀',
+    'update_rate'                     => '更新匯率',
     'value'                           => '匯率',
 ];

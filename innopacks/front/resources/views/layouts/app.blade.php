@@ -64,6 +64,7 @@
 
   @if (!request('iframe'))
     @include('components.mini-cart')
+    @include('components.newsletter-popup')
   @endif
 
   @stack('footer')

@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Thêm thành công!',
     'address'                    => 'địa chỉ',
     'administrator_remarks'      => 'Ghi chú của quản trị viên',
+    'auto_complete_message'      => 'Hệ thống tự động hoàn thành mệnh lệnh',
     'billing_address'            => 'địa chỉ hóa đơn',
     'billing_address_1'          => 'địa chỉ hóa đơn 1',
     'billing_address_2'          => 'địa chỉ hóa đơn 2',

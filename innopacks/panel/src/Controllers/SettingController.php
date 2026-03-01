@@ -20,6 +20,7 @@ use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Repositories\SmsRepo;
 use InnoShop\Common\Repositories\WeightClassRepo;
 use InnoShop\Common\Services\AI\AIServiceManager;
+use InnoShop\Common\Services\GeoLite2Service;
 use InnoShop\Common\Services\SmsService;
 use InnoShop\Panel\Repositories\ContentAIRepo;
 use InnoShop\Panel\Requests\SettingRequest;
@@ -45,6 +46,7 @@ class SettingController
             'sms_repo'       => SmsRepo::getInstance(),
             'ai_models'      => AIServiceManager::getInstance()->getModelsForSelect(),
             'ai_prompts'     => ContentAIRepo::getInstance()->getPrompts(),
+            'geolite2_info'  => (new GeoLite2Service)->getDatabaseInfo(),
         ];
 
         return inno_view('panel::settings.index', $data);
@@ -82,7 +84,7 @@ class SettingController
 
             return redirect($settingUrl)
                 ->with('instance', $settings)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             $errorUrl = panel_route('settings.index');
             if ($tab) {
@@ -129,6 +131,54 @@ class SettingController
             return response()->json([
                 'success' => false,
                 'message' => $translatedMessage,
+            ], 400);
+        }
+    }
+
+    /**
+     * Download GeoLite2 database
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function downloadGeoLite2(Request $request): mixed
+    {
+        try {
+            $url             = $request->input('url');
+            $geoLite2Service = new GeoLite2Service;
+            $result          = $geoLite2Service->downloadDatabase($url);
+
+            return response()->json($result);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('panel/setting_geolite2.download_failed', ['error' => $e->getMessage()]),
+            ], 400);
+        }
+    }
+
+    /**
+     * Get GeoLite2 database info
+     *
+     * @return mixed
+     */
+    public function getGeoLite2Info(): mixed
+    {
+        try {
+            // 清除文件系统缓存，确保获取最新信息
+            clearstatcache();
+
+            $geoLite2Service = new GeoLite2Service;
+            $info            = $geoLite2Service->getDatabaseInfo();
+
+            return response()->json([
+                'success' => true,
+                'data'    => $info,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
             ], 400);
         }
     }

@@ -27,9 +27,36 @@ class GroupRepo extends BaseRepo
     public static function getCriteria(): array
     {
         return [
-            ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
-            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
+            ['name' => 'keyword', 'type' => 'input', 'label' => trans('common/base.name')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('common/base.created_at')],
         ];
+    }
+
+    /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('common/base.name')],
+        ];
+
+        return fire_hook_filter('common.repo.attribute_group.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [];
+
+        return fire_hook_filter('common.repo.attribute_group.filter_button_options', $filters);
     }
 
     /**

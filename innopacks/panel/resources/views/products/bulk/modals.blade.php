@@ -14,8 +14,8 @@
   </el-form>
   <template #footer>
     <div class="dialog-footer">
-      <el-button @click="dialogVisible.price = false">{{ __('panel/common.cancel') }}</el-button>
-      <el-button type="primary" @click="submitBulkUpdate('price')">{{ __('panel/common.save') }}</el-button>
+      <el-button @click="dialogVisible.price = false">{{ __('common/base.cancel') }}</el-button>
+      <el-button type="primary" @click="submitBulkUpdate('price')">{{ __('common/base.save') }}</el-button>
     </div>
   </template>
 </el-dialog>
@@ -36,8 +36,8 @@
   </el-form>
   <template #footer>
     <div class="dialog-footer">
-      <el-button @click="dialogVisible.categories = false">{{ __('panel/common.cancel') }}</el-button>
-      <el-button type="primary" @click="submitBulkUpdate('categories')">{{ __('panel/common.save') }}</el-button>
+      <el-button @click="dialogVisible.categories = false">{{ __('common/base.cancel') }}</el-button>
+      <el-button type="primary" @click="submitBulkUpdate('categories')">{{ __('common/base.save') }}</el-button>
     </div>
   </template>
 </el-dialog>
@@ -60,8 +60,8 @@
   </el-form>
   <template #footer>
     <div class="dialog-footer">
-      <el-button @click="dialogVisible.quantity = false">{{ __('panel/common.cancel') }}</el-button>
-      <el-button type="primary" @click="submitBulkUpdate('quantity')">{{ __('panel/common.save') }}</el-button>
+      <el-button @click="dialogVisible.quantity = false">{{ __('common/base.cancel') }}</el-button>
+      <el-button type="primary" @click="submitBulkUpdate('quantity')">{{ __('common/base.save') }}</el-button>
     </div>
   </template>
 </el-dialog>
@@ -73,8 +73,8 @@
   <span>{{ __('panel/product.publish_confirm') }}</span>
   <template #footer>
     <div class="dialog-footer">
-      <el-button @click="dialogVisible.publish = false">{{ __('panel/common.cancel') }}</el-button>
-      <el-button type="primary" @click="submitBulkUpdate('publish')">{{ __('panel/common.confirm') }}</el-button>
+      <el-button @click="dialogVisible.publish = false">{{ __('common/base.cancel') }}</el-button>
+      <el-button type="primary" @click="submitBulkUpdate('publish')">{{ __('common/base.confirm') }}</el-button>
     </div>
   </template>
 </el-dialog>
@@ -86,8 +86,8 @@
   <span>{{ __('panel/product.unpublish_confirm') }}</span>
   <template #footer>
     <div class="dialog-footer">
-      <el-button @click="dialogVisible.unpublish = false">{{ __('panel/common.cancel') }}</el-button>
-      <el-button type="primary" @click="submitBulkUpdate('unpublish')">{{ __('panel/common.confirm') }}</el-button>
+      <el-button @click="dialogVisible.unpublish = false">{{ __('common/base.cancel') }}</el-button>
+      <el-button type="primary" @click="submitBulkUpdate('unpublish')">{{ __('common/base.confirm') }}</el-button>
     </div>
   </template>
 </el-dialog> 

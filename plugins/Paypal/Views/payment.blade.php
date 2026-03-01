@@ -2,7 +2,7 @@
 <div id="paypal-button-container" class="mt-4"></div>
 
 <!-- Include the PayPal JavaScript SDK -->
-@php($currency = strtoupper(plugin_setting('paypal','currency')))
+@php($currency = strtoupper(system_setting('currency')))
 @if($payment_setting['sandbox_mode'])
     <script src="https://www.paypal.com/sdk/js?client-id={{ plugin_setting('paypal.sandbox_client_id') }}&currency={{ $currency }}"></script>
 @else
@@ -28,10 +28,10 @@
             }).then(function (orderData) {
                 if (orderData.error) {
                     layer.alert(orderData.error.details[0].description, {
-                        title: '{{ __('front/common.text_hint') }}',
+                        title: '{{ __('common.text_hint') }}',
                         closeBtn: 0,
                         area: ['400px', 'auto'],
-                        btn: ['{{ __('front/common.confirm') }}']
+                        btn: ['{{ __('common.confirm') }}']
                     }, function(index) {
                       window.location.reload();
                       layer.close(index);
@@ -65,7 +65,7 @@
                     @if (current_customer())
                         window.location.href = "{{ account_route('orders.number_show', $order->number) }}"
                     @else
-                        window.location.href = "{{ front_route('payment.success', ['order_number' => $order->number]) }}"
+                        window.location.href = "{{ front_route('checkout.success', ['order_number' => $order->number]) }}"
                     @endif
                 }
             });

@@ -534,6 +534,15 @@ class CheckoutService
 
             DB::commit();
 
+            // Track order placed event
+            $eventService = new \InnoShop\Common\Services\EventTrackingService;
+            $eventService->trackOrderPlaced(
+                $order->id,
+                $order->number,
+                (float) $order->total,
+                request()
+            );
+
             $data = [
                 'cart_list' => $this->getCartList(),
                 'checkout'  => $checkoutData,

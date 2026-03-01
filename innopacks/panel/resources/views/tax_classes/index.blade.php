@@ -11,24 +11,29 @@
 
 @section('page-title-right')
 <button type="button" class="btn btn-primary btn-add" onclick="app.create()"><i class="bi bi-plus-square"></i> {{
-  __('panel/common.create') }}</button>
+  __('common/base.create') }}</button>
 @endsection
 
 @section('content')
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('tax_classes.index')" />
+    <x-panel-data-data-search
+      :action="panel_route('tax_classes.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="true"
+    />
 
     @if ($tax_classes->count())
     <div class="table-responsive">
       <table class="table align-middle">
         <thead>
           <tr>
-            <td>{{ __('panel/common.id')}}</td>
-            <td>{{ __('panel/common.name') }}</td>
-            <td>{{ __('panel/common.description') }}</td>
-            <td>{{ __('panel/common.created_at') }}</td>
+            <td>{{ __('common/base.id') }}</td>
+            <td>{{ __('common/base.name') }}</td>
+            <td>{{ __('common/base.description') }}</td>
+            <td>{{ __('common/base.created_at') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
           </tr>
         </thead>
@@ -41,14 +46,14 @@
             <td>{{ $item->created_at }}</td>
             <td>
               <div class="d-flex gap-1">
-                <el-button size="small" plain type="primary" @click="edit({{ $item->id }})">{{ __('panel/common.edit')}}
+                <el-button size="small" plain type="primary" @click="edit({{ $item->id }})">{{ __('common/base.edit')}}
                 </el-button>
                 <form ref="deleteForm" action="{{ panel_route('tax_classes.destroy', [$item->id]) }}" method="POST"
                   class="d-inline">
                   @csrf
                   @method('DELETE')
                   <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{
-                    __('panel/common.delete')}}</el-button>
+                    __('common/base.delete')}}</el-button>
                 </form>
               </div>
             </td>
@@ -68,12 +73,12 @@
       <div class="text-dark fs-4">{{ __('panel/menu.tax_classes') }}</div>
     </template>
     <el-form ref="formRef" label-position="top" :model="form" :rules="rules" label-width="auto" status-icon>
-      <el-form-item label="{{ __('panel/common.name') }}" prop="name">
-        <el-input size="large" v-model="form.name" placeholder="{{ __('panel/common.name') }}"></el-input>
+      <el-form-item label="{{ __('common/base.name') }}" prop="name">
+        <el-input size="large" v-model="form.name" placeholder="{{ __('common/base.name') }}"></el-input>
       </el-form-item>
 
-      <el-form-item label="{{ __('panel/common.description') }}" prop="description">
-        <el-input size="large" v-model="form.description" placeholder="{{ __('panel/common.description') }}"></el-input>
+      <el-form-item label="{{ __('common/base.description') }}" prop="description">
+        <el-input size="large" v-model="form.description" placeholder="{{ __('common/base.description') }}"></el-input>
       </el-form-item>
 
       <el-form-item label="{{ __('panel/tax_classes.rule') }}">
@@ -104,7 +109,7 @@
                   placeholder="{{ __('panel/tax_classes.priority') }}">
               </td>
               <td class="text-end">
-                <el-button type="danger" @click="form.tax_rules.splice(index, 1)">{{ __('panel/common.delete')}}
+                <el-button type="danger" @click="form.tax_rules.splice(index, 1)">{{ __('common/base.delete')}}
                 </el-button>
               </td>
             </tr>
@@ -112,7 +117,7 @@
           <tfoot>
             <tr>
               <td colspan="4" class="text-end">
-                <el-button type="primary" @click="addItem">{{ __('panel/common.add') }}</el-button>
+                <el-button type="primary" @click="addItem">{{ __('common/base.add') }}</el-button>
               </td>
             </tr>
           </tfoot>
@@ -122,7 +127,7 @@
 
     <template #footer>
       <div style="flex: auto">
-        <el-button @click="drawer = false">{{ __('panel/common.close') }}</el-button>
+        <el-button @click="drawer = false">{{ __('common/base.close') }}</el-button>
         <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
       </div>
     </template>

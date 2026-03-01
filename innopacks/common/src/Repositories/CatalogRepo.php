@@ -32,6 +32,45 @@ class CatalogRepo extends BaseRepo
     }
 
     /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'title', 'label' => trans('panel/catalog.title')],
+            ['value' => 'slug', 'label' => trans('panel/common.slug')],
+        ];
+
+        return fire_hook_filter('common.repo.catalog.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [
+            [
+                'name'    => 'active',
+                'label'   => trans('panel/common.status'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => '1', 'label' => trans('panel/common.active_yes')],
+                    ['value' => '0', 'label' => trans('panel/common.active_no')],
+                ],
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.catalog.filter_button_options', $filters);
+    }
+
+    /**
      * @param  $filters
      * @return LengthAwarePaginator
      * @throws Exception
@@ -113,6 +152,26 @@ class CatalogRepo extends BaseRepo
         if ($title) {
             $builder->whereHas('translation', function ($query) use ($title) {
                 $query->where('title', 'like', "%$title%");
+            });
+        }
+
+        // Handle new search filters (keyword + search_field)
+        $keyword     = $filters['keyword'] ?? '';
+        $searchField = $filters['search_field'] ?? '';
+        if ($keyword && $searchField) {
+            if ($searchField === 'title') {
+                $builder->whereHas('translation', function ($query) use ($keyword) {
+                    $query->where('title', 'like', "%{$keyword}%");
+                });
+            } else {
+                $builder->where($searchField, 'like', "%{$keyword}%");
+            }
+        } elseif ($keyword) {
+            $builder->where(function ($query) use ($keyword) {
+                $query->where('slug', 'like', "%{$keyword}%")
+                    ->orWhereHas('translation', function ($q) use ($keyword) {
+                        $q->where('title', 'like', "%{$keyword}%");
+                    });
             });
         }
 

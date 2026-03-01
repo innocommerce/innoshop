@@ -63,9 +63,9 @@
       <x-common-form-input :title="__('panel/product.spu_code')" name="spu_code"
                            :value="old('spu_code', $product->spu_code ?? '')"
                            :placeholder="__('panel/product.spu_code')"/>
-      <x-common-form-input :title="__('panel/common.position')" name="position"
+      <x-common-form-input :title="__('common/base.position')" name="position"
                            :value="old('position', $product->position ?? '')"
-                           :placeholder="__('panel/common.position')"/>
+                           :placeholder="__('common/base.position')"/>
     </div>
   </div>
   <div class="row">

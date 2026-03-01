@@ -31,8 +31,9 @@ class CountryController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria'  => CountryRepo::getCriteria(),
-            'countries' => CountryRepo::getInstance()->list($filters),
+            'searchFields'  => CountryRepo::getSearchFieldOptions(),
+            'filterButtons' => CountryRepo::getFilterButtonOptions(),
+            'countries'     => CountryRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::countries.index', $data);
@@ -71,7 +72,7 @@ class CountryController extends BaseController
 
             return redirect(panel_route('countries.index'))
                 ->with('instance', $country)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('countries.index'))
                 ->withInput()
@@ -130,7 +131,7 @@ class CountryController extends BaseController
             CountryRepo::getInstance()->destroy($country);
 
             return redirect(panel_route('countries.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('countries.index'))
                 ->withErrors(['error' => $e->getMessage()]);

@@ -78,7 +78,7 @@ class ThemeController extends BaseController
 
             return redirect($settingUrl)
                 ->with('instance', $settings)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect($settingUrl)->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -100,7 +100,7 @@ class ThemeController extends BaseController
                 SettingRepo::getInstance()->updateSystemValue('theme', $themeCode);
             }
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

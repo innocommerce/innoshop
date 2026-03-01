@@ -4,7 +4,7 @@
 
 @section('page-title-right')
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#optionGroupModal" onclick="openCreateModal()">
-  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+  <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}
 </button>
 @endsection
 
@@ -25,7 +25,12 @@
         </li>
       </ul>
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('options.index')" />
+      <x-panel-data-data-search
+        :action="panel_route('options.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="false"
+      />
 
       <!-- Option group list -->
       @if ($option_groups->count())
@@ -33,14 +38,14 @@
           <table class="table align-middle">
             <thead>
             <tr>
-              <th>{{ __('panel/common.id') }}</th>
-              <th>{{ __('panel/common.name') }}</th>
+              <th>{{ __('common/base.id') }}</th>
+              <th>{{ __('common/base.name') }}</th>
               <th>{{ panel_trans('options.description') }}</th>
               <th>{{ panel_trans('options.type') }}</th>
               <th>{{ panel_trans('options.is_required') }}</th>
               <th>{{ panel_trans('options.sort') }}</th>
               <th>{{ __('panel/common.active') }}</th>
-              <th>{{ __('panel/common.created_at') }}</th>
+              <th>{{ __('common/base.created_at') }}</th>
               <th>{{ __('panel/common.actions') }}</th>
             </tr>
             </thead>
@@ -97,7 +102,7 @@
                       <button type="button" class="btn btn-sm btn-outline-primary" 
                               data-bs-toggle="modal" data-bs-target="#optionGroupModal" 
                               onclick="openEditModal({{ $optionGroup->id }})">
-                        {{ __('panel/common.edit') }}
+                        {{ __('common/base.edit') }}
                       </button>
                     </div>
                     <div>
@@ -107,7 +112,7 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-outline-danger" 
                                 onclick="return confirm('{{ panel_trans('options.confirm_delete_option_group') }}')">
-                          {{ __('panel/common.delete') }}
+                          {{ __('common/base.delete') }}
                         </button>
                       </form>
                     </div>

@@ -13,6 +13,7 @@ return [
     'add_successfully'           => '追加に成功しました！',
     'address'                    => '住所',
     'administrator_remarks'      => '管理者のコメント',
+    'auto_complete_message'      => 'システムが自動的に註文を行います',
     'billing_address'            => '請求先住所',
     'billing_address_1'          => '請求先住所1',
     'billing_address_2'          => '請求先住所2',

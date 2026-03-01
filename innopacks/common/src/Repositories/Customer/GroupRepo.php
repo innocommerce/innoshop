@@ -25,11 +25,38 @@ class GroupRepo extends BaseRepo
     public static function getCriteria(): array
     {
         return [
-            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'name', 'type' => 'input', 'label' => trans('common/base.name')],
             ['name' => 'level', 'type' => 'input', 'label' => trans('panel/customer.level')],
             ['name' => 'discount_rate', 'type' => 'input', 'label' => trans('panel/customer.discount_rate')],
             ['name' => 'mini_cost', 'type' => 'range', 'label' => trans('panel/customer.mini_cost')],
         ];
+    }
+
+    /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('common/base.name')],
+        ];
+
+        return fire_hook_filter('common.repo.customer_group.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [];
+
+        return fire_hook_filter('common.repo.customer_group.filter_button_options', $filters);
     }
 
     /**

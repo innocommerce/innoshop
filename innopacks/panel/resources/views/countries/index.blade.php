@@ -13,19 +13,24 @@
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('countries.index')" />
+    <x-panel-data-data-search
+      :action="panel_route('countries.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="false"
+    />
 
     @if ($countries)
     <div class="table-responsive">
       <table class="table align-middle">
         <thead>
           <tr>
-            <td>{{ __('panel/common.id')}}</td>
-            <td>{{ __('panel/common.name') }}</td>
+            <td>{{ __('common/base.id') }}</td>
+            <td>{{ __('common/base.name') }}</td>
             <td>{{ __('panel/currency.code') }}</td>
             <td>{{ __('panel/country.continent') }}</td>
-            <td>{{ __('panel/common.position') }}</td>
-            <td>{{ __('panel/common.status') }}</td>
+            <td>{{ __('common/base.position') }}</td>
+            <td>{{ __('common/base.status') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
           </tr>
         </thead>
@@ -35,7 +40,7 @@
             <td>{{ $item['id'] }}</td>
             <td>{{ $item['name'] }}
               @if($item['code'] === system_setting('country_code'))
-              <span class="badge bg-success">{{ __('panel/common.default') }}</span>
+              <span class="badge bg-success">{{ __('common/base.default') }}</span>
               @endif
             </td>
             <td>{{ $item['code'] }}</td>
@@ -49,7 +54,7 @@
               <div class="d-flex gap-2">
                 <div>
                   <a @click="edit({{ $item->id }})">
-                    <el-button size="small" plain type="primary">{{__('panel/common.edit')}}</el-button>
+                    <el-button size="small" plain type="primary">{{__('common/base.edit')}}</el-button>
                   </a>
                 </div>
                 <div>
@@ -58,7 +63,7 @@
                     @csrf
                     @method('DELETE')
                     <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{
-                      __('panel/common.delete')}}</el-button>
+                      __('common/base.delete')}}</el-button>
                   </form>
                 </div>
               </div>
@@ -80,7 +85,7 @@
       <div class="text-dark fs-4">{{ __('panel/menu.countries') }}</div>
     </template>
     <el-form ref="formRef" label-position="top" :model="form" :rules="rules" label-width="auto" status-icon>
-      <el-form-item label="{{ __('panel/common.name') }}" prop="name">
+      <el-form-item label="{{ __('common/base.name') }}" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
 
@@ -92,17 +97,17 @@
         <el-input v-model="form.continent"></el-input>
       </el-form-item>
 
-      <el-form-item label="{{ __('panel/common.position') }}" prop="position">
+      <el-form-item label="{{ __('common/base.position') }}" prop="position">
         <el-input v-model="form.position"></el-input>
       </el-form-item>
 
-      <el-form-item label="{{ __('panel/common.status') }}" prop="active">
+      <el-form-item label="{{ __('common/base.status') }}" prop="active">
         <el-switch v-model="form.active" :active-value="1" :inactive-value="0"></el-switch>
       </el-form-item>
     </el-form>
     <template #footer>
       <div style="flex: auto">
-        <el-button @click="drawer = false">{{ __('panel/common.close') }}</el-button>
+        <el-button @click="drawer = false">{{ __('common/base.close') }}</el-button>
         <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
       </div>
     </template>

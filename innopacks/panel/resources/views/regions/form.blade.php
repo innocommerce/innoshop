@@ -41,7 +41,7 @@
                     <select class="form-select form-select-sm" name="region_states[{{ $index }}][state_id]" required data-id="{{ $item->state_id }}"></select>
                   </td>
                   <td class="text-end">
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel/common.delete')}}</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('common/base.delete')}}</button>
                   </td>
                 </tr>
                 @php ($index++)
@@ -50,7 +50,7 @@
             <tfoot>
               <tr>
                 <td colspan="3" class="text-end">
-                  <button type="button" class="btn add-tax btn-sm btn-outline-primary">{{ __('panel/common.add') }}</button>
+                  <button type="button" class="btn add-tax btn-sm btn-outline-primary">{{ __('common/base.add') }}</button>
                 </td>
               </tr>
             </tfoot>
@@ -86,7 +86,7 @@
             </select>
           </td>
           <td class="text-end">
-            <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('panel/common.delete')}}</button>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-tax">{{ __('common/base.delete')}}</button>
           </td>
         </tr>
       `;

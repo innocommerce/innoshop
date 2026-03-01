@@ -32,8 +32,8 @@
                   </label>
                 </div>
                 <div class="action-buttons">
-                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openVariantDialog(index, null)">{{ __('panel/common.edit') }}</button>
-                  <button type="button" class="btn btn-outline-danger btn-sm ms-2" @click="deleteVariant(index)">{{ __('panel/common.delete') }}</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openVariantDialog(index, null)">{{ __('common/base.edit') }}</button>
+                  <button type="button" class="btn btn-outline-danger btn-sm ms-2" @click="deleteVariant(index)">{{ __('common/base.delete') }}</button>
                 </div>
               </div>
               <div class="variant-values">
@@ -99,7 +99,7 @@
                       <div class="d-inline-block cursor-pointer" @click="addVariantValue(index)"><i class="bi bi-plus-lg"></i> {{ __('panel/product.add_variant_value') }}</div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
-                      <button type="button" class="btn btn-outline-danger" @click="deleteVariant(index)">{{ __('panel/common.delete') }}</button>
+                      <button type="button" class="btn btn-outline-danger" @click="deleteVariant(index)">{{ __('common/base.delete') }}</button>
                       <button type="button" class="btn btn-outline-primary" @click="saveVariant(index)">{{ __('panel/common.btn_save') }}</button>
                     </div>
                   </div>
@@ -312,8 +312,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeVariantDialog">{{ __('panel/common.cancel') }}</button>
-            <button type="button" class="btn btn-primary" @click="saveVariantDialog">{{ __('panel/common.save') }}</button>
+            <button type="button" class="btn btn-secondary" @click="closeVariantDialog">{{ __('common/base.cancel') }}</button>
+            <button type="button" class="btn btn-primary" @click="saveVariantDialog">{{ __('common/base.save') }}</button>
           </div>
         </div>
       </div>
@@ -1070,7 +1070,7 @@
         }
         
         closeVariantDialog();
-        layer.msg('{{ __('panel/common.saved_success') }}', {icon: 1});
+        layer.msg('{{ __('common/base.saved_success') }}', {icon: 1});
       };
 
       // Toggle variant image mode
@@ -1107,7 +1107,7 @@
       const deleteVariantValue = (variantIndex, valueIndex) => {
         if (confirm('{{ __('panel/common.confirm_delete') }}')) {
           variants.value[variantIndex].values.splice(valueIndex, 1);
-          layer.msg('{{ __('panel/common.deleted_success') }}', {icon: 1});
+          layer.msg('{{ __('common/base.deleted_success') }}', {icon: 1});
         }
       };
 

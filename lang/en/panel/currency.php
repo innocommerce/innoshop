@@ -18,4 +18,10 @@ return [
     'symbol_left'                     => 'Left Symbol',
     'symbol_right'                    => 'Right Symbol',
     'value'                           => 'Value',
+    'calculator'                      => 'Currency Calculator',
+    'select_currency'                 => 'Select Currency',
+    'input_amount'                    => 'Input Amount',
+    'converted_results'               => 'Converted Results',
+    'no_results'                      => 'Please enter an amount to calculate',
+    'update_rate'                     => 'Update Rate',
 ];

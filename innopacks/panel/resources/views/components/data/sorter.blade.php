@@ -1,14 +1,14 @@
 @if(isset($options) && count($options))
 <div class="sorter-component d-flex align-items-center gap-2">
-  <div class="text-muted sorter-label">{{ __('panel/common.sort') }}:</div>
+  <div class="text-muted sorter-label">{{ __('common/base.sort') }}:</div>
   <select class="form-select form-select-sm sorter-field" id="sort-field" name="sort">
-    <option value="">{{ __('panel/common.none') }}</option>
+    <option value="">{{ __('common/base.none') }}</option>
     @foreach($options as $value => $label)
       <option value="{{ $value }}" {{ request('sort') == $value ? 'selected' : '' }}>{{ $label }}</option>
     @endforeach
   </select>
   <select class="form-select form-select-sm sorter-direction" id="sort-direction" name="order">
-    <option value="" class="none-option" {{ !request('sort') ? '' : 'style=display:none' }}>{{ __('panel/common.none') }}</option>
+    <option value="" class="none-option" {{ !request('sort') ? '' : 'style=display:none' }}>{{ __('common/base.none') }}</option>
     <option value="desc" {{ request('order', 'desc') == 'desc' ? 'selected' : '' }}>{{ __('panel/common.desc') }} ↓</option>
     <option value="asc" {{ request('order') == 'asc' ? 'selected' : '' }}>{{ __('panel/common.asc') }} ↑</option>
   </select>

@@ -21,15 +21,29 @@ use InnoShop\Plugin\Repositories\SettingRepo;
 final class Plugin implements Arrayable, ArrayAccess
 {
     public const TYPES = [
-        'feature',    // Feature modules
-        'marketing',  // Marketing tools
-        'billing',    // Payment methods
-        'shipping',   // Shipping methods
-        'fee',        // Order fees
-        'social',     // Social login
-        'language',   // Language packs
-        'translator', // Translation tools
-        'intelli',    // AI models
+        // 核心交易
+        'payment',        // 支付方式
+        'shipping',       // 配送方式
+
+        // 价格费用（核心协调类型）
+        'price',          // 商品价格
+        'orderfee',       // 订单费用
+
+        // 扩展功能
+        'marketing',      // 营销推广
+        'service',        // 外部服务
+        'feature',        // 功能扩展
+    ];
+
+    // 旧类型到新类型的映射（兼容旧插件）
+    public const TYPE_MAPPING = [
+        'billing'    => 'payment',
+        'fee'        => 'orderfee',
+        'discount'   => 'orderfee',
+        'translator' => 'service',
+        'intelli'    => 'service',
+        'social'     => 'feature',
+        'language'   => 'feature',
     ];
 
     protected string $type;
@@ -88,6 +102,11 @@ final class Plugin implements Arrayable, ArrayAccess
      */
     public function setType(string $type): self
     {
+        // 兼容旧类型，自动映射到新类型
+        if (isset(self::TYPE_MAPPING[$type])) {
+            $type = self::TYPE_MAPPING[$type];
+        }
+
         if (! in_array($type, self::TYPES)) {
             throw new Exception('Invalid plugin type, must be one of '.implode(',', self::TYPES));
         }
@@ -141,12 +160,12 @@ final class Plugin implements Arrayable, ArrayAccess
     }
 
     /**
-     * @param  string  $icon
+     * @param  string|null  $icon
      * @return $this
      */
-    public function setIcon(string $icon): self
+    public function setIcon(?string $icon): self
     {
-        $this->icon = $icon;
+        $this->icon = $icon ?? '';
 
         return $this;
     }
@@ -372,7 +391,7 @@ final class Plugin implements Arrayable, ArrayAccess
     }
 
     /**
-     * Get plugin menu URL (if plugin has registered a menu route).
+     * Get plugin menu URL from config.json
      *
      * @return string
      */
@@ -382,91 +401,36 @@ final class Plugin implements Arrayable, ArrayAccess
             return '';
         }
 
-        // Allow plugins to register their menu URL via hook
-        // This is the primary method - plugins should use this hook
-        $menuUrl = fire_hook_filter("plugin.{$this->code}.menu.url", '');
-
-        if (! empty($menuUrl)) {
-            return $menuUrl;
-        }
-
-        // Fallback: Try to find menu URL from sidebar routes
-        // This searches through sidebar hooks to find routes that match the plugin code
-        try {
-            $routes = $this->findPluginRoutes();
-            if (! empty($routes)) {
-                // Return the first route found
-                return $routes[0]['url'] ?? '';
-            }
-        } catch (\Exception $e) {
-            // Silently fail
-        }
-
-        return '';
+        return $this->getPanelRouteFromConfig();
     }
 
     /**
-     * Find plugin routes from sidebar hooks.
-     * This is a fallback mechanism when plugins don't explicitly register menu URL.
+     * Get panel route from plugin config.json
      *
-     * @return array
+     * @return string
      */
-    protected function findPluginRoutes(): array
+    protected function getPanelRouteFromConfig(): string
     {
-        $routes          = [];
-        $pluginCode      = $this->code;
-        $pluginCodeSnake = Str::snake($pluginCode);
-        $pluginCodeCamel = Str::camel($pluginCode);
-
-        // Check all sidebar hook filters
-        $sidebarHooks = [
-            'panel.component.sidebar.product.routes',
-            'panel.component.sidebar.order.routes',
-            'panel.component.sidebar.customer.routes',
-            'panel.component.sidebar.content.routes',
-            'panel.component.sidebar.design.routes',
-            'panel.component.sidebar.analytic.routes',
-            'panel.component.sidebar.marketing.routes',
-            'panel.component.sidebar.setting.routes',
-            'panel.component.sidebar.plugin.routes',
-        ];
-
-        foreach ($sidebarHooks as $hook) {
-            $hookRoutes = fire_hook_filter($hook, []);
-            foreach ($hookRoutes as $route) {
-                $routeName = $route['route'] ?? '';
-
-                // Check if route name contains plugin code in various formats
-                // e.g., 'image_bot.index', 'imageBot.index', 'imagebot.index'
-                $matches = false;
-                if (! empty($routeName)) {
-                    $routeNameLower = strtolower($routeName);
-                    $matches        = str_contains($routeNameLower, strtolower($pluginCodeSnake)) ||
-                               str_contains($routeNameLower, strtolower($pluginCodeCamel)) ||
-                               str_contains($routeNameLower, strtolower($pluginCode));
-                }
-
-                if ($matches) {
-                    $url = $route['url'] ?? '';
-                    if (empty($url) && ! empty($routeName)) {
-                        try {
-                            $url = panel_route($routeName);
-                        } catch (\Exception $e) {
-                            continue;
-                        }
-                    }
-                    if (! empty($url)) {
-                        $routes[] = [
-                            'route' => $routeName,
-                            'url'   => $url,
-                            'title' => $route['title'] ?? '',
-                        ];
-                    }
-                }
-            }
+        $configFile = $this->getPath().'/config.json';
+        if (! file_exists($configFile)) {
+            return '';
         }
 
-        return $routes;
+        $config = json_decode(file_get_contents($configFile), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return '';
+        }
+
+        $route = $config['panel_route'] ?? '';
+        if (empty($route)) {
+            return '';
+        }
+
+        try {
+            return panel_route($route);
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     public function checkActive(): bool
@@ -515,7 +479,7 @@ final class Plugin implements Arrayable, ArrayAccess
      */
     public function getFields(): array
     {
-        if ($this->getType() == 'billing') {
+        if ($this->getType() == 'payment') {
             $this->fields[] = SettingRepo::getInstance()->getPluginAvailableField();
         }
 
@@ -524,6 +488,12 @@ final class Plugin implements Arrayable, ArrayAccess
         foreach ($this->fields as $index => $field) {
             $dbField = $existValues[$field['name']] ?? null;
             $value   = $dbField ? $dbField->value : null;
+
+            // Use default value if value is null and default is set
+            if ($value === null && isset($field['default'])) {
+                $value = $field['default'];
+            }
+
             if ($field['name'] == 'active') {
                 $value = (int) $value;
             }

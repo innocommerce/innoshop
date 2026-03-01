@@ -20,7 +20,7 @@ class EnvironmentChecker
 
     public function __construct(?string $basePath = null)
     {
-        $this->basePath = $basePath ?? dirname(dirname(dirname(dirname(__DIR__))));
+        $this->basePath = $basePath ?? dirname(__DIR__, 5);
     }
 
     public function checkPhpVersion(): array

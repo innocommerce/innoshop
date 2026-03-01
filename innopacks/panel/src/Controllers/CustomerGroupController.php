@@ -28,8 +28,9 @@ class CustomerGroupController
     {
         $filters = $request->all();
         $data    = [
-            'criteria' => Customer\GroupRepo::getCriteria(),
-            'groups'   => Customer\GroupRepo::getInstance()->list($filters),
+            'searchFields'  => Customer\GroupRepo::getSearchFieldOptions(),
+            'filterButtons' => Customer\GroupRepo::getFilterButtonOptions(),
+            'groups'        => Customer\GroupRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::customer_groups.index', $data);
@@ -60,7 +61,7 @@ class CustomerGroupController
 
             return redirect(panel_route('customer_groups.index'))
                 ->with('instance', $customerGroup)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customer_groups.index'))
                 ->withInput()
@@ -105,7 +106,7 @@ class CustomerGroupController
 
             return redirect(panel_route('customer_groups.index'))
                 ->with('instance', $customerGroup)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customer_groups.index'))
                 ->withInput()
@@ -124,7 +125,7 @@ class CustomerGroupController
             $customerGroup->delete();
 
             return redirect(panel_route('customer_groups.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customer_groups.index'))
                 ->withErrors(['error' => $e->getMessage()]);

@@ -19,6 +19,8 @@ use InnoShop\Common\Repositories\Customer\TransactionRepo;
 use InnoShop\Common\Repositories\Order\PaymentRepo;
 use Throwable;
 
+use function fire_hook_action;
+
 class StateMachineService
 {
     private Order $order;
@@ -81,15 +83,15 @@ class StateMachineService
         ],
         self::UNPAID => [
             self::PAID      => ['updateStatus', 'addHistory', 'updateSales', 'subStock', 'notifyUpdateOrder'],
-            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder'],
+            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder', 'fireCancelledHook'],
         ],
         self::PAID => [
-            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder'],
+            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder', 'fireCancelledHook'],
             self::SHIPPED   => ['updateStatus', 'addHistory', 'addShipment', 'notifyUpdateOrder'],
-            self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
+            self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireCompletedHook'],
         ],
         self::SHIPPED => [
-            self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
+            self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireCompletedHook'],
         ],
     ];
 
@@ -259,6 +261,17 @@ class StateMachineService
                     $this->{$function}($oldStatusCode, $status);
                 }
             }
+            // Track payment completed event when status changes to PAID
+            if ($status === self::PAID) {
+                $eventService = new \InnoShop\Common\Services\EventTrackingService;
+                $eventService->trackPaymentCompleted(
+                    $order->id,
+                    $order->number,
+                    (float) $order->total,
+                    request()
+                );
+            }
+
             $data = ['order' => $order, 'status' => $status, 'comment' => $comment, 'notify' => $notify];
             fire_hook_action('service.state_machine.change_status.after', $data);
 
@@ -516,5 +529,37 @@ class StateMachineService
             return;
         }
         $this->order->notifyUpdateOrder($oldCode);
+    }
+
+    /**
+     * Fire hook when order is cancelled.
+     * This allows plugins to rollback promotions, restore stock, etc.
+     *
+     * @param  $oldCode
+     * @param  $newCode
+     * @return void
+     */
+    private function fireCancelledHook($oldCode, $newCode): void
+    {
+        fire_hook_action('order.cancelled', [
+            'order'   => $this->order,
+            'comment' => $this->comment,
+        ]);
+    }
+
+    /**
+     * Fire hook when order is completed.
+     * This allows plugins to handle completion events (e.g., award points, finalize promotions).
+     *
+     * @param  $oldCode
+     * @param  $newCode
+     * @return void
+     */
+    private function fireCompletedHook($oldCode, $newCode): void
+    {
+        fire_hook_action('order.completed', [
+            'order'   => $this->order,
+            'comment' => $this->comment,
+        ]);
     }
 }

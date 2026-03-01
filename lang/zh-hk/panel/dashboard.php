@@ -8,16 +8,21 @@
  */
 
 return [
-    'customer_quantity' => '客戶總數',
     'frontend'          => '前台首頁',
-    'order_amount'      => '訂單總額',
+    'last_30_days'      => '近 30 天',
+    'new_customers'     => '新增客戶',
     'order_quantity'    => '訂單總數',
-    'order_trends'      => '訂單趨勢',
-    'product'           => '商品',
-    'product_quantity'  => '產品總數',
+    'order_status_dist' => '訂單狀態分佈',
+    'page_views'        => '瀏覽量 (PV)',
     'profile'           => '個人中心',
-    'ranking'           => '排名',
-    'sales'             => '銷量',
+    'revenue_orders'    => '營收與訂單',
     'sign_out'          => '退出登录',
+    'today_orders'      => '今日訂單',
+    'today_revenue'     => '今日營收',
+    'today_visits'      => '今日訪問',
+    'top_customers'     => '高價值客戶',
     'top_products'      => '熱賣商品',
+    'traffic_trends'    => '流量趨勢',
+    'unique_visitors'   => '獨立訪客 (UV)',
+    'vs_yesterday'      => '較昨日',
 ];

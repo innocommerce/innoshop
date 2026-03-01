@@ -78,7 +78,7 @@
               :options="$catalogs" key="id" label="name" :emptyOption=false />
             <x-common-form-input title="{{ __('panel/common.slug') }}" name="slug" :value="old('slug', $catalog->slug ?? '')"
               placeholder="{{ __('panel/common.slug') }}" />
-            <x-common-form-input title="{{ __('panel/common.position') }}" name="position" :value="old('position', $catalog->position ?? 0)" />
+            <x-common-form-input title="{{ __('common/base.position') }}" name="position" :value="old('position', $catalog->position ?? 0)" />
           </div>
         </div>
       </div>

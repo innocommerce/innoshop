@@ -80,6 +80,10 @@ Route::get('/tags', [Controllers\TagController::class, 'index'])->name('tags.ind
 Route::get('/tags/{tag}', [Controllers\TagController::class, 'show'])->name('tags.show');
 Route::get('/tag-{slug}', [Controllers\TagController::class, 'slugShow'])->name('tags.slug_show');
 
+// Newsletter
+Route::post('/newsletter/subscribe', [Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::post('/newsletter/unsubscribe', [Controllers\NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
 // Pages - Use page-{slug} pattern to maintain consistency with other resources (product-{slug}, category-{slug}, article-{slug})
 // Note: This route is typically overridden by PageBuilder plugin when active
 Route::get('/pages', [Controllers\PageController::class, 'index'])->name('pages.index');

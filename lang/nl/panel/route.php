@@ -3,7 +3,7 @@
  * Copyright (c) Since 2024 InnoShop - All Rights Reserved
  *
  * @link       https://www.innoshop.com
- * @author     iszmxw <mail@54zm.com>
+ * @author     InnoShop <team@innoshop.com>
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
@@ -164,6 +164,7 @@ return [
     'products_destroy'            => 'Product verwijderen',
     'products_edit'               => 'Product bewerken',
     'products_index'              => 'Productlijst',
+    'products_selector'           => 'Product selector',
     'products_show'               => 'Product weergeven',
     'products_store'              => 'Product opslaan',
     'products_update'             => 'Product bijwerken',
@@ -230,20 +231,20 @@ return [
     'themes_index'                => 'Thema lijst',
     'themes_settings_index'       => 'Thema instellingen lijst',
     'themes_settings_update'      => 'Thema instellingen bijwerken',
-    'upload_files'                => 'Bestanden uploaden',
-    'upload_images'               => 'Afbeeldingen uploaden',
-    'translations_trans_text'     => 'Vertaal tekst',
-    'translations_trans_html'     => 'Vertaal HTML',
+    'transactions_create'         => 'Transactie maken',
     'transactions_index'          => 'Transactielijst',
     'transactions_show'           => 'Transactie details',
     'transactions_store'          => 'Transactie opslaan',
-    'transactions_create'         => 'Transactie maken',
+    'translations_trans_html'     => 'Vertaal HTML',
+    'translations_trans_text'     => 'Vertaal tekst',
+    'upload_files'                => 'Bestanden uploaden',
+    'upload_images'               => 'Afbeeldingen uploaden',
+    'weight_classes_active'       => 'Gewichtseenheid inschakelen',
+    'weight_classes_create'       => 'Gewichtseenheid maken',
+    'weight_classes_destroy'      => 'Gewichtseenheid verwijderen',
+    'weight_classes_edit'         => 'Gewichtseenheid bewerken',
     'weight_classes_index'        => 'Gewichtseenheid lijst',
     'weight_classes_show'         => 'Gewichtseenheid weergeven',
     'weight_classes_store'        => 'Gewichtseenheid opslaan',
     'weight_classes_update'       => 'Gewichtseenheid bijwerken',
-    'weight_classes_create'       => 'Gewichtseenheid maken',
-    'weight_classes_destroy'      => 'Gewichtseenheid verwijderen',
-    'weight_classes_edit'         => 'Gewichtseenheid bewerken',
-    'weight_classes_active'       => 'Gewichtseenheid inschakelen',
 ];

@@ -57,7 +57,7 @@ class WeightClassController extends BaseController
             WeightClassRepo::getInstance()->create($data);
 
             return redirect(panel_route('weight_classes.index'))
-                ->with('success', panel_trans('common.saved_success'));
+                ->with('success', common_trans('base.saved_success'));
         } catch (Exception $e) {
             return back()
                 ->withInput()
@@ -90,7 +90,7 @@ class WeightClassController extends BaseController
             WeightClassRepo::getInstance()->update($weight_class, $data);
 
             return redirect(panel_route('weight_classes.index'))
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return back()
                 ->withInput()
@@ -121,7 +121,7 @@ class WeightClassController extends BaseController
 
             WeightClassRepo::getInstance()->destroy($weight_class);
 
-            return back()->with('success', panel_trans('common.deleted_success'));
+            return back()->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

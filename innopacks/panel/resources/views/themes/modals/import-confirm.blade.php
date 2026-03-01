@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('panel/common.cancel') }}</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('common/base.cancel') }}</button>
         <button type="button" class="btn btn-primary" id="confirmImportDemo{{ $theme['code'] }}">
           <span class="spinner-border spinner-border-sm d-none me-2" id="importSpinner{{ $theme['code'] }}" role="status" aria-hidden="true"></span>
           {{ __('panel/themes.confirm_import_button') }}

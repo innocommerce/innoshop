@@ -40,7 +40,7 @@
                 placeholder="{{ __('front/order.order_number') }}"
                 value="{{ request('number') }}"
             >
-            <button class="btn btn-primary text-nowrap" type="submit">{{ __('front/common.search') }}</button>
+            <button class="btn btn-primary text-nowrap" type="submit">{{ __('common/base.search') }}</button>
           </form>
 
           @if ($orders->count())
@@ -83,7 +83,7 @@
                   <td data-title="Total">{{ $order->total_format }}</td>
                   <td data-title="Actions">
                     <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary btn-sm"
-                       role="button">{{ __('front/common.view') }}</a>
+                       role="button">{{ __('common/base.view') }}</a>
                     @if ($order->status == 'shipped')
                       <button data-number="{{ $order->number }}"
                               class="btn btn-primary btn-sm btn-shipped">{{ __('front/account.signed') }}</button>
@@ -130,7 +130,7 @@
                                 <td>{{ $child->total_format }}</td>
                                 <td>
                                   <a href="{{ account_route('orders.number_show', $child->number) }}"
-                                     class="btn btn-primary btn-sm" role="button">{{ __('front/common.view') }}</a>
+                                     class="btn btn-primary btn-sm" role="button">{{ __('common/base.view') }}</a>
                                   @if ($child->status == 'shipped')
                                     <button data-number="{{ $child->number }}"
                                             class="btn btn-primary btn-sm btn-shipped">{{ __('front/account.signed') }}</button>

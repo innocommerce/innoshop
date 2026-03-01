@@ -24,7 +24,7 @@
           </div>
           <div class="right">
             <div class="order-item">
-              <span class="d-none d-md-block">{{ __('front/common.sort') }}:</span>
+              <span class="d-none d-md-block">{{ __('common/base.sort') }}:</span>
               <select class="form-select order-select">
                 <option value="">{{ __('/front/category.default') }}</option>
                 <option value="products.sales|asc" {{ request('sort') == 'products.sales' && request('order') == 'asc' ? 'selected' : '' }}>{{ __('/front/category.sales') }} ({{ __('/front/category.low') . ' - ' . __('/front/category.high')}})</option>

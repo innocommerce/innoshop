@@ -134,7 +134,7 @@ class EditController extends Controller
 
             return redirect(account_route('edit.index'))
                 ->with('instance', $customer)
-                ->with('success', front_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
 
         } catch (Exception $e) {
             return redirect(account_route('edit.index'))

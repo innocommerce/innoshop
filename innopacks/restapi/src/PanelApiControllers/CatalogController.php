@@ -55,7 +55,7 @@ class CatalogController extends BaseController
             $data    = $request->all();
             $catalog = CatalogRepo::getInstance()->create($data);
 
-            return json_success(panel_trans('common.updated_success'), $catalog);
+            return json_success(common_trans('base.updated_success'), $catalog);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -72,7 +72,7 @@ class CatalogController extends BaseController
             $data = $request->all();
             CatalogRepo::getInstance()->update($catalog, $data);
 
-            return json_success(panel_trans('common.updated_success'), $catalog);
+            return json_success(common_trans('base.updated_success'), $catalog);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -87,7 +87,7 @@ class CatalogController extends BaseController
         try {
             CatalogRepo::getInstance()->destroy($catalog);
 
-            return json_success(panel_trans('common.deleted_success'));
+            return json_success(common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

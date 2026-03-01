@@ -61,7 +61,7 @@ class BaseController extends Controller
             $item->active = $request->get('status');
             $item->saveOrFail();
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

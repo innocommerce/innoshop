@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'add_to_carts'        => 'Add to Cart',
+    'avg_duration'        => 'Average length of stay',
+    'basic_info'          => 'Basic information',
+    'browser'             => 'Browser',
+    'by_country'          => 'By country',
+    'by_device'           => 'By device',
+    'checkout_starts'     => 'Start checking out',
+    'city'                => 'City',
+    'conversion_checkout' => 'Settlement',
+    'conversion_event'    => 'Transformation event',
+    'conversion_funnel'   => 'Transformation funnel',
+    'conversion_order'    => 'Place an order',
+    'conversion_payment'  => '"Payment',
+    'conversion_register' => '"Register',
+    'country'             => '"Country"',
+    'country_code'        => 'Country code',
+    'country_name'        => 'Country name',
+    'customer'            => 'Customer',
+    'daily_trends'        => 'Daily Trends',
+    'device_desktop'      => 'Desktop',
+    'device_mobile'       => '"Mobile"',
+    'device_tablet'       => '"Tablet"',
+    'device_type'         => 'Equipment type',
+    'end_date'            => 'End date',
+    'first_visited_at'    => 'First visit time',
+    'guest'               => 'Visitor',
+    'hour'                => '"Hour',
+    'hourly_distribution' => '24-hour distribution',
+    'ip_address'          => 'IP address',
+    'last_visited_at'     => 'Last visit time',
+    'locale'              => '"Language"',
+    'location'            => 'Location',
+    'location_info'       => 'Location information',
+    'order_placed'        => 'The order has been placed.',
+    'os'                  => 'Operating system',
+    'overall_conversion'  => 'Overall conversion rate',
+    'page_views'          => 'Page views',
+    'payment_completed'   => 'Payment completed',
+    'product_views'       => 'Commodity browsing',
+    'referrer'            => 'Source',
+    'session_id'          => 'Session ID',
+    'start_date'          => 'Start date',
+    'total_visits'        => 'Total visits',
+    'unique_visitors'     => 'Independent Visitor',
+    'user_agent'          => 'User agent',
+    'visit_detail'        => 'Visit details',
+    'visit_duration'      => 'Duration of visit',
+    'visits'              => 'Number of visits',
+];

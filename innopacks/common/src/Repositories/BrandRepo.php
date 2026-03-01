@@ -30,6 +30,45 @@ class BrandRepo extends BaseRepo
     }
 
     /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('panel/brand.name')],
+            ['value' => 'slug', 'label' => trans('panel/common.slug')],
+        ];
+
+        return fire_hook_filter('common.repo.brand.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [
+            [
+                'name'    => 'active',
+                'label'   => trans('panel/common.status'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => '1', 'label' => trans('panel/common.active_yes')],
+                    ['value' => '0', 'label' => trans('panel/common.active_no')],
+                ],
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.brand.filter_button_options', $filters);
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */
@@ -56,6 +95,18 @@ class BrandRepo extends BaseRepo
 
         if (isset($filters['active'])) {
             $builder->where('active', (bool) $filters['active']);
+        }
+
+        // Handle new search filters (keyword + search_field)
+        $keyword     = $filters['keyword'] ?? '';
+        $searchField = $filters['search_field'] ?? '';
+        if ($keyword && $searchField) {
+            $builder->where($searchField, 'like', "%{$keyword}%");
+        } elseif ($keyword) {
+            $builder->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('slug', 'like', "%{$keyword}%");
+            });
         }
 
         return fire_hook_filter('repo.brand.builder', $builder);

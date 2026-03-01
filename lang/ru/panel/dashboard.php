@@ -8,16 +8,21 @@
  */
 
 return [
-    'customer_quantity' => 'всего клиентов',
     'frontend'          => ' Главная',
-    'order_amount'      => 'сумма заказов',
+    'last_30_days'      => 'Почти 30 дней.',
+    'new_customers'     => 'Новые клиенты.',
     'order_quantity'    => 'количество заказов',
-    'order_trends'      => 'тренды заказов',
-    'product'           => 'товар',
-    'product_quantity'  => 'количество товаров',
+    'order_status_dist' => 'Распределение состояния заказа',
+    'page_views'        => 'Количество просмотров (PV)',
     'profile'           => 'профиль',
-    'ranking'           => 'рейтинг',
-    'sales'             => 'продажи',
+    'revenue_orders'    => 'Батальон принимает заказы',
     'sign_out'          => 'выход',
+    'today_orders'      => 'Заказ на сегодня.',
+    'today_revenue'     => 'На сегодня.',
+    'today_visits'      => 'Сегодня.',
+    'top_customers'     => 'Ценный клиент',
     'top_products'      => 'топ продаваемых товаров',
+    'traffic_trends'    => 'Тенденция потока',
+    'unique_visitors'   => 'Независимый посетитель',
+    'vs_yesterday'      => 'Вчера.',
 ];

@@ -43,7 +43,7 @@ class OrderComplete extends Command
 
         foreach ($orders as $order) {
             try {
-                $comment = trans('common/order.auto_complete_message', [], $order->locale);
+                $comment = trans('panel/order.auto_complete_message', [], $order->locale);
 
                 StateMachineService::getInstance($order)->changeStatus(StateMachineService::COMPLETED, $comment);
 

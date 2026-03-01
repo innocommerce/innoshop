@@ -74,7 +74,7 @@
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-primary btn-lg mt-4 w-50">{{ __('front/common.submit') }}</button>
+              <button type="submit" class="btn btn-primary btn-lg mt-4 w-50">{{ __('common/base.submit') }}</button>
             </form>
           @endif
 

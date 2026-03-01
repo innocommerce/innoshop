@@ -8,6 +8,7 @@
  */
 
 return [
+    'auto_complete_message'      => 'System auto completed order',
     'add'                        => 'Add',
     'add_failed!'                => 'Add Failed!',
     'add_successfully'           => 'Added successfully!',
@@ -123,5 +124,4 @@ return [
     'user_agent'                 => 'User Agent',
     'view'                       => 'View',
     'website'                    => 'Website',
-    'shipment_status'            => 'Shipment Status',
 ];

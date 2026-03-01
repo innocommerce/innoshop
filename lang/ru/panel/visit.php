@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'add_to_carts'        => 'Присоединяйся к тележке',
+    'avg_duration'        => 'Средняя продолжительность пребывания в ней составляет около 30 лет',
+    'basic_info'          => 'Основная информация.',
+    'browser'             => 'браузер',
+    'by_country'          => 'По стране.',
+    'by_device'           => 'Нажми на устройство.',
+    'checkout_starts'     => 'Начинай выписывать чеки.',
+    'city'                => 'город',
+    'conversion_checkout' => 'расчетн',
+    'conversion_event'    => 'Трансформация.',
+    'conversion_funnel'   => 'Трансформационная воронка',
+    'conversion_order'    => 'Дела заказ',
+    'conversion_payment'  => 'плат',
+    'conversion_register' => 'зарегистрирова',
+    'country'             => 'стран',
+    'country_code'        => 'Код страны',
+    'country_name'        => 'Название страны',
+    'customer'            => 'клиент',
+    'daily_trends'        => 'Ежедневно.',
+    'device_desktop'      => 'настольн',
+    'device_mobile'       => 'мобильн',
+    'device_tablet'       => 'плоск',
+    'device_type'         => 'Тип оборудования',
+    'end_date'            => 'Конец.',
+    'first_visited_at'    => 'Время первого визита',
+    'guest'               => 'посетител',
+    'hour'                => 'час',
+    'hourly_distribution' => 'Распределение на 24 часа',
+    'ip_address'          => 'IP адрес.',
+    'last_visited_at'     => 'Последний визит',
+    'locale'              => 'язык',
+    'location'            => 'мест',
+    'location_info'       => 'Информация о местоположении',
+    'order_placed'        => 'Приказ выполнен.',
+    'os'                  => 'Операционная система',
+    'overall_conversion'  => 'Общая скорость преобразования',
+    'page_views'          => 'Браузер страницы',
+    'payment_completed'   => 'Оплата завершена.',
+    'product_views'       => 'товарооборот',
+    'referrer'            => 'источник',
+    'session_id'          => 'Удостоверение.',
+    'start_date'          => 'Дата начала.',
+    'total_visits'        => 'Полный список посетителей',
+    'unique_visitors'     => 'Независимый посетитель',
+    'user_agent'          => 'Абонентский агент',
+    'visit_detail'        => 'Подробности визита',
+    'visit_duration'      => 'Долго?',
+    'visits'              => 'Количество посещений.',
+];

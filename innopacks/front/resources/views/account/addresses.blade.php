@@ -27,11 +27,11 @@
                     <div class="address-card-actions">
                       @if($address['default'])
                         <div class="bg-success text-white p-1 required rounded">
-                          {{__('front/common.default')}}
+                          {{__('common/base.default')}}
                         </div>
                       @endif
-                      <button type="button" class="btn btn-link edit-address">{{ __('front/common.edit') }}</button>
-                      <button type="button" class="btn btn-link delete-address">{{ __('front/common.delete') }}</button>
+                      <button type="button" class="btn btn-link edit-address">{{ __('common/base.edit') }}</button>
+                      <button type="button" class="btn btn-link delete-address">{{ __('common/base.delete') }}</button>
                     </div>
                   </div>
                   <div class="address-card-body">
@@ -108,8 +108,8 @@
     $('.delete-address').on('click', function () {
       const id = $(this).closest('.address-card').data('id');
 
-      layer.confirm('{{ __('front/common.delete_confirm') }}', {
-        btn: ['{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}']
+      layer.confirm('{{ __('common/base.delete_confirm') }}', {
+        btn: ['{{ __('common/base.confirm') }}', '{{ __('common/base.cancel') }}']
       }, function () {
         axios.delete(`{{ account_route('addresses.index') }}/${id}`).then(function (res) {
           if (res.success) {

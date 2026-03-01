@@ -22,7 +22,7 @@
             <li class="nav-item" role="presentation">
               <a class="nav-link {{ empty(request()->get('tab')) || request()->get('tab') == 'all' ? 'active' : '' }}" 
                  href="{{ request()->fullUrlWithQuery(['tab' => 'all', 'page' => 1]) }}">
-                {{ __('panel/common.all') }}
+                {{ __('common/base.all') }}
               </a>
             </li>
             <li class="nav-item" role="presentation">
@@ -56,7 +56,7 @@
                        class="form-control border-start-0" 
                        name="search" 
                        value="{{ request()->get('search') }}"
-                       placeholder="{{ __('panel/common.search') }}..." 
+                       placeholder="{{ __('common/base.search') }}..." 
                        id="searchInput"
                        autocomplete="off">
                 @if(request()->get('search'))
@@ -85,7 +85,7 @@
               <div class="d-flex gap-2 flex-wrap align-items-center">
                 <a class="btn btn-sm {{ empty(request()->category) ? 'btn-primary' : 'btn-outline-secondary' }} rounded px-3"
                    href="{{ request()->fullUrlWithQuery(['category' => null, 'page' => 1]) }}">
-                  {{ __('panel/common.all') }}
+                  {{ __('common/base.all') }}
                 </a>
                 @foreach($categoryList as $index => $category)
                   <a class="btn btn-sm category-item {{ request()->category == $category['slug'] ? 'btn-primary' : 'btn-outline-secondary' }} rounded px-3 {{ $hasMore && $index >= $maxVisible ? 'd-none category-more' : '' }}"
@@ -95,7 +95,7 @@
                 @endforeach
                 @if($hasMore)
                   <button type="button" class="btn btn-sm btn-outline-secondary rounded px-3" id="toggleMoreCategories">
-                    <span class="show-more-text">{{ __('panel/common.view_more') }}</span>
+                    <span class="show-more-text">{{ __('common/base.view_more') }}</span>
                     <span class="show-less-text d-none">{{ __('panel/common.collapse') }}</span>
                   </button>
                 @endif
@@ -117,7 +117,7 @@
       @if(empty($products['data']))
         <div class="text-center py-5">
           <i class="bi bi-inbox fs-1 text-muted"></i>
-          <p class="text-muted mt-3 mb-0">{{ __('panel/common.no_data') }}</p>
+          <p class="text-muted mt-3 mb-0">{{ __('common/base.no_data') }}</p>
         </div>
       @else
         <div class="row g-4" id="marketItemsContent">

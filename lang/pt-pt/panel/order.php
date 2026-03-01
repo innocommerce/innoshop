@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Adicionado com sucesso!',
     'address'                    => 'Endereço',
     'administrator_remarks'      => 'Comentários do administrador',
+    'auto_complete_message'      => 'O sistema preenche automaticamente os pedidos',
     'billing_address'            => 'Endereço de Cobrança',
     'billing_address_1'          => 'Endereço de Cobrança 1',
     'billing_address_2'          => 'Endereço de Cobrança 2',

@@ -8,16 +8,21 @@
  */
 
 return [
-    'customer_quantity' => 'Nombre total de clients',
     'frontend'          => 'Page d\'accueil frontale',
-    'order_amount'      => 'Montant total des commandes',
+    'last_30_days'      => 'Près de 30 jours',
+    'new_customers'     => 'Nouveaux clients ajoutés',
     'order_quantity'    => 'Nombre total de commandes',
-    'order_trends'      => 'Tendances des commandes',
-    'product'           => 'Produit',
-    'product_quantity'  => 'Nombre total de produits',
+    'order_status_dist' => 'Distribution du statut des commandes',
+    'page_views'        => 'Nombre de vues (PV)',
     'profile'           => 'Profil',
-    'ranking'           => 'Classement',
-    'sales'             => 'Ventes',
+    'revenue_orders'    => 'Revenus et commandes',
     'sign_out'          => 'Se déconnecter',
+    'today_orders'      => 'Commande du jour',
+    'today_revenue'     => 'Revenus du jour',
+    'today_visits'      => 'Visitez dès aujourd’hui',
+    'top_customers'     => 'Clients de haute valeur',
     'top_products'      => 'Produits les plus vendus',
+    'traffic_trends'    => 'Tendances du trafic',
+    'unique_visitors'   => 'Visiteurs uniques (UV)',
+    'vs_yesterday'      => 'Plus qu’hier',
 ];

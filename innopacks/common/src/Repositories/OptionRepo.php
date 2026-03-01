@@ -21,6 +21,33 @@ class OptionRepo extends BaseRepo
     protected string $model = Option::class;
 
     /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('common/base.name')],
+        ];
+
+        return fire_hook_filter('common.repo.option.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [];
+
+        return fire_hook_filter('common.repo.option.filter_button_options', $filters);
+    }
+
+    /**
      * Get paginated list of option groups
      *
      * @param  array  $filters
@@ -72,6 +99,21 @@ class OptionRepo extends BaseRepo
         $active = $filters['active'] ?? '';
         if ($active !== '') {
             $builder->where('active', (bool) $active);
+        }
+
+        // Handle new search filters (keyword + search_field)
+        $keyword     = $filters['keyword'] ?? '';
+        $searchField = $filters['search_field'] ?? '';
+        if ($keyword && $searchField === 'name') {
+            $builder->where(function ($query) use ($keyword) {
+                $query->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.en')) LIKE ?", ["%{$keyword}%"])
+                    ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.zh-cn')) LIKE ?", ["%{$keyword}%"]);
+            });
+        } elseif ($keyword) {
+            $builder->where(function ($query) use ($keyword) {
+                $query->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.en')) LIKE ?", ["%{$keyword}%"])
+                    ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.zh-cn')) LIKE ?", ["%{$keyword}%"]);
+            });
         }
 
         return fire_hook_filter('repo.option.builder', $builder);

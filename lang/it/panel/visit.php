@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'add_to_carts'        => 'Prendete il carrello della spesa',
+    'avg_duration'        => 'Durata media del soggiorno',
+    'basic_info'          => 'Informazioni di base',
+    'browser'             => 'browser',
+    'by_country'          => 'Per paese',
+    'by_device'           => 'Per attrezzatura',
+    'checkout_starts'     => 'Inizio della liquidazione dei conti',
+    'city'                => 'città',
+    'conversion_checkout' => 'liquidazione',
+    'conversion_event'    => 'Tradurre gli eventi',
+    'conversion_funnel'   => 'Imbuto di trasformazione',
+    'conversion_order'    => 'ordinazioni',
+    'conversion_payment'  => 'pagamento',
+    'conversion_register' => 'registrazione',
+    'country'             => 'paesi',
+    'country_code'        => 'Codici dei paesi',
+    'country_name'        => 'Nome del paese',
+    'customer'            => 'clienti',
+    'daily_trends'        => 'Tendenze giornaliere',
+    'device_desktop'      => 'tavolo',
+    'device_mobile'       => 'mobili',
+    'device_tablet'       => 'piatti',
+    'device_type'         => 'Tipo di attrezzatura',
+    'end_date'            => 'Data di chiusura',
+    'first_visited_at'    => 'Prima visita',
+    'guest'               => 'visitatori',
+    'hour'                => 'ora',
+    'hourly_distribution' => 'Distribuzione su 24 ore',
+    'ip_address'          => 'Indirizzo IP',
+    'last_visited_at'     => 'Ultimo periodo di visita',
+    'locale'              => 'lingua',
+    'location'            => 'posizione',
+    'location_info'       => 'Informazioni sulla localizzazione',
+    'order_placed'        => 'Ordine protocollare',
+    'os'                  => 'Sistema operativo',
+    'overall_conversion'  => 'Tassi di conversione globali',
+    'page_views'          => 'Numero di pagine consultate',
+    'payment_completed'   => 'Pagamenti effettuati',
+    'product_views'       => 'Navigazione marittima',
+    'referrer'            => 'fonti',
+    'session_id'          => 'sessione',
+    'start_date'          => 'Data di inizio',
+    'total_visits'        => 'Numero totale di visite',
+    'unique_visitors'     => 'Visitatori indipendenti',
+    'user_agent'          => 'Agente utente',
+    'visit_detail'        => 'Dettagli relativi all’accesso',
+    'visit_duration'      => 'Durata della visita',
+    'visits'              => 'Numero di visite',
+];

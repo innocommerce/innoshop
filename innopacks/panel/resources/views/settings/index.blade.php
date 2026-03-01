@@ -15,13 +15,22 @@
         <div class="card-header">{{ __('panel/menu.settings') }}</div>
         <div class="card-body">
           <ul class="nav flex-column settings-nav">
+            <!-- Core Settings (High Frequency + High Importance) -->
             <a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-basics">{{ __('panel/setting.basic') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-webdata">{{ __('panel/setting.website_data') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-image">{{ __('panel/setting.image_settings') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting.email_setting') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-sms">{{ __('panel/setting.sms_setting') }}</a>
-            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-ai">{{ __('panel/setting.ai_setting') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-localization">{{ __('panel/setting.localization_settings') }}</a>
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-logistics-information">{{ __('panel/setting.express_company') }}</a>
+            
+            <!-- Business Settings (Medium-High Frequency + High Importance) -->
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-store-system">{{ __('panel/setting.store_system_setting') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-email">{{ __('panel/setting_email.email_setting') }}</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-sms">{{ __('panel/setting_sms.sms_setting') }}</a>
+            
+            <!-- Feature Settings (Medium Frequency + Medium Importance) -->
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-image">{{ __('panel/setting_image.image_settings') }}</a>
+            
+            <!-- Tool Settings (Low Frequency + Low Importance) -->
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-tools">{{ __('panel/setting.tools_setting') }}</a>
+            
             @hookinsert('panel.settings.tab.nav.bottom')
         </ul>
         </div>
@@ -33,11 +42,12 @@
         <div class="card-body">
           <div class="tab-content">
             @include('panel::settings._basic_setting')
-            @include('panel::settings._web_data')
+            @include('panel::settings._localization_setting')
+            @include('panel::settings._store_system_setting')
             @include('panel::settings._image_setting')
             @include('panel::settings._email_setting')
             @include('panel::settings._sms_setting')
-            @include('panel::settings._ai_setting')
+            @include('panel::settings._tools_setting')
             @include('panel::settings._logistics_information')
             @hookinsert('panel.settings.tab.pane.bottom')
           </div>
@@ -66,7 +76,7 @@
     getZones(countryId);
   });
 
-  // 获取所有国家数据
+  // Get all countries data
   function getCountries() {
     axios.get('{{ front_route('countries.index') }}').then(function(res) {
       var countries = res.data;
@@ -79,7 +89,7 @@
     });
   }
 
-  // 获取对应国家的省份数据 countries/72
+  // Get zones/provinces data for the specified country
   function getZones(countryId) {
     axios.get('{{ front_route('countries.index') }}/' + countryId).then(function(res) {
       var zones = res.data;

@@ -61,7 +61,7 @@
               <div class="text-secondary"><small>{{ __('front/edit.phone_update_hint') }}</small></div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg w-50">{{ __('front/common.submit') }}</button>
+            <button type="submit" class="btn btn-primary btn-lg w-50">{{ __('common/base.submit') }}</button>
           </form>
         </div>
       </div>

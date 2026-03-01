@@ -7,19 +7,24 @@
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('locales.index')" />
+    <x-panel-data-data-search
+      :action="panel_route('locales.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="false"
+    />
 
     @if ($locales)
     <div class="table-responsive">
       <table class="table align-middle">
         <thead>
           <tr>
-            <td>{{ __('panel/common.id') }}</td>
+            <td>{{ __('common/base.id') }}</td>
             <td>{{ __('panel/common.logo') }}</td>
-            <td>{{ __('panel/common.name') }}</td>
+            <td>{{ __('common/base.name') }}</td>
             <td>{{ __('panel/currency.code') }}</td>
-            <td>{{ __('panel/common.position') }}</td>
-            <td>{{ __('panel/common.status') }}</td>
+            <td>{{ __('common/base.position') }}</td>
+            <td>{{ __('common/base.status') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
           </tr>
         </thead>
@@ -30,7 +35,7 @@
             <td><img src="{{ image_resize($item['image'], 90, 60) }}" class="border" style="width: 30px;"></td>
             <td>{{ $item['name'] }}
               @if($item['code'] === system_setting('front_locale'))
-              <span class="badge bg-success">{{ __('panel/common.default') }}</span>
+              <span class="badge bg-success">{{ __('common/base.default') }}</span>
               @endif
             </td>
             <td>{{ $item['code'] }}</td>

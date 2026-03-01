@@ -26,8 +26,9 @@ class AttributeGroupController extends BaseController
     public function index(Request $request): mixed
     {
         $data = [
-            'criteria'   => GroupRepo::getCriteria(),
-            'attributes' => GroupRepo::getInstance()->list($request->all()),
+            'searchFields'  => GroupRepo::getSearchFieldOptions(),
+            'filterButtons' => GroupRepo::getFilterButtonOptions(),
+            'attributes'    => GroupRepo::getInstance()->list($request->all()),
         ];
 
         return inno_view('panel::attribute_groups.index', $data);
@@ -85,6 +86,6 @@ class AttributeGroupController extends BaseController
         $attributeGroup->delete();
 
         return redirect(panel_route('attribute_groups.index'))
-            ->with('success', panel_trans('common.deleted_success'));
+            ->with('success', common_trans('base.deleted_success'));
     }
 }

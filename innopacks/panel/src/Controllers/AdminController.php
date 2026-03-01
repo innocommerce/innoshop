@@ -28,8 +28,9 @@ class AdminController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria' => AdminRepo::getCriteria(),
-            'admins'   => AdminRepo::getInstance()->list($filters),
+            'searchFields'  => AdminRepo::getSearchFieldOptions(),
+            'filterButtons' => AdminRepo::getFilterButtonOptions(),
+            'admins'        => AdminRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::admins.index', $data);
@@ -68,7 +69,7 @@ class AdminController extends BaseController
 
             return redirect(panel_route('admins.index'))
                 ->with('instance', $admin)
-                ->with('success', panel_trans('common.saved_success'));
+                ->with('success', common_trans('base.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('admins.index'))
                 ->withErrors(['error' => $e->getMessage()]);
@@ -113,7 +114,7 @@ class AdminController extends BaseController
 
             return redirect(panel_route('admins.index'))
                 ->with('instance', $admin)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('admins.index'))
                 ->withErrors(['error' => $e->getMessage()]);
@@ -130,7 +131,7 @@ class AdminController extends BaseController
             AdminRepo::getInstance()->destroy($admin);
 
             return redirect(panel_route('admins.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('admins.index'))
                 ->withErrors(['error' => $e->getMessage()]);

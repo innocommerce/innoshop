@@ -25,7 +25,8 @@ body.page-categories {
 
         span {
           color: #777;
-          width: 100%;
+          margin-right: 8px;
+          white-space: nowrap;
         }
 
         &:last-child {

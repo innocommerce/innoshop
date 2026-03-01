@@ -8,7 +8,7 @@
       <table class="table products-table align-middle">
         <thead>
           <tr>
-            <th>{{ __('panel/common.id') }}</th>
+            <th>{{ __('common/base.id') }}</th>
             <th>{{ __('panel/order.product') }}</th>
             <th>{{ __('panel/order.sku_code') }}</th>
             <th>{{ __('panel/order.quantity') }}</th>

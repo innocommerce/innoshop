@@ -38,7 +38,7 @@
         const page = button.data('page');
 
         button.prop('disabled', true).html(
-          '<i class="bi bi-arrow-repeat spin"></i> {{ __('front/common.loading') }}');
+          '<i class="bi bi-arrow-repeat spin"></i> {{ __('common/base.loading') }}');
 
         axios.get(`{{ front_route('products.reviews', ['product' => $product->id]) }}`, {
           params: {

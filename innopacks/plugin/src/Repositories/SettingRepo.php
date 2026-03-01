@@ -23,7 +23,7 @@ class SettingRepo extends CommonSettingRepo
     {
         return [
             'name'     => 'active',
-            'label'    => panel_trans('common.status'),
+            'label'    => trans('common/base.status'),
             'type'     => 'bool',
             'required' => true,
         ];
@@ -38,7 +38,7 @@ class SettingRepo extends CommonSettingRepo
     {
         return [
             'name'    => 'available',
-            'label'   => panel_trans('common.available'),
+            'label'   => trans('common/base.available'),
             'type'    => 'checkbox',
             'options' => [
                 ['label' => 'PC WEB', 'value' => 'pc_web'],

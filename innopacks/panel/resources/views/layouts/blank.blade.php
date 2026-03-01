@@ -31,8 +31,8 @@
     const lang = {
       hint: '{{ __('panel/common.hint') }}',
       delete_confirm: '{{ __('panel/common.delete_confirm') }}',
-      confirm: '{{ __('panel/common.confirm') }}',
-      cancel: '{{ __('panel/common.cancel') }}',
+      confirm: '{{ __('common/base.confirm') }}',
+      cancel: '{{ __('common/base.cancel') }}',
     }
   </script>
   @stack('header')
