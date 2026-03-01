@@ -26,11 +26,56 @@ class TransactionRepo extends BaseRepo
 
         return [
             ['name' => 'customer_id', 'type' => 'input', 'label' => trans('panel/transaction.customer')],
-            ['name' => 'email', 'type' => 'input', 'label' => trans('panel/common.email')],
+            ['name' => 'email', 'type' => 'input', 'label' => trans('common/base.email')],
             ['name' => 'type', 'type' => 'select', 'label' => trans('panel/transaction.type'), 'options' => $options, 'options_key' => 'code', 'options_label' => 'label'],
             ['name' => 'amount', 'type' => 'range', 'label' => trans('panel/transaction.amount')],
-            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('common/base.created_at')],
         ];
+    }
+
+    /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'email', 'label' => trans('common/base.email')],
+            ['value' => 'comment', 'label' => trans('panel/transaction.comment')],
+        ];
+
+        return fire_hook_filter('common.repo.transaction.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $typeOptions = [
+            ['value' => '', 'label' => trans('panel/common.all')],
+        ];
+        foreach (Transaction::TYPES as $type) {
+            $typeOptions[] = [
+                'value' => $type,
+                'label' => trans('common/transaction.'.$type),
+            ];
+        }
+
+        $filters = [
+            [
+                'name'    => 'type',
+                'label'   => trans('panel/transaction.type'),
+                'type'    => 'button',
+                'options' => $typeOptions,
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.transaction.filter_button_options', $filters);
     }
 
     /**

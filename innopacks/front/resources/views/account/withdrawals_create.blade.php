@@ -84,7 +84,7 @@
                             id="account_type" 
                             name="account_type" 
                             required>
-                      <option value="">{{ __('front/common.please_choose') }}</option>
+                      <option value="">{{ __('common/base.please_choose') }}</option>
                       @foreach($account_types as $type)
                         <option value="{{ $type['value'] }}" {{ old('account_type') == $type['value'] ? 'selected' : '' }}>
                           {{ $type['label'] }}
@@ -169,7 +169,7 @@
                   <i class="bi bi-check-circle"></i> {{ __('front/withdrawal.submit_application') }}
                 </button>
                 <a href="{{ account_route('wallet.withdrawals.index') }}" class="btn btn-secondary ms-2">
-                  {{ __('front/common.cancel') }}
+                  {{ __('common/base.cancel') }}
                 </a>
               </div>
             </form>

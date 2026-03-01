@@ -4,7 +4,7 @@
 @section('title', __('panel/menu.roles'))
 @section('page-title-right')
 <a href="{{ panel_route('roles.create') }}" class="btn btn-primary">
-  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+  <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}
 </a>
 @endsection
 
@@ -17,9 +17,9 @@
       <table class="table align-middle">
         <thead>
           <tr>
-            <th>{{ __('panel/common.id') }}</th>
-            <th>{{ __('panel/common.name') }}</th>
-            <th>{{ __('panel/common.created_at') }}</th>
+            <th>{{ __('common/base.id') }}</th>
+            <th>{{ __('common/base.name') }}</th>
+            <th>{{ __('common/base.created_at') }}</th>
             <th>{{ __('panel/common.actions') }}</th>
           </tr>
         </thead>
@@ -32,14 +32,14 @@
             <td>
               <div class="d-flex gap-1">
                 <a href="{{ panel_route('roles.edit', [$item->id]) }}">
-                  <el-button size="small" plain type="primary">{{ __('panel/common.edit')}}</el-button>
+                  <el-button size="small" plain type="primary">{{ __('common/base.edit')}}</el-button>
                 </a>
                 <form ref="deleteForm" action="{{ panel_route('roles.destroy', [$item->id]) }}" method="POST"
                   class="d-inline">
                   @csrf
                   @method('DELETE')
                   <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{
-                    __('panel/common.delete')}}</el-button>
+                    __('common/base.delete')}}</el-button>
                 </form>
               </div>
             </td>

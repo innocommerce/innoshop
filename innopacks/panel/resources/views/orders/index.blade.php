@@ -10,7 +10,17 @@
 @section('content')
   <div class="card h-min-600">
     <div class="card-body">
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('orders.index')" :export="true" />
+      <x-panel-data-data-search
+        :action="panel_route('orders.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="true"
+      />
+      <div class="mb-3">
+        <a href="{{ panel_route('orders.export_batch') }}?{{ http_build_query(request()->query()) }}" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-file-earmark-excel"></i> {{ __('panel/common.export') }}
+        </a>
+      </div>
       @hookinsert('panel.orders.index.criteria.after')
 
       @if ($orders->count())
@@ -19,7 +29,7 @@
             <thead>
               <tr>
                @hookinsert('panel.orders.index.header.top')
-                <td>{{ __('panel/common.id') }}</td>
+                <td>{{ __('common/base.id') }}</td>
                 <td>{{ __('panel/order.number') }}</td>
                 <td>{{ __('panel/order.order_items') }}</td>
                 <td>{{ __('panel/order.customer_name') }}</td>
@@ -65,7 +75,7 @@
                   <td>{{ $item->created_at }}</td>
                   <td>
                     <a href="{{ panel_route('orders.show', [$item->id]) }}"
-                      class="btn btn-sm btn-outline-primary">{{ __('panel/common.view') }}</a>
+                      class="btn btn-sm btn-outline-primary">{{ __('common/base.view') }}</a>
                   </td>
                 </tr>
               @endforeach

@@ -29,26 +29,71 @@ class WithdrawalRepo extends BaseRepo
         $statusOptions = [];
         foreach (Withdrawal::STATUSES as $status) {
             $statusOptions[] = [
-                'code'  => $status,
-                'label' => trans('common/withdrawal.'.$status),
+                'value' => $status,
+                'label' => trans('panel/withdrawal.'.$status),
             ];
         }
 
         $accountTypeOptions = [];
         foreach (Withdrawal::ACCOUNT_TYPES as $type) {
             $accountTypeOptions[] = [
-                'code'  => $type,
-                'label' => trans('common/withdrawal.'.$type),
+                'value' => $type,
+                'label' => trans('panel/withdrawal.'.$type),
             ];
         }
 
         return [
             ['name' => 'customer_id', 'type' => 'input', 'label' => trans('panel/withdrawal.customer_id')],
-            ['name' => 'status', 'type' => 'select', 'label' => trans('panel/withdrawal.status'), 'options' => $statusOptions, 'options_key' => 'code', 'options_label' => 'label'],
-            ['name' => 'account_type', 'type' => 'select', 'label' => trans('panel/withdrawal.account_type'), 'options' => $accountTypeOptions, 'options_key' => 'code', 'options_label' => 'label'],
+            ['name' => 'status', 'type' => 'select', 'label' => trans('panel/withdrawal.status'), 'options' => $statusOptions, 'options_key' => 'value', 'options_label' => 'label'],
+            ['name' => 'account_type', 'type' => 'select', 'label' => trans('panel/withdrawal.account_type'), 'options' => $accountTypeOptions, 'options_key' => 'value', 'options_label' => 'label'],
             ['name' => 'amount', 'type' => 'range', 'label' => trans('panel/withdrawal.amount')],
-            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('common/base.created_at')],
         ];
+    }
+
+    /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'customer_name', 'label' => trans('panel/withdrawal.customer_name')],
+            ['value' => 'customer_email', 'label' => trans('panel/withdrawal.customer_email')],
+        ];
+
+        return fire_hook_filter('common.repo.withdrawal.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $statusOptions = [
+            ['value' => '', 'label' => trans('panel/common.all')],
+        ];
+        foreach (Withdrawal::STATUSES as $status) {
+            $statusOptions[] = [
+                'value' => $status,
+                'label' => trans('panel/withdrawal.'.$status),
+            ];
+        }
+
+        $filters = [
+            [
+                'name'    => 'status',
+                'label'   => trans('panel/withdrawal.status'),
+                'type'    => 'button',
+                'options' => $statusOptions,
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.withdrawal.filter_button_options', $filters);
     }
 
     /**

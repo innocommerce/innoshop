@@ -27,6 +27,45 @@ class AdminRepo extends BaseRepo
     }
 
     /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('panel/admin.name')],
+            ['value' => 'email', 'label' => trans('panel/admin.email')],
+        ];
+
+        return fire_hook_filter('common.repo.admin.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [
+            [
+                'name'    => 'active',
+                'label'   => trans('panel/common.status'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => '1', 'label' => trans('panel/common.active_yes')],
+                    ['value' => '0', 'label' => trans('panel/common.active_no')],
+                ],
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.admin.filter_button_options', $filters);
+    }
+
+    /**
      * @param  $data
      * @return mixed
      * @throws Throwable

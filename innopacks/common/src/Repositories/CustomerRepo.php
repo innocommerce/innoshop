@@ -47,10 +47,50 @@ class CustomerRepo extends BaseRepo
             ],
             ['name' => 'from', 'type' => 'select', 'label' => trans('panel/customer.from'), 'options' => self::getFromList(), 'options_key' => 'key', 'options_label' => 'value'],
             ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/customer.locale')],
-            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('common/base.created_at')],
         ];
 
         return fire_hook_filter('repo.customer.criteria', $criteria);
+    }
+
+    /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('panel/customer.name')],
+            ['value' => 'email', 'label' => trans('panel/customer.email')],
+            ['value' => 'telephone', 'label' => trans('panel/customer.telephone')],
+        ];
+
+        return fire_hook_filter('common.repo.customer.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [
+            [
+                'name'    => 'active',
+                'label'   => trans('panel/common.status'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => '1', 'label' => trans('panel/common.active_yes')],
+                    ['value' => '0', 'label' => trans('panel/common.active_no')],
+                ],
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.customer.filter_button_options', $filters);
     }
 
     /**
@@ -111,6 +151,28 @@ class CustomerRepo extends BaseRepo
         $createdEnd = $filters['created_at_end'] ?? '';
         if ($createdEnd) {
             $builder->where('created_at', '<', $createdEnd);
+        }
+
+        // Handle new search filters (keyword + search_field)
+        $searchKeyword = $filters['keyword'] ?? '';
+        $searchField   = $filters['search_field'] ?? '';
+        if ($searchKeyword && $searchField) {
+            $builder->where($searchField, 'like', "%{$searchKeyword}%");
+        }
+
+        // Handle date range filter
+        $dateFilter = $filters['date_filter'] ?? '';
+        $startDate  = $filters['start_date'] ?? '';
+        $endDate    = $filters['end_date'] ?? '';
+
+        if ($dateFilter === 'today') {
+            $builder->whereDate('created_at', today());
+        } elseif ($dateFilter === 'this_week') {
+            $builder->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($dateFilter === 'this_month') {
+            $builder->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
+        } elseif ($dateFilter === 'custom' && $startDate && $endDate) {
+            $builder->whereBetween('created_at', [$startDate.' 00:00:00', $endDate.' 23:59:59']);
         }
 
         return fire_hook_filter('repo.customer.builder', $builder);

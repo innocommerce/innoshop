@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\OrderReturn;
 use Throwable;
 
+use function fire_hook_action;
+
 class ReturnStateService
 {
     private OrderReturn $orderReturn;
@@ -65,11 +67,11 @@ class ReturnStateService
             self::PENDING => ['updateStatus', 'addHistory', 'notifyNewOrder'],
         ],
         self::PENDING => [
-            self::REFUNDED  => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
+            self::REFUNDED  => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireRefundCompletedHook'],
             self::CANCELLED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
         ],
         self::REFUNDED => [
-            self::RETURNED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
+            self::RETURNED => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireRefundCompletedHook'],
         ],
     ];
 
@@ -335,5 +337,21 @@ class ReturnStateService
             return;
         }
         // $this->orderReturn->notifyUpdateOrder($oldCode);
+    }
+
+    /**
+     * Fire hook when refund is completed (refunded or returned status).
+     * This allows plugins to handle refund events (e.g., restore coupon usage, rollback promotions).
+     *
+     * @param  $oldCode
+     * @param  $newCode
+     * @return void
+     */
+    private function fireRefundCompletedHook($oldCode, $newCode): void
+    {
+        fire_hook_action('order.refund.completed', [
+            'order'  => $this->orderReturn->order,
+            'refund' => $this->orderReturn,
+        ]);
     }
 }

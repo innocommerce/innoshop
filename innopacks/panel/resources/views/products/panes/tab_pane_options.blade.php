@@ -89,7 +89,7 @@
                 <div style="max-height: 500px; overflow-y: auto;">
                   <div v-if="selectedOptions.length === 0" class="text-center py-4 text-muted">
                     <i class="bi bi-inbox display-6 d-block mb-2"></i>
-                    <p class="mb-0">{{ __('panel/common.no_data') }}</p>
+                    <p class="mb-0">{{ __('common/base.no_data') }}</p>
                     <small>{{ __('panel/product.select_option') }}</small>
                   </div>
                   

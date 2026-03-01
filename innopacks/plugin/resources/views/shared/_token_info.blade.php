@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.close') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.close') }}</button>
                     <a href="{{config('innoshop.api_url').'/account/domains'}}" type="button" class="btn btn-primary" target="_blank">{{ __('panel/plugin.point_to_get_token') }}</a>
                 </div>
             </div>

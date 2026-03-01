@@ -29,6 +29,10 @@ class CheckoutController extends Controller
     public function index(): mixed
     {
         try {
+            // Track checkout start event
+            $eventService = new \InnoShop\Common\Services\EventTrackingService;
+            $eventService->trackCheckoutStart(request());
+
             $checkout = CheckoutService::getInstance();
             $result   = $checkout->getCheckoutResult();
             if (empty($result['cart_list'])) {
@@ -80,7 +84,7 @@ class CheckoutController extends Controller
             $order = $checkout->confirm();
             StateMachineService::getInstance($order)->changeStatus(StateMachineService::UNPAID, '', true);
 
-            return json_success(front_trans('common.submitted_success'), $order);
+            return json_success(common_trans('base.submitted_success'), $order);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

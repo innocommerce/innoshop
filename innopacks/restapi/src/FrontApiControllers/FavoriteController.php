@@ -43,7 +43,7 @@ class FavoriteController extends BaseController
             ];
             FavoriteRepo::getInstance()->create($data);
 
-            return json_success(front_trans('common.saved_success'));
+            return json_success(common_trans('base.saved_success'));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -71,7 +71,7 @@ class FavoriteController extends BaseController
 
             $favorite->delete();
 
-            return json_success(front_trans('common.deleted_success'));
+            return json_success(common_trans('base.deleted_success'));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }

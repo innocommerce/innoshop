@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'event_product_view'      => '浏览产品',
+    'event_add_to_cart'       => '加入购物车',
+    'event_checkout_start'    => '开始结算',
+    'event_order_placed'      => '下单',
+    'event_payment_completed' => '支付完成',
+    'event_register'          => '注册',
+    'visit_detail'            => '访问详情',
+    'basic_info'              => '基本信息',
+    'location_info'           => '位置信息',
+    'session_id'              => '会话ID',
+    'ip_address'              => 'IP地址',
+    'customer'                => '客户',
+    'guest'                   => '访客',
+    'country_code'            => '国家代码',
+    'country_name'            => '国家名称',
+    'city'                    => '城市',
+    'location'                => '位置',
+    'device_type'             => '设备类型',
+    'device_desktop'          => '桌面',
+    'device_mobile'           => '移动',
+    'device_tablet'           => '平板',
+    'browser'                 => '浏览器',
+    'os'                      => '操作系统',
+    'page_views'              => '页面浏览量',
+    'visit_duration'          => '访问时长',
+    'conversion_event'        => '转化事件',
+    'conversion_register'     => '注册',
+    'conversion_checkout'     => '结算',
+    'conversion_order'        => '下单',
+    'conversion_payment'      => '支付',
+    'first_visited_at'        => '首次访问时间',
+    'last_visited_at'         => '最后访问时间',
+    'referrer'                => '来源',
+    'user_agent'              => '用户代理',
+    'locale'                  => '语言',
+    'start_date'              => '开始日期',
+    'end_date'                => '结束日期',
+
+    // Analytics page
+    'total_visits'        => '总访问量',
+    'unique_visitors'     => '独立访客',
+    'visits'              => '访问次数',
+    'avg_duration'        => '平均停留时长',
+    'conversion_funnel'   => '转化漏斗',
+    'product_views'       => '商品浏览',
+    'add_to_carts'        => '加入购物车',
+    'checkout_starts'     => '开始结账',
+    'order_placed'        => '订单已下',
+    'payment_completed'   => '支付完成',
+    'overall_conversion'  => '整体转化率',
+    'daily_trends'        => '每日趋势',
+    'by_device'           => '按设备',
+    'by_country'          => '按国家',
+    'hourly_distribution' => '24小时分布',
+    'country'             => '国家',
+    'hour'                => '小时',
+];

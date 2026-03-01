@@ -111,6 +111,11 @@ class ProductController extends Controller
         }
 
         $product->increment('viewed');
+
+        // Track product view event
+        $eventService = new \InnoShop\Common\Services\EventTrackingService;
+        $eventService->trackProductView($product->id, request());
+
         $reviews    = ReviewRepo::getInstance()->getListByProduct($product, 10);
         $customerID = current_customer_id();
         $variables  = ProductVariable::collection($product->variables)->jsonSerialize();

@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Добавлено успешно!',
     'address'                    => 'Адрес',
     'administrator_remarks'      => 'Комментарии администратора',
+    'auto_complete_message'      => 'Система автоматически выполняет приказы',
     'billing_address'            => 'Адрес для выставления счета',
     'billing_address_1'          => 'Адрес для выставления счета 1',
     'billing_address_2'          => 'Адрес для выставления счета 2',

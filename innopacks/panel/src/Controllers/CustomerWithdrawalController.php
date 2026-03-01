@@ -29,8 +29,9 @@ class CustomerWithdrawalController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria'    => WithdrawalRepo::getCriteria(),
-            'withdrawals' => WithdrawalRepo::getInstance()->list($filters),
+            'searchFields'  => WithdrawalRepo::getSearchFieldOptions(),
+            'filterButtons' => WithdrawalRepo::getFilterButtonOptions(),
+            'withdrawals'   => WithdrawalRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::withdrawals.index', $data);
@@ -79,7 +80,7 @@ class CustomerWithdrawalController extends BaseController
                 'approved' => panel_trans('withdrawal.approved_success'),
                 'rejected' => panel_trans('withdrawal.rejected_success'),
                 'paid'     => panel_trans('withdrawal.paid_success'),
-                default    => panel_trans('common.updated_success'),
+                default    => common_trans('base.updated_success'),
             };
 
             if ($request->expectsJson()) {

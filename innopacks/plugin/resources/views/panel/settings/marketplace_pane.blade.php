@@ -129,7 +129,7 @@
       const $btn = $(this);
       const url = $btn.data('url');
       
-      $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>{{ __('panel/common.loading') }}');
+      $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>{{ __('common/base.loading') }}');
       
       axios.get(url)
         .then(function(res) {
@@ -139,7 +139,7 @@
             if (token) {
               $('#domain_token').val(token);
             }
-            layer.msg(res.message || '{{ __('panel/common.success') }}', {icon: 1});
+            layer.msg(res.message || '{{ __('common/base.success') }}', {icon: 1});
           } else {
             layer.msg(res?.message || '{{ __('panel/common.error') }}', {icon: 2});
           }
@@ -163,14 +163,14 @@
       const $btn = $(this);
       const url = $btn.data('url');
       
-      layer.confirm('{{ __('panel/plugin.clear_cache_confirm') }}', {icon: 3, title: '{{ __('panel/common.confirm') }}'}, function(index) {
-        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>{{ __('panel/common.loading') }}');
+      layer.confirm('{{ __('panel/plugin.clear_cache_confirm') }}', {icon: 3, title: '{{ __('common/base.confirm') }}'}, function(index) {
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>{{ __('common/base.loading') }}');
         
         axios.post(url)
           .then(function(res) {
             // axios interceptor already returns response.data, so res is the JSON object
             if (res && res.success) {
-              layer.msg(res.message || '{{ __('panel/common.success') }}', {icon: 1});
+              layer.msg(res.message || '{{ __('common/base.success') }}', {icon: 1});
             } else {
               layer.msg(res?.message || '{{ __('panel/common.error') }}', {icon: 2});
             }

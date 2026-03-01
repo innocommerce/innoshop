@@ -194,12 +194,6 @@ body {
   }
 }
 
-.btn-outline-primary {
-  &:hover {
-    color: #fff !important;
-  }
-}
-
 .card {
   .card-header {
     padding-left: 0;
@@ -678,5 +672,115 @@ body {
       background-color: #eee;
       color: $primary;
     }
+  }
+}
+
+// Laydate picker styles
+.layui-laydate {
+  font-family: inherit;
+
+  .layui-this,
+  .layui-laydate-content td.layui-this,
+  .layui-laydate-content td.layui-selected {
+    background-color: $primary !important;
+    color: #fff !important;
+  }
+
+  .layui-laydate-content td:hover {
+    background-color: lighten($primary, 35%) !important;
+  }
+}
+
+// Data search component styles
+.data-search-container {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+.search-filters-section {
+  background: #fff;
+  border-color: #dee2e6;
+}
+
+.search-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.filters-section {
+  padding-top: 16px !important;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0 !important;
+}
+
+.filter-label {
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 13px;
+  color: #495057;
+  min-width: 70px;
+}
+
+
+.selected-filter-tag {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 0.25rem;
+}
+
+.btn-close-xs {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.6;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.show-more-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.filter-more-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.custom-date-inputs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  .form-control-sm {
+    width: 100px;
+    height: 22px;
+    padding: 1px 4px;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .btn-sm {
+    padding: 1px 6px;
+    font-size: 12px;
+    height: 22px;
+    line-height: 1.2;
   }
 }

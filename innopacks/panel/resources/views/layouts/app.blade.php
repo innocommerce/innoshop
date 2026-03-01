@@ -22,6 +22,7 @@
   <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
+  <script src="{{ asset('vendor/laydate/laydate.js') }}"></script>
   <script src="{{ mix('build/panel/js/app.js') }}"></script>
   <script>
     const urls = {
@@ -34,8 +35,8 @@
     const lang = {
       hint: '{{ __('panel/common.hint') }}',
       delete_confirm: '{{ __('panel/common.delete_confirm') }}',
-      confirm: '{{ __('panel/common.confirm') }}',
-      cancel: '{{ __('panel/common.cancel') }}',
+      confirm: '{{ __('common/base.confirm') }}',
+      cancel: '{{ __('common/base.cancel') }}',
     }
   </script>
   @stack('header')

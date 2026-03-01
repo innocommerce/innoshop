@@ -77,8 +77,8 @@
     $('.delete-address').on('click', function () {
       const id = $(this).parents('tr').data('id');
 
-      layer.confirm('{{ __('front/common.delete_confirm') }}', {
-        btn: ['{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}']
+      layer.confirm('{{ __('common/base.delete_confirm') }}', {
+        btn: ['{{ __('common/base.confirm') }}', '{{ __('common/base.cancel') }}']
       }, function () {
         axios.delete(`{{ account_route('addresses.index') }}/${id}`).then(function (res) {
           if (res.success) {

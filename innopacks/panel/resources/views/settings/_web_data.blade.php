@@ -130,58 +130,78 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- System Features -->
-    <div class="mb-4">
-      <h6 class="mb-3">{{ __('panel/setting.system_features') }}</h6>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="mb-4">
-            <x-common-form-switch-radio title="{{ __('panel/setting.backstage_menu_expansion') }}" name="expand" required
-                                    value="{{ old('expand', system_setting('expand')) }}"/>
-            <div class="text-secondary"><small>{{ __('panel/setting.backstage_menu_expansion_desc') }}</small></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-4">
-            <x-common-form-switch-radio title="{{ __('panel/setting.debug') }}" name="debug" required
-                                    value="{{ old('debug', system_setting('debug')) }}"/>
-            <div class="text-secondary"><small>{{ __('panel/setting.debug_desc') }}</small></div>
-          </div>
+<!-- System Features -->
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="card-title mb-0">{{ __('panel/setting.system_features') }}</h5>
+    <p class="text-muted small mb-0">{{ __('panel/setting.system_features_desc') }}</p>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-4">
+          <x-common-form-switch-radio title="{{ __('panel/setting.backstage_menu_expansion') }}" name="expand" required
+                                  value="{{ old('expand', system_setting('expand')) }}"/>
+          <div class="text-secondary"><small>{{ __('panel/setting.backstage_menu_expansion_desc') }}</small></div>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="mb-4">
+          <x-common-form-switch-radio title="{{ __('panel/setting.debug') }}" name="debug" required
+                                  value="{{ old('debug', system_setting('debug')) }}"/>
+          <div class="text-secondary"><small>{{ __('panel/setting.debug_desc') }}</small></div>
+        </div>
+      </div>
+    </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <div class="mb-4">
-            <x-common-form-switch-radio title="{{ __('panel/setting.maintenance_mode') }}" name="maintenance_mode" required
-                                    value="{{ old('maintenance_mode', system_setting('maintenance_mode')) }}"/>
-            <div class="text-secondary"><small>{{ __('panel/setting.maintenance_mode_desc') }}</small></div>
-          </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-4">
+          <x-common-form-switch-radio title="{{ __('panel/setting.maintenance_mode') }}" name="maintenance_mode" required
+                                  value="{{ old('maintenance_mode', system_setting('maintenance_mode')) }}"/>
+          <div class="text-secondary"><small>{{ __('panel/setting.maintenance_mode_desc') }}</small></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Media Management -->
+
+<!-- Newsletter Settings -->
 <div class="card mb-4">
   <div class="card-header">
-    <h5 class="card-title mb-0">{{ __('panel/setting.media_management') }}</h5>
-    <p class="text-muted small mb-0">{{ __('panel/setting.media_management_desc') }}</p>
+    <h5 class="card-title mb-0">{{ __('panel/setting.newsletter_settings') }}</h5>
+    <p class="text-muted small mb-0">{{ __('panel/setting.newsletter_settings_desc') }}</p>
   </div>
   <div class="card-body">
-    <!-- File Manager -->
-    <div class="mb-4">
-      <h6 class="mb-3">{{ __('panel/setting.file_manager') }}</h6>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="mb-4">
-            <x-common-form-switch-radio title="{{ __('panel/setting.file_manager_enable_crop') }}" name="file_manager_enable_crop" 
-                                    value="{{ old('file_manager_enable_crop', system_setting('file_manager_enable_crop')) }}"/>
-            <div class="text-secondary"><small>{{ __('panel/setting.file_manager_enable_crop_desc') }}</small></div>
-          </div>
-        </div>
+    <div class="mb-3">
+      <label class="form-label">{{ __('panel/setting.newsletter_display_locations') }}</label>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="newsletter_display_locations[]" 
+               value="footer" id="newsletter-footer"
+               {{ in_array('footer', old('newsletter_display_locations', system_setting('newsletter_display_locations', ['footer']) ?: ['footer'])) ? 'checked' : '' }}>
+        <label class="form-check-label" for="newsletter-footer">
+          {{ __('panel/setting.newsletter_location_footer') }}
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="newsletter_display_locations[]" 
+               value="popup" id="newsletter-popup"
+               {{ in_array('popup', old('newsletter_display_locations', system_setting('newsletter_display_locations', ['footer']) ?: ['footer'])) ? 'checked' : '' }}>
+        <label class="form-check-label" for="newsletter-popup">
+          {{ __('panel/setting.newsletter_location_popup') }}
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="newsletter_display_locations[]" 
+               value="checkout" id="newsletter-checkout"
+               {{ in_array('checkout', old('newsletter_display_locations', system_setting('newsletter_display_locations', ['footer']) ?: ['footer'])) ? 'checked' : '' }}>
+        <label class="form-check-label" for="newsletter-checkout">
+          {{ __('panel/setting.newsletter_location_checkout') }}
+        </label>
       </div>
     </div>
   </div>

@@ -152,6 +152,7 @@ class PanelServiceProvider extends ServiceProvider
             'data-criteria'          => Components\Data\Criteria::class,
             'data-sorter'            => Components\Data\Sorter::class,
             'data-info'              => Components\Data\DataInfo::class,
+            'data-data-search'       => Components\Data\DataSearch::class,
             'layout-sidebar'         => Components\Layout\Sidebar::class,
             'chart-line'             => Components\Charts\Line::class,
             'chart-pie'              => Components\Charts\Pie::class,

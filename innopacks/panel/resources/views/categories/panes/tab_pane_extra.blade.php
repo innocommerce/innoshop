@@ -7,9 +7,9 @@
     </div>
 
     <div class="col-12 col-md-6">
-      <x-common-form-input title="{{ panel_trans('common.position') }}" name="position" 
+      <x-common-form-input title="{{ trans('common/base.position') }}" name="position" 
         :value="old('position', $category->position ?? 0)"
-        placeholder="{{ panel_trans('common.position') }}" />
+        placeholder="{{ trans('common/base.position') }}" />
     </div>
   </div>
 </div>

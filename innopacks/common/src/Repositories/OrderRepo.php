@@ -56,6 +56,54 @@ class OrderRepo extends BaseRepo
     }
 
     /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'number', 'label' => trans('panel/order.number')],
+            ['value' => 'customer_name', 'label' => trans('panel/order.customer_name')],
+            ['value' => 'email', 'label' => trans('panel/order.email')],
+            ['value' => 'telephone', 'label' => trans('panel/order.telephone')],
+        ];
+
+        return fire_hook_filter('common.repo.order.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $statuses      = StateMachineService::getAllStatuses();
+        $statusOptions = [
+            ['value' => '', 'label' => trans('panel/common.all')],
+        ];
+        foreach ($statuses as $status) {
+            $statusOptions[] = [
+                'value' => $status['status'],
+                'label' => $status['name'],
+            ];
+        }
+
+        $filters = [
+            [
+                'name'    => 'status',
+                'label'   => trans('panel/order.status'),
+                'type'    => 'button',
+                'options' => $statusOptions,
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.order.filter_button_options', $filters);
+    }
+
+    /**
      * @return array
      */
     public function getFilterStatuses(): array
@@ -170,6 +218,36 @@ class OrderRepo extends BaseRepo
         $totalEnd = $filters['total_end'] ?? '';
         if ($totalEnd) {
             $builder->where('total', '<', $totalEnd);
+        }
+
+        // Handle new search filters (keyword + search_field)
+        $keyword     = $filters['keyword'] ?? '';
+        $searchField = $filters['search_field'] ?? '';
+        if ($keyword && $searchField) {
+            $builder->where($searchField, 'like', "%{$keyword}%");
+        } elseif ($keyword) {
+            // Search across all searchable fields
+            $builder->where(function ($query) use ($keyword) {
+                $query->where('number', 'like', "%{$keyword}%")
+                    ->orWhere('customer_name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('telephone', 'like', "%{$keyword}%");
+            });
+        }
+
+        // Handle date range filter
+        $dateFilter = $filters['date_filter'] ?? '';
+        $startDate  = $filters['start_date'] ?? '';
+        $endDate    = $filters['end_date'] ?? '';
+
+        if ($dateFilter === 'today') {
+            $builder->whereDate('created_at', today());
+        } elseif ($dateFilter === 'this_week') {
+            $builder->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($dateFilter === 'this_month') {
+            $builder->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
+        } elseif ($dateFilter === 'custom' && $startDate && $endDate) {
+            $builder->whereBetween('created_at', [$startDate.' 00:00:00', $endDate.' 23:59:59']);
         }
 
         return fire_hook_filter('repo.order.builder', $builder);

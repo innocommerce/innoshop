@@ -10,4 +10,5 @@ return [
     InnoShop\Front\FrontServiceProvider::class,
     InnoShop\RestAPI\RestAPIServiceProvider::class,
     InnoShop\Plugin\PluginServiceProvider::class,
+    InnoShop\DevTools\DevToolsServiceProvider::class,
 ];

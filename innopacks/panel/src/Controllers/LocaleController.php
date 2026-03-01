@@ -28,8 +28,9 @@ class LocaleController extends BaseController
     public function index(): mixed
     {
         $data = [
-            'criteria' => LocaleRepo::getCriteria(),
-            'locales'  => LocaleRepo::getInstance()->getFrontListWithPath(),
+            'searchFields'  => LocaleRepo::getSearchFieldOptions(),
+            'filterButtons' => LocaleRepo::getFilterButtonOptions(),
+            'locales'       => LocaleRepo::getInstance()->getFrontListWithPath(),
         ];
 
         return inno_view('panel::locales.index', $data);
@@ -97,7 +98,7 @@ class LocaleController extends BaseController
             $data = $request->all();
             LocaleRepo::getInstance()->update($locale, $data);
 
-            return back()->with('success', panel_trans('common.updated_success'));
+            return back()->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -121,7 +122,7 @@ class LocaleController extends BaseController
                 session()->forget('locale');
             }
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -145,7 +146,7 @@ class LocaleController extends BaseController
             $item->active = $request->get('status');
             $item->saveOrFail();
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

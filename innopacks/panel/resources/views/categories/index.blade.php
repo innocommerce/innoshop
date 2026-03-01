@@ -5,7 +5,7 @@
 
 @section('page-title-right')
   <a href="{{ panel_route('categories.create') }}" class="btn btn-primary"><i
-        class="bi bi-plus-square"></i> {{ __('panel/common.create') }}</a>
+        class="bi bi-plus-square"></i> {{ __('common/base.create') }}</a>
   @hookinsert('panel.categories.index.page-title-right')
 @endsection
 
@@ -43,8 +43,8 @@
               <div class="form-check form-switch list-switch ms-2">
                 <input class="form-check-input" type="checkbox" role="switch" ${item.active ? 'checked' : ''}>
               </div>
-              <a href="${categoryIndexUrl}/${item.id}/edit" class="btn btn-sm text-nowrap edit-category btn-outline-primary ms-3">{{ __('panel/common.edit')}}</a>
-              <span class="btn btn-sm ms-2 text-nowrap btn-outline-danger btn-delete">{{ __('panel/common.delete')}}</span>
+              <a href="${categoryIndexUrl}/${item.id}/edit" class="btn btn-sm text-nowrap edit-category btn-outline-primary ms-3">{{ __('common/base.edit')}}</a>
+              <span class="btn btn-sm ms-2 text-nowrap btn-outline-danger btn-delete">{{ __('common/base.delete')}}</span>
             </div>
           </div>
         </h2>`;

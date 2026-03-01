@@ -4,7 +4,7 @@
 @section('title', __('panel/menu.weight_classes'))
 @section('page-title-right')
 <a href="{{ panel_route('weight_classes.create') }}" class="btn btn-primary">
-  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+  <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}
 </a>
 @endsection
 
@@ -22,7 +22,7 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>{{ __('panel/common.id') }}</th>
+            <th>{{ __('common/base.id') }}</th>
             <th>{{ __('panel/weight_class.name') }}</th>
             <th>{{ __('panel/weight_class.code') }}</th>
             <th>{{ __('panel/weight_class.unit') }}</th>
@@ -39,7 +39,7 @@
             <td>
               {{ $weightClass->name }}
               @if($weightClass->code === system_setting('default_weight_class'))
-              <span class="badge bg-success">{{ __('panel/common.default') }}</span>
+              <span class="badge bg-success">{{ __('common/base.default') }}</span>
               @endif
             </td>
             <td>{{ $weightClass->code }}</td>
@@ -56,7 +56,7 @@
               <div class="d-flex gap-2">
                 <a href="{{ panel_route('weight_classes.edit', $weightClass->id) }}"
                   class="btn btn-sm btn-outline-primary px-2">
-                  <i class="bi bi-pencil-square me-1"></i>{{ __('panel/common.edit') }}
+                  <i class="bi bi-pencil-square me-1"></i>{{ __('common/base.edit') }}
                 </a>
                 @if($weightClass->code !== system_setting('default_weight_class'))
                 <x-common-delete-button :id="$weightClass->id"

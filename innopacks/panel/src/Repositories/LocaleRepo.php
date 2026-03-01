@@ -27,7 +27,7 @@ class LocaleRepo extends BaseRepo
                 throw new Exception("File ($langFile) not exist!");
             }
             $baseData = require $langFile;
-            $name     = $baseData['name'] ?? $localeCode;
+            $name     = $baseData['language_name'] ?? $localeCode;
             $items[]  = [
                 'code'  => $localeCode,
                 'name'  => $name,

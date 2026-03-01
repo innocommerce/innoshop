@@ -5,7 +5,7 @@
 
 @section('page-title-right')
   <a href="{{ panel_route('reviews.create') }}" class="btn btn-primary">
-    <i class="bi bi-plus-square"></i> {{__('panel/common.create') }}
+    <i class="bi bi-plus-square"></i> {{__('common/base.create') }}
   </a>
   @hookinsert('panel.reviews.list.buttons')
 @endsection
@@ -14,7 +14,12 @@
   <div class="card h-min-600">
     <div class="card-body">
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('reviews.index')"/>
+      <x-panel-data-data-search
+        :action="panel_route('reviews.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="true"
+      />
 
       @if ($reviews->count())
         <div class="table-responsive">
@@ -62,7 +67,7 @@
                 </td>
                 <td>
                   <button type="button" class="btn delete-review btn-sm btn-outline-danger"
-                          data-url="{{ panel_route('reviews.destroy', $review->id) }}">{{ __('front/common.delete') }}</button>
+                          data-url="{{ panel_route('reviews.destroy', $review->id) }}">{{ __('common/base.delete') }}</button>
                 </td>
               </tr>
             @endforeach
@@ -81,8 +86,8 @@
   <script>
     $('.delete-review').on('click', function () {
       const url = $(this).data('url');
-      layer.confirm('{{ __('front/common.delete_confirm') }}', {
-        btn: ['{{ __('front/common.confirm') }}', '{{ __('front/common.cancel') }}']
+      layer.confirm('{{ __('common/base.delete_confirm') }}', {
+        btn: ['{{ __('common/base.confirm') }}', '{{ __('common/base.cancel') }}']
       }, function () {
         axios.delete(url).then(function (res) {
           if (res.success) {

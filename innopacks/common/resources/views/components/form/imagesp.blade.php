@@ -45,7 +45,7 @@
                 <div class="modal-body text-center p-4" style="min-height: 200px; display: flex; align-items: center; justify-content: center;"></div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('panel/common.close') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.close') }}</button>
                 </div>
             </div>
         </div>

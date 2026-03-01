@@ -23,7 +23,7 @@
   </div>
   <button class="btn btn-sm btn-outline-danger" @click="deleteAll" :disabled="checkedIds.length === 0">
     <i class="bi bi-trash"></i> 
-    <span class="d-sm-inline">{{ __('panel/common.delete') }}</span>
+    <span class="d-sm-inline">{{ __('common/base.delete') }}</span>
     <span v-if="checkedIds.length > 0" class="badge bg-danger text-white ms-1">@{{ checkedIds.length }}</span>
   </button>
 </div> 

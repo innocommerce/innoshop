@@ -30,7 +30,8 @@ class OrderReturnController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria'      => OrderReturnRepo::getCriteria(),
+            'searchFields'  => OrderReturnRepo::getSearchFieldOptions(),
+            'filterButtons' => OrderReturnRepo::getFilterButtonOptions(),
             'order_returns' => OrderReturnRepo::getInstance()->list($filters),
         ];
 
@@ -61,7 +62,7 @@ class OrderReturnController extends BaseController
 
             return redirect(panel_route('order_returns.index'))
                 ->with('instance', $orderReturn)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -107,7 +108,7 @@ class OrderReturnController extends BaseController
 
             return redirect(panel_route('order_returns.index'))
                 ->with('instance', $orderReturn)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
@@ -122,7 +123,7 @@ class OrderReturnController extends BaseController
         try {
             OrderReturnRepo::getInstance()->destroy($order_return);
 
-            return back()->with('success', panel_trans('common.deleted_success'));
+            return back()->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -140,7 +141,7 @@ class OrderReturnController extends BaseController
         try {
             ReturnStateService::getInstance($orderReturn)->changeStatus($status, $comment, true);
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

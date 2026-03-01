@@ -45,7 +45,7 @@ class MarketplaceController
             $domainToken = $request->get('domain_token');
             SettingRepo::getInstance()->updateSystemValue('domain_token', $domainToken);
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -89,7 +89,7 @@ class MarketplaceController
                     SettingRepo::getInstance()->updateSystemValue('domain_token', $token);
                 }
 
-                return json_success(panel_trans('common.success'), ['token' => $token]);
+                return json_success(trans('common/base.success'), ['token' => $token]);
             }
 
             return json_fail($response->json()['message'] ?? '获取 token 失败');
@@ -126,7 +126,7 @@ class MarketplaceController
                 $this->clearCacheByPrefix('marketplace.');
             }
 
-            return json_success(panel_trans('common.success'));
+            return json_success(trans('common/base.success'));
         } catch (\Exception $e) {
             Log::error('Failed to clear marketplace cache', [
                 'error' => $e->getMessage(),

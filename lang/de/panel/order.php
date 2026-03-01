@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Hinzugefügt mit Erfolg!',
     'address'                    => 'Adresse',
     'administrator_remarks'      => 'Administratorenbemerkungen',
+    'auto_complete_message'      => 'Das system erfüllt die bestellung automatisch',
     'billing_address'            => 'Rechnungsadresse',
     'billing_address_1'          => 'Rechnungsadresse 1',
     'billing_address_2'          => 'Rechnungsadresse 2',

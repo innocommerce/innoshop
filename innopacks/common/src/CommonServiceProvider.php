@@ -77,6 +77,7 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\NormalizeLocales::class,
                 Commands\MigrateImagePaths::class,
                 Commands\OrderComplete::class,
+                Commands\AggregateVisitStatistics::class,
             ]);
         }
     }

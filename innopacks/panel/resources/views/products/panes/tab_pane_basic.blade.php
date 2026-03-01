@@ -68,7 +68,7 @@
     </div>
   </div>
 
-  <x-common-form-images title="{{ __('panel/common.image') }}" name="images"
+  <x-common-form-images title="{{ __('common/base.image') }}" name="images"
                         :values="old('images', $product->images ?? [])"/>
 
   <x-common-form-image title="{{ __('panel/product.hover_image') }}" name="hover_image"
@@ -131,7 +131,7 @@
     </div>
   </div>
 
-  <x-common-form-switch-radio :title="__('panel/common.status')" name="active"
+  <x-common-form-switch-radio :title="__('common/base.status')" name="active"
                               :value="old('active', $product->active ?? true)"/>
   @hookinsert('panel.product.edit.basic.after')
 </div>

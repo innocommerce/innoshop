@@ -48,14 +48,14 @@
 
         <div class="col-12 col-md-6 mb-3">
           <div class="col-sm-2 col-form-label text-start">
-            <div class="fw-bold">{{ __('panel/common.created_at') }}</div>
+            <div class="fw-bold">{{ __('common/base.created_at') }}</div>
           </div>
           <div class="form-control-plaintext">{{ $transaction->created_at }}</div>
         </div>
 
         <div class="col-12 col-md-6 mb-3">
           <div class="col-sm-2 col-form-label text-start">
-            <div class="fw-bold">{{ __('panel/common.updated_at') }}</div>
+            <div class="fw-bold">{{ __('common/base.updated_at') }}</div>
           </div>
           <div class="form-control-plaintext">{{ $transaction->updated_at }}</div>
         </div>

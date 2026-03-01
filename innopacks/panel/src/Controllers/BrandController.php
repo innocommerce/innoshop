@@ -27,8 +27,9 @@ class BrandController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria' => BrandRepo::getCriteria(),
-            'brands'   => BrandRepo::getInstance()->list($filters),
+            'searchFields'  => BrandRepo::getSearchFieldOptions(),
+            'filterButtons' => BrandRepo::getFilterButtonOptions(),
+            'brands'        => BrandRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::brands.index', $data);
@@ -58,7 +59,7 @@ class BrandController extends BaseController
 
             return redirect(panel_route('brands.index'))
                 ->with('instance', $brand)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('brands.index'))
                 ->withInput()
@@ -114,7 +115,7 @@ class BrandController extends BaseController
 
             return redirect(panel_route('brands.index'))
                 ->with('instance', $brand)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('brands.index'))
                 ->withInput()
@@ -131,7 +132,7 @@ class BrandController extends BaseController
         try {
             BrandRepo::getInstance()->destroy($brand);
 
-            return back()->with('success', panel_trans('common.deleted_success'));
+            return back()->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

@@ -18,7 +18,7 @@
         <p class="mb-0">{{ $order->created_at }}</p>
       </div>
       <div class="col-lg-3 col-md-4 d-flex">
-        <div class="fw-bold me-2">{{ __('panel/common.status') }}:</div>
+        <div class="fw-bold me-2">{{ __('common/base.status') }}:</div>
         <div>
           <span class="badge bg-{{ $order->status_color }}">{{ $order->status_format }}</span>
         </div>

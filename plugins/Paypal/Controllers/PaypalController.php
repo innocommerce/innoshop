@@ -12,7 +12,6 @@ namespace Plugin\Paypal\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use InnoShop\Common\Libraries\Currency;
 use InnoShop\Common\Repositories\Order\PaymentRepo;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\StateMachineService;
@@ -50,23 +49,18 @@ class PaypalController
         $order = OrderRepo::getInstance()->getOrderByNumber($orderNumber);
         $this->initPaypal($order);
 
-        $currencyCode = plugin_setting('paypal', 'currency', 'usd');
-        $orderTotal   = Currency::getInstance()->convert($order->total, $order->currency_code, 'USD');
-
-        $orderData = [
+        $paypalOrder = $this->paypalClient->createOrder([
             'intent'         => 'CAPTURE',
             'purchase_units' => [
                 [
                     'amount' => [
-                        'currency_code' => strtoupper($currencyCode),
-                        'value'         => round($orderTotal, 2),
+                        'currency_code' => strtoupper(system_setting('currency')),
+                        'value'         => round($order->total, 2),
                     ],
                     'description' => $order->number,
                 ],
             ],
-        ];
-
-        $paypalOrder = $this->paypalClient->createOrder($orderData);
+        ]);
 
         return response()->json($paypalOrder);
     }

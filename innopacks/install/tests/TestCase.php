@@ -1,28 +1,35 @@
 <?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace InnoShop\Install\Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Facades\App;
-use Illuminate\Translation\FileLoader;
-use Illuminate\Translation\Translator;
-use Orchestra\Testbench\Concerns\CreatesApplication;
 
+/**
+ * Install module TestCase
+ *
+ * This TestCase does NOT use RefreshDatabase because Install tests
+ * need to test the installation process before database tables exist.
+ */
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use \Illuminate\Foundation\Testing\Concerns\InteractsWithContainer;
 
-    protected function setUp(): void
+    /**
+     * Creates the application.
+     */
+    public function createApplication(): \Illuminate\Foundation\Application
     {
-        parent::setUp();
+        $app = require __DIR__.'/../../../bootstrap/app.php';
 
-        // Initialize translator
-        $loader = new FileLoader(
-            app('files'),
-            base_path('lang')
-        );
+        $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-        $translator = new Translator($loader, 'zh-cn');
-        App::instance('translator', $translator);
+        return $app;
     }
 }

@@ -181,7 +181,7 @@
               <div class="tab-pane fade" id="tab-setting-slideshow">
                 <table class="table table-bordered align-middle">
                   <thead>
-                  <th>{{ __('panel/common.image') }}</th>
+                  <th>{{ __('common/base.image') }}</th>
                   <th>{{ __('panel/common.link') }}</th>
                   <th class="text-end" width="100"></th>
                   </thead>

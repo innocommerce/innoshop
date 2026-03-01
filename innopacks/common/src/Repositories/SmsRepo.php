@@ -27,7 +27,7 @@ class SmsRepo
     public function getGateways(): array
     {
         $gateways = [
-            ['code' => '', 'name' => trans('panel/setting.sms_gateway_none'), 'value' => ''],
+            ['code' => '', 'name' => trans('panel/setting_sms.sms_gateway_none'), 'value' => ''],
             ['code' => 'yunpian', 'name' => '云片 (Yunpian)', 'value' => 'yunpian'],
             ['code' => 'aliyun', 'name' => '阿里云 (Aliyun)', 'value' => 'aliyun'],
             ['code' => 'tencent', 'name' => '腾讯云 (Tencent)', 'value' => 'tencent'],

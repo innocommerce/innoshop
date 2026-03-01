@@ -32,7 +32,7 @@ class PaymentController extends BaseController
             $payment->paid = $request->get('status');
             $payment->saveOrFail();
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

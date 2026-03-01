@@ -4,26 +4,31 @@
 @section('title', __('panel/menu.brands'))
 @section('page-title-right')
 <a href="{{ panel_route('brands.create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> {{
-  __('panel/common.create') }}</a>
+  __('common/base.create') }}</a>
 @endsection
 
 @section('content')
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('brands.index')" />
+    <x-panel-data-data-search
+      :action="panel_route('brands.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="false"
+    />
 
     @if ($brands->count())
     <div class="table-responsive">
       <table class="table align-middle">
         <thead>
           <tr>
-            <td>{{ __('panel/common.id')}}</td>
+            <td>{{ __('common/base.id') }}</td>
             <td>{{ __('panel/brand.logo') }}</td>
             <td>{{ __('panel/brand.name') }}</td>
             <td>{{ __('panel/brand.first') }}</td>
             <td>{{ __('panel/common.slug') }}</td>
-            <td>{{ __('panel/common.position') }}</td>
+            <td>{{ __('common/base.position') }}</td>
             <td>{{ __('panel/common.active') }}</td>
             <td>{{ __('panel/common.actions') }}</td>
           </tr>
@@ -53,7 +58,7 @@
                 <div>
                   <a href="{{ panel_route('brands.edit', [$item->id]) }}">
                     <el-button size="small" plain type="primary">{{
-                      __('panel/common.edit')}}</el-button>
+                      __('common/base.edit')}}</el-button>
                   </a>
                 </div>
                 <div>
@@ -61,7 +66,7 @@
                     @csrf
                     @method('DELETE')
                     <el-button size="small" type="danger" plain @click="open({{ $item->id }})">{{
-                      __('panel/common.delete')}}</el-button>
+                      __('common/base.delete')}}</el-button>
                   </form>
                 </div>
               </div>

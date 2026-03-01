@@ -1,12 +1,114 @@
+// Newsletter Section Styles
+.footer-newsletter-wrapper {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 0;
+  margin-top: 50px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+  }
+
+  @media (min-width: 768px) {
+    padding: 60px 0;
+  }
+}
+
+.footer-newsletter {
+  position: relative;
+  z-index: 1;
+
+  .newsletter-title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    
+    @media (min-width: 768px) {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+  }
+
+  .newsletter-desc {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    margin-bottom: 0;
+    line-height: 1.6;
+
+    @media (min-width: 768px) {
+      font-size: 16px;
+    }
+  }
+
+  .newsletter-form {
+    margin-top: 20px;
+
+    @media (min-width: 992px) {
+      margin-top: 0;
+    }
+  }
+
+  .newsletter-input-group {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+    background: #fff;
+    padding: 4px;
+  }
+
+  .newsletter-email-input {
+    border: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    background: transparent;
+    box-shadow: none;
+
+    &:focus {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  .newsletter-submit-btn {
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
 footer {
   position: relative;
   background-color: #222222;
   overflow: hidden;
-  margin-top: 20px;
-
-  @media (min-width: 768px) {
-    margin-top: 50px;
-  }
+  margin-top: 0;
 
   &::after, &::before {
     content: '';

@@ -4,7 +4,7 @@
 
 @section('page-title-right')
 <button type="button" class="btn btn-primary" onclick="openCreateModal()">
-  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+  <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}
 </button>
 @endsection
 
@@ -25,7 +25,12 @@
         </li>
       </ul>
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('option_values.index')" />
+      <x-panel-data-data-search
+        :action="panel_route('option_values.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="false"
+      />
 
       <!-- Option value list -->
       @if ($optionValues->count())
@@ -33,13 +38,13 @@
           <table class="table align-middle">
             <thead>
             <tr>
-              <th>{{ __('panel/common.id') }}</th>
-              <th>{{ __('panel/common.name') }}</th>
+              <th>{{ __('common/base.id') }}</th>
+              <th>{{ __('common/base.name') }}</th>
               <th>{{ panel_trans('options.option_group') }}</th>
               <th>{{ panel_trans('options.image') }}</th>
               <th>{{ panel_trans('options.sort') }}</th>
               <th>{{ __('panel/common.active') }}</th>
-              <th>{{ __('panel/common.created_at') }}</th>
+              <th>{{ __('common/base.created_at') }}</th>
               <th>{{ __('panel/common.actions') }}</th>
             </tr>
             </thead>
@@ -73,10 +78,10 @@
                 <td>{{ $optionValue->created_at }}</td>
                 <td>
                   <button type="button" class="btn btn-outline-primary btn-sm" onclick="openEditModal({{ $optionValue->id }})">
-                    <i class="bi bi-pencil-square"></i> {{ __('panel/common.edit') }}
+                    <i class="bi bi-pencil-square"></i> {{ __('common/base.edit') }}
                   </button>
                   <button type="button" class="btn btn-outline-danger btn-sm" onclick="if(confirm('{{ panel_trans('options.confirm_delete_option_value') }}')) { document.getElementById('delete-form-{{ $optionValue->id }}').submit(); }">
-                    <i class="bi bi-trash"></i> {{ __('panel/common.delete') }}
+                    <i class="bi bi-trash"></i> {{ __('common/base.delete') }}
                   </button>
                   <form id="delete-form-{{ $optionValue->id }}" action="{{ panel_route('option_values.destroy', $optionValue) }}" method="POST" style="display: none;">
                     @csrf

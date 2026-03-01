@@ -11,7 +11,7 @@
     <ul class="nav nav-tabs w-max-1000 mb-2" id="myTab" role="tablist">
       @foreach (locales() as $locale)
         <li class="nav-item" role="presentation">
-          <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $locale['code'] }}" data-bs-toggle="tab"
+          <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $name }}-{{ $locale['code'] }}-tab" data-bs-toggle="tab"
             data-bs-target="#{{ $name }}-{{ $locale['code'] }}-pane" type="button">
             <img src="{{ asset('images/flag/' . $locale['code'] . '.png') }}" class="me-2" style="width: 20px;">
             {{ $locale['name'] }}
@@ -24,7 +24,7 @@
       @foreach (locales() as $locale)
         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
           id="{{ $name }}-{{ $locale['code'] }}-pane" role="tabpanel"
-          aria-labelledby="{{ $locale['code'] }}">
+          aria-labelledby="{{ $name }}-{{ $locale['code'] }}-tab">
           <textarea rows="4" type="text" name="translations[{{ $locale['code'] }}][{{ $name }}]"
             class="tinymce" placeholder="{{ $title }}" data-is-rich-text="true">{{ $value[$locale['code']] ?? '' }}</textarea>
         </div>

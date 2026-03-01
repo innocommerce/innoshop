@@ -1,7 +1,6 @@
 import "./http";
 import "./bootstrap-validation";
 import "./autocomplete";
-import "./settings";
 import common from "./common";
 import dominateColor from "./dominate_color";
 import ProductSelector from './product_selector';
@@ -51,24 +50,150 @@ const UI = {
   },
 
   initTabNavigation: () => {
-    $("a[data-bs-target], button[data-bs-target]").on("click", function () {
-      const dataBsTarget = $(this).attr("data-bs-target");
-      if ($(this).hasClass("nav-link")) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("tab", dataBsTarget.replace("#", ""));
-        window.history.pushState({}, "", url.toString());
+    // Handle tabs with data-target (internal tabs, don't update URL)
+    $("button[data-target]").on("click", function(e) {
+      const $tab = $(this);
+      
+      // Skip if also has data-bs-target (use standard Bootstrap behavior)
+      if ($tab.attr("data-bs-target")) {
+        return;
+      }
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const target = $tab.data('target');
+      if (!target) return;
+      
+      const $container = $tab.closest('.nav-tabs');
+      const $tabContent = $container.siblings('.tab-content');
+      let $panes = $tabContent.find('.tab-pane');
+      
+      if ($panes.length === 0) {
+        $panes = $container.parent().find('.tab-content .tab-pane');
+      }
+      
+      // Switch tabs
+      $container.find('button[data-target]').removeClass('active').attr('aria-selected', 'false');
+      $tab.addClass('active').attr('aria-selected', 'true');
+      
+      if ($panes.length > 0) {
+        $panes.removeClass('show active');
+        $(target).addClass('show active');
       }
     });
 
+    // Handle main navigation tabs (update URL) - only for data-bs-target
+    $("a[data-bs-target], button[data-bs-target]").on("click", function () {
+      const $this = $(this);
+      
+      // Skip if has data-target but no data-bs-target (handled above)
+      if ($this.attr("data-target") && !$this.attr("data-bs-target")) {
+        return;
+      }
+      
+      const dataBsTarget = $this.attr("data-bs-target");
+      if ($this.hasClass("nav-link")) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("tab", dataBsTarget.replace("#", ""));
+        window.history.pushState({}, "", url.toString());
+        
+        // Update header if exists (for settings page)
+        const $header = $('.setting-header');
+        if ($header.length) {
+          $header.text($this.text().trim());
+        }
+      }
+    });
+
+    // Handle URL parameters on page load
     const tab = common.getQueryString("tab");
     if (tab) {
+      const tabTarget = `#tab-setting-${tab}`;
+      const $tabLink = $(`.settings-nav a[data-bs-target="${tabTarget}"]`);
       const tabButton = $(`button[data-bs-target="#${tab}"]`);
       const tabLink = $(`a[data-bs-target="#${tab}"]`);
-      if (tabButton.length) {
+      
+      if ($tabLink.length) {
+        // Settings page tab
+        $('.settings-nav a').removeClass('active');
+        $('.tab-pane').removeClass('show active');
+        $tabLink.addClass('active');
+        $(tabTarget).addClass('show active');
+        $('.setting-header').text($tabLink.text().trim());
+      } else if (tabButton.length) {
         tabButton[0].click();
       } else if (tabLink.length) {
         tabLink[0].click();
       }
+    } else if ($('.settings-nav').length > 0) {
+      // Settings page: ensure first tab is active
+      const $firstTab = $('.settings-nav a').first();
+      if ($firstTab.length && !$firstTab.hasClass('active')) {
+        $firstTab.click();
+      }
+    }
+    
+    // Handle browser back/forward for settings page
+    if ($('.settings-nav').length > 0) {
+      window.addEventListener('popstate', function() {
+        const tabParam = common.getQueryString("tab");
+        if (tabParam) {
+          const tabTarget = `#tab-setting-${tabParam}`;
+          const $tabLink = $(`.settings-nav a[data-bs-target="${tabTarget}"]`);
+          if ($tabLink.length) {
+            $('.settings-nav a').removeClass('active');
+            $('.tab-pane').removeClass('show active');
+            $tabLink.addClass('active');
+            $(tabTarget).addClass('show active');
+            $('.setting-header').text($tabLink.text().trim());
+            
+            // Initialize internal tabs in the active pane
+            initInternalTabs($(tabTarget));
+          }
+        }
+      });
+    }
+    
+    // Initialize internal tabs on page load
+    function initInternalTabs($container) {
+      if (!$container || $container.length === 0) {
+        $container = $('.tab-pane.active');
+      }
+      
+      $container.find('.nav-tabs').each(function() {
+        const $navTabs = $(this);
+        // Only handle tabs with data-target (not data-bs-target)
+        const $tabs = $navTabs.find('button[data-target]').not('[data-bs-target]');
+        const $tabContent = $navTabs.siblings('.tab-content');
+        let $panes = $tabContent.find('.tab-pane');
+        
+        if ($panes.length === 0) {
+          $panes = $navTabs.parent().find('.tab-content .tab-pane');
+        }
+        
+        if ($tabs.length > 0) {
+          // Activate first tab if none is active
+          const $activeTab = $tabs.filter('.active');
+          if ($activeTab.length === 0) {
+            const $firstTab = $tabs.first();
+            const firstTarget = $firstTab.data('target');
+            
+            $firstTab.addClass('active').attr('aria-selected', 'true');
+            if (firstTarget && $(firstTarget).length) {
+              $panes.removeClass('show active');
+              $(firstTarget).addClass('show active');
+            } else if ($panes.length > 0) {
+              $panes.first().addClass('show active');
+            }
+          }
+        }
+      });
+    }
+    
+    // Initialize internal tabs for active tab pane
+    if ($('.settings-nav').length > 0) {
+      initInternalTabs();
     }
   },
 

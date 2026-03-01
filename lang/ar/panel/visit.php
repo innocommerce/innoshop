@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'add_to_carts'        => 'انضم إلى عربة التسوق',
+    'avg_duration'        => 'متوسط مدة البقاء',
+    'basic_info'          => 'المعلومات الأساسية',
+    'browser'             => 'المتصفح',
+    'by_country'          => 'حسب البلاد',
+    'by_device'           => 'اضغط على الجهاز',
+    'checkout_starts'     => 'ابدأ الحساب',
+    'city'                => 'المدينة',
+    'conversion_checkout' => 'تسوية',
+    'conversion_event'    => 'تحويل',
+    'conversion_funnel'   => 'تحويل',
+    'conversion_order'    => 'الاوامر',
+    'conversion_payment'  => 'دفع',
+    'conversion_register' => 'تسجيل',
+    'country'             => 'البلدان',
+    'country_code'        => 'رمز الدولة',
+    'country_name'        => 'اسم البلد',
+    'customer'            => 'العملاء',
+    'daily_trends'        => 'الاتجاهات اليومية',
+    'device_desktop'      => 'سطح المكتب',
+    'device_mobile'       => 'تتحرك',
+    'device_tablet'       => 'لوحي',
+    'device_type'         => 'نوع الجهاز',
+    'end_date'            => 'تاريخ النهاية',
+    'first_visited_at'    => 'وقت الزيارة الأولى',
+    'guest'               => 'الزوار',
+    'hour'                => 'ساعة',
+    'hourly_distribution' => 'التوزيع على مدار الساعة',
+    'ip_address'          => 'عنوان IP',
+    'last_visited_at'     => 'وقت الزيارة الأخير',
+    'locale'              => 'اللغة',
+    'location'            => 'الموقع',
+    'location_info'       => 'معلومات الموقع',
+    'order_placed'        => 'الطلب قادم',
+    'os'                  => 'نظام التشغيل',
+    'overall_conversion'  => 'معدل التحويل الإجمالي',
+    'page_views'          => 'عدد الصفحات المطالعة',
+    'payment_completed'   => 'تم الدفع',
+    'product_views'       => 'تصفح السلع',
+    'referrer'            => 'مصادر',
+    'session_id'          => 'معرف الجلسة',
+    'start_date'          => 'تاريخ البدء',
+    'total_visits'        => 'مجموع الزيارات',
+    'unique_visitors'     => 'زائر مستقل',
+    'user_agent'          => 'وكيل مستخدم',
+    'visit_detail'        => 'تفاصيل الزيارة',
+    'visit_duration'      => 'وقت الزيارة',
+    'visits'              => 'عدد الزيارات',
+];

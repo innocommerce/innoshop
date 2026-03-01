@@ -15,7 +15,7 @@
         <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}" rows="3"></textarea>
         <template #footer>
           <div class="dialog-footer">
-            <el-button @click="statusDialog = false">{{ __('panel/common.close') }}</el-button>
+            <el-button @click="statusDialog = false">{{ __('common/base.close') }}</el-button>
             <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
           </div>
         </template>
@@ -44,7 +44,7 @@
           <p class="mb-0">{{ $order->created_at }}</p>
         </div>
         <div class="col-lg-3 col-md-4 d-flex">
-          <div class="fw-bold me-2">{{ __('panel/common.status') }}:</div>
+          <div class="fw-bold me-2">{{ __('common/base.status') }}:</div>
           <div>
             <span class="badge bg-{{ $order->status_color }}">{{ $order->status_format }}</span>
           </div>
@@ -80,7 +80,7 @@
         <table class="table products-table align-middle">
           <thead>
             <tr>
-              <th>{{ __('panel/common.id') }}</th>
+              <th>{{ __('common/base.id') }}</th>
               <th>{{ __('panel/order.product') }}</th>
               <th>{{ __('panel/order.sku_code') }}</th>
               <th>{{ __('panel/order.quantity') }}</th>
@@ -202,7 +202,7 @@
             <h6 class="fs-5">{{ __('panel/order.administrator_remarks') }}</h6>
             <p class="mb-0">{{ $order->admin_note }}</p>
             <button class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal">
-              {{ __('panel/common.edit') }}
+              {{ __('common/base.edit') }}
             </button>
 
             <div class="modal fade" id="admin_note" tabindex="-1" aria-labelledby="admin_noteLabel" aria-hidden="true">

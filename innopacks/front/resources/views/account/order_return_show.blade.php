@@ -41,7 +41,7 @@
             </tr>
             <tr>
               <td class="order_return">{{ __('front/return.opened') }}:</td>
-              <td class="order_return">{{ $order_return->opened ? __('front/common.yes') : __('front/common.no') }}</td>
+              <td class="order_return">{{ $order_return->opened ? __('common/base.yes') : __('common/base.no') }}</td>
             </tr>
             <tr>
               <td class="order_return">{{ __('front/return.comment') }}:</td>

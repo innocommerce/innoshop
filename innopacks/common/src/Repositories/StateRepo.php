@@ -28,6 +28,35 @@ class StateRepo extends BaseRepo
     }
 
     /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('panel/state.name')],
+            ['value' => 'code', 'label' => trans('panel/state.code')],
+            ['value' => 'country_code', 'label' => trans('panel/state.country_code')],
+        ];
+
+        return fire_hook_filter('common.repo.state.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [];
+
+        return fire_hook_filter('common.repo.state.filter_button_options', $filters);
+    }
+
+    /**
      * Get filter builder.
      *
      * @param  $filters
@@ -54,6 +83,19 @@ class StateRepo extends BaseRepo
         $code = $filters['code'] ?? '';
         if ($code) {
             $builder->where('code', 'like', "%$code%");
+        }
+
+        // Handle new search filters (keyword + search_field)
+        $keyword     = $filters['keyword'] ?? '';
+        $searchField = $filters['search_field'] ?? '';
+        if ($keyword && $searchField) {
+            $builder->where($searchField, 'like', "%{$keyword}%");
+        } elseif ($keyword) {
+            $builder->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('code', 'like', "%{$keyword}%")
+                    ->orWhere('country_code', 'like', "%{$keyword}%");
+            });
         }
 
         return fire_hook_filter('repo.state.builder', $builder);

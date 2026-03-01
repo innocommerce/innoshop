@@ -38,7 +38,7 @@
                         <x-common-form-input name="password" title="{{ __('front/forgotten.new_password') }}" value="" type="password" required="required" placeholder="{{ __('front/forgotten.new_password') }}" />
                         <x-common-form-input name="password_confirmation" title="{{ __('front/forgotten.confirm_password') }}" value="" type="password" required="required" placeholder="{{ __('front/password.confirm_password') }}" />
 
-                        <button type="button" id="btnSubmit" class="btn btn-primary btn-lg mt-4 submit-form w-50">{{ __('front/common.submit') }}</button>
+                        <button type="button" id="btnSubmit" class="btn btn-primary btn-lg mt-4 submit-form w-50">{{ __('common/base.submit') }}</button>
                     </form>
                 </div>
             </div>

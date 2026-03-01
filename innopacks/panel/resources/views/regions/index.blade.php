@@ -11,7 +11,7 @@
 
 @section('page-title-right')
   <button type="button" class="btn btn-primary btn-add" onclick="regionList.create()">
-    <i class="bi bi-plus-square"></i> {{__('panel/common.create') }}
+    <i class="bi bi-plus-square"></i> {{__('common/base.create') }}
   </button>
 @endsection
 
@@ -19,14 +19,19 @@
   <div class="card h-min-600" id="app">
     <div class="card-body">
 
-      <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('regions.index')"/>
+      <x-panel-data-data-search
+        :action="panel_route('regions.index')"
+        :searchFields="$searchFields ?? []"
+        :filters="$filterButtons ?? []"
+        :enableDateRange="false"
+      />
 
       @if ($regions)
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
             <tr>
-              <td>{{ __('panel/common.id')}}</td>
+              <td>{{ __('common/base.id') }}</td>
               <td>{{ __('panel/region.name')}}</td>
               <td>{{ __('panel/region.description')}}</td>
               <td>{{ __('panel/common.active')}}</td>
@@ -46,14 +51,14 @@
                 <td>
                   <div class="d-flex gap-1">
                     <el-button size="small" plain type="primary"
-                               @click="edit({{ $item->id }})">{{ __('panel/common.edit')}}
+                               @click="edit({{ $item->id }})">{{ __('common/base.edit')}}
                     </el-button>
                     <form ref="deleteForm" action="{{ panel_route('regions.destroy', [$item->id]) }}" method="POST"
                           class="d-inline">
                       @csrf
                       @method('DELETE')
                       <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{
-                    __('panel/common.delete')}}</el-button>
+                    __('common/base.delete')}}</el-button>
                     </form>
                   </div>
                 </td>
@@ -107,7 +112,7 @@
                 </select>
               </td>
               <td class="text-end">
-                <el-button type="danger" @click="form.region_states.splice(index, 1)">{{ __('panel/common.delete')}}
+                <el-button type="danger" @click="form.region_states.splice(index, 1)">{{ __('common/base.delete')}}
                 </el-button>
               </td>
             </tr>
@@ -115,7 +120,7 @@
             <tfoot>
             <tr>
               <td colspan="3" class="text-end">
-                <el-button type="primary" @click="addRegionState">{{ __('panel/common.add') }}</el-button>
+                <el-button type="primary" @click="addRegionState">{{ __('common/base.add') }}</el-button>
               </td>
             </tr>
             </tfoot>
@@ -125,7 +130,7 @@
 
       <template #footer>
         <div style="flex: auto">
-          <el-button @click="drawer = false">{{ __('panel/common.close') }}</el-button>
+          <el-button @click="drawer = false">{{ __('common/base.close') }}</el-button>
           <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
         </div>
       </template>

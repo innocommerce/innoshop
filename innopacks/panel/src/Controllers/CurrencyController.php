@@ -27,8 +27,10 @@ class CurrencyController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria'   => CurrencyRepo::getCriteria(),
-            'currencies' => CurrencyRepo::getInstance()->list($filters),
+            'searchFields'      => CurrencyRepo::getSearchFieldOptions(),
+            'filterButtons'     => CurrencyRepo::getFilterButtonOptions(),
+            'currencies'        => CurrencyRepo::getInstance()->list($filters),
+            'enabledCurrencies' => CurrencyRepo::getInstance()->enabledList(),
         ];
 
         return inno_view('panel::currencies.index', $data);
@@ -65,7 +67,7 @@ class CurrencyController extends BaseController
             $data = $request->all();
             CurrencyRepo::getInstance()->create($data);
 
-            return json_success(panel_trans('common.saved_success'));
+            return json_success(common_trans('base.saved_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -106,7 +108,7 @@ class CurrencyController extends BaseController
             $data = $request->all();
             CurrencyRepo::getInstance()->update($currency, $data);
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -124,7 +126,7 @@ class CurrencyController extends BaseController
             }
             CurrencyRepo::getInstance()->destroy($currency);
 
-            return json_success(panel_trans('common.deleted_success'));
+            return json_success(common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -148,7 +150,7 @@ class CurrencyController extends BaseController
             $item->active = $request->get('status');
             $item->saveOrFail();
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

@@ -78,9 +78,10 @@
 
       <!-- Cart footer -->
       <div class="border-top p-3">
+        @hookinsert('mini_cart.totals.before')
         <div class="d-flex align-items-center mb-3">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="selectAll" 
+            <input class="form-check-input" type="checkbox" id="selectAll"
               :checked="allSelected"
               @change="toggleSelectAll">
             <label class="form-check-label" for="selectAll">{{ __('front/cart.select_all') }}</label>
@@ -112,14 +113,14 @@ if (!window.cartApp) {
       // Reactive states
       const cartItems = ref([])
       const totalAmount = ref('')
-      
+
       // Computed properties
       const isEmpty = computed(() => !cartItems.value.length)
       const allSelected = computed(() => {
         const normalItems = cartItems.value.filter(item => item.item_type === 'normal')
         return normalItems.length > 0 && normalItems.every(item => item.selected)
       })
-      
+
       // Methods
       const loadCart = async () => {
         try {

@@ -131,6 +131,7 @@
             <div class="title">{{ __('front/cart.cart_total') }}</div>
             <ul class="cart-data-list">
               <li><span>{{ __('front/cart.selected') }} </span><span class="total-total">@{{ total }}</span></li>
+              @hookinsert('cart.totals.before')
               <li><span>{{ __('front/cart.total') }}</span><span class="total-amount">@{{ amount_format }}</span></li>
             </ul>
             @if(!system_setting('disable_online_order'))
@@ -141,6 +142,9 @@
               </button>
             @endif
           </div>
+
+          {{-- Hook point after cart data section --}}
+          @hookinsert('cart.data.after')
         </div>
       </div>
       <div v-else class="text-center pm-5 pb-5">
@@ -183,6 +187,11 @@
           total.value = data.total_format
           amount_format.value = data.amount_format
           $('.header-cart-icon .icon-quantity').text(data.total_format)
+
+          // Trigger hook for cart state update
+          if (window.cartStateUpdateHooks) {
+            window.cartStateUpdateHooks.forEach(hook => hook(data))
+          }
         }
 
         const updateQuantity = async (id, quantity) => {
@@ -271,4 +280,7 @@
       }
     }).mount('#app-cart')
   </script>
+
+  <!-- Hook for plugins to inject custom JavaScript -->
+  @hookinsert('cart.script.after')
 @endpush

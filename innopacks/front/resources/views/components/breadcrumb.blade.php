@@ -23,7 +23,7 @@
       <div class="breadcrumb-filter-btn d-block d-md-none">
         <button class="btn btn-outline-primary btn-sm d-flex align-items-center" id="toggleFilterSidebar">
           <i class="bi bi-funnel me-1"></i>
-          <span class="filter-text">{{ __('front/common.filter') }}</span>
+          <span class="filter-text">{{ __('common/base.filter') }}</span>
         </button>
       </div>
     @endif

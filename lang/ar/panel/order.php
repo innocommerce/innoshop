@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'تم الإضافة بنجاح!',
     'address'                    => 'العنوان',
     'administrator_remarks'      => 'ملاحظات المشرف',
+    'auto_complete_message'      => 'يكمل النظام تلقائيا الطلب',
     'billing_address'            => 'عنوان الفاتورة',
     'billing_address_1'          => 'عنوان الفاتورة 1',
     'billing_address_2'          => 'عنوان الفاتورة 2',

@@ -50,7 +50,7 @@
     </div>
 
     <div class="mt-4">
-      <button type="button" class="btn btn-primary btn-bank-transfer">{{ __('front/common.confirm') }}</button>
+      <button type="button" class="btn btn-primary btn-bank-transfer">{{ __('common/base.confirm') }}</button>
     </div>
   </div>
 </div>

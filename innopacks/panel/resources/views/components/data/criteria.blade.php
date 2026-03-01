@@ -8,7 +8,7 @@
     <!-- Filter Header -->
     <div class="d-flex justify-content-between align-items-center px-3 py-2 filter-header">
       <div class="d-flex align-items-center">
-        <i class="bi bi-funnel me-1 text-secondary"></i> <span class="fw-medium">{{ __('panel/common.filter') }}</span>
+        <i class="bi bi-funnel me-1 text-secondary"></i> <span class="fw-medium">{{ __('common/base.filter') }}</span>
         <a href="#" class="text-decoration-none small text-primary ms-3 toggle-filters">
           <i class="bi bi-chevron-{{ $hasFilters ? 'up' : 'down' }}"></i>
           <span>{{ $hasFilters ? __('panel/common.collapse') : __('panel/common.expand') }}</span>
@@ -16,10 +16,10 @@
       </div>
       <div class="d-flex align-items-center">
         <button type="submit" class="btn btn-sm btn-primary me-2">
-          <i class="bi bi-search"></i> {{ __('panel/common.search') }}
+          <i class="bi bi-search"></i> {{ __('common/base.search') }}
         </button>
         <a href="{{ $action }}" class="btn btn-sm btn-outline-secondary @if($export) me-2 @endif">
-          <i class="bi bi-arrow-repeat"></i> {{ __('panel/common.reset') }}
+          <i class="bi bi-arrow-repeat"></i> {{ __('common/base.reset') }}
         </a>
         @if($export)
           <a href="{{ $getExportUrl() }}" class="btn btn-sm btn-outline-secondary">
@@ -104,7 +104,7 @@ $(document).ready(function() {
     }
     
     // Set submit button to loading state
-    $('button[type="submit"]').prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> {{ __('panel/common.loading') }}');
+    $('button[type="submit"]').prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> {{ __('common/base.loading') }}');
   });
 });
 </script>

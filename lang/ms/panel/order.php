@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Ditambahkan dengan jayanya!',
     'address'                    => 'Alamat',
     'administrator_remarks'      => 'Catatan Pentadbir',
+    'auto_complete_message'      => 'Sistem secara automatik melengkapkan pesanan',
     'billing_address'            => 'Alamat Bil',
     'billing_address_1'          => 'Alamat Bil 1',
     'billing_address_2'          => 'Alamat Bil 2',

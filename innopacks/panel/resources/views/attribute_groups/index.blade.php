@@ -4,7 +4,7 @@
 @section('title', __('panel/menu.attribute_groups'))
 @section('page-title-right')
 <button type="button" class="btn btn-primary btn-add" onclick="app.create()">
-  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+  <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}
 </button>
 @endsection
 
@@ -31,16 +31,21 @@
       </li>
     </ul>
 
-    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('attribute_groups.index')" />
+    <x-panel-data-data-search
+      :action="panel_route('attribute_groups.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="false"
+    />
 
     @if ($attributes->count())
     <div class="table-responsive">
       <table class="table align-middle">
       <thead>
         <tr>
-        <td>{{ __('panel/common.id')}}</td>
-        <td>{{ __('panel/common.name')}}</td>
-        <td>{{ __('panel/common.created_at')}}</td>
+        <td>{{ __('common/base.id') }}</td>
+        <td>{{ __('common/base.name') }}</td>
+        <td>{{ __('common/base.created_at') }}</td>
         <td>{{ __('panel/common.actions')}}</td>
         </tr>
       </thead>
@@ -55,7 +60,7 @@
           <div>
           <a @click="edit({{ $item->id }})">
           <el-button size="small" plain type="primary">{{
-      __('panel/common.edit')}}</el-button>
+      __('common/base.edit')}}</el-button>
           </a>
           </div>
           <div>
@@ -63,7 +68,7 @@
           method="POST" class="d-inline">
           @csrf
           @method('DELETE')
-          <el-button size="small" type="danger" plain @click="open({{ $item->id }})">{{ __('panel/common.delete')}}</el-button>
+          <el-button size="small" type="danger" plain @click="open({{ $item->id }})">{{ __('common/base.delete')}}</el-button>
           </form>
           </div>
           </div>
@@ -99,20 +104,20 @@
             <div :class="['tab-pane fade', !index ? 'show active' : '']" :id="'values-' + locale . code + '-pane'"
               role="tabpanel" v-for="(locale, index) in locales" :key="locale . code">
               <el-input size="large" v-model="form.translations[locale.code].name"
-                placeholder="{{ __('panel/common.name')}}"></el-input>
+                placeholder="{{ __('common/base.name') }}"></el-input>
             </div>
           </div>
         </div>
       </el-form-item>
 
-      <el-form-item label="{{ __('panel/common.position')}}" prop="position">
-        <el-input size="large" v-model="form.position" placeholder="{{ __('panel/common.position')}}"></el-input>
+      <el-form-item label="{{ __('common/base.position')}}" prop="position">
+        <el-input size="large" v-model="form.position" placeholder="{{ __('common/base.position')}}"></el-input>
       </el-form-item>
     </el-form>
 
     <template #footer>
       <div style="flex: auto">
-        <el-button @click="drawer = false">{{ __('panel/common.close') }}</el-button>
+        <el-button @click="drawer = false">{{ __('common/base.close') }}</el-button>
         <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
       </div>
     </template>
@@ -183,11 +188,11 @@
       const deleteForm = ref(null);
       const open = (id) => {
      ElMessageBox.confirm(
-      '确定要删除吗?',
-      '提示',
+      '{{ __("panel/common.confirm_delete") }}',
+      '{{ __("panel/common.confirm") }}',
       {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+      confirmButtonText: '{{ __("panel/common.confirm") }}',
+      cancelButtonText: '{{ __("panel/common.btn_back") }}',
       type: 'warning',
       }
      )

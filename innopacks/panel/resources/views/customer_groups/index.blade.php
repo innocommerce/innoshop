@@ -4,22 +4,27 @@
 @section('title', __('panel/menu.customer_groups'))
 @section('page-title-right')
 <a href="{{ panel_route('customer_groups.create') }}" class="btn btn-primary">
-  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}</a>
+  <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}</a>
 @endsection
 
 @section('content')
 <div class="card h-min-600" id="app">
   <div class="card-body">
 
-    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('customer_groups.index')" />
+    <x-panel-data-data-search
+      :action="panel_route('customer_groups.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="false"
+    />
 
     @if ($groups->count())
     <div class="table-responsive">
       <table class="table align-middle">
         <thead>
           <tr>
-            <td>{{ __('panel/common.id') }}</td>
-            <td>{{ __('panel/common.name') }}</td>
+            <td>{{ __('common/base.id') }}</td>
+            <td>{{ __('common/base.name') }}</td>
             <td>{{ __('panel/customer.level') }}</td>
             <td>{{ __('panel/customer.mini_cost') }}</td>
             <td>{{ __('panel/customer.discount_rate') }}</td>
@@ -37,14 +42,14 @@
             <td>
               <div class="d-flex gap-1">
                 <a href="{{ panel_route('customer_groups.edit', [$item->id]) }}">
-                  <el-button size="small" plain type="primary">{{ __('panel/common.edit')}}</el-button>
+                  <el-button size="small" plain type="primary">{{ __('common/base.edit')}}</el-button>
                 </a>
                 <form ref="deleteForm" action="{{ panel_route('customer_groups.destroy', [$item->id]) }}" method="POST"
                   class="d-inline">
                   @csrf
                   @method('DELETE')
                   <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{
-                    __('panel/common.delete')}}</el-button>
+                    __('common/base.delete')}}</el-button>
                 </form>
               </div>
             </td>

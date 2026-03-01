@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'เพิ่มสำเร็จ!',
     'address'                    => 'ที่อยู่',
     'administrator_remarks'      => 'หมายเหตุของผู้ดูแลระบบ',
+    'auto_complete_message'      => 'ระบบทำการสั่งซื้ออัตโนมัติ',
     'billing_address'            => 'ที่อยู่สำหรับออกบิล',
     'billing_address_1'          => 'ที่อยู่สำหรับออกบิล 1',
     'billing_address_2'          => 'ที่อยู่สำหรับออกบิล 2',

@@ -17,13 +17,13 @@
       <tr v-for="(attr, index) in attributes" :key="index">
         <td class="col-5">
           <select class="form-control" v-model="attr.attribute_id" @change="onAttributeChange(index)">
-            <option value="">{{ __('panel/common.please_choose') }}</option>
+            <option value="">{{ __('common/base.please_choose') }}</option>
             <option v-for="item in allAttributes" :key="item.id" :value="item.id">@{{ item.name }}</option>
           </select>
         </td>
         <td class="col-5">
           <select class="form-control" v-model="attr.attribute_value_id">
-            <option value="">{{ __('panel/common.please_choose') }}</option>
+            <option value="">{{ __('common/base.please_choose') }}</option>
             <option v-for="value in getAttributeValues(attr.attribute_id)" :key="value.id" :value="value.id">@{{ value.name }}</option>
           </select>
         </td>

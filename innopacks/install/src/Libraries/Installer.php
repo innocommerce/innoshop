@@ -36,7 +36,7 @@ class Installer
 
     public function __construct(?string $basePath = null)
     {
-        $this->basePath           = $basePath ?? dirname(dirname(dirname(dirname(__DIR__))));
+        $this->basePath           = $basePath ?? dirname(__DIR__, 4);
         $this->installedFile      = $this->basePath.'/storage/installed';
         $this->environmentChecker = new EnvironmentChecker($this->basePath);
         $this->mysqlDatabase      = new MySQLDatabase;
@@ -196,7 +196,7 @@ class Installer
         ];
     }
 
-    private function saveEnv(array $data): void
+    protected function saveEnv(array $data): void
     {
         $env = [
             'APP_NAME'  => $data['app_name'] ?? 'InnoShop',
@@ -223,7 +223,7 @@ class Installer
         file_put_contents($this->basePath.'/.env', $envContent);
     }
 
-    private function migrate(): void
+    protected function migrate(): void
     {
         Artisan::call('migrate:fresh', ['--force' => true]);
     }
@@ -238,7 +238,7 @@ class Installer
         ]);
     }
 
-    private function markAsInstalled(): void
+    protected function markAsInstalled(): void
     {
         if (! is_dir(dirname($this->installedFile))) {
             mkdir(dirname($this->installedFile), 0755, true);

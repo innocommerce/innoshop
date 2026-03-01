@@ -40,7 +40,7 @@ class PasswordController extends Controller
             CustomerRepo::getInstance()->updatePassword(current_customer(), $request->all());
 
             return redirect(account_route('password.index'))
-                ->with('success', front_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(account_route('password.index'))
                 ->withErrors(['error' => $e->getMessage()])

@@ -63,7 +63,8 @@
             "InnoShop\\Front\\": "innopacks/front/src",
             "InnoShop\\Panel\\": "innopacks/panel/src",
             "InnoShop\\RestAPI\\": "innopacks/restapi/src",
-            "InnoShop\\Plugin\\": "innopacks/plugin/src"
+            "InnoShop\\Plugin\\": "innopacks/plugin/src",
+            "InnoShop\\DevTools\\": "innopacks/devtools/src"
         },
         "files": [
             "innopacks/install/helpers.php",
@@ -74,7 +75,14 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "InnoShop\\Install\\Tests\\": "innopacks/install/tests",
+            "InnoShop\\Common\\Tests\\": "innopacks/common/tests",
+            "InnoShop\\Front\\Tests\\": "innopacks/front/tests",
+            "InnoShop\\Panel\\Tests\\": "innopacks/panel/tests",
+            "InnoShop\\RestAPI\\Tests\\": "innopacks/restapi/tests",
+            "InnoShop\\Plugin\\Tests\\": "innopacks/plugin/tests",
+            "InnoShop\\DevTools\\Tests\\": "innopacks/devtools/tests"
         }
     },
     "scripts": {

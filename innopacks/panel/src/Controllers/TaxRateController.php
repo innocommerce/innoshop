@@ -28,10 +28,11 @@ class TaxRateController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria'  => TaxRateRepo::getCriteria(),
-            'types'     => [['value' => 'percent', 'label' => '百分比'], ['value' => 'fixed', 'label' => '固定']],
-            'regions'   => RegionRepo::getInstance()->all()->toArray(),
-            'tax_rates' => TaxRateRepo::getInstance()->list($filters),
+            'searchFields'  => TaxRateRepo::getSearchFieldOptions(),
+            'filterButtons' => TaxRateRepo::getFilterButtonOptions(),
+            'types'         => [['value' => 'percent', 'label' => '百分比'], ['value' => 'fixed', 'label' => '固定']],
+            'regions'       => RegionRepo::getInstance()->all()->toArray(),
+            'tax_rates'     => TaxRateRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::tax_rates.index', $data);
@@ -128,7 +129,7 @@ class TaxRateController extends BaseController
             TaxRateRepo::getInstance()->destroy($taxRate);
 
             return redirect(panel_route('tax_rates.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('tax_rates.index'))
                 ->withErrors(['error' => $e->getMessage()]);

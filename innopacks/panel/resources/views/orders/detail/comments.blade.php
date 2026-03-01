@@ -14,7 +14,7 @@
           <h6 class="fs-5">{{ __('panel/order.administrator_remarks') }}</h6>
           <p class="mb-0">{{ $order->admin_note }}</p>
           <button class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#admin_note">
-            {{ __('panel/common.edit') }}
+            {{ __('common/base.edit') }}
           </button>
         </div>
       </div>

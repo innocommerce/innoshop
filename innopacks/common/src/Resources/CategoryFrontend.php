@@ -33,7 +33,7 @@ class CategoryFrontend extends JsonResource
             'id'       => $this->id,
             'slug'     => $this->slug,
             'locale'   => $this->translation->locale ?? '',
-            'name'     => $this->translation->name ?? '',
+            'name'     => $this->fallbackName(),
             'url'      => $this->url,
             'image'    => image_resize($this->image, 300, 300),
             'active'   => (bool) $this->active,

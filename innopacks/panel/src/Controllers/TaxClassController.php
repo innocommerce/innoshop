@@ -32,7 +32,8 @@ class TaxClassController extends BaseController
         $taxRates = TaxRateRepo::getInstance()->all();
 
         $data = [
-            'criteria'      => TaxClassRepo::getCriteria(),
+            'searchFields'  => TaxClassRepo::getSearchFieldOptions(),
+            'filterButtons' => TaxClassRepo::getFilterButtonOptions(),
             'tax_classes'   => TaxClassRepo::getInstance()->list($filters),
             'tax_rates'     => $taxRates,
             'address_types' => AddressRepo::getAddressTypes(),
@@ -136,7 +137,7 @@ class TaxClassController extends BaseController
             TaxClassRepo::getInstance()->destroy($taxClass);
 
             return redirect(panel_route('tax_classes.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('tax_classes.index'))
                 ->withErrors(['error' => $e->getMessage()]);

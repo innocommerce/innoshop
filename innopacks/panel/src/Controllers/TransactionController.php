@@ -28,8 +28,9 @@ class TransactionController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria'     => TransactionRepo::getCriteria(),
-            'transactions' => TransactionRepo::getInstance()->list($filters),
+            'searchFields'  => TransactionRepo::getSearchFieldOptions(),
+            'filterButtons' => TransactionRepo::getFilterButtonOptions(),
+            'transactions'  => TransactionRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::transactions.index', $data);
@@ -60,7 +61,7 @@ class TransactionController extends BaseController
 
             return redirect(panel_route('transactions.index'))
                 ->with('instance', $transaction)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('transactions.index'))
                 ->withInput()
@@ -119,7 +120,7 @@ class TransactionController extends BaseController
 
             return redirect(panel_route('transactions.index'))
                 ->with('instance', $transaction)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('transactions.index'))
                 ->withInput()

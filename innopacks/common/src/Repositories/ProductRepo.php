@@ -44,13 +44,13 @@ class ProductRepo extends BaseRepo
     public static function getSortOptions(): array
     {
         $options = [
-            'pt.name'    => __('panel/common.name'),
+            'pt.name'    => __('common/base.name'),
             'ps.price'   => __('panel/product.price'),
-            'position'   => __('panel/common.position'),
+            'position'   => __('common/base.position'),
             'sales'      => __('panel/product.sales'),
             'viewed'     => __('panel/product.viewed'),
-            'created_at' => __('panel/common.created_at'),
-            'updated_at' => __('panel/common.updated_at'),
+            'created_at' => __('common/base.created_at'),
+            'updated_at' => __('common/base.updated_at'),
         ];
 
         return fire_hook_filter('common.repo.product.sort_options', $options);
@@ -79,7 +79,7 @@ class ProductRepo extends BaseRepo
     public static function getCriteria(): array
     {
         $criteria = [
-            ['name' => 'keyword', 'type' => 'input', 'label' => trans('panel/common.name')],
+            ['name' => 'keyword', 'type' => 'input', 'label' => trans('common/base.name')],
             [
                 'name'              => 'sku_code',
                 'type'              => 'autocomplete',
@@ -102,10 +102,65 @@ class ProductRepo extends BaseRepo
                 'url'   => route('api.panel.brands.autocomplete'),
             ],
             ['name' => 'price', 'type' => 'range', 'label' => trans('panel/product.price')],
-            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('panel/common.created_at')],
+            ['name' => 'created_at', 'type' => 'date_range', 'label' => trans('common/base.created_at')],
         ];
 
         return fire_hook_filter('common.repo.product.criteria', $criteria);
+    }
+
+    /**
+     * Get search field options for data_search component
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        $options = [
+            ['value' => '', 'label' => trans('panel/common.all_fields')],
+            ['value' => 'name', 'label' => trans('panel/product.name')],
+            ['value' => 'sku_code', 'label' => trans('panel/product.sku_code')],
+            ['value' => 'spu_code', 'label' => trans('panel/product.spu_code')],
+        ];
+
+        return fire_hook_filter('common.repo.product.search_field_options', $options);
+    }
+
+    /**
+     * Get filter button options for data_search component
+     *
+     * @return array
+     */
+    public static function getFilterButtonOptions(): array
+    {
+        $filters = [
+            [
+                'name'    => 'active',
+                'label'   => trans('panel/common.status'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => '1', 'label' => trans('panel/common.active_yes')],
+                    ['value' => '0', 'label' => trans('panel/common.active_no')],
+                ],
+            ],
+            [
+                'name'    => 'type',
+                'label'   => trans('panel/product.type'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => 'normal', 'label' => trans('panel/product.type_normal')],
+                    ['value' => 'bundle', 'label' => trans('panel/product.type_bundle')],
+                ],
+            ],
+            [
+                'name'  => 'price',
+                'label' => trans('panel/product.price'),
+                'type'  => 'range',
+            ],
+        ];
+
+        return fire_hook_filter('common.repo.product.filter_button_options', $filters);
     }
 
     /**

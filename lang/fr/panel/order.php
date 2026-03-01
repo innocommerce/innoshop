@@ -13,6 +13,7 @@ return [
     'add_successfully'           => 'Ajouté avec succès !',
     'address'                    => 'Adresse',
     'administrator_remarks'      => 'Remarques de l administrateur',
+    'auto_complete_message'      => 'Le système remplit automatiquement les commandes',
     'billing_address'            => 'Adresse de facturation',
     'billing_address_1'          => 'Adresse de facturation 1',
     'billing_address_2'          => 'Adresse de facturation 2',

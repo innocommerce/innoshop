@@ -158,7 +158,7 @@ class BaseRepo implements RepoInterface
     /**
      * @return Builder
      */
-    private function modelQuery(): Builder
+    protected function modelQuery(): Builder
     {
         return $this->model::query();
     }

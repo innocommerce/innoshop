@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'add_to_carts'        => 'เพิ่มรถเข็น',
+    'avg_duration'        => 'ระยะเวลาการหยุดพักเฉลี่ย',
+    'basic_info'          => 'ข้อมูลพื้นฐาน',
+    'browser'             => 'เบราเซอร์',
+    'by_country'          => 'ตามประเทศ',
+    'by_device'           => 'อุปกรณ์',
+    'checkout_starts'     => 'เริ่มจ่ายเงินได้',
+    'city'                => 'เมือง',
+    'conversion_checkout' => 'การแลกเปลี่ยน',
+    'conversion_event'    => 'การเปลี่ยนแปลง',
+    'conversion_funnel'   => 'เปลี่ยนช่องทาง',
+    'conversion_order'    => 'สั่งเลยค่ะ',
+    'conversion_payment'  => 'จ่าย',
+    'conversion_register' => 'ลงทะเบียน',
+    'country'             => 'ประเทศ',
+    'country_code'        => 'รหัสประเทศ',
+    'country_name'        => 'ชื่อประเทศ',
+    'customer'            => 'ลูกค้า',
+    'daily_trends'        => 'แนวโน้มประจำวัน',
+    'device_desktop'      => 'พื้น ที่ทำงาน',
+    'device_mobile'       => 'ย้าย!',
+    'device_tablet'       => 'จารึก',
+    'device_type'         => 'ประเภทอุปกรณ์',
+    'end_date'            => 'วัน ที่สิ้นสุด',
+    'first_visited_at'    => 'เวลาเยี่ยมชมครั้งแรก',
+    'guest'               => 'ผู้มาเยือน',
+    'hour'                => 'ชั่วโมง',
+    'hourly_distribution' => 'การกระจายตัว 24 ชั่วโมง',
+    'ip_address'          => 'ไอพีแอดเดรส',
+    'last_visited_at'     => 'เวลา ที่เข้าใช้ครั้งสุดท้าย',
+    'locale'              => 'ภาษา',
+    'location'            => 'ตำแหน่ง',
+    'location_info'       => 'ข้อมูลตำแหน่ง',
+    'order_placed'        => 'สั่งเรียบร้อยแล้วค่ะ',
+    'os'                  => 'ระบบปฏิบัติการ',
+    'overall_conversion'  => 'อัตราการเปลี่ยนแปลงโดยรวม',
+    'page_views'          => 'จำนวนหน้า',
+    'payment_completed'   => 'การชำระเงินเสร็จสิ้น',
+    'product_views'       => 'การเรียกดูรายการ',
+    'referrer'            => 'ต้นฉบับ',
+    'session_id'          => 'หมายเลขกลุ่มงาน',
+    'start_date'          => 'วัน ที่เริ่ม',
+    'total_visits'        => 'จำนวนผู้เข้าชมทั้งหมด',
+    'unique_visitors'     => 'ผู้เข้าชมอิสระ',
+    'user_agent'          => 'พร็อกซีของผู้ใช้',
+    'visit_detail'        => 'รายละเอียดการเข้าถึง',
+    'visit_duration'      => 'ระยะเวลาการเข้าถึง',
+    'visits'              => 'จำนวนครั้ง ที่ใช้',
+];

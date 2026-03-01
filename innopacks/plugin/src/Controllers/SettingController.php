@@ -24,7 +24,7 @@ class SettingController extends BaseController
         try {
             SettingRepo::getInstance()->updateValues(request()->all());
 
-            return back()->with('success', __('common.updated_successfully'));
+            return back()->with('success', __('common/base.updated_success'));
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

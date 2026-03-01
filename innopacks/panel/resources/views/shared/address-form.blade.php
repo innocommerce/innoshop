@@ -54,7 +54,7 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <button type="button" class="btn btn-primary btn-lg form-submit w-50">{{ __('front/common.submit') }}</button>
+    <button type="button" class="btn btn-primary btn-lg form-submit w-50">{{ __('common/base.submit') }}</button>
   </div>
 </form>
 
@@ -87,7 +87,7 @@
       var countries = res.data;
       var countrySelect = $('select[name="country_code"]');
       countrySelect.empty();
-      countrySelect.append('<option value="">{{ __('panel/common.please_choose') }}</option>');
+      countrySelect.append('<option value="">{{ __('common/base.please_choose') }}</option>');
       countries.forEach(function(country) {
         countrySelect.append('<option value="' + country.code + '"' + (country.code == settingCountryCode ? ' selected' : '') + '>' + country.name + '</option>');
       });
@@ -100,7 +100,7 @@
       var zones = res.data;
       var zoneSelect = $('select[name="state_code"]');
       zoneSelect.empty().prop('disabled', false);
-      zoneSelect.append('<option value="">{{ __('panel/common.please_choose') }}</option>');
+      zoneSelect.append('<option value="">{{ __('common/base.please_choose') }}</option>');
       zones.forEach(function(zone) {
         zoneSelect.append('<option value="' + zone.code + '"' + (zone.code == settingStateCode ? ' selected' : '') + '>' + zone.name + '</option>');
       });

@@ -119,7 +119,7 @@
 
     <div class="col-6">
       <div class="form-group mb-4 d-flex gap-3">
-        <label class="form-label" for="default">{{__('front/common.default')}}</label>
+        <label class="form-label" for="default">{{__('common/base.default')}}</label>
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" role="switch" id="default" name="default" value="1">
         </div>
@@ -128,7 +128,7 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <button type="button" class="btn btn-primary btn-lg form-submit w-50">{{ __('front/common.submit') }}</button>
+    <button type="button" class="btn btn-primary btn-lg form-submit w-50">{{ __('common/base.submit') }}</button>
   </div>
 </form>
 
@@ -161,7 +161,7 @@
         var countries = res.data;
         var countrySelect = $('select[name="country_code"]');
         countrySelect.empty();
-        countrySelect.append('<option value="">{{ __('front/common.please_choose') }}</option>');
+        countrySelect.append('<option value="">{{ __('common/base.please_choose') }}</option>');
         countries.forEach(function (country) {
           countrySelect.append('<option value="' + country.code + '"' + (country.code == settingCountryCode ? ' selected' : '') + '>' + country.name + '</option>');
         });
@@ -181,7 +181,7 @@
         } else {
           zoneSelect.prop('disabled', false);
           zoneSelect.prop('required', true);
-          zoneSelect.append('<option value="">{{ __('front/common.please_choose') }}</option>');
+          zoneSelect.append('<option value="">{{ __('common/base.please_choose') }}</option>');
           zones.forEach(function (zone) {
             zoneSelect.append('<option value="' + zone.code + '">' + zone.name + '</option>');
           });

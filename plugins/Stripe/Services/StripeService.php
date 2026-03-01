@@ -100,7 +100,7 @@ class StripeService extends PaymentService
         $paymentCountry = Country::query()->find($this->order->payment_country_id);
         $customerData   = [
             'email'       => $this->order->email,
-            'description' => setting('base.meta_title'),
+            'description' => system_setting_locale('meta_title'),
             'name'        => $this->order->customer_name,
             'phone'       => $this->order->shipping_telephone,
             'address'     => [
@@ -157,7 +157,7 @@ class StripeService extends PaymentService
 
         return [
             'isAllowDelay'   => true,
-            'merchantName'   => system_setting('base.meta_title'),
+            'merchantName'   => system_setting_locale('meta_title'),
             'paymentIntent'  => $paymentIntent->client_secret,
             'publishKey'     => plugin_setting('stripe.publishable_key'),
             'billingDetails' => $this->getBillingDetails(),
@@ -242,7 +242,7 @@ class StripeService extends PaymentService
                     'currency'     => $currency,
                     'product_data' => [
                         'name'        => 'Order #'.$this->order->number,
-                        'description' => setting('base.meta_title') ?: 'Order Payment',
+                        'description' => system_setting_locale('meta_title') ?: 'Order Payment',
                     ],
                     'unit_amount' => $total,
                 ],

@@ -11,6 +11,15 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="InnoPacks">
+            <directory>innopacks/common/tests</directory>
+            <directory>innopacks/front/tests</directory>
+            <directory>innopacks/panel/tests</directory>
+            <directory>innopacks/restapi/tests</directory>
+            <directory>innopacks/plugin/tests</directory>
+            <directory>innopacks/devtools/tests</directory>
+            <directory>innopacks/install/tests</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

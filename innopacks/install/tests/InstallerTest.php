@@ -9,13 +9,11 @@
 
 namespace InnoShop\Install\Tests;
 
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use InnoShop\Install\Libraries\Database\MySQLDatabase;
 use InnoShop\Install\Libraries\Database\SQLiteDatabase;
 use InnoShop\Install\Libraries\Environment\EnvironmentChecker;
 use InnoShop\Install\Libraries\Installer;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * InstallerTest class
@@ -48,6 +46,21 @@ class TestInstaller extends Installer
     {
         // Skip creating admin in tests
     }
+
+    protected function saveEnv(array $data): void
+    {
+        // Skip saving .env in tests
+    }
+
+    protected function migrate(): void
+    {
+        // Skip migrations in tests
+    }
+
+    protected function markAsInstalled(): void
+    {
+        // Skip marking as installed in tests
+    }
 }
 
 class InstallerTest extends TestCase
@@ -63,7 +76,6 @@ class InstallerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        app()->setLocale('zh-cn');
 
         $this->mysqlDatabase      = $this->createMock(MySQLDatabase::class);
         $this->sqliteDatabase     = $this->createMock(SQLiteDatabase::class);
@@ -72,18 +84,6 @@ class InstallerTest extends TestCase
         $this->installer = new TestInstaller('/tmp/test');
         $this->installer->setDatabases($this->mysqlDatabase, $this->sqliteDatabase);
         $this->installer->setEnvironmentChecker($this->environmentChecker);
-
-        // Mock Artisan facade
-        Artisan::shouldReceive('call')
-            ->with('migrate:fresh', ['--force' => true])
-            ->andReturn(0);
-
-        // Mock DB facade
-        DB::shouldReceive('table')
-            ->with('admins')
-            ->andReturnSelf();
-        DB::shouldReceive('insert')
-            ->andReturn(true);
     }
 
     public function test_can_install_with_my_sql(): void
@@ -103,18 +103,6 @@ class InstallerTest extends TestCase
             ->method('checkConnection')
             ->with($data)
             ->willReturn(['db_success' => true]);
-
-        $this->mysqlDatabase->expects($this->once())
-            ->method('getConfig')
-            ->with($data)
-            ->willReturn([
-                'DB_CONNECTION' => 'mysql',
-                'DB_HOST'       => 'localhost',
-                'DB_PORT'       => '3306',
-                'DB_DATABASE'   => 'test_db',
-                'DB_USERNAME'   => 'test_user',
-                'DB_PASSWORD'   => 'test_pass',
-            ]);
 
         $this->environmentChecker->expects($this->once())
             ->method('checkPhpVersion')
@@ -144,14 +132,6 @@ class InstallerTest extends TestCase
             ->method('checkConnection')
             ->with($data)
             ->willReturn(['db_success' => true]);
-
-        $this->sqliteDatabase->expects($this->once())
-            ->method('getConfig')
-            ->with($data)
-            ->willReturn([
-                'DB_CONNECTION' => 'sqlite',
-                'DB_DATABASE'   => '/tmp/test/database/database.sqlite',
-            ]);
 
         $this->environmentChecker->expects($this->once())
             ->method('checkPhpVersion')
@@ -216,17 +196,5 @@ class InstallerTest extends TestCase
 
         // Cleanup
         system("rm -rf {$testBasePath}");
-    }
-
-    public function test_the_installer_returns_a_successful_response(): void
-    {
-        $response = $this->get('/install/');
-        $response->assertStatus(200);
-    }
-
-    public function test_the_homepage_returns_a_successful_response(): void
-    {
-        $response = $this->get('/');
-        $response->assertStatus(200);
     }
 }

@@ -28,8 +28,9 @@ class CustomerController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria'  => CustomerRepo::getCriteria(),
-            'customers' => CustomerRepo::getInstance()->list($filters),
+            'searchFields'  => CustomerRepo::getSearchFieldOptions(),
+            'filterButtons' => CustomerRepo::getFilterButtonOptions(),
+            'customers'     => CustomerRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::customers.index', $data);
@@ -59,7 +60,7 @@ class CustomerController extends BaseController
 
             return redirect(panel_route('customers.index'))
                 ->with('instance', $customer)
-                ->with('success', panel_trans('common.saved_success'));
+                ->with('success', common_trans('base.saved_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
                 ->withInput()
@@ -102,7 +103,7 @@ class CustomerController extends BaseController
 
             return redirect(panel_route('customers.index'))
                 ->with('instance', $customer)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
                 ->withInput()
@@ -120,7 +121,7 @@ class CustomerController extends BaseController
             CustomerRepo::getInstance()->destroy($customer);
 
             return redirect(panel_route('customers.index'))
-                ->with('success', panel_trans('common.deleted_success'));
+                ->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return redirect(panel_route('customers.index'))
                 ->withErrors(['error' => $e->getMessage()]);

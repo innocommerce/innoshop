@@ -65,7 +65,7 @@ class PluginController
             PluginService::getInstance()->installPlugin($plugin);
             Artisan::call('view:clear');
 
-            return json_success(panel_trans('common.saved_success'));
+            return json_success(common_trans('base.saved_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -82,7 +82,7 @@ class PluginController
             PluginService::getInstance()->uninstallPlugin($plugin);
             Artisan::call('view:clear');
 
-            return json_success(panel_trans('common.deleted_success'));
+            return json_success(common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -149,7 +149,7 @@ class PluginController
 
         return redirect($currentUrl)
             ->with('instance', $plugin)
-            ->with('success', panel_trans('common.updated_success'));
+            ->with('success', common_trans('base.updated_success'));
     }
 
     /**
@@ -165,7 +165,7 @@ class PluginController
             SettingRepo::getInstance()->updatePluginValue($code, 'active', $enabled);
             Artisan::call('view:clear');
 
-            return json_success(panel_trans('common.updated_success'));
+            return json_success(common_trans('base.updated_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         } catch (Throwable $e) {

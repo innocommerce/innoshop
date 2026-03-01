@@ -34,7 +34,7 @@
               <i class="bi bi-eye me-1"></i>{{ __('panel/common.preview') }}
             </a>
             <button type="button" @click="deleteVideo" class="btn btn-sm btn-outline-danger">
-              <i class="bi bi-trash me-1"></i>{{ __('panel/common.delete') }}
+              <i class="bi bi-trash me-1"></i>{{ __('common/base.delete') }}
             </button>
           </div>
         </div>

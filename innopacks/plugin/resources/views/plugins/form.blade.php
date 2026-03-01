@@ -35,8 +35,8 @@
           @endif
           @if($plugin->checkInstalled() && $plugin->getEnabled() && $plugin->getMenuUrl())
             <div class="ms-auto">
-              <a href="{{ $plugin->getMenuUrl() }}" class="btn btn-success btn-sm" title="{{ __('panel/common.use') }}">
-                <i class="bi bi-box-arrow-up-right"></i> {{ __('panel/common.use') }}
+              <a href="{{ $plugin->getMenuUrl() }}" class="btn btn-success btn-sm" title="{{ __('common/base.use') }}">
+                <i class="bi bi-box-arrow-up-right"></i> {{ __('common/base.use') }}
               </a>
             </div>
           @endif

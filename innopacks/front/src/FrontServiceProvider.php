@@ -16,6 +16,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\View\FileViewFinder;
 use InnoShop\Common\Middleware\ContentFilterHook;
 use InnoShop\Common\Middleware\EventActionHook;
+use InnoShop\Common\Middleware\VisitTrackingMiddleware;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Front\Middleware\CustomerAuthentication;
 use InnoShop\Front\Middleware\GlobalFrontData;
@@ -109,6 +110,7 @@ class FrontServiceProvider extends ServiceProvider
             EventActionHook::class,
             ContentFilterHook::class,
             GlobalFrontData::class,
+            VisitTrackingMiddleware::class,
             MaintenanceMode::class,
         ];
 

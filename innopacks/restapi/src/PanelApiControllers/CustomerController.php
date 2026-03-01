@@ -61,7 +61,7 @@ class CustomerController extends BaseController
             $data     = $request->all();
             $customer = CustomerRepo::getInstance()->create($data);
 
-            return json_success(panel_trans('common.updated_success'), $customer);
+            return json_success(common_trans('base.updated_success'), $customer);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -78,7 +78,7 @@ class CustomerController extends BaseController
             $data = $request->all();
             CustomerRepo::getInstance()->update($customer, $data);
 
-            return json_success(panel_trans('common.updated_success'), $customer);
+            return json_success(common_trans('base.updated_success'), $customer);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -93,7 +93,7 @@ class CustomerController extends BaseController
         try {
             CustomerRepo::getInstance()->destroy($customer);
 
-            return json_success(panel_trans('common.deleted_success'));
+            return json_success(common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

@@ -30,8 +30,9 @@ class AttributeController extends BaseController
         $filters = $request->all();
 
         $data = [
-            'criteria'   => AttributeRepo::getCriteria(),
-            'attributes' => AttributeRepo::getInstance()->list($filters),
+            'searchFields'  => AttributeRepo::getSearchFieldOptions(),
+            'filterButtons' => AttributeRepo::getFilterButtonOptions(),
+            'attributes'    => AttributeRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::attributes.index', $data);
@@ -61,7 +62,7 @@ class AttributeController extends BaseController
 
             return redirect(panel_route('attributes.index'))
                 ->with('instance', $attribute)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('attributes.index'))
                 ->withInput()
@@ -109,7 +110,7 @@ class AttributeController extends BaseController
 
             return redirect(panel_route('attributes.index'))
                 ->with('instance', $attribute)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('attributes.index'))
                 ->withInput()
@@ -126,7 +127,7 @@ class AttributeController extends BaseController
         try {
             AttributeRepo::getInstance()->destroy($attribute);
 
-            return back()->with('success', panel_trans('common.deleted_success'));
+            return back()->with('success', common_trans('base.deleted_success'));
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

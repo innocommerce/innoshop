@@ -13,6 +13,7 @@ return [
     'add_successfully'           => '添加成功！',
     'address'                    => '地址',
     'administrator_remarks'      => '管理員備註',
+    'auto_complete_message'      => '系統自動完成訂單',
     'billing_address'            => '帳單地址',
     'billing_address_1'          => '帳單地址1',
     'billing_address_2'          => '帳單地址2',

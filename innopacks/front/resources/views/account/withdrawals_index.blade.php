@@ -72,7 +72,7 @@
                     <td class="text-center">
                       <a href="{{ account_route('wallet.withdrawals.show', $withdrawal->id) }}" 
                          class="btn btn-outline-primary btn-sm">
-                        {{ __('front/common.view') }}
+                        {{ __('common/base.view') }}
                       </a>
                     </td>
                   </tr>

@@ -15,7 +15,7 @@
                 <th>{{ __('panel/transaction.amount') }}</th>
                 <th>{{ __('panel/transaction.type') }}</th>
                 <th>{{ __('panel/transaction.comment') }}</th>
-                <th>{{ __('panel/common.created_at') }}</th>
+                <th>{{ __('common/base.created_at') }}</th>
               </tr>
             </thead>
             <tbody>

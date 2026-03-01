@@ -17,7 +17,7 @@
         <textarea v-model="comment" class="form-control" placeholder="{{ __('panel/order.comment') }}" rows="3"></textarea>
         <template #footer>
           <div class="dialog-footer">
-            <el-button @click="statusDialog = false">{{ __('panel/common.close') }}</el-button>
+            <el-button @click="statusDialog = false">{{ __('common/base.close') }}</el-button>
             <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
           </div>
         </template>

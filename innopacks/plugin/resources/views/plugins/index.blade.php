@@ -54,12 +54,12 @@
                   <div class="btns">
                     @if ($plugin['installed'])
                       @if($plugin['menu_url'])
-                        <a href="{{ $plugin['menu_url'] }}" class="btn btn-success btn-sm" title="{{ __('panel/common.use') }}">
-                          <i class="bi bi-box-arrow-up-right"></i> {{ __('panel/common.use') }}
+                        <a href="{{ $plugin['menu_url'] }}" class="btn btn-success btn-sm" title="{{ __('common/base.use') }}">
+                          <i class="bi bi-box-arrow-up-right"></i> {{ __('common/base.use') }}
                         </a>
                       @endif
                       @if($plugin['edit_url'])
-                        <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('panel/common.edit') }}</a>
+                        <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('common/base.edit') }}</a>
                       @endif
                       <div class="btn btn-danger btn-sm uninstall-plugin">{{ __('panel/common.uninstall') }}</div>
                     @else

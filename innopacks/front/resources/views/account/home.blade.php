@@ -78,7 +78,7 @@
                   <td data-title="Total">{{ $order->total }}</td>
                   <td data-title="Actions">
                     <a href="{{ account_route('orders.number_show', $order->number) }}" class="btn btn-primary btn-sm" role="button">
-                        {{ __('front/common.view') }}
+                        {{ __('common/base.view') }}
                     </a>
                  </td>
                 </tr>

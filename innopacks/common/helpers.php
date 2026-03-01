@@ -338,11 +338,14 @@ if (! function_exists('locales')) {
      * Get available locales
      *
      * @return mixed
-     * @throws Exception
      */
     function locales(): mixed
     {
-        return LocaleRepo::getInstance()->getActiveList();
+        try {
+            return LocaleRepo::getInstance()->getActiveList();
+        } catch (\Throwable $e) {
+            return collect([]);
+        }
     }
 }
 
@@ -504,6 +507,21 @@ if (! function_exists('front_trans')) {
     }
 }
 
+if (! function_exists('common_trans')) {
+    /**
+     * Get common translation.
+     *
+     * @param  $key
+     * @param  array  $replace
+     * @param  $locale
+     * @return mixed
+     */
+    function common_trans($key = null, array $replace = [], $locale = null): mixed
+    {
+        return trans('common/'.$key, $replace, $locale);
+    }
+}
+
 if (! function_exists('theme_trans')) {
     /**
      * @param  $key
@@ -564,7 +582,7 @@ if (! function_exists('create_json_success')) {
             $data = fire_hook_filter($hook, $data);
         }
 
-        return json_success(panel_trans('common.saved_success'), $data);
+        return json_success(common_trans('base.saved_success'), $data);
     }
 }
 
@@ -580,7 +598,7 @@ if (! function_exists('read_json_success')) {
             $data = fire_hook_filter($hook, $data);
         }
 
-        return json_success(panel_trans('common.read_success'), $data);
+        return json_success(common_trans('base.read_success'), $data);
     }
 }
 
@@ -596,7 +614,7 @@ if (! function_exists('update_json_success')) {
             $data = fire_hook_filter($hook, $data);
         }
 
-        return json_success(panel_trans('common.updated_success'), $data);
+        return json_success(common_trans('base.updated_success'), $data);
     }
 }
 
@@ -612,7 +630,7 @@ if (! function_exists('delete_json_success')) {
             $data = fire_hook_filter($hook, $data);
         }
 
-        return json_success(panel_trans('common.deleted_success'), $data);
+        return json_success(common_trans('base.deleted_success'), $data);
     }
 }
 
@@ -628,7 +646,7 @@ if (! function_exists('submit_json_success')) {
             $data = fire_hook_filter($hook, $data);
         }
 
-        return json_success(panel_trans('common.submitted_success'), $data);
+        return json_success(common_trans('base.submitted_success'), $data);
     }
 }
 

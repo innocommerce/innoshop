@@ -789,7 +789,7 @@ return new class extends Migration
             $table->bigIncrements('id')->comment('ID');
             $table->string('space')->comment('Group, Like: system, stripe, paypal');
             $table->string('name')->comment('Field Name');
-            $table->text('value')->comment('Field Value');
+            $table->longText('value')->comment('Field Value');
             $table->boolean('json')->default(false)->comment('JSON Or Not');
             $table->timestamps();
         });

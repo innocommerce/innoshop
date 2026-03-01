@@ -9,7 +9,7 @@
 <div class="container">
   @if($keyword)
     <div class="mb-4">
-      <h2 class="h4">{{ __('front/common.search_results') }}: "{{ $keyword }}"</h2>
+      <h2 class="h4">{{ __('common/base.search_results') }}: "{{ $keyword }}"</h2>
       <p class="text-muted">{{ __('front/common.found_categories', ['count' => $categories->total()]) }}</p>
     </div>
   @endif
@@ -38,7 +38,7 @@
                 </p>
               @endif
               <a href="{{ $category->url }}" class="btn btn-sm btn-outline-primary">
-                {{ __('front/common.view_more') }}
+                {{ __('common/base.view_more') }}
               </a>
             </div>
           </div>
@@ -51,7 +51,7 @@
     <div class="text-center py-5">
       <x-common-no-data />
       @if($keyword)
-        <p class="text-muted mt-3">{{ __('front/common.no_search_results') }}</p>
+        <p class="text-muted mt-3">{{ __('common/base.no_search_results') }}</p>
       @endif
     </div>
   @endif

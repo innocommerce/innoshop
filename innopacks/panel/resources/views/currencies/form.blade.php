@@ -16,7 +16,7 @@
       @csrf
       @method($currency->id ? 'PUT' : 'POST')
 
-      <x-common-form-input title="{{ __('panel/common.name') }}" name="name" value="{{ old('name', $currency->name) }}" required />
+      <x-common-form-input title="{{ __('common/base.name') }}" name="name" value="{{ old('name', $currency->name) }}" required />
       <x-common-form-input title="{{ __('panel/currency.code') }}" name="code" value="{{ old('code', $currency->code) }}" required />
       <x-common-form-input title="{{ __('panel/currency.symbol_left') }}" name="symbol_left" value="{{ old('symbol_left', $currency->symbol_left) }}" />
       <x-common-form-input title="{{ __('panel/currency.symbol_right') }}" name="symbol_right" value="{{ old('symbol_right', $currency->symbol_right) }}" />

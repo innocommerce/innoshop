@@ -26,10 +26,10 @@ class ProductController extends BaseController
 {
     /**
      * @param  Request  $request
-     * @return AnonymousResourceCollection
+     * @return mixed
      * @throws Exception
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request): mixed
     {
         $filters = $request->all();
         $perPage = $request->get('per_page', 15);
@@ -54,9 +54,11 @@ class ProductController extends BaseController
 
         $products = $productBuilder->paginate($perPage);
 
-        return ProductSimple::collection($products)->additional([
+        $response = ProductSimple::collection($products)->additional([
             'filters' => FilterRepo::getInstance($builder)->getCurrentFilters(),
         ]);
+
+        return fire_hook_filter('front.api.product.index', $response);
     }
 
     /**

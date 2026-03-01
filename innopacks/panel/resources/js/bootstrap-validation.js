@@ -25,9 +25,19 @@ $(function () {
 
   // Add loading animation for form submission
   $(document).on('submit', 'form', function(event) {
-    if (!$(this).hasClass('no-load')) {
+    const $form = $(this);
+    if (!$form.hasClass('no-load')) {
       layer.load(2, { shade: [0.2, '#fff'] });
+      // Auto close loading after 10 seconds as a fallback
+      setTimeout(function() {
+        layer.closeAll('loading');
+      }, 10000);
     }
+  });
+
+  // Close loading when AJAX completes
+  $(document).ajaxComplete(function() {
+    layer.closeAll('loading');
   });
 
 

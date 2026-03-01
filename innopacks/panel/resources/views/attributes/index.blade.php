@@ -4,13 +4,19 @@
 @section('title', __('panel/menu.attributes'))
 @section('page-title-right')
 <a href="{{ panel_route('attributes.create') }}" class="btn btn-primary">
-  <i class="bi bi-plus-square"></i> {{ __('panel/common.create') }}
+  <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}
 </a>
 @endsection
 
 @section('content')
 <div class="card h-min-600" id="app">
   <div class="card-body">
+    <x-panel-data-data-search
+      :action="panel_route('attributes.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="false"
+    />
     <!-- Navigation links -->
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item">
@@ -25,18 +31,16 @@
       </li>
     </ul>
 
-    <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('attributes.index')" />
-
     @if ($attributes->count())
     <div class="table-responsive">
       <table class="table align-middle">
         <thead>
           <tr>
-            <td>{{ __('panel/common.id')}}</td>
-            <td>{{ __('panel/common.name')}}</td>
+            <td>{{ __('common/base.id') }}</td>
+            <td>{{ __('common/base.name') }}</td>
             <td>{{ __('panel/menu.attribute_groups')}}</td>
-            <td>{{ __('panel/common.position')}}</td>
-            <td>{{ __('panel/common.created_at')}}</td>
+            <td>{{ __('common/base.position')}}</td>
+            <td>{{ __('common/base.created_at') }}</td>
             <td>{{ __('panel/common.actions')}}</td>
           </tr>
         </thead>
@@ -53,7 +57,7 @@
                 <div>
                   <a href="{{ panel_route('attributes.edit', [$item->id]) }}">
                     <el-button size="small" plain type="primary">{{
-      __('panel/common.edit')}}</el-button>
+      __('common/base.edit')}}</el-button>
                   </a>
                 </div>
                 <div>
@@ -61,7 +65,7 @@
                     class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{ __('panel/common.delete')}}</el-button>
+                    <el-button size="small" type="danger" plain @click="open({{$item->id}})">{{ __('common/base.delete')}}</el-button>
                   </form>
                 </div>
               </div>

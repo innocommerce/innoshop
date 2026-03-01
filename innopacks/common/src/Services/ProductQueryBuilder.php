@@ -252,14 +252,30 @@ class ProductQueryBuilder
      */
     public function applySearchFilters(Builder $builder, array $filters): Builder
     {
-        // Support both 'keyword' and 'search' parameters
-        $keyword = $filters['keyword'] ?? $filters['search'] ?? '';
+        $keyword     = $filters['keyword'] ?? $filters['search'] ?? '';
+        $searchField = $filters['search_field'] ?? '';
+
         if ($keyword) {
-            $builder->whereHas('translation', function (Builder $query) use ($keyword) {
-                $query->where('name', 'like', "%$keyword%");
-            })->orWhereHas('skus', function (Builder $query) use ($keyword) {
-                $query->where('code', 'like', "%$keyword%");
-            });
+            if ($searchField === 'name') {
+                $builder->whereHas('translation', function (Builder $query) use ($keyword) {
+                    $query->where('name', 'like', "%$keyword%");
+                });
+            } elseif ($searchField === 'sku_code') {
+                $builder->whereHas('skus', function (Builder $query) use ($keyword) {
+                    $query->where('code', 'like', "%$keyword%");
+                });
+            } elseif ($searchField === 'spu_code') {
+                $builder->where('spu_code', 'like', "%$keyword%");
+            } else {
+                // Search all fields
+                $builder->where(function ($query) use ($keyword) {
+                    $query->whereHas('translation', function (Builder $q) use ($keyword) {
+                        $q->where('name', 'like', "%$keyword%");
+                    })->orWhereHas('skus', function (Builder $q) use ($keyword) {
+                        $q->where('code', 'like', "%$keyword%");
+                    })->orWhere('spu_code', 'like', "%$keyword%");
+                });
+            }
         }
 
         return $builder;
@@ -310,8 +326,13 @@ class ProductQueryBuilder
             $builder->whereIn('products.id', $productIDs);
         }
 
-        if (isset($filters['active'])) {
+        if (isset($filters['active']) && $filters['active'] !== '') {
             $builder->where('products.active', (bool) $filters['active']);
+        }
+
+        $type = $filters['type'] ?? '';
+        if ($type) {
+            $builder->where('products.type', $type);
         }
 
         return $builder;
@@ -326,6 +347,40 @@ class ProductQueryBuilder
      */
     public function applyDateFilters(Builder $builder, array $filters): Builder
     {
+        // Support date_filter parameter
+        $dateFilter = $filters['date_filter'] ?? '';
+        if ($dateFilter && $dateFilter !== 'all') {
+            $now = now();
+            switch ($dateFilter) {
+                case 'today':
+                    $builder->whereDate('products.created_at', $now->toDateString());
+                    break;
+                case 'this_week':
+                    $builder->whereBetween('products.created_at', [
+                        $now->startOfWeek()->toDateTimeString(),
+                        $now->endOfWeek()->toDateTimeString(),
+                    ]);
+                    break;
+                case 'this_month':
+                    $builder->whereBetween('products.created_at', [
+                        $now->startOfMonth()->toDateTimeString(),
+                        $now->endOfMonth()->toDateTimeString(),
+                    ]);
+                    break;
+                case 'custom':
+                    $startDate = $filters['start_date'] ?? '';
+                    $endDate   = $filters['end_date'] ?? '';
+                    if ($startDate) {
+                        $builder->whereDate('products.created_at', '>=', $startDate);
+                    }
+                    if ($endDate) {
+                        $builder->whereDate('products.created_at', '<=', $endDate);
+                    }
+                    break;
+            }
+        }
+
+        // Support legacy date range parameters
         $createdStart = $filters['created_at_start'] ?? '';
         if ($createdStart) {
             $builder->where('created_at', '>', $createdStart);

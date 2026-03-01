@@ -10,8 +10,8 @@
 namespace InnoShop\Install\Tests\Database;
 
 use InnoShop\Install\Libraries\Database\MySQLDatabase;
+use InnoShop\Install\Tests\TestCase;
 use PDO;
-use Tests\TestCase;
 
 /**
  * MySQLDatabaseTest class

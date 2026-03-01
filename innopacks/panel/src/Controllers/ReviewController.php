@@ -28,8 +28,9 @@ class ReviewController extends BaseController
     {
         $filters = $request->all();
         $data    = [
-            'criteria' => ReviewRepo::getCriteria(),
-            'reviews'  => ReviewRepo::getInstance()->list($filters),
+            'searchFields'  => ReviewRepo::getSearchFieldOptions(),
+            'filterButtons' => ReviewRepo::getFilterButtonOptions(),
+            'reviews'       => ReviewRepo::getInstance()->list($filters),
         ];
 
         return inno_view('panel::reviews.index', $data);
@@ -59,7 +60,7 @@ class ReviewController extends BaseController
 
             return redirect(panel_route('reviews.index'))
                 ->with('instance', $review)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('reviews.index'))
                 ->withInput()
@@ -105,7 +106,7 @@ class ReviewController extends BaseController
 
             return redirect(panel_route('reviews.index'))
                 ->with('instance', $review)
-                ->with('success', panel_trans('common.updated_success'));
+                ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
             return redirect(panel_route('reviews.index'))
                 ->withInput()
