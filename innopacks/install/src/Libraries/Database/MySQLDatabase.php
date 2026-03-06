@@ -26,6 +26,16 @@ class MySQLDatabase
         $this->pdo = $pdo;
     }
 
+    protected function createPdo(string $dsn, string $username, string $password): PDO
+    {
+        return new PDO(
+            $dsn,
+            $username,
+            $password,
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        );
+    }
+
     public function checkConnection(array $data): array
     {
         $result = ['db_success' => false];
@@ -39,12 +49,7 @@ class MySQLDatabase
                     $data['db_name']
                 );
 
-                $this->pdo = new PDO(
-                    $dsn,
-                    $data['db_username'],
-                    $data['db_password'],
-                    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-                );
+                $this->pdo = $this->createPdo($dsn, $data['db_username'], $data['db_password']);
             }
 
             // Check MySQL version

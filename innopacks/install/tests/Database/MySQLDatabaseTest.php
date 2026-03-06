@@ -12,6 +12,7 @@ namespace InnoShop\Install\Tests\Database;
 use InnoShop\Install\Libraries\Database\MySQLDatabase;
 use InnoShop\Install\Tests\TestCase;
 use PDO;
+use PDOException;
 
 /**
  * MySQLDatabaseTest class
@@ -72,9 +73,15 @@ class MySQLDatabaseTest extends TestCase
 
     public function test_cannot_connect_with_invalid_host(): void
     {
-        $this->database->setPdo(null);
+        $database = new class extends MySQLDatabase
+        {
+            protected function createPdo(string $dsn, string $username, string $password): PDO
+            {
+                throw new PDOException('Connection failed', 2002);
+            }
+        };
 
-        $result = $this->database->checkConnection([
+        $result = $database->checkConnection([
             'db_hostname' => 'invalid_host',
             'db_port'     => '3306',
             'db_name'     => 'test_db',
@@ -89,9 +96,15 @@ class MySQLDatabaseTest extends TestCase
 
     public function test_cannot_connect_with_invalid_credentials(): void
     {
-        $this->database->setPdo(null);
+        $database = new class extends MySQLDatabase
+        {
+            protected function createPdo(string $dsn, string $username, string $password): PDO
+            {
+                throw new PDOException('Access denied', 1045);
+            }
+        };
 
-        $result = $this->database->checkConnection([
+        $result = $database->checkConnection([
             'db_hostname' => 'localhost',
             'db_port'     => '3306',
             'db_name'     => 'test_db',
