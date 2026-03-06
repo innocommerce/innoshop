@@ -26,7 +26,7 @@ return new class extends Migration
                 $table->bigIncrements('id')->comment('ID');
                 $table->string('email')->unique()->comment('Email Address');
                 $table->string('name')->nullable()->comment('Subscriber Name');
-                $table->unsignedInteger('customer_id')->nullable()->index('customer_id')->comment('Customer ID (if registered)');
+                $table->unsignedInteger('customer_id')->nullable()->index()->comment('Customer ID (if registered)');
                 $table->string('status')->default('active')->comment('Status: active, unsubscribed, bounced');
                 $table->string('source')->nullable()->comment('Subscription Source: footer, popup, checkout, etc.');
                 $table->timestamp('subscribed_at')->nullable()->comment('Subscription Date');
@@ -35,7 +35,6 @@ return new class extends Migration
                 $table->timestamps();
 
                 $table->index(['status', 'created_at']);
-                $table->index('email');
             });
         }
     }

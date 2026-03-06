@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -29,13 +30,34 @@ return new class extends Migration
             });
         }
 
+        // SQLite requires dropping indexes before dropping columns
+        $isSQLite = DB::connection()->getDriverName() === 'sqlite';
+
         if (Schema::hasColumn('products', 'product_image_id')) {
+            if ($isSQLite) {
+                try {
+                    DB::statement('DROP INDEX IF EXISTS p_pi_id');
+                } catch (\Exception) {
+                }
+            }
             Schema::dropColumns('products', 'product_image_id');
         }
         if (Schema::hasColumn('products', 'product_video_id')) {
+            if ($isSQLite) {
+                try {
+                    DB::statement('DROP INDEX IF EXISTS p_pv_id');
+                } catch (\Exception) {
+                }
+            }
             Schema::dropColumns('products', 'product_video_id');
         }
         if (Schema::hasColumn('products', 'product_sku_id')) {
+            if ($isSQLite) {
+                try {
+                    DB::statement('DROP INDEX IF EXISTS p_ps_id');
+                } catch (\Exception) {
+                }
+            }
             Schema::dropColumns('products', 'product_sku_id');
         }
     }

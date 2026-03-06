@@ -20,7 +20,7 @@ return new class extends Migration
         if (! Schema::hasTable('customer_transactions')) {
             Schema::create('customer_transactions', function (Blueprint $table) {
                 $table->id();
-                $table->integer('customer_id')->index('customer_id')->comment('Customer ID');
+                $table->integer('customer_id')->index()->comment('Customer ID');
                 $table->decimal('amount')->comment('Amount');
                 $table->string('type')->comment('Transaction Type');
                 $table->text('comment')->nullable()->comment('Comment');

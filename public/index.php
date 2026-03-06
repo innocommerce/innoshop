@@ -4,11 +4,16 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// Determine if the application is installed...
+// Determine if the application is installed or .env is invalid...
 $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-if (! file_exists(__DIR__.'/../storage/installed')
-    && ! str_starts_with($requestUri, '/install')
-    && (stripos($_SERVER['REQUEST_URI'], '_debugbar') !== 1)) {
+$envPath = __DIR__.'/../.env';
+$envExists = file_exists($envPath);
+$envValid = $envExists && str_contains(file_get_contents($envPath), 'APP_KEY=');
+$installed = file_exists(__DIR__.'/../storage/installed');
+$isInstallRoute = str_starts_with($requestUri, '/install');
+$isDebugbar = stripos($_SERVER['REQUEST_URI'], '_debugbar') !== false;
+
+if ((! $installed || ! $envValid) && ! $isInstallRoute && ! $isDebugbar) {
     header('Location: /install');
     exit;
 }

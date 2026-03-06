@@ -99,15 +99,19 @@ class Installer
 
     public function isInstalled(): bool
     {
-        if (! file_exists($this->installedFile)) {
-            return false;
+        if (file_exists($this->installedFile)) {
+            return true;
         }
 
-        if (! file_exists($this->basePath.'/.env')) {
-            return false;
+        if (file_exists($this->basePath.'/.env')) {
+            // Check if DB_HOST is configured
+            $env = file_get_contents($this->basePath.'/.env');
+            if (strpos($env, 'DB_HOST=') !== false && strpos($env, 'DB_DATABASE=') !== false) {
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
 
     private function validateData(array $data): array
