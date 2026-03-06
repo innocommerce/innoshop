@@ -30,35 +30,23 @@ return new class extends Migration
             });
         }
 
-        // SQLite requires dropping indexes before dropping columns
-        $isSQLite = DB::connection()->getDriverName() === 'sqlite';
-
         if (Schema::hasColumn('products', 'product_image_id')) {
-            if ($isSQLite) {
-                try {
-                    DB::statement('DROP INDEX IF EXISTS p_pi_id');
-                } catch (\Exception) {
-                }
-            }
-            Schema::dropColumns('products', 'product_image_id');
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropIndex('p_pi_id');
+                $table->dropColumn('product_image_id');
+            });
         }
         if (Schema::hasColumn('products', 'product_video_id')) {
-            if ($isSQLite) {
-                try {
-                    DB::statement('DROP INDEX IF EXISTS p_pv_id');
-                } catch (\Exception) {
-                }
-            }
-            Schema::dropColumns('products', 'product_video_id');
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropIndex('p_pv_id');
+                $table->dropColumn('product_video_id');
+            });
         }
         if (Schema::hasColumn('products', 'product_sku_id')) {
-            if ($isSQLite) {
-                try {
-                    DB::statement('DROP INDEX IF EXISTS p_ps_id');
-                } catch (\Exception) {
-                }
-            }
-            Schema::dropColumns('products', 'product_sku_id');
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropIndex('p_ps_id');
+                $table->dropColumn('product_sku_id');
+            });
         }
     }
 
