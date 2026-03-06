@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'Tiempo para comentarios',
     'customer'               => 'Los clientes',
     'id'                     => 'ID',
     'please_select_customer' => 'Por favor seleccione un cliente',
@@ -18,4 +17,5 @@ return [
     'rating'                 => 'Calificación',
     'review'                 => 'Revisión',
     'review_content'         => 'Revisión del contenido',
+    'anonymous_customer'     => 'Cliente anónimo',
 ];

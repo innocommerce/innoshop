@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => '평론 시간',
     'customer'               => '고객',
     'id'                     => 'ID',
     'please_select_customer' => '고객을 선택하십시오',
@@ -18,4 +17,5 @@ return [
     'rating'                 => '평가',
     'review'                 => '논평',
     'review_content'         => '리뷰 내용',
+    'anonymous_customer'     => '익명 고객',
 ];

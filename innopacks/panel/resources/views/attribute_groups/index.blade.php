@@ -122,7 +122,6 @@
       </div>
     </template>
   </el-drawer>
-  <el-button plain @click="open">Click to open the Message Box</el-button>
 </div>
 @endsection
 

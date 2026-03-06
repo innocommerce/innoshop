@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'Yorum Tarihi',
     'customer'               => 'müşteri',
     'id'                     => 'ID',
     'please_select_customer' => 'Lütfen bir müşteri seçin',
@@ -18,4 +17,5 @@ return [
     'rating'                 => 'Puan',
     'review'                 => 'Yorum',
     'review_content'         => 'Yorum İçeriği',
+    'anonymous_customer'     => 'Anonim Müşteri',
 ];

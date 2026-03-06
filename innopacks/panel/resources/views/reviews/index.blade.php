@@ -31,7 +31,7 @@
               <td>{{ __('panel/review.product') }}</td>
               <td>{{ __('panel/review.rating') }}</td>
               <td>{{ __('panel/review.review_content') }}</td>
-              <td>{{ __('panel/common.date') }}</td>
+              <td>{{ __('panel/common.created_at') }}</td>
               <td>{{ __('panel/common.active') }}</td>
               <td>{{ __('panel/common.actions') }}</td>
             </tr>
@@ -40,7 +40,7 @@
             @foreach($reviews as $review)
               <tr>
                 <td>{{ $review->id }}</td>
-                <td>{{ $review->customer->name ?? '-' }}</td>
+                <td>{{ $review->customer->name ?? __('panel/review.anonymous_customer') }}</td>
                 @if($review->product)
                   <td data-title="product" data-bs-toggle="tooltip" data-bs-placement="bottom"
                       title="{{ $review->product->fallbackName() }}">

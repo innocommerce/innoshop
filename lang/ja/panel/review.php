@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'レビュータイムです',
     'customer'               => 'お客様です',
     'id'                     => 'ID',
     'please_select_customer' => 'お客様をお願いします。',
@@ -18,4 +17,5 @@ return [
     'rating'                 => '評価',
     'review'                 => 'レビュー',
     'review_content'         => 'レビュー_コンテンツ',
+    'anonymous_customer'     => '匿名顧客',
 ];

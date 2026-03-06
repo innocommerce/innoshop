@@ -14,8 +14,8 @@ return [
     'rating'                 => 'Beoordeling',
     'review'                 => 'Recensie',
     'review_content'         => 'Recensie-inhoud',
-    'created_at'             => 'Recensietijd',
     'please_select_product'  => 'Selecteer een product',
     'please_select_customer' => 'Selecteer een klant',
     'please_select_rating'   => 'Selecteer een beoordeling',
+    'anonymous_customer'     => 'Anonymous Customer',
 ];

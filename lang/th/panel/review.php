@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'เวลาแสดงผล',
     'customer'               => 'ลูกค้า',
     'id'                     => 'รหัส',
     'please_select_customer' => 'โปรดเลือกลูกค้า',
@@ -18,4 +17,5 @@ return [
     'rating'                 => 'การจัดอันดับ',
     'review'                 => 'ความคิดเห็น',
     'review_content'         => 'เนื้อหารีวิว',
+    'anonymous_customer'     => 'ลูกค้านิรนาม',
 ];

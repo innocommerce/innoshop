@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'Masa komen',
     'customer'               => 'Pelanggan',
     'id'                     => 'ID',
     'please_select_customer' => 'Sila pilih pelanggan',
@@ -18,4 +17,5 @@ return [
     'rating'                 => 'Peratingan',
     'review'                 => 'Komen',
     'review_content'         => 'Kandungan Ulasan',
+    'anonymous_customer'     => 'Anonymous Customer',
 ];

@@ -11,12 +11,6 @@
 @section('content')
 <div class="card h-min-600" id="app">
   <div class="card-body">
-    <x-panel-data-data-search
-      :action="panel_route('attributes.index')"
-      :searchFields="$searchFields ?? []"
-      :filters="$filterButtons ?? []"
-      :enableDateRange="false"
-    />
     <!-- Navigation links -->
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item">
@@ -30,6 +24,13 @@
         </a>
       </li>
     </ul>
+
+    <x-panel-data-data-search
+      :action="panel_route('attributes.index')"
+      :searchFields="$searchFields ?? []"
+      :filters="$filterButtons ?? []"
+      :enableDateRange="false"
+    />
 
     @if ($attributes->count())
     <div class="table-responsive">

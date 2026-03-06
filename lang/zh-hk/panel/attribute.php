@@ -12,4 +12,5 @@ return [
     'attribute_value' => '屬性值',
     'name'            => '屬性名',
     'set_attribute'   => '設置屬性',
+    'group'           => '屬性組',
 ];

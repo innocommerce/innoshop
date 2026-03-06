@@ -17,7 +17,7 @@
                         data-filter-name="{{ $filterGroup['name'] }}"
                         data-value="{{ $option['value'] ?? '' }}"
                         data-is-all="{{ ($option['value'] ?? '') === '' ? '1' : '0' }}">
-                    {{ $option['label'] }}
+                    {!! $option['label'] !!}
                 </button>
             @endforeach
 
@@ -37,7 +37,7 @@
                         class="btn-filter btn btn-sm {{ $isActive ? 'btn-primary' : 'btn-outline-secondary' }}"
                         data-filter-name="{{ $filterGroup['name'] }}"
                         data-value="{{ $option['value'] ?? '' }}">
-                    {{ $option['label'] }}
+                    {!! $option['label'] !!}
                 </button>
             @endforeach
         </div>

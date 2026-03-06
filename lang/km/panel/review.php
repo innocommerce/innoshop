@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'Review At',
     'customer'               => 'client',
     'id'                     => 'ID',
     'please_select_customer' => 'Please select Customer',
@@ -18,4 +17,5 @@ return [
     'rating'                 => 'Rating',
     'review'                 => 'Review',
     'review_content'         => 'Review Content',
+    'anonymous_customer'     => 'Anonymous Customer',
 ];

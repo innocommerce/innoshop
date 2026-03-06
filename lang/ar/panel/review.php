@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'وقت التعليق',
     'customer'               => 'العملاء',
     'id'                     => 'ID',
     'please_select_customer' => 'يرجى اختيار العميل',
@@ -18,4 +17,5 @@ return [
     'rating'                 => '评级',
     'review'                 => 'تعليقات',
     'review_content'         => '评论内容',
+    'anonymous_customer'     => 'Anonymous Customer',
 ];

@@ -12,4 +12,5 @@ return [
     'attribute_value' => 'Öznitelik Değeri',
     'name'            => 'Mülkün adı',
     'set_attribute'   => 'Öznitelik Ayarla',
+    'group'           => 'Öznitelik Grubu',
 ];

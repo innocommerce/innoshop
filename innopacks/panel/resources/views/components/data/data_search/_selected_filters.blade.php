@@ -19,7 +19,7 @@
 
     @foreach($activeFilters as $name => $filter)
         <span class="badge bg-light text-dark border selected-filter-tag">
-            {{ $filter['label'] }}: {{ $filter['valueLabel'] }}
+            {{ $filter['label'] }}: {!! $filter['valueLabel'] !!}
             <button type="button" class="btn-close-xs ms-1 remove-filter" data-filter-type="filter" data-field="{{ $name }}">×</button>
         </span>
     @endforeach

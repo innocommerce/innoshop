@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => '評論時間',
     'customer'               => '客戶',
     'id'                     => 'ID',
     'please_select_customer' => '請選擇客戶',
@@ -18,4 +17,5 @@ return [
     'rating'                 => '評級',
     'review'                 => '評論',
     'review_content'         => '評論內容',
+    'anonymous_customer'     => '匿名客戶',
 ];

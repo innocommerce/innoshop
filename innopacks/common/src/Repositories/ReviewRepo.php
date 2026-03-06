@@ -57,9 +57,11 @@ class ReviewRepo extends BaseRepo
             ['value' => '', 'label' => trans('panel/common.all')],
         ];
         for ($i = 1; $i <= 5; $i++) {
+            $stars = str_repeat('<i class="bi bi-star-fill text-warning"></i>', $i)
+                   .str_repeat('<i class="bi bi-star text-muted"></i>', 5 - $i);
             $ratingOptions[] = [
                 'value' => (string) $i,
-                'label' => $i.' '.trans('panel/review.star'),
+                'label' => $stars,
             ];
         }
 

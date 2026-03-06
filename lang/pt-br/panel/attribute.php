@@ -12,4 +12,5 @@ return [
     'name'            => 'Nome do atributo',
     'attribute_value' => 'Valor do atributo',
     'set_attribute'   => 'Definir atributo',
+    'group'           => 'Grupo de atributos',
 ];

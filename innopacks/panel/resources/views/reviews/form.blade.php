@@ -38,17 +38,12 @@
           <div class="mb-3">
             <label class="form-label">
               {{ __('panel/review.customer') }}
-              <span class="text-danger">*</span>
             </label>
             <input type="text" id="customer-autocomplete"
-                   value="{{ old('customer_name', isset($review->customer) ? $review->customer->name : '') }}" 
+                   value="{{ old('customer_name', isset($review->customer) ? $review->customer->name : '') }}"
                    placeholder="{{ __('panel/review.customer') }}"
-                   class="form-control"
-                   required>
-            <input type="hidden" name="customer_id" value="{{ old('customer_id', $review->customer_id) }}" required>
-            <div class="invalid-feedback">
-              {{ __('panel/review.please_select_customer') }}
-            </div>
+                   class="form-control">
+            <input type="hidden" name="customer_id" value="{{ old('customer_id', $review->customer_id ?? 0) }}">
           </div>
         </div>
       </div>

@@ -8,7 +8,6 @@
  */
 
 return [
-    'created_at'             => 'Thời gian bình luận',
     'customer'               => 'Khách hàng',
     'id'                     => 'ID',
     'please_select_customer' => 'Xin vui lòng chọn khách hàng',
@@ -18,4 +17,5 @@ return [
     'rating'                 => 'xếp hạng',
     'review'                 => 'Lời bình luận',
     'review_content'         => 'nội dung đánh giá',
+    'anonymous_customer'     => 'Khách hàng ẩn danh',
 ];

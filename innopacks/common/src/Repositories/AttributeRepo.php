@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Attribute;
+use InnoShop\Common\Repositories\Attribute\GroupRepo;
 use Throwable;
 
 class AttributeRepo extends BaseRepo
@@ -52,12 +53,21 @@ class AttributeRepo extends BaseRepo
      */
     public static function getFilterButtonOptions(): array
     {
+        $groupOptions = [['value' => '', 'label' => trans('panel/common.all')]];
+        $groups       = GroupRepo::getInstance()->getOptions();
+        foreach ($groups as $group) {
+            $groupOptions[] = [
+                'value' => $group['id'],
+                'label' => $group['name'],
+            ];
+        }
+
         $filters = [
             [
                 'name'    => 'attribute_group_id',
                 'label'   => trans('panel/attribute.group'),
                 'type'    => 'button',
-                'options' => [],
+                'options' => $groupOptions,
             ],
         ];
 
@@ -151,6 +161,12 @@ class AttributeRepo extends BaseRepo
             $builder->whereHas('translation', function (Builder $query) use ($searchKeyword) {
                 $query->where('name', 'like', "%{$searchKeyword}%");
             });
+        }
+
+        // Handle attribute_group_id filter
+        $attributeGroupId = $filters['attribute_group_id'] ?? '';
+        if ($attributeGroupId) {
+            $builder->where('attribute_group_id', $attributeGroupId);
         }
 
         return $builder;
