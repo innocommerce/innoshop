@@ -11,4 +11,6 @@ use Illuminate\Support\Facades\Route;
 use Plugin\BankTransfer\Controllers\ReceiptController;
 
 // Bank transfer receipt upload endpoint
-Route::post('/orders/{number}/receipt', [ReceiptController::class, 'upload'])->name('orders.receipt_upload');
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/orders/{number}/receipt', [ReceiptController::class, 'upload'])->name('orders.receipt_upload');
+});

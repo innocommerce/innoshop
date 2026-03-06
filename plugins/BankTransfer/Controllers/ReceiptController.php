@@ -34,6 +34,11 @@ class ReceiptController extends BaseController
                 return json_fail(__('front/order.not_found'), null, 404);
             }
 
+            // Verify ownership
+            if ($order->customer_id !== token_customer_id()) {
+                return json_fail(__('front/order.unauthorized_access'), null, 403);
+            }
+
             // Verify order uses bank transfer payment method
             if ($order->billing_method_code != 'bank_transfer') {
                 return json_fail(__('front/order.invalid_payment_method'), null, 400);
