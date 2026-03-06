@@ -18,9 +18,6 @@ Route::post('/login', [FrontApiControllers\AuthController::class, 'login'])->nam
 Route::post('/register', [FrontApiControllers\AuthController::class, 'register'])->name('login.register');
 Route::post('/sms-code', [FrontApiControllers\AuthController::class, 'sendSmsCode'])->name('sms-code');
 
-Route::post('/upload/images', [FrontApiControllers\UploadController::class, 'images'])->name('upload.images');
-Route::post('/upload/files', [FrontApiControllers\UploadController::class, 'files'])->name('upload.files');
-
 Route::post('/miniapp', [FrontApiControllers\MiniappController::class, 'index'])->name('miniapp.index');
 
 Route::get('/brands', [FrontApiControllers\BrandController::class, 'index'])->name('brands.index');
@@ -43,6 +40,9 @@ Route::get('/checkout/billing_methods', [FrontApiControllers\CheckoutController:
 Route::post('/checkout/quick_confirm', [FrontApiControllers\CheckoutController::class, 'quickConfirm'])->name('checkout.quick_confirm');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::post('/upload/images', [FrontApiControllers\UploadController::class, 'images'])->name('upload.images');
+    Route::post('/upload/files', [FrontApiControllers\UploadController::class, 'files'])->name('upload.files');
 
     Route::get('/account/me', [FrontApiControllers\AccountController::class, 'me'])->name('account.me');
     Route::put('/account/profile', [FrontApiControllers\AccountController::class, 'updateProfile'])->name('account.update_profile');

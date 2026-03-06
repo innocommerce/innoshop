@@ -83,6 +83,10 @@ class OrderReturnController extends BaseController
      */
     public function show(OrderReturn $orderReturn): mixed
     {
+        if ($orderReturn->customer_id !== token_customer_id()) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
         $data = [
             'order_return' => $orderReturn,
             'histories'    => OrderReturnHistory::collection($orderReturn->histories()->get()),
@@ -98,6 +102,10 @@ class OrderReturnController extends BaseController
      */
     public function destroy(OrderReturn $order_return): mixed
     {
+        if ($order_return->customer_id !== token_customer_id()) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
         $order_return->delete();
 
         return delete_json_success();

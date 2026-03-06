@@ -52,6 +52,9 @@ class CartController extends BaseController
     public function update(Request $request, CartItem $cart): mixed
     {
         try {
+            if ($cart->customer_id != token_customer_id()) {
+                throw new \Exception('Cart item does not belong to the customer');
+            }
             $cartData = CartService::getInstance(token_customer_id())->updateCart($cart, $request->all());
 
             return json_success(common_trans('base.updated_success'), $cartData);

@@ -28,6 +28,10 @@ class OrderController extends Controller
         try {
             $order = Order::query()->where('number', $request->number)->firstOrFail();
 
+            if ($order->customer_id !== current_customer_id()) {
+                abort(403, 'Unauthorized access to order payment');
+            }
+
             return PaymentService::getInstance($order)->pay();
         } catch (Exception $e) {
             return $e->getMessage();
@@ -43,6 +47,11 @@ class OrderController extends Controller
     public function numberShow(int $number): mixed
     {
         $order = OrderRepo::getInstance()->getOrderByNumber($number);
+
+        if ($order->customer_id !== current_customer_id()) {
+            abort(403, 'Unauthorized access to order details');
+        }
+
         $order->load(['items', 'fees']);
         $data = [
             'order' => $order,

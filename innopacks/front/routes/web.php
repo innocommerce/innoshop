@@ -52,10 +52,6 @@ Route::get('/payment/success', [Controllers\PaymentController::class, 'success']
 Route::get('/payment/cancel', [Controllers\PaymentController::class, 'cancel'])->name('payment.cancel');
 Route::get('/payment/fail', [Controllers\PaymentController::class, 'fail'])->name('payment.fail');
 
-// Orders
-Route::get('/orders/{number}/pay', [Controllers\OrderController::class, 'pay'])->name('orders.pay');
-Route::get('/orders/{number}', [Controllers\OrderController::class, 'numberShow'])->name('orders.number_show');
-
 // Guest Address
 Route::post('/addresses', [Controllers\AddressesController::class, 'store'])->name('addresses.store');
 Route::put('/addresses/{address}', [Controllers\AddressesController::class, 'update'])->name('addresses.update');
@@ -100,6 +96,12 @@ Route::post('/register/sms-code', [Account\RegisterController::class, 'sendSmsCo
 Route::get('/forgotten', [Account\ForgottenController::class, 'index'])->name('forgotten.index');
 Route::post('/forgotten/verify_code', [Account\ForgottenController::class, 'sendVerifyCode'])->name('forgotten.verify_code');
 Route::post('/forgotten/password', [Account\ForgottenController::class, 'changePassword'])->name('forgotten.password');
+
+// Orders (authenticated)
+Route::middleware('customer_auth:customer')->group(function () {
+    Route::get('/orders/{number}', [Controllers\OrderController::class, 'numberShow'])->name('orders.number_show');
+    Route::get('/orders/{number}/pay', [Controllers\OrderController::class, 'pay'])->name('orders.pay');
+});
 
 Route::prefix('account')
     ->name('account.')

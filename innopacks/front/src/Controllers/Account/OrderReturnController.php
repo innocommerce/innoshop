@@ -81,6 +81,10 @@ class OrderReturnController extends BaseController
      */
     public function show(OrderReturn $orderReturn): mixed
     {
+        if ($orderReturn->customer_id !== current_customer_id()) {
+            abort(403, 'Unauthorized access');
+        }
+
         $data = [
             'order_return' => $orderReturn,
             'histories'    => $orderReturn->histories()->orderByDesc('id')->get(),
@@ -96,6 +100,10 @@ class OrderReturnController extends BaseController
      */
     public function destroy(OrderReturn $order_return): mixed
     {
+        if ($order_return->customer_id !== current_customer_id()) {
+            abort(403, 'Unauthorized action');
+        }
+
         $order_return->delete();
 
         return redirect(account_route('order_returns.index'));

@@ -58,6 +58,10 @@ class ReviewController extends BaseController
      */
     public function destroy(Review $review): mixed
     {
+        if ($review->customer_id !== token_customer_id()) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
         $review->delete();
 
         return delete_json_success();

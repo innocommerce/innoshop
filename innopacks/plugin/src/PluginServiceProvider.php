@@ -371,7 +371,7 @@ class PluginServiceProvider extends ServiceProvider
         $frontApiRoutePath = "$pluginBasePath/$pluginCode/Routes/front-api.php";
         if (file_exists($frontApiRoutePath)) {
             Route::prefix('api')
-                ->middleware('api')
+                ->middleware(['api', 'auth:sanctum'])
                 ->name('api.')
                 ->group(function () use ($frontApiRoutePath) {
                     $this->loadRoutesFrom($frontApiRoutePath);
