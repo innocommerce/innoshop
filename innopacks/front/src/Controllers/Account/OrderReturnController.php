@@ -11,6 +11,7 @@ namespace InnoShop\Front\Controllers\Account;
 
 use Exception;
 use Illuminate\Http\Request;
+use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\OrderReturn;
 use InnoShop\Common\Repositories\Order\ItemRepo;
 use InnoShop\Common\Repositories\OrderRepo;
@@ -66,7 +67,24 @@ class OrderReturnController extends BaseController
         $data = $request->all();
         try {
             $data['customer_id'] = current_customer_id();
-            $orderReturn         = OrderReturnRepo::getInstance()->create($data);
+
+            $orderItemID = $data['order_item_id'];
+            $orderItem   = Item::findOrFail($orderItemID);
+
+            $alreadyReturned = OrderReturn::query()
+                ->where('order_item_id', $orderItemID)
+                ->whereIn('status', ['created', 'pending', 'returned', 'refunded'])
+                ->sum('quantity');
+
+            $newReturnQty = (int) ($data['quantity'] ?? 1);
+
+            if (($alreadyReturned + $newReturnQty) > $orderItem->quantity) {
+                return back()->withInput()->withErrors([
+                    'errors' => 'The total refund amount for this product cannot exceed the order amount!',
+                ]);
+            }
+
+            $orderReturn = OrderReturnRepo::getInstance()->create($data);
 
             return redirect(account_route('order_returns.index'))
                 ->with('instance', $orderReturn);
