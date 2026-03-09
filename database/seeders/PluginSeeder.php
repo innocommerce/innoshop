@@ -46,7 +46,7 @@ class PluginSeeder extends Seeder
     {
         return [
             ['type' => 'shipping', 'code' => 'fixed_shipping', 'priority' => 0],
-            ['type' => 'billing', 'code' => 'bank_transfer', 'priority' => 0],
+            ['type' => 'payment', 'code' => 'bank_transfer', 'priority' => 0],
         ];
     }
 

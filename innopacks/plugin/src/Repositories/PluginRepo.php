@@ -146,7 +146,7 @@ class PluginRepo
     {
         $allPlugins = $this->allPlugins();
 
-        return $allPlugins->where('type', 'billing')->filter(function ($item) {
+        return $allPlugins->where('type', 'payment')->filter(function ($item) {
             $plugin = plugin($item->code);
             if ($plugin) {
                 $item->plugin = $plugin;
