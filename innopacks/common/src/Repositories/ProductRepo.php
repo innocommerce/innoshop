@@ -945,10 +945,15 @@ class ProductRepo extends BaseRepo
 
         foreach ($activeCategories as $category) {
             if ($category->parent_id && isset($itemsById[$category->parent_id])) {
-                if (! isset($itemsById[$category->parent_id]->children)) {
-                    $itemsById[$category->parent_id]->children = collect();
+                $parent = $itemsById[$category->parent_id];
+                // Initialize children collection if not exists
+                if (! isset($parent->children)) {
+                    $parent->children = collect();
                 }
-                $itemsById[$category->parent_id]->children->push($category);
+                // Only push if not already in children (avoid duplicates from eager loading)
+                if (! $parent->children->contains('id', $category->id)) {
+                    $parent->children->push($category);
+                }
             } else {
                 $tree->push($category);
             }
