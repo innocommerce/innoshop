@@ -14,10 +14,13 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use InnoShop\Plugin\Traits\CleansUpExtractedFiles;
 use PhpZip\ZipFile;
 
 class PluginManager
 {
+    use CleansUpExtractedFiles;
+
     protected static ?Collection $plugins = null;
 
     /**
@@ -62,9 +65,10 @@ class PluginManager
 
             $pluginPath = $this->getPluginsDir().DIRECTORY_SEPARATOR.$dirname;
 
-            // Check plugin type before creating plugin instance
+            // Check plugin type before creating plugin instance (apply legacy type mapping)
             $pluginType     = $package['type'] ?? '';
             $normalizedType = strtolower($pluginType);
+            $normalizedType = Plugin::TYPE_MAPPING[$normalizedType] ?? $normalizedType;
             if (! in_array($normalizedType, Plugin::TYPES)) {
                 Log::warning("Plugin invalid type: Directory '{$dirname}' has invalid type '{$pluginType}'. Plugin will be skipped.", [
                     'directory'   => $dirname,
@@ -256,5 +260,8 @@ class PluginManager
 
         $zipFile = new ZipFile;
         $zipFile->openFile($newFilePath)->extractTo(base_path('plugins'));
+
+        // Clean up unnecessary files after extraction
+        $this->cleanupExtractedFiles(base_path('plugins'));
     }
 }

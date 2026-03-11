@@ -58,6 +58,19 @@
           </div>
           <small class="text-muted">{{ __('panel/plugin.cache_ttl_tip') }}</small>
         </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ __('panel/plugin.product_detail_cache_ttl') }}</label>
+          <div class="input-group">
+            <input type="number" 
+                   class="form-control" 
+                   name="marketplace_product_detail_cache_ttl" 
+                   value="{{ old('marketplace_product_detail_cache_ttl', system_setting('marketplace_product_detail_cache_ttl', 300)) }}"
+                   min="0" 
+                   step="60">
+            <span class="input-group-text">{{ __('panel/plugin.seconds') }}</span>
+          </div>
+          <small class="text-muted">{{ __('panel/plugin.product_detail_cache_ttl_tip') }}</small>
+        </div>
         <div class="col-md-12 mb-3">
           <button type="button" 
                   class="btn btn-outline-danger" 

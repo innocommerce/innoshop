@@ -1125,6 +1125,11 @@ if (! function_exists('should_copy_static_file')) {
      */
     function should_copy_static_file(string $sourceFile, string $destFile): bool
     {
+        // copy() cannot copy directories - only files
+        if (file_exists($sourceFile) && is_dir($sourceFile)) {
+            return false;
+        }
+
         $shouldCopy = false;
 
         // Check if destination file doesn't exist or source file is newer
@@ -1139,7 +1144,7 @@ if (! function_exists('should_copy_static_file')) {
         }
 
         // Copy file if needed
-        if ($shouldCopy && file_exists($sourceFile)) {
+        if ($shouldCopy && file_exists($sourceFile) && is_file($sourceFile)) {
             create_directories(dirname($destFile));
 
             return copy($sourceFile, $destFile);
@@ -1198,6 +1203,9 @@ if (! function_exists('theme_image')) {
      */
     function theme_image(string $path, string $theme = '', int $width = 100, int $height = 100): string
     {
+        if (empty($path)) {
+            return image_resize('', $width, $height, 'contain');
+        }
         if (empty($theme)) {
             $theme = system_setting('theme', 'default');
         }

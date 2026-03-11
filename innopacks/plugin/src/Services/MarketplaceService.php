@@ -17,11 +17,14 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use InnoShop\Plugin\Traits\CleansUpExtractedFiles;
 use PhpZip\Exception\ZipException;
 use PhpZip\ZipFile;
 
 class MarketplaceService
 {
+    use CleansUpExtractedFiles;
+
     private string $baseUrl;
 
     private int $page = 1;
@@ -108,6 +111,16 @@ class MarketplaceService
     private function getCacheTtl(): int
     {
         return (int) system_setting('marketplace_cache_ttl', 3600);
+    }
+
+    /**
+     * Get product detail cache TTL (shorter for version freshness)
+     *
+     * @return int
+     */
+    private function getProductDetailCacheTtl(): int
+    {
+        return (int) system_setting('marketplace_product_detail_cache_ttl', 300); // 默认 5 分钟
     }
 
     /**
@@ -239,14 +252,20 @@ class MarketplaceService
 
     /**
      * @param  $id
+     * @param  bool  $forceRefresh  Force refresh cache to get latest version
      * @return mixed
      * @throws ConnectionException
      */
-    public function getProductDetail($id): mixed
+    public function getProductDetail($id, bool $forceRefresh = false): mixed
     {
         $cacheKey = $this->buildCacheKey("product.detail.{$id}");
 
-        if ($this->isCacheEnabled()) {
+        // If force refresh, clear cache first
+        if ($forceRefresh) {
+            $this->clearProductCache($id);
+        }
+
+        if ($this->isCacheEnabled() && ! $forceRefresh) {
             $cacheStore = $this->getCacheStore(['marketplace', 'plugin_market', 'theme_market']);
             $cached     = $cacheStore->get($cacheKey);
             if ($cached !== null) {
@@ -257,17 +276,56 @@ class MarketplaceService
         }
 
         $uri = '/products/'.$id;
-        $this->log('getProductDetail', ['uri' => $uri, 'id' => $id]);
+        $this->log('getProductDetail', ['uri' => $uri, 'id' => $id, 'force_refresh' => $forceRefresh]);
 
         $response = $this->client->get($uri);
         $result   = $this->response($response);
 
+        // Use shorter cache TTL for product detail (for version freshness)
         if ($this->isCacheEnabled() && ! isset($result['error'])) {
             $cacheStore = $this->getCacheStore(['marketplace', 'plugin_market', 'theme_market']);
-            $cacheStore->put($cacheKey, $result, $this->getCacheTtl());
+            $cacheStore->put($cacheKey, $result, $this->getProductDetailCacheTtl());
         }
 
         return $result;
+    }
+
+    /**
+     * Clear cache for a specific product
+     *
+     * @param  int  $productId
+     * @return void
+     */
+    public function clearProductCache(int $productId): void
+    {
+        $cacheKey = $this->buildCacheKey("product.detail.{$productId}");
+
+        if ($this->cacheSupportsTags()) {
+            $cacheStore = $this->getCacheStore(['marketplace', 'plugin_market', 'theme_market']);
+            $cacheStore->forget($cacheKey);
+        } else {
+            Cache::forget($cacheKey);
+        }
+
+        $this->log('Product cache cleared', ['product_id' => $productId]);
+    }
+
+    /**
+     * Clear all marketplace cache
+     *
+     * @return void
+     */
+    public function clearAllCache(): void
+    {
+        if ($this->cacheSupportsTags()) {
+            Cache::tags(['marketplace', 'plugin_market', 'theme_market'])->flush();
+        } else {
+            // For drivers that don't support tags, clear all marketplace.* keys
+            // This is a best-effort approach
+            $this->log('clearAllCache: Cache driver does not support tags, manual cleanup may be needed');
+        }
+
+        $this->log('All marketplace cache cleared');
     }
 
     /**
@@ -402,6 +460,9 @@ class MarketplaceService
             throw new \Exception('Invalid product type!');
         }
 
+        // Clear product cache before download to ensure we get the latest version
+        $this->clearProductCache((int) $id);
+
         $uri = "/products/$id/download";
         $this->log('download', ['uri' => $uri, 'id' => $id, 'type' => $type]);
 
@@ -415,11 +476,11 @@ class MarketplaceService
         $pluginZip = storage_path('app/'.$pluginPath);
         $zipFile   = new ZipFile;
 
-        if ($type == 'plugin') {
-            $zipFile->openFile($pluginZip)->extractTo(base_path('plugins'));
-        } else {
-            $zipFile->openFile($pluginZip)->extractTo(base_path('themes'));
-        }
+        $extractPath = $type == 'plugin' ? base_path('plugins') : base_path('themes');
+        $zipFile->openFile($pluginZip)->extractTo($extractPath);
+
+        // Clean up unnecessary files after extraction
+        $this->cleanupExtractedFiles($extractPath);
     }
 
     /**
