@@ -31,6 +31,16 @@ const config = {
     }
 };
 
+// Add webpack alias for cleaner SCSS imports
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@front': path.resolve(__dirname, 'innopacks/front/resources'),
+            '@theme': path.resolve(__dirname, 'themes/' + config.theme)
+        }
+    }
+});
+
 // Utility functions
 const utils = {
     /**
