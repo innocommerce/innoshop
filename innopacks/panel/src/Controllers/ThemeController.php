@@ -36,8 +36,10 @@ class ThemeController extends BaseController
      */
     public function index(): mixed
     {
-        $data = [
-            'themes' => ThemeService::getInstance()->getListFromPath(),
+        $result = ThemeService::getInstance()->getListFromPath();
+        $data   = [
+            'themes' => $result['themes'],
+            'errors' => $result['errors'],
         ];
 
         return inno_view('panel::themes.index', $data);

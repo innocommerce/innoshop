@@ -202,12 +202,12 @@ class OrderRepo extends BaseRepo
 
         $createdStart = $filters['created_at_start'] ?? '';
         if ($createdStart) {
-            $builder->where('created_at', '>', $createdStart);
+            $builder->where('created_at', '>=', $createdStart);
         }
 
         $createdEnd = $filters['created_at_end'] ?? '';
         if ($createdEnd) {
-            $builder->where('created_at', '<', $createdEnd);
+            $builder->where('created_at', '<=', $createdEnd);
         }
 
         $totalStart = $filters['total_start'] ?? '';

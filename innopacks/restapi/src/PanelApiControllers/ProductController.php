@@ -22,6 +22,9 @@ use Throwable;
 class ProductController extends BaseController
 {
     /**
+     * List products.
+     * GET /api/panel/products
+     *
      * @param  Request  $request
      * @return mixed
      * @throws Exception
@@ -35,6 +38,9 @@ class ProductController extends BaseController
     }
 
     /**
+     * Get products by IDs.
+     * GET /api/panel/products/names?ids=1,2,3
+     *
      * @param  Request  $request
      * @return AnonymousResourceCollection
      * @throws Exception
@@ -47,6 +53,9 @@ class ProductController extends BaseController
     }
 
     /**
+     * Autocomplete by keyword.
+     * GET /api/panel/products/autocomplete?keyword=xxx
+     *
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
@@ -58,7 +67,8 @@ class ProductController extends BaseController
     }
 
     /**
-     * SKU编码自动完成
+     * SKU autocomplete by keyword.
+     * GET /api/panel/products/sku_autocomplete?keyword=xxx
      *
      * @param  Request  $request
      * @return AnonymousResourceCollection
@@ -74,6 +84,135 @@ class ProductController extends BaseController
     }
 
     /**
+     * Get single product by ID with full details.
+     * GET /api/panel/products/{id}
+     *
+     * @param  int  $id
+     * @return mixed
+     */
+    public function show(int $id): mixed
+    {
+        try {
+            $product = ProductRepo::getInstance()->builder()->with('translations')->findOrFail($id);
+
+            $sku  = $product->masterSku;
+            $data = [
+                'id'           => $product->id,
+                'spu_code'     => $product->spu_code,
+                'slug'         => $product->slug,
+                'brand_id'     => $product->brand_id,
+                'price'        => $product->price,
+                'images'       => $product->images,
+                'active'       => (bool) $product->active,
+                'position'     => $product->position,
+                'translations' => $product->translations->map(function ($t) {
+                    return [
+                        'locale'           => $t->locale,
+                        'name'             => $t->name,
+                        'summary'          => $t->summary,
+                        'content'          => $t->content,
+                        'meta_title'       => $t->meta_title,
+                        'meta_description' => $t->meta_description,
+                        'meta_keywords'    => $t->meta_keywords,
+                    ];
+                }),
+            ];
+
+            return json_success('Success', $data);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Create new product.
+     * POST /api/panel/products
+     *
+     * @param  Request  $request
+     * @return mixed
+     * @throws Throwable
+     */
+    public function store(Request $request): mixed
+    {
+        try {
+            $data    = $request->all();
+            $product = ProductImportService::getInstance()->import($data);
+
+            return create_json_success();
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Update product by ID (full update).
+     * PUT /api/panel/products/{id}
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return mixed
+     * @throws Throwable
+     */
+    public function update(Request $request, int $id): mixed
+    {
+        try {
+            $product = ProductRepo::getInstance()->builder()->findOrFail($id);
+            $data    = $request->all();
+
+            ProductImportService::getInstance()->import($data, $product);
+
+            return json_success('Product updated successfully');
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Partial update product by ID.
+     * PATCH /api/panel/products/{id}
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return mixed
+     * @throws Throwable
+     */
+    public function patch(Request $request, int $id): mixed
+    {
+        try {
+            $product = ProductRepo::getInstance()->builder()->findOrFail($id);
+            $data    = $request->all();
+
+            ProductImportService::getInstance()->patch($product, $data);
+
+            return update_json_success();
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Delete product by ID.
+     * DELETE /api/panel/products/{id}
+     *
+     * @param  int  $id
+     * @return mixed
+     */
+    public function destroy(int $id): mixed
+    {
+        try {
+            $product = ProductRepo::getInstance()->builder()->findOrFail($id);
+            ProductRepo::getInstance()->destroy($product);
+
+            return json_success('Product deleted successfully');
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Bulk import products.
+     * POST /api/panel/products/import
+     *
      * @param  Request  $request
      * @return mixed
      * @throws Throwable
@@ -94,53 +233,6 @@ class ProductController extends BaseController
             }
 
             return create_json_success();
-        } catch (Exception $e) {
-            return json_fail($e->getMessage());
-        }
-    }
-
-    /**
-     * @param  Request  $request
-     * @param  string  $spuCode
-     * @return mixed
-     * @throws Throwable
-     */
-    public function update(Request $request, string $spuCode): mixed
-    {
-        try {
-            $data    = $request->all();
-            $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
-            if (! $product) {
-                throw new Exception('Product not found!');
-            }
-
-            ProductImportService::getInstance()->import($data, $product);
-
-            return create_json_success();
-        } catch (Exception $e) {
-            return json_fail($e->getMessage());
-        }
-    }
-
-    /**
-     * @param  Request  $request
-     * @param  string  $spuCode
-     * @return mixed
-     * @throws Throwable
-     */
-    public function patch(Request $request, string $spuCode): mixed
-    {
-        try {
-            $data    = $request->all();
-            $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
-            if (! $product) {
-                throw new Exception('Product not found!');
-            }
-
-            $data['spu_code'] = $spuCode;
-            ProductImportService::getInstance()->patch($product, $data);
-
-            return update_json_success();
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

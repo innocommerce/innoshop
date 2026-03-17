@@ -41,4 +41,13 @@ return [
     'no_demo_data_description'      => 'The system checks for SQL files in the theme directory themes/:code/demo/sql/. If this directory exists and contains *.sql files, it is considered to have demo data.',
     'theme_description'             => 'Theme Description',
     'version'                       => 'Version',
+    'error_theme_validation'        => 'The following themes have configuration errors and were skipped',
+    'theme_guide_title'             => 'Theme Development Guide',
+    'theme_guide_desc'              => 'When developing custom themes, please follow these guidelines:',
+    'theme_guide_preview'           => 'Recommended 900×600 pixels, 3:2 ratio, place in public/images/ directory',
+    'theme_guide_preview_title'     => 'Preview Image (preview.png/jpg)',
+    'theme_guide_icon'              => 'Recommended 60×60 pixels, square',
+    'theme_guide_icon_title'        => 'Theme Icon (icon.png)',
+    'theme_guide_config'            => 'The "code" must match the folder name and be all lowercase',
+    'theme_guide_config_title'      => 'config.json Configuration',
 ];

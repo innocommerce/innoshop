@@ -20,18 +20,26 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/admin', [PanelApiControllers\AuthController::class, 'admin'])->name('auth.admin');
 
     Route::get('/dashboard', [PanelApiControllers\DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard/{date}', [PanelApiControllers\DashboardController::class, 'daily'])->name('dashboard.daily');
 
     Route::get('/products', [PanelApiControllers\ProductController::class, 'index'])->name('products.index');
     Route::get('/products/names', [PanelApiControllers\ProductController::class, 'names'])->name('products.names');
     Route::get('/products/autocomplete', [PanelApiControllers\ProductController::class, 'autocomplete'])->name('products.autocomplete');
     Route::get('/products/sku_autocomplete', [PanelApiControllers\ProductController::class, 'skuAutocomplete'])->name('products.sku_autocomplete');
+    Route::post('/products', [PanelApiControllers\ProductController::class, 'store'])->name('products.store');
     Route::post('/products/import', [PanelApiControllers\ProductController::class, 'import'])->name('products.import');
-    Route::put('/products/{spu_code}', [PanelApiControllers\ProductController::class, 'update'])->name('products.update');
-    Route::patch('/products/{spu_code}', [PanelApiControllers\ProductController::class, 'patch'])->name('products.patch');
+    Route::get('/products/{id}', [PanelApiControllers\ProductController::class, 'show'])->name('products.show');
+    Route::put('/products/{id}', [PanelApiControllers\ProductController::class, 'update'])->name('products.update');
+    Route::patch('/products/{id}', [PanelApiControllers\ProductController::class, 'patch'])->name('products.patch');
+    Route::delete('/products/{id}', [PanelApiControllers\ProductController::class, 'destroy'])->name('products.destroy');
 
     Route::get('/categories', [PanelApiControllers\CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/names', [PanelApiControllers\CategoryController::class, 'names'])->name('categories.names');
     Route::get('/categories/autocomplete', [PanelApiControllers\CategoryController::class, 'autocomplete'])->name('categories.autocomplete');
+    Route::get('/categories/{id}', [PanelApiControllers\CategoryController::class, 'show'])->name('categories.show');
+    Route::post('/categories', [PanelApiControllers\CategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{id}', [PanelApiControllers\CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{id}', [PanelApiControllers\CategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::get('/brands', [PanelApiControllers\BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands/names', [PanelApiControllers\BrandController::class, 'names'])->name('brands.name');

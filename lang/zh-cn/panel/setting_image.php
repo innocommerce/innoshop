@@ -25,4 +25,6 @@ return [
     'image_resize_mode_width_cover_desc'  => '拉伸到目标宽度，保持宽高比，高度裁剪或填充以适配',
     'image_resize_mode_height_cover'      => '高度覆盖 (Height Cover)',
     'image_resize_mode_height_cover_desc' => '拉伸到目标高度，保持宽高比，宽度裁剪或填充以适配',
+    'upload_max_file_size'                => '上传文件大小限制',
+    'upload_max_file_size_desc'           => '普通用户上传文件的最大大小（单位：KB），默认 2048（2MB）。注意：实际上传还受限于 PHP 配置（upload_max_filesize: :upload_max_filesize, post_max_size: :post_max_size）',
 ];

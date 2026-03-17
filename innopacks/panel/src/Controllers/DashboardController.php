@@ -11,7 +11,6 @@ namespace InnoShop\Panel\Controllers;
 
 use InnoShop\Panel\Repositories\Analytics\CustomerRepo;
 use InnoShop\Panel\Repositories\Analytics\OrderRepo as AnalyticsOrderRepo;
-use InnoShop\Panel\Repositories\Analytics\ProductRepo as AnalyticsProductRepo;
 use InnoShop\Panel\Repositories\DashboardRepo;
 
 class DashboardController extends BaseController
@@ -60,7 +59,7 @@ class DashboardController extends BaseController
             'customers' => [
                 'latest_month' => $customerTrends,
             ],
-            'top_sale_products' => (new AnalyticsProductRepo)->getTopSaleProducts(7),
+            'top_sale_products' => DashboardRepo::getInstance()->getTopSellingProducts($dateRange, 7),
             'top_customers'     => $topCustomers,
         ];
 

@@ -25,4 +25,9 @@ return [
     'traffic_trends'    => '流量趋势',
     'top_customers'     => '高价值客户',
     'last_30_days'      => '近 30 天',
+    'revenue'           => '营收',
+    'orders'            => '订单',
+    'orders_unit'       => '单',
+    'customers_unit'    => '人',
+    'visits'            => '访问量',
 ];

@@ -45,4 +45,13 @@ return [
     'error_demo_image_copy_failed'  => '复制图片失败: :file',
     'error_export_failed'           => '导出失败',
     'demo_installed'                => '演示数据安装成功',
+    'error_theme_validation'        => '以下主题配置有误，已被跳过',
+    'theme_guide_title'             => '主题开发指南',
+    'theme_guide_desc'              => '开发自定义主题时，请遵循以下规范：',
+    'theme_guide_preview'           => '建议尺寸 900×600 像素，3:2 比例，放置于 public/images/ 目录',
+    'theme_guide_preview_title'     => '预览图 (preview.png/jpg)',
+    'theme_guide_icon'              => '建议尺寸 60×60 像素，正方形',
+    'theme_guide_icon_title'        => '主题图标 (icon.png)',
+    'theme_guide_config'            => 'code 必须与文件夹名一致，且全部小写',
+    'theme_guide_config_title'      => 'config.json 配置',
 ];

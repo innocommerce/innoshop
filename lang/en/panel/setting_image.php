@@ -25,4 +25,6 @@ return [
     'image_resize_mode_width_cover_desc'  => 'Stretch to target width while maintaining aspect ratio, crop or pad height to fit',
     'image_resize_mode_height_cover'      => 'Height Cover',
     'image_resize_mode_height_cover_desc' => 'Stretch to target height while maintaining aspect ratio, crop or pad width to fit',
+    'upload_max_file_size'                => 'Upload File Size Limit',
+    'upload_max_file_size_desc'           => 'Maximum file size for regular user uploads (in KB), default 2048 (2MB). Note: actual upload is also limited by PHP settings (upload_max_filesize: :upload_max_filesize, post_max_size: :post_max_size)',
 ];

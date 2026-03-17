@@ -9,15 +9,34 @@
 
 namespace InnoShop\RestAPI\PanelApiControllers;
 
-use Illuminate\Support\Facades\Auth;
+use InnoShop\Panel\Repositories\DashboardRepo;
 
 class DashboardController extends BaseController
 {
     /**
+     * Get yesterday's report.
+     *
      * @return mixed
      */
     public function index(): mixed
     {
-        return read_json_success(Auth::guard('admin')->user());
+        $dashboardRepo = new DashboardRepo;
+        $report        = $dashboardRepo->getDailyReport();
+
+        return read_json_success($report);
+    }
+
+    /**
+     * Get report for a specific date.
+     *
+     * @param  string  $date
+     * @return mixed
+     */
+    public function daily(string $date): mixed
+    {
+        $dashboardRepo = new DashboardRepo;
+        $report        = $dashboardRepo->getDailyReport($date);
+
+        return read_json_success($report);
     }
 }

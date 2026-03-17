@@ -115,8 +115,8 @@
                       @endif
                     </td>
                     <td>
-                      <a class="text-dark text-decoration-none" href="{{ panel_route('products.edit', $product['product_id']) }}">
-                        {{ $product['summary'] }}
+                      <a class="text-dark text-decoration-none" href="{{ panel_route('products.edit', $product['id']) }}">
+                        {{ sub_string($product['name'], 50) }}
                       </a>
                       <div class="text-muted small">{{ currency_format($product['total_amount']) }}</div>
                     </td>

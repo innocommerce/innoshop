@@ -15,7 +15,64 @@ use InnoShop\Plugin\Services\MarketplaceService;
 class ThemeMarketController
 {
     /**
-     * Get plugins market categories and items.
+     * Get search field options for theme market
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        return [
+            ['value' => 'all', 'label' => trans('panel/plugin.search_field_all')],
+            ['value' => 'name', 'label' => trans('panel/plugin.search_field_name')],
+            ['value' => 'author', 'label' => trans('panel/plugin.search_field_author')],
+            ['value' => 'description', 'label' => trans('panel/plugin.search_field_description')],
+        ];
+    }
+
+    /**
+     * Get filter button options for theme market
+     *
+     * @param  array  $categories
+     * @return array
+     */
+    public static function getFilterButtonOptions(array $categories = []): array
+    {
+        $filters = [
+            [
+                'name'    => 'tab',
+                'label'   => trans('panel/plugin.filter_type'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => 'featured', 'label' => trans('panel/plugin.featured')],
+                    ['value' => 'popular', 'label' => trans('panel/plugin.popular')],
+                    ['value' => 'recommended', 'label' => trans('panel/plugin.recommended')],
+                ],
+            ],
+        ];
+
+        // Add category filter if categories available
+        if (! empty($categories)) {
+            $categoryOptions = [['value' => '', 'label' => trans('panel/common.all')]];
+            foreach ($categories as $category) {
+                $categoryOptions[] = [
+                    'value' => $category['slug'] ?? '',
+                    'label' => $category['translation']['name'] ?? $category['name'] ?? '',
+                ];
+            }
+            $filters[] = [
+                'name'    => 'category',
+                'label'   => trans('panel/common.category'),
+                'type'    => 'button',
+                'options' => $categoryOptions,
+            ];
+        }
+
+        return $filters;
+    }
+
+    /**
+     * Get themes market categories and items.
      *
      * @param  Request  $request
      * @return mixed
@@ -25,6 +82,7 @@ class ThemeMarketController
         try {
             $categorySlug = $request->get('category');
             $search       = $request->get('search');
+            $searchField  = $request->get('search_field', 'all');
             $tab          = $request->get('tab', 'all');
 
             $marketService = MarketplaceService::getInstance()
@@ -33,7 +91,6 @@ class ThemeMarketController
 
             // Build query parameters
             // Use parent_slug=themes to filter only themes
-            // The server-side MarketplaceService will handle the conversion
             $params = ['parent_slug' => 'themes'];
             if ($categorySlug) {
                 $params['category_slug'] = $categorySlug;
@@ -41,24 +98,33 @@ class ThemeMarketController
             if ($search) {
                 $params['search'] = $search;
             }
+            if ($searchField && $searchField !== 'all') {
+                $params['search_field'] = $searchField;
+            }
             if ($tab && $tab !== 'all') {
                 $params['tab'] = $tab;
             }
 
-            // Always use getMarketProductsWithParams to ensure type filtering
-            $products = $marketService->getMarketProductsWithParams($params);
+            // Get categories and products
+            // Limit categories to 4 for cleaner UI
+            $categories = $marketService->getThemeCategories(10);
+            $products   = $marketService->getMarketProductsWithParams($params);
 
             $data = [
-                'categories' => $marketService->getThemeCategories(),
-                'products'   => $products,
+                'categories'    => $categories,
+                'products'      => $products,
+                'searchFields'  => self::getSearchFieldOptions(),
+                'filterButtons' => self::getFilterButtonOptions($categories['data'] ?? []),
             ];
 
             return inno_view('plugin::theme_market.index', $data);
         } catch (\Exception $e) {
             return inno_view('plugin::theme_market.index', [
-                'categories' => ['data' => []],
-                'products'   => ['data' => []],
-                'error'      => $e->getMessage(),
+                'categories'    => ['data' => []],
+                'products'      => ['data' => []],
+                'searchFields'  => self::getSearchFieldOptions(),
+                'filterButtons' => [],
+                'error'         => $e->getMessage(),
             ])->with('error', $e->getMessage());
         }
     }

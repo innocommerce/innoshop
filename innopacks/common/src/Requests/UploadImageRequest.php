@@ -50,7 +50,8 @@ class UploadImageRequest extends FormRequest
             // Convert to KB for Laravel validation
             $maxSize = (int) ($maxSizeBytes / 1024);
         } else {
-            $maxSize = 2048; // 2MB for regular users
+            // For regular users, read from system settings, default 2MB
+            $maxSize = (int) system_setting('upload_max_file_size', 2048);
         }
 
         return [

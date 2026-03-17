@@ -33,8 +33,8 @@
     };
 
     const lang = {
-      hint: '{{ __('panel/common.hint') }}',
-      delete_confirm: '{{ __('panel/common.delete_confirm') }}',
+      hint: '{{ __('common/base.hint') }}',
+      delete_confirm: '{{ __('common/base.delete_confirm') }}',
       confirm: '{{ __('common/base.confirm') }}',
       cancel: '{{ __('common/base.cancel') }}',
     }

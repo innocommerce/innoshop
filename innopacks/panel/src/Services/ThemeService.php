@@ -13,6 +13,7 @@ namespace InnoShop\Panel\Services;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use InnoShop\Panel\Domain\Theme;
 use InnoShop\Panel\Repositories\ThemeRepo;
 
@@ -27,18 +28,46 @@ class ThemeService extends BaseService
 
     /**
      * Get all themes with preview and selected status
-     * @return array
+     * @return array{themes: array, errors: array}
      * @throws Exception
      */
     public function getListFromPath(): array
     {
         $current = system_setting('theme');
         $dirs    = ThemeRepo::getInstance()->getThemeDirs();
+        $errors  = [];
 
-        return collect($dirs)->map(function (string $dir) use ($current) {
-            $config = ThemeRepo::getInstance()->readConfig($dir);
-            $this->validateConfig($config);
-            $this->validateCode($config, strtolower(basename($dir)));
+        $themes = collect($dirs)->map(function (string $dir) use ($current, &$errors) {
+            $folderName = basename($dir);
+            $themeName  = $folderName;
+
+            try {
+                $config = ThemeRepo::getInstance()->readConfig($dir);
+
+                // Try to get theme name for better error messages
+                if (isset($config['name'])) {
+                    $localeCode = locale_code();
+                    $themeName  = is_array($config['name'])
+                        ? ($config['name'][$localeCode] ?? $config['name']['en'] ?? $folderName)
+                        : $config['name'];
+                }
+
+                $this->validateConfig($config);
+                $this->validateCode($config, strtolower($folderName));
+            } catch (Exception $e) {
+                Log::warning("Theme validation failed: {$e->getMessage()}", [
+                    'directory' => $folderName,
+                    'path'      => $dir,
+                ]);
+                $errors[] = [
+                    'name'   => $themeName,
+                    'folder' => $folderName,
+                    'error'  => $e->getMessage(),
+                ];
+
+                return null;
+            }
+
             $theme = new Theme(
                 code: $config['code'],
                 names: $config['name'],
@@ -54,7 +83,12 @@ class ThemeService extends BaseService
             );
 
             return $theme->toArray();
-        })->all();
+        })->filter()->values()->all();
+
+        return [
+            'themes' => $themes,
+            'errors' => $errors,
+        ];
     }
 
     /**
@@ -66,6 +100,7 @@ class ThemeService extends BaseService
     {
         return collect($this->getThemeDirs())
             ->map(fn (string $dir) => $this->readTheme($dir))
+            ->filter()
             ->map(fn (Theme $theme) => $theme->toArray())
             ->all();
     }
@@ -118,11 +153,21 @@ class ThemeService extends BaseService
      * Read theme information from directory
      * @throws Exception
      */
-    protected function readTheme(string $dir, ?string $folderName = null): Theme
+    protected function readTheme(string $dir, ?string $folderName = null): ?Theme
     {
-        $config = $this->readConfig($dir);
-        $this->validateConfig($config);
-        $this->validateCode($config, $folderName ?: strtolower(basename($dir)));
+        try {
+            $config = $this->readConfig($dir);
+            $this->validateConfig($config);
+            $this->validateCode($config, $folderName ?: strtolower(basename($dir)));
+        } catch (Exception $e) {
+            $folder = $folderName ?: basename($dir);
+            Log::warning("Theme validation failed: {$e->getMessage()}", [
+                'directory' => $folder,
+                'path'      => $dir,
+            ]);
+
+            return null;
+        }
 
         return Theme::fromArray([
             ...$config,

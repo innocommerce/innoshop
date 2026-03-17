@@ -52,7 +52,8 @@
       <div class="text-secondary"><small>{{ __('panel/setting.file_manager_enable_crop_desc') }}</small></div>
     </div>
 
-    <div class="text-secondary mt-3">
+    <!-- Resize Mode Description -->
+    <div class="text-secondary mb-4">
       <small>
         <strong>{{ __('panel/setting_image.image_resize_mode_cover') }}:</strong> {{ __('panel/setting_image.image_resize_mode_cover_desc') }}<br>
         <strong>{{ __('panel/setting_image.image_resize_mode_contain') }}:</strong> {{ __('panel/setting_image.image_resize_mode_contain_desc') }}<br>
@@ -62,6 +63,28 @@
         <strong>{{ __('panel/setting_image.image_resize_mode_height_cover') }}:</strong> {{ __('panel/setting_image.image_resize_mode_height_cover_desc') }}
       </small>
     </div>
+
+    <!-- Upload File Size Limit -->
+    <x-panel::form.row :title="__('panel/setting_image.upload_max_file_size')">
+      <div class="input-group" style="max-width: 200px;">
+        <input type="number"
+               id="upload_max_file_size"
+               name="upload_max_file_size"
+               value="{{ old('upload_max_file_size', system_setting('upload_max_file_size', 2048)) }}"
+               class="form-control"
+               min="128"
+               max="102400">
+        <span class="input-group-text">KB</span>
+      </div>
+      <div class="text-secondary mt-1">
+        <small>
+          {{ __('panel/setting_image.upload_max_file_size_desc', [
+            'upload_max_filesize' => ini_get('upload_max_filesize'),
+            'post_max_size' => ini_get('post_max_size')
+          ]) }}
+        </small>
+      </div>
+    </x-panel::form.row>
   </div>
 </div>
 

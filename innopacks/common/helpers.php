@@ -1198,13 +1198,14 @@ if (! function_exists('theme_image')) {
      * @param  string  $theme  Theme name (default taken from system settings)
      * @param  int  $width  Desired width for resizing
      * @param  int  $height  Desired height for resizing
+     * @param  string  $mode  Resize mode: cover, contain, resize, pad, width-cover, height-cover
      * @return string URL to the resized image
      * @throws Exception
      */
-    function theme_image(string $path, string $theme = '', int $width = 100, int $height = 100): string
+    function theme_image(string $path, string $theme = '', int $width = 100, int $height = 100, string $mode = 'contain'): string
     {
         if (empty($path)) {
-            return image_resize('', $width, $height, 'contain');
+            return image_resize('', $width, $height, $mode);
         }
         if (empty($theme)) {
             $theme = system_setting('theme', 'default');
@@ -1218,11 +1219,11 @@ if (! function_exists('theme_image')) {
         $fileExists = should_copy_static_file($sourceFile, $destFile);
 
         if (! $fileExists) {
-            return image_resize('', $width, $height, 'contain');
+            return image_resize('', $width, $height, $mode);
         }
 
         // ImageService will automatically validate and use placeholder if image is invalid
-        return image_resize($destThemePath, $width, $height, 'contain');
+        return image_resize($destThemePath, $width, $height, $mode);
     }
 }
 

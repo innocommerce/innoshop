@@ -182,14 +182,17 @@ class MarketplaceService
     }
 
     /**
-     * Build cache key with prefix
+     * Build cache key with prefix and API URL hash
      *
      * @param  string  $key
      * @return string
      */
     private function buildCacheKey(string $key): string
     {
-        return 'marketplace.'.$key;
+        // Include API URL hash to ensure cache is invalidated when API URL changes
+        $apiUrlHash = md5(config('innoshop.api_url'));
+
+        return 'marketplace.'.$apiUrlHash.'.'.$key;
     }
 
     /**
@@ -215,21 +218,23 @@ class MarketplaceService
     }
 
     /**
+     * @param  int  $limit  Limit the number of categories returned (0 = no limit)
      * @return mixed
      * @throws ConnectionException
      */
-    public function getPluginCategories(): mixed
+    public function getPluginCategories(int $limit = 0): mixed
     {
-        return $this->getMarketCategories('plugins');
+        return $this->getMarketCategories('plugins', $limit);
     }
 
     /**
+     * @param  int  $limit  Limit the number of categories returned (0 = no limit)
      * @return mixed
      * @throws ConnectionException
      */
-    public function getThemeCategories(): mixed
+    public function getThemeCategories(int $limit = 0): mixed
     {
-        return $this->getMarketCategories('themes');
+        return $this->getMarketCategories('themes', $limit);
     }
 
     /**
@@ -332,25 +337,29 @@ class MarketplaceService
      * Get market categories.
      *
      * @param  $parentSlug
+     * @param  int  $limit  Limit the number of categories returned
      * @return mixed
      * @throws ConnectionException
      */
-    private function getMarketCategories($parentSlug): mixed
+    private function getMarketCategories($parentSlug, int $limit = 0): mixed
     {
-        $cacheKey = $this->buildCacheKey("categories.{$parentSlug}");
+        $cacheKey = $this->buildCacheKey("categories.{$parentSlug}.{$limit}");
 
         if ($this->isCacheEnabled()) {
             $cacheStore = $this->getCacheStore(['marketplace', 'plugin_market']);
             $cached     = $cacheStore->get($cacheKey);
             if ($cached !== null) {
-                $this->log('getMarketCategories (cached)', ['parentSlug' => $parentSlug]);
+                $this->log('getMarketCategories (cached)', ['parentSlug' => $parentSlug, 'limit' => $limit]);
 
                 return $cached;
             }
         }
 
         $uri = "/categories?parent_slug=$parentSlug";
-        $this->log('getMarketCategories', ['uri' => $uri, 'parentSlug' => $parentSlug]);
+        if ($limit > 0) {
+            $uri .= "&limit=$limit";
+        }
+        $this->log('getMarketCategories', ['uri' => $uri, 'parentSlug' => $parentSlug, 'limit' => $limit]);
 
         $response = $this->client->get($uri);
         $result   = $this->response($response);

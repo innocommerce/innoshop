@@ -15,6 +15,63 @@ use InnoShop\Plugin\Services\MarketplaceService;
 class PluginMarketController
 {
     /**
+     * Get search field options for plugin market
+     *
+     * @return array
+     */
+    public static function getSearchFieldOptions(): array
+    {
+        return [
+            ['value' => 'all', 'label' => trans('panel/plugin.search_field_all')],
+            ['value' => 'name', 'label' => trans('panel/plugin.search_field_name')],
+            ['value' => 'author', 'label' => trans('panel/plugin.search_field_author')],
+            ['value' => 'description', 'label' => trans('panel/plugin.search_field_description')],
+        ];
+    }
+
+    /**
+     * Get filter button options for plugin market
+     *
+     * @param  array  $categories
+     * @return array
+     */
+    public static function getFilterButtonOptions(array $categories = []): array
+    {
+        $filters = [
+            [
+                'name'    => 'tab',
+                'label'   => trans('panel/plugin.filter_type'),
+                'type'    => 'button',
+                'options' => [
+                    ['value' => '', 'label' => trans('panel/common.all')],
+                    ['value' => 'featured', 'label' => trans('panel/plugin.featured')],
+                    ['value' => 'popular', 'label' => trans('panel/plugin.popular')],
+                    ['value' => 'recommended', 'label' => trans('panel/plugin.recommended')],
+                ],
+            ],
+        ];
+
+        // Add category filter if categories available
+        if (! empty($categories)) {
+            $categoryOptions = [['value' => '', 'label' => trans('panel/common.all')]];
+            foreach ($categories as $category) {
+                $categoryOptions[] = [
+                    'value' => $category['slug'] ?? '',
+                    'label' => $category['translation']['name'] ?? $category['name'] ?? '',
+                ];
+            }
+            $filters[] = [
+                'name'    => 'category',
+                'label'   => trans('panel/common.category'),
+                'type'    => 'button',
+                'options' => $categoryOptions,
+            ];
+        }
+
+        return $filters;
+    }
+
+    /**
      * Get plugins market categories and items.
      *
      * @param  Request  $request
@@ -25,6 +82,7 @@ class PluginMarketController
         try {
             $categorySlug = $request->get('category');
             $search       = $request->get('search');
+            $searchField  = $request->get('search_field', 'all');
             $tab          = $request->get('tab', 'all');
 
             $marketService = MarketplaceService::getInstance()
@@ -41,24 +99,37 @@ class PluginMarketController
             if ($search) {
                 $params['search'] = $search;
             }
+            $searchField = $request->get('search_field', 'all');
+            if ($searchField) {
+                $params['search_field'] = $searchField;
+            }
+            if ($searchField) {
+                $params['search_field'] = $searchField;
+            }
             if ($tab && $tab !== 'all') {
                 $params['tab'] = $tab;
             }
 
             // Always use getMarketProductsWithParams to ensure type filtering
-            $products = $marketService->getMarketProductsWithParams($params);
+            // Limit categories to 6 for cleaner UI
+            $categories = $marketService->getPluginCategories(10);
+            $products   = $marketService->getMarketProductsWithParams($params);
 
             $data = [
-                'categories' => $marketService->getPluginCategories(),
-                'products'   => $products,
+                'categories'    => $categories,
+                'products'      => $products,
+                'searchFields'  => self::getSearchFieldOptions(),
+                'filterButtons' => self::getFilterButtonOptions($categories['data'] ?? []),
             ];
 
             return inno_view('plugin::plugin_market.index', $data);
         } catch (\Exception $e) {
             return inno_view('plugin::plugin_market.index', [
-                'categories' => ['data' => []],
-                'products'   => ['data' => []],
-                'error'      => $e->getMessage(),
+                'categories'    => ['data' => []],
+                'products'      => ['data' => []],
+                'searchFields'  => self::getSearchFieldOptions(),
+                'filterButtons' => [],
+                'error'         => $e->getMessage(),
             ])->with('error', $e->getMessage());
         }
     }
