@@ -116,7 +116,6 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/themes/settings', [Controllers\ThemeController::class, 'settings'])->name('themes_settings.index');
         Route::put('/themes/settings', [Controllers\ThemeController::class, 'updateSettings'])->name('themes_settings.update');
         Route::post('/themes/{code}/import-demo', [Controllers\ThemeController::class, 'importDemo'])->name('themes.import_demo');
-        Route::get('/themes/{code}/export-sql', [Controllers\ThemeController::class, 'exportSql'])->name('themes.export_sql');
 
         Route::get('/account', [Controllers\AccountController::class, 'index'])->name('account.index');
         Route::put('/account', [Controllers\AccountController::class, 'update'])->name('account.update');

@@ -80,7 +80,7 @@
                 <div class="theme-info-item p-3 bg-light rounded">
                   <div class="text-secondary small text-uppercase mb-2 fw-semibold">
                     <i class="bi bi-code-square me-1"></i>
-                    {{ __('panel/common.code') }}
+                    {{ __('common/base.code') }}
                   </div>
                   <div class="fs-6 fw-medium font-monospace">{{ $theme['code'] }}</div>
                 </div>
@@ -146,19 +146,13 @@
                 </div>
               </div>
 
-              <div class="text-center d-flex gap-3 justify-content-center">
-                <button type="button" 
-                        class="btn btn-danger" 
+              <div class="text-center">
+                <button type="button"
+                        class="btn btn-danger"
                         data-bs-toggle="modal"
                         data-bs-target="#importDemoConfirm{{ $theme['code'] }}">
                   <i class="bi bi-arrow-up me-2"></i>
                   {{ __('panel/themes.import_demo_data') }}
-                </button>
-                <button type="button" 
-                        class="btn btn-primary theme-export-sql-btn"
-                        data-code="{{ $theme['code'] }}">
-                  <i class="bi bi-download me-2"></i>
-                  {{ __('panel/themes.export_sql') }}
                 </button>
               </div>
             @else
@@ -175,14 +169,6 @@
                 </div>
               </div>
 
-              <div class="text-center">
-                <button type="button" 
-                        class="btn btn-primary theme-export-sql-btn"
-                        data-code="{{ $theme['code'] }}">
-                  <i class="bi bi-download me-2"></i>
-                  {{ __('panel/themes.export_sql') }}
-                </button>
-              </div>
             @endif
           </div>
         </div>
@@ -232,41 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
         layer.closeAll('loading');
       });
     });
-  }
-
-  // Handle theme export SQL button click
-  const exportSqlBtn = document.querySelector('#themeDetail{{ $theme['code'] }} .theme-export-sql-btn');
-  if (exportSqlBtn) {
-    exportSqlBtn.addEventListener('click', function() {
-      const code = this.getAttribute('data-code');
-      
-      layer.load(2, {shade: [0.3, '#fff']});
-      
-      // Create download link
-      let url = '{{ panel_route('themes.export_sql', $theme['code']) }}';
-      
-      // Ensure URL uses the same protocol as current page
-      if (url.startsWith('http://') && window.location.protocol === 'https:') {
-        url = url.replace('http://', 'https://');
-      } else if (url.startsWith('https://') && window.location.protocol === 'http:') {
-        url = url.replace('https://', 'http://');
-      }
-      
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = code + '_demo.sql';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Close loading after a short delay to allow download to start
-      setTimeout(() => {
-        layer.closeAll('loading');
-        inno.msg('{{ __('panel/themes.export_started') }}');
-      }, 500);
-    });
-  }
-
 });
 </script>
 @endpush

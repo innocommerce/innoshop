@@ -96,11 +96,13 @@ class HomeRepo
             'id'             => $product->id,
             'name'           => $productName,
             'image'          => $image,
+            'url'            => $product->url,
             'supplier'       => $supplier,
             'supplier_badge' => $supplierBadge,
             'price'          => number_format($price, 2),
             'moq'            => $moq,
             'category'       => '', // 可以从分类关系中获取
+            'sku_id'         => $masterSku ? $masterSku->id : null,
         ];
     }
 

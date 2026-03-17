@@ -358,3 +358,73 @@ When creating a new plugin:
 - [ ] Added copyright header to all PHP files
 - [ ] Ran `composer pint` to check code style
 - [ ] Ran `composer phpstan:plugins` to check for issues
+
+---
+
+# Theme System
+
+Themes are located in `/themes/` directory (e.g., `electronics`, `petnow`).
+
+## Theme Directory Structure
+
+```
+themes/electronics/
+├── demo/
+│   └── Seeder.php           # Demo data seeder (closure pattern, NOT class-based)
+├── views/
+│   ├── layouts/
+│   ├── components/
+│   └── home.blade.php
+├── css/
+│   ├── app.scss
+│   └── components/
+├── js/
+│   └── app.js
+├── config.json
+└── public/                  # Compiled assets for distribution
+```
+
+## Theme Seeder Pattern
+
+**IMPORTANT**: Theme demo seeders use **closure pattern**, NOT PSR-4 classes. Do not use namespaces for theme seeders.
+
+Reference: `themes/electronics/demo/Seeder.php`
+
+```php
+<?php
+use InnoShop\Common\Repositories\SettingRepo;
+
+return function (string $dir): void {
+    $themeCode = basename($dir);
+
+    // Your seeder code
+    SettingRepo::getInstance()->updateSystemValue('setting_name', 'value');
+};
+```
+
+## Theme Build System
+
+```bash
+# Build specific theme
+THEME=electronics npm run dev
+
+# Build all themes
+npm run dev
+```
+
+The build system:
+- Compiles `themes/{name}/css/` and `themes/{name}/js/`
+- Outputs to `public/static/themes/{name}/`
+- Copies assets to `themes/{name}/public/` for distribution
+
+## Theme Helpers
+
+- `theme_asset($path, $themeCode)` - Get theme asset path without image processing
+- `theme_image($path, $themeCode)` - Get theme image with processing (resizes, etc.)
+- `inno_view($view, $data)` - Render view with theme fallback
+
+## Frontend Components
+
+Default frontend components are in `innopacks/front/resources/views/shared/`:
+- `product.blade.php` - Product grid item with links and add-to-cart
+- Use these as reference when creating custom theme components

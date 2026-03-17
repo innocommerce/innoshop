@@ -77,14 +77,6 @@ class ThemeControllerTest extends TestCase
     }
 
     #[Test]
-    public function test_export_sql_method_exists(): void
-    {
-        $this->assertTrue($this->reflection->hasMethod('exportSql'));
-        $method = $this->reflection->getMethod('exportSql');
-        $this->assertTrue($method->isPublic());
-    }
-
-    #[Test]
     public function test_constructor_accepts_theme_service(): void
     {
         $constructor = $this->reflection->getConstructor();

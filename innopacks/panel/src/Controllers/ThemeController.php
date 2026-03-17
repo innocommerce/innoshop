@@ -133,26 +133,4 @@ class ThemeController extends BaseController
         }
     }
 
-    /**
-     * Export current data as SQL file
-     * @param  string  $code
-     * @return mixed
-     */
-    public function exportSql(string $code): mixed
-    {
-        try {
-            $demoService = new \InnoShop\Panel\Services\ThemeDemoService;
-            $sqlPath     = $demoService->exportSql($code);
-
-            if (! file_exists($sqlPath)) {
-                throw new Exception(__('panel/themes.error_export_failed'));
-            }
-
-            $fileName = basename($sqlPath);
-
-            return response()->download($sqlPath, $fileName)->deleteFileAfterSend(true);
-        } catch (Exception $e) {
-            return json_fail($e->getMessage());
-        }
-    }
 }
