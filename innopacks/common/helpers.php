@@ -343,7 +343,7 @@ if (! function_exists('locales')) {
     {
         try {
             return LocaleRepo::getInstance()->getActiveList();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return collect([]);
         }
     }
@@ -1650,6 +1650,6 @@ if (! function_exists('smart_log')) {
         }
 
         // Log the message using Laravel's Log facade
-        \Illuminate\Support\Facades\Log::{$level}($message, $context);
+        Log::{$level}($message, $context);
     }
 }

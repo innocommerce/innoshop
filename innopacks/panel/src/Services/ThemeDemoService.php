@@ -118,7 +118,8 @@ class ThemeDemoService extends BaseService
      */
     protected function copyImagesFromSource(string $sourceDir, string $targetRelativePath): void
     {
-        $pattern   = $sourceDir.'/**/*.{jpg,png,gif,webp,jpeg}';
+        // Match files in current directory AND subdirectories
+        $pattern   = $sourceDir.'/{*,**/*}.{jpg,png,gif,webp,jpeg,svg}';
         $images    = glob($pattern, GLOB_BRACE) ?: [];
 
         foreach ($images as $image) {

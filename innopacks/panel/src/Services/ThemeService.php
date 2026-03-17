@@ -39,16 +39,24 @@ class ThemeService extends BaseService
             $folderName = basename($dir);
             $themeName  = $folderName;
             $themeCode  = strtolower($folderName);
+            $localeCode = locale_code();
 
             try {
                 $config = ThemeRepo::getInstance()->readConfig($dir);
 
                 // Try to get theme name for better error messages
                 if (isset($config['name'])) {
-                    $localeCode = locale_code();
-                    $themeName  = is_array($config['name'])
+                    $themeName = is_array($config['name'])
                         ? ($config['name'][$localeCode] ?? $config['name']['en'] ?? $folderName)
                         : $config['name'];
+                }
+
+                // Get localized description
+                $themeDescription = '';
+                if (isset($config['description'])) {
+                    $themeDescription = is_array($config['description'])
+                        ? ($config['description'][$localeCode] ?? $config['description']['en'] ?? '')
+                        : $config['description'];
                 }
 
                 $this->validateConfig($config);
@@ -56,13 +64,14 @@ class ThemeService extends BaseService
 
                 // Return theme data
                 return [
-                    'code'     => $themeCode,
-                    'name'     => $themeName,
-                    'selected' => $current === $themeCode,
-                    'preview'  => $this->getPreviewPath($dir),
-                    'has_demo' => $this->hasDemo($dir),
-                    'version'  => $config['version'] ?? '',
-                    'author'   => $config['author'] ?? [],
+                    'code'        => $themeCode,
+                    'name'        => $themeName,
+                    'description' => $themeDescription,
+                    'selected'    => $current === $themeCode,
+                    'preview'     => $this->getPreviewPath($dir),
+                    'has_demo'    => $this->hasDemo($dir),
+                    'version'     => $config['version'] ?? '',
+                    'author'      => $config['author'] ?? [],
                 ];
             } catch (Exception $e) {
                 Log::warning("Theme validation failed: {$e->getMessage()}", [
@@ -89,22 +98,30 @@ class ThemeService extends BaseService
      */
     public function getPreviewPath(string $dir): string
     {
-        // Check public/images/preview.jpg (standard location)
-        $previewImage = $dir.'/public/images/preview.jpg';
-        if (file_exists($previewImage)) {
-            return 'images/preview.jpg';
+        $extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+        // Check public/images/preview.{ext} (standard location)
+        foreach ($extensions as $ext) {
+            $previewImage = $dir.'/public/images/preview.'.$ext;
+            if (file_exists($previewImage)) {
+                return 'images/preview.'.$ext;
+            }
         }
 
-        // Check images/preview.jpg (alternative location)
-        $previewImage = $dir.'/images/preview.jpg';
-        if (file_exists($previewImage)) {
-            return 'images/preview.jpg';
+        // Check images/preview.{ext} (alternative location)
+        foreach ($extensions as $ext) {
+            $previewImage = $dir.'/images/preview.'.$ext;
+            if (file_exists($previewImage)) {
+                return 'images/preview.'.$ext;
+            }
         }
 
-        // Check preview.jpg in root (simple location)
-        $previewImage = $dir.'/preview.jpg';
-        if (file_exists($previewImage)) {
-            return 'preview.jpg';
+        // Check preview.{ext} in root (simple location)
+        foreach ($extensions as $ext) {
+            $previewImage = $dir.'/preview.'.$ext;
+            if (file_exists($previewImage)) {
+                return 'preview.'.$ext;
+            }
         }
 
         return '';
