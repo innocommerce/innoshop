@@ -32,6 +32,7 @@ return [
     'products'                        => 'Products',
     'refresh'                         => 'Refresh',
     'register'                        => 'Register',
+    'search'                          => 'Search',
     'search_results'                  => 'Search Results',
     'service_unavailable'             => 'Service Unavailable',
     'service_unavailable_description' => 'The service is temporarily unavailable. Please try again later.',

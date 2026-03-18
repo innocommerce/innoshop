@@ -32,6 +32,7 @@ return [
     'products'                        => '商品',
     'refresh'                         => '刷新',
     'register'                        => '注册',
+    'search'                          => '搜索',
     'search_results'                  => '搜索结果',
     'service_unavailable'             => '服务暂不可用',
     'service_unavailable_description' => '服务暂时不可用，请稍后再试。',
