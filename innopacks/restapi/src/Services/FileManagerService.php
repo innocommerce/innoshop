@@ -550,7 +550,7 @@ class FileManagerService implements FileManagerInterface
             }
 
             return $item;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning('Skipping directory due to access restriction:', [
                 'directory' => $directory,
                 'error'     => $e->getMessage(),
@@ -592,7 +592,7 @@ class FileManagerService implements FileManagerInterface
                     'mime'         => 'directory',
                     'created_time' => @filemtime($realDirectory) ?: time(),
                 ];
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::warning('Skipping directory due to access restriction:', [
                     'directory' => $directory,
                     'error'     => $e->getMessage(),
@@ -637,7 +637,7 @@ class FileManagerService implements FileManagerInterface
                 $fileInfo                 = $this->handleImage($fileName, $baseName);
                 $fileInfo['created_time'] = @filemtime($realFile) ?: time();
                 $images[]                 = $fileInfo;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::warning('Skipping file due to access restriction:', [
                     'file'  => $file,
                     'error' => $e->getMessage(),

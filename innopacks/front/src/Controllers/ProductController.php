@@ -18,6 +18,8 @@ use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\ReviewRepo;
 use InnoShop\Common\Resources\ProductVariable;
 use InnoShop\Common\Resources\SkuListItem;
+use InnoShop\Common\Services\EventTrackingService;
+use InnoShop\Common\Services\RequestFilterParser;
 use InnoShop\Front\Traits\FilterSidebarTrait;
 
 class ProductController extends Controller
@@ -33,7 +35,7 @@ class ProductController extends Controller
     public function index(Request $request): mixed
     {
         // Use RequestFilterParser to extract filter conditions
-        $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
+        $filterParser = new RequestFilterParser;
         $filters      = $filterParser->extractFilters($request, [
             'keyword',
             'sort',
@@ -113,7 +115,7 @@ class ProductController extends Controller
         $product->increment('viewed');
 
         // Track product view event
-        $eventService = new \InnoShop\Common\Services\EventTrackingService;
+        $eventService = new EventTrackingService;
         $eventService->trackProductView($product->id, request());
 
         $reviews    = ReviewRepo::getInstance()->getListByProduct($product, 10);

@@ -38,7 +38,7 @@ class ForgottenController extends Controller
             AccountService::getInstance()->sendVerifyCode($email);
 
             return json_success(front_trans('forgotten.verification_code_sent'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }
@@ -61,7 +61,7 @@ class ForgottenController extends Controller
             AccountService::getInstance()->verifyUpdatePassword($code, $email, $password);
 
             return json_success(front_trans('forgotten.password_updated'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

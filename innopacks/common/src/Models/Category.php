@@ -30,7 +30,7 @@ class Category extends BaseModel
         static::saving(function ($category) {
             // Check parent cannot be itself
             if ($category->parent_id && $category->parent_id == $category->id) {
-                throw new \Exception(trans('panel/common.category_parent_self'));
+                throw new Exception(trans('panel/common.category_parent_self'));
             }
 
             // Check for circular references
@@ -40,7 +40,7 @@ class Category extends BaseModel
 
                 while ($currentParent) {
                     if (in_array($currentParent->id, $visited)) {
-                        throw new \Exception(trans('panel/common.category_circular_reference'));
+                        throw new Exception(trans('panel/common.category_circular_reference'));
                     }
                     $visited[]     = $currentParent->id;
                     $currentParent = $currentParent->parent;

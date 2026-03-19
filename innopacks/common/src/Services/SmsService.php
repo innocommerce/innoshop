@@ -12,7 +12,12 @@ namespace InnoShop\Common\Services;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\VerifyCode;
+use InnoShop\Common\Repositories\SmsRepo;
 use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\GatewayErrorException;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\Strategies\OrderStrategy;
+use Psr\Http\Message\ResponseInterface;
 
 class SmsService
 {
@@ -195,7 +200,7 @@ class SmsService
                 'gateway'      => $gateway,
                 'result'       => $result,
             ]);
-        } catch (\Overtrue\EasySms\Exceptions\NoGatewayAvailableException $e) {
+        } catch (NoGatewayAvailableException $e) {
             // Get detailed error messages from all failed gateways
             $exceptions    = $e->getExceptions();
             $errorMessages = [];
@@ -216,7 +221,7 @@ class SmsService
 
             Log::error("SMS gateway error: {$errorMessage}");
             throw new Exception($errorMessage);
-        } catch (\Overtrue\EasySms\Exceptions\GatewayErrorException $e) {
+        } catch (GatewayErrorException $e) {
             // Handle gateway-specific errors
             $errorMessage = $this->extractDetailedError($e, $gateway ?? 'unknown');
             Log::error("SMS gateway error: {$errorMessage}", ['exception' => $e]);
@@ -239,7 +244,7 @@ class SmsService
         $config = [
             'timeout' => 5.0,
             'default' => [
-                'strategy' => \Overtrue\EasySms\Strategies\OrderStrategy::class,
+                'strategy' => OrderStrategy::class,
                 'gateways' => [$gateway],
             ],
             'gateways' => [],
@@ -510,7 +515,7 @@ class SmsService
      */
     private function getSmsData(string $gateway, string $message, string $code, string $type): array
     {
-        $smsRepo = \InnoShop\Common\Repositories\SmsRepo::getInstance();
+        $smsRepo = SmsRepo::getInstance();
 
         // Gateways that require template format
         if ($smsRepo->requiresTemplate($gateway)) {
@@ -628,11 +633,11 @@ class SmsService
     /**
      * Extract detailed error message from exception
      *
-     * @param  \Exception  $exception
+     * @param  Exception  $exception
      * @param  string  $gateway
      * @return string
      */
-    private function extractDetailedError(\Exception $exception, string $gateway): string
+    private function extractDetailedError(Exception $exception, string $gateway): string
     {
         $errorMessage = $exception->getMessage();
 
@@ -654,7 +659,7 @@ class SmsService
 
             // Try to get HTTP response
             if ($reflection->hasMethod('getResponse')) {
-                /** @var \Psr\Http\Message\ResponseInterface|null $response */
+                /** @var ResponseInterface|null $response */
                 $response = $reflection->getMethod('getResponse')->invoke($exception);
                 if ($response && method_exists($response, 'getBody')) {
                     $body     = $response->getBody()->getContents();
@@ -667,7 +672,7 @@ class SmsService
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // If reflection fails, just return the original message
         }
 

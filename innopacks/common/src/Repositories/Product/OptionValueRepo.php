@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use InnoShop\Common\Models\Option;
 use InnoShop\Common\Models\Product\OptionValue;
 use InnoShop\Common\Repositories\BaseRepo;
 
@@ -134,7 +135,7 @@ class OptionValueRepo extends BaseRepo
             }
 
             // Get option required status from options table
-            $option   = \InnoShop\Common\Models\Option::find($optionId);
+            $option   = Option::find($optionId);
             $required = $option ? $option->required : false;
 
             // Create product option record (match table columns)

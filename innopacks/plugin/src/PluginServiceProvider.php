@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use InnoShop\Panel\Middleware\SetPanelLocale;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Core\PluginManager;
+use InnoShop\Plugin\Hooks\MarketplaceSettingsHook;
 
 class PluginServiceProvider extends ServiceProvider
 {
@@ -174,7 +175,7 @@ class PluginServiceProvider extends ServiceProvider
             if (method_exists($className, 'init')) {
                 try {
                     (new $className)->init();
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::error("Failed to boot plugin: {$pluginCode} - {$e->getMessage()}");
                 }
             }
@@ -579,7 +580,7 @@ class PluginServiceProvider extends ServiceProvider
      */
     private function registerMarketplaceSettingsHook(): void
     {
-        $hook = new \InnoShop\Plugin\Hooks\MarketplaceSettingsHook;
+        $hook = new MarketplaceSettingsHook;
         $hook->init();
     }
 

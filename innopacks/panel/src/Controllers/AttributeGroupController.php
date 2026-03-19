@@ -11,7 +11,6 @@ namespace InnoShop\Panel\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Models\Attribute\Group;
 use InnoShop\Common\Repositories\Attribute\GroupRepo;
 use Throwable;
@@ -38,7 +37,7 @@ class AttributeGroupController extends BaseController
      * @param  Group  $attributeGroup
      * @return Group
      */
-    public function show(Attribute\Group $attributeGroup): Group
+    public function show(Group $attributeGroup): Group
     {
         return $attributeGroup->load(['translations']);
     }
@@ -65,7 +64,7 @@ class AttributeGroupController extends BaseController
      * @return mixed
      * @throws Exception
      */
-    public function update(Request $request, Attribute\Group $attributeGroup): mixed
+    public function update(Request $request, Group $attributeGroup): mixed
     {
         try {
             $attributeGroup = GroupRepo::getInstance()->update($attributeGroup, $request->all());
@@ -80,7 +79,7 @@ class AttributeGroupController extends BaseController
      * @param  Group  $attributeGroup
      * @return mixed
      */
-    public function destroy(Attribute\Group $attributeGroup): mixed
+    public function destroy(Group $attributeGroup): mixed
     {
         $attributeGroup->translations()->delete();
         $attributeGroup->delete();

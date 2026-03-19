@@ -10,6 +10,7 @@
 namespace InnoShop\DevTools\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InnoShop\DevTools\Services\ScaffoldService;
 
 class MakeTheme extends Command
@@ -51,7 +52,7 @@ class MakeTheme extends Command
             $service->generateTheme($name, $options);
 
             $this->info('Theme created successfully!');
-            $this->line('Theme path: themes/'.\Illuminate\Support\Str::snake($name));
+            $this->line('Theme path: themes/'.Str::snake($name));
 
             return Command::SUCCESS;
         } catch (\Exception $e) {

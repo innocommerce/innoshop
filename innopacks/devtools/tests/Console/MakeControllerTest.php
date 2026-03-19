@@ -9,6 +9,7 @@
 
 namespace InnoShop\DevTools\Tests\Console;
 
+use Illuminate\Console\Command;
 use InnoShop\DevTools\Console\Commands\MakeController;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +30,7 @@ class MakeControllerTest extends TestCase
     public function test_command_extends_illuminate_command(): void
     {
         $reflection = new \ReflectionClass(MakeController::class);
-        $this->assertTrue($reflection->isSubclassOf(\Illuminate\Console\Command::class));
+        $this->assertTrue($reflection->isSubclassOf(Command::class));
     }
 
     #[Test]

@@ -10,7 +10,9 @@
 namespace InnoShop\Plugin\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use InnoShop\Common\Repositories\SettingRepo;
@@ -77,7 +79,7 @@ class MarketplaceController
     {
         try {
             $baseUrl  = config('innoshop.api_url');
-            $response = \Illuminate\Support\Facades\Http::baseUrl($baseUrl)
+            $response = Http::baseUrl($baseUrl)
                 ->withOptions(['verify' => false])
                 ->get('/api/domains/token');
 
@@ -112,7 +114,7 @@ class MarketplaceController
             if (in_array($driver, $supportedDrivers)) {
                 // Use tags if supported
                 try {
-                    \Illuminate\Support\Facades\Cache::tags(['marketplace', 'plugin_market', 'theme_market'])->flush();
+                    Cache::tags(['marketplace', 'plugin_market', 'theme_market'])->flush();
                 } catch (\Exception $e) {
                     // Fallback if tags still fail
                     Log::warning('Cache tags flush failed, using prefix method', [
@@ -178,10 +180,10 @@ class MarketplaceController
                 // For file driver, we need to clear the entire cache directory
                 // This is a limitation - file driver doesn't support pattern matching
                 // We'll clear all cache as a workaround
-                \Illuminate\Support\Facades\Cache::flush();
+                Cache::flush();
             } else {
                 // For other drivers, try to flush all cache
-                \Illuminate\Support\Facades\Cache::flush();
+                Cache::flush();
             }
         } catch (\Exception $e) {
             // If table doesn't exist or query fails, log the error

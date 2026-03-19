@@ -12,6 +12,10 @@ namespace InnoShop\Panel\Repositories\Analytics;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Models\Order;
+use InnoShop\Common\Models\Order\Item;
+use InnoShop\Common\Models\Product;
+use InnoShop\Common\Models\Product\Translation;
 use InnoShop\Panel\Repositories\BaseRepo;
 
 class ProductRepo extends BaseRepo
@@ -174,10 +178,10 @@ class ProductRepo extends BaseRepo
     {
         $prefix = DB::getTablePrefix();
 
-        $orderItemModel   = new \InnoShop\Common\Models\Order\Item;
-        $orderModel       = new \InnoShop\Common\Models\Order;
-        $productModel     = new \InnoShop\Common\Models\Product;
-        $translationModel = new \InnoShop\Common\Models\Product\Translation;
+        $orderItemModel   = new Item;
+        $orderModel       = new Order;
+        $productModel     = new Product;
+        $translationModel = new Translation;
 
         // Get table names without prefix (Laravel adds prefix automatically for join/table)
         $orderItemTable   = $orderItemModel->getTable();
@@ -291,8 +295,8 @@ class ProductRepo extends BaseRepo
 
         if (! empty($productIds)) {
             $prefix         = DB::getTablePrefix();
-            $orderItemTable = (new \InnoShop\Common\Models\Order\Item)->getTable();
-            $orderTable     = (new \InnoShop\Common\Models\Order)->getTable();
+            $orderItemTable = (new Item)->getTable();
+            $orderTable     = (new Order)->getTable();
 
             // For raw SQL, we need to add prefix manually
             $rawOrderItemTable = $prefix.$orderItemTable;

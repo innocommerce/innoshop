@@ -14,6 +14,7 @@ use InnoShop\Common\Libraries\Currency;
 use InnoShop\Common\Models\Country;
 use InnoShop\Front\Services\PaymentService;
 use Stripe\Charge;
+use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
@@ -222,10 +223,10 @@ class StripeService extends PaymentService
      * 创建 Stripe Checkout Session
      *
      * @param  array  $options  配置选项
-     * @return \Stripe\Checkout\Session
+     * @return Session
      * @throws ApiErrorException
      */
-    public function createCheckoutSession(array $options = []): \Stripe\Checkout\Session
+    public function createCheckoutSession(array $options = []): Session
     {
         $currency = $this->order->currency_code;
         if (! in_array($currency, self::ZERO_DECIMAL)) {

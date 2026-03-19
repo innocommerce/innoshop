@@ -11,6 +11,7 @@ namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use InnoShop\Common\Repositories\OrderRepo;
 
 class PaymentController extends Controller
@@ -19,7 +20,7 @@ class PaymentController extends Controller
      * Payment success page
      *
      * @param  Request  $request
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function success(Request $request)
     {
@@ -33,7 +34,7 @@ class PaymentController extends Controller
      * Payment fail page
      *
      * @param  Request  $request
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function fail(Request $request)
     {
@@ -47,7 +48,7 @@ class PaymentController extends Controller
      * Payment cancel page
      *
      * @param  Request  $request
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function cancel(Request $request)
     {

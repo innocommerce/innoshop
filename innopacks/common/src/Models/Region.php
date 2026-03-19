@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use InnoShop\Common\Models\Region\State;
 
 class Region extends BaseModel
 {
@@ -24,6 +25,6 @@ class Region extends BaseModel
      */
     public function regionStates(): HasMany
     {
-        return $this->hasMany(\InnoShop\Common\Models\Region\State::class);
+        return $this->hasMany(State::class);
     }
 }

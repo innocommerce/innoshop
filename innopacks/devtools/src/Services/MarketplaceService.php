@@ -11,6 +11,8 @@ namespace InnoShop\DevTools\Services;
 
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -18,7 +20,7 @@ class MarketplaceService
 {
     private string $baseUrl;
 
-    private \Illuminate\Http\Client\PendingRequest $client;
+    private PendingRequest $client;
 
     public function __construct()
     {
@@ -86,10 +88,10 @@ class MarketplaceService
     /**
      * Handle response.
      *
-     * @param  \Illuminate\Http\Client\Response  $response
+     * @param  Response  $response
      * @return mixed
      */
-    private function response(\Illuminate\Http\Client\Response $response): mixed
+    private function response(Response $response): mixed
     {
         $this->log('response', [
             'status' => $response->status(),

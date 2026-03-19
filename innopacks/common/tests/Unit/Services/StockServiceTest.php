@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Tests\Unit\Services;
 
+use InnoShop\Common\Services\StockService;
 use PHPUnit\Framework\TestCase;
 
 class StockServiceTest extends TestCase
@@ -18,7 +19,7 @@ class StockServiceTest extends TestCase
      */
     public function test_cache_ttl_constant(): void
     {
-        $this->assertEquals(300, \InnoShop\Common\Services\StockService::CACHE_TTL);
+        $this->assertEquals(300, StockService::CACHE_TTL);
     }
 
     /**

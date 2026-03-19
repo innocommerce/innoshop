@@ -247,6 +247,6 @@ class WithdrawalRepo extends BaseRepo
         ];
 
         // Create transaction record, TransactionRepo will automatically sync user balance
-        \InnoShop\Common\Repositories\Customer\TransactionRepo::getInstance()->create($transactionData);
+        TransactionRepo::getInstance()->create($transactionData);
     }
 }

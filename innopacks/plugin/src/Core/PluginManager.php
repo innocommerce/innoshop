@@ -84,7 +84,7 @@ class PluginManager
 
             try {
                 $plugin = new Plugin($pluginPath, $package);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error('The Plugin: '.$dirname.' - '.$e->getMessage());
 
                 continue;

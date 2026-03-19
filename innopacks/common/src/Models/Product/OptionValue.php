@@ -12,6 +12,7 @@ namespace InnoShop\Common\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use InnoShop\Common\Models\Option;
 use InnoShop\Common\Models\Product;
 
 /**
@@ -56,7 +57,7 @@ class OptionValue extends Model
      */
     public function option(): BelongsTo
     {
-        return $this->belongsTo(\InnoShop\Common\Models\Option::class);
+        return $this->belongsTo(Option::class);
     }
 
     /**

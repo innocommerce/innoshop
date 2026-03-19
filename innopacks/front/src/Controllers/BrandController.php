@@ -16,6 +16,7 @@ use InnoShop\Common\Models\Brand;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Services\RequestFilterParser;
 use InnoShop\Front\Traits\FilterSidebarTrait;
 
 class BrandController extends Controller
@@ -75,7 +76,7 @@ class BrandController extends Controller
         }
 
         // Use RequestFilterParser to handle filter logic
-        $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
+        $filterParser = new RequestFilterParser;
         $filters      = $filterParser->extractFilters($request, [
             'brand_id',
             'keyword',

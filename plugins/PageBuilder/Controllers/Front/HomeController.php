@@ -11,6 +11,7 @@ namespace Plugin\PageBuilder\Controllers\Front;
 
 use Exception;
 use InnoShop\Front\Controllers\BaseController;
+use Plugin\PageBuilder\Repositories\DemoRepo;
 use Plugin\PageBuilder\Services\DesignService;
 
 class HomeController extends BaseController
@@ -25,7 +26,7 @@ class HomeController extends BaseController
         $device  = request()->get('device', 'pc');
 
         if (empty($modules) || empty($modules['modules'])) {
-            $demoData         = \Plugin\PageBuilder\Repositories\DemoRepo::getHomeDemoData();
+            $demoData         = DemoRepo::getHomeDemoData();
             $processedModules = [];
             foreach ($demoData as $demo) {
                 $moduleCode = $demo['code'] ?? '';

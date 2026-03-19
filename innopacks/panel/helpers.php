@@ -85,7 +85,7 @@ if (! function_exists('panel_locale_direction')) {
     function panel_locale_direction(): string
     {
         $localeCode = panel_locale_code();
-        $rtlCodes   = array_keys(\InnoShop\Common\Repositories\LocaleRepo::getRtlLanguages());
+        $rtlCodes   = array_keys(InnoShop\Common\Repositories\LocaleRepo::getRtlLanguages());
 
         return in_array($localeCode, $rtlCodes) ? 'rtl' : 'ltr';
     }
@@ -136,7 +136,7 @@ if (! function_exists('panel_route')) {
         $panelName = panel_name();
         try {
             return route($panelName.'.'.$name, $parameters, $absolute);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return route($panelName.'.dashboard.index');
         }
 

@@ -14,6 +14,7 @@ use Exception;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\VerifyCode;
 use InnoShop\Common\Repositories\CustomerRepo;
+use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Common\Services\SmsService;
 use Throwable;
 
@@ -62,7 +63,7 @@ class AccountService extends BaseService
         $customer = CustomerRepo::getInstance()->create($customerData);
 
         // Track register event
-        $eventService = new \InnoShop\Common\Services\EventTrackingService;
+        $eventService = new EventTrackingService;
         $eventService->trackRegister($customer->id, request());
 
         fire_hook_action('front.service.account.register', $customer);
@@ -134,7 +135,7 @@ class AccountService extends BaseService
         $smsService->deleteCode($callingCode, $telephone);
 
         // Track register event
-        $eventService = new \InnoShop\Common\Services\EventTrackingService;
+        $eventService = new EventTrackingService;
         $eventService->trackRegister($customer->id, request());
 
         fire_hook_action('front.service.account.register', $customer);

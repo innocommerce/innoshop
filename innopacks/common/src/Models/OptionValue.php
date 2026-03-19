@@ -47,7 +47,7 @@ class OptionValue extends Model
      */
     public function productOptionValues(): HasMany
     {
-        return $this->hasMany(\InnoShop\Common\Models\Product\OptionValue::class);
+        return $this->hasMany(Product\OptionValue::class);
     }
 
     /**

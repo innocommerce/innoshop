@@ -11,6 +11,7 @@ namespace InnoShop\Common\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use InnoShop\Common\Models\Cart\OptionValue;
 
 /**
  * @property int $id
@@ -58,7 +59,7 @@ class CartItem extends BaseModel
      */
     public function optionValues(): HasMany
     {
-        return $this->hasMany(\InnoShop\Common\Models\Cart\OptionValue::class, 'cart_item_id', 'id');
+        return $this->hasMany(OptionValue::class, 'cart_item_id', 'id');
     }
 
     public function getSubtotalAttribute(): float

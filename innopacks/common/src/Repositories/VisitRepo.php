@@ -169,7 +169,7 @@ class VisitRepo extends BaseRepo
     public function getConversionFunnel(array $filters = []): array
     {
         // Use event-based funnel analysis (more accurate)
-        $eventRepo = new \InnoShop\Common\Repositories\VisitEventRepo;
+        $eventRepo = new VisitEventRepo;
 
         return $eventRepo->getConversionFunnel($filters);
     }

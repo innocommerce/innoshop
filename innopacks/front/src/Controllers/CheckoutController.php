@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Exceptions\Unauthorized;
 use InnoShop\Common\Services\CheckoutService;
+use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Front\Requests\CheckoutConfirmRequest;
 use Throwable;
@@ -30,7 +31,7 @@ class CheckoutController extends Controller
     {
         try {
             // Track checkout start event
-            $eventService = new \InnoShop\Common\Services\EventTrackingService;
+            $eventService = new EventTrackingService;
             $eventService->trackCheckoutStart(request());
 
             $checkout = CheckoutService::getInstance();

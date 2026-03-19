@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Tests\Unit\Repositories;
 
+use InnoShop\Common\Repositories\ProductRepo;
 use PHPUnit\Framework\TestCase;
 
 class ProductRepoTest extends TestCase
@@ -29,7 +30,7 @@ class ProductRepoTest extends TestCase
             'pt.name',
         ];
 
-        $this->assertEquals($expectedFields, \InnoShop\Common\Repositories\ProductRepo::AVAILABLE_SORT_FIELDS);
+        $this->assertEquals($expectedFields, ProductRepo::AVAILABLE_SORT_FIELDS);
     }
 
     /**

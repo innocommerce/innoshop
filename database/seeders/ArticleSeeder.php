@@ -184,7 +184,7 @@ class ArticleSeeder extends Seeder
     }
 
     /**
-     * @return \int[][]
+     * @return int[][]
      */
     private function getArticleTags(): array
     {

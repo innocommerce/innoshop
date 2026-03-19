@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Models\Order;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Order;
 
@@ -32,7 +33,7 @@ class Payment extends BaseModel
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function order()
     {

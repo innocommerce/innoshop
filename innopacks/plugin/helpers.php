@@ -8,6 +8,7 @@
  */
 
 use Barryvdh\Debugbar\Facades\Debugbar;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InnoShop\Common\Services\ImageService;
@@ -280,20 +281,20 @@ if (! function_exists('add_model_relation')) {
      *
      * @param  string  $modelClass  The model class name (e.g., Product::class)
      * @param  string  $relationName  The name of the relation (e.g., 'seller')
-     * @param  \Closure  $callback  The closure that defines the relation
+     * @param  Closure  $callback  The closure that defines the relation
      * @param  array  $options  Additional options:
      *                          - 'override' (bool): Allow overriding existing relation (default: false)
      * @return bool Returns true if relation was added successfully, false otherwise
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    function add_model_relation(string $modelClass, string $relationName, \Closure $callback, array $options = []): bool
+    function add_model_relation(string $modelClass, string $relationName, Closure $callback, array $options = []): bool
     {
         if (! class_exists($modelClass)) {
-            throw new \InvalidArgumentException("Model class {$modelClass} does not exist");
+            throw new InvalidArgumentException("Model class {$modelClass} does not exist");
         }
 
-        if (! is_subclass_of($modelClass, \Illuminate\Database\Eloquent\Model::class)) {
-            throw new \InvalidArgumentException("{$modelClass} must be an Eloquent Model");
+        if (! is_subclass_of($modelClass, Model::class)) {
+            throw new InvalidArgumentException("{$modelClass} must be an Eloquent Model");
         }
 
         $allowOverride = $options['override'] ?? false;
@@ -329,7 +330,7 @@ if (! function_exists('add_model_relations')) {
         $results = [];
 
         foreach ($relations as $relationName => $callback) {
-            if (! ($callback instanceof \Closure)) {
+            if (! ($callback instanceof Closure)) {
                 if (config('app.debug')) {
                     Log::warning("Invalid callback for relation {$relationName} on {$modelClass}");
                 }

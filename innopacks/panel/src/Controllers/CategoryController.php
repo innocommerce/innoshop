@@ -141,7 +141,7 @@ class CategoryController extends BaseController
     {
         try {
             if ($category->children()->count()) {
-                throw new \Exception(panel_trans('category.has_children'));
+                throw new Exception(panel_trans('category.has_children'));
             }
             CategoryRepo::getInstance()->destroy($category);
 

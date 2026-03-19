@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Tests\Unit\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
 use InnoShop\Common\Repositories\BaseRepo;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +23,7 @@ class BaseRepoTest extends TestCase
         // Create a concrete implementation for testing
         $repo = new class extends BaseRepo
         {
-            protected string $model = \Illuminate\Database\Eloquent\Model::class;
+            protected string $model = Model::class;
 
             protected string $table = 'test_table';
 
@@ -42,7 +43,7 @@ class BaseRepoTest extends TestCase
     {
         $repo = new class extends BaseRepo
         {
-            protected string $model = \Illuminate\Database\Eloquent\Model::class;
+            protected string $model = Model::class;
 
             protected string $table = 'test_table';
 
@@ -70,7 +71,7 @@ class BaseRepoTest extends TestCase
     {
         $repo = new class extends BaseRepo
         {
-            protected string $model = \Illuminate\Database\Eloquent\Model::class;
+            protected string $model = Model::class;
 
             protected string $table = 'test_table';
 

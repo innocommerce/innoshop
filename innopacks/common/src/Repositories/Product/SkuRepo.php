@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Repositories\Product;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Repositories\BaseRepo;
@@ -61,7 +62,7 @@ class SkuRepo extends BaseRepo
      * Search SKUs by keyword.
      *
      * @param  ?string  $keyword
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function searchByKeyword(?string $keyword, $limit = 10)
     {

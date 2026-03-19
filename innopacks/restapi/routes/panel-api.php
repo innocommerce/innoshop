@@ -10,6 +10,7 @@
 use Illuminate\Support\Facades\Route;
 use InnoShop\RestAPI\Middleware\EnsureUserIsAdmin;
 use InnoShop\RestAPI\PanelApiControllers;
+use InnoShop\RestAPI\PanelApiControllers\FileManagerController;
 
 Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('base.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
@@ -92,19 +93,19 @@ Route::middleware($middlewares)->group(function () {
     Route::put('/customers/{tag}', [PanelApiControllers\CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{tag}', [PanelApiControllers\CustomerController::class, 'destroy'])->name('customers.destroy');
 
-    Route::get('/file_manager/files', [PanelApiControllers\FileManagerController::class, 'getFiles'])->name('file_manager.get_files');
-    Route::get('/file_manager/directories', [PanelApiControllers\FileManagerController::class, 'getDirectories'])->name('file_manager.get_directories');
-    Route::post('/file_manager/directories', [PanelApiControllers\FileManagerController::class, 'createDirectory'])->name('file_manager.create_directory');
-    Route::post('/file_manager/upload', [PanelApiControllers\FileManagerController::class, 'uploadFiles'])->name('file_manager.upload');
-    Route::post('/file_manager/rename', [PanelApiControllers\FileManagerController::class, 'rename'])->name('file_manager.rename');
-    Route::delete('/file_manager/files', [PanelApiControllers\FileManagerController::class, 'destroyFiles'])->name('file_manager.delete_files');
-    Route::delete('/file_manager/directories', [PanelApiControllers\FileManagerController::class, 'destroyDirectories'])->name('file_manager.delete_directories');
-    Route::post('/file_manager/move_directories', [PanelApiControllers\FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
-    Route::post('/file_manager/move_files', [PanelApiControllers\FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
-    Route::post('/file_manager/copy_files', [PanelApiControllers\FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
+    Route::get('/file_manager/files', [FileManagerController::class, 'getFiles'])->name('file_manager.get_files');
+    Route::get('/file_manager/directories', [FileManagerController::class, 'getDirectories'])->name('file_manager.get_directories');
+    Route::post('/file_manager/directories', [FileManagerController::class, 'createDirectory'])->name('file_manager.create_directory');
+    Route::post('/file_manager/upload', [FileManagerController::class, 'uploadFiles'])->name('file_manager.upload');
+    Route::post('/file_manager/rename', [FileManagerController::class, 'rename'])->name('file_manager.rename');
+    Route::delete('/file_manager/files', [FileManagerController::class, 'destroyFiles'])->name('file_manager.delete_files');
+    Route::delete('/file_manager/directories', [FileManagerController::class, 'destroyDirectories'])->name('file_manager.delete_directories');
+    Route::post('/file_manager/move_directories', [FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
+    Route::post('/file_manager/move_files', [FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
+    Route::post('/file_manager/copy_files', [FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
 
-    Route::get('/file_manager/storage_config', [\InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'getStorageConfig']);
-    Route::post('/file_manager/storage_config', [\InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'saveStorageConfig']);
+    Route::get('/file_manager/storage_config', [FileManagerController::class, 'getStorageConfig']);
+    Route::post('/file_manager/storage_config', [FileManagerController::class, 'saveStorageConfig']);
 
     Route::get('/currencies', [PanelApiControllers\CurrencyController::class, 'index'])->name('currencies.index');
 });

@@ -428,7 +428,7 @@ final class Plugin implements Arrayable, ArrayAccess
 
         try {
             return panel_route($route);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return '';
         }
     }

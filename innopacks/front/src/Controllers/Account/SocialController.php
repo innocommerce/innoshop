@@ -60,7 +60,7 @@ class SocialController extends BaseController
 
             return inno_view('account.social_callback');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             exit($e->getMessage());
         }
     }

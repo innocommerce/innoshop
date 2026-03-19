@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use InnoShop\Common\Repositories\VisitRepo;
 use InnoShop\Panel\Repositories\Analytics\CustomerRepo;
 use InnoShop\Panel\Repositories\Analytics\OrderRepo as AnalyticsOrderRepo;
 use InnoShop\Panel\Repositories\DashboardRepo;
@@ -35,7 +36,7 @@ class DashboardController extends BaseController
         $topCustomers = $customerRepo->getTopCustomers($dateRange, 7);
 
         // Get visit trends
-        $visitStats = (new \InnoShop\Common\Repositories\VisitRepo)->getDailyStatistics([
+        $visitStats = (new VisitRepo)->getDailyStatistics([
             'start_date' => $dateRange['start_date'],
             'end_date'   => $dateRange['end_date'],
         ]);

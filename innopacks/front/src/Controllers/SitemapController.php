@@ -24,7 +24,7 @@ class SitemapController
     {
         try {
             return SitemapService::getInstance()->response($request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }

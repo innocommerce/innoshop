@@ -12,6 +12,7 @@ namespace InnoShop\Panel\Repositories\Analytics;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Models\Customer;
 use InnoShop\Panel\Repositories\BaseRepo;
 
 class CustomerRepo extends BaseRepo
@@ -210,7 +211,7 @@ class CustomerRepo extends BaseRepo
      */
     public function getTopCustomers(array $dateRange, int $limit = 10): array
     {
-        $query = \InnoShop\Common\Models\Customer::withCount('orders')
+        $query = Customer::withCount('orders')
             ->withSum('orders', 'total');
 
         if ($dateRange['start_date'] && $dateRange['end_date']) {

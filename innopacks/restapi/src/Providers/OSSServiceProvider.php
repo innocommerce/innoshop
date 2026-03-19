@@ -2,6 +2,7 @@
 
 namespace InnoShop\RestAPI\Providers;
 
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\ServiceProvider;
 use InnoShop\RestAPI\Services\OSSService;
 
@@ -29,7 +30,7 @@ class OSSServiceProvider extends ServiceProvider
 
         if (! $this->app->bound('filesystem')) {
             $this->app->singleton('filesystem', function ($app) {
-                return $app->make(\Illuminate\Filesystem\FilesystemManager::class);
+                return $app->make(FilesystemManager::class);
             });
         }
     }

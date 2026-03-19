@@ -10,6 +10,7 @@
 namespace InnoShop\Plugin\Services;
 
 use Exception;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
@@ -170,9 +171,9 @@ class MarketplaceService
      * Get cache instance with or without tags
      *
      * @param  array  $tags
-     * @return \Illuminate\Contracts\Cache\Repository
+     * @return Repository
      */
-    private function getCacheStore(array $tags = []): \Illuminate\Contracts\Cache\Repository
+    private function getCacheStore(array $tags = []): Repository
     {
         if ($this->cacheSupportsTags() && ! empty($tags)) {
             return Cache::tags($tags);
@@ -466,7 +467,7 @@ class MarketplaceService
     public function download($id, $type): void
     {
         if (! in_array($type, ['plugin', 'theme'])) {
-            throw new \Exception('Invalid product type!');
+            throw new Exception('Invalid product type!');
         }
 
         // Clear product cache before download to ensure we get the latest version

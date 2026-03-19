@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 use InnoShop\Common\Models\Option;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Option as ProductOption;
+use InnoShop\Common\Models\Product\OptionValue;
 
 /**
  * 产品选项服务类
@@ -112,7 +113,7 @@ class ProductOptionService
                     }
 
                     // 检查选项值库存
-                    $productOptionValue = \InnoShop\Common\Models\Product\OptionValue::where('product_id', $this->product->id)
+                    $productOptionValue = OptionValue::where('product_id', $this->product->id)
                         ->where('option_id', $group->id)
                         ->where('option_value_id', $optionId)
                         ->first();

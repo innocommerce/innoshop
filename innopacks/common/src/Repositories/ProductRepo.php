@@ -21,6 +21,7 @@ use InnoShop\Common\Repositories\Product\BundleRepo;
 use InnoShop\Common\Repositories\Product\OptionValueRepo;
 use InnoShop\Common\Repositories\Product\RelationRepo;
 use InnoShop\Common\Repositories\Product\VariantRepo;
+use InnoShop\Common\Services\ProductQueryBuilder;
 use Throwable;
 
 class ProductRepo extends BaseRepo
@@ -798,7 +799,7 @@ class ProductRepo extends BaseRepo
         $filters = array_merge($this->filters, $filters);
 
         // Use ProductQueryBuilder to handle filtering logic
-        $queryBuilder = new \InnoShop\Common\Services\ProductQueryBuilder;
+        $queryBuilder = new ProductQueryBuilder;
 
         $builder = $queryBuilder->applyCategoryFilters($builder, $filters);
         $builder = $queryBuilder->applyAttributeFilters($builder, $filters);

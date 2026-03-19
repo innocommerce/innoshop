@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Models\Attribute;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use InnoShop\Common\Models\Attribute\Value\Translation;
 use InnoShop\Common\Models\BaseModel;
 
 class Value extends BaseModel
@@ -27,7 +28,7 @@ class Value extends BaseModel
      */
     public function translations(): HasMany
     {
-        $class = \InnoShop\Common\Models\Attribute\Value\Translation::class;
+        $class = Translation::class;
 
         return $this->hasMany($class, 'attribute_value_id', 'id');
     }
@@ -40,7 +41,7 @@ class Value extends BaseModel
      */
     public function translation(): mixed
     {
-        $class = \InnoShop\Common\Models\Attribute\Value\Translation::class;
+        $class = Translation::class;
 
         return $this->hasOne($class, 'attribute_value_id', 'id')
             ->where('locale', locale_code());

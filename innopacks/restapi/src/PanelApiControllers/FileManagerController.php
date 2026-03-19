@@ -11,7 +11,9 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Panel\Controllers\BaseController;
 use InnoShop\RestAPI\Requests\FileRequest;
@@ -413,7 +415,7 @@ class FileManagerController extends BaseController
             ];
 
             return json_success('获取存储配置成功', $config);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('获取存储配置失败:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -453,7 +455,7 @@ class FileManagerController extends BaseController
                 ],
             ]);
 
-            $settingRepo = \InnoShop\Common\Repositories\SettingRepo::getInstance();
+            $settingRepo = SettingRepo::getInstance();
             $settingRepo->updatePluginValue('file_manager', 'driver', $driver);
             $settingRepo->updatePluginValue('file_manager', 'key', $key);
             $settingRepo->updatePluginValue('file_manager', 'secret', $secret);
@@ -462,7 +464,7 @@ class FileManagerController extends BaseController
             $settingRepo->updatePluginValue('file_manager', 'region', $region);
             $settingRepo->updatePluginValue('file_manager', 'cdn_domain', $cdn_domain);
 
-            \Illuminate\Support\Facades\Artisan::call('config:clear');
+            Artisan::call('config:clear');
 
             load_settings();
 
@@ -493,7 +495,7 @@ class FileManagerController extends BaseController
             ];
 
             return json_success('存储配置保存成功', $configData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('存储配置保存失败:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),

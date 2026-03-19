@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Components\Base;
 
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class DeleteButton extends Component
 {
@@ -52,7 +53,7 @@ class DeleteButton extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\View\View|\Closure|string
+     * @return View|\Closure|string
      */
     public function render()
     {

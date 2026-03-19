@@ -159,7 +159,7 @@ class DeepSeekService implements AIServiceInterface
 
         try {
             $stream = $this->client->chat()->createStreamed($requestData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('DeepSeekService stream creation failed', [
                 'error'          => $e->getMessage(),
                 'model'          => $requestData['model'],

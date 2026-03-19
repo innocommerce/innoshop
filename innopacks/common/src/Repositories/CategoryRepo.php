@@ -409,7 +409,7 @@ class CategoryRepo extends BaseRepo
     /**
      * Recursively build hierarchy structure with breadcrumb paths
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $categories
+     * @param  Collection  $categories
      * @param  array  $result
      * @param  int  $parentId
      * @param  array  $parentPath

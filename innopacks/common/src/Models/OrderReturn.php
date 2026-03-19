@@ -12,6 +12,7 @@ namespace InnoShop\Common\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Models\OrderReturn\History;
+use InnoShop\Common\Services\ReturnStateService;
 
 class OrderReturn extends BaseModel
 {
@@ -92,11 +93,11 @@ class OrderReturn extends BaseModel
     private static function statusColorMap(): array
     {
         return [
-            \InnoShop\Common\Services\ReturnStateService::CREATED   => 'secondary',
-            \InnoShop\Common\Services\ReturnStateService::PENDING   => 'warning',
-            \InnoShop\Common\Services\ReturnStateService::REFUNDED  => 'info',
-            \InnoShop\Common\Services\ReturnStateService::RETURNED  => 'success',
-            \InnoShop\Common\Services\ReturnStateService::CANCELLED => 'danger',
+            ReturnStateService::CREATED   => 'secondary',
+            ReturnStateService::PENDING   => 'warning',
+            ReturnStateService::REFUNDED  => 'info',
+            ReturnStateService::RETURNED  => 'success',
+            ReturnStateService::CANCELLED => 'danger',
         ];
     }
 }

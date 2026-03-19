@@ -10,6 +10,7 @@
 namespace InnoShop\RestAPI\FrontApiControllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Models\Product;
@@ -102,8 +103,8 @@ class ProductController extends BaseController
     /**
      * Summary of searchSku
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @param  Request  $request
+     * @return mixed|JsonResponse
      */
     public function skuList(Request $request)
     {

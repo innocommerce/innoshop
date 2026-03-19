@@ -263,7 +263,7 @@ class StateMachineService
             }
             // Track payment completed event when status changes to PAID
             if ($status === self::PAID) {
-                $eventService = new \InnoShop\Common\Services\EventTrackingService;
+                $eventService = new EventTrackingService;
                 $eventService->trackPaymentCompleted(
                     $order->id,
                     $order->number,
@@ -279,7 +279,7 @@ class StateMachineService
                 $this->changeStatus(self::COMPLETED, $comment, $notify);
             }
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
@@ -475,7 +475,7 @@ class StateMachineService
         $expressCompany = $shipment['express_company'] ?? '';
         $expressNumber  = $shipment['express_number'] ?? '';
         if ($expressCode && $expressCompany && $expressNumber) {
-            $orderShipment = new Order\Shipment([
+            $orderShipment = new Shipment([
                 'order_id'        => $this->orderId,
                 'express_code'    => $expressCode,
                 'express_company' => $expressCompany,

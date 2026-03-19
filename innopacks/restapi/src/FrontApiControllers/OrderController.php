@@ -71,7 +71,7 @@ class OrderController extends BaseController
             $result = new OrderDetail($order);
 
             return read_json_success($result);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

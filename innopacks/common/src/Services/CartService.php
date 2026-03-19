@@ -13,7 +13,10 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use InnoShop\Common\Models\CartItem;
+use InnoShop\Common\Models\Option;
+use InnoShop\Common\Models\OptionValue;
 use InnoShop\Common\Models\Order;
+use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Repositories\CartItemRepo;
 use InnoShop\Common\Resources\CartListItem;
 use Throwable;
@@ -123,9 +126,9 @@ class CartService
 
         // 验证产品选项
         if (! empty($data['options'])) {
-            $productSku = \InnoShop\Common\Models\Product\Sku::find($data['sku_id']);
+            $productSku = Sku::find($data['sku_id']);
             if ($productSku && $productSku->product) {
-                $optionService = \InnoShop\Common\Services\ProductOptionService::getInstance($productSku->product);
+                $optionService = ProductOptionService::getInstance($productSku->product);
                 $validation    = $optionService->validateOptions($data['options']);
 
                 if (! $validation['valid']) {
@@ -144,7 +147,7 @@ class CartService
 
         // Track add to cart event
         if ($cartItem && $cartItem->productSku && $cartItem->productSku->product) {
-            $eventService = new \InnoShop\Common\Services\EventTrackingService;
+            $eventService = new EventTrackingService;
             $eventService->trackAddToCart(
                 $cartItem->productSku->product->id,
                 $cartItem->quantity ?? 1,
@@ -335,8 +338,8 @@ class CartService
 
             foreach ($optionValueIds as $optionValueId) {
                 // 获取选项和选项值信息
-                $option      = \InnoShop\Common\Models\Option::find($optionId);
-                $optionValue = \InnoShop\Common\Models\OptionValue::find($optionValueId);
+                $option      = Option::find($optionId);
+                $optionValue = OptionValue::find($optionValueId);
 
                 if (! $option || ! $optionValue) {
                     continue;

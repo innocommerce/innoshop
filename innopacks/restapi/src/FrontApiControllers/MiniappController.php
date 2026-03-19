@@ -40,7 +40,7 @@ class MiniappController extends BaseController
             $token = $customer->createToken('customer-token')->plainTextToken;
 
             return create_json_success(['token' => $token]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
     }

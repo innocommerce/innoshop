@@ -13,6 +13,7 @@ use Exception;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\CategoryRepo;
+use InnoShop\Supplier\Models\Supplier;
 
 class HomeRepo
 {
@@ -76,7 +77,7 @@ class HomeRepo
         $supplierBadge = null;
         if (class_exists('InnoShop\Supplier\Models\Supplier') && isset($product->supplier_id) && $product->supplier_id) {
             try {
-                $supplierModel = \InnoShop\Supplier\Models\Supplier::query()->find($product->supplier_id);
+                $supplierModel = Supplier::query()->find($product->supplier_id);
                 if ($supplierModel) {
                     $supplier = $supplierModel->name;
                     if ($supplierModel->status === 'approved' && $supplierModel->supplier_level) {

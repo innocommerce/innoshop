@@ -535,7 +535,7 @@ class CheckoutService
             DB::commit();
 
             // Track order placed event
-            $eventService = new \InnoShop\Common\Services\EventTrackingService;
+            $eventService = new EventTrackingService;
             $eventService->trackOrderPlaced(
                 $order->id,
                 $order->number,

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Order\Item;
+use InnoShop\Common\Models\Product\Attribute;
 use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Traits\HasPackageFactory;
@@ -71,7 +72,7 @@ class Product extends BaseModel
      */
     public function productAttributes(): HasMany
     {
-        return $this->hasMany(\InnoShop\Common\Models\Product\Attribute::class, 'product_id');
+        return $this->hasMany(Attribute::class, 'product_id');
     }
 
     /**
@@ -168,7 +169,7 @@ class Product extends BaseModel
      */
     public function productOptions(): HasMany
     {
-        return $this->hasMany(\InnoShop\Common\Models\Product\Option::class, 'product_id', 'id');
+        return $this->hasMany(Product\Option::class, 'product_id', 'id');
     }
 
     /**
@@ -176,7 +177,7 @@ class Product extends BaseModel
      */
     public function productOptionValues(): HasMany
     {
-        return $this->hasMany(\InnoShop\Common\Models\Product\OptionValue::class, 'product_id', 'id');
+        return $this->hasMany(Product\OptionValue::class, 'product_id', 'id');
     }
 
     /**

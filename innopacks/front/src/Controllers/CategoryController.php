@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Services\RequestFilterParser;
 use InnoShop\Front\Traits\FilterSidebarTrait;
 
 class CategoryController extends Controller
@@ -54,7 +55,7 @@ class CategoryController extends Controller
         }
 
         // Otherwise, display product list (original behavior)
-        $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
+        $filterParser = new RequestFilterParser;
         $filters      = $filterParser->extractFilters($request, [
             'keyword',
             'sort',
@@ -132,7 +133,7 @@ class CategoryController extends Controller
         $categories = CategoryRepo::getInstance()->getTwoLevelCategories();
 
         // Use RequestFilterParser to handle filter logic
-        $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
+        $filterParser = new RequestFilterParser;
         $filters      = $filterParser->extractFilters($request, [
             'keyword',
             'sort',

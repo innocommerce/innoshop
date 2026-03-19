@@ -10,6 +10,7 @@
 namespace InnoShop\DevTools\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InnoShop\DevTools\Services\ScaffoldService;
 
 class MakePlugin extends Command
@@ -55,7 +56,7 @@ class MakePlugin extends Command
             $service->generatePlugin($name, $options);
 
             $this->info('Plugin created successfully!');
-            $this->line('Plugin path: plugins/'.\Illuminate\Support\Str::studly($name));
+            $this->line('Plugin path: plugins/'.Str::studly($name));
 
             return Command::SUCCESS;
         } catch (\Exception $e) {

@@ -9,6 +9,7 @@
 
 namespace InnoShop\Plugin\Tests\Models;
 
+use InnoShop\Common\Models\BaseModel;
 use InnoShop\Plugin\Models\Plugin;
 use InnoShop\Plugin\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -49,6 +50,6 @@ class PluginModelTest extends TestCase
     #[Test]
     public function test_extends_base_model(): void
     {
-        $this->assertTrue(is_subclass_of(Plugin::class, \InnoShop\Common\Models\BaseModel::class));
+        $this->assertTrue(is_subclass_of(Plugin::class, BaseModel::class));
     }
 }

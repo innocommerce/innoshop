@@ -11,6 +11,7 @@ namespace InnoShop\Panel\Tests\Unit\Resources;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use InnoShop\Common\Models\Brand;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Tests\TestCase;
@@ -23,7 +24,7 @@ class ProductNameResourceBugTest extends TestCase
     public function test_product_name_resource_handles_missing_relation_product()
     {
         // Create Brand
-        $brand = new \InnoShop\Common\Models\Brand;
+        $brand = new Brand;
         $brand->fill([
             'name'   => 'Test Brand',
             'first'  => 'T',

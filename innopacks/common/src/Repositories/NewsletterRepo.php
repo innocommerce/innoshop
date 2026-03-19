@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use InnoShop\Common\Models\NewsletterSubscriber;
 use Throwable;
 
@@ -221,7 +222,7 @@ class NewsletterRepo extends BaseRepo
      * Get subscribers by status.
      *
      * @param  string  $status
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getByStatus(string $status)
     {
