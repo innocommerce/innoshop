@@ -51,6 +51,7 @@
                   <b>{{ system_setting_locale('meta_description', '') }}</b>
                 </p>
               </div>
+              @hookinsert('layout.footer.about.after')
             </div>
           </div>
           <div class="col-12 col-md-8">

@@ -132,5 +132,4 @@ class ThemeController extends BaseController
             return json_fail($e->getMessage());
         }
     }
-
 }

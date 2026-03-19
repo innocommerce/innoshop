@@ -79,8 +79,9 @@ class ThemeService extends BaseService
                     'path'      => $dir,
                 ]);
                 $errors[] = [
-                    'name'  => $themeName,
-                    'error' => $e->getMessage(),
+                    'name'   => $themeName,
+                    'folder' => $folderName,
+                    'error'  => $e->getMessage(),
                 ];
 
                 return null;

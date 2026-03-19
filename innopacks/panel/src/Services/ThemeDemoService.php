@@ -98,6 +98,7 @@ class ThemeDemoService extends BaseService
         $publicImagesDir = $dir.'/public/images';
         if (is_dir($publicImagesDir)) {
             $this->copyImagesFromSource($publicImagesDir, 'static/themes/'.$themeCode.'/images');
+
             return;
         }
 
@@ -105,6 +106,7 @@ class ThemeDemoService extends BaseService
         $demoImagesDir = $dir.'/demo/images';
         if (is_dir($demoImagesDir)) {
             $this->copyImagesFromSource($demoImagesDir, 'static/themes/'.$themeCode.'/images');
+
             return;
         }
 
@@ -119,8 +121,8 @@ class ThemeDemoService extends BaseService
     protected function copyImagesFromSource(string $sourceDir, string $targetRelativePath): void
     {
         // Match files in current directory AND subdirectories
-        $pattern   = $sourceDir.'/{*,**/*}.{jpg,png,gif,webp,jpeg,svg}';
-        $images    = glob($pattern, GLOB_BRACE) ?: [];
+        $pattern = $sourceDir.'/{*,**/*}.{jpg,png,gif,webp,jpeg,svg}';
+        $images  = glob($pattern, GLOB_BRACE) ?: [];
 
         foreach ($images as $image) {
             if (! file_exists($image)) {
@@ -147,7 +149,7 @@ class ThemeDemoService extends BaseService
         }
 
         smart_log('info', '[ThemeDemo] Images copied successfully', [
-            'count' => count($images),
+            'count'  => count($images),
             'source' => $sourceDir,
             'target' => $targetRelativePath,
         ]);
