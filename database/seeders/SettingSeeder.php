@@ -54,6 +54,7 @@ class SettingSeeder extends Seeder
             ['space' => 'system', 'name' => 'menu_footer_categories', 'value' => ['1', '4', '7']],
             ['space' => 'system', 'name' => 'menu_footer_catalogs', 'value' => ['1', '2']],
             ['space' => 'system', 'name' => 'menu_footer_pages', 'value' => ['1', '2', '3']],
+            ['space' => 'system', 'name' => 'menu_footer_specials', 'value' => ['products', 'brands']],
             [
                 'space' => 'system',
                 'name'  => 'meta_title',
