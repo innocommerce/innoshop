@@ -10,9 +10,12 @@
 namespace InnoShop\Panel\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use InnoShop\Common\Traits\PatchRequestTrait;
 
 class PageRequest extends FormRequest
 {
+    use PatchRequestTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,7 +41,7 @@ class PageRequest extends FormRequest
 
         $defaultLocale = setting_locale_code();
 
-        return [
+        $rules = [
             'slug'     => $slugRule,
             'key_name' => 'nullable|string',
             'position' => 'integer',
@@ -52,6 +55,13 @@ class PageRequest extends FormRequest
             'translations.*.meta_keywords'    => 'max:500',
             'translations.*.meta_description' => 'max:1000',
         ];
+
+        // For PATCH requests, make all rules optional (sometimes)
+        if ($this->isMethod('PATCH')) {
+            $rules = $this->applySometimesToRules($rules);
+        }
+
+        return $rules;
     }
 
     /**
@@ -69,6 +79,57 @@ class PageRequest extends FormRequest
             'translations.*.meta_title'       => trans('panel/common.meta_title'),
             'translations.*.meta_description' => trans('panel/common.meta_description'),
             'translations.*.meta_keywords'    => trans('panel/common.meta_keywords'),
+        ];
+    }
+
+    /**
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        $locale = setting_locale_code();
+
+        return [
+            'slug' => [
+                'description' => 'Unique page slug (alpha_dash).',
+                'example'     => 'about-us',
+            ],
+            'key_name' => [
+                'description' => 'Optional internal key for theme or code references.',
+                'example'     => 'about',
+            ],
+            'position' => [
+                'description' => 'Sort order.',
+                'example'     => 0,
+            ],
+            'active' => [
+                'description' => 'Whether the page is published.',
+                'example'     => true,
+            ],
+            "translations.$locale.locale" => [
+                'description' => 'Locale code for this translation.',
+                'example'     => $locale,
+            ],
+            "translations.$locale.title" => [
+                'description' => 'Page title.',
+                'example'     => 'About us',
+            ],
+            "translations.$locale.content" => [
+                'description' => 'Page body (HTML allowed, large max length).',
+                'example'     => '<p>About our store</p>',
+            ],
+            'translations.*.meta_title' => [
+                'description' => 'SEO meta title (max 500).',
+                'example'     => 'About us',
+            ],
+            'translations.*.meta_keywords' => [
+                'description' => 'SEO meta keywords (max 500).',
+                'example'     => 'about, company',
+            ],
+            'translations.*.meta_description' => [
+                'description' => 'SEO meta description (max 1000).',
+                'example'     => 'Learn more about us.',
+            ],
         ];
     }
 }

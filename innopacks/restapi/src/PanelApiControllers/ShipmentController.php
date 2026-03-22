@@ -13,7 +13,12 @@ use Exception;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Services\ShippingTraceService;
 use InnoShop\RestAPI\Requests\ShipmentRequest;
+use Knuckles\Scribe\Attributes\BodyParam;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\UrlParam;
 
+#[Group('Panel - Shipments')]
 class ShipmentController extends BaseController
 {
     /**
@@ -21,6 +26,10 @@ class ShipmentController extends BaseController
      * @param  ShipmentRequest  $request
      * @return mixed
      */
+    #[Endpoint('Create shipment')]
+    #[UrlParam('order', type: 'integer', description: 'Order ID')]
+    #[BodyParam('express_code', type: 'string', required: true, description: 'Express carrier code')]
+    #[BodyParam('express_number', type: 'string', required: true, description: 'Express tracking number')]
     public function store(Order $order, ShipmentRequest $request): mixed
     {
         try {
@@ -36,6 +45,8 @@ class ShipmentController extends BaseController
      * @param  Order\Shipment  $shipment
      * @return mixed
      */
+    #[Endpoint('Delete shipment')]
+    #[UrlParam('shipment', type: 'integer', description: 'Shipment ID')]
     public function destroy(Order\Shipment $shipment): mixed
     {
         try {
@@ -51,6 +62,8 @@ class ShipmentController extends BaseController
      * @param  Order\Shipment  $shipment
      * @return mixed
      */
+    #[Endpoint('Get shipment traces')]
+    #[UrlParam('shipment', type: 'integer', description: 'Shipment ID')]
     public function getTraces(Order\Shipment $shipment): mixed
     {
         try {

@@ -58,4 +58,23 @@ class UploadFileRequest extends FormRequest
             'type' => 'required|alpha_dash',
         ];
     }
+
+    /**
+     * Extra fields for Scribe / OpenAPI (descriptions & examples).
+     *
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'file' => [
+                'description' => 'File upload (multipart). Allowed types include images, zip, office docs, pdf, mp4.',
+                'example'     => null,
+            ],
+            'type' => [
+                'description' => 'Upload context slug (alphanumeric + dash/underscore).',
+                'example'     => 'document',
+            ],
+        ];
+    }
 }

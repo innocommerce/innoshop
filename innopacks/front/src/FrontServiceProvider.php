@@ -10,7 +10,6 @@
 namespace InnoShop\Front;
 
 use Exception;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -128,7 +127,7 @@ class FrontServiceProvider extends ServiceProvider
                 }
             });
 
-        $locales = locales();
+        $locales   = locales();
         $webRoutes = __DIR__.'/../routes/web.php';
         if (hide_url_locale() || $locales->isEmpty()) {
             Route::middleware('front')
@@ -191,36 +190,26 @@ class FrontServiceProvider extends ServiceProvider
      */
     protected function loadThemeViewPath(): void
     {
-        // If anything resolved `view` before this boot() runs, the Factory still holds the
-        // default FileViewFinder (resource_path only). Replace finder binding and drop the
-        // cached Factory so theme + pack paths apply — behavior can differ per install
-        // (plugins, debugbar, Octane) even when innopacks match.
-        /** @var Application $application */
-        $application = $this->app;
+        // `view.finder` is a container `bind`, not a singleton: each `make('view.finder')` is a new
+        // instance. The View factory keeps the one it got when `view` was first resolved — mutating
+        // a separately resolved finder does nothing. Always prepend on the factory's finder.
+        $finder = $this->app->make('view')->getFinder();
+        if (! $finder instanceof FileViewFinder) {
+            return;
+        }
 
-        $application->forgetInstance('view.finder');
+        // Prepend search paths in place (do not replace finder or forget `view`) so package engines
+        // and namespaces stay intact.
+        $packViews = realpath(__DIR__.'/../resources/views') ?: (__DIR__.'/../resources/views');
+        if (is_dir($packViews)) {
+            $finder->prependLocation($packViews);
+        }
 
-        $application->singleton('view.finder', function ($app) {
-            $themePaths = [];
-            if ($theme = system_setting('theme')) {
-                $themeViewPath = base_path("themes/{$theme}/views");
-                if (is_dir($themeViewPath)) {
-                    $themePaths[] = $themeViewPath;
-                }
+        if ($theme = system_setting('theme')) {
+            $themeViewPath = base_path("themes/{$theme}/views");
+            if (is_dir($themeViewPath)) {
+                $finder->prependLocation($themeViewPath);
             }
-            $packViews = realpath(__DIR__.'/../resources/views');
-            if ($packViews !== false) {
-                $themePaths[] = $packViews;
-            }
-
-            $viewPaths = $app['config']['view.paths'];
-            $viewPaths = array_merge($themePaths, $viewPaths);
-
-            return new FileViewFinder($app['files'], $viewPaths);
-        });
-
-        if ($application->resolved('view')) {
-            $application->forgetInstance('view');
         }
     }
 

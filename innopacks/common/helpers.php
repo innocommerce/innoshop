@@ -76,6 +76,33 @@ if (! function_exists('system_setting')) {
     }
 }
 
+if (! function_exists('api_docs_enabled')) {
+    /**
+     * Whether Scribe API documentation routes (/docs, /docs/panel, OpenAPI, Postman) are enabled.
+     * Requires shop to be installed; uses system setting api_docs_enabled (default on when unset).
+     */
+    function api_docs_enabled(): bool
+    {
+        if (! installed()) {
+            return false;
+        }
+
+        $value = system_setting('api_docs_enabled', '1');
+
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        if (is_int($value)) {
+            return $value === 1;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return in_array($normalized, ['1', 'true', 'yes', 'on'], true);
+    }
+}
+
 if (! function_exists('system_setting_locale')) {
     /**
      * Get system settings

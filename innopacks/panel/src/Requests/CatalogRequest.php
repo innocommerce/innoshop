@@ -10,9 +10,12 @@
 namespace InnoShop\Panel\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use InnoShop\Common\Traits\PatchRequestTrait;
 
 class CatalogRequest extends FormRequest
 {
+    use PatchRequestTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,7 +41,7 @@ class CatalogRequest extends FormRequest
 
         $defaultLocale = setting_locale_code();
 
-        return [
+        $rules = [
             'slug'     => $slugRule,
             'position' => 'integer',
             'active'   => 'bool',
@@ -50,6 +53,13 @@ class CatalogRequest extends FormRequest
             'translations.*.meta_keywords'    => 'max:500',
             'translations.*.meta_description' => 'max:1000',
         ];
+
+        // For PATCH requests, make all rules optional (sometimes)
+        if ($this->isMethod('PATCH')) {
+            $rules = $this->applySometimesToRules($rules);
+        }
+
+        return $rules;
     }
 
     /**
@@ -67,6 +77,49 @@ class CatalogRequest extends FormRequest
             'translations.*.meta_title'       => trans('panel/common.meta_title'),
             'translations.*.meta_keywords'    => trans('panel/common.meta_keywords'),
             'translations.*.meta_description' => trans('panel/common.meta_description'),
+        ];
+    }
+
+    /**
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        $locale = setting_locale_code();
+
+        return [
+            'slug' => [
+                'description' => 'URL slug (letters, numbers, hyphens). Unique per catalog.',
+                'example'     => 'news',
+            ],
+            'position' => [
+                'description' => 'Sort order.',
+                'example'     => 0,
+            ],
+            'active' => [
+                'description' => 'Whether the catalog is active.',
+                'example'     => true,
+            ],
+            "translations.$locale.locale" => [
+                'description' => 'Locale code for this translation.',
+                'example'     => $locale,
+            ],
+            "translations.$locale.title" => [
+                'description' => 'Catalog title in this locale.',
+                'example'     => 'News',
+            ],
+            'translations.*.meta_title' => [
+                'description' => 'SEO meta title (max 500).',
+                'example'     => 'News catalog',
+            ],
+            'translations.*.meta_keywords' => [
+                'description' => 'SEO meta keywords (max 500).',
+                'example'     => 'news, blog',
+            ],
+            'translations.*.meta_description' => [
+                'description' => 'SEO meta description (max 1000).',
+                'example'     => 'Latest news articles.',
+            ],
         ];
     }
 }

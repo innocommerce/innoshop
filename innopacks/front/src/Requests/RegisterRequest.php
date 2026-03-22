@@ -89,4 +89,39 @@ class RegisterRequest extends FormRequest
             'password' => front_trans('login.password'),
         ];
     }
+
+    /**
+     * Extra fields for Scribe / OpenAPI (descriptions & examples).
+     *
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'email' => [
+                'description' => 'Unique email for the new customer account.',
+                'example'     => 'newuser@example.com',
+            ],
+            'password' => [
+                'description' => 'Password (must match password_confirmation).',
+                'example'     => 'your-secure-password',
+            ],
+            'password_confirmation' => [
+                'description' => 'Same value as password.',
+                'example'     => 'your-secure-password',
+            ],
+            'calling_code' => [
+                'description' => 'Phone country calling code for SMS registration.',
+                'example'     => '+86',
+            ],
+            'telephone' => [
+                'description' => 'Mobile number without country code.',
+                'example'     => '13800138000',
+            ],
+            'code' => [
+                'description' => 'SMS verification code (6 characters).',
+                'example'     => '123456',
+            ],
+        ];
+    }
 }

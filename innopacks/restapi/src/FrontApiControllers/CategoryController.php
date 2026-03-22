@@ -15,13 +15,21 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\Category\TreeRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Resources\CategoryFrontend;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\Unauthenticated;
 
+#[Group('Front - Categories')]
 class CategoryController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
+    #[Endpoint('List categories')]
+    #[Unauthenticated]
+    #[QueryParam('per_page', 'integer', required: false, example: 15)]
     public function index(Request $request): AnonymousResourceCollection
     {
         $filters = $request->all();
@@ -36,6 +44,8 @@ class CategoryController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('Get category tree')]
+    #[Unauthenticated]
     public function tree(): mixed
     {
         $categoryTree = TreeRepo::getInstance()->getCategoryTree();

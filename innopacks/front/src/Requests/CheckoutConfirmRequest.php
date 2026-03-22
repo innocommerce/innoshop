@@ -46,4 +46,31 @@ class CheckoutConfirmRequest extends FormRequest
 
         return $rules;
     }
+
+    /**
+     * Extra fields for Scribe / OpenAPI (descriptions & examples).
+     *
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'billing_method_code' => [
+                'description' => 'Selected billing/payment method code from checkout.',
+                'example'     => 'stripe',
+            ],
+            'shipping_address_id' => [
+                'description' => 'Customer address ID for shipping (required for non-virtual carts).',
+                'example'     => 1,
+            ],
+            'billing_address_id' => [
+                'description' => 'Customer address ID for billing (required for non-virtual carts).',
+                'example'     => 1,
+            ],
+            'shipping_method_code' => [
+                'description' => 'Selected shipping method code (required for non-virtual carts).',
+                'example'     => 'flat_rate',
+            ],
+        ];
+    }
 }

@@ -15,13 +15,20 @@ use InnoShop\Common\Repositories\CustomerRepo;
 use InnoShop\Common\Resources\CustomerDetail;
 use InnoShop\Front\Requests\PasswordRequest;
 use InnoShop\Front\Requests\SetPasswordRequest;
+use Knuckles\Scribe\Attributes\Authenticated;
+use Knuckles\Scribe\Attributes\BodyParam;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
 
+#[Group('Front - Account')]
+#[Authenticated]
 class AccountController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Get current user')]
     public function me(Request $request): mixed
     {
         $user   = $request->user();
@@ -35,6 +42,10 @@ class AccountController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('Update profile')]
+    #[BodyParam('avatar', type: 'string', required: false)]
+    #[BodyParam('name', type: 'string', required: false)]
+    #[BodyParam('email', type: 'string', required: false)]
     public function updateProfile(Request $request): mixed
     {
         try {
@@ -52,11 +63,40 @@ class AccountController extends BaseController
     }
 
     /**
+     * Partial update profile.
+     * PATCH /api/front/account/profile
+     *
+     * @param  Request  $request
+     * @return mixed
+     * @throws Exception
+     */
+    #[Endpoint('Partial update profile')]
+    #[BodyParam('avatar', type: 'string', required: false)]
+    #[BodyParam('name', type: 'string', required: false)]
+    #[BodyParam('email', type: 'string', required: false)]
+    public function patchProfile(Request $request): mixed
+    {
+        try {
+            $customer    = $request->user();
+            $requestData = $request->only(['avatar', 'name', 'email']);
+            CustomerRepo::getInstance()->patch($customer, $requestData);
+
+            $result = new CustomerDetail($customer);
+
+            return update_json_success($result);
+
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
      * Request to change password.
      *
      * @param  PasswordRequest  $request
      * @return mixed
      */
+    #[Endpoint('Change password')]
     public function updatePassword(PasswordRequest $request): mixed
     {
         try {
@@ -76,6 +116,7 @@ class AccountController extends BaseController
      * @param  SetPasswordRequest  $request
      * @return mixed
      */
+    #[Endpoint('Set password (first time)')]
     public function setPassword(SetPasswordRequest $request): mixed
     {
         try {

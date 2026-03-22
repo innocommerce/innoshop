@@ -192,6 +192,49 @@ class TagRepo extends BaseRepo
     }
 
     /**
+     * Partial update for REST PATCH: merge validated fields onto current state, then run the same pipeline as update().
+     *
+     * @param  array<string, mixed>  $data  Typically $request->validated()
+     *
+     * @throws Exception|Throwable
+     */
+    public function patch(Tag $tag, array $data): mixed
+    {
+        $tag->loadMissing(['translations']);
+
+        $merged = [
+            'slug'         => $tag->slug,
+            'position'     => $tag->position,
+            'active'       => $tag->active,
+            'translations' => [],
+        ];
+
+        foreach ($tag->translations as $translation) {
+            $merged['translations'][$translation->locale] = $translation->only($translation->getFillable());
+        }
+
+        foreach (['slug', 'position', 'active'] as $key) {
+            if (array_key_exists($key, $data)) {
+                $merged[$key] = $data[$key];
+            }
+        }
+
+        if (isset($data['translations']) && is_array($data['translations'])) {
+            foreach ($data['translations'] as $locale => $fields) {
+                if (! is_array($fields)) {
+                    continue;
+                }
+                $merged['translations'][$locale] = array_merge(
+                    $merged['translations'][$locale] ?? ['locale' => $locale],
+                    $fields
+                );
+            }
+        }
+
+        return $this->update($tag, $merged);
+    }
+
+    /**
      * @param  Tag  $tag
      * @param  $data
      * @return mixed

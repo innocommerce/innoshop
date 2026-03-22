@@ -17,8 +17,13 @@ use InnoShop\Common\Repositories\PageRepo;
 use InnoShop\Common\Resources\PageName;
 use InnoShop\Common\Resources\PageSimple;
 use InnoShop\Panel\Requests\PageRequest;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\UrlParam;
 use Throwable;
 
+#[Group('Panel - Pages')]
 class PageController extends BaseController
 {
     /**
@@ -26,6 +31,7 @@ class PageController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('List pages')]
     public function index(Request $request): mixed
     {
         $filters = $request->all();
@@ -39,6 +45,8 @@ class PageController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Get pages by IDs')]
+    #[QueryParam('ids', 'string', required: true)]
     public function names(Request $request): AnonymousResourceCollection
     {
         $pages = PageRepo::getInstance()->getListByPageIDs($request->get('ids'));
@@ -51,6 +59,7 @@ class PageController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Create page')]
     public function store(PageRequest $request): mixed
     {
         try {
@@ -68,6 +77,8 @@ class PageController extends BaseController
      * @param  Page  $page
      * @return mixed
      */
+    #[Endpoint('Update page')]
+    #[UrlParam('page', 'integer', description: 'Page ID')]
     public function update(PageRequest $request, Page $page): mixed
     {
         try {
@@ -81,9 +92,33 @@ class PageController extends BaseController
     }
 
     /**
+     * Partial update a page.
+     * PATCH /api/panel/pages/{page}
+     *
+     * @param  PageRequest  $request
      * @param  Page  $page
      * @return mixed
      */
+    #[Endpoint('Partial update page')]
+    #[UrlParam('page', 'integer', description: 'Page ID')]
+    public function patch(PageRequest $request, Page $page): mixed
+    {
+        try {
+            $data = $request->validated();
+            PageRepo::getInstance()->patch($page, $data);
+
+            return update_json_success($page);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * @param  Page  $page
+     * @return mixed
+     */
+    #[Endpoint('Delete page')]
+    #[UrlParam('page', 'integer', description: 'Page ID')]
     public function destroy(Page $page): mixed
     {
         try {
@@ -103,6 +138,8 @@ class PageController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Autocomplete pages')]
+    #[QueryParam('keyword', 'string', required: false)]
     public function autocomplete(Request $request): AnonymousResourceCollection
     {
         $catalogs = PageRepo::getInstance()->autocomplete($request->get('keyword') ?? '');

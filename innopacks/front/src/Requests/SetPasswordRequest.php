@@ -41,4 +41,23 @@ class SetPasswordRequest extends FormRequest
             'new_password' => front_trans('password.new_password'),
         ];
     }
+
+    /**
+     * Extra fields for Scribe / OpenAPI (descriptions & examples).
+     *
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'new_password' => [
+                'description' => 'New password (min 6 characters; must match new_password_confirmation).',
+                'example'     => 'new-secure-password',
+            ],
+            'new_password_confirmation' => [
+                'description' => 'Must match new_password.',
+                'example'     => 'new-secure-password',
+            ],
+        ];
+    }
 }

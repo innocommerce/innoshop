@@ -14,7 +14,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\OptionRepo;
 use InnoShop\Common\Repositories\OptionValueRepo;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\UrlParam;
 
+#[Group('Panel - Options')]
 class OptionController extends BaseController
 {
     /**
@@ -24,6 +28,7 @@ class OptionController extends BaseController
      * @return JsonResponse
      * @throws Exception
      */
+    #[Endpoint('Get available options')]
     public function available(Request $request): JsonResponse
     {
         $filters           = $request->all();
@@ -61,6 +66,8 @@ class OptionController extends BaseController
      * @return JsonResponse
      * @throws Exception
      */
+    #[Endpoint('Get option values')]
+    #[UrlParam('optionId', type: 'integer', description: 'Option ID')]
     public function values(Request $request, int $optionId): JsonResponse
     {
         $filters              = $request->all();

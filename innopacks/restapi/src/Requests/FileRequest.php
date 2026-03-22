@@ -42,4 +42,21 @@ class FileRequest extends FormRequest
             'name' => trans('panel/file_manager.name'),
         ];
     }
+
+    /**
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'Directory or file name for file manager operations.',
+                'example'     => 'uploads',
+            ],
+            'parent_id' => [
+                'description' => 'Parent directory identifier (nullable for root).',
+                'example'     => 'root',
+            ],
+        ];
+    }
 }

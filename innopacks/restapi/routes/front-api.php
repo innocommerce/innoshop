@@ -46,12 +46,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/account/me', [FrontApiControllers\AccountController::class, 'me'])->name('account.me');
     Route::put('/account/profile', [FrontApiControllers\AccountController::class, 'updateProfile'])->name('account.update_profile');
+    Route::patch('/account/profile', [FrontApiControllers\AccountController::class, 'patchProfile'])->name('account.patch_profile');
     Route::put('/account/password', [FrontApiControllers\AccountController::class, 'updatePassword'])->name('account.update_password');
     Route::post('/account/password', [FrontApiControllers\AccountController::class, 'setPassword'])->name('account.set_password');
 
     Route::get('/carts', [FrontApiControllers\CartController::class, 'index'])->name('carts.index');
     Route::post('/carts', [FrontApiControllers\CartController::class, 'store'])->name('carts.store');
     Route::put('/carts/{cart}', [FrontApiControllers\CartController::class, 'update'])->name('carts.update');
+    Route::patch('/carts/{cart}', [FrontApiControllers\CartController::class, 'patch'])->name('carts.patch');
     Route::delete('/carts/{cart}', [FrontApiControllers\CartController::class, 'destroy'])->name('carts.destroy');
     Route::post('/carts/select', [FrontApiControllers\CartController::class, 'select'])->name('carts.select');
     Route::post('/carts/unselect', [FrontApiControllers\CartController::class, 'unselect'])->name('carts.unselect');
@@ -60,6 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/checkout', [FrontApiControllers\CheckoutController::class, 'index'])->name('checkout.index');
     Route::put('/checkout', [FrontApiControllers\CheckoutController::class, 'update'])->name('checkout.store');
+    Route::patch('/checkout', [FrontApiControllers\CheckoutController::class, 'patch'])->name('checkout.patch');
     Route::post('/checkout/confirm', [FrontApiControllers\CheckoutController::class, 'confirm'])->name('checkout.confirm');
 
     Route::get('/favorites', [FrontApiControllers\FavoriteController::class, 'index'])->name('favorites.index');
@@ -74,6 +77,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/addresses', [FrontApiControllers\AddressController::class, 'store'])->name('addresses.store');
     Route::get('/addresses/{address}', [FrontApiControllers\AddressController::class, 'show'])->name('addresses.show');
     Route::put('/addresses/{address}', [FrontApiControllers\AddressController::class, 'update'])->name('addresses.update');
+    Route::patch('/addresses/{address}', [FrontApiControllers\AddressController::class, 'patch'])->name('addresses.patch');
     Route::delete('/addresses/{address}', [FrontApiControllers\AddressController::class, 'destroy'])->name('addresses.destroy');
 
     Route::get('/orders', [FrontApiControllers\OrderController::class, 'index'])->name('orders.index');

@@ -17,10 +17,18 @@ use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Repositories\OrderReturnRepo;
 use InnoShop\Common\Resources\OrderReturnHistory;
 use InnoShop\Front\Controllers\BaseController;
+use Knuckles\Scribe\Attributes\Authenticated;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\UrlParam;
 use Throwable;
 
+#[Group('Front - Order Returns')]
+#[Authenticated]
 class OrderReturnController extends BaseController
 {
+    #[Endpoint('List order returns')]
     public function index(Request $request)
     {
         $filters = $request->all();
@@ -36,6 +44,8 @@ class OrderReturnController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Get order info for return')]
+    #[QueryParam('order_number', type: 'string', required: true)]
     public function orderInfo(Request $request): mixed
     {
         $number = $request->get('order_number');
@@ -64,6 +74,7 @@ class OrderReturnController extends BaseController
      * @return mixed
      * @throws Exception|Throwable
      */
+    #[Endpoint('Create order return')]
     public function store(Request $request): mixed
     {
         $data = $request->all();
@@ -81,6 +92,8 @@ class OrderReturnController extends BaseController
      * @param  OrderReturn  $orderReturn
      * @return mixed
      */
+    #[Endpoint('Get order return detail')]
+    #[UrlParam('orderReturn', type: 'integer', description: 'Order return ID')]
     public function show(OrderReturn $orderReturn): mixed
     {
         if ($orderReturn->customer_id !== token_customer_id()) {
@@ -100,6 +113,8 @@ class OrderReturnController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('Delete order return')]
+    #[UrlParam('order_return', type: 'integer', description: 'Order return ID')]
     public function destroy(OrderReturn $order_return): mixed
     {
         if ($order_return->customer_id !== token_customer_id()) {

@@ -10,9 +10,12 @@
 namespace InnoShop\Panel\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use InnoShop\Common\Traits\PatchRequestTrait;
 
 class TagRequest extends FormRequest
 {
+    use PatchRequestTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,7 +41,7 @@ class TagRequest extends FormRequest
 
         $defaultLocale = setting_locale_code();
 
-        return [
+        $rules = [
             'slug'     => $slugRule,
             'position' => 'integer',
             'active'   => 'bool',
@@ -46,6 +49,13 @@ class TagRequest extends FormRequest
             "translations.$defaultLocale.locale" => 'required',
             "translations.$defaultLocale.name"   => 'required',
         ];
+
+        // For PATCH requests, make all rules optional (sometimes)
+        if ($this->isMethod('PATCH')) {
+            $rules = $this->applySometimesToRules($rules);
+        }
+
+        return $rules;
     }
 
     /**
@@ -58,6 +68,37 @@ class TagRequest extends FormRequest
         return [
             "translations.$defaultLocale.locale" => trans('panel/tag.locale'),
             "translations.$defaultLocale.name"   => trans('panel/tag.name'),
+        ];
+    }
+
+    /**
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        $locale = setting_locale_code();
+
+        return [
+            'slug' => [
+                'description' => 'Unique tag slug (alpha_dash).',
+                'example'     => 'featured',
+            ],
+            'position' => [
+                'description' => 'Sort order.',
+                'example'     => 0,
+            ],
+            'active' => [
+                'description' => 'Whether the tag is active.',
+                'example'     => true,
+            ],
+            "translations.$locale.locale" => [
+                'description' => 'Locale code for this translation.',
+                'example'     => $locale,
+            ],
+            "translations.$locale.name" => [
+                'description' => 'Tag display name.',
+                'example'     => 'Featured',
+            ],
         ];
     }
 }

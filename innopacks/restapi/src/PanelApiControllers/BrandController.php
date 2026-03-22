@@ -16,13 +16,19 @@ use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Resources\BrandName;
 use InnoShop\Common\Resources\BrandSimple;
 use InnoShop\RestAPI\FrontApiControllers\BaseController;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
 
+#[Group('Panel - Brands')]
 class BrandController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
+    #[Endpoint('List brands')]
+    #[QueryParam('per_page', 'integer', required: false, example: 15)]
     public function index(Request $request): AnonymousResourceCollection
     {
         $filters = $request->all();
@@ -38,6 +44,8 @@ class BrandController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Get brands by IDs')]
+    #[QueryParam('ids', 'string', required: true, example: '1,2,3')]
     public function names(Request $request): AnonymousResourceCollection
     {
         $brands = BrandRepo::getInstance()->getListByBrandIDs($request->get('ids'));
@@ -52,6 +60,8 @@ class BrandController extends BaseController
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
+    #[Endpoint('Autocomplete brands')]
+    #[QueryParam('keyword', 'string', required: false)]
     public function autocomplete(Request $request): AnonymousResourceCollection
     {
         $categories = BrandRepo::getInstance()->autocomplete($request->get('keyword') ?? '');

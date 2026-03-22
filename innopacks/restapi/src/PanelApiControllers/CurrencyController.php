@@ -12,7 +12,10 @@ namespace InnoShop\RestAPI\PanelApiControllers;
 use Illuminate\Http\JsonResponse;
 use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Resources\CurrencyItem;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
 
+#[Group('Panel - Currencies')]
 class CurrencyController extends BaseController
 {
     /**
@@ -20,6 +23,7 @@ class CurrencyController extends BaseController
      *
      * @return JsonResponse
      */
+    #[Endpoint('List currencies')]
     public function index(): JsonResponse
     {
         $currencies = CurrencyRepo::getInstance()->withActive()->builder()->get();

@@ -89,4 +89,35 @@ class LoginRequest extends FormRequest
             'password' => front_trans('login.password'),
         ];
     }
+
+    /**
+     * Extra fields for Scribe / OpenAPI (descriptions & examples).
+     *
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'email' => [
+                'description' => 'Customer email. Required when using email login.',
+                'example'     => 'customer@example.com',
+            ],
+            'password' => [
+                'description' => 'Account password. Required with email login.',
+                'example'     => 'your-secure-password',
+            ],
+            'calling_code' => [
+                'description' => 'Phone country calling code (e.g. +86). Used for phone/SMS login.',
+                'example'     => '+86',
+            ],
+            'telephone' => [
+                'description' => 'Mobile number without country code.',
+                'example'     => '13800138000',
+            ],
+            'code' => [
+                'description' => 'SMS verification code (6 characters) when logging in with phone.',
+                'example'     => '123456',
+            ],
+        ];
+    }
 }

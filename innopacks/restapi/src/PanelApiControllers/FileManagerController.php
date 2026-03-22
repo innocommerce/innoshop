@@ -20,7 +20,12 @@ use InnoShop\RestAPI\Requests\FileRequest;
 use InnoShop\RestAPI\Services\FileManagerInterface;
 use InnoShop\RestAPI\Services\FileManagerService;
 use InnoShop\RestAPI\Services\OSSService;
+use Knuckles\Scribe\Attributes\BodyParam;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
 
+#[Group('Panel - File Manager')]
 class FileManagerController extends BaseController
 {
     public function __construct()
@@ -93,6 +98,7 @@ class FileManagerController extends BaseController
      *
      * @return mixed
      */
+    #[Endpoint('File manager index page')]
     public function index(): mixed
     {
         $data = $this->getFileManagerData();
@@ -114,6 +120,7 @@ class FileManagerController extends BaseController
      *
      * @return mixed
      */
+    #[Endpoint('File manager iframe view')]
     public function iframe(): mixed
     {
         $data = $this->getFileManagerData();
@@ -131,6 +138,13 @@ class FileManagerController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('List files')]
+    #[QueryParam('base_folder', type: 'string', required: false, example: '/')]
+    #[QueryParam('page', type: 'integer', required: false, example: 1)]
+    #[QueryParam('per_page', type: 'integer', required: false, example: 20)]
+    #[QueryParam('keyword', type: 'string', required: false, description: 'Search keyword')]
+    #[QueryParam('sort', type: 'string', required: false, example: 'created')]
+    #[QueryParam('order', type: 'string', required: false, example: 'desc')]
     public function getFiles(Request $request): mixed
     {
         try {
@@ -161,6 +175,8 @@ class FileManagerController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('List directories')]
+    #[QueryParam('base_folder', type: 'string', required: false, example: '/')]
     public function getDirectories(Request $request): mixed
     {
         $service    = $this->getService();
@@ -179,6 +195,9 @@ class FileManagerController extends BaseController
      * @param  FileRequest  $request
      * @return mixed
      */
+    #[Endpoint('Create directory')]
+    #[BodyParam('name', type: 'string', required: true, description: 'Directory name')]
+    #[BodyParam('parent_id', type: 'string', required: false, example: '/')]
     public function createDirectory(FileRequest $request): mixed
     {
         try {
@@ -202,6 +221,9 @@ class FileManagerController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Rename file or folder')]
+    #[BodyParam('origin_name', type: 'string', required: true, description: 'Original file or folder path')]
+    #[BodyParam('new_name', type: 'string', required: true, description: 'New name')]
     public function rename(Request $request): mixed
     {
         try {
@@ -241,6 +263,7 @@ class FileManagerController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Delete files')]
     public function destroyFiles(Request $request): mixed
     {
         try {
@@ -268,6 +291,8 @@ class FileManagerController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('Delete directory')]
+    #[BodyParam('name', type: 'string', required: true, description: 'Directory path to delete')]
     public function destroyDirectories(Request $request): mixed
     {
         try {
@@ -287,6 +312,9 @@ class FileManagerController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Move directory')]
+    #[BodyParam('source_path', type: 'string', required: true, description: 'Source directory path')]
+    #[BodyParam('dest_path', type: 'string', required: true, description: 'Destination directory path')]
     public function moveDirectories(Request $request): mixed
     {
         try {
@@ -307,6 +335,7 @@ class FileManagerController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Move files')]
     public function moveFiles(Request $request): mixed
     {
         try {
@@ -343,6 +372,9 @@ class FileManagerController extends BaseController
      * @param  UploadFileRequest  $request
      * @return mixed
      */
+    #[Endpoint('Upload file')]
+    #[BodyParam('file', type: 'file', required: true, description: 'File to upload')]
+    #[BodyParam('path', type: 'string', required: false, description: 'Target directory path')]
     public function uploadFiles(UploadFileRequest $request): mixed
     {
         $service  = $this->getService();
@@ -366,6 +398,7 @@ class FileManagerController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Copy files')]
     public function copyFiles(Request $request): mixed
     {
         try {
@@ -401,6 +434,7 @@ class FileManagerController extends BaseController
      *
      * @return mixed
      */
+    #[Endpoint('Get storage configuration')]
     public function getStorageConfig(): mixed
     {
         try {
@@ -432,6 +466,14 @@ class FileManagerController extends BaseController
      * @return mixed
      * @throws \Throwable
      */
+    #[Endpoint('Save storage configuration')]
+    #[BodyParam('driver', type: 'string', required: true, example: 'local')]
+    #[BodyParam('key', type: 'string', required: false, description: 'Storage access key')]
+    #[BodyParam('secret', type: 'string', required: false, description: 'Storage secret key')]
+    #[BodyParam('endpoint', type: 'string', required: false, description: 'Storage endpoint URL')]
+    #[BodyParam('bucket', type: 'string', required: false, description: 'Storage bucket name')]
+    #[BodyParam('region', type: 'string', required: false, description: 'Storage region')]
+    #[BodyParam('cdn_domain', type: 'string', required: false, description: 'CDN domain')]
     public function saveStorageConfig(Request $request): mixed
     {
         try {

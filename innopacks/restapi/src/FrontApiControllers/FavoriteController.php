@@ -12,12 +12,19 @@ namespace InnoShop\RestAPI\FrontApiControllers;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\Customer\FavoriteRepo;
 use InnoShop\Common\Resources\FavoriteItem;
+use Knuckles\Scribe\Attributes\Authenticated;
+use Knuckles\Scribe\Attributes\BodyParam;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
 
+#[Group('Front - Favorites')]
+#[Authenticated]
 class FavoriteController extends BaseController
 {
     /**
      * @return mixed
      */
+    #[Endpoint('List favorites')]
     public function index(): mixed
     {
         $filters = [
@@ -34,6 +41,8 @@ class FavoriteController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Add to favorites')]
+    #[BodyParam('product_id', type: 'integer', required: true)]
     public function store(Request $request): mixed
     {
         try {
@@ -55,6 +64,8 @@ class FavoriteController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Remove from favorites')]
+    #[BodyParam('product_id', type: 'integer', required: true)]
     public function cancel(Request $request): mixed
     {
         try {

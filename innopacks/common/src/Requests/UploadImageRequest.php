@@ -59,4 +59,23 @@ class UploadImageRequest extends FormRequest
             'type'  => 'required|alpha_dash',
         ];
     }
+
+    /**
+     * Extra fields for Scribe / OpenAPI (descriptions & examples).
+     *
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'image' => [
+                'description' => 'Image file (multipart). Allowed: jpg, png, jpeg, gif, webp.',
+                'example'     => null,
+            ],
+            'type' => [
+                'description' => 'Upload context slug (alphanumeric + dash/underscore), e.g. product, avatar.',
+                'example'     => 'product',
+            ],
+        ];
+    }
 }

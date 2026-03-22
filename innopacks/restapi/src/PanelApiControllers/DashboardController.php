@@ -10,7 +10,11 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use InnoShop\Panel\Repositories\DashboardRepo;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\UrlParam;
 
+#[Group('Panel - Dashboard')]
 class DashboardController extends BaseController
 {
     /**
@@ -18,6 +22,7 @@ class DashboardController extends BaseController
      *
      * @return mixed
      */
+    #[Endpoint('Get dashboard report')]
     public function index(): mixed
     {
         $dashboardRepo = new DashboardRepo;
@@ -32,6 +37,8 @@ class DashboardController extends BaseController
      * @param  string  $date
      * @return mixed
      */
+    #[Endpoint('Get daily report')]
+    #[UrlParam('date', 'string', description: 'Date in Y-m-d format', example: '2024-01-15')]
     public function daily(string $date): mixed
     {
         $dashboardRepo = new DashboardRepo;

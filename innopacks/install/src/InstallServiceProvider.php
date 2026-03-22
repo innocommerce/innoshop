@@ -61,5 +61,4 @@ class InstallServiceProvider extends ServiceProvider
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'install');
     }
-
 }

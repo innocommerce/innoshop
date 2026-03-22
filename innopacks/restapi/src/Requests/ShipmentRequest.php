@@ -45,4 +45,25 @@ class ShipmentRequest extends FormRequest
             'express_number'  => trans('panel/shipment.express_number'),
         ];
     }
+
+    /**
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'express_code' => [
+                'description' => 'Carrier / express service code used by your logistics integration.',
+                'example'     => 'sf',
+            ],
+            'express_company' => [
+                'description' => 'Display name of the shipping carrier.',
+                'example'     => 'SF Express',
+            ],
+            'express_number' => [
+                'description' => 'Tracking number.',
+                'example'     => 'SF1234567890',
+            ],
+        ];
+    }
 }

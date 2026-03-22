@@ -204,6 +204,66 @@ class ArticleRepo extends BaseRepo
     }
 
     /**
+     * Partial update for REST PATCH: merge validated fields onto current state, then run the same pipeline as update().
+     *
+     * @param  array<string, mixed>  $data  Typically $request->validated()
+     *
+     * @throws Throwable
+     */
+    public function patch(Article $article, array $data): mixed
+    {
+        $article->loadMissing(['translations', 'tags', 'relatedArticles', 'products']);
+
+        $merged = [
+            'catalog_id'          => $article->catalog_id,
+            'slug'                => $article->slug,
+            'position'            => $article->position,
+            'viewed'              => $article->viewed,
+            'author'              => $article->author,
+            'image'               => $article->image,
+            'active'              => $article->active,
+            'tag_ids'             => $article->tags->pluck('id')->all(),
+            'related_article_ids' => $article->relatedArticles->pluck('relation_id')->filter()->all(),
+            'product_ids'         => $article->products->pluck('id')->all(),
+            'translations'        => [],
+        ];
+
+        foreach ($article->translations as $translation) {
+            $merged['translations'][$translation->locale] = $translation->only($translation->getFillable());
+        }
+
+        if (array_key_exists('related_articles', $data)) {
+            $merged['related_article_ids'] = array_values(array_filter(array_column($data['related_articles'] ?? [], 'related_id')));
+            unset($data['related_articles']);
+        }
+        if (array_key_exists('article_products', $data)) {
+            $merged['product_ids'] = array_values(array_filter(array_column($data['article_products'] ?? [], 'product_id')));
+            unset($data['article_products']);
+        }
+
+        $scalarKeys = ['catalog_id', 'slug', 'position', 'viewed', 'author', 'image', 'active', 'tag_ids', 'related_article_ids', 'product_ids'];
+        foreach ($scalarKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                $merged[$key] = $data[$key];
+            }
+        }
+
+        if (isset($data['translations']) && is_array($data['translations'])) {
+            foreach ($data['translations'] as $locale => $fields) {
+                if (! is_array($fields)) {
+                    continue;
+                }
+                $merged['translations'][$locale] = array_merge(
+                    $merged['translations'][$locale] ?? ['locale' => $locale],
+                    $fields
+                );
+            }
+        }
+
+        return $this->update($article, $merged);
+    }
+
+    /**
      * @param  Article  $article
      * @param  $data
      * @return mixed

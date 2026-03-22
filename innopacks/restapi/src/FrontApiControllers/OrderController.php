@@ -17,14 +17,21 @@ use InnoShop\Common\Resources\OrderDetail;
 use InnoShop\Common\Services\CartService;
 use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Front\Services\PaymentService;
+use Knuckles\Scribe\Attributes\Authenticated;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\UrlParam;
 use Throwable;
 
+#[Group('Front - Orders')]
+#[Authenticated]
 class OrderController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('List orders')]
     public function index(Request $request): mixed
     {
         $filters = $request->all();
@@ -42,6 +49,8 @@ class OrderController extends BaseController
      * @param  Order  $order
      * @return mixed
      */
+    #[Endpoint('Get order detail')]
+    #[UrlParam('order', type: 'integer', description: 'Order ID')]
     public function show(Order $order): mixed
     {
         if ($order->customer_id != token_customer_id()) {
@@ -59,6 +68,8 @@ class OrderController extends BaseController
      * @param  int  $number
      * @return mixed
      */
+    #[Endpoint('Get order by number')]
+    #[UrlParam('number', type: 'integer', description: 'Order number')]
     public function numberShow(int $number): mixed
     {
         try {
@@ -80,6 +91,8 @@ class OrderController extends BaseController
      * @param  int  $number
      * @return mixed
      */
+    #[Endpoint('Pay order')]
+    #[UrlParam('number', type: 'integer', description: 'Order number')]
     public function pay(int $number): mixed
     {
         try {
@@ -98,6 +111,8 @@ class OrderController extends BaseController
      * @param  int  $number
      * @return mixed
      */
+    #[Endpoint('Cancel order')]
+    #[UrlParam('number', type: 'integer', description: 'Order number')]
     public function cancel(int $number): mixed
     {
         try {
@@ -118,6 +133,8 @@ class OrderController extends BaseController
      * @param  int  $number
      * @return mixed
      */
+    #[Endpoint('Complete order')]
+    #[UrlParam('number', type: 'integer', description: 'Order number')]
     public function complete(int $number): mixed
     {
         try {
@@ -139,6 +156,8 @@ class OrderController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Reorder')]
+    #[UrlParam('number', type: 'integer', description: 'Order number')]
     public function reorder(int $number): mixed
     {
         try {

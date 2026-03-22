@@ -15,8 +15,13 @@ use Illuminate\Validation\ValidationException;
 use InnoShop\Front\Requests\LoginRequest;
 use InnoShop\Front\Requests\RegisterRequest;
 use InnoShop\Front\Services\AccountService;
+use Knuckles\Scribe\Attributes\BodyParam;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Unauthenticated;
 use Throwable;
 
+#[Group('Front - Authentication')]
 class AuthController extends BaseController
 {
     /**
@@ -24,6 +29,13 @@ class AuthController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Register customer')]
+    #[Unauthenticated]
+    #[BodyParam('email', 'string', required: false)]
+    #[BodyParam('password', 'string', required: false)]
+    #[BodyParam('calling_code', 'string', required: false)]
+    #[BodyParam('telephone', 'string', required: false)]
+    #[BodyParam('code', 'string', required: false)]
     public function register(RegisterRequest $request): mixed
     {
         try {
@@ -52,6 +64,13 @@ class AuthController extends BaseController
      * @param  LoginRequest  $request
      * @return mixed
      */
+    #[Endpoint('Login customer')]
+    #[Unauthenticated]
+    #[BodyParam('email', 'string', required: false)]
+    #[BodyParam('password', 'string', required: false)]
+    #[BodyParam('calling_code', 'string', required: false)]
+    #[BodyParam('telephone', 'string', required: false)]
+    #[BodyParam('code', 'string', required: false)]
     public function login(LoginRequest $request): mixed
     {
         try {
@@ -83,6 +102,11 @@ class AuthController extends BaseController
      * @param  Request  $request
      * @return mixed
      */
+    #[Endpoint('Send SMS verification code')]
+    #[Unauthenticated]
+    #[BodyParam('calling_code', 'string', required: true)]
+    #[BodyParam('telephone', 'string', required: true)]
+    #[BodyParam('type', 'string', 'register or login', required: true)]
     public function sendSmsCode(Request $request): mixed
     {
         try {

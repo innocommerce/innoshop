@@ -13,13 +13,21 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Address;
 use InnoShop\Common\Repositories\AddressRepo;
 use InnoShop\Common\Resources\AddressListItem;
+use Knuckles\Scribe\Attributes\Authenticated;
+use Knuckles\Scribe\Attributes\BodyParam;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\UrlParam;
 use Throwable;
 
+#[Group('Front - Addresses')]
+#[Authenticated]
 class AddressController extends BaseController
 {
     /**
      * @return mixed
      */
+    #[Endpoint('List addresses')]
     public function index(): mixed
     {
         $filters = [
@@ -37,6 +45,15 @@ class AddressController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Create address')]
+    #[BodyParam('name', type: 'string')]
+    #[BodyParam('phone', type: 'string')]
+    #[BodyParam('zipcode', type: 'string')]
+    #[BodyParam('address_1', type: 'string')]
+    #[BodyParam('address_2', type: 'string', required: false)]
+    #[BodyParam('city', type: 'string')]
+    #[BodyParam('state_id', type: 'integer', required: false)]
+    #[BodyParam('country_id', type: 'integer')]
     public function store(Request $request): mixed
     {
         $data = $request->all();
@@ -53,6 +70,8 @@ class AddressController extends BaseController
      * @param  Address  $address
      * @return mixed
      */
+    #[Endpoint('Get address detail')]
+    #[UrlParam('address', type: 'integer', description: 'Address ID')]
     public function show(Address $address): mixed
     {
         $customerID = token_customer_id();
@@ -70,6 +89,8 @@ class AddressController extends BaseController
      * @param  Address  $address
      * @return mixed
      */
+    #[Endpoint('Update address')]
+    #[UrlParam('address', type: 'integer', description: 'Address ID')]
     public function update(Request $request, Address $address): mixed
     {
         $customerID = token_customer_id();
@@ -88,9 +109,36 @@ class AddressController extends BaseController
     }
 
     /**
+     * Partial update an address.
+     * PATCH /api/front/addresses/{address}
+     *
+     * @param  Request  $request
      * @param  Address  $address
      * @return mixed
      */
+    #[Endpoint('Partial update address')]
+    #[UrlParam('address', type: 'integer', description: 'Address ID')]
+    public function patch(Request $request, Address $address): mixed
+    {
+        $customerID = token_customer_id();
+        if ($customerID != $address->customer_id) {
+            return json_fail('Unauthorized', null, 403);
+        }
+
+        $data = $request->all();
+
+        $address = AddressRepo::getInstance()->patch($address, $data);
+        $result  = new AddressListItem($address);
+
+        return update_json_success($result);
+    }
+
+    /**
+     * @param  Address  $address
+     * @return mixed
+     */
+    #[Endpoint('Delete address')]
+    #[UrlParam('address', type: 'integer', description: 'Address ID')]
     public function destroy(Address $address): mixed
     {
         $customerID = token_customer_id();

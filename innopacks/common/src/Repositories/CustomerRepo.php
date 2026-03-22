@@ -214,6 +214,61 @@ class CustomerRepo extends BaseRepo
     }
 
     /**
+     * Partial update for REST PATCH: merge validated / submitted fields onto the current customer,
+     * then run the same pipeline as update(). Front profile uses null for omitted keys in only([...]);
+     * panel PATCH may send name, email, and/or password.
+     *
+     * @param  mixed  $customer
+     * @param  array<string, mixed>  $data
+     *
+     * @throws Exception|Throwable
+     */
+    public function patch(mixed $customer, array $data): mixed
+    {
+        $profileKeys = ['avatar', 'name', 'email'];
+        $mergeKeys   = [
+            'email', 'name', 'avatar', 'password', 'calling_code', 'telephone',
+            'customer_group_id', 'address_id', 'locale', 'active', 'code', 'from',
+        ];
+
+        $requestData = [
+            'email'             => $customer->email,
+            'name'              => $customer->name,
+            'customer_group_id' => $customer->customer_group_id,
+            'address_id'        => $customer->address_id,
+            'locale'            => $customer->locale,
+            'active'            => $customer->active,
+            'code'              => $customer->code ?? '',
+            'from'              => $customer->from ?? Customer::FROM_PC_WEB,
+            'calling_code'      => $customer->calling_code,
+            'telephone'         => $customer->telephone,
+        ];
+        if ($customer->avatar) {
+            $requestData['avatar'] = $customer->avatar;
+        }
+
+        $applied = false;
+        foreach ($data as $key => $value) {
+            if ($key === 'password_confirmation') {
+                continue;
+            }
+            if (in_array($key, $profileKeys, true) && $value === null) {
+                continue;
+            }
+            if (in_array($key, $mergeKeys, true)) {
+                $requestData[$key] = $value;
+                $applied           = true;
+            }
+        }
+
+        if (! $applied) {
+            return $customer;
+        }
+
+        return $this->update($customer, $requestData);
+    }
+
+    /**
      * Update profile only include avatar, name and email.
      *
      * @param  $item

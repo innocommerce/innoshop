@@ -86,6 +86,23 @@ class AddressRepo extends BaseRepo
     }
 
     /**
+     * Partial update for REST PATCH: merge request fields onto the stored address, then run the same pipeline as update().
+     *
+     * @param  array<string, mixed>  $data
+     *
+     * @throws Throwable
+     */
+    public function patch(Address $address, array $data): mixed
+    {
+        $base = $address->getAttributes();
+        unset($base['id'], $base['created_at'], $base['updated_at']);
+
+        $merged = array_replace($base, $data);
+
+        return $this->update($address, $merged);
+    }
+
+    /**
      * @param  mixed  $item
      * @return void
      */

@@ -40,6 +40,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/categories/{id}', [PanelApiControllers\CategoryController::class, 'show'])->name('categories.show');
     Route::post('/categories', [PanelApiControllers\CategoryController::class, 'store'])->name('categories.store');
     Route::put('/categories/{id}', [PanelApiControllers\CategoryController::class, 'update'])->name('categories.update');
+    Route::patch('/categories/{id}', [PanelApiControllers\CategoryController::class, 'patch'])->name('categories.patch');
     Route::delete('/categories/{id}', [PanelApiControllers\CategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::get('/brands', [PanelApiControllers\BrandController::class, 'index'])->name('brands.index');
@@ -51,6 +52,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/articles/autocomplete', [PanelApiControllers\ArticleController::class, 'autocomplete'])->name('articles.autocomplete');
     Route::post('/articles', [PanelApiControllers\ArticleController::class, 'store'])->name('articles.store');
     Route::put('/articles/{article}', [PanelApiControllers\ArticleController::class, 'update'])->name('articles.update');
+    Route::patch('/articles/{article}', [PanelApiControllers\ArticleController::class, 'patch'])->name('articles.patch');
     Route::delete('/articles/{article}', [PanelApiControllers\ArticleController::class, 'destroy'])->name('articles.destroy');
 
     Route::get('/catalogs', [PanelApiControllers\CatalogController::class, 'index'])->name('catalogs.index');
@@ -58,6 +60,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/catalogs/autocomplete', [PanelApiControllers\CatalogController::class, 'autocomplete'])->name('catalogs.autocomplete');
     Route::post('/catalogs', [PanelApiControllers\CatalogController::class, 'store'])->name('catalogs.store');
     Route::put('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'update'])->name('catalogs.update');
+    Route::patch('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'patch'])->name('catalogs.patch');
     Route::delete('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'destroy'])->name('catalogs.destroy');
 
     Route::post('/orders/{order}/notes', [PanelApiControllers\OrderController::class, 'updateNote'])->name('orders.update_note');
@@ -71,6 +74,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/pages/autocomplete', [PanelApiControllers\PageController::class, 'autocomplete'])->name('pages.autocomplete');
     Route::post('/pages', [PanelApiControllers\PageController::class, 'store'])->name('pages.store');
     Route::put('/pages/{page}', [PanelApiControllers\PageController::class, 'update'])->name('pages.update');
+    Route::patch('/pages/{page}', [PanelApiControllers\PageController::class, 'patch'])->name('pages.patch');
     Route::delete('/pages/{page}', [PanelApiControllers\PageController::class, 'destroy'])->name('pages.destroy');
 
     Route::get('/tags', [PanelApiControllers\TagController::class, 'index'])->name('tags.index');
@@ -78,6 +82,7 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/tags/autocomplete', [PanelApiControllers\TagController::class, 'autocomplete'])->name('tags.autocomplete');
     Route::post('/tags', [PanelApiControllers\TagController::class, 'store'])->name('tags.store');
     Route::put('/tags/{tag}', [PanelApiControllers\TagController::class, 'update'])->name('tags.update');
+    Route::patch('/tags/{tag}', [PanelApiControllers\TagController::class, 'patch'])->name('tags.patch');
     Route::delete('/tags/{tag}', [PanelApiControllers\TagController::class, 'destroy'])->name('tags.destroy');
 
     Route::get('/attributes', [PanelApiControllers\AttributeController::class, 'index'])->name('attributes.index');
@@ -90,8 +95,9 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/customers/names', [PanelApiControllers\CustomerController::class, 'names'])->name('customers.name');
     Route::get('/customers/autocomplete', [PanelApiControllers\CustomerController::class, 'autocomplete'])->name('customers.autocomplete');
     Route::post('/customers', [PanelApiControllers\CustomerController::class, 'store'])->name('customers.store');
-    Route::put('/customers/{tag}', [PanelApiControllers\CustomerController::class, 'update'])->name('customers.update');
-    Route::delete('/customers/{tag}', [PanelApiControllers\CustomerController::class, 'destroy'])->name('customers.destroy');
+    Route::put('/customers/{customer}', [PanelApiControllers\CustomerController::class, 'update'])->name('customers.update');
+    Route::patch('/customers/{customer}', [PanelApiControllers\CustomerController::class, 'patch'])->name('customers.patch');
+    Route::delete('/customers/{customer}', [PanelApiControllers\CustomerController::class, 'destroy'])->name('customers.destroy');
 
     Route::get('/file_manager/files', [FileManagerController::class, 'getFiles'])->name('file_manager.get_files');
     Route::get('/file_manager/directories', [FileManagerController::class, 'getDirectories'])->name('file_manager.get_directories');

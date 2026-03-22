@@ -17,8 +17,13 @@ use InnoShop\Common\Repositories\TagRepo;
 use InnoShop\Common\Resources\TagListItem;
 use InnoShop\Common\Resources\TagSimple;
 use InnoShop\Panel\Requests\TagRequest;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\UrlParam;
 use Throwable;
 
+#[Group('Panel - Tags')]
 class TagController extends BaseController
 {
     /**
@@ -26,6 +31,8 @@ class TagController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('List tags')]
+    #[QueryParam('tag_ids', 'string', required: false, description: 'Comma-separated tag IDs')]
     public function index(Request $request): mixed
     {
         $filters = $request->all();
@@ -44,6 +51,8 @@ class TagController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Get tags by IDs')]
+    #[QueryParam('ids', 'string', required: true)]
     public function names(Request $request): AnonymousResourceCollection
     {
         $tags = TagRepo::getInstance()->getListByTagIDs($request->get('ids'));
@@ -56,6 +65,7 @@ class TagController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Create tag')]
     public function store(TagRequest $request): mixed
     {
         try {
@@ -73,6 +83,8 @@ class TagController extends BaseController
      * @param  Tag  $tag
      * @return mixed
      */
+    #[Endpoint('Update tag')]
+    #[UrlParam('tag', 'integer', description: 'Tag ID')]
     public function update(TagRequest $request, Tag $tag): mixed
     {
         try {
@@ -86,9 +98,33 @@ class TagController extends BaseController
     }
 
     /**
+     * Partial update a tag.
+     * PATCH /api/panel/tags/{tag}
+     *
+     * @param  TagRequest  $request
      * @param  Tag  $tag
      * @return mixed
      */
+    #[Endpoint('Partial update tag')]
+    #[UrlParam('tag', 'integer', description: 'Tag ID')]
+    public function patch(TagRequest $request, Tag $tag): mixed
+    {
+        try {
+            $data = $request->validated();
+            TagRepo::getInstance()->patch($tag, $data);
+
+            return update_json_success($tag);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * @param  Tag  $tag
+     * @return mixed
+     */
+    #[Endpoint('Delete tag')]
+    #[UrlParam('tag', 'integer', description: 'Tag ID')]
     public function destroy(Tag $tag): mixed
     {
         try {
@@ -108,6 +144,8 @@ class TagController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Autocomplete tags')]
+    #[QueryParam('keyword', 'string', required: false)]
     public function autocomplete(Request $request): AnonymousResourceCollection
     {
         $name     = $request->get('keyword');

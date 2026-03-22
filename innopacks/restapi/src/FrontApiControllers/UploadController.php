@@ -12,7 +12,13 @@ namespace InnoShop\RestAPI\FrontApiControllers;
 use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Common\Requests\UploadImageRequest;
 use InnoShop\RestAPI\Services\UploadService;
+use Knuckles\Scribe\Attributes\Authenticated;
+use Knuckles\Scribe\Attributes\BodyParam;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
 
+#[Group('Front - Upload')]
+#[Authenticated]
 class UploadController
 {
     /**
@@ -21,6 +27,8 @@ class UploadController
      * @param  UploadImageRequest  $request
      * @return mixed
      */
+    #[Endpoint('Upload images')]
+    #[BodyParam('images', type: 'file', required: true, description: 'Image files to upload')]
     public function images(UploadImageRequest $request): mixed
     {
         $data = UploadService::getInstance()->images($request);
@@ -34,6 +42,8 @@ class UploadController
      * @param  UploadFileRequest  $request
      * @return mixed
      */
+    #[Endpoint('Upload files')]
+    #[BodyParam('files', type: 'file', required: true, description: 'Files to upload')]
     public function files(UploadFileRequest $request): mixed
     {
         $data = UploadService::getInstance()->files($request);

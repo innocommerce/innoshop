@@ -17,8 +17,13 @@ use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Resources\ProductSimple;
 use InnoShop\Common\Resources\SkuSimple;
 use InnoShop\RestAPI\Services\ProductImportService;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\UrlParam;
 use Throwable;
 
+#[Group('Panel - Products')]
 class ProductController extends BaseController
 {
     /**
@@ -29,6 +34,10 @@ class ProductController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('List products')]
+    #[QueryParam('per_page', 'integer', required: false, example: 15)]
+    #[QueryParam('keyword', 'string', required: false)]
+    #[QueryParam('category_id', 'integer', required: false)]
     public function index(Request $request): mixed
     {
         $filters  = $request->all();
@@ -45,6 +54,8 @@ class ProductController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Get products by IDs')]
+    #[QueryParam('ids', 'string', description: 'Comma-separated product IDs', required: true, example: '1,2,3')]
     public function names(Request $request): AnonymousResourceCollection
     {
         $products = ProductRepo::getInstance()->getListByProductIDs($request->get('ids'));
@@ -59,6 +70,8 @@ class ProductController extends BaseController
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
+    #[Endpoint('Autocomplete products')]
+    #[QueryParam('keyword', 'string', required: false)]
     public function autocomplete(Request $request): AnonymousResourceCollection
     {
         $products = ProductRepo::getInstance()->autocomplete($request->get('keyword') ?? '');
@@ -73,6 +86,9 @@ class ProductController extends BaseController
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
+    #[Endpoint('Autocomplete SKUs')]
+    #[QueryParam('keyword', 'string', required: false)]
+    #[QueryParam('limit', 'integer', required: false, example: 10)]
     public function skuAutocomplete(Request $request): AnonymousResourceCollection
     {
         $keyword = $request->get('keyword') ?? '';
@@ -90,6 +106,8 @@ class ProductController extends BaseController
      * @param  int  $id
      * @return mixed
      */
+    #[Endpoint('Get product detail')]
+    #[UrlParam('id', 'integer', description: 'Product ID', example: 1)]
     public function show(int $id): mixed
     {
         try {
@@ -132,6 +150,7 @@ class ProductController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Create product')]
     public function store(Request $request): mixed
     {
         try {
@@ -153,6 +172,8 @@ class ProductController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Update product')]
+    #[UrlParam('id', 'integer', description: 'Product ID', example: 1)]
     public function update(Request $request, int $id): mixed
     {
         try {
@@ -172,14 +193,16 @@ class ProductController extends BaseController
      * PATCH /api/panel/products/{id}
      *
      * @param  Request  $request
-     * @param  int  $id
+     * @param  string  $spuCode
      * @return mixed
      * @throws Throwable
      */
-    public function patch(Request $request, int $id): mixed
+    #[Endpoint('Partial update product')]
+    #[UrlParam('spuCode', 'string', description: 'Product SPU code', example: 'SPU-001')]
+    public function patch(Request $request, string $spuCode): mixed
     {
         try {
-            $product = ProductRepo::getInstance()->builder()->findOrFail($id);
+            $product = ProductRepo::getInstance()->builder()->findOrFail($spuCode);
             $data    = $request->all();
 
             ProductImportService::getInstance()->patch($product, $data);
@@ -197,6 +220,8 @@ class ProductController extends BaseController
      * @param  int  $id
      * @return mixed
      */
+    #[Endpoint('Delete product')]
+    #[UrlParam('id', 'integer', description: 'Product ID', example: 1)]
     public function destroy(int $id): mixed
     {
         try {
@@ -217,6 +242,7 @@ class ProductController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Bulk import products')]
     public function import(Request $request): mixed
     {
         try {

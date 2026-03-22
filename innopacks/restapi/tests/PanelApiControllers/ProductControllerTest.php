@@ -169,7 +169,7 @@ class ProductControllerTest extends TestCase
 
         $this->assertCount(2, $parameters);
         $this->assertEquals('request', $parameters[0]->getName());
-        $this->assertEquals('spuCode', $parameters[1]->getName());
+        $this->assertEquals('id', $parameters[1]->getName());
     }
 
     #[Test]

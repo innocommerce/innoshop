@@ -10,9 +10,12 @@
 namespace InnoShop\Panel\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use InnoShop\Common\Traits\PatchRequestTrait;
 
 class ArticleRequest extends FormRequest
 {
+    use PatchRequestTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,7 +41,7 @@ class ArticleRequest extends FormRequest
 
         $defaultLocale = setting_locale_code();
 
-        return [
+        $rules = [
             'catalog_id' => 'nullable|integer',
             'slug'       => $slugRule,
             'position'   => 'integer',
@@ -62,6 +65,13 @@ class ArticleRequest extends FormRequest
             'article_products'              => 'nullable|array',
             'article_products.*.product_id' => 'required|integer|exists:products,id',
         ];
+
+        // For PATCH requests, make all rules optional (sometimes)
+        if ($this->isMethod('PATCH')) {
+            $rules = $this->applySometimesToRules($rules);
+        }
+
+        return $rules;
     }
 
     public function attributes(): array
@@ -79,6 +89,81 @@ class ArticleRequest extends FormRequest
             'translations.*.meta_title'       => trans('panel/common.meta_title'),
             'translations.*.meta_keywords'    => trans('panel/common.meta_keywords'),
             'translations.*.meta_description' => trans('panel/common.meta_description'),
+        ];
+    }
+
+    /**
+     * @return array<string, array{description?: string, example?: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        $locale = setting_locale_code();
+
+        return [
+            'catalog_id' => [
+                'description' => 'Optional article catalog/category ID.',
+                'example'     => 1,
+            ],
+            'slug' => [
+                'description' => 'URL slug (letters, numbers, hyphens). Unique per article.',
+                'example'     => 'summer-sale-guide',
+            ],
+            'position' => [
+                'description' => 'Sort order.',
+                'example'     => 0,
+            ],
+            'viewed' => [
+                'description' => 'View counter (integer).',
+                'example'     => 0,
+            ],
+            'image' => [
+                'description' => 'Featured image path or URL (max 500).',
+                'example'     => 'static/uploads/article/cover.jpg',
+            ],
+            "translations.$locale.locale" => [
+                'description' => 'Locale code for this translation.',
+                'example'     => $locale,
+            ],
+            "translations.$locale.title" => [
+                'description' => 'Article title.',
+                'example'     => 'Summer sale announcement',
+            ],
+            "translations.$locale.content" => [
+                'description' => 'Article body HTML or text (max 20000).',
+                'example'     => '<p>Content here</p>',
+            ],
+            'translations.*.summary' => [
+                'description' => 'Short summary (max 320).',
+                'example'     => 'Brief teaser for listings.',
+            ],
+            'translations.*.meta_title' => [
+                'description' => 'SEO meta title (max 500).',
+                'example'     => 'Summer sale',
+            ],
+            'translations.*.meta_keywords' => [
+                'description' => 'SEO meta keywords (max 500).',
+                'example'     => 'sale, summer',
+            ],
+            'translations.*.meta_description' => [
+                'description' => 'SEO meta description (max 1000).',
+                'example'     => 'Read our summer sale article.',
+            ],
+            'related_articles' => [
+                'description' => 'Optional list of related articles.',
+                'example'     => [['related_id' => 2]],
+            ],
+            'related_articles.*.related_id' => [
+                'description' => 'Related article ID (must exist).',
+                'example'     => 2,
+            ],
+            'article_products' => [
+                'description' => 'Optional linked products.',
+                'example'     => [['product_id' => 10]],
+            ],
+            'article_products.*.product_id' => [
+                'description' => 'Product ID (must exist).',
+                'example'     => 10,
+            ],
         ];
     }
 }

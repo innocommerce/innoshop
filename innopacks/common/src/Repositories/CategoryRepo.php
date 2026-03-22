@@ -185,6 +185,55 @@ class CategoryRepo extends BaseRepo
     }
 
     /**
+     * Partial update for REST PATCH: merge validated fields onto current state, then run the same pipeline as update().
+     *
+     * @param  array<string, mixed>  $data  Typically $request->validated()
+     *
+     * @throws Throwable
+     */
+    public function patch(Category $category, array $data): mixed
+    {
+        $category->loadMissing(['translations']);
+
+        $merged = [
+            'parent_id'    => $category->parent_id ?? 0,
+            'slug'         => $category->slug,
+            'image'        => $category->image,
+            'position'     => $category->position,
+            'active'       => $category->active,
+            'translations' => [],
+        ];
+
+        foreach ($category->translations as $translation) {
+            $merged['translations'][$translation->locale] = $translation->only($translation->getFillable());
+        }
+
+        foreach (['parent_id', 'slug', 'image', 'position', 'active'] as $key) {
+            if (array_key_exists($key, $data)) {
+                $merged[$key] = $data[$key];
+            }
+        }
+
+        if (isset($data['translations']) && is_array($data['translations'])) {
+            foreach ($data['translations'] as $locale => $fields) {
+                if (! is_array($fields)) {
+                    continue;
+                }
+                $merged['translations'][$locale] = array_merge(
+                    $merged['translations'][$locale] ?? ['locale' => $locale],
+                    $fields
+                );
+            }
+        }
+
+        if (array_key_exists('children', $data)) {
+            $merged['children'] = $data['children'];
+        }
+
+        return $this->update($category, $merged);
+    }
+
+    /**
      * Crate or update category.
      *
      * @param  Category  $category

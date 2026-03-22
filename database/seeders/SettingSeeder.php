@@ -44,6 +44,7 @@ class SettingSeeder extends BaseSeeder
             ['space' => 'system', 'name' => 'state_code', 'value' => 'CA'],
             ['space' => 'system', 'name' => 'front_locale', 'value' => 'en'],
             ['space' => 'system', 'name' => 'expand', 'value' => '0'],
+            ['space' => 'system', 'name' => 'api_docs_enabled', 'value' => '1'],
             ['space' => 'system', 'name' => 'address', 'value' => 'TF Software Park'],
             ['space' => 'system', 'name' => 'telephone', 'value' => '13688886666'],
             ['space' => 'system', 'name' => 'email', 'value' => 'team@innoshop.com'],

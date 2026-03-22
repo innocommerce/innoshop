@@ -16,8 +16,13 @@ use InnoShop\Common\Models\Catalog;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Resources\CatalogName;
 use InnoShop\Panel\Requests\CatalogRequest;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\UrlParam;
 use Throwable;
 
+#[Group('Panel - Catalogs')]
 class CatalogController extends BaseController
 {
     /**
@@ -25,6 +30,7 @@ class CatalogController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('List catalogs')]
     public function index(Request $request): mixed
     {
         $filters = $request->all();
@@ -37,6 +43,8 @@ class CatalogController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Get catalogs by IDs')]
+    #[QueryParam('ids', 'string', required: true)]
     public function names(Request $request): AnonymousResourceCollection
     {
         $catalogs = CatalogRepo::getInstance()->getListByCatalogIDs($request->get('ids'));
@@ -49,6 +57,7 @@ class CatalogController extends BaseController
      * @return mixed
      * @throws Throwable
      */
+    #[Endpoint('Create catalog')]
     public function store(CatalogRequest $request): mixed
     {
         try {
@@ -66,6 +75,8 @@ class CatalogController extends BaseController
      * @param  Catalog  $catalog
      * @return mixed
      */
+    #[Endpoint('Update catalog')]
+    #[UrlParam('catalog', 'integer', description: 'Catalog ID')]
     public function update(CatalogRequest $request, Catalog $catalog): mixed
     {
         try {
@@ -79,9 +90,33 @@ class CatalogController extends BaseController
     }
 
     /**
+     * Partial update a catalog.
+     * PATCH /api/panel/catalogs/{catalog}
+     *
+     * @param  CatalogRequest  $request
      * @param  Catalog  $catalog
      * @return mixed
      */
+    #[Endpoint('Partial update catalog')]
+    #[UrlParam('catalog', 'integer', description: 'Catalog ID')]
+    public function patch(CatalogRequest $request, Catalog $catalog): mixed
+    {
+        try {
+            $data = $request->validated();
+            CatalogRepo::getInstance()->patch($catalog, $data);
+
+            return update_json_success($catalog);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * @param  Catalog  $catalog
+     * @return mixed
+     */
+    #[Endpoint('Delete catalog')]
+    #[UrlParam('catalog', 'integer', description: 'Catalog ID')]
     public function destroy(Catalog $catalog): mixed
     {
         try {
@@ -101,6 +136,8 @@ class CatalogController extends BaseController
      * @return AnonymousResourceCollection
      * @throws Exception
      */
+    #[Endpoint('Autocomplete catalogs')]
+    #[QueryParam('keyword', 'string', required: false)]
     public function autocomplete(Request $request): AnonymousResourceCollection
     {
         $catalogs = CatalogRepo::getInstance()->autocomplete($request->get('keyword') ?? '');

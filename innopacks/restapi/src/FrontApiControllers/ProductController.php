@@ -22,7 +22,13 @@ use InnoShop\Common\Resources\ProductDetail;
 use InnoShop\Common\Resources\ProductSimple;
 use InnoShop\Common\Resources\ReviewListItem;
 use InnoShop\Common\Resources\SkuSimple;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\Unauthenticated;
+use Knuckles\Scribe\Attributes\UrlParam;
 
+#[Group('Front - Products')]
 class ProductController extends BaseController
 {
     /**
@@ -30,6 +36,13 @@ class ProductController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('List products')]
+    #[Unauthenticated]
+    #[QueryParam('per_page', 'integer', required: false, example: 15)]
+    #[QueryParam('sort', 'string', required: false, example: 'id')]
+    #[QueryParam('order', 'string', required: false, example: 'desc')]
+    #[QueryParam('category_id', 'integer', required: false)]
+    #[QueryParam('brand_id', 'integer', required: false)]
     public function index(Request $request): mixed
     {
         $filters = $request->all();
@@ -66,6 +79,9 @@ class ProductController extends BaseController
      * @param  Product  $product
      * @return mixed
      */
+    #[Endpoint('Get product details')]
+    #[Unauthenticated]
+    #[UrlParam('product', 'integer', description: 'Product ID')]
     public function show(Product $product): mixed
     {
         $single = new ProductDetail($product);
@@ -78,6 +94,8 @@ class ProductController extends BaseController
      * @return mixed
      * @throws Exception
      */
+    #[Endpoint('Get product filters')]
+    #[Unauthenticated]
     public function filters(Request $request): mixed
     {
         $builder = ProductRepo::getInstance()->builder($request->all());
@@ -89,6 +107,9 @@ class ProductController extends BaseController
      * @param  Product  $product
      * @return AnonymousResourceCollection
      */
+    #[Endpoint('Get product reviews')]
+    #[Unauthenticated]
+    #[UrlParam('product', 'integer', description: 'Product ID')]
     public function productReviews(Product $product): AnonymousResourceCollection
     {
         $filters = [
@@ -106,6 +127,10 @@ class ProductController extends BaseController
      * @param  Request  $request
      * @return mixed|JsonResponse
      */
+    #[Endpoint('Search SKUs by keyword')]
+    #[Unauthenticated]
+    #[QueryParam('keyword', 'string', required: false)]
+    #[QueryParam('limit', 'integer', required: false, example: 10)]
     public function skuList(Request $request)
     {
         $keyword = $request->get('keyword');

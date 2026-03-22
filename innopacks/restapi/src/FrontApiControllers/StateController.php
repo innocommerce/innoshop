@@ -13,13 +13,21 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\StateRepo;
 use InnoShop\Common\Resources\StateItem;
+use Knuckles\Scribe\Attributes\Endpoint;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
+use Knuckles\Scribe\Attributes\Unauthenticated;
 
+#[Group('Front - Countries & States')]
 class StateController extends BaseController
 {
     /**
      * @param  Request  $request
      * @return AnonymousResourceCollection
      */
+    #[Endpoint('List states')]
+    #[Unauthenticated]
+    #[QueryParam('country_id', type: 'integer', required: false, description: 'Filter by country ID')]
     public function index(Request $request): AnonymousResourceCollection
     {
         $states = StateRepo::getInstance()->builder($request->all())->get();
