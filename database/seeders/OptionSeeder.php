@@ -9,16 +9,15 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Option;
 use InnoShop\Common\Models\OptionValue;
 
-class OptionSeeder extends Seeder
+class OptionSeeder extends BaseSeeder
 {
     public function run(): void
     {
-        OptionValue::query()->truncate();
-        Option::query()->truncate();
+        $this->safeTruncate(OptionValue::class);
+        $this->safeTruncate(Option::class);
 
         $options = $this->getOptions();
 

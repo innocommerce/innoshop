@@ -13,6 +13,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -46,5 +47,18 @@ class DatabaseSeeder extends Seeder
         ]);
 
         touch(storage_path('installed'));
+    }
+
+    /**
+     * Safely truncate a table by disabling foreign key checks.
+     *
+     * @param  string  $modelClass
+     * @return void
+     */
+    protected function safeTruncate(string $modelClass): void
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        $modelClass::query()->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 }

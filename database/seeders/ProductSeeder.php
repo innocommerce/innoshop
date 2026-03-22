@@ -9,11 +9,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\ProductRepo;
 
-class ProductSeeder extends Seeder
+class ProductSeeder extends BaseSeeder
 {
     /**
      * @throws \Exception|\Throwable
@@ -22,10 +21,10 @@ class ProductSeeder extends Seeder
     {
         $items = $this->getProducts();
         if ($items) {
-            Product::query()->truncate();
-            Product\Translation::query()->truncate();
-            Product\Category::query()->truncate();
-            Product\Sku::query()->truncate();
+            $this->safeTruncate(Product\Translation::class);
+            $this->safeTruncate(Product\Category::class);
+            $this->safeTruncate(Product\Sku::class);
+            $this->safeTruncate(Product::class);
             foreach ($items as $item) {
                 ProductRepo::getInstance()->create($item);
             }

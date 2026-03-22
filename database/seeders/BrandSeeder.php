@@ -9,16 +9,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Brand;
 
-class BrandSeeder extends Seeder
+class BrandSeeder extends BaseSeeder
 {
     public function run(): void
     {
         $items = $this->getBrands();
         if ($items) {
-            Brand::query()->truncate();
+            $this->safeTruncate(Brand::class);
+
             foreach ($items as $item) {
                 Brand::query()->create($item);
             }

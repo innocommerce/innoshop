@@ -9,7 +9,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Models\Attribute\Group as AttributeGroup;
 use InnoShop\Common\Models\Attribute\Group\Translation as AttributeGroupTranslation;
@@ -18,7 +17,7 @@ use InnoShop\Common\Models\Attribute\Value as AttributeValue;
 use InnoShop\Common\Models\Attribute\Value\Translation as AttributeValueTranslation;
 use InnoShop\Common\Models\Product\Attribute as ProductAttribute;
 
-class AttributeSeeder extends Seeder
+class AttributeSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -27,13 +26,13 @@ class AttributeSeeder extends Seeder
      */
     public function run()
     {
-        AttributeGroup::query()->truncate();
-        AttributeGroupTranslation::query()->truncate();
-        Attribute::query()->truncate();
-        AttributeTranslation::query()->truncate();
-        AttributeValue::query()->truncate();
-        AttributeValueTranslation::query()->truncate();
-        ProductAttribute::query()->truncate();
+        $this->safeTruncate(AttributeGroupTranslation::class);
+        $this->safeTruncate(AttributeGroup::class);
+        $this->safeTruncate(AttributeValueTranslation::class);
+        $this->safeTruncate(AttributeValue::class);
+        $this->safeTruncate(AttributeTranslation::class);
+        $this->safeTruncate(Attribute::class);
+        $this->safeTruncate(ProductAttribute::class);
 
         // Attribute Group
         $attributeGroupsNumber = 4;

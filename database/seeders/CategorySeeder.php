@@ -9,12 +9,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 use Throwable;
 
-class CategorySeeder extends Seeder
+class CategorySeeder extends BaseSeeder
 {
     /**
      * @throws Throwable
@@ -23,7 +22,7 @@ class CategorySeeder extends Seeder
     {
         $items = $this->getCategories();
         if ($items) {
-            Category::query()->truncate();
+            $this->safeTruncate(Category::class);
             foreach ($items as $item) {
                 CategoryRepo::getInstance()->create($item);
             }

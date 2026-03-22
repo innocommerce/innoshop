@@ -9,16 +9,15 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Article;
 
-class ArticleSeeder extends Seeder
+class ArticleSeeder extends BaseSeeder
 {
     public function run(): void
     {
         $items = $this->getArticles();
         if ($items) {
-            Article::query()->truncate();
+            $this->safeTruncate(Article::class);
             foreach ($items as $item) {
                 Article::query()->create($item);
             }
@@ -26,7 +25,7 @@ class ArticleSeeder extends Seeder
 
         $items = $this->getArticleTranslations();
         if ($items) {
-            Article\Translation::query()->truncate();
+            $this->safeTruncate(Article\Translation::class);
             foreach ($items as $item) {
                 Article\Translation::query()->create($item);
             }
@@ -34,7 +33,7 @@ class ArticleSeeder extends Seeder
 
         $items = $this->getArticleTags();
         if ($items) {
-            Article\Tag::query()->truncate();
+            $this->safeTruncate(Article\Tag::class);
             foreach ($items as $item) {
                 Article\Tag::query()->create($item);
             }

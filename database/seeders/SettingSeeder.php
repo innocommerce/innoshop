@@ -9,12 +9,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use InnoShop\Common\Models\Setting;
 use InnoShop\Common\Repositories\SettingRepo;
 use Throwable;
 
-class SettingSeeder extends Seeder
+class SettingSeeder extends BaseSeeder
 {
     /**
      * @return void
@@ -24,7 +23,7 @@ class SettingSeeder extends Seeder
     {
         $items = $this->getSettings();
         if ($items) {
-            Setting::query()->truncate();
+            $this->safeTruncate(Setting::class);
             foreach ($items as $item) {
                 SettingRepo::getInstance()->updateSystemValue($item['name'], $item['value']);
             }
@@ -52,9 +51,9 @@ class SettingSeeder extends Seeder
             ['space' => 'system', 'name' => 'menu_header_categories', 'value' => ['1', '4', '7', '10', '13']],
             ['space' => 'system', 'name' => 'menu_header_pages', 'value' => ['3']],
             ['space' => 'system', 'name' => 'menu_footer_categories', 'value' => ['1', '4', '7']],
+            ['space' => 'system', 'name' => 'menu_footer_specials', 'value' => ['products', 'brands']],
             ['space' => 'system', 'name' => 'menu_footer_catalogs', 'value' => ['1', '2']],
             ['space' => 'system', 'name' => 'menu_footer_pages', 'value' => ['1', '2', '3']],
-            ['space' => 'system', 'name' => 'menu_footer_specials', 'value' => ['products', 'brands']],
             [
                 'space' => 'system',
                 'name'  => 'meta_title',
