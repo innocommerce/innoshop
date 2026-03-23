@@ -35,6 +35,7 @@ return [
     'show'                       => 'Aantal',
     'specials'                   => 'Speciale aanbiedingen',
     'stock_not_enough'           => 'Niet genoeg voorraad',
+    'minimum_required'           => 'Minimum bestelhoeveelheid is :min',
     'telephone'                  => 'Telefoonnummer',
     'text_hint'                  => 'Hint',
 ];

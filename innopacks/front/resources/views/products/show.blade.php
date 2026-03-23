@@ -51,6 +51,9 @@
               @else
                 <div class="out-stock badge d-none">{{ __('front/product.out_stock') }}</div>
               @endif
+              @if($product->minimum > 1)
+                <span class="min-quantity-notice ms-2 text-muted small">{{ __('front/product.min_quantity_notice', ['min' => $product->minimum]) }}</span>
+              @endif
             </div>
 
             @hookinsert('product.detail.stock.after')
@@ -93,8 +96,8 @@
               <div class="product-info-bottom">
                 <div class="quantity-wrap">
                   <div class="minus"><i class="bi bi-dash-lg"></i></div>
-                  <input type="number" class="form-control product-quantity" value="1"
-                         data-sku-id="{{ $sku['id'] }}">
+                  <input type="number" class="form-control product-quantity" value="{{ $product->minimum ?? 1 }}"
+                         min="{{ $product->minimum ?? 1 }}" data-sku-id="{{ $sku['id'] }}" data-minimum="{{ $product->minimum ?? 1 }}">
                   <div class="plus"><i class="bi bi-plus-lg"></i></div>
                 </div>
                 <div class="product-info-btns">
@@ -208,12 +211,15 @@
         return;
       }
 
-      let quantity = parseInt($(this).siblings('input').val());
+      const $input = $(this).siblings('input');
+      let quantity = parseInt($input.val());
+      const minimum = parseInt($input.data('minimum')) || 1;
+
       if ($(this).hasClass('plus')) {
-        $(this).siblings('input').val(quantity + 1);
+        $input.val(quantity + 1);
       } else {
-        if (quantity > 1) {
-          $(this).siblings('input').val(quantity - 1);
+        if (quantity > minimum) {
+          $input.val(quantity - 1);
         }
       }
     });

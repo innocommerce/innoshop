@@ -35,6 +35,7 @@ return [
     'show'                       => 'Göster',
     'specials'                   => 'Özel İndirimler',
     'stock_not_enough'           => 'Yetersiz envanter',
+    'minimum_required'           => 'Minimum sipariş miktarı :min',
     'telephone'                  => 'Telefon',
     'text_hint'                  => 'İpucu',
 ];

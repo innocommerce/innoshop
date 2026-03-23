@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'Xem thêm hàng hóa',
     'visit_order_to_review'          => 'Vui lòng đến trung tâm cá nhân để để lại bình luận',
     'your_review'                    => 'Đánh giá của bạn',
+    'min_quantity_notice'            => 'Số lượng mua tối thiểu: :min đơn vị',
 ];

@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'Daha fazla ürün gör',
     'visit_order_to_review'          => 'Yorum Yapmak İçin Siparişinizi Ziyaret Edin',
     'your_review'                    => 'Yorumunuz',
+    'min_quantity_notice'            => 'Minimum sipariş miktarı: :min adet',
 ];

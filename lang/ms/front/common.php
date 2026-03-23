@@ -35,6 +35,7 @@ return [
     'show'                       => 'Paparan Bilangan',
     'specials'                   => 'Pautan',
     'stock_not_enough'           => 'Inventori tidak mencukupi',
+    'minimum_required'           => 'Kuantiti pembelian minimum ialah :min',
     'telephone'                  => 'Telefon',
     'text_hint'                  => 'Petunjuk',
 ];

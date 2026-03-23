@@ -35,6 +35,7 @@ return [
     'show'                       => '數量',
     'specials'                   => '鏈接',
     'stock_not_enough'           => '庫存不足',
+    'minimum_required'           => '最小購買數量為 :min',
     'telephone'                  => '聯繫電話',
     'text_hint'                  => '提示',
 ];

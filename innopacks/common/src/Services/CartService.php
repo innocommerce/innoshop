@@ -124,6 +124,16 @@ class CartService
             throw new Exception(trans('front/common.stock_not_enough'));
         }
 
+        // Validate minimum quantity
+        $productSku = Sku::find($data['sku_id']);
+        if ($productSku && $productSku->product) {
+            $minimum  = $productSku->product->minimum ?? 1;
+            $quantity = $data['quantity'] ?? 1;
+            if ($quantity < $minimum) {
+                throw new Exception(trans('front/common.minimum_required', ['min' => $minimum]));
+            }
+        }
+
         // 验证产品选项
         if (! empty($data['options'])) {
             $productSku = Sku::find($data['sku_id']);
@@ -175,6 +185,15 @@ class CartService
     {
         if (! $this->stockService->checkStockByCartItem($cartItem, $data['quantity'])) {
             throw new Exception(trans('front/common.stock_not_enough'));
+        }
+
+        // Validate minimum quantity
+        if ($cartItem->product) {
+            $minimum  = $cartItem->product->minimum ?? 1;
+            $quantity = $data['quantity'] ?? $cartItem->quantity;
+            if ($quantity < $minimum) {
+                throw new Exception(trans('front/common.minimum_required', ['min' => $minimum]));
+            }
         }
 
         $data = $this->mergeAuthId($data);

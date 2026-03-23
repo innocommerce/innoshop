@@ -35,6 +35,7 @@ return [
     'show'                       => 'Quantidade',
     'specials'                   => 'ligações',
     'stock_not_enough'           => 'Falta de estoque',
+    'minimum_required'           => 'A quantidade mínima de compra é :min',
     'telephone'                  => 'Telefone',
     'text_hint'                  => 'Dica',
 ];

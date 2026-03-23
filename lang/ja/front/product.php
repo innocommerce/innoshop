@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'もっと商品を見ます',
     'visit_order_to_review'          => '個人センターに移動してレビューを投稿してください',
     'your_review'                    => 'あなたのレビュー',
+    'min_quantity_notice'            => '最小注文数: :min 個',
 ];

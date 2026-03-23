@@ -35,6 +35,7 @@ return [
     'show'                       => 'Jumlah Tampil',
     'specials'                   => 'tautan',
     'stock_not_enough'           => 'Persediaan tidak mencukupi',
+    'minimum_required'           => 'Jumlah pembelian minimum adalah :min',
     'telephone'                  => 'Telepon',
     'text_hint'                  => 'Sūchnā',
 ];

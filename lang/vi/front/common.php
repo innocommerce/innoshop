@@ -35,6 +35,7 @@ return [
     'show'                       => 'Hiển thị',
     'specials'                   => 'Liên kết',
     'stock_not_enough'           => 'Thiếu hụt hàng tồn kho',
+    'minimum_required'           => 'Số lượng mua tối thiểu là :min',
     'telephone'                  => 'Số điện thoại',
     'text_hint'                  => 'Gợi ý',
 ];

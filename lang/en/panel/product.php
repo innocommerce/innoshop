@@ -165,4 +165,5 @@ return [
     'weight_class'                => 'Weight Unit',
     'weight_class_help'           => 'Select the unit of measurement for the weight of the commodity',
     'weight_help'                 => 'Product weight for shipping calculation',
+    'minimum'                     => 'Minimum Quantity',
 ];

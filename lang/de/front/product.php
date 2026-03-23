@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'Prüft noch mehr artikel.',
     'visit_order_to_review'          => 'Gehe zu Mein Konto und hinterlasse eine Bewertung',
     'your_review'                    => 'Ihre Bewertung',
+    'min_quantity_notice'            => 'Mindestbestellmenge: :min Stück',
 ];

@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'Ver más productos',
     'visit_order_to_review'          => 'Por favor visite el centro personal para dejar una reseña',
     'your_review'                    => 'Tu reseña',
+    'min_quantity_notice'            => 'Cantidad mínima de pedido: :min unidades',
 ];

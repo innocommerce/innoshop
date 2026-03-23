@@ -35,6 +35,7 @@ return [
     'show'                       => '표시',
     'specials'                   => '링크',
     'stock_not_enough'           => '재고 부족',
+    'minimum_required'           => '최소 주문 수량은 :min입니다',
     'telephone'                  => '전화번호',
     'text_hint'                  => '힌트',
 ];

@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'មើលផលិតផលច្រើនទៀត',
     'visit_order_to_review'          => 'View Order to Add a Review',
     'your_review'                    => 'Your Review',
+    'min_quantity_notice'            => 'ចំនួនទិញអប្បបរមា: :min ឯកតា',
 ];

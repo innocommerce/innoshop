@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'Maggiori informazioni',
     'visit_order_to_review'          => 'Visita il centro account per lasciare una recensione',
     'your_review'                    => 'La tua recensione',
+    'min_quantity_notice'            => 'Quantità minima d\'ordine: :min unità',
 ];

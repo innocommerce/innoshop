@@ -35,6 +35,7 @@ return [
     'show'                       => 'จำนวน',
     'specials'                   => 'เชื่อมโยง',
     'stock_not_enough'           => 'คลังสินค้าไม่เพียงพอ',
+    'minimum_required'           => 'จำนวนการซื้อขั้นต่ำคือ :min',
     'telephone'                  => 'โทรศัพท์',
     'text_hint'                  => 'คำใบ้',
 ];

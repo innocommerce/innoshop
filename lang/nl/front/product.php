@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'View more products',
     'visit_order_to_review'          => 'Bezoek je account om een recensie te plaatsen',
     'your_review'                    => 'Jouw recensie',
+    'min_quantity_notice'            => 'Minimum bestelhoeveelheid: :min eenheden',
 ];

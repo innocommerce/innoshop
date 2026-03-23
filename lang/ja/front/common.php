@@ -35,6 +35,7 @@ return [
     'show'                       => 'すうりょう',
     'specials'                   => 'リンクします',
     'stock_not_enough'           => '在庫不足です',
+    'minimum_required'           => '最小購入数量は :min です',
     'telephone'                  => '電話番号',
     'text_hint'                  => 'ヒント',
 ];

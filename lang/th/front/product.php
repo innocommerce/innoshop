@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'ดูรายการเพิ่มเติม',
     'visit_order_to_review'          => 'กรุณาไปที่ส่วนตัวของฉันเพื่อแสดงความคิดเห็น',
     'your_review'                    => 'รีวิวของคุณ',
+    'min_quantity_notice'            => 'จำนวนการซื้อขั้นต่ำ: :min หน่วย',
 ];

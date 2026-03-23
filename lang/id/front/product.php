@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'Lihat lebih banyak barang',
     'visit_order_to_review'          => 'Silakan kunjungi pusat pribadi untuk meninggalkan ulasan',
     'your_review'                    => 'Ulasan Anda',
+    'min_quantity_notice'            => 'Jumlah pembelian minimum: :min unit',
 ];

@@ -39,6 +39,7 @@ return [
     'show'                            => 'Show',
     'specials'                        => 'Specials',
     'stock_not_enough'                => 'Stock not enough',
+    'minimum_required'                => 'Minimum purchase quantity is :min',
     'telephone'                       => 'Telephone',
     'text_hint'                       => 'Hint',
 ];

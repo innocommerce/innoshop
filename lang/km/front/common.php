@@ -35,6 +35,7 @@ return [
     'show'                       => 'បង្ហាញ',
     'specials'                   => 'ពិសេស',
     'stock_not_enough'           => 'ស្តុកមិនគ្រប់គ្រាន់',
+    'minimum_required'           => 'ចំនួនទិញអប្បបរមាគឺ :min',
     'telephone'                  => 'លេខទូរស័ព្ទ',
     'text_hint'                  => 'ព័ត៌មាន',
 ];

@@ -165,4 +165,5 @@ return [
     'weight_class'                => '重量单位',
     'weight_class_help'           => '选择商品重量的计量单位',
     'weight_help'                 => '商品重量，用于计算运费',
+    'minimum'                     => '最小起订量',
 ];

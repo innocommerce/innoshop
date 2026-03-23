@@ -39,6 +39,7 @@ return [
     'show'                            => '数量',
     'specials'                        => '链接',
     'stock_not_enough'                => '库存不足',
+    'minimum_required'                => '最小购买数量为 :min',
     'telephone'                       => '联系电话',
     'text_hint'                       => '提示',
 ];

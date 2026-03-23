@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'Осмотреть товар',
     'visit_order_to_review'          => 'пожалуйста, перейдите в личный кабинет, чтобы оставить обзор',
     'your_review'                    => 'ваш обзор',
+    'min_quantity_notice'            => 'Минимальное количество заказа: :min шт',
 ];

@@ -59,4 +59,6 @@ return [
     'view_more_products'             => '查看更多商品',
     'visit_order_to_review'          => '请到个人中心留言评论',
     'your_review'                    => '你的评论',
+    'minimum_notice'                 => '最小起订量：:min 件',
+    'min_quantity_notice'            => '最小起订量：:min 件',
 ];

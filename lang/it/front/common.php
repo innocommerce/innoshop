@@ -35,6 +35,7 @@ return [
     'show'                       => 'Mostra',
     'specials'                   => 'link',
     'stock_not_enough'           => 'Scorte insufficienti',
+    'minimum_required'           => 'La quantità minima d\'acquisto è :min',
     'telephone'                  => 'Telefono',
     'text_hint'                  => 'Suggerimento',
 ];

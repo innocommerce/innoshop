@@ -59,4 +59,5 @@ return [
     'view_more_products'             => 'انظر المزيد من السلع',
     'visit_order_to_review'          => 'يرجى زيارة المركز الشخصي لترك مراجعة',
     'your_review'                    => 'مراجعتك',
+    'min_quantity_notice'            => 'الحد الأدنى للطلب: :min وحدة',
 ];

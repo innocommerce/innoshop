@@ -76,6 +76,9 @@
                            :value="old('viewed', $product->viewed ?? '')" :placeholder="__('panel/product.viewed')"/>
     </div>
     <div class="col-12 col-md-6">
+      <x-common-form-input :title="__('panel/product.minimum')" name="minimum" type="number"
+                           :value="old('minimum', $product->minimum ?? 1)"
+                           :placeholder="__('panel/product.minimum')"/>
       <x-common-form-switch-radio :title="__('panel/product.is_virtual')" name="is_virtual"
                               :value="old('is_virtual', $product->is_virtual ?? false)"/>
     </div>

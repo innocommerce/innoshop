@@ -35,6 +35,7 @@ return [
     'show'                       => 'Anzahl',
     'specials'                   => 'Link.',
     'stock_not_enough'           => 'Unzureichende lagerbestände.',
+    'minimum_required'           => 'Die Mindestbestellmenge beträgt :min',
     'telephone'                  => 'Telefonnummer',
     'text_hint'                  => 'Hinweis',
 ];

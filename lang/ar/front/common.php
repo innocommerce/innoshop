@@ -35,6 +35,7 @@ return [
     'show'                       => 'عرض',
     'specials'                   => 'الرابط',
     'stock_not_enough'           => 'مخزون',
+    'minimum_required'           => 'الحد الأدنى للطلب هو :min',
     'telephone'                  => 'رقم الهاتف',
     'text_hint'                  => 'تلميح نصي',
 ];

@@ -679,6 +679,7 @@ class ProductRepo extends BaseRepo
             'weight_class' => $data['weight_class'] ?? '',
             'sales'        => (int) ($data['sales'] ?? 0),
             'viewed'       => (int) ($data['viewed'] ?? 0),
+            'minimum'      => (int) ($data['minimum'] ?? 1),
             'published_at' => $data['published_at'] ?? now(),
             'active'       => (bool) ($data['active'] ?? false),
         ];
