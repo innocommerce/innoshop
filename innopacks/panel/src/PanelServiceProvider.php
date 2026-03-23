@@ -49,6 +49,8 @@ class PanelServiceProvider extends ServiceProvider
     public function register(): void
     {
         app('router')->aliasMiddleware('admin_auth', AdminAuthenticate::class);
+
+        $this->loadViewsFrom(inno_path('panel/resources/views'), 'panel');
     }
 
     /**
@@ -174,7 +176,5 @@ class PanelServiceProvider extends ServiceProvider
         $this->publishes([
             $originViewPath => $customViewPath,
         ], 'views');
-
-        $this->loadViewsFrom($originViewPath, 'panel');
     }
 }

@@ -44,6 +44,8 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->singleton('plugin', function () {
             return new PluginManager;
         });
+
+        $this->loadViewsFrom(inno_path('plugin/resources/views'), 'plugin');
     }
 
     /**
@@ -80,7 +82,6 @@ class PluginServiceProvider extends ServiceProvider
         }
 
         $this->registerPanelRoutes();
-        $this->loadViewTemplates();
         $this->registerMarketplaceSettingsHook();
 
         $this->pluginBasePath = base_path('plugins');
@@ -102,16 +103,6 @@ class PluginServiceProvider extends ServiceProvider
             ->group(function () {
                 $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
             });
-    }
-
-    /**
-     * Load templates
-     *
-     * @return void
-     */
-    private function loadViewTemplates(): void
-    {
-        $this->loadViewsFrom(inno_path('plugin/resources/views'), 'plugin');
     }
 
     /**

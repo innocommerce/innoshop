@@ -15,6 +15,14 @@ use Illuminate\Support\ServiceProvider;
 class InstallServiceProvider extends ServiceProvider
 {
     /**
+     * @return void
+     */
+    public function register(): void
+    {
+        $this->loadViewsFrom(inno_path('install/resources/views'), 'install');
+    }
+
+    /**
      * Boot front service provider.
      *
      * @return void
@@ -23,7 +31,6 @@ class InstallServiceProvider extends ServiceProvider
     {
         $this->registerWebRoutes();
         $this->loadTranslations();
-        $this->loadViewTemplates();
     }
 
     /**
@@ -52,14 +59,4 @@ class InstallServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'install');
     }
 
-    /**
-     * Load templates
-     *
-     * @return void
-     */
-    private function loadViewTemplates(): void
-    {
-        $originViewPath = inno_path('install/resources/views');
-        $this->loadViewsFrom($originViewPath, 'install');
-    }
 }
