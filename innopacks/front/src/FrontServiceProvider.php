@@ -10,6 +10,7 @@
 namespace InnoShop\Front;
 
 use Exception;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -182,7 +183,16 @@ class FrontServiceProvider extends ServiceProvider
      */
     protected function loadThemeViewPath(): void
     {
-        $this->app->singleton('view.finder', function ($app) {
+        // If anything resolved `view` before this boot() runs, the Factory still holds the
+        // default FileViewFinder (resource_path only). Replace finder binding and drop the
+        // cached Factory so theme + pack paths apply — behavior can differ per install
+        // (plugins, debugbar, Octane) even when innopacks match.
+        /** @var Application $application */
+        $application = $this->app;
+
+        $application->forgetInstance('view.finder');
+
+        $application->singleton('view.finder', function ($app) {
             $themePaths = [];
             if ($theme = system_setting('theme')) {
                 $themeViewPath = base_path("themes/{$theme}/views");
@@ -190,13 +200,20 @@ class FrontServiceProvider extends ServiceProvider
                     $themePaths[] = $themeViewPath;
                 }
             }
-            $themePaths[] = realpath(__DIR__.'/../resources/views');
+            $packViews = realpath(__DIR__.'/../resources/views');
+            if ($packViews !== false) {
+                $themePaths[] = $packViews;
+            }
 
             $viewPaths = $app['config']['view.paths'];
             $viewPaths = array_merge($themePaths, $viewPaths);
 
             return new FileViewFinder($app['files'], $viewPaths);
         });
+
+        if ($application->resolved('view')) {
+            $application->forgetInstance('view');
+        }
     }
 
     /**

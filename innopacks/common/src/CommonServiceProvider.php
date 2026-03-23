@@ -23,6 +23,15 @@ class CommonServiceProvider extends ServiceProvider
     private string $basePath = __DIR__.'/../';
 
     /**
+     * Register common view namespace early so Blade components can resolve
+     * `common::...` even if boot() is skipped or reordered (e.g. Octane edge cases).
+     */
+    public function register(): void
+    {
+        $this->loadViewsFrom($this->basePath.'resources/views', 'common');
+    }
+
+    /**
      * Boot front service provider.
      *
      * @return void
@@ -158,7 +167,5 @@ class CommonServiceProvider extends ServiceProvider
         $this->publishes([
             $originViewPath => $customViewPath,
         ], 'views');
-
-        $this->loadViewsFrom($originViewPath, 'common');
     }
 }
