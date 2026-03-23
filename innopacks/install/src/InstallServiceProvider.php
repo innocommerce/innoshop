@@ -42,7 +42,10 @@ class InstallServiceProvider extends ServiceProvider
     {
         Route::name('install.')
             ->group(function () {
-                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
+                $path = __DIR__.'/../routes/web.php';
+                if (is_file($path)) {
+                    $this->loadRoutesFrom($path);
+                }
             });
     }
 

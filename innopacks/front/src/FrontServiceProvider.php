@@ -122,23 +122,31 @@ class FrontServiceProvider extends ServiceProvider
         Route::middleware('front')
             ->name('front.')
             ->group(function () {
-                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/root.php'));
+                $path = __DIR__.'/../routes/root.php';
+                if (is_file($path)) {
+                    $this->loadRoutesFrom($path);
+                }
             });
 
         $locales = locales();
+        $webRoutes = __DIR__.'/../routes/web.php';
         if (hide_url_locale() || $locales->isEmpty()) {
             Route::middleware('front')
                 ->name('front.')
-                ->group(function () {
-                    $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
+                ->group(function () use ($webRoutes) {
+                    if (is_file($webRoutes)) {
+                        $this->loadRoutesFrom($webRoutes);
+                    }
                 });
         } else {
             foreach ($locales as $locale) {
                 Route::middleware('front')
                     ->prefix($locale->code)
                     ->name($locale->code.'.front.')
-                    ->group(function () {
-                        $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
+                    ->group(function () use ($webRoutes) {
+                        if (is_file($webRoutes)) {
+                            $this->loadRoutesFrom($webRoutes);
+                        }
                     });
             }
         }

@@ -26,15 +26,6 @@ class DevToolsServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom($this->basePath.'config/devtools.php', 'devtools');
-    }
-
-    /**
-     * Boot the service provider.
-     *
-     * @return void
-     */
-    public function boot(): void
-    {
         $this->registerCommands();
     }
 

@@ -101,7 +101,10 @@ class PluginServiceProvider extends ServiceProvider
             ->middleware(['web', 'admin_auth:admin', SetPanelLocale::class])
             ->name("$adminName.")
             ->group(function () {
-                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/web.php'));
+                $path = __DIR__.'/../routes/web.php';
+                if (is_file($path)) {
+                    $this->loadRoutesFrom($path);
+                }
             });
     }
 

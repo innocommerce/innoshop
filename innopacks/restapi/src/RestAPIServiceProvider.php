@@ -59,7 +59,10 @@ class RestAPIServiceProvider extends ServiceProvider
             ->middleware('api')
             ->name('api.')
             ->group(function () {
-                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/front-api.php'));
+                $path = __DIR__.'/../routes/front-api.php';
+                if (is_file($path)) {
+                    $this->loadRoutesFrom($path);
+                }
             });
     }
 
@@ -79,7 +82,10 @@ class RestAPIServiceProvider extends ServiceProvider
             ->middleware('panel_api')
             ->name('api.panel.')
             ->group(function () {
-                $this->loadRoutesFrom(realpath(__DIR__.'/../routes/panel-api.php'));
+                $path = __DIR__.'/../routes/panel-api.php';
+                if (is_file($path)) {
+                    $this->loadRoutesFrom($path);
+                }
             });
     }
 }
