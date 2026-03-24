@@ -8,11 +8,8 @@
  */
 
 use InnoShop\RestAPI\Middleware\EnsureApiDocumentationEnabled;
-use Knuckles\Scribe\Config\AuthIn;
 use Knuckles\Scribe\Config\Defaults;
 use Knuckles\Scribe\Extracting\Strategies;
-
-use function Knuckles\Scribe\Config\removeStrategies;
 
 return [
     'title' => 'InnoShop Panel API Documentation',
@@ -65,7 +62,7 @@ return [
     'auth' => [
         'enabled'     => true,
         'default'     => true,
-        'in'          => AuthIn::BEARER->value,
+        'in'          => 'bearer',
         'name'        => 'Authorization',
         'use_value'   => env('SCRIBE_AUTH_KEY'),
         'placeholder' => '{YOUR_AUTH_KEY}',
@@ -100,6 +97,7 @@ return [
         'models_source' => ['factoryCreate', 'factoryMake', 'databaseFirst'],
     ],
 
+    // Scribe 5.x: GetFromRouteRules / GetFromDocBlocks in sub-namespaces were removed; use Defaults.
     'strategies' => [
         'metadata' => [
             ...Defaults::METADATA_STRATEGIES,
@@ -120,10 +118,13 @@ return [
         'bodyParameters' => [
             ...Defaults::BODY_PARAMETERS_STRATEGIES,
         ],
-        'responses' => removeStrategies(
-            Defaults::RESPONSES_STRATEGIES,
-            [Strategies\Responses\ResponseCalls::class],
-        ),
+        'responses' => [
+            Strategies\Responses\UseResponseAttributes::class,
+            Strategies\Responses\UseTransformerTags::class,
+            Strategies\Responses\UseApiResourceTags::class,
+            Strategies\Responses\UseResponseTag::class,
+            Strategies\Responses\UseResponseFileTag::class,
+        ],
         'responseFields' => [
             ...Defaults::RESPONSE_FIELDS_STRATEGIES,
         ],

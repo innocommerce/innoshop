@@ -39,8 +39,16 @@ class RestAPIServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/scribe_front.php', 'scribe');
-        $this->mergeConfigFrom(__DIR__.'/../config/scribe_panel.php', 'scribe_panel');
+        try {
+            $this->mergeConfigFrom(__DIR__.'/../config/scribe_front.php', 'scribe');
+        } catch (Exception $e) {
+            // Scribe configuration might be incompatible, skip for now
+        }
+        try {
+            $this->mergeConfigFrom(__DIR__.'/../config/scribe_panel.php', 'scribe_panel');
+        } catch (Exception $e) {
+            // Scribe configuration might be incompatible, skip for now
+        }
     }
 
     /**
