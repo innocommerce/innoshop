@@ -22,8 +22,14 @@ abstract class BaseSeeder extends Seeder
      */
     protected function safeTruncate(string $modelClass): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        $modelClass::query()->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF');
+            $modelClass::query()->truncate();
+            DB::statement('PRAGMA foreign_keys = ON');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+            $modelClass::query()->truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
     }
 }
