@@ -19,29 +19,27 @@
         "parsedown/parsedown": "^1.7",
         "geoip2/geoip2": "^3.2",
         "intervention/image": "^3.5",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^13.0",
         "laravel/octane": "^2.8",
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.18",
-        "laravel/tinker": "^2.10",
+        "laravel/tinker": "^3.0",
         "maatwebsite/excel": "^3.1",
         "mobiledetect/mobiledetectlib": "^4.8",
         "nelexa/zip": "^4.0",
         "openai-php/client": "^0.15.0",
         "overtrue/easy-sms": "^3.2",
-        "phpunit/php-timer": "^7.0",
+        "phpunit/php-timer": "^8.0",
         "rap2hpoutre/fast-excel": "^5.5",
         "spatie/laravel-permission": "^6.7",
         "spatie/laravel-sitemap": "^7.3",
-        "srmklive/paypal": "^3.0",
         "stripe/stripe-php": "^15.10",
-        "tormjens/eventy": "^0.9.3",
-        "w7corp/easywechat": "^6.7",
-        "wikimedia/composer-merge-plugin": "^2.1"
+        "tormjens/eventy": "dev-master",
+        "w7corp/easywechat": "^6.7"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.13",
+        "barryvdh/laravel-debugbar": "^4.0",
         "fakerphp/faker": "^1.23",
         "kitloong/laravel-migrations-generator": "^7.0",
         "knuckleswtf/scribe": "^5.9",
@@ -51,7 +49,7 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^11.0.1",
+        "phpunit/phpunit": "^12.0",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
@@ -133,19 +131,6 @@
     "extra": {
         "laravel": {
             "dont-discover": []
-        },
-        "merge-plugin": {
-            "include": [
-                "plugins/*/composer.json"
-            ],
-            "recurse": true,
-            "replace": false,
-            "ignore-duplicates": false,
-            "merge-dev": true,
-            "merge-extra": false,
-            "merge-extra-deep": false,
-            "merge-replace": true,
-            "merge-scripts": false
         }
     },
     "config": {
@@ -154,8 +139,7 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true,
-            "wikimedia/composer-merge-plugin": true
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "stable",
