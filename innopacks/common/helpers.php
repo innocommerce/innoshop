@@ -25,6 +25,8 @@ use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\LocaleRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Services\ImageService;
+use InnoShop\Common\Support\EntityLinkEnricher;
+use InnoShop\Common\Support\EntityLinkPayload;
 use InnoShop\Common\Support\Registry;
 
 if (! function_exists('load_settings')) {
@@ -861,6 +863,71 @@ if (! function_exists('front_root_route')) {
     function front_root_route($name, mixed $parameters = [], bool $absolute = true): string
     {
         return route('front.'.$name, $parameters, $absolute);
+    }
+}
+
+if (! function_exists('entity_link_normalize')) {
+    /**
+     * InnoLinkPicker: normalize stored link (JSON, legacy product:/category:, custom URL) to a fixed row shape.
+     * Does not hit the database. For label/image/price from DB use {@see entity_link_enrich()} or {@see entity_link_display()}.
+     *
+     * @param  array<string, mixed>|string|null  $stored
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}
+     */
+    function entity_link_normalize(array|string|null $stored): array
+    {
+        return EntityLinkPayload::normalize($stored);
+    }
+}
+
+if (! function_exists('entity_link_enrich')) {
+    /**
+     * Fill missing entity_label / entity_image / entity_price on a normalized row (panel + storefront themes).
+     * On the storefront, names follow the same request locale as product pages (middleware sets app + session).
+     *
+     * @param  array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}  $row
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}
+     */
+    function entity_link_enrich(array $row): array
+    {
+        return EntityLinkEnricher::enrichRow($row);
+    }
+}
+
+if (! function_exists('entity_link_resolve')) {
+    /**
+     * Resolve entity id or slug to a model instance (shared with InnoLinkPicker).
+     *
+     * @param  class-string  $modelClass
+     */
+    function entity_link_resolve(string $modelClass, string $value, array $with = []): ?object
+    {
+        return EntityLinkEnricher::resolveByIdOrSlug($modelClass, $value, $with);
+    }
+}
+
+if (! function_exists('entity_link_display')) {
+    /**
+     * Normalize + DB enrichment + {@see EntityLinkPayload::urlFromRow()} as entity_href (slideshow, menus, Blade).
+     *
+     * @param  array<string, mixed>|string|null  $stored
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string, entity_href: string}
+     */
+    function entity_link_display(array|string|null $stored): array
+    {
+        return EntityLinkPayload::forDisplay($stored);
+    }
+}
+
+if (! function_exists('entity_link_url')) {
+    /**
+     * Storefront URL only (no DB). Faster than {@see entity_link_display()} when you do not need label/image/price.
+     *
+     * @param  array<string, mixed>|string|null  $stored
+     */
+    function entity_link_url(array|string|null $stored): string
+    {
+        return EntityLinkPayload::urlFromStored($stored);
     }
 }
 

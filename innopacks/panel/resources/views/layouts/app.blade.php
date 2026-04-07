@@ -24,6 +24,7 @@
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script src="{{ asset('vendor/laydate/laydate.js') }}"></script>
   <script src="{{ mix('build/panel/js/app.js') }}"></script>
+  <script src="{{ mix('build/panel/js/panel-standalone.js') }}"></script>
   <script>
     const urls = {
       panel_api: '{{ route('api.panel.base.index') }}',
@@ -40,6 +41,7 @@
     }
   </script>
   @stack('header')
+  @include('common::components.echo')
 </head>
 
 <body class="@yield('body-class')">

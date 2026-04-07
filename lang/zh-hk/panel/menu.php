@@ -64,7 +64,7 @@ return [
     'top_customer'           => '客戶',
     'top_data'               => '數據',
     'top_design'             => '界面',
-    'top_marketing'          => '營銷',
+    'top_marketing'          => '營運',
     'top_order'              => '訂單',
     'top_plugin'             => '插件',
     'top_product'            => '產品',

@@ -64,7 +64,7 @@ return [
     'top_report'             => '报表',
     'top_customer'           => '客户',
     'top_design'             => '界面',
-    'top_marketing'          => '营销',
+    'top_marketing'          => '运营',
     'top_order'              => '订单',
     'top_plugin'             => '插件',
     'top_product'            => '产品',

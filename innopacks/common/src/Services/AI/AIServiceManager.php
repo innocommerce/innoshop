@@ -59,7 +59,7 @@ class AIServiceManager
             Log::info('Selected model: '.$model);
             Log::info('Config: '.json_encode($config));
 
-            $service = AIServiceFactory::make($model, $config);
+            $service = new LaravelAIService;
             Log::info('Service created successfully');
 
             // Allow modification of request via hooks
@@ -82,7 +82,7 @@ class AIServiceManager
                 if ($fallbackModel && $fallbackModel !== $model) {
                     Log::info('Trying fallback model: '.$fallbackModel);
                     $config  = $this->getModelConfig($fallbackModel);
-                    $service = AIServiceFactory::make($fallbackModel, $config);
+                    $service = new LaravelAIService;
 
                     return $service->generate($prompt, $options);
                 }
@@ -109,7 +109,7 @@ class AIServiceManager
         $model  = $this->getModelForPurpose($purpose);
         $config = $this->getModelConfig($model);
 
-        $service = AIServiceFactory::make($model, $config);
+        $service = new LaravelAIService;
 
         $prompt  = apply_filters('ai.generate_prompt', $prompt, $purpose, $model);
         $options = apply_filters('ai.generate_options', $options, $purpose, $model);
@@ -129,18 +129,30 @@ class AIServiceManager
      */
     public function make(string $model, array $config = []): AIServiceInterface
     {
-        if (! isset($this->config['models'][$model])) {
-            throw new \InvalidArgumentException("Unsupported AI model: {$model}");
+        return new LaravelAIService;
+    }
+
+    /**
+     * Chat with multi-turn messages.
+     */
+    public function chat(array $messages, array $options = []): string
+    {
+        $model  = $options['model'] ?? $this->getModelForPurpose('chat');
+        $config = array_merge($this->getModelConfig($model), $options);
+
+        try {
+            return $this->make($model)->chat($messages, $config);
+        } catch (\Throwable $e) {
+            $fallback = $this->getFallbackModel($model);
+            if ($fallback) {
+                try {
+                    return $this->make($fallback)->chat($messages, $config);
+                } catch (\Throwable $e2) {
+                    throw new \RuntimeException('AI chat failed: '.$e2->getMessage());
+                }
+            }
+            throw new \RuntimeException('AI chat failed: '.$e->getMessage());
         }
-
-        // Check if model is enabled
-        if (! $this->isModelEnabled($model)) {
-            throw new \InvalidArgumentException("AI model is disabled: {$model}");
-        }
-
-        $modelConfig = array_merge($this->config['models'][$model], $config);
-
-        return AIServiceFactory::make($model, $modelConfig);
     }
 
     /**
@@ -253,6 +265,22 @@ class AIServiceManager
                     'max_tokens'  => 1000,
                     'temperature' => 0.7,
                 ],
+                'glm' => [
+                    'enabled'     => system_setting('glm_enabled', false),
+                    'api_key'     => system_setting('glm_api_key', ''),
+                    'base_url'    => 'https://open.bigmodel.cn/api/paas/v4',
+                    'model'       => 'glm-4',
+                    'max_tokens'  => 1000,
+                    'temperature' => 0.7,
+                ],
+                'minimax' => [
+                    'enabled'     => system_setting('minimax_enabled', false),
+                    'api_key'     => system_setting('minimax_api_key', ''),
+                    'base_url'    => 'https://api.minimax.chat/v1',
+                    'model'       => 'MiniMax-Text-01',
+                    'max_tokens'  => 1000,
+                    'temperature' => 0.7,
+                ],
             ],
             'purpose_mapping' => [
                 'tdk'   => 'openai',
@@ -266,7 +294,9 @@ class AIServiceManager
                 'doubao'    => 'qianwen',
                 'qianwen'   => 'hunyuan',
                 'hunyuan'   => 'anthropic',
-                'anthropic' => 'openai',
+                'anthropic' => 'glm',
+                'glm'       => 'minimax',
+                'minimax'   => 'openai',
             ],
         ];
 
@@ -280,7 +310,24 @@ class AIServiceManager
      */
     public function getAvailableModels(): array
     {
-        return AIServiceFactory::getAvailableModels();
+        $models = [
+            'openai'    => OpenAIService::class,
+            'anthropic' => OpenAIService::class,
+            'deepseek'  => OpenAIService::class,
+            'kimi'      => OpenAIService::class,
+            'doubao'    => OpenAIService::class,
+            'qianwen'   => OpenAIService::class,
+            'hunyuan'   => OpenAIService::class,
+            'glm'       => GlmService::class,
+            'minimax'   => MinimaxService::class,
+        ];
+
+        $result = [];
+        foreach ($models as $key => $class) {
+            $result[$key] = $class::getModelInfo();
+        }
+
+        return apply_filters('ai.available_models', $result);
     }
 
     /**
@@ -290,16 +337,15 @@ class AIServiceManager
      */
     public function getModelsForSelect(): array
     {
-        $models    = $this->getAvailableModels();
-        $formatted = [];
+        $formatted       = [];
+        $systemProviders = ['openai', 'anthropic', 'deepseek', 'kimi', 'doubao', 'qianwen', 'hunyuan', 'glm', 'minimax'];
 
-        foreach ($models as $key => $info) {
-            // Only include enabled models
-            $modelConfig = $this->config['models'][$key] ?? [];
-            if (isset($modelConfig['enabled']) && $modelConfig['enabled']) {
+        foreach ($systemProviders as $name) {
+            $apiKey = system_setting("{$name}_api_key");
+            if (! empty($apiKey)) {
                 $formatted[] = [
-                    'code' => $key,
-                    'name' => $info['name'] ?? $key,
+                    'code' => $name,
+                    'name' => ucfirst($name),
                 ];
             }
         }
@@ -316,7 +362,7 @@ class AIServiceManager
      */
     public function validateModelConfig(string $model, array $config): bool
     {
-        return AIServiceFactory::validateConfig($model, $config);
+        return ! empty($config['api_key']);
     }
 
     /**
@@ -356,6 +402,6 @@ class AIServiceManager
     public function reloadConfig(): void
     {
         $this->config = $this->loadConfig();
-        AIServiceFactory::clearCache();
+        // Cache cleared via config refresh
     }
 }

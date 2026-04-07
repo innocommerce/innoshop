@@ -19,6 +19,7 @@ return [
     'home'                            => '首页',
     'in_stock'                        => '有货',
     'load_more'                       => '加载更多',
+    'links'                           => '链接',
     'login'                           => '登录',
     'logo'                            => '品牌',
     'news'                            => '新闻',

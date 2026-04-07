@@ -189,6 +189,44 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- GLM Configuration -->
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="card-title mb-0">GLM ({{ __('panel/setting_ai.zhipu') }})</h6>
+                    <x-common-form-model-switch name="glm_enabled" 
+                                               :value="old('glm_enabled', system_setting('glm_enabled', false))" 
+                                               id="glm_enabled" />
+                  </div>
+                  <div class="card-body">
+                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.glm_description') }} <a href="https://open.bigmodel.cn/usercenter/apikeys" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
+                    <div class="mb-3">
+                      <x-common-form-input title="{{ __('panel/setting_ai.glm_api_key') }}" 
+                                         name="glm_api_key" 
+                                         value="{{ old('glm_api_key', system_setting('glm_api_key')) }}"
+                                         placeholder="..." />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MiniMax Configuration -->
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="card-title mb-0">MiniMax</h6>
+                    <x-common-form-model-switch name="minimax_enabled" 
+                                               :value="old('minimax_enabled', system_setting('minimax_enabled', false))" 
+                                               id="minimax_enabled" />
+                  </div>
+                  <div class="card-body">
+                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.minimax_description') }} <a href="https://platform.minimaxi.com/document/Key%20management" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
+                    <div class="mb-3">
+                      <x-common-form-input title="{{ __('panel/setting_ai.minimax_api_key') }}" 
+                                         name="minimax_api_key" 
+                                         value="{{ old('minimax_api_key', system_setting('minimax_api_key')) }}"
+                                         placeholder="..." />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

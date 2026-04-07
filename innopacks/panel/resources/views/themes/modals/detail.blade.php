@@ -192,32 +192,3 @@
 @if($theme['has_demo'])
   @include('panel::themes.modals.import-confirm', ['theme' => $theme])
 @endif
-
-@push('footer')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Handle theme enable button click
-  const enableBtn = document.querySelector('#themeDetail{{ $theme['code'] }} .theme-enable-btn');
-  if (enableBtn) {
-    enableBtn.addEventListener('click', function() {
-      const url = this.getAttribute('data-url');
-      const code = this.getAttribute('data-code');
-      
-      layer.load(2, {shade: [0.3, '#fff']});
-      axios.put(url, {status: 1}).then((res) => {
-        inno.msg(res.message);
-        // Close modal and reload page
-        const modal = bootstrap.Modal.getInstance(document.getElementById('themeDetail{{ $theme['code'] }}'));
-        if (modal) {
-          modal.hide();
-        }
-        location.reload();
-      }).catch((err) => {
-        inno.msg(err.response?.data?.message || '{{ __('panel/common.operation_failed') }}');
-      }).finally(() => {
-        layer.closeAll('loading');
-      });
-    });
-});
-</script>
-@endpush

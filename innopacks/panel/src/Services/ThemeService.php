@@ -69,7 +69,7 @@ class ThemeService extends BaseService
                     'description' => $themeDescription,
                     'selected'    => $current === $themeCode,
                     'preview'     => $this->getPreviewPath($dir),
-                    'has_demo'    => $this->hasDemo($dir),
+                    'has_demo'    => ThemeDemoService::getInstance()->hasDemo($dir),
                     'version'     => $config['version'] ?? '',
                     'author'      => $config['author'] ?? [],
                 ];
@@ -129,17 +129,11 @@ class ThemeService extends BaseService
     }
 
     /**
-     * Check if theme has demo data
-     * Supports: Seeder.php closure
+     * Check if theme has demo data (delegates to ThemeDemoService for one source of truth).
      */
     public function hasDemo(string $dir): bool
     {
-        // Check for Seeder.php closure (preferred)
-        if (file_exists($dir.'/demo/Seeder.php')) {
-            return true;
-        }
-
-        return false;
+        return ThemeDemoService::getInstance()->hasDemo($dir);
     }
 
     /**

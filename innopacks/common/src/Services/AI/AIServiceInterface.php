@@ -43,4 +43,14 @@ interface AIServiceInterface
      * @return array Model information including available models and capabilities
      */
     public static function getModelInfo(): array;
+
+    /**
+     * Chat with multi-turn messages.
+     */
+    public function chat(array $messages, array $options = []): string;
+
+    /**
+     * Chat with streaming.
+     */
+    public function chatStream(array $messages, array $options = []): iterable;
 }

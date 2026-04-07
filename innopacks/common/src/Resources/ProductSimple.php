@@ -32,6 +32,7 @@ class ProductSimple extends JsonResource
         $data = [
             'id'                  => $this->id,
             'master_sku_id'       => $sku->id,
+            'code'                => $sku->code ?? '',
             'slug'                => $this->slug,
             'url'                 => $this->url,
             'name'                => $this->fallbackName('name'),

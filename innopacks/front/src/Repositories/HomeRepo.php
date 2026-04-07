@@ -10,10 +10,8 @@
 namespace InnoShop\Front\Repositories;
 
 use Exception;
-use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\CategoryRepo;
-use InnoShop\Supplier\Models\Supplier;
 
 class HomeRepo
 {
@@ -26,7 +24,9 @@ class HomeRepo
     }
 
     /**
-     * @return array
+     * Home slideshow: load settings, resolve links, and resolve localized title/subtitle for the view.
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getSlideShow(): array
     {
@@ -37,33 +37,98 @@ class HomeRepo
 
         $result = [];
         foreach ($slideShow as $item) {
-            if (str_starts_with($item['link'], 'category:')) {
-                $categoryID = str_replace('category:', '', $item['link']);
-                $category   = Category::query()->find($categoryID);
-                if (empty($category)) {
-                    $category = Category::query()->where('slug', $categoryID)->first();
-                }
-                $item['link'] = $category->url;
-            } elseif (str_starts_with($item['link'], 'product:')) {
-                $productID = str_replace('product:', '', $item['link']);
-                $product   = Product::query()->find($productID);
-                if (empty($product)) {
-                    $product = Product::query()->where('slug', $productID)->first();
-                }
-                $item['link'] = $product->url;
-            }
-            $result[] = $item;
+            $linkRaw              = $item['link'] ?? '';
+            $parsed               = entity_link_display(is_string($linkRaw) ? $linkRaw : '');
+            $item['link']         = $parsed['entity_href'];
+            $item['entity_label'] = $parsed['entity_label'] ?? '';
+            $item['entity_image'] = $parsed['entity_image'] ?? '';
+            $item['entity_price'] = $parsed['entity_price'] ?? '';
+            $result[]             = $item;
         }
 
-        return $result;
+        return $this->formatSlideShowForHomeView($result);
     }
 
     /**
-     * Format product data for home page
+     * Map slideshow rows (same shape as the theme setting) to view fields: display_title, locale, etc.
+     * If a `home.index.data` hook replaces `slideshow`, pass raw rows in the same shape and call this method to reuse the same logic.
+     *
+     * @param  array<int, array<string, mixed>>  $slides
+     * @return array<int, array<string, mixed>>
+     */
+    public function formatSlideShowForHomeView(array $slides): array
+    {
+        if ($slides === []) {
+            return [];
+        }
+
+        $locale         = front_locale_code();
+        $fallbackLocale = (string) config('app.locale', 'en');
+
+        $out = [];
+        foreach ($slides as $item) {
+            $images = $item['image'] ?? null;
+            if (! is_array($images) || ($images[$locale] ?? '') === '') {
+                continue;
+            }
+
+            $titles    = is_array($item['title'] ?? null) ? $item['title'] : [];
+            $subtitles = is_array($item['subtitle'] ?? null) ? $item['subtitle'] : [];
+
+            $displayTitle    = $this->resolveLocalizedSlideText($titles, $locale, $fallbackLocale);
+            $displaySubtitle = $this->resolveLocalizedSlideText($subtitles, $locale, $fallbackLocale);
+
+            $item['locale']                = $locale;
+            $item['display_title']         = $displayTitle;
+            $item['display_subtitle']      = $displaySubtitle;
+            $item['image_alt']             = $displayTitle !== '' ? $displayTitle : __('front/common.home');
+            $item['has_slideshow_caption'] = $displayTitle !== '' || $displaySubtitle !== '';
+
+            $out[] = $item;
+        }
+
+        return $out;
+    }
+
+    /**
+     * Resolve a non-empty string from per-locale rows: current locale, then app fallback, then any locale.
+     *
+     * @param  array<string, string>  $rows
+     */
+    private function resolveLocalizedSlideText(array $rows, string $locale, string $fallbackLocale): string
+    {
+        $v = trim((string) ($rows[$locale] ?? ''));
+        if ($v !== '') {
+            return $v;
+        }
+        $v = trim((string) ($rows[$fallbackLocale] ?? ''));
+        if ($v !== '') {
+            return $v;
+        }
+        foreach ($rows as $one) {
+            $t = trim((string) $one);
+            if ($t !== '') {
+                return $t;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Format product data for home page (core fields only).
+     *
+     * Extensions (e.g. supplier/seller) must use hook:
+     * `front.repo.home.format_product_data`
+     *
+     * Payload shape:
+     * - `data`: array shown to the view (keys below are the baseline).
+     * - `product`: the Product model instance.
+     *
+     * Listeners must return the same payload shape with `data` updated (and may keep `product`).
      *
      * @param  Product  $product
-     * @return array
-     * @throws Exception
+     * @return array<string, mixed>
      */
     public function formatProductData(Product $product): array
     {
@@ -72,89 +137,31 @@ class HomeRepo
         $moq       = $masterSku ? $masterSku->quantity : 0;
         $image     = $product->getImageUrl(400, 400);
 
-        // 获取供应商信息（如果 supplier 模块启用）
-        $supplier      = null;
-        $supplierBadge = null;
-        if (class_exists('InnoShop\Supplier\Models\Supplier') && isset($product->supplier_id) && $product->supplier_id) {
-            try {
-                $supplierModel = Supplier::query()->find($product->supplier_id);
-                if ($supplierModel) {
-                    $supplier = $supplierModel->name;
-                    if ($supplierModel->status === 'approved' && $supplierModel->supplier_level) {
-                        $supplierBadge = $supplierModel->supplier_level_format;
-                    } else {
-                        $supplierBadge = $supplierModel->status === 'approved' ? trans('Supplier::supplier.gold_supplier') : '';
-                    }
-                }
-            } catch (Exception $e) {
-                // 忽略错误
-            }
-        }
-
         $productName = $product->fallbackName();
 
-        return [
-            'id'             => $product->id,
-            'name'           => $productName,
-            'image'          => $image,
-            'url'            => $product->url,
-            'supplier'       => $supplier,
-            'supplier_badge' => $supplierBadge,
-            'price'          => number_format($price, 2),
-            'moq'            => $moq,
-            'category'       => '', // 可以从分类关系中获取
-            'sku_id'         => $masterSku ? $masterSku->id : null,
+        $data = [
+            'id'       => $product->id,
+            'name'     => $productName,
+            'image'    => $image,
+            'url'      => $product->url,
+            'price'    => number_format($price, 2),
+            'moq'      => $moq,
+            'category' => '',
+            'sku_id'   => $masterSku ? $masterSku->id : null,
         ];
-    }
 
-    /**
-     * Format supplier data for home page
-     *
-     * @param  mixed  $supplier
-     * @return array
-     */
-    public function formatSupplierData($supplier): array
-    {
-        $customer = $supplier->customer ?? null;
-        $category = $supplier->category ?? null;
+        $payload = [
+            'data'    => $data,
+            'product' => $product,
+        ];
 
-        // Logo：优先供应商 logo，其次客户头像
-        $logo = $supplier->logo ?: ($customer->avatar ?? '');
-        if ($logo) {
-            $logo = image_resize($logo, 400, 400);
+        $payload = fire_hook_filter('front.repo.home.format_product_data', $payload);
+
+        if (! is_array($payload) || ! isset($payload['data']) || ! is_array($payload['data'])) {
+            return $data;
         }
 
-        // 供应商等级
-        $level     = $supplier->supplier_level ?? 'gold';
-        $levelName = $supplier->supplier_level ? $supplier->supplier_level_format : trans('Supplier::supplier.gold_supplier');
-
-        $categoryName = '';
-        $categorySlug = null;
-        $categoryId   = null;
-        if ($category) {
-            $categoryName = $category->fallbackName() ?? ($category->name ?? '');
-            $categorySlug = $category->slug ?? null;
-            $categoryId   = $category->id ?? null;
-        }
-
-        return [
-            'id'            => $supplier->id,
-            'name'          => $supplier->name ?? '',
-            'logo'          => $logo,
-            'level'         => $level,
-            'level_name'    => $levelName,
-            'verified'      => ($supplier->status ?? '') === 'approved',
-            'location'      => $supplier->location ?: ($customer->address ?? ''),
-            'main_products' => $supplier->main_products ?? '',
-            'established'   => $supplier->established_year,
-            'employees'     => $supplier->employees_count,
-            'export_value'  => $supplier->annual_export_value_text ?? $supplier->annual_export_value,
-            'category'      => $categoryName,
-            'category_slug' => $categorySlug,
-            'category_id'   => $categoryId,
-            'type'          => $supplier->type ?? '',
-            'website'       => $supplier->website ?? '',
-        ];
+        return $payload['data'];
     }
 
     /**

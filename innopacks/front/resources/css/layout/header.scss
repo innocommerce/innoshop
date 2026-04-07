@@ -111,43 +111,51 @@ header {
           padding: 0;
         }
 
-        .navbar {
-          .nav-item {
-            > .dropdown > .nav-link, > .nav-link {
-              font-weight: bold;
-              color: #222;
-              font-size: 16px;
-              padding-left: 6px;
-              padding-right: 6px;
-              margin: 0 14px;
-              position: relative;
+        .navbar-nav > .nav-item {
+          > .dropdown {
+            position: relative;
+          }
 
+          &:not(.hf-header-menu-item) > .dropdown > .dropdown-menu:not(.w-100) {
+            left: 0;
+            right: auto;
+            transform: none;
+          }
+
+          > .dropdown > .nav-link, > .nav-link {
+            font-weight: bold;
+            color: #222;
+            font-size: 16px;
+            padding-left: 6px;
+            padding-right: 6px;
+            margin: 0 14px;
+            position: relative;
+
+            &::after {
+              content: "";
+              position: absolute;
+              right: 0;
+              bottom: 0;
+              width: 0;
+              border-bottom: 1px solid;
+              border-bottom-width: 2px;
+              transition: width .3s;
+            }
+          }
+
+          &:hover {
+            > .dropdown > .nav-link, > .nav-link {
               &::after {
-                content: "";
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                width: 0;
-                border-bottom: 1px solid;
-                border-bottom-width: 2px;
-                transition: width .3s;
+                width: 100%;
+                left: 0;
               }
             }
 
-            &:hover {
-              > .dropdown > .nav-link, > .nav-link {
-                &::after {
-                  width: 100%;
-                  left: 0;
-                }
-              }
-
-              .dropdown-menu {
-                border-radius: 2px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-                border: none;
-                display: block;
-              }
+            .dropdown-menu {
+              border-radius: 2px;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+              border: none;
+              display: block;
             }
           }
         }

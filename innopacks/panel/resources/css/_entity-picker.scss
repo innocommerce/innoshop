@@ -1,0 +1,94 @@
+// InnoLinkPicker — selected entity row: long product names must shrink inside flex (tooltip trigger = block)
+.inno-link-picker {
+  min-width: 0;
+}
+
+.inno-link-picker__selected {
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.inno-link-picker__entity-meta {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+
+  .el-tooltip {
+    display: block;
+    max-width: 100%;
+  }
+
+  .el-tooltip__trigger {
+    display: block !important;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    vertical-align: top;
+  }
+
+  .text-truncate,
+  .text-truncate.d-block {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.inno-link-picker__actions {
+  padding-top: 0.125rem;
+}
+
+// Entity picker dialog (Panel API autocomplete + InnoLinkPicker)
+.panel-entity-picker-popper.el-popper {
+  min-width: 420px;
+  max-width: min(96vw, 560px);
+
+  .el-autocomplete-suggestion__list {
+    padding: 4px 0;
+  }
+
+  .panel-entity-picker-suggestion {
+    line-height: 1.25;
+  }
+}
+
+.panel-entity-picker-dialog.el-dialog {
+  .el-dialog__body {
+    padding-top: 12px;
+  }
+}
+
+.panel-entity-picker-list__scroll {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.panel-entity-picker-row {
+  cursor: pointer;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  min-width: 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &--selected {
+    background-color: var(--el-color-primary-light-9);
+  }
+
+  > .flex-grow-1.min-w-0 {
+    overflow: hidden;
+  }
+}
+
+.panel-entity-picker-row__thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+}
+
+.panel-entity-picker-row__price {
+  color: #fd560f;
+  min-width: 4.5rem;
+}

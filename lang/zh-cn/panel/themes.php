@@ -8,6 +8,13 @@
  */
 
 return [
+    'available_themes_count'   => '当前可用主题：:count',
+    'themes_stats_title'       => '主题概览',
+    'themes_stat_available'    => '可用主题',
+    'themes_stat_demo'         => '含演示数据',
+    'themes_stat_current'      => '当前使用',
+    'themes_stat_none'         => '未设置',
+    'theme_badge_demo'         => '演示数据',
     'no_custom_theme'          => '系统目录下无自定义模板, 使用 innopacks/front/resources 下默认模板',
     'error_config_not_found'   => '主题配置文件不存在: :file',
     'error_config_invalid'     => '主题配置文件格式错误: :file',

@@ -19,6 +19,7 @@ return [
     'home'                       => 'ホーム',
     'in_stock'                   => '在庫あり',
     'load_more'                  => 'もっとロードします',
+    'links'                      => 'リンク',
     'login'                      => 'ログイン',
     'logo'                       => 'ブランド',
     'news'                       => 'ニュース',

@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use InnoShop\Plugin\Traits\CleansUpExtractedFiles;
 use PhpZip\Exception\ZipException;
-use PhpZip\ZipFile;
 
 class MarketplaceService
 {
@@ -484,13 +483,9 @@ class MarketplaceService
         Storage::disk('local')->put($pluginPath, $content);
 
         $pluginZip = storage_path('app/'.$pluginPath);
-        $zipFile   = new ZipFile;
 
-        $extractPath = $type == 'plugin' ? base_path('plugins') : base_path('themes');
-        $zipFile->openFile($pluginZip)->extractTo($extractPath);
-
-        // Clean up unnecessary files after extraction
-        $this->cleanupExtractedFiles($extractPath);
+        $destinationRoot = $type === 'plugin' ? base_path('plugins') : base_path('themes');
+        $this->extractZipAndMergeIntoRoot($pluginZip, $destinationRoot);
     }
 
     /**

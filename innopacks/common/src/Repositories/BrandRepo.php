@@ -189,12 +189,13 @@ class BrandRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
+        $keyword = trim((string) $keyword);
         $builder = Brand::query();
-        if ($keyword) {
+        if ($keyword !== '') {
             $builder->where('name', 'like', "%{$keyword}%");
         }
 
-        return $builder->limit($limit)->get();
+        return $builder->orderBy('name')->limit($limit)->get();
     }
 
     /**

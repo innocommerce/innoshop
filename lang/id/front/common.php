@@ -19,6 +19,7 @@ return [
     'home'                       => 'Beranda',
     'in_stock'                   => 'Tersedia',
     'load_more'                  => 'Memuat lebih banyak',
+    'links'                      => 'Tautan',
     'login'                      => 'Login',
     'logo'                       => 'Merek',
     'news'                       => 'Berita',

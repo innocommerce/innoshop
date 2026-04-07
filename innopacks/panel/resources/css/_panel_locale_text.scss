@@ -1,0 +1,243 @@
+// InnoPanelLocaleText — one neutral palette (field + append + dialog, no blue/gray mix)
+.inno-panel-locale-text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  // Fallback when --el-border-color is missing or blends with background
+  --inno-locale-border: var(--el-border-color, #dcdfe6);
+  --inno-locale-bg: var(--bs-body-bg, var(--el-fill-color-blank));
+  --inno-locale-text: var(--bs-body-color, var(--el-text-color-primary));
+  --inno-locale-muted: var(--bs-secondary-color, var(--el-text-color-secondary));
+  --inno-locale-append-bg: var(--bs-tertiary-bg, var(--el-fill-color-light));
+  --inno-locale-append-hover: var(--bs-secondary-bg, var(--el-fill-color));
+}
+
+// Preview: kill EP blue focus/hover ring on wrapper; inner must be transparent (no gray “patch”)
+.inno-panel-locale-text__preview.el-input {
+  --el-input-bg-color: var(--inno-locale-bg);
+  --el-input-border-color: var(--inno-locale-border);
+  --el-input-hover-border-color: var(--el-border-color-darker);
+  --el-input-focus-border-color: var(--el-border-color-darker);
+  --el-input-text-color: var(--inno-locale-text);
+}
+
+// Has append ⇒ root is .el-input-group: use ONE outer border; no inset box-shadow on wrapper (avoids blue EP focus ring)
+.inno-panel-locale-text__preview.el-input-group {
+  display: inline-flex;
+  width: 100%;
+  border: 1px solid var(--inno-locale-border, #dcdfe6);
+  border-radius: var(--el-border-radius-base);
+  overflow: hidden;
+  background-color: var(--inno-locale-bg);
+}
+
+.inno-panel-locale-text__preview.el-input-group:hover {
+  border-color: var(--el-border-color-darker);
+}
+
+.inno-panel-locale-text__preview.el-input-group:focus-within {
+  border-color: var(--el-border-color-darker);
+  outline: none;
+}
+
+.inno-panel-locale-text__preview.el-input-group .el-input__wrapper {
+  flex: 1;
+  min-width: 0;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: var(--inno-locale-bg) !important;
+}
+
+.inno-panel-locale-text__preview.el-input-group .el-input__wrapper.is-focus,
+.inno-panel-locale-text__preview.el-input-group .el-input__wrapper:hover {
+  box-shadow: none !important;
+}
+
+.inno-panel-locale-text__preview.el-input-group .el-input__inner {
+  color: var(--inno-locale-text);
+  -webkit-text-fill-color: var(--inno-locale-text);
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inno-panel-locale-text__preview-row {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+
+  .el-tooltip__trigger {
+    display: block !important;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.inno-panel-locale-text__preview-tooltip {
+  width: 100%;
+  min-width: 0;
+}
+
+.inno-panel-locale-text__preview--fallback.el-input-group .el-input__inner {
+  color: var(--inno-locale-muted);
+  -webkit-text-fill-color: var(--inno-locale-muted);
+}
+
+.inno-panel-locale-text__preview {
+  .el-input-group__append {
+    flex-shrink: 0;
+    padding: 0;
+    background-color: var(--inno-locale-append-bg);
+    box-shadow: none;
+    border: none;
+  }
+
+  .el-input-group__append .el-button.inno-panel-locale-text__edit-btn {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    border-left: 1px solid var(--inno-locale-border);
+    height: 100%;
+    min-height: 32px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    background-color: var(--inno-locale-append-bg);
+    color: var(--inno-locale-text);
+    font-weight: 500;
+  }
+
+  .el-input-group__append .el-button.inno-panel-locale-text__edit-btn:hover:not(.is-disabled) {
+    background-color: var(--inno-locale-append-hover);
+    color: var(--inno-locale-text);
+  }
+
+  .el-input-group__append .el-button.inno-panel-locale-text__edit-btn:focus-visible {
+    outline: 2px solid var(--el-border-color-darker);
+    outline-offset: -2px;
+  }
+}
+
+.inno-panel-locale-text__hint {
+  color: var(--inno-locale-muted);
+}
+
+.inno-panel-locale-text__preview-hint {
+  display: block;
+  color: var(--inno-locale-muted);
+  line-height: 1.45;
+}
+
+// Dialog: one row per language (product basic: input-group + flag); same EP variables
+.inno-panel-locale-text__dialog {
+  --el-input-bg-color: var(--inno-locale-bg);
+  --el-input-border-color: var(--inno-locale-border);
+  --el-input-hover-border-color: var(--el-border-color-darker);
+  --el-input-focus-border-color: var(--el-border-color-darker);
+
+  .inno-panel-locale-text__dialog-row.input-group {
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  // Fixed column: flag + label — same width every row (overrides BS .input-group-text nowrap/center)
+  .inno-panel-locale-text__lang-prefix {
+    flex: 0 0 10.5rem;
+    width: 10.5rem;
+    max-width: 10.5rem;
+    min-width: 10.5rem;
+    justify-content: flex-start;
+    text-align: start;
+    white-space: normal;
+  }
+
+  .inno-panel-locale-text__lang-label {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .inno-panel-locale-text__lang-flag {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .inno-panel-locale-text__lang-name {
+    min-width: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--inno-locale-text);
+    line-height: 1.2;
+  }
+
+  // BS only gives flex:1 to .form-control — plain wrapper must mimic it or the field collapses
+  .inno-panel-locale-text__dialog-field-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    // Outer frame always visible (default / hover / focus): do not rely on EP wrapper alone
+    border: 1px solid var(--inno-locale-border, #dcdfe6);
+    border-radius: 0 var(--el-border-radius-base) var(--el-border-radius-base) 0;
+    overflow: hidden;
+    background-color: var(--inno-locale-bg);
+    transition: border-color 0.15s ease;
+
+    .el-input {
+      width: 100% !important;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+
+  .inno-panel-locale-text__dialog-field-wrap:hover {
+    border-color: var(--el-border-color-darker, #a8abb2);
+  }
+
+  .inno-panel-locale-text__dialog-field-wrap:focus-within {
+    border-color: var(--el-border-color-darker, #a8abb2);
+  }
+
+  // Inner: no second box — edge is the field-wrap above
+  .inno-panel-locale-text__dialog-field-wrap .el-input__wrapper {
+    background-color: var(--inno-locale-bg) !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .inno-panel-locale-text__dialog-field-wrap .el-input__wrapper:hover,
+  .inno-panel-locale-text__dialog-field-wrap .el-input__wrapper.is-focus {
+    box-shadow: none !important;
+  }
+
+  .inno-panel-locale-text__dialog-field-wrap .el-input__inner {
+    color: var(--inno-locale-text);
+    -webkit-text-fill-color: var(--inno-locale-text);
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+// Footer: cancel = default; confirm = secondary gray (same family as append, not blue primary)
+.inno-panel-locale-text__footer {
+  .el-button.inno-panel-locale-text__confirm-btn {
+    background-color: var(--bs-secondary, #6c757d);
+    border-color: var(--bs-secondary, #6c757d);
+    color: #fff;
+  }
+
+  .el-button.inno-panel-locale-text__confirm-btn:hover:not(.is-disabled) {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    filter: brightness(0.92);
+    color: #fff;
+  }
+}

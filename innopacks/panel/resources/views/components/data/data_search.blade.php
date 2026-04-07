@@ -9,9 +9,9 @@
     <form action="{{ $action }}" method="GET" id="search-form" class="search-form">
         <div class="search-filters-section bg-white rounded border">
             <div class="p-3">
-                {{-- Search Row --}}
-                <div class="search-row g-2 align-items-center">
-                    <div class="d-flex align-items-center gap-2">
+                {{-- Search Row: filters left, optional slot (e.g. export) right --}}
+                <div class="search-row g-2 align-items-center justify-content-between gap-2 flex-wrap w-100">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
                         <span class="text-secondary"><i class="bi bi-search"></i></span>
                         <select name="search_field" class="form-select form-select-sm" style="width: 120px;">
                             @foreach($searchFields as $field)
@@ -26,6 +26,11 @@
                             <i class="bi bi-search"></i> {{ __('panel/common.search') }}
                         </button>
                     </div>
+                    @isset($toolbarRight)
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
+                            {{ $toolbarRight }}
+                        </div>
+                    @endisset
                 </div>
 
                 @if(count($filters) > 0 || $enableDateRange)

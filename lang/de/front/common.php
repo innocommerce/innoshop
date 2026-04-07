@@ -19,6 +19,7 @@ return [
     'home'                       => 'Startseite',
     'in_stock'                   => 'Auf Lager',
     'load_more'                  => 'Doppelte ladung.',
+    'links'                      => 'Links',
     'login'                      => 'Anmelden',
     'logo'                       => 'Logo',
     'news'                       => 'Neuigkeiten',

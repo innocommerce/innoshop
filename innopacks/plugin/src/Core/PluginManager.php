@@ -15,7 +15,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InnoShop\Plugin\Traits\CleansUpExtractedFiles;
-use PhpZip\ZipFile;
 
 class PluginManager
 {
@@ -249,6 +248,10 @@ class PluginManager
     /**
      * Upload plugin and unzip it.
      *
+     * Extraction uses a temporary directory so {@see cleanupExtractedFiles} does not run on the
+     * entire <code>plugins/</code> tree — doing that recursively removed every sibling plugin's
+     * <code>.git</code> directory.
+     *
      * @throws Exception
      */
     public function import(UploadedFile $file): void
@@ -258,10 +261,6 @@ class PluginManager
         $newFilePath  = $destPath.'/'.$originalName;
         $file->move($destPath, $originalName);
 
-        $zipFile = new ZipFile;
-        $zipFile->openFile($newFilePath)->extractTo(base_path('plugins'));
-
-        // Clean up unnecessary files after extraction
-        $this->cleanupExtractedFiles(base_path('plugins'));
+        $this->extractZipAndMergeIntoRoot($newFilePath, base_path('plugins'));
     }
 }

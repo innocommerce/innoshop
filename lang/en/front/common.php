@@ -19,6 +19,7 @@ return [
     'home'                            => 'Home',
     'in_stock'                        => 'In Stock',
     'load_more'                       => 'Load more',
+    'links'                           => 'Links',
     'login'                           => 'Login',
     'logo'                            => 'Lego',
     'news'                            => 'News',

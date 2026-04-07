@@ -12,6 +12,7 @@ namespace InnoShop\Panel\Controllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
@@ -37,9 +38,18 @@ class ThemeController extends BaseController
     public function index(): mixed
     {
         $result = ThemeService::getInstance()->getListFromPath();
-        $data   = [
-            'themes' => $result['themes'],
-            'errors' => $result['errors'],
+        /** @var Collection<int, array<string, mixed>> $themes */
+        $themes = $result['themes'] ?? collect();
+
+        $selected = $themes->firstWhere('selected', true);
+        $data     = [
+            'themes'                 => $themes,
+            'themes_count'           => $themes->count(),
+            'themes_with_demo_count' => $themes->filter(function (array $t): bool {
+                return ! empty($t['has_demo'] ?? false);
+            })->count(),
+            'selected_theme_name' => data_get($selected, 'name'),
+            'errors'              => $result['errors'],
         ];
 
         return inno_view('panel::themes.index', $data);

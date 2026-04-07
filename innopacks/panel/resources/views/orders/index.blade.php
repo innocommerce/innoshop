@@ -15,12 +15,13 @@
         :searchFields="$searchFields ?? []"
         :filters="$filterButtons ?? []"
         :enableDateRange="true"
-      />
-      <div class="mb-3">
-        <a href="{{ panel_route('orders.export_batch') }}?{{ http_build_query(request()->query()) }}" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-file-earmark-excel"></i> {{ __('panel/common.export') }}
-        </a>
-      </div>
+      >
+        <x-slot name="toolbarRight">
+          <a href="{{ panel_route('orders.export.batch') }}?{{ http_build_query(request()->query()) }}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-file-earmark-excel"></i> {{ __('panel/common.export') }}
+          </a>
+        </x-slot>
+      </x-panel-data-data-search>
       @hookinsert('panel.orders.index.criteria.after')
 
       @if ($orders->count())

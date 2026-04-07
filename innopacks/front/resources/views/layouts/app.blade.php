@@ -46,6 +46,7 @@
     const asset_url = '{{ asset('') }}';
   </script>
   @stack('header')
+  @include('common::components.echo')
   @hookinsert('front.layout.app.head.bottom')
 </head>
 

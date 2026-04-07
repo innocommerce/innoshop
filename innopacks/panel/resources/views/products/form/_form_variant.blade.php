@@ -403,8 +403,14 @@
           $('.skus-single-box').addClass('d-none');
         }
 
-        // Don't generate SKUs if only one empty variant exists
-        if (variants.value.length == 1 && isObjectValuesEmpty(variants.value[0].values[0].name)) {
+        // Don't generate SKUs if only one empty variant exists (guard: modal-added variants may have values: [] until values are added)
+        const firstVariant = variants.value[0];
+        if (
+          variants.value.length === 1 &&
+          firstVariant.values &&
+          firstVariant.values[0] &&
+          isObjectValuesEmpty(firstVariant.values[0].name)
+        ) {
           return;
         }
 
@@ -1061,8 +1067,14 @@
           }
         } else {
           if (variantIndex === -1) {
-            // Creating new variant
-            variants.value.push({name, values: [], isImage: false});
+            // Creating new variant — align with addVariant(): at least one value row so watchers / SKU gen never read values[0] on undefined
+            variants.value.push({
+              name,
+              values: [{ name: localesFill(''), error: false, image: '' }],
+              isImage: false,
+              variantFormShow: false,
+              error: false,
+            });
           } else {
             // Update existing variant
             variants.value[variantIndex].name = name;

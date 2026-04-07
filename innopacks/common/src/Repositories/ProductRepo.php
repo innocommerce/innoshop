@@ -898,14 +898,19 @@ class ProductRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
+        $keyword = trim((string) $keyword);
         $builder = Product::query()->with(['translation', 'masterSku']);
-        if ($keyword) {
-            $builder->whereHas('translation', function ($query) use ($keyword) {
-                $query->where('name', 'like', "%{$keyword}%");
+        if ($keyword !== '') {
+            $builder->where(function ($q) use ($keyword) {
+                $q->whereHas('translation', function ($query) use ($keyword) {
+                    $query->where('name', 'like', "%{$keyword}%");
+                })->orWhereHas('masterSku', function ($query) use ($keyword) {
+                    $query->where('code', 'like', "%{$keyword}%");
+                });
             });
         }
 
-        return $builder->limit($limit)->get();
+        return $builder->orderByDesc('id')->limit($limit)->get();
     }
 
     /**

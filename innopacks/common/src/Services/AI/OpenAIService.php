@@ -121,4 +121,14 @@ class OpenAIService implements AIServiceInterface
             'max_tokens'         => 128000,
         ];
     }
+
+    public function chat(array $messages, array $options = []): string
+    {
+        return $this->generate(end($messages)['content'] ?? '', $options);
+    }
+
+    public function chatStream(array $messages, array $options = []): iterable
+    {
+        yield $this->chat($messages, $options);
+    }
 }

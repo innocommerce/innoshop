@@ -19,6 +19,7 @@ return [
     'home'                       => 'Laman Utama',
     'in_stock'                   => 'Stok Ada',
     'load_more'                  => 'Muatkan lagi',
+    'links'                      => 'Pautan',
     'login'                      => 'Log masuk',
     'logo'                       => 'Logo',
     'news'                       => 'Berita',

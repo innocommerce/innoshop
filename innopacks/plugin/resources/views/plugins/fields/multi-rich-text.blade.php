@@ -2,7 +2,7 @@
     :name="$field['name']"
     :title="$field['label']"
     :value="old($field['name'], $field['value'] ?? '')"
-    :required="(bool)$field['required']"
+    :required="(bool)($field['required'] ?? false)"
     :is-locales="true">
     @if (isset($field['description']))
         <div class="text-secondary"><small>{{ $field['description'] }}</small></div>

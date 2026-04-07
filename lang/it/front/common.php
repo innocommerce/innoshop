@@ -19,6 +19,7 @@ return [
     'home'                       => 'Home',
     'in_stock'                   => 'Disponibile',
     'load_more'                  => 'Maggiori carichi',
+    'links'                      => 'Link',
     'login'                      => 'Accedi',
     'logo'                       => 'Logo',
     'news'                       => 'Notizie',

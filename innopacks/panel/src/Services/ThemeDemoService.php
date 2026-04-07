@@ -16,17 +16,46 @@ use Exception;
 class ThemeDemoService extends BaseService
 {
     /**
-     * Determine whether the theme has demo data
-     * Supports: Seeder.php closure
+     * Resolve the PHP file used for demo import (same rules as import).
+     * Supports: demo/Seeder.php (any case basename), *Seeder.php, or exactly one demo/*.php.
+     */
+    public function resolveDemoSeederPath(string $dir): ?string
+    {
+        $demoDir = $dir.'/demo';
+        if (! is_dir($demoDir)) {
+            return null;
+        }
+
+        $phpFiles = glob($demoDir.'/*.php') ?: [];
+        if ($phpFiles === []) {
+            return null;
+        }
+
+        foreach ($phpFiles as $path) {
+            if (strcasecmp(basename($path), 'Seeder.php') === 0) {
+                return $path;
+            }
+        }
+
+        foreach ($phpFiles as $path) {
+            if (preg_match('/Seeder\.php$/i', basename($path))) {
+                return $path;
+            }
+        }
+
+        if (count($phpFiles) === 1) {
+            return $phpFiles[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Determine whether the theme has demo data (must match {@see importDemo}).
      */
     public function hasDemo(string $dir): bool
     {
-        // Check for Seeder.php closure (preferred)
-        if (file_exists($dir.'/demo/Seeder.php')) {
-            return true;
-        }
-
-        return false;
+        return $this->resolveDemoSeederPath($dir) !== null;
     }
 
     /**
@@ -43,9 +72,8 @@ class ThemeDemoService extends BaseService
      */
     public function importDemo(string $dir): void
     {
-        // Check for PHP seeder
-        $seederFile = $dir.'/demo/Seeder.php';
-        if (! file_exists($seederFile)) {
+        $seederFile = $this->resolveDemoSeederPath($dir);
+        if ($seederFile === null || ! is_file($seederFile)) {
             throw new Exception(__('panel/themes.error_demo_not_found'));
         }
 

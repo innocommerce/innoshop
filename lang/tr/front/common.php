@@ -19,6 +19,7 @@ return [
     'home'                       => 'Ana Sayfa',
     'in_stock'                   => 'Stokta Var',
     'load_more'                  => 'Daha fazla yükle',
+    'links'                      => 'Bağlantılar',
     'login'                      => 'Giriş Yap',
     'logo'                       => 'Logo',
     'news'                       => 'Makaleler',

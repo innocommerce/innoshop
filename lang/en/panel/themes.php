@@ -8,6 +8,12 @@
  */
 
 return [
+    'available_themes_count'       => 'Available themes: :count',
+    'themes_stats_title'           => 'Overview',
+    'themes_stat_available'        => 'Available',
+    'themes_stat_demo'             => 'With demo data',
+    'themes_stat_current'          => 'In use',
+    'themes_stat_none'             => 'Not set',
     'author'                       => 'Author',
     'confirm_import'               => 'Confirm Import',
     'confirm_import_button'        => 'Confirm Import',
@@ -44,4 +50,5 @@ return [
     'theme_guide_icon_title'       => 'Theme Icon (icon.png)',
     'theme_guide_config'           => 'The "code" must match the folder name and be all lowercase',
     'theme_guide_config_title'     => 'config.json Configuration',
+    'theme_badge_demo'             => 'Demo data',
 ];

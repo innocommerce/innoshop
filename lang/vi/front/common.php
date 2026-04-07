@@ -19,6 +19,7 @@ return [
     'home'                       => 'Trang chủ',
     'in_stock'                   => 'Còn hàng',
     'load_more'                  => 'Nạp thêm đạn',
+    'links'                      => 'Liên kết',
     'login'                      => 'Đăng nhập',
     'logo'                       => 'Logo',
     'news'                       => 'Tin tức',

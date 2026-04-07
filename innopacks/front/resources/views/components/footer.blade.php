@@ -35,6 +35,7 @@
   </div>
 @endif
 
+@hookupdate('layouts.footer.main')
 <footer id="appFooter">
   <div class="footer-box">
     <div class="container">
@@ -141,6 +142,7 @@
     </div>
   </div>
 </footer>
+@endhookupdate
 
 @hookinsert('layout.footer.bottom')
 

@@ -1,28 +1,50 @@
-@import './_variables';
+/*
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ *
+ * Front SCSS entry (default theme).
+ * Structure: base/ (variables, global, font) -> layout/ -> components/ -> modules/ -> pages/
+ *
+ * Theme reuse (themes/<theme>/css/app.scss):
+ *   @import './_variables';          // optional (define $primary/$price/$default)
+ *   @import '@front/css/app';        // reuse this entry
+ *   @import '@front/css/<group>/<file>'; // optional: import extra styles not included by default entry
+ *   @import './...';                 // theme overrides
+ */
 
-@import './global';
+// Base: variables -> global -> font
+@import './base/variables';
+@import './base/global';
+@import './base/font';
 
-@import './header';
-@import './footer';
-@import './home';
-@import './font';
-@import './news';
-@import './module-swiper';
-@import './product-item';
-@import './module-product-tab';
-@import './module-news';
-@import './login';
-@import './breadcrumb';
-@import './page-account';
-@import './page-categories';
-@import './page-product';
-@import './page-cart';
-@import './page-checkout';
-@import './page-order';
-@import './page-addresses';
-@import './page-brands';
-@import './page-checkout-success';
-@import './product-review';
-@import './page-wallet';
-@import './social';
-@import './filter-sidebar';
+// Layout: header/footer (site chrome)
+@import './layout/header';
+@import './layout/footer';
+
+// Components: small reusable pieces
+@import './components/breadcrumb';
+@import './components/filter-sidebar';
+
+// Modules: reusable functional blocks
+@import './modules/product-item';
+@import './modules/product-tab';
+@import './modules/news';
+@import './modules/product-review';
+@import './modules/social';
+
+// Pages: page-scoped styles
+@import './pages/home';
+@import './pages/news';
+@import './pages/login';
+@import './pages/account';
+@import './pages/categories';
+@import './pages/product';
+@import './pages/cart';
+@import './pages/checkout';
+@import './pages/order';
+@import './pages/addresses';
+@import './pages/brands';
+@import './pages/checkout-success';
+@import './pages/wallet';

@@ -1,0 +1,117 @@
+body.page-home {
+  .module-title-wrap {
+    margin-bottom: 30px;
+
+    .module-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: .7rem;
+      position: relative;
+      color: #222;
+
+      @media (max-width: 768px) {
+        font-size: 1.4rem;
+        margin-bottom: .2rem;
+      }
+    }
+
+    .module-sub-title {
+      text-align: center;
+      font-size: 1rem;
+      color: #768088;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.4;
+      max-width: 840px;
+
+      @media (max-width: 768px) {
+        font-size: .87rem;
+      }
+    }
+  }
+
+  .module-line {
+    margin-bottom: 20px;
+
+    @media (min-width: 768px) {
+      margin-bottom: 40px;
+    }
+  }
+
+  #module-swiper-1 {
+    .swiper-slide {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .home-slideshow-link {
+      display: block;
+      width: 100%;
+      position: relative;
+      text-decoration: none !important;
+    }
+
+    .home-slideshow-link img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 600px;
+      object-fit: cover;
+      object-position: center;
+      vertical-align: middle;
+    }
+
+    .home-slideshow-caption {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 90%;
+      max-width: 800px;
+      text-align: center;
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+
+    .home-slideshow-caption .home-slideshow-title,
+    .home-slideshow-caption .home-slideshow-subtitle {
+      color: #ffffff !important;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.75);
+    }
+
+    .home-slideshow-caption .home-slideshow-title {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.25rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .home-slideshow-caption .home-slideshow-subtitle {
+      margin: 0;
+      font-size: clamp(0.9rem, 2.5vw, 1.25rem);
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 768px) {
+      .home-slideshow-link img {
+        max-height: 300px;
+      }
+    }
+
+    .swiper-pagination {
+      .swiper-pagination-bullet {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .swiper-pagination-bullet-active {
+        background: $primary !important;
+      }
+    }
+  }
+}
+
