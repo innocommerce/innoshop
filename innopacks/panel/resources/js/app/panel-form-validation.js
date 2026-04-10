@@ -1,3 +1,6 @@
+/**
+ * Bootstrap-style `.needs-validation` UX: submit delegation, tabs on error, layer loading.
+ */
 $(function () {
   const forms = document.querySelectorAll(".needs-validation");
 

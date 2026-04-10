@@ -1,3 +1,6 @@
+/**
+ * `window.inno` API: alerts, translate actions, slug, upload, delete confirm, query helpers.
+ */
 export default {
   /**
    * Get panel base URL safely

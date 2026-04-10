@@ -1,3 +1,6 @@
+/**
+ * Average-color helper for images (exposed as `window.dominantColor`).
+ */
 export default {
   getDominantColor(img, callback) {
     const canvas = document.createElement('canvas');
