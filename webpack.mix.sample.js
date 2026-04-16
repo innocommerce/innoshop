@@ -41,6 +41,14 @@ mix.webpackConfig({
     },
 });
 
+// Remove webpackbar plugin to avoid ProgressPlugin validation error on webpack 5.97+
+// webpackbar@5.0.2 passes name/color/reporters/reporter which are not valid ProgressPlugin options
+mix.override(webpackConfig => {
+    webpackConfig.plugins = (webpackConfig.plugins || []).filter(
+        plugin => plugin.constructor.name !== 'WebpackBar'
+    );
+});
+
 // Utility functions
 const utils = {
     /**
