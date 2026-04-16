@@ -29,6 +29,11 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // 安全修复: 系统已安装后，不再注册安装路由，防止未授权重装攻击
+        if (installed()) {
+            return;
+        }
+
         $this->registerWebRoutes();
         $this->loadTranslations();
     }
