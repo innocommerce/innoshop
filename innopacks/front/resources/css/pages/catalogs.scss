@@ -1,0 +1,52 @@
+.catalog-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+
+    img {
+      transform: scale(1.05);
+    }
+  }
+
+  .overflow-hidden {
+    aspect-ratio: 1;
+
+    img {
+      transition: transform 0.3s;
+    }
+  }
+
+  .catalog-placeholder {
+    aspect-ratio: 1;
+  }
+
+  .card-body {
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .card-text {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+    }
+  }
+}
+
+.catalog-intro {
+  .catalog-intro-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+  }
+
+  .catalog-intro-summary {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.8;
+  }
+}

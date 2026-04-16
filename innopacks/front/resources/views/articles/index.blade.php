@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'page-news')
+@section('body-class', 'page-articles')
 
 @section('content')
 

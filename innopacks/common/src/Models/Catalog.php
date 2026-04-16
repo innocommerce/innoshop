@@ -18,7 +18,7 @@ class Catalog extends BaseModel
     use Translatable;
 
     protected $fillable = [
-        'parent_id', 'slug', 'position', 'active',
+        'parent_id', 'slug', 'image', 'position', 'active',
     ];
 
     /**
@@ -81,5 +81,25 @@ class Catalog extends BaseModel
         }
 
         return front_route('catalogs.show', $this);
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return $this->getImageUrl();
+    }
+
+    /**
+     * @param  int  $width
+     * @param  int  $height
+     * @return string
+     * @throws \Exception
+     */
+    public function getImageUrl(int $width = 600, int $height = 600): string
+    {
+        return image_resize($this->image ?? '', $width, $height);
     }
 }

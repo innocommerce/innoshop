@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('body-class', 'page-news-details')
+@section('body-class', 'page-articles-details')
 
 @section('title', \InnoShop\Common\Libraries\MetaInfo::getInstance($page)->getTitle())
 @section('description', \InnoShop\Common\Libraries\MetaInfo::getInstance($page)->getDescription())

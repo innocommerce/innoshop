@@ -224,7 +224,7 @@ class CatalogRepo extends BaseRepo
             $merged['translations'][$translation->locale] = $translation->only($translation->getFillable());
         }
 
-        foreach (['parent_id', 'slug', 'position', 'active'] as $key) {
+        foreach (['parent_id', 'slug', 'image', 'position', 'active'] as $key) {
             if (array_key_exists($key, $data)) {
                 $merged[$key] = $data[$key];
             }
@@ -335,6 +335,7 @@ class CatalogRepo extends BaseRepo
         return [
             'parent_id' => $data['parent_id'] ?? 0,
             'slug'      => $data['slug'] ?? null,
+            'image'     => $data['image'] ?? null,
             'position'  => $data['position'] ?? 0,
             'active'    => (bool) $data['active'],
         ];

@@ -4,6 +4,18 @@
     :value="old('slug', $catalog->slug ?? '')"
     placeholder="{{ __('panel/common.slug') }}" />
 
+  {{-- 摘要 (多语言) --}}
+  <div class="mb-3">
+    <label class="form-label">{{ __('panel/common.summary') }}</label>
+    <x-common-form-locale-input
+      name="summary"
+      type="textarea"
+      :translations="locale_field_data($catalog, 'summary')"
+      :label="__('panel/common.summary')"
+      :placeholder="__('panel/common.summary')"
+    />
+  </div>
+
   <div class="mb-3">
     <label class="form-label">{{ __('panel/setting.meta_title') }}</label>
     <x-common-form-locale-input

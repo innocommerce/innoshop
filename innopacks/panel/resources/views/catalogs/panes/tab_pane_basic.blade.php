@@ -12,16 +12,13 @@
     />
   </div>
 
-  {{-- 摘要 (多语言) --}}
+  {{-- 主图 --}}
   <div class="mb-3 col-12 col-md-6">
-    <label class="form-label">{{ __('panel/common.summary') }}</label>
-    <x-common-form-locale-input
-      name="summary"
-      type="textarea"
-      :translations="locale_field_data($catalog, 'summary')"
-      :label="__('panel/common.summary')"
-      :placeholder="__('panel/common.summary')"
-    />
+    <x-common-form-image title="{{ panel_trans('catalog.image') }}" name="image"
+                        value="{{ old('image', $catalog->image ?? '') }}"/>
+    <div class="mt-2 text-muted small">
+      <i class="bi bi-info-circle me-1"></i>{{ panel_trans('catalog.image_description') }}
+    </div>
   </div>
 
   {{-- 上级分类 + 排序 --}}

@@ -11,7 +11,6 @@ namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Catalog;
 use InnoShop\Common\Repositories\ArticleRepo;
@@ -20,11 +19,17 @@ use InnoShop\Common\Repositories\CatalogRepo;
 class CatalogController extends Controller
 {
     /**
-     * @return RedirectResponse
+     * @return mixed
      */
-    public function index(): RedirectResponse
+    public function index(): mixed
     {
-        return redirect()->to(route('articles.index'));
+        $catalogs = CatalogRepo::getInstance()->getTopCatalogs();
+
+        $data = [
+            'catalogs' => $catalogs,
+        ];
+
+        return inno_view('catalogs.index', $data);
     }
 
     /**
