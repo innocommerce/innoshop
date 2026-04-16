@@ -12,32 +12,42 @@
     @endif
   </div>
   @else
-  <ul class="nav nav-tabs w-max-1000 mb-2" id="myTab" role="tablist">
-    @foreach (locales() as $locale)
-      <li class="nav-item" role="presentation">
-        <button class="nav-link d-flex {{ $loop->first ? 'active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-tab" data-bs-toggle="tab" data-bs-target="#{{ $name }}-{{ $locale['code'] }}-pane" type="button">
-          <div class="wh-20 me-2">
-            <img src="{{ asset('images/flag/'. $locale['code'].'.png') }}" class="img-fluid {{ default_locale_class($locale->code) }}">
-          </div>
-          {{ $locale['name'] }}
-        </button>
-      </li>
-    @endforeach
-  </ul>
+    @php
+      $localeValues = [];
+      $useTranslationsFormat = false;
+      if (is_string($value)) {
+        $value = [$value];
+      }
+      foreach (locales() as $loc) {
+        $code = $loc->code;
+        $val = null;
 
-  <div class="tab-content w-max-1000" id="">
-    @foreach (locales() as $locale)
-      <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-pane" role="tabpanel" aria-labelledby="{{ $name }}-{{ $locale['code'] }}-tab">
-      @if(is_object($value))
-        @php ($o_value = $value->where('locale', $locale['code'])->first())
-        <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
-        <textarea rows="4" type="text" name="translations[{{ $locale['code'] }}][{{ $name }}]" class="form-control" @if ($required) required @endif placeholder="{{ $title }}" data-column="{{ $column ?? '' }}" data-lang="{{ $locale['code'] }}">{{ $o_value->description ?? '' }}</textarea>
-      @else
-        <textarea rows="4" type="text" name="{{ $name }}[{{ $locale['code'] }}]" class="form-control" @if ($required) required @endif placeholder="{{ $title }}" data-column="{{ $column ?? '' }}" data-lang="{{ $locale['code'] }}">{{ $value[$locale['code']] ?? '' }}</textarea>
-      @endif
-      </div>
-    @endforeach
-  </div>
-@endif
+        if (is_object($value)) {
+          $item = $value->where('locale', $code)->first();
+          $val = $item->description ?? '';
+          $useTranslationsFormat = true;
+        } elseif (is_array($value)) {
+          if (isset($value[$code])) {
+            $val = $value[$code];
+          } elseif (isset($value[0])) {
+            $val = $value[0];
+          }
+        }
+
+        $localeValues[$code] = (string) ($val ?? '');
+      }
+    @endphp
+
+    <x-common-form-locale-input
+      name="{{ $name }}"
+      type="textarea"
+      :translations="$localeValues"
+      :required="$required"
+      :label="$title"
+      :placeholder="$title"
+      :name-format="$useTranslationsFormat ? 'translations' : 'direct'"
+      :description="$description"
+    />
+  @endif
   {{ $slot }}
 </x-panel::form.row>

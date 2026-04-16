@@ -39,7 +39,10 @@
 </div>
 
 <script>
-  $('.single-image-upload-wrapper .is-up-file .img-upload-item').click(function () {
+  $(document).on('click', '.single-image-upload-wrapper .is-up-file .img-upload-item', function (e) {
+    if ($(e.target).closest('.delete-img, .show-img').length) {
+      return;
+    }
     const _self = $(this);
 
     window.inno.fileManagerIframe((file) => {
@@ -49,7 +52,7 @@
       _self.find('input').val(val);
       _self.find('.tool-wrap').removeClass('d-none');
       _self.find('.img-info').html('<img src="' + url + '" class="img-fluid" data-origin-img="' + originUrl + '">');
-      
+
       _self.find('input').trigger('change');
     }, {
       multiple: false,
@@ -57,7 +60,7 @@
     });
   });
 
-  $('.single-image-upload-wrapper .is-up-file .delete-img').on('click', function (e) {
+  $(document).on('click', '.single-image-upload-wrapper .is-up-file .delete-img', function (e) {
     e.stopPropagation();
     let _self = $(this).parent().parent();
     _self.find('input').val('');
@@ -65,7 +68,7 @@
     _self.find('.img-info').html('<i class="bi bi-plus fs-1 text-secondary opacity-75"></i>');
   });
 
-  $('.single-image-upload-wrapper .is-up-file .show-img').on('click', function (e) {
+  $(document).on('click', '.single-image-upload-wrapper .is-up-file .show-img', function (e) {
     e.stopPropagation();
     const imgElement = $(this).closest('.img-upload-item').find('.img-info img');
     let src = imgElement.data('origin-img') || imgElement.attr('src');

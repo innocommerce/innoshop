@@ -60,4 +60,8 @@ return [
     'view'              => '查看',
     'view_more'         => '查看更多',
     'yes'               => '是',
+
+    // Panel: InnoPanelLocaleText（多语言编辑）
+    'locale_text_edit'        => '编辑多语言',
+    'locale_text_dialog_hint' => '前台优先显示当前语言文案，未填写时回退到店铺默认语言。',
 ];

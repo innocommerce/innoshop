@@ -1,6 +1,5 @@
 @php
-  $newsletterLocations = system_setting('newsletter_display_locations', ['footer']);
-  $showPopupNewsletter = in_array('popup', is_array($newsletterLocations) ? $newsletterLocations : ['footer']);
+  $showPopupNewsletter = system_setting('newsletter_popup_enabled', false);
 @endphp
 
 @if($showPopupNewsletter)

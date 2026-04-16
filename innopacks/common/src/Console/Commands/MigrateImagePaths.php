@@ -12,6 +12,7 @@ namespace InnoShop\Common\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use InnoShop\Common\Services\StorageService;
 
 /**
  * Image path migration command
@@ -42,7 +43,7 @@ class MigrateImagePaths extends Command
     /**
      * New path
      */
-    protected string $newPath = '/static/media/';
+    protected string $newPath = '/'.StorageService::STORAGE_PREFIX;
 
     public function handle(): void
     {

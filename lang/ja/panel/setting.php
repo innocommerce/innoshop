@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'SEO設定です',
     'seo_settings_desc'             => 'サイトのSEOに関する情報を配置します',
     'setting'                       => 'システム設定',
-    'shop_address'                  => '店舗の住所',
+    'shop_address'                  => '会社住所',
     'slideshow'                     => 'ホームページのメインスライド',
     'specials'                      => '固定ページです',
     'store_features'                => '店舗機能の設定です',

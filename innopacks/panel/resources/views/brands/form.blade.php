@@ -2,7 +2,11 @@
 
 @section('title', __('panel/menu.brands'))
 
-<x-panel::form.right-btns />
+@push('header')
+<script src="{{ asset('vendor/tinymce/5.9.1/tinymce.min.js') }}"></script>
+@endpush
+
+<x-panel::form.right-btns formid="app-form" />
 
 @section('content')
 <div class="card h-min-600">
@@ -16,12 +20,29 @@
       @csrf
       @method($brand->id ? 'PUT' : 'POST')
 
-      <x-common-form-input title="{{ __('panel/brand.name') }}" name="name" value="{{ old('name', $brand->name) }}" required placeholder="{{ __('panel/brand.name') }}" />
-      <x-common-form-image title="{{ __('panel/brand.logo') }}" name="logo" value="{{ old('logo', $brand->logo) }}" required />
-      <x-common-form-input title="{{ __('panel/brand.first') }}" name="first" value="{{ old('first', $brand->first) }}" required placeholder="{{ __('panel/brand.first') }}" />
-      <x-common-form-input title="{{ __('common/base.position') }}" name="position" value="{{ old('position', $brand->position) }}" placeholder="{{ __('common/base.position') }}" />
-      <x-common-form-switch-radio title="{{ __('panel/common.whether_enable') }}" name="active" :value="old('active', $page->active ?? true)" placeholder="{{ __('panel/common.whether_enable') }}"/>
-      <x-common-form-input title="{{ __('panel/common.slug') }}" name="slug" value="{{ old('slug', $brand->slug) }}" placeholder="{{ __('panel/common.slug') }}" />
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic-tab-pane"
+            type="button" role="tab" aria-controls="basic-tab-pane"
+            aria-selected="true">{{ __('panel/common.basic_info') }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="content-tab" data-bs-toggle="tab" data-bs-target="#content-tab-pane" type="button"
+            role="tab" aria-controls="content-tab-pane" aria-selected="false">{{ __('panel/brand.content') }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo-tab-pane" type="button"
+            role="tab" aria-controls="seo-tab-pane" aria-selected="false">{{ __('panel/product.seo') }}</button>
+        </li>
+        @hookinsert('panel.brand.edit.tab.nav.bottom')
+      </ul>
+
+      <div class="tab-content" id="myTabContent">
+        @include('panel::brands.panes.tab_pane_basic', ['brand' => $brand])
+        @include('panel::brands.panes.tab_pane_content', ['brand' => $brand])
+        @include('panel::brands.panes.tab_pane_seo', ['brand' => $brand])
+        @hookinsert('panel.brand.edit.tab.pane.bottom')
+      </div>
 
       <button type="submit" class="d-none"></button>
     </form>

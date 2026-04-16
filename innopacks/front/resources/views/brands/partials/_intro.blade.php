@@ -17,10 +17,12 @@
               <h1 class="brand-title display-6 fw-bold mb-3 text-primary">{{ $brand->name }}</h1>
               
               {{-- Brand description or summary if available --}}
-              @if($brand->description ?? false)
+              @php($brandSummary = $brand->translation->summary ?? '')
+              @php($brandContent = $brand->translation->content ?? '')
+              @if($brandSummary || $brandContent)
                 <div class="brand-summary mb-4">
                   <div class="summary-content text-muted fs-5 lh-lg">
-                    {!! $brand->description !!}
+                    {!! $brandSummary ?: \Illuminate\Support\Str::limit(strip_tags($brandContent), 200) !!}
                   </div>
                 </div>
               @endif

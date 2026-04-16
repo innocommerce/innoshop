@@ -22,7 +22,7 @@ return [
     'register_text'       => 'Vul het onderstaande formulier in om je te registreren',
     'select_calling_code' => 'Select the area code',
     'send_code'           => 'Send verification code',
-    'sending'             => '"Sending in progress',
+    'sending'             => 'Sending in progress',
     'sms_code'            => 'SMS verification code',
     'sms_code_sent'       => 'The SMS verification code has been sent',
     'telephone'           => 'Telephone number',

@@ -3,7 +3,7 @@
     :title="$field['label']"
     :description="$field['description'] ?? ''"
     :error="$errors->first($field['name'])"
-    :required="(bool)$field['required']"
+    :required="(bool)($field['required'] ?? false)"
     :value="old($field['name'], $field['value'] ?? '')">
     @if ($field['recommend_size'] ?? false)
         <div class="text-secondary"><small>{{ __('common.recommend_size') }} {{ $field['recommend_size'] }}</small></div>

@@ -1,0 +1,1055 @@
+@import './_variables';
+
+// File Manager theme — reuse panel primary color
+$fm-primary: $primary;
+$fm-primary-light: lighten($primary, 10%);
+$fm-primary-dark: darken($primary, 10%);
+$fm-primary-bg: rgba($primary, 0.05);
+$fm-primary-highlight: lighten($primary, 42%);
+$fm-border: #EBEEF5;
+$fm-text: #303133;
+$fm-text-secondary: #909399;
+
+/* ========== 容器与布局 ========== */
+.container-fluid {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.file-manager {
+  background: #fff;
+  border-radius: 4px;
+  min-height: calc(100vh - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== 左侧文件夹树 ========== */
+.folder-tree {
+  height: 100%;
+  overflow: auto;
+  border-right: 1px solid $fm-border;
+  background: #fff;
+  max-height: 90vh;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.folder-tree .el-tree-node__label {
+  font-size: 14px;
+}
+
+.folder-tree-container {
+  height: 100%;
+  position: relative;
+}
+
+.folder-tree-container.drag-over {
+  background-color: $fm-primary-highlight;
+  border: 2px dashed $fm-primary;
+  border-radius: 4px;
+  animation: dropTarget 1s ease infinite;
+}
+
+.folder-tree-container.is-drop-target {
+  background-color: $fm-primary-highlight !important;
+  border: 2px dashed $fm-primary !important;
+  border-radius: 4px;
+  animation: dropTarget 1s ease infinite;
+}
+
+/* ========== 右侧文件列表 ========== */
+.file-list {
+  padding: 20px;
+  overflow-y: auto;
+  height: 90vh;
+  flex: 1;
+  border-bottom: 1px solid #F0F0F0;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-list .el-loading-mask {
+  border-radius: 4px;
+}
+
+/* ========== 顶部工具栏 ========== */
+.file-toolbar {
+  padding: 15px 20px;
+  border-bottom: 1px solid $fm-border;
+  background: #fff;
+  border-radius: 4px 4px 0 0;
+  flex-shrink: 0;
+}
+
+.file-toolbar .el-button-group + .el-button-group {
+  margin-left: 10px;
+}
+
+/* ========== 文件卡片 ========== */
+.file-card {
+  border: 1px solid $fm-border;
+  border-radius: 4px;
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 15px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.file-card.selected {
+  border-color: $fm-primary;
+  background: $fm-primary-bg;
+}
+
+.file-card.dragging {
+  opacity: 0.6;
+  transform: scale(0.95);
+  cursor: move;
+}
+
+.file-card[data-is-dir="true"] {
+  cursor: pointer;
+}
+
+.file-card[data-is-dir="true"].drag-over {
+  background-color: $fm-primary-highlight;
+  border: 2px dashed $fm-primary;
+  animation: dropTarget 1s ease infinite;
+}
+
+.file-card[data-is-dir="true"].drag-over::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+}
+
+.file-card[data-is-dir="true"] .file-thumb {
+  background: #f8f9fc;
+}
+
+.file-card:hover .file-checkbox,
+.file-card.selected .file-checkbox {
+  opacity: 1;
+}
+
+/* ========== 文件缩略图 ========== */
+.file-thumb {
+  position: relative;
+  padding: 6px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border-bottom: 1px solid $fm-border;
+  user-select: none;
+}
+
+.file-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.file-thumb:hover .preview-button {
+  opacity: 1;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.preview-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  background-color: rgba($fm-primary, 0.85);
+  border-radius: 4px;
+  font-size: 12px;
+  color: #fff;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.preview-button:hover {
+  transform: scale(1.05);
+}
+
+/* ========== 文件信息 ========== */
+.file-info {
+  padding: 12px 16px;
+}
+
+.file-name {
+  font-weight: 500;
+  color: $fm-text;
+  margin-bottom: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-type {
+  font-size: 12px;
+  color: $fm-text-secondary;
+  line-height: 1.4;
+}
+
+/* ========== 多选框 ========== */
+.file-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+  padding: 2px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.file-checkbox .el-checkbox {
+  margin-right: 0;
+}
+
+.file-card.selected .file-checkbox {
+  opacity: 1;
+}
+
+/* ========== Element UI 主题色 ========== */
+.el-button--primary {
+  background-color: $fm-primary;
+  border-color: $fm-primary;
+}
+
+.el-button--primary:hover,
+.el-button--primary:focus {
+  background: $fm-primary-light;
+  border-color: $fm-primary-light;
+}
+
+.el-button--primary:active {
+  background: $fm-primary-dark;
+  border-color: $fm-primary-dark;
+  color: #fff;
+}
+
+/* ========== Element UI 按钮样式 ========== */
+.el-button {
+  font-weight: normal;
+  border-radius: 4px;
+  padding: 8px 15px;
+  line-height: 1;
+  height: auto;
+}
+
+.el-button--small {
+  padding: 7px 12px;
+  font-size: 12px;
+}
+
+.el-button--mini {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.el-button--default {
+  background: #fff;
+  border-color: #dcdfe6;
+  color: #606266;
+}
+
+.el-button--default:hover,
+.el-button--default:focus {
+  background: #f4f4f5;
+  border-color: $fm-primary;
+  color: $fm-primary;
+}
+
+.el-button-group {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.el-button-group:last-child {
+  margin-right: 0;
+}
+
+.el-button-group .el-button {
+  border-radius: 0;
+}
+
+.el-button-group .el-button:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.el-button-group .el-button:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.el-button-group .el-button:not(:first-child):not(:last-child) {
+  margin: 0 -1px;
+}
+
+.el-button.is-disabled,
+.el-button.is-disabled:hover,
+.el-button.is-disabled:focus {
+  color: #c0c4cc;
+  cursor: not-allowed;
+  background-image: none;
+  background-color: #fff;
+  border-color: #ebeef5;
+}
+
+.el-button [class*="el-icon-"] {
+  margin-right: 5px;
+}
+
+.file-card-context-menu li i {
+  margin-right: 8px;
+}
+
+.el-button--text {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: $fm-primary;
+}
+
+.el-button--text:hover,
+.el-button--text:focus {
+  color: $fm-primary-light;
+  background: transparent;
+}
+
+/* ========== 复选框 ========== */
+.el-checkbox__inner {
+  border-color: #DCDFE6;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: $fm-primary;
+  border-color: $fm-primary;
+}
+
+/* ========== 图片与上传 ========== */
+.el-image {
+  width: 100%;
+  height: 100%;
+}
+
+.el-image:hover {
+  transform: scale(1.05);
+}
+
+/* ========== 图片预览弹出层 ========== */
+.el-image-viewer__wrapper {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.el-image-viewer__img {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+}
+
+/* ========== 视频缩略图与播放 ========== */
+.video-thumb,
+.file-icon-default {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 48px;
+  color: $fm-text-secondary;
+}
+
+.file-card:hover .video-thumb i,
+.file-card:hover .file-icon-default i {
+  color: $fm-primary;
+  transform: scale(1.1);
+  transition: all 0.3s;
+}
+
+.video-dialog .el-dialog__header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  padding: 0;
+}
+
+.video-dialog .el-dialog__headerbtn {
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  font-size: 16px;
+}
+
+.video-dialog .el-dialog__headerbtn .el-dialog__close {
+  color: #fff;
+}
+
+.video-dialog .el-dialog__headerbtn:hover .el-dialog__close {
+  color: #fff;
+}
+
+.video-dialog .el-dialog__body {
+  padding: 0;
+}
+
+.video-player {
+  width: 100%;
+  max-height: 70vh;
+  display: block;
+  background: #000;
+  border-radius: 0 0 4px 4px;
+  outline: none;
+}
+
+.file-uploader {
+  text-align: center;
+}
+
+.file-uploader .el-upload {
+  width: 100%;
+}
+
+.file-uploader .el-upload-dragger {
+  width: 100%;
+  height: 200px;
+}
+
+.file-uploader .el-icon-upload {
+  margin: 40px 0 16px;
+  font-size: 48px;
+  color: $fm-primary;
+}
+
+.file-uploader .el-upload__text {
+  color: #606266;
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.file-uploader .el-upload__text em {
+  color: $fm-primary;
+  font-style: normal;
+}
+
+.file-uploader .el-upload__tip {
+  color: $fm-text-secondary;
+}
+
+/* ========== 裁剪对话框 ========== */
+.cropper-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 2001;
+  width: 900px;
+}
+
+.cropper-container {
+  width: 100%;
+  height: 500px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.cropper-container img {
+  max-width: 100%;
+  display: block;
+}
+
+.cropper-controls {
+  text-align: right;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.cropper-controls button {
+  margin-left: 10px;
+  padding: 6px 20px;
+}
+
+.cropper-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+}
+
+/* ========== Element UI 对话框层级 ========== */
+.el-dialog__wrapper {
+  z-index: 1000;
+}
+
+.v-modal {
+  z-index: 999;
+}
+
+/* ========== 重命名对话框 ========== */
+.rename-dialog .el-form-item {
+  margin-bottom: 0;
+}
+
+.rename-dialog .el-input {
+  width: 100%;
+}
+
+.rename-dialog .el-input-group__append {
+  min-width: 60px;
+  text-align: center;
+  background-color: #f5f7fa;
+  color: $fm-text-secondary;
+}
+
+.rename-dialog.el-dialog {
+  width: 500px !important;
+}
+
+.rename-dialog .el-form-item__label {
+  padding-right: 20px;
+}
+
+.rename-dialog .el-form-item__content {
+  margin-right: 20px;
+}
+
+/* ========== 树节点样式 ========== */
+.el-tree {
+  background: none;
+}
+
+.el-tree-node {
+  white-space: nowrap;
+}
+
+.el-tree-node__content {
+  height: auto;
+  min-height: 32px;
+  padding: 4px 0;
+}
+
+.el-tree-node__content:hover {
+  background-color: #f5f7fa;
+}
+
+.el-tree-node__expand-icon {
+  color: $fm-text-secondary;
+}
+
+.el-tree-node__content .el-icon-folder,
+.el-tree-node__content .el-icon-folder-opened {
+  font-size: 16px;
+}
+
+.el-tree-node.is-current > .el-tree-node__content {
+  background-color: $fm-primary-highlight !important;
+  color: $fm-primary;
+}
+
+.el-tree-node.is-expanded > .el-tree-node__content .el-icon-folder {
+  color: $fm-primary;
+}
+
+.el-tree-node__wrapper {
+  width: 100%;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.el-tree-node__wrapper:hover {
+  background-color: #f5f7fa;
+}
+
+.el-tree-node.is-current > .el-tree-node__content > .el-tree-node__wrapper {
+  background-color: $fm-primary-highlight !important;
+  color: $fm-primary;
+}
+
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  padding: 0 8px;
+
+  .el-icon-folder,
+  .el-icon-folder-opened {
+    margin-right: 4px;
+    color: $fm-primary;
+  }
+}
+
+/* ========== 工具栏 ========== */
+.file-toolbar-actions {
+  text-align: right;
+}
+
+/* ========== 右键菜单样式 ========== */
+.file-card-context-menu {
+  position: fixed;
+  background: white;
+  border: 1px solid $fm-border;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  z-index: 3000;
+  min-width: 160px;
+  padding: 5px 0;
+}
+
+.file-card-context-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-card-context-menu li {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.file-card-context-menu li:hover {
+  background-color: $fm-primary-highlight;
+  color: $fm-primary;
+}
+
+.file-card-context-menu li i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* ========== 文件夹右键菜单样式 ========== */
+.folder-context-menu {
+  position: fixed;
+  background: white;
+  border: 1px solid $fm-border;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  z-index: 3000;
+  min-width: 120px;
+}
+
+.folder-context-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.folder-context-menu li {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.folder-context-menu li:hover {
+  background-color: #f5f7fa;
+  color: $fm-primary;
+}
+
+.folder-context-menu li i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* ========== 文件夹图标 ========== */
+.folder-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.folder-icon i {
+  transition: all 0.3s;
+}
+
+.folder-image {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  transition: all 0.3s;
+}
+
+.file-card:hover .folder-icon i {
+  transform: scale(1.1);
+  color: $fm-primary-light;
+}
+
+.file-card:hover .folder-image {
+  transform: scale(1.1);
+}
+
+/* ========== 拖拽样式 ========== */
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+
+.el-tree-node.is-dragging {
+  opacity: 0.5;
+  cursor: move;
+}
+
+.el-tree-node.is-dragging .el-tree-node__content {
+  opacity: 0.7;
+  background-color: $fm-primary-highlight !important;
+  border: 1px solid $fm-primary;
+  border-radius: 4px;
+}
+
+.el-tree-node.is-dragging .el-icon-folder,
+.el-tree-node.is-dragging .el-icon-folder-opened {
+  color: $fm-primary;
+}
+
+.el-tree-node__content.is-drop-inner {
+  background-color: $fm-primary-highlight !important;
+  border: 2px dashed $fm-primary;
+  border-radius: 4px;
+  animation: dropTarget 1s ease infinite;
+}
+
+.el-tree-node.is-drop-inner > .el-tree-node__content {
+  background-color: $fm-primary-highlight !important;
+  border: 2px dashed $fm-primary !important;
+  box-shadow: 0 0 5px rgba($fm-primary, 0.3);
+  animation: dropTarget 1s ease infinite;
+}
+
+.el-tree-node.is-drop-inner > .el-tree-node__content:hover {
+  background-color: $fm-primary-highlight !important;
+}
+
+.el-tree-node.is-drop-inner {
+  z-index: 100;
+}
+
+.el-tree-node.is-drop-inner::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.el-tree-node.can-drop > .el-tree-node__content {
+  background-color: $fm-primary-highlight !important;
+  border: 2px dashed $fm-primary;
+  animation: dropTarget 1s ease infinite;
+}
+
+.el-tree-node.is-drop-not-allow .el-tree-node__content {
+  background-color: #fef0f0 !important;
+  border: 2px dashed #f56c6c;
+}
+
+.el-tree-node.drag-over > .el-tree-node__content {
+  background-color: $fm-primary-highlight !important;
+  border: 2px dashed $fm-primary;
+  animation: dropTarget 1s ease infinite;
+}
+
+.el-tree-node.drag-over > .el-tree-node__content::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.el-tree-node.is-drop-target > .el-tree-node__content {
+  background-color: $fm-primary-highlight !important;
+  border: 2px dashed $fm-primary !important;
+  animation: dropTarget 1s ease infinite;
+}
+
+.el-tree-node.is-drop-target > .el-tree-node__content:hover {
+  background-color: $fm-primary-highlight !important;
+}
+
+@keyframes dropTarget {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ========== 分页 ========== */
+.pagination-container {
+  padding: 20px 0;
+  text-align: right;
+  background: #fff;
+  border-top: 1px solid $fm-border;
+  flex-shrink: 0;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: $fm-primary;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: $fm-primary;
+}
+
+.el-pagination .el-select .el-input .el-input__inner:hover {
+  border-color: $fm-primary;
+}
+
+/* ========== 加载状态 ========== */
+.el-loading-spinner .el-loading-text {
+  color: $fm-primary;
+}
+
+.el-loading-spinner .path {
+  stroke: $fm-primary;
+}
+
+/* ========== 空状态 ========== */
+.el-empty {
+  padding: 40px 0;
+  background: #fff;
+  border-radius: 4px;
+}
+
+/* ========== 存储配置对话框 ========== */
+.storage-config-dialog {
+  .el-dialog__header {
+    padding-bottom: 0;
+  }
+
+  .el-dialog__body {
+    padding-top: 16px;
+  }
+
+  .el-dialog__footer {
+    padding: 12px 20px 16px;
+  }
+}
+
+.storage-dialog-header {
+  .storage-dialog-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: $fm-text;
+
+    i {
+      font-size: 20px;
+      color: $fm-primary;
+    }
+  }
+
+  .storage-dialog-desc {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: $fm-text-secondary;
+    line-height: 1.5;
+  }
+}
+
+.storage-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.storage-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 2px solid $fm-border;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: #fff;
+  user-select: none;
+
+  &:hover {
+    border-color: lighten($fm-primary, 20%);
+    background: rgba($primary, 0.02);
+    box-shadow: 0 2px 8px rgba($primary, 0.08);
+  }
+
+  &.is-selected {
+    border-color: $fm-primary;
+    background: rgba($primary, 0.04);
+    box-shadow: 0 0 0 1px rgba($primary, 0.15);
+
+    .storage-card-icon {
+      background: $fm-primary;
+      color: #fff;
+    }
+
+    .storage-card-name {
+      color: $fm-primary;
+    }
+  }
+}
+
+.storage-card-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f0f2f5;
+  color: $fm-text-secondary;
+  font-size: 20px;
+  transition: all 0.25s ease;
+}
+
+.storage-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.storage-card-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: $fm-text;
+  line-height: 1.4;
+  transition: color 0.25s ease;
+}
+
+.storage-card-desc {
+  font-size: 12px;
+  color: $fm-text-secondary;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.storage-card-check {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $fm-primary;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  animation: storageCheckIn 0.3s ease;
+}
+
+.storage-card-current {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 10px;
+  color: $fm-primary;
+  background: rgba($primary, 0.08);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.storage-dialog-footer {
+  display: flex;
+  align-items: center;
+
+  .storage-settings-link {
+    margin-right: auto;
+    font-size: 13px;
+    color: #409eff;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+@keyframes storageCheckIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ========== 响应式 ========== */
+@media screen and (max-width: 768px) {
+  .el-tree-node__wrapper { padding: 6px; }
+  .file-list { padding: 6px; }
+  .el-button--small { font-size: 8px; }
+}
+
+@media screen and (max-width: 600px) {
+  .storage-config-dialog {
+    width: 95% !important;
+    margin: 10px auto !important;
+  }
+
+  .storage-card {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .storage-card-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .storage-card-name {
+    font-size: 13px;
+  }
+
+  .storage-card-desc {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .el-button--small { font-size: 2px; }
+}

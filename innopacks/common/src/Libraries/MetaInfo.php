@@ -110,12 +110,10 @@ class MetaInfo
     {
         $object = $this->object;
         $type   = $this->type;
-        if (in_array($type, ['category', 'product', 'tag'])) {
+        if (in_array($type, ['category', 'product', 'tag', 'brand'])) {
             return $object->fallbackName('name');
         } elseif (in_array($type, ['catalog', 'article', 'page'])) {
             return $object->fallbackName('title');
-        } elseif ($type == 'brand') {
-            return $object->name;
         }
 
         return '';

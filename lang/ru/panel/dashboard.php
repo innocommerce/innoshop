@@ -24,5 +24,6 @@ return [
     'top_products'      => 'топ продаваемых товаров',
     'traffic_trends'    => 'Тенденция потока',
     'unique_visitors'   => 'Независимый посетитель',
+    'order_trends'      => 'Тенденции заказов',
     'vs_yesterday'      => 'Вчера.',
 ];

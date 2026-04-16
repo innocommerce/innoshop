@@ -8,6 +8,13 @@
  */
 
 return [
+    'available_themes_count'        => 'Available themes: :count',
+    'themes_stats_title'            => 'Overview',
+    'themes_stat_available'         => 'Available',
+    'themes_stat_demo'              => 'With demo data',
+    'themes_stat_current'           => 'In use',
+    'themes_stat_none'              => 'Not set',
+    'theme_badge_demo'              => 'Demo data',
     'author'                        => 'Author',
     'confirm_import'                => 'Confirm import',
     'confirm_import_button'         => 'Confirm import',
@@ -34,7 +41,7 @@ return [
     'export_sql'                    => 'Export SQL',
     'export_started'                => 'The export has begun and the file will be downloaded automatically',
     'import_demo_data'              => 'Import demonstration data',
-    'import_export_data'            => '"Demo data"',
+    'import_export_data'            => 'Demo data',
     'import_failed'                 => 'Import failed',
     'no_custom_theme'               => 'No custom templates system directory, use innopacks/front/resources under the default template',
     'no_demo_data'                  => 'There is no demonstration data available for the moment',

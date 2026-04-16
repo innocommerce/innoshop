@@ -9,7 +9,7 @@
 
 return [
     'click_or_drag'         => 'Click "Upload" or drag the file here',
-    'close'                 => '"Close',
+    'close'                 => 'Close',
     'current_count'         => 'Current quantity',
     'drag_and_drop'         => 'Sleep bestand hierheen',
     'drag_to_reorder'       => 'Drag the pictures to adjust their order',

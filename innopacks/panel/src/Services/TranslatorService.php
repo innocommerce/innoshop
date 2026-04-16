@@ -36,8 +36,10 @@ class TranslatorService extends BaseService
                 $result = $error = '';
                 if (is_array($text)) {
                     $result = $translator->batchTranslate($source, $target, $text);
+                    $result = self::cleanResult($result);
                 } elseif (is_string($text)) {
                     $result = $translator->translate($source, $target, $text);
+                    $result = self::cleanResult($result);
                 }
             } catch (Exception $e) {
                 $error = $e->getMessage();
@@ -51,6 +53,21 @@ class TranslatorService extends BaseService
         }
 
         return $items;
+    }
+
+    /**
+     * Remove surrounding quotes from translation results.
+     *
+     * @param  array|string  $result
+     * @return array|string
+     */
+    private static function cleanResult(array|string $result): array|string
+    {
+        if (is_string($result)) {
+            return trim($result, '\'"');
+        }
+
+        return array_map(fn ($item) => is_string($item) ? trim($item, '\'"') : $item, $result);
     }
 
     /**

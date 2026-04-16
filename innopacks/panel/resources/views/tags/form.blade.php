@@ -17,34 +17,15 @@
           <h5 class="card-title mb-0">{{ __('panel/common.basic_info') }}</h5>
         </div>
         <div class="card-body">
-          <div class="accordion accordion-flush locales-accordion" id="data-locales">
-            @foreach (locales() as $locale)
-            @php($localeCode = $locale->code)
-            @php($localeName = $locale->name)
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button"
-                  data-bs-toggle="collapse" data-bs-target="#data-locale-{{ $localeCode }}"
-                  aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="data-locale-{{ $localeCode }}">
-                  <div class="d-flex align-items-center wh-20">
-                    <img src="{{ image_origin($locale->image) }}" class="img-fluid {{ default_locale_class($locale->code) }}"
-                        alt="{{ $localeName }}">
-                  </div>&nbsp;
-                  {{ $localeName }}
-                </button>
-              </h2>
-              <div id="data-locale-{{ $localeCode }}"
-                class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" data-bs-parent="#data-locales">
-                <div class="accordion-body">
-                  <input name="translations[{{$localeCode}}][locale]" value="{{$localeCode}}" class="d-none">
-
-                  <x-common-form-input title="{{ __('panel/article.title') }}" name="translations[{{$localeCode}}][name]"
-                    :translate="true" value="{{ old('translations.' . $localeCode . '.name', $tag->translate($localeCode, 'name')) }}" />
-
-                </div>
-              </div>
-            </div>
-            @endforeach
+          <div class="mb-3 col-12 col-md-6">
+            <label class="form-label">{{ __('panel/article.title') }}</label>
+            <x-common-form-locale-input
+              name="name"
+              :translations="locale_field_data($tag, 'name')"
+              :required="true"
+              :label="__('panel/article.title')"
+              :placeholder="__('panel/article.title')"
+            />
           </div>
         </div>
       </div>

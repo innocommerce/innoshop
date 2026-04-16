@@ -191,6 +191,81 @@ class EventTrackingService
     }
 
     /**
+     * Track home page view event
+     *
+     * @param  Request|null  $request
+     * @return VisitEvent|null
+     */
+    public function trackHomeView(?Request $request = null): ?VisitEvent
+    {
+        return $this->track(VisitEvent::TYPE_HOME_VIEW, [], $request);
+    }
+
+    /**
+     * Track category view event
+     *
+     * @param  int  $categoryId
+     * @param  string  $categoryName
+     * @param  Request|null  $request
+     * @return VisitEvent|null
+     */
+    public function trackCategoryView(int $categoryId, string $categoryName, ?Request $request = null): ?VisitEvent
+    {
+        return $this->track(VisitEvent::TYPE_CATEGORY_VIEW, [
+            'category_id'   => $categoryId,
+            'category_name' => $categoryName,
+        ], $request);
+    }
+
+    /**
+     * Track search event
+     *
+     * @param  string  $keyword
+     * @param  int  $resultCount
+     * @param  Request|null  $request
+     * @return VisitEvent|null
+     */
+    public function trackSearch(string $keyword, int $resultCount, ?Request $request = null): ?VisitEvent
+    {
+        return $this->track(VisitEvent::TYPE_SEARCH, [
+            'keyword'      => $keyword,
+            'result_count' => $resultCount,
+        ], $request);
+    }
+
+    /**
+     * Track cart view event
+     *
+     * @param  int  $itemCount
+     * @param  Request|null  $request
+     * @return VisitEvent|null
+     */
+    public function trackCartView(int $itemCount, ?Request $request = null): ?VisitEvent
+    {
+        return $this->track(VisitEvent::TYPE_CART_VIEW, [
+            'item_count' => $itemCount,
+        ], $request);
+    }
+
+    /**
+     * Track order cancelled event
+     *
+     * @param  int  $orderId
+     * @param  string  $orderNumber
+     * @param  string  $reason
+     * @param  Request|null  $request
+     * @return VisitEvent|null
+     */
+    public function trackOrderCancelled(int $orderId, string $orderNumber, string $reason = '', ?Request $request = null): ?VisitEvent
+    {
+        return $this->track(VisitEvent::TYPE_ORDER_CANCELLED, [
+            'order_id'     => $orderId,
+            'order_number' => $orderNumber,
+            'reason'       => $reason,
+        ], $request);
+    }
+
+    /**
      * Get client IP address
      *
      * @param  Request  $request

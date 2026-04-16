@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'Tetapan SEO',
     'seo_settings_desc'             => 'Konfigurasikan maklumat berkaitan SEO tapak web anda',
     'setting'                       => 'Tetapan sistem',
-    'shop_address'                  => 'Alamat kedai',
+    'shop_address'                  => 'Alamat syarikat',
     'slideshow'                     => 'Slide utama halaman depan',
     'specials'                      => 'Halaman yang disematkan',
     'store_features'                => 'Tetapan fungsi kedai',

@@ -8,7 +8,8 @@
  */
 
 return [
-    'name'  => 'Name',
-    'first' => 'Initial',
-    'logo'  => 'Logo',
+    'name'    => 'Name',
+    'first'   => 'Initial',
+    'logo'    => 'Logo',
+    'content' => 'Content',
 ];

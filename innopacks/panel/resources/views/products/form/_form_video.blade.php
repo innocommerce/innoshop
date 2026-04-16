@@ -30,9 +30,9 @@
             <i v-else class="bi bi-plus fs-1 text-muted"></i>
           </div>
           <div v-if="videoForm.url" class="video-actions">
-            <a target="_blank" :href="videoForm.url" class="btn btn-sm btn-outline-primary mb-2">
+            <button type="button" @click="previewVideo" class="btn btn-sm btn-outline-primary mb-2">
               <i class="bi bi-eye me-1"></i>{{ __('panel/common.preview') }}
-            </a>
+            </button>
             <button type="button" @click="deleteVideo" class="btn btn-sm btn-outline-danger">
               <i class="bi bi-trash me-1"></i>{{ __('common/base.delete') }}
             </button>
@@ -65,6 +65,23 @@
 
     <input type="hidden" name="video" :value="videoForm.path">
   </div>
+
+  <!-- Video Preview Modal -->
+  <div class="modal fade" id="videoPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ __('panel/common.preview') }}</h5>
+          <button type="button" class="btn-close" @click="closeVideoPreview"></button>
+        </div>
+        <div class="modal-body p-0">
+          <video v-if="showPreview" ref="previewPlayer" class="w-100" style="max-height: 70vh;" controls>
+            <source :src="videoForm.url" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @push('footer')
@@ -79,7 +96,8 @@
           iframe: '', // iframe code
           custom: '', // Custom path
           path: '' // Final submission path
-        }
+        },
+        showPreview: false
       };
     },
     
@@ -219,6 +237,33 @@
        * Delete video
        * Delete video data
        */
+
+      /**
+       * Preview video in modal
+       */
+      previewVideo() {
+        if (!this.videoForm.url) return;
+        this.showPreview = true;
+        this.$nextTick(() => {
+          const modal = new bootstrap.Modal(document.getElementById('videoPreviewModal'));
+          modal.show();
+        });
+      },
+
+      /**
+       * Close video preview modal
+       */
+      closeVideoPreview() {
+        const videoEl = this.$refs.previewPlayer;
+        if (videoEl) {
+          videoEl.pause();
+        }
+        const modal = bootstrap.Modal.getInstance(document.getElementById('videoPreviewModal'));
+        if (modal) {
+          modal.hide();
+        }
+        this.showPreview = false;
+      },
       deleteVideo() {
         // Clear all video-related fields
         this.videoForm.url = '';

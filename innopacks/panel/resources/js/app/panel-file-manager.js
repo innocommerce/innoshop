@@ -51,7 +51,7 @@ export default {
 
     layer.open({
       type: 2,
-      title: "File Manager",
+      title: urls.file_manager_title || "File Manager",
       shadeClose: false,
       shade: 0.8,
       area: ["90%", "90%"],

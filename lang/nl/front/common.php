@@ -19,6 +19,7 @@ return [
     'home'                       => 'Startpagina',
     'in_stock'                   => 'Op voorraad',
     'load_more'                  => 'Meer laden',
+    'links'                      => 'Links',
     'login'                      => 'Inloggen',
     'logo'                       => 'Merk',
     'news'                       => 'Nieuws',

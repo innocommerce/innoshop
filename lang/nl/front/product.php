@@ -10,7 +10,7 @@
 return [
     'add_to_cart'                    => 'Voeg toe aan winkelwagentje',
     'add_wishlist'                   => 'Voeg toe aan verlanglijst',
-    'apply'                          => '"Application',
+    'apply'                          => 'Application',
     'attribute'                      => 'Productkenmerken',
     'availability'                   => 'Inventory status',
     'brand'                          => 'Merk',
@@ -25,7 +25,7 @@ return [
     'custom_options'                 => 'Custom extension options',
     'default'                        => 'Default',
     'description'                    => 'Productdetails',
-    'filter'                         => '"Screening',
+    'filter'                         => 'Screening',
     'from'                           => 'From',
     'have_reviewed'                  => 'Je hebt dit product al beoordeeld',
     'in_stock'                       => 'Op voorraad',

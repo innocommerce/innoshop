@@ -15,10 +15,14 @@ use Illuminate\Support\ServiceProvider;
 use InnoShop\Common\Middleware\ContentFilterHook;
 use InnoShop\Common\Middleware\EventActionHook;
 use InnoShop\Common\Models\Admin;
+use InnoShop\Common\Services\StorageService;
 use InnoShop\Panel\Console\Commands\ChangeRootPassword;
 use InnoShop\Panel\Middleware\AdminAuthenticate;
 use InnoShop\Panel\Middleware\GlobalPanelData;
 use InnoShop\Panel\Middleware\SetPanelLocale;
+use InnoShop\RestAPI\Services\FileManagerInterface;
+use InnoShop\RestAPI\Services\FileManagerService;
+use InnoShop\RestAPI\Services\OSSService;
 
 class PanelServiceProvider extends ServiceProvider
 {
@@ -37,6 +41,7 @@ class PanelServiceProvider extends ServiceProvider
         $this->registerWebRoutes();
         $this->registerGuard();
         $this->registerUploadFileSystem();
+        $this->registerFileManagerService();
         $this->registerCommands();
         $this->loadTranslations();
         $this->loadViewTemplates();
@@ -70,27 +75,70 @@ class PanelServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the media filesystem disk.
+     * When OSS driver is configured, the media disk points to S3; otherwise local.
+     *
      * @return void
      */
     protected function registerUploadFileSystem(): void
     {
-        Config::set('filesystems.disks.media', [
-            'driver'      => 'local',
-            'root'        => public_path('static/media'),
-            'url'         => env('APP_URL').'/media',
-            'visibility'  => 'public',
-            'throw'       => true,
-            'permissions' => [
-                'file' => [
-                    'public'  => 0755,
-                    'private' => 0755,
+        $driver    = system_setting('file_manager_driver', 'local');
+        $s3Drivers = ['oss', 'cos', 'qiniu', 's3', 'obs', 'r2', 'minio'];
+
+        if (in_array($driver, $s3Drivers)) {
+            $prefix   = "storage_{$driver}_";
+            $s3Config = [
+                'driver'                  => 's3',
+                'key'                     => system_setting($prefix.'key', system_setting('storage_key', '')),
+                'secret'                  => system_setting($prefix.'secret', system_setting('storage_secret', '')),
+                'region'                  => system_setting($prefix.'region', system_setting('storage_region', '')),
+                'bucket'                  => system_setting($prefix.'bucket', system_setting('storage_bucket', '')),
+                'endpoint'                => system_setting($prefix.'endpoint', system_setting('storage_endpoint', '')),
+                'url'                     => system_setting($prefix.'cdn_domain', system_setting('storage_cdn_domain', '')) ?: null,
+                'use_path_style_endpoint' => false,
+                'visibility'              => 'public',
+                'options'                 => ['ACL' => 'public-read'],
+                'throw'                   => true,
+            ];
+            Config::set('filesystems.disks.media', $s3Config);
+        } else {
+            Config::set('filesystems.disks.media', [
+                'driver'      => 'local',
+                'root'        => public_path(rtrim(StorageService::STORAGE_PREFIX, '/')),
+                'url'         => env('APP_URL').'/media',
+                'visibility'  => 'public',
+                'throw'       => true,
+                'permissions' => [
+                    'file' => [
+                        'public'  => 0755,
+                        'private' => 0755,
+                    ],
+                    'dir' => [
+                        'public'  => 0755,
+                        'private' => 0755,
+                    ],
                 ],
-                'dir' => [
-                    'public'  => 0755,
-                    'private' => 0755,
-                ],
-            ],
-        ]);
+            ]);
+        }
+    }
+
+    /**
+     * Bind FileManagerInterface to the appropriate implementation.
+     */
+    protected function registerFileManagerService(): void
+    {
+        $driver    = system_setting('file_manager_driver', 'local');
+        $s3Drivers = ['oss', 'cos', 'qiniu', 's3', 'obs', 'r2', 'minio'];
+
+        if (in_array($driver, $s3Drivers)) {
+            $this->app->singleton(FileManagerInterface::class, function () {
+                return new OSSService;
+            });
+        } else {
+            $this->app->singleton(FileManagerInterface::class, function () {
+                return new FileManagerService;
+            });
+        }
     }
 
     /**

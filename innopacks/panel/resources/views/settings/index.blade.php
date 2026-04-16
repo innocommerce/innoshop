@@ -27,7 +27,10 @@
             
             <!-- Feature Settings (Medium Frequency + Medium Importance) -->
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-image">{{ __('panel/setting_image.image_settings') }}</a>
-            
+
+            <!-- Storage Settings -->
+            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-storage">{{ __('panel/setting.storage_settings') }}</a>
+
             <!-- Tool Settings (Low Frequency + Low Importance) -->
             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#tab-setting-tools">{{ __('panel/setting.tools_setting') }}</a>
             
@@ -45,6 +48,7 @@
             @include('panel::settings._localization_setting')
             @include('panel::settings._store_system_setting')
             @include('panel::settings._image_setting')
+            @include('panel::settings._storage_setting')
             @include('panel::settings._email_setting')
             @include('panel::settings._sms_setting')
             @include('panel::settings._tools_setting')
@@ -76,6 +80,12 @@
     getZones(countryId);
   });
 
+  // Switch to tab from URL query param
+  var tabParam = new URLSearchParams(window.location.search).get('tab');
+  if (tabParam) {
+    $('a[data-bs-target="#' + tabParam + '"]').tab('show');
+  }
+
   // Get all countries data
   function getCountries() {
     axios.get('{{ front_route('countries.index') }}').then(function(res) {
@@ -101,62 +111,5 @@
       });
     });
   }
-
-  function addSlide(btn) {
-    var tbody = $(btn).closest('table').find('tbody');
-    var index = tbody.find('tr').length;
-    var tr = `
-      <tr>
-        <td>
-          <div class="accordion accordion-sm" id="accordion-slideshow-${index}">
-            ${locales.map((locale, locale_index) => `
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button class="accordion-button py-2 ${locale_index === 0 ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse" data-bs-target="#data-locale-${index}-${locale.code}" aria-expanded="false" aria-controls="data-locale-${index}-${locale.code}">
-                    <div class="wh-20 me-2"><img src="${locale.image}" class="img-fluid"></div>
-                    ${locale.name}
-                  </button>
-                </h2>
-                <div id="data-locale-${index}-${locale.code}" class="accordion-collapse collapse ${locale_index === 0 ? 'show' : ''}" data-bs-parent="#accordion-slideshow-${index}">
-                  <div class="accordion-body">
-                    <div class="is-up-file slideshow-img">
-                      <div class="img-upload-item wh-80 position-relative d-flex justify-content-center rounded overflow-hidden align-items-center border border-1 mb-1 me-1">
-                        <div class="position-absolute bg-white d-none img-loading"><div class="spinner-border opacity-50"></div></div>
-                        <div class="img-info d-flex justify-content-center align-items-center h-100 w-80 cursor-pointer">
-                          <i class="bi bi-plus fs-1 text-secondary opacity-75"></i>
-                        </div>
-                        <input class="d-none" name="slideshow[${index}][image][${locale.code}]" value="">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </td>
-        <td>
-          <input type="text" name="slideshow[${index}][link]" class="form-control">
-        </td>
-        <td class="text-end">
-          <button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">删除</button>
-        </td>
-      </tr>
-    `;
-    tbody.append(tr);
-  }
-
-  $(document).on('click', '.is-up-file.slideshow-img .img-upload-item', function () {
-    const _self = $(this);
-    $('#form-upload').remove();
-    $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" accept="image/*" name="file" /></form>');
-    $('#form-upload input[name=\'file\']').trigger('click');
-    $('#form-upload input[name=\'file\']').change(function () {
-      let file = $(this).prop('files')[0];
-      inno.imgUploadAjax(file, _self, (data) => {
-        _self.find('input').val(data.data.value);
-        _self.find('.img-info').html('<img src="' + data.data.url + '" class="img-fluid">');
-      })
-    });
-  })
 </script>
 @endpush

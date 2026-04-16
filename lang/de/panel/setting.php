@@ -193,7 +193,7 @@ return [
     'seo_settings'                            => 'Einstellungen SEO',
     'seo_settings_desc'                       => 'Legt die seo-informationen auf der website fest',
     'setting'                                 => 'Systemeinstellung',
-    'shop_address'                            => 'Shop-Adresse',
+    'shop_address'                            => 'Firmenadresse',
     'slideshow'                               => 'Startseiten-Diashow',
     'sms_aliyun_access_key_id'                => 'Access Key ID',
     'sms_aliyun_access_key_secret'            => 'Access Key Secret',

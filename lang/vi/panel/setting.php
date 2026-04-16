@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'Cài đặt SEO',
     'seo_settings_desc'             => 'Cấu hình thông tin về SEO của trang web',
     'setting'                       => 'thiết lập hệ thống',
-    'shop_address'                  => 'địa chỉ cửa hàng',
+    'shop_address'                  => 'Địa chỉ công ty',
     'slideshow'                     => 'slideshow trang chủ',
     'specials'                      => 'Trang cố định',
     'store_features'                => 'Thiết lập chức năng cửa hàng',

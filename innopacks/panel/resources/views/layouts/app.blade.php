@@ -12,6 +12,7 @@
   <meta name="description" content="@yield('description', 'InnoShop')">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="api-token" content="{{ session('panel_api_token') }}">
+  <meta name="storage-base-url" content="{{ storage_url('') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
   <link rel="stylesheet" href="{{ asset('vendor/element-plus/index.css') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
@@ -24,12 +25,15 @@
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script src="{{ asset('vendor/laydate/laydate.js') }}"></script>
   <script src="{{ mix('build/panel/js/app.js') }}"></script>
+  <script src="{{ mix('build/panel/js/panel-standalone.js') }}"></script>
+  <script src="{{ asset('vendor/locale-modal/locale-modal.js') }}"></script>
   <script>
     const urls = {
       panel_api: '{{ route('api.panel.base.index') }}',
       panel_base: '{{ panel_route('home.index') }}',
       panel_upload: '{{ panel_route('upload.images') }}',
       panel_ai: '{{ panel_route('content_ai.generate') }}',
+      file_manager_title: '{{ __("panel/menu.file_manager") }}',
     };
 
     const lang = {
@@ -38,14 +42,32 @@
       confirm: '{{ __('common/base.confirm') }}',
       cancel: '{{ __('common/base.cancel') }}',
     }
+
+    const panelLocaleMessages = {
+      frontRequired: '{{ __("panel/common.front_locale_required", ["locale" => setting_locale_code(), "field" => ":field"]) }}',
+    };
+
+    window._lmConfig = {
+      defaultLocale: '{{ panel_locale_code() }}',
+      locales: @json(locales()),
+      hasTranslator: @json(has_translator()),
+      translateUrl: '{{ panel_route("home.index") }}/translations/translate-text',
+      messages: {
+        sourceEmpty: '{{ __("panel/common.source_empty") }}',
+        noEmpty: '{{ __("panel/common.no_empty_languages") }}',
+        translated: '{{ __("panel/common.translated_languages", ["count" => ":count"]) }}',
+        copied: '{{ __("panel/common.copied_languages", ["count" => ":count"]) }}',
+      },
+    };
   </script>
   @stack('header')
+  @include('common::components.echo')
 </head>
 
 <body class="@yield('body-class')">
   @include('panel::layouts.header')
   <div class="main-content">
-    <aside class="sidebar-box navbar-expand-xs border-radius-xl">
+    <aside id="sidebar-box" class="sidebar-box navbar-expand-xs border-radius-xl">
       <div class="sidebar-body">
         <x-panel-layout-sidebar></x-panel-layout-sidebar>
       </div>

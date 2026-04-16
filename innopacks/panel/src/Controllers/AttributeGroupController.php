@@ -24,10 +24,16 @@ class AttributeGroupController extends BaseController
      */
     public function index(Request $request): mixed
     {
+        $panelLocale   = panel_locale_code();
+        $allLocales    = locales();
+        $defaultLocale = $allLocales->first(fn ($l) => $l->code === $panelLocale);
+
         $data = [
-            'searchFields'  => GroupRepo::getSearchFieldOptions(),
-            'filterButtons' => GroupRepo::getFilterButtonOptions(),
-            'attributes'    => GroupRepo::getInstance()->list($request->all()),
+            'searchFields'      => GroupRepo::getSearchFieldOptions(),
+            'filterButtons'     => GroupRepo::getFilterButtonOptions(),
+            'attributes'        => GroupRepo::getInstance()->list($request->all()),
+            'defaultLocaleName' => $defaultLocale->name ?? $panelLocale,
+            'otherLocales'      => $allLocales->filter(fn ($l) => $l->code !== $panelLocale),
         ];
 
         return inno_view('panel::attribute_groups.index', $data);
@@ -37,9 +43,11 @@ class AttributeGroupController extends BaseController
      * @param  Group  $attributeGroup
      * @return Group
      */
-    public function show(Group $attributeGroup): Group
+    public function show(Group $attributeGroup): mixed
     {
-        return $attributeGroup->load(['translations']);
+        $attributeGroup->load(['translations']);
+
+        return json_success('', $attributeGroup);
     }
 
     /**
@@ -81,10 +89,13 @@ class AttributeGroupController extends BaseController
      */
     public function destroy(Group $attributeGroup): mixed
     {
-        $attributeGroup->translations()->delete();
-        $attributeGroup->delete();
+        try {
+            $attributeGroup->translations()->delete();
+            $attributeGroup->delete();
 
-        return redirect(panel_route('attribute_groups.index'))
-            ->with('success', common_trans('base.deleted_success'));
+            return delete_json_success();
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
     }
 }

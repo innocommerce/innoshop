@@ -8,6 +8,13 @@
  */
 
 return [
+    'available_themes_count'        => 'Available themes: :count',
+    'themes_stats_title'            => 'Overview',
+    'themes_stat_available'         => 'Available',
+    'themes_stat_demo'              => 'With demo data',
+    'themes_stat_current'           => 'In use',
+    'themes_stat_none'              => 'Not set',
+    'theme_badge_demo'              => 'Demo data',
     'author'                        => 'Tác giả',
     'confirm_import'                => 'Xác nhận nhập khẩu',
     'confirm_import_button'         => 'Xác nhận nhập khẩu',

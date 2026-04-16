@@ -8,7 +8,7 @@
     <i class="bi bi-info-circle me-1"></i>
     {{ __('panel/themes.theme_guide_title') }}
   </button>
-  <a href="{{ panel_route('theme_market.index') }}" class="btn btn-primary">{{ __('panel/common.get_more') }}</a>
+  <a href="{{ panel_route('theme-market.index') }}" class="btn btn-primary">{{ __('panel/common.get_more') }}</a>
 @endsection
 
 @section('content')
@@ -29,6 +29,16 @@
 
 <div class="card h-min-600">
   <div class="card-body p-4">
+    <div class="d-flex flex-wrap align-items-center gap-2 gap-md-3 text-muted small mb-3 pb-3 border-bottom">
+      <span>
+        <i class="bi bi-palette me-1"></i>
+        {{ __('panel/themes.available_themes_count', ['count' => $themes_count ?? 0]) }}
+      </span>
+      <span class="text-secondary">·</span>
+      <span>{{ __('panel/themes.themes_stat_demo') }}: {{ $themes_with_demo_count }}</span>
+      <span class="text-secondary">·</span>
+      <span class="text-truncate" style="max-width: 100%;" title="{{ $selected_theme_name ?? '' }}">{{ __('panel/themes.themes_stat_current') }}: {{ $selected_theme_name ?? __('panel/themes.themes_stat_none') }}</span>
+    </div>
     @if($themes)
       <div class="themes-wrap">
         <div class="row g-4">
@@ -58,8 +68,13 @@
               </div>
               <div class="card-body d-flex flex-column">
                 <div class="theme-header mb-3">
-                  <h6 class="theme-name mb-2 fw-semibold @if($theme['selected']) text-primary @endif">
-                    {{ $theme['name'] }}
+                  <h6 class="theme-name mb-2 fw-semibold @if($theme['selected']) text-primary @endif d-flex flex-wrap align-items-center gap-2">
+                    <span class="flex-grow-1 min-w-0">{{ $theme['name'] }}</span>
+                    @if(data_get($theme, 'has_demo'))
+                      <span class="badge bg-warning text-dark flex-shrink-0">
+                        <i class="bi bi-database me-1"></i>{{ __('panel/themes.theme_badge_demo') }}
+                      </span>
+                    @endif
                   </h6>
                   <div class="theme-meta d-flex align-items-center gap-3 text-muted small">
                     @if(isset($theme['version']) && $theme['version'])
@@ -157,4 +172,123 @@
     </div>
   </div>
 </div>
+
+@push('footer')
+<script>
+$(function () {
+  var demoInstalledMsg = @json(__('panel/themes.demo_installed'));
+  var importFailedMsg = @json(__('panel/themes.import_failed'));
+  var operationFailedMsg = @json(__('panel/common.operation_failed'));
+  var csrf = function () {
+    return $('meta[name="csrf-token"]').attr('content');
+  };
+
+  $(document).on('click', '.theme-enable-btn', function (e) {
+    var $btn = $(this);
+    if (!$btn.closest('[id^="themeDetail"]').length) {
+      return;
+    }
+    var url = $btn.data('url');
+    var $modal = $btn.closest('.modal');
+    if (!url || !$modal.length) {
+      return;
+    }
+    e.preventDefault();
+    layer.load(2, {shade: [0.3, '#fff']});
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({status: 1}),
+      processData: false,
+      headers: {'X-CSRF-TOKEN': csrf()},
+      success: function (res) {
+        inno.msg(res.message);
+        var inst = bootstrap.Modal.getInstance($modal[0]);
+        if (inst) {
+          inst.hide();
+        }
+        location.reload();
+      },
+      error: function (xhr) {
+        var msg = (xhr.responseJSON && xhr.responseJSON.message) || operationFailedMsg;
+        inno.msg(msg);
+      },
+      complete: function () {
+        layer.closeAll('loading');
+      },
+    });
+  });
+
+  $(document).on('click', '.btn-import-demo-confirm', function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var $modal = $btn.closest('.import-demo-confirm-modal');
+    var url = $btn.attr('data-demo-import-url');
+    var $err = $modal.find('.import-demo-error-wrap');
+    var $errMsg = $modal.find('.import-demo-error-msg');
+    var $spin = $modal.find('.import-demo-spinner');
+    if (!url) {
+      return;
+    }
+    $err.addClass('d-none');
+    $errMsg.text('');
+    $spin.removeClass('d-none');
+    $btn.prop('disabled', true);
+    var clearCatalog = $modal.find('.import-demo-clear-catalog').is(':checked');
+    $.ajax({
+      url: url,
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({clear_default_catalog: clearCatalog}),
+      processData: false,
+      headers: {'X-CSRF-TOKEN': csrf()},
+      success: function (data) {
+        if (data.success) {
+          var inst = bootstrap.Modal.getInstance($modal[0]);
+          if (inst) {
+            inst.hide();
+          }
+          inno.msg(data.message || demoInstalledMsg);
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
+        } else {
+          $errMsg.text(data.message || data.error || importFailedMsg);
+          $err.removeClass('d-none');
+          $err[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+        }
+      },
+      error: function (xhr) {
+        var msg = importFailedMsg;
+        if (xhr.responseJSON) {
+          msg = xhr.responseJSON.message || xhr.responseJSON.error || msg;
+        }
+        $errMsg.text(msg);
+        $err.removeClass('d-none');
+        $err[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+      },
+      complete: function () {
+        $spin.addClass('d-none');
+        $btn.prop('disabled', false);
+      },
+    });
+  });
+
+  $(document).on('show.bs.modal', '.import-demo-confirm-modal', function () {
+    $(this).find('.import-demo-clear-catalog').prop('checked', false);
+    var code = $(this).attr('data-theme-code');
+    var $detail = $('#themeDetail' + code);
+    if ($detail.length && bootstrap.Modal.getInstance($detail[0])) {
+      $detail.attr('data-bs-backdrop', 'static');
+    }
+  });
+
+  $(document).on('hidden.bs.modal', '.import-demo-confirm-modal', function () {
+    var code = $(this).attr('data-theme-code');
+    $('#themeDetail' + code).removeAttr('data-bs-backdrop');
+  });
+});
+</script>
+@endpush
 @endsection

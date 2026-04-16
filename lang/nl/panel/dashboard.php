@@ -22,7 +22,8 @@ return [
     'today_visits'      => 'Today\'s visit',
     'top_customers'     => 'High-value customers',
     'top_products'      => 'Populaire producten',
-    'traffic_trends'    => '"Traffic trend"',
+    'traffic_trends'    => 'Traffic trend',
     'unique_visitors'   => 'Independent Visitor (UV',
+    'order_trends'      => 'Besteltrends',
     'vs_yesterday'      => 'Compared with yesterday',
 ];

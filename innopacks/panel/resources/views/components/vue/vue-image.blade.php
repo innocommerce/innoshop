@@ -29,20 +29,18 @@
         const self = this;
         inno.fileManagerIframe(function(file) {
           if (file) {
-            const imagePath = file.url || file.path;
-            self.$emit('update:model-value', imagePath);
+            self.$emit('update:model-value', file.path);
           }
         }, {
           type: "image",
           multiple: false
         });
       },
-
       thumbnail(path) {
         if (!path) return '';
         if (path.startsWith('http')) return path;
-        if (path.startsWith('/static')) return path;
-        return `/storage/${path.replace(/^\//, '')}`;
+        const base = document.querySelector('meta[name="storage-base-url"]')?.content || '';
+        return base ? base + '/' + path.replace(/^\/+/, '') : path;
       }
     }
   };

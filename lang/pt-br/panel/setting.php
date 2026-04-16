@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'Configurações SEO',
     'seo_settings_desc'             => 'Configurar informações relacionadas ao SEO do site',
     'setting'                       => 'Configurações do sistema',
-    'shop_address'                  => 'Endereço da loja',
+    'shop_address'                  => 'Endereço da empresa',
     'slideshow'                     => 'Slideshow da página inicial',
     'specials'                      => 'Página fixa',
     'store_features'                => 'Recursos da loja',

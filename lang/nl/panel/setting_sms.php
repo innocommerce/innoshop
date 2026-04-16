@@ -81,7 +81,7 @@ return [
     'sms_test_phone_label'                    => 'Test mobile phone number',
     'sms_test_phone_placeholder'              => 'Please enter your mobile phone number',
     'sms_test_send'                           => 'Send test',
-    'sms_test_sending'                        => '"Sending..."',
+    'sms_test_sending'                        => 'Sending...',
     'sms_test_success'                        => 'The test text message was sent successfully!',
     'sms_test_telephone_required'             => 'Please enter your mobile phone number',
     'sms_test_type_label'                     => 'Test type',

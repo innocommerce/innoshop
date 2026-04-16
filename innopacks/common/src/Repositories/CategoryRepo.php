@@ -51,7 +51,7 @@ class CategoryRepo extends BaseRepo
     public function getPerPageItems(): array
     {
         $perPages      = [];
-        $configPerPage = system_setting('product_per_page', 15);
+        $configPerPage = system_setting('product_per_page', 12);
         for ($index = 1; $index <= 5; $index++) {
             $perPages[] = $configPerPage * $index;
         }
@@ -60,7 +60,7 @@ class CategoryRepo extends BaseRepo
     }
 
     /**
-     * Format categories for cascader component
+     * Format categories for cascader component (uses Eloquent children relation)
      *
      * @param  Collection  $categories
      * @return array
@@ -75,6 +75,30 @@ class CategoryRepo extends BaseRepo
             ];
             if ($category->children && ! $category->children->isEmpty()) {
                 $node['children'] = self::formatCategoriesForCascader($category->children);
+            }
+            $result[] = $node;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Format categories for cascader using inline children (no extra queries).
+     *
+     * @param  Collection  $categories
+     * @return array
+     */
+    public static function formatCategoriesForCascaderInline($categories): array
+    {
+        $result = [];
+        foreach ($categories as $category) {
+            $node = [
+                'value' => $category->id,
+                'label' => $category->fallbackName(),
+            ];
+            $children = $category->inlineChildren ?? collect();
+            if ($children->isNotEmpty()) {
+                $node['children'] = self::formatCategoriesForCascaderInline($children);
             }
             $result[] = $node;
         }
@@ -334,14 +358,15 @@ class CategoryRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
+        $keyword = trim((string) $keyword);
         $builder = Category::query()->with(['translation']);
-        if ($keyword) {
+        if ($keyword !== '') {
             $builder->whereHas('translation', function ($query) use ($keyword) {
                 $query->where('name', 'like', "%{$keyword}%");
             });
         }
 
-        return $builder->limit($limit)->get();
+        return $builder->orderBy('position')->orderBy('id')->limit($limit)->get();
     }
 
     /**

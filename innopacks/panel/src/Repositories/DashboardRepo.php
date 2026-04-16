@@ -11,7 +11,6 @@ namespace InnoShop\Panel\Repositories;
 
 use Carbon\Carbon;
 use InnoShop\Common\Models\Customer;
-use InnoShop\Common\Models\Visit\Visit;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Repositories\VisitRepo;
 use InnoShop\Common\Services\StateMachineService;
@@ -40,8 +39,8 @@ class DashboardRepo extends BaseRepo
         $todayCustomers     = Customer::whereDate('created_at', $today)->count();
         $yesterdayCustomers = Customer::whereDate('created_at', $yesterday)->count();
 
-        $todayVisits     = Visit::whereDate('first_visited_at', $today)->distinct('ip_address')->count('ip_address');
-        $yesterdayVisits = Visit::whereDate('first_visited_at', $yesterday)->distinct('ip_address')->count('ip_address');
+        $todayVisits     = VisitRepo::getInstance()->getStatistics(['start_date' => $today->toDateString(), 'end_date' => $today->toDateString()])['unique_visitors'];
+        $yesterdayVisits = VisitRepo::getInstance()->getStatistics(['start_date' => $yesterday->toDateString(), 'end_date' => $yesterday->toDateString()])['unique_visitors'];
 
         return [
             [
@@ -118,8 +117,8 @@ class DashboardRepo extends BaseRepo
         $customers     = Customer::whereDate('created_at', $date)->count();
         $prevCustomers = Customer::whereDate('created_at', $prevDate)->count();
 
-        $visits     = Visit::whereDate('first_visited_at', $date)->distinct('ip_address')->count('ip_address');
-        $prevVisits = Visit::whereDate('first_visited_at', $prevDate)->distinct('ip_address')->count('ip_address');
+        $visits     = VisitRepo::getInstance()->getStatistics(['start_date' => $date->toDateString(), 'end_date' => $date->toDateString()])['unique_visitors'];
+        $prevVisits = VisitRepo::getInstance()->getStatistics(['start_date' => $prevDate->toDateString(), 'end_date' => $prevDate->toDateString()])['unique_visitors'];
 
         return [
             'revenue' => [

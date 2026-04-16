@@ -28,6 +28,7 @@ class ArticleName extends JsonResource
             'id'         => $this->id,
             'slug'       => $this->slug,
             'name'       => $this->fallbackName('title'),
+            'url'        => $this->url,
             'image'      => image_resize($this->image, 200, 150),
             'active'     => (bool) $this->active,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),

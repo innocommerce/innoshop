@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Panel\Controllers\BaseController;
+use InnoShop\RestAPI\Requests\DeleteFilesRequest;
 use InnoShop\RestAPI\Requests\FileRequest;
+use InnoShop\RestAPI\Requests\MoveFilesRequest;
+use InnoShop\RestAPI\Requests\RenameFileRequest;
 use InnoShop\RestAPI\Services\FileManagerInterface;
 use InnoShop\RestAPI\Services\FileManagerService;
 use InnoShop\RestAPI\Services\OSSService;
@@ -33,25 +36,11 @@ class FileManagerController extends BaseController
         parent::__construct();
     }
 
-    private function getService(): FileManagerInterface
+    protected function getService(): FileManagerInterface
     {
-        try {
-            $driver = plugin_setting('file_manager', 'driver');
+        $service = app(FileManagerInterface::class);
 
-            if ($driver === 'oss') {
-                $service = new OSSService;
-
-                return fire_hook_filter('file_manager.service', $service);
-            }
-        } catch (Exception $e) {
-            Log::warning('Failed to initialize OSS service, falling back to local:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-        }
-
-        // default local file service
-        return fire_hook_filter('file_manager.service', new FileManagerService);
+        return fire_hook_filter('file_manager.service', $service);
     }
 
     /**
@@ -60,7 +49,7 @@ class FileManagerController extends BaseController
      *
      * @return array
      */
-    private function getFileManagerData(): array
+    protected function getFileManagerData(): array
     {
         $uploadMaxFileSize = ini_get('upload_max_filesize');
         $postMaxSize       = ini_get('post_max_size');
@@ -75,17 +64,20 @@ class FileManagerController extends BaseController
 
         $request = request();
 
+        $fmDriver = system_setting('file_manager_driver', 'local');
+
         return [
-            'isIframe'    => $request->header('X-Iframe') === '1',
-            'multiple'    => $request->query('multiple') === '1',
-            'type'        => $request->query('type', 'all'),
-            'base_folder' => '/',
-            'driver'      => plugin_setting('file_manager', 'driver', 'local'),
-            'title'       => plugin_setting('file_manager', 'driver') === 'oss' ? 'OSS 文件管理' : '图片空间',
-            'config'      => [
-                'driver'   => plugin_setting('file_manager', 'driver', 'local'),
-                'endpoint' => plugin_setting('file_manager', 'endpoint', ''),
-                'bucket'   => plugin_setting('file_manager', 'bucket', ''),
+            'isIframe'        => $request->header('X-Iframe') === '1',
+            'multiple'        => $request->query('multiple') === '1',
+            'type'            => $request->query('type', 'all'),
+            'base_folder'     => '/',
+            'driver'          => $fmDriver,
+            'title'           => $fmDriver !== 'local' ? trans('panel/file_manager.oss_title') : trans('panel/file_manager.root_name'),
+            'enabled_drivers' => $this->getEnabledDrivers(),
+            'config'          => [
+                'driver'   => $fmDriver,
+                'endpoint' => system_setting("storage_{$fmDriver}_endpoint", system_setting('storage_endpoint', '')),
+                'bucket'   => system_setting("storage_{$fmDriver}_bucket", system_setting('storage_bucket', '')),
                 'baseUrl'  => config('app.url'),
             ],
             'uploadMaxFileSize' => $uploadMaxFileSize,
@@ -102,15 +94,6 @@ class FileManagerController extends BaseController
     public function index(): mixed
     {
         $data = $this->getFileManagerData();
-
-        Log::info('File manager index:', [
-            'data'   => $data,
-            'config' => [
-                'driver'   => plugin_setting('file_manager', 'driver'),
-                'bucket'   => plugin_setting('file_manager', 'bucket'),
-                'endpoint' => plugin_setting('file_manager', 'endpoint'),
-            ],
-        ]);
 
         return inno_view('panel::file_manager.index', $data);
     }
@@ -222,13 +205,16 @@ class FileManagerController extends BaseController
      * @return mixed
      */
     #[Endpoint('Rename file or folder')]
-    #[BodyParam('origin_name', type: 'string', required: true, description: 'Original file or folder path')]
-    #[BodyParam('new_name', type: 'string', required: true, description: 'New name')]
-    public function rename(Request $request): mixed
+    public function rename(RenameFileRequest $request): mixed
     {
         try {
-            $originName = $request->get('origin_name');
-            $newName    = $request->get('new_name');
+            $originName = $request->input('origin_name');
+            $newName    = $request->input('new_name');
+
+            // Prevent path traversal in new name
+            if (str_contains($newName, '/') || str_contains($newName, '\\')) {
+                throw new Exception(trans('panel/file_manager.invalid_params'));
+            }
 
             $originName = $this->normalizePath($originName);
 
@@ -264,16 +250,11 @@ class FileManagerController extends BaseController
      * @return mixed
      */
     #[Endpoint('Delete files')]
-    public function destroyFiles(Request $request): mixed
+    public function destroyFiles(DeleteFilesRequest $request): mixed
     {
         try {
-            $requestData = json_decode($request->getContent(), true);
-            $basePath    = $requestData['path'] ?? '/';
-            $files       = $requestData['files'] ?? [];
-
-            if (empty($files)) {
-                throw new Exception(trans('panel::file_manager.no_files_selected'));
-            }
+            $basePath = $request->input('path');
+            $files    = $request->input('files');
 
             $service = $this->getService();
             $service->deleteFiles($basePath, $files);
@@ -336,21 +317,11 @@ class FileManagerController extends BaseController
      * @return mixed
      */
     #[Endpoint('Move files')]
-    public function moveFiles(Request $request): mixed
+    public function moveFiles(MoveFilesRequest $request): mixed
     {
         try {
-            $requestData = json_decode($request->getContent(), true);
-            $files       = $requestData['files'] ?? [];
-            $destPath    = $requestData['dest_path'] ?? '';
-
-            if (empty($files) || empty($destPath)) {
-                throw new Exception(trans('panel::file_manager.invalid_params'));
-            }
-
-            Log::info('Move files request:', [
-                'files'    => $files,
-                'destPath' => $destPath,
-            ]);
+            $files    = $request->input('files');
+            $destPath = $request->input('dest_path');
 
             $service = $this->getService();
             $service->moveFiles($files, $destPath);
@@ -359,7 +330,6 @@ class FileManagerController extends BaseController
         } catch (Exception $e) {
             Log::error('Move files failed:', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
             return json_fail($e->getMessage());
@@ -382,11 +352,13 @@ class FileManagerController extends BaseController
         $savePath = $request->get('path');
 
         $originName = $file->getClientOriginalName();
-        $fileUrl    = $service->uploadFile($file, $savePath, $originName);
+        $storageKey = $service->uploadFile($file, $savePath, $originName);
 
         $data = [
-            'name' => $originName,
-            'url'  => $fileUrl,
+            'name'       => $originName,
+            'path'       => $storageKey,
+            'url'        => storage_url($storageKey),
+            'origin_url' => storage_url($storageKey),
         ];
 
         return json_success('success', $data);
@@ -399,21 +371,11 @@ class FileManagerController extends BaseController
      * @return mixed
      */
     #[Endpoint('Copy files')]
-    public function copyFiles(Request $request): mixed
+    public function copyFiles(MoveFilesRequest $request): mixed
     {
         try {
-            $requestData = json_decode($request->getContent(), true);
-            $files       = $requestData['files'] ?? [];
-            $destPath    = $requestData['dest_path'] ?? '';
-
-            if (empty($files) || empty($destPath)) {
-                throw new Exception(trans('panel::file_manager.invalid_params'));
-            }
-
-            Log::info('Copy files request:', [
-                'files'    => $files,
-                'destPath' => $destPath,
-            ]);
+            $files    = $request->input('files');
+            $destPath = $request->input('dest_path');
 
             $service = $this->getService();
             $service->copyFiles($files, $destPath);
@@ -422,7 +384,6 @@ class FileManagerController extends BaseController
         } catch (Exception $e) {
             Log::error('Copy files failed:', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
             return json_fail($e->getMessage());
@@ -430,7 +391,7 @@ class FileManagerController extends BaseController
     }
 
     /**
-     * Get storage configs
+     * Get storage configs (driver only, credentials are in system settings)
      *
      * @return mixed
      */
@@ -439,28 +400,21 @@ class FileManagerController extends BaseController
     {
         try {
             $config = [
-                'driver'     => plugin_setting('file_manager', 'driver', 'local'),
-                'key'        => plugin_setting('file_manager', 'key', ''),
-                'secret'     => plugin_setting('file_manager', 'secret', ''),
-                'endpoint'   => plugin_setting('file_manager', 'endpoint', ''),
-                'bucket'     => plugin_setting('file_manager', 'bucket', ''),
-                'region'     => plugin_setting('file_manager', 'region', ''),
-                'cdn_domain' => plugin_setting('file_manager', 'cdn_domain', ''),
+                'driver' => system_setting('file_manager_driver', 'local'),
             ];
 
-            return json_success('获取存储配置成功', $config);
+            return json_success(trans('panel/file_manager.storage_config_loaded'), $config);
         } catch (Exception $e) {
-            Log::error('获取存储配置失败:', [
+            Log::error('Get storage config failed:', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
-            return json_fail('获取存储配置失败: '.$e->getMessage());
+            return json_fail(trans('panel/file_manager.storage_config_load_failed').': '.$e->getMessage());
         }
     }
 
     /**
-     * Save storage configs
+     * Save storage driver (credentials are managed in system settings)
      *
      * @param  Request  $request
      * @return mixed
@@ -468,82 +422,81 @@ class FileManagerController extends BaseController
      */
     #[Endpoint('Save storage configuration')]
     #[BodyParam('driver', type: 'string', required: true, example: 'local')]
-    #[BodyParam('key', type: 'string', required: false, description: 'Storage access key')]
-    #[BodyParam('secret', type: 'string', required: false, description: 'Storage secret key')]
-    #[BodyParam('endpoint', type: 'string', required: false, description: 'Storage endpoint URL')]
-    #[BodyParam('bucket', type: 'string', required: false, description: 'Storage bucket name')]
-    #[BodyParam('region', type: 'string', required: false, description: 'Storage region')]
-    #[BodyParam('cdn_domain', type: 'string', required: false, description: 'CDN domain')]
     public function saveStorageConfig(Request $request): mixed
     {
         try {
-            $driver     = $request->input('driver', 'local');
-            $key        = $request->input('key', '');
-            $secret     = $request->input('secret', '');
-            $endpoint   = $request->input('endpoint', '');
-            $bucket     = $request->input('bucket', '');
-            $region     = $request->input('region', '');
-            $cdn_domain = $request->input('cdn_domain', '');
+            $driver = $request->input('driver', 'local');
 
-            Log::info('Save storage configs:', [
-                'request' => [
-                    'driver'     => $driver,
-                    'key'        => $key,
-                    'secret'     => '***',
-                    'endpoint'   => $endpoint,
-                    'bucket'     => $bucket,
-                    'region'     => $region,
-                    'cdn_domain' => $cdn_domain,
-                ],
-            ]);
-
-            $settingRepo = SettingRepo::getInstance();
-            $settingRepo->updatePluginValue('file_manager', 'driver', $driver);
-            $settingRepo->updatePluginValue('file_manager', 'key', $key);
-            $settingRepo->updatePluginValue('file_manager', 'secret', $secret);
-            $settingRepo->updatePluginValue('file_manager', 'endpoint', $endpoint);
-            $settingRepo->updatePluginValue('file_manager', 'bucket', $bucket);
-            $settingRepo->updatePluginValue('file_manager', 'region', $region);
-            $settingRepo->updatePluginValue('file_manager', 'cdn_domain', $cdn_domain);
+            SettingRepo::getInstance()->updateSystemValue('file_manager_driver', $driver);
 
             Artisan::call('config:clear');
-
             load_settings();
 
-            config([
-                'filesystems.file_manager.driver' => $driver,
-            ]);
-
-            // 是OSS
-            if ($driver == 'oss') {
-                config([
-                    'filesystems.disks.s3.key'        => $key,
-                    'filesystems.disks.s3.secret'     => $secret,
-                    'filesystems.disks.s3.region'     => $region,
-                    'filesystems.disks.s3.bucket'     => $bucket,
-                    'filesystems.disks.s3.endpoint'   => $endpoint,
-                    'filesystems.disks.s3.cdn_domain' => $cdn_domain,
-                ]);
+            // Rebind the FileManagerInterface singleton with the new driver
+            $s3Drivers = ['oss', 'cos', 'qiniu', 's3', 'obs', 'r2', 'minio'];
+            app()->forgetInstance(FileManagerInterface::class);
+            if (in_array($driver, $s3Drivers)) {
+                app()->singleton(FileManagerInterface::class, function () {
+                    return new OSSService;
+                });
+            } else {
+                app()->singleton(FileManagerInterface::class, function () {
+                    return new FileManagerService;
+                });
             }
 
-            $configData = [
-                'driver'     => $driver,
-                'key'        => $key,
-                'secret'     => $secret,
-                'endpoint'   => $endpoint,
-                'bucket'     => $bucket,
-                'region'     => $region,
-                'cdn_domain' => $cdn_domain,
-            ];
-
-            return json_success('存储配置保存成功', $configData);
+            return json_success(trans('panel/file_manager.storage_config_saved'), ['driver' => $driver]);
         } catch (Exception $e) {
-            Log::error('存储配置保存失败:', [
+            Log::error('Save storage config failed:', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
-            return json_fail('存储配置保存失败: '.$e->getMessage());
+            return json_fail(trans('panel/file_manager.storage_config_save_failed').': '.$e->getMessage());
         }
+    }
+
+    /**
+     * Mask a secret value, showing only the last 4 characters.
+     */
+    private function maskSecret(string $value): string
+    {
+        if (empty($value)) {
+            return '';
+        }
+        if (strlen($value) <= 4) {
+            return str_repeat('*', strlen($value));
+        }
+
+        return str_repeat('*', strlen($value) - 4).substr($value, -4);
+    }
+
+    /**
+     * Check if a value is a masked placeholder (all asterisks except last 4 chars).
+     */
+    private function isMasked(string $value): bool
+    {
+        if (empty($value) || strlen($value) <= 4) {
+            return false;
+        }
+
+        return str_repeat('*', strlen($value) - 4) === substr($value, 0, strlen($value) - 4);
+    }
+
+    /**
+     * Get list of enabled cloud drivers from settings.
+     * Always includes 'local'.
+     */
+    private function getEnabledDrivers(): array
+    {
+        $valid   = ['oss', 'cos', 'qiniu', 's3', 'obs', 'r2', 'minio'];
+        $drivers = ['local'];
+
+        foreach ($valid as $driver) {
+            if (system_setting("storage_{$driver}_enabled", '0') === '1') {
+                $drivers[] = $driver;
+            }
+        }
+
+        return $drivers;
     }
 }

@@ -9,6 +9,7 @@ import { setupApiHeaders } from './panel-api-setup';
 import { panelUI } from './panel-ui';
 import fileManager from './panel-file-manager';
 import { initEditor } from './panel-editor';
+import localeField from './locale-field';
 
 export function initPanelInno() {
   window.inno = inno;
@@ -33,4 +34,6 @@ export function bindPanelOnReady() {
 
   inno.getTranslate();
   inno.initSlugFormatting();
+
+  localeField.init();
 }

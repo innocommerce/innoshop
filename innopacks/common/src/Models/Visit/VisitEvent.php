@@ -63,6 +63,16 @@ class VisitEvent extends BaseModel
 
     public const TYPE_REGISTER = 'register';
 
+    public const TYPE_HOME_VIEW = 'home_view';
+
+    public const TYPE_CATEGORY_VIEW = 'category_view';
+
+    public const TYPE_SEARCH = 'search';
+
+    public const TYPE_CART_VIEW = 'cart_view';
+
+    public const TYPE_ORDER_CANCELLED = 'order_cancelled';
+
     /**
      * Get the customer that owns the event.
      *
@@ -87,6 +97,11 @@ class VisitEvent extends BaseModel
             self::TYPE_ORDER_PLACED      => trans('panel/visit.event_order_placed'),
             self::TYPE_PAYMENT_COMPLETED => trans('panel/visit.event_payment_completed'),
             self::TYPE_REGISTER          => trans('panel/visit.event_register'),
+            self::TYPE_HOME_VIEW         => trans('panel/visit.event_home_view'),
+            self::TYPE_CATEGORY_VIEW     => trans('panel/visit.event_category_view'),
+            self::TYPE_SEARCH            => trans('panel/visit.event_search'),
+            self::TYPE_CART_VIEW         => trans('panel/visit.event_cart_view'),
+            self::TYPE_ORDER_CANCELLED   => trans('panel/visit.event_order_cancelled'),
         ];
 
         return $types[$this->event_type] ?? $this->event_type;

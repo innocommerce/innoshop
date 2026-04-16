@@ -87,10 +87,19 @@ class AttributeController extends BaseController
      */
     public function form($attribute): mixed
     {
+        $valuesJson = $attribute->values->map(function ($v) {
+            $names = [];
+            foreach ($v->translations as $t) {
+                $names[$t->locale] = $t->name;
+            }
+
+            return ['id' => $v->id, 'name' => $names];
+        })->values()->toArray();
+
         $data = [
-            'attribute'        => $attribute,
-            'attribute_values' => $attribute->values->pluck('translations')->toArray(),
-            'attribute_groups' => GroupRepo::getInstance()->getOptions(),
+            'attribute'             => $attribute,
+            'attribute_values_json' => $valuesJson,
+            'attribute_groups'      => GroupRepo::getInstance()->getOptions(),
         ];
 
         return inno_view('panel::attributes.form', $data);

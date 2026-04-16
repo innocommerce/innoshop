@@ -50,7 +50,7 @@ return [
     'openai_proxy_url'                  => 'OpenAI proxy URL',
     'qianwen_api_key'                   => 'Qianwen API key',
     'qianwen_description'               => 'Tongyi Qianwen is a large language model launched by Alibaba DAMO Academy, supporting multiple application scenarios.',
-    'qianwen_title'                     => '"Thousand Questions',
+    'qianwen_title'                     => 'Thousand Questions',
     'quality_high'                      => 'high',
     'quality_low'                       => 'low',
     'quality_medium'                    => 'In the',

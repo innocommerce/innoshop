@@ -8,7 +8,7 @@
  */
 
 return [
-    'create' => '"New label',
+    'create' => 'New label',
     'list'   => 'Tag list',
     'name'   => 'Name',
 ];

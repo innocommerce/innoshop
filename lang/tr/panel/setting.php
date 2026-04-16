@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'SEO ayarları',
     'seo_settings_desc'             => 'Web sitenizin SEO ile ilgili bilgilerini yapılandırın',
     'setting'                       => 'Sistem Ayarları',
-    'shop_address'                  => 'Mağaza Adresi',
+    'shop_address'                  => 'Şirket Adresi',
     'slideshow'                     => 'Ana Sayfa Slayt Gösterisi',
     'specials'                      => 'Sabitlenmiş sayfalar',
     'store_features'                => 'İşlev ayarlarını sakla',

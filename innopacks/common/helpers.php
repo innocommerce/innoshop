@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
 use InnoShop\Common\Libraries\ApiHook;
 use InnoShop\Common\Libraries\Currency;
 use InnoShop\Common\Libraries\ViewHook;
@@ -25,6 +24,9 @@ use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\LocaleRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Services\ImageService;
+use InnoShop\Common\Services\StorageService;
+use InnoShop\Common\Support\EntityLinkEnricher;
+use InnoShop\Common\Support\EntityLinkPayload;
 use InnoShop\Common\Support\Registry;
 
 if (! function_exists('load_settings')) {
@@ -732,6 +734,19 @@ if (! function_exists('json_fail')) {
     }
 }
 
+if (! function_exists('storage_url')) {
+    /**
+     * Generate file URL based on current storage driver configuration.
+     *
+     * @param  ?string  $path  Storage key or legacy path
+     * @return string
+     */
+    function storage_url(?string $path): string
+    {
+        return StorageService::getInstance()->url($path);
+    }
+}
+
 if (! function_exists('image_resize')) {
     /**
      * Resize image
@@ -741,31 +756,22 @@ if (! function_exists('image_resize')) {
      * @param  int  $height
      * @param  string|null  $mode  Resize mode: cover, contain, resize, fit, scale, crop, pad
      * @return string
-     * @throws Exception
      */
     function image_resize(?string $image = '', int $width = 100, int $height = 100, ?string $mode = null): string
     {
-        if (Str::startsWith($image, 'http')) {
-            return $image;
-        }
-
-        return (new ImageService((string) $image))->resize($width, $height, $mode);
+        return StorageService::getInstance()->resize($image, $width, $height, $mode);
     }
 }
 
 if (! function_exists('image_origin')) {
     /**
-     * Get origin image
+     * Get original image URL. Alias of storage_url().
      *
      * @throws Exception
      */
     function image_origin($image)
     {
-        if (Str::startsWith($image, 'http')) {
-            return $image;
-        }
-
-        return (new ImageService((string) $image))->originUrl();
+        return storage_url($image);
     }
 }
 
@@ -861,6 +867,71 @@ if (! function_exists('front_root_route')) {
     function front_root_route($name, mixed $parameters = [], bool $absolute = true): string
     {
         return route('front.'.$name, $parameters, $absolute);
+    }
+}
+
+if (! function_exists('entity_link_normalize')) {
+    /**
+     * InnoLinkPicker: normalize stored link (JSON, legacy product:/category:, custom URL) to a fixed row shape.
+     * Does not hit the database. For label/image/price from DB use {@see entity_link_enrich()} or {@see entity_link_display()}.
+     *
+     * @param  array<string, mixed>|string|null  $stored
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}
+     */
+    function entity_link_normalize(array|string|null $stored): array
+    {
+        return EntityLinkPayload::normalize($stored);
+    }
+}
+
+if (! function_exists('entity_link_enrich')) {
+    /**
+     * Fill missing entity_label / entity_image / entity_price on a normalized row (panel + storefront themes).
+     * On the storefront, names follow the same request locale as product pages (middleware sets app + session).
+     *
+     * @param  array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}  $row
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}
+     */
+    function entity_link_enrich(array $row): array
+    {
+        return EntityLinkEnricher::enrichRow($row);
+    }
+}
+
+if (! function_exists('entity_link_resolve')) {
+    /**
+     * Resolve entity id or slug to a model instance (shared with InnoLinkPicker).
+     *
+     * @param  class-string  $modelClass
+     */
+    function entity_link_resolve(string $modelClass, string $value, array $with = []): ?object
+    {
+        return EntityLinkEnricher::resolveByIdOrSlug($modelClass, $value, $with);
+    }
+}
+
+if (! function_exists('entity_link_display')) {
+    /**
+     * Normalize + DB enrichment + {@see EntityLinkPayload::urlFromRow()} as entity_href (slideshow, menus, Blade).
+     *
+     * @param  array<string, mixed>|string|null  $stored
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string, entity_href: string}
+     */
+    function entity_link_display(array|string|null $stored): array
+    {
+        return EntityLinkPayload::forDisplay($stored);
+    }
+}
+
+if (! function_exists('entity_link_url')) {
+    /**
+     * Storefront URL only (no DB). Faster than {@see entity_link_display()} when you do not need label/image/price.
+     *
+     * @param  array<string, mixed>|string|null  $stored
+     */
+    function entity_link_url(array|string|null $stored): string
+    {
+        return EntityLinkPayload::urlFromStored($stored);
     }
 }
 
@@ -1232,7 +1303,7 @@ if (! function_exists('theme_image')) {
     function theme_image(string $path, string $theme = '', int $width = 100, int $height = 100, string $mode = 'contain'): string
     {
         if (empty($path)) {
-            return image_resize('', $width, $height, $mode);
+            return (new ImageService(''))->resize($width, $height, $mode);
         }
         if (empty($theme)) {
             $theme = system_setting('theme', 'default');
@@ -1246,7 +1317,7 @@ if (! function_exists('theme_image')) {
         $fileExists = should_copy_static_file($sourceFile, $destFile);
 
         if (! $fileExists) {
-            return image_resize('', $width, $height, $mode);
+            return (new ImageService(''))->resize($width, $height, $mode);
         }
 
         // ImageService will automatically validate and use placeholder if image is invalid

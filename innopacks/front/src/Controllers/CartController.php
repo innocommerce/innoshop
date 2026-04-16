@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\CartItem;
 use InnoShop\Common\Services\CartService;
+use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Front\Requests\CartRequest;
 use Throwable;
 
@@ -25,6 +26,10 @@ class CartController extends Controller
     public function index(): mixed
     {
         $cartList = CartService::getInstance()->handleResponse();
+
+        // Track cart view event
+        $eventService = new EventTrackingService;
+        $eventService->trackCartView(count($cartList['list'] ?? []), request());
 
         return inno_view('cart.index', $cartList);
     }

@@ -24,5 +24,6 @@ return [
     'top_products'      => 'المنتجات الأكثر مبيعًا',
     'traffic_trends'    => 'اتجاهات التدفق',
     'unique_visitors'   => 'زائر مستقل (UV)',
+    'order_trends'      => 'اتجاهات الطلبات',
     'vs_yesterday'      => 'أكثر من الماضي',
 ];

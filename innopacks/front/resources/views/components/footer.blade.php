@@ -2,18 +2,22 @@
 
 {{-- Newsletter Section --}}
 @php
-  $newsletterLocations = system_setting('newsletter_display_locations', ['footer']);
-  $newsletterLocations = is_array($newsletterLocations) ? $newsletterLocations : ['footer'];
-  $showFooterNewsletter = in_array('footer', $newsletterLocations);
+  $showFooterNewsletter = system_setting('newsletter_footer_enabled', true);
 @endphp
 @if($showFooterNewsletter)
-  <div class="footer-newsletter-wrapper">
-    <div class="footer-newsletter">
+  @php
+    $bgColorStart = system_setting('newsletter_bg_color', '#667eea');
+    $bgColorEnd   = system_setting('newsletter_bg_color_end', '#764ba2');
+    $textColor    = system_setting('newsletter_text_color', '#ffffff');
+  @endphp
+  <div class="footer-newsletter-wrapper"
+       style="background: linear-gradient(135deg, {{ $bgColorStart }} 0%, {{ $bgColorEnd }} 100%);">
+    <div class="footer-newsletter" style="color: {{ $textColor }};">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-12 col-lg-5">
-            <h4 class="newsletter-title">{{ __('front/newsletter.newsletter') }}</h4>
-            <p class="newsletter-desc">{{ __('front/newsletter.newsletter_desc') }}</p>
+            <h4 class="newsletter-title" style="color: {{ $textColor }};">{{ __('front/newsletter.newsletter') }}</h4>
+            <p class="newsletter-desc" style="color: {{ $textColor }}; opacity: 0.9;">{{ __('front/newsletter.newsletter_desc') }}</p>
           </div>
           <div class="col-12 col-lg-7">
             <form class="newsletter-form" action="{{ front_route('newsletter.subscribe') }}" method="POST">
@@ -35,6 +39,7 @@
   </div>
 @endif
 
+@hookupdate('layouts.footer.main')
 <footer id="appFooter">
   <div class="footer-box">
     <div class="container">
@@ -141,6 +146,7 @@
     </div>
   </div>
 </footer>
+@endhookupdate
 
 @hookinsert('layout.footer.bottom')
 

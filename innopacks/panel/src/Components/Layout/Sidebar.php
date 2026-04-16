@@ -437,8 +437,6 @@ class Sidebar extends Component
             ['route' => 'tax_rates.index', 'title' => __('panel/menu.tax_rates')],
             ['route' => 'tax_classes.index', 'title' => __('panel/menu.tax_classes')],
             ['route' => 'weight_classes.index', 'title' => __('panel/menu.weight_classes')],
-            ['route' => 'themes_settings.index', 'title' => __('panel/menu.themes_settings')],
-            ['route' => 'themes.index', 'title' => __('panel/menu.themes')],
         ];
 
         return fire_hook_filter('panel.component.sidebar.setting.routes', $routes);

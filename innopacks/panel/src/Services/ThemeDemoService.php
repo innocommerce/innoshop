@@ -12,21 +12,53 @@ declare(strict_types=1);
 namespace InnoShop\Panel\Services;
 
 use Exception;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class ThemeDemoService extends BaseService
 {
     /**
-     * Determine whether the theme has demo data
-     * Supports: Seeder.php closure
+     * Resolve the PHP file used for demo import (same rules as import).
+     * Supports: demo/Seeder.php (any case basename), *Seeder.php, or exactly one demo/*.php.
+     */
+    public function resolveDemoSeederPath(string $dir): ?string
+    {
+        $demoDir = $dir.'/demo';
+        if (! is_dir($demoDir)) {
+            return null;
+        }
+
+        $phpFiles = glob($demoDir.'/*.php') ?: [];
+        if ($phpFiles === []) {
+            return null;
+        }
+
+        foreach ($phpFiles as $path) {
+            if (strcasecmp(basename($path), 'Seeder.php') === 0) {
+                return $path;
+            }
+        }
+
+        foreach ($phpFiles as $path) {
+            if (preg_match('/Seeder\.php$/i', basename($path))) {
+                return $path;
+            }
+        }
+
+        if (count($phpFiles) === 1) {
+            return $phpFiles[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Determine whether the theme has demo data (must match {@see importDemo}).
      */
     public function hasDemo(string $dir): bool
     {
-        // Check for Seeder.php closure (preferred)
-        if (file_exists($dir.'/demo/Seeder.php')) {
-            return true;
-        }
-
-        return false;
+        return $this->resolveDemoSeederPath($dir) !== null;
     }
 
     /**
@@ -43,9 +75,8 @@ class ThemeDemoService extends BaseService
      */
     public function importDemo(string $dir): void
     {
-        // Check for PHP seeder
-        $seederFile = $dir.'/demo/Seeder.php';
-        if (! file_exists($seederFile)) {
+        $seederFile = $this->resolveDemoSeederPath($dir);
+        if ($seederFile === null || ! is_file($seederFile)) {
             throw new Exception(__('panel/themes.error_demo_not_found'));
         }
 
@@ -86,50 +117,67 @@ class ThemeDemoService extends BaseService
     }
 
     /**
-     * Copy demo images to the public directory
-     * Automatically copies from public/images/{theme}/ or demo/images/
+     * Copy demo images to the public directory.
+     * Copies both {@see $dir}/public/images (e.g. preview.png) and {@see $dir}/demo/images (e.g. figma/*.jpg)
+     * when present — themes often keep only preview assets under public/images while bulk demo art lives in demo/images.
+     *
      * @throws Exception
      */
     protected function copyDemoImages(string $dir): void
     {
-        $themeCode = basename($dir);
-
-        // Priority 1: Copy from theme public/images directory
+        $themeCode       = basename($dir);
+        $targetRelative  = 'static/themes/'.$themeCode.'/images';
         $publicImagesDir = $dir.'/public/images';
+        $demoImagesDir   = $dir.'/demo/images';
+        $total           = 0;
+
         if (is_dir($publicImagesDir)) {
-            $this->copyImagesFromSource($publicImagesDir, 'static/themes/'.$themeCode.'/images');
-
-            return;
+            $total += $this->copyImagesFromSource($publicImagesDir, $targetRelative);
         }
 
-        // Priority 2: Copy from demo/images directory (legacy support)
-        $demoImagesDir = $dir.'/demo/images';
         if (is_dir($demoImagesDir)) {
-            $this->copyImagesFromSource($demoImagesDir, 'static/themes/'.$themeCode.'/images');
-
-            return;
+            $total += $this->copyImagesFromSource($demoImagesDir, $targetRelative);
         }
 
-        smart_log('warning', '[ThemeDemo] No demo images found in theme', [
-            'theme' => $themeCode,
-        ]);
+        if ($total === 0) {
+            smart_log('warning', '[ThemeDemo] No demo images found in theme', [
+                'theme' => $themeCode,
+            ]);
+        }
     }
 
     /**
-     * Copy images from source directory to target
+     * Recursively copy image files from a source directory into public/{targetRelativePath}.
+     *
+     * @return int Number of files copied
+     *
+     * @throws Exception
      */
-    protected function copyImagesFromSource(string $sourceDir, string $targetRelativePath): void
+    protected function copyImagesFromSource(string $sourceDir, string $targetRelativePath): int
     {
-        // Match files in current directory AND subdirectories
-        $pattern = $sourceDir.'/{*,**/*}.{jpg,png,gif,webp,jpeg,svg}';
-        $images  = glob($pattern, GLOB_BRACE) ?: [];
+        $sourceDir = rtrim($sourceDir, DIRECTORY_SEPARATOR);
+        $allowed   = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+        $images    = [];
 
-        foreach ($images as $image) {
-            if (! file_exists($image)) {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            if (! $file->isFile()) {
                 continue;
             }
+            $ext = strtolower($file->getExtension());
+            if (! in_array($ext, $allowed, true)) {
+                continue;
+            }
+            $images[] = $file->getPathname();
+        }
 
-            $relativePath = str_replace($sourceDir.'/', '', $image);
+        $count = 0;
+        foreach ($images as $image) {
+            $relativePath = substr($image, strlen($sourceDir) + 1);
+            $relativePath = str_replace(DIRECTORY_SEPARATOR, '/', $relativePath);
             $targetPath   = public_path($targetRelativePath.'/'.$relativePath);
 
             $targetDir = dirname($targetPath);
@@ -146,12 +194,15 @@ class ThemeDemoService extends BaseService
                     'file' => basename($image),
                 ]));
             }
+            $count++;
         }
 
-        smart_log('info', '[ThemeDemo] Images copied successfully', [
-            'count'  => count($images),
+        smart_log('info', '[ThemeDemo] Images copied from source', [
+            'count'  => $count,
             'source' => $sourceDir,
             'target' => $targetRelativePath,
         ]);
+
+        return $count;
     }
 }

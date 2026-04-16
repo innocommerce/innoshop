@@ -8,6 +8,13 @@
  */
 
 return [
+    'available_themes_count'        => '目前可用主題：:count',
+    'themes_stats_title'            => '主題概覽',
+    'themes_stat_available'         => '可用主題',
+    'themes_stat_demo'              => '含演示數據',
+    'themes_stat_current'           => '當前使用',
+    'themes_stat_none'              => '未設置',
+    'theme_badge_demo'              => '演示數據',
     'author'                        => '作者',
     'confirm_import'                => '確認導入',
     'confirm_import_button'         => '確認導入',

@@ -224,9 +224,8 @@ class AnalyticsController extends BaseController
         $now = Carbon::now();
         switch ($dateFilter) {
             case '':
-                // All - no date restriction
-                $startDate = null;
-                $endDate   = null;
+                $startDate = Carbon::now()->subDays(29)->format('Y-m-d');
+                $endDate   = Carbon::now()->format('Y-m-d');
                 break;
             case 'today':
                 $startDate = $now->format('Y-m-d');
@@ -269,30 +268,21 @@ class AnalyticsController extends BaseController
             $filters['end_date']   = Carbon::parse($endDate)->endOfDay();
         }
 
-        // Get basic statistics from raw data (for real-time accuracy)
-        $statistics = $repo->getStatistics($filters);
-
-        // Get aggregated daily statistics
-        $dailyQuery = \DB::table('visit_daily');
+        // Trigger auto-aggregation first (populates visit_daily & conversion_daily)
+        $dailyStatistics = collect();
         if ($startDate && $endDate) {
-            $dailyQuery->whereBetween('date', [$startDate, $endDate]);
+            $dailyStatistics = collect($repo->getDailyStatistics($filters));
         }
-        $dailyStatistics = $dailyQuery->orderBy('date')->get();
 
-        // Get hourly statistics from raw data
-        $hourlyStats = $repo->getHourlyStatistics($filters);
-
-        // Get device breakdown
-        $deviceStats = $repo->getVisitsByDeviceType($filters);
-
-        // Get country breakdown
-        $countryStats = $repo->getVisitsByCountry($filters);
-
-        // Get conversion funnel (from aggregated data or raw data)
+        // Now all summary queries hit pre-aggregated data
+        $statistics       = $repo->getStatistics($filters);
+        $deviceStats      = $repo->getVisitsByDeviceType($filters);
         $conversionFunnel = $repo->getConversionFunnel($filters);
+        $avgDuration      = $repo->getAverageVisitDuration($filters);
 
-        // Calculate average visit duration
-        $avgDuration = $repo->getAverageVisitDuration($filters);
+        // These still query raw tables (no daily aggregation available)
+        $hourlyStats  = $repo->getHourlyStatistics($filters);
+        $countryStats = $repo->getVisitsByCountry($filters);
 
         $data = [
             'statistics'         => $statistics,

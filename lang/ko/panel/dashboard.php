@@ -24,5 +24,6 @@ return [
     'top_products'      => '베스트 상품',
     'traffic_trends'    => '유량 경향',
     'unique_visitors'   => '독립적인 방문자 (uv)',
+    'order_trends'      => '주문 추세',
     'vs_yesterday'      => '어제보다',
 ];

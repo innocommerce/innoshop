@@ -24,5 +24,6 @@ return [
     'top_products'      => 'Çok Satanlar',
     'traffic_trends'    => 'Trafik eğilimleri',
     'unique_visitors'   => 'Bağımsız Ziyaretçi (UV)',
+    'order_trends'      => 'Sipariş Trendleri',
     'vs_yesterday'      => 'Dünle karşılaştırıldığında',
 ];

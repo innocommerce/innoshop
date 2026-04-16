@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Front\Repositories\HomeRepo;
 
 class HomeController extends Controller
@@ -40,6 +41,10 @@ class HomeController extends Controller
         ];
 
         $data = fire_hook_filter('home.index.data', $data);
+
+        // Track home page view event
+        $eventService = new EventTrackingService;
+        $eventService->trackHomeView(request());
 
         return inno_view('home', $data);
     }
@@ -84,7 +89,7 @@ class HomeController extends Controller
                 ->with(['masterSku', 'skus', 'translation'])
                 ->get();
 
-            // 获取所有分类ID，用于批量获取分类名称
+            // Collect category IDs for batch category name resolution
             $categoryIds = [];
             foreach ($hotProductsData['categories'] as $categoryGroup) {
                 if (isset($categoryGroup['category_id'])) {
@@ -92,7 +97,7 @@ class HomeController extends Controller
                 }
             }
 
-            // 批量获取分类信息
+            // Load category names in one query
             $categories = [];
             if (! empty($categoryIds)) {
                 $categoryModels = CategoryRepo::getInstance()
@@ -110,8 +115,8 @@ class HomeController extends Controller
                 }
 
                 $categoryId = $categoryGroup['category_id'] ?? 0;
-                // 优先使用从数据库查询的多语言分类名称，如果不存在则使用配置中的名称
-                $categoryName = $categories[$categoryId] ?? ($categoryGroup['category_name'] ?? "分类 ID: {$categoryId}");
+                // Prefer DB name over stored category_name in settings
+                $categoryName = $categories[$categoryId] ?? ($categoryGroup['category_name'] ?? "Category ID: {$categoryId}");
 
                 $categoryProducts = [];
                 foreach ($categoryGroup['products'] as $productId) {

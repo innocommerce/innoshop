@@ -24,5 +24,6 @@ return [
     'top_products'      => 'Produtos mais vendidos',
     'traffic_trends'    => 'Tendências do tráfego',
     'unique_visitors'   => 'Visitantes únicos (UV)',
+    'order_trends'      => 'Tendências de Pedidos',
     'vs_yesterday'      => 'Mais do que ontem',
 ];

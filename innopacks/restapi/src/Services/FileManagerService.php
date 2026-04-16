@@ -13,12 +13,13 @@ use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Services\FileSecurityValidator;
+use InnoShop\Common\Services\StorageService;
 
 class FileManagerService implements FileManagerInterface
 {
     protected string $fileBasePath = '';
 
-    protected string $mediaDir = 'static/media';
+    protected string $mediaDir;
 
     protected string $basePath = '';
 
@@ -39,6 +40,7 @@ class FileManagerService implements FileManagerInterface
 
     public function __construct()
     {
+        $this->mediaDir     = rtrim(StorageService::STORAGE_PREFIX, '/');
         $this->basePath     = '/'.$this->mediaDir;
         $this->fileBasePath = public_path().$this->basePath;
     }
@@ -62,7 +64,7 @@ class FileManagerService implements FileManagerInterface
 
         $result = [];
         foreach ($directories as $directory) {
-            $processed = $this->processDirectory($directory, $realBasePath);
+            $processed = $this->processDirectoryIterative($directory, $realBasePath);
             if ($processed !== null) {
                 $result[] = $processed;
             }
@@ -93,13 +95,23 @@ class FileManagerService implements FileManagerInterface
 
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
         $folders         = $this->collectFolders($currentBasePath, $realBasePath);
-        $images          = $this->collectFiles($currentBasePath, $realBasePath, $keyword);
+        $fileEntries     = $this->collectFileEntries($currentBasePath, $realBasePath, $keyword);
 
-        $allItems = array_merge($folders, $images);
+        $allItems = array_merge($folders, $fileEntries);
         $allItems = $this->sortItems($allItems, $sort, $order);
-        $allItems = $this->removeTemporaryFields($allItems);
 
-        return $this->paginateItems($allItems, $page, $perPage);
+        $total     = count($allItems);
+        $offset    = ($page - 1) * $perPage;
+        $pageItems = array_slice($allItems, $offset, $perPage);
+        $pageItems = $this->enrichFileMetadata($pageItems);
+
+        return [
+            'items'    => $pageItems,
+            'total'    => $total,
+            'page'     => $page,
+            'per_page' => $perPage,
+            'success'  => true,
+        ];
     }
 
     /**
@@ -153,11 +165,6 @@ class FileManagerService implements FileManagerInterface
             $this->ensureDirectoryExists($sourceDirPath);
             $this->ensureDirectoryExists($destDirPath);
             $this->ensurePathDoesNotExist($destFullPath);
-
-            Log::info('Moving directory:', [
-                'from' => $sourceDirPath,
-                'to'   => $destFullPath,
-            ]);
 
             if (! @rename($sourceDirPath, $destFullPath)) {
                 Log::error('Failed to move directory:', [
@@ -218,11 +225,6 @@ class FileManagerService implements FileManagerInterface
             $path     = FileSecurityValidator::validateDirectoryPath($path);
             $fullPath = $this->getFullPath($path);
 
-            Log::info('Deleting path:', [
-                'path'   => $fullPath,
-                'is_dir' => is_dir($fullPath),
-            ]);
-
             if (is_dir($fullPath)) {
                 $this->deleteDirectory($fullPath);
             } elseif (file_exists($fullPath)) {
@@ -254,8 +256,6 @@ class FileManagerService implements FileManagerInterface
 
             foreach ($files as $file) {
                 $filePath = $this->getFullPath("$basePath/$file");
-
-                Log::info('Deleting file:', ['path' => $filePath]);
 
                 if (file_exists($filePath)) {
                     $this->deleteFile($filePath);
@@ -348,7 +348,7 @@ class FileManagerService implements FileManagerInterface
         $originName = $this->getUniqueFileName($savePath, $originName);
         $filePath   = $file->storeAs($savePath, $originName, 'media');
 
-        return asset($this->mediaDir.'/'.$filePath);
+        return StorageService::storageKey($filePath);
     }
 
     /**
@@ -360,11 +360,13 @@ class FileManagerService implements FileManagerInterface
      */
     public function getUniqueFileName(string $savePath, string $originName): string
     {
-        $fullPath = $this->getFullPath("$savePath/$originName");
-        if (file_exists($fullPath)) {
+        $maxAttempts = 100;
+        for ($i = 0; $i < $maxAttempts; $i++) {
+            $fullPath = $this->getFullPath("$savePath/$originName");
+            if (! file_exists($fullPath)) {
+                return $originName;
+            }
             $originName = $this->getNewFileName($originName);
-
-            return $this->getUniqueFileName($savePath, $originName);
         }
 
         return $originName;
@@ -389,39 +391,6 @@ class FileManagerService implements FileManagerInterface
         }
 
         return "{$name}.{$extension}";
-    }
-
-    /**
-     * Processes an image file and returns its metadata.
-     *
-     * @param  string  $filePath  Path to the image file
-     * @param  string  $baseName  Base filename
-     * @return array Image metadata
-     */
-    protected function handleImage(string $filePath, string $baseName): array
-    {
-        $thumbPath = $path = "$this->mediaDir$filePath";
-        $realPath  = str_replace($this->fileBasePath.$this->basePath, $this->fileBasePath, $this->fileBasePath.$filePath);
-
-        $mime = '';
-        if (file_exists($realPath)) {
-            $mime = mime_content_type($realPath);
-            if (str_starts_with($mime, 'application/')) {
-                $thumbPath = 'images/panel/doc.png';
-            } elseif (str_starts_with($mime, 'video/')) {
-                $thumbPath = 'images/panel/video.png';
-            }
-        }
-
-        return [
-            'id'         => $filePath,
-            'path'       => '/'.$path,
-            'name'       => $baseName,
-            'origin_url' => image_origin($path),
-            'url'        => image_resize($thumbPath),
-            'mime'       => $mime,
-            'selected'   => false,
-        ];
     }
 
     /**
@@ -514,50 +483,59 @@ class FileManagerService implements FileManagerInterface
     }
 
     /**
-     * Process a directory entry and return folder metadata if valid.
-     *
-     * @param  string  $directory  Directory path
-     * @param  string  $realBasePath  Real base path for validation
-     * @return array|null Folder metadata or null if invalid
+     * Process a directory entry iteratively, building subdirectory tree without recursion.
      */
-    protected function processDirectory(string $directory, string $realBasePath): ?array
+    protected function processDirectoryIterative(string $directory, string $realBasePath): ?array
     {
         $realDirectory = realpath($directory);
-        if ($realDirectory === false) {
+        if ($realDirectory === false || ! str_starts_with($realDirectory, $realBasePath)) {
             return null;
         }
 
-        if (! str_starts_with($realDirectory, $realBasePath)) {
+        if (! is_dir($realDirectory)) {
             return null;
         }
 
         $baseName = basename($directory);
         $dirName  = str_replace($this->fileBasePath, '', $directory);
-
         if (! str_starts_with($dirName, '/')) {
             $dirName = '/'.$dirName;
         }
 
-        try {
-            if (! is_dir($realDirectory)) {
-                return null;
+        $item = $this->handleFolder($dirName, $baseName);
+
+        // Build subdirectory tree iteratively using a stack
+        $stack = [['dirName' => $dirName, 'item' => &$item]];
+        while (! empty($stack)) {
+            $current = array_pop($stack);
+            $subPath = rtrim($this->fileBasePath.$current['dirName'], '/');
+            $subs    = glob("$subPath/*", GLOB_ONLYDIR) ?: [];
+
+            foreach ($subs as $sub) {
+                $realSub = realpath($sub);
+                if ($realSub === false || ! str_starts_with($realSub, $realBasePath) || ! is_dir($realSub)) {
+                    continue;
+                }
+
+                $subBaseName = basename($sub);
+                $subDirName  = str_replace($this->fileBasePath, '', $sub);
+                if (! str_starts_with($subDirName, '/')) {
+                    $subDirName = '/'.$subDirName;
+                }
+
+                $child                         = $this->handleFolder($subDirName, $subBaseName);
+                $current['item']['children'][] = $child;
+
+                // Push child to stack for further processing
+                $stack[] = [
+                    'dirName' => $subDirName,
+                    'item'    => &$current['item']['children'][count($current['item']['children']) - 1],
+                ];
             }
-
-            $item           = $this->handleFolder($dirName, $baseName);
-            $subDirectories = $this->getDirectories($dirName);
-            if (! empty($subDirectories)) {
-                $item['children'] = $subDirectories;
-            }
-
-            return $item;
-        } catch (Exception $e) {
-            Log::warning('Skipping directory due to access restriction:', [
-                'directory' => $directory,
-                'error'     => $e->getMessage(),
-            ]);
-
-            return null;
+            unset($current);
         }
+
+        return $item;
     }
 
     /**
@@ -604,14 +582,10 @@ class FileManagerService implements FileManagerInterface
     }
 
     /**
-     * Collect files from a directory path.
-     *
-     * @param  string  $currentBasePath  Current base path
-     * @param  string  $realBasePath  Real base path for validation
-     * @param  string  $keyword  Search keyword
-     * @return array Array of file metadata
+     * Collect lightweight file entries (name and path only, no metadata).
+     * Metadata is loaded only for the current page items via enrichFileMetadata().
      */
-    protected function collectFiles(string $currentBasePath, string $realBasePath, string $keyword = ''): array
+    protected function collectFileEntries(string $currentBasePath, string $realBasePath, string $keyword = ''): array
     {
         $files  = glob($currentBasePath.'/*') ?: [];
         $images = [];
@@ -622,30 +596,69 @@ class FileManagerService implements FileManagerInterface
                 continue;
             }
 
-            try {
-                if (! is_file($realFile)) {
-                    continue;
-                }
-
-                $baseName = basename($file);
-                if ($this->shouldSkipFile($baseName, $keyword)) {
-                    continue;
-                }
-
-                $fileName = $this->normalizeRelativePath(str_replace($this->fileBasePath, '', $file));
-
-                $fileInfo                 = $this->handleImage($fileName, $baseName);
-                $fileInfo['created_time'] = @filemtime($realFile) ?: time();
-                $images[]                 = $fileInfo;
-            } catch (Exception $e) {
-                Log::warning('Skipping file due to access restriction:', [
-                    'file'  => $file,
-                    'error' => $e->getMessage(),
-                ]);
+            if (! is_file($realFile)) {
+                continue;
             }
+
+            $baseName = basename($file);
+            if ($this->shouldSkipFile($baseName, $keyword)) {
+                continue;
+            }
+
+            $fileName = $this->normalizeRelativePath(str_replace($this->fileBasePath, '', $file));
+
+            $images[] = [
+                'id'           => $fileName,
+                'path'         => StorageService::storageKey(ltrim($fileName, '/')),
+                'name'         => $baseName,
+                'is_dir'       => false,
+                'thumb'        => '',
+                'url'          => '',
+                'origin_url'   => '',
+                'mime'         => '',
+                'selected'     => false,
+                'created_time' => @filemtime($realFile) ?: time(),
+                '_realPath'    => $realFile,
+            ];
         }
 
         return $images;
+    }
+
+    /**
+     * Enrich page items with full metadata (mime, thumbnails).
+     * Only called for items on the current page to avoid unnecessary I/O.
+     */
+    protected function enrichFileMetadata(array $items): array
+    {
+        return array_map(function ($item) {
+            if (($item['is_dir'] ?? false) || empty($item['_realPath'])) {
+                unset($item['_realPath'], $item['created_time']);
+
+                return $item;
+            }
+
+            $realPath = $item['_realPath'];
+            $path     = $item['path'];
+
+            $mime    = '';
+            $isVideo = false;
+            if (file_exists($realPath)) {
+                $mime = mime_content_type($realPath);
+                if (str_starts_with($mime, 'video/')) {
+                    $isVideo = true;
+                }
+            }
+
+            $item['mime']       = $mime;
+            $item['origin_url'] = storage_url($path);
+            $item['url']        = str_starts_with($mime, 'image/') ? image_resize($path) : asset('images/panel/doc.png');
+            $item['thumb']      = str_starts_with($mime, 'image/') ? storage_url($path) : asset('images/panel/doc.png');
+
+            unset($item['_realPath'], $item['created_time']);
+
+            return $item;
+        }, $items);
     }
 
     /**
@@ -700,41 +713,6 @@ class FileManagerService implements FileManagerInterface
     }
 
     /**
-     * Remove temporary fields from items.
-     *
-     * @param  array  $items  Items to process
-     * @return array Items without temporary fields
-     */
-    protected function removeTemporaryFields(array $items): array
-    {
-        return array_map(function ($item) {
-            unset($item['created_time']);
-
-            return $item;
-        }, $items);
-    }
-
-    /**
-     * Paginate items and return formatted result.
-     *
-     * @param  array  $items  Items to paginate
-     * @param  int  $page  Current page number
-     * @param  int  $perPage  Items per page
-     * @return array Paginated result
-     */
-    protected function paginateItems(array $items, int $page, int $perPage): array
-    {
-        $collection   = collect($items);
-        $currentItems = $collection->forPage($page, $perPage);
-
-        return [
-            'images'      => $currentItems->values(),
-            'image_total' => $collection->count(),
-            'image_page'  => $page,
-        ];
-    }
-
-    /**
      * Get empty file list result.
      *
      * @param  int  $page  Current page number
@@ -743,9 +721,11 @@ class FileManagerService implements FileManagerInterface
     protected function getEmptyFileList(int $page): array
     {
         return [
-            'images'      => [],
-            'image_total' => 0,
-            'image_page'  => $page,
+            'items'    => [],
+            'total'    => 0,
+            'page'     => $page,
+            'per_page' => 20,
+            'success'  => true,
         ];
     }
 
@@ -807,20 +787,13 @@ class FileManagerService implements FileManagerInterface
         $sourcePath   = $this->getFullPath($fileName);
         $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
 
-        Log::info('Moving file:', [
-            'source'      => $sourcePath,
-            'destination' => $destFilePath,
-            'fileName'    => $fileName,
-            'destPath'    => $destPath,
-        ]);
-
         if (! file_exists($sourcePath)) {
             Log::warning('Source file not found:', ['path' => $sourcePath]);
             throw new Exception(trans('panel/file_manager.source_file_not_exist'));
         }
 
         if (file_exists($destFilePath)) {
-            @unlink($destFilePath);
+            throw new Exception(trans('panel/file_manager.target_file_exists'));
         }
 
         if (! @rename($sourcePath, $destFilePath)) {
@@ -831,11 +804,6 @@ class FileManagerService implements FileManagerInterface
             ]);
             throw new Exception(trans('panel/file_manager.move_failed'));
         }
-
-        Log::info('File moved successfully:', [
-            'from' => $sourcePath,
-            'to'   => $destFilePath,
-        ]);
     }
 
     /**
@@ -851,11 +819,6 @@ class FileManagerService implements FileManagerInterface
     {
         $sourcePath   = $this->getFullPath($fileName);
         $destFilePath = rtrim($destFullPath, '/').'/'.basename($fileName);
-
-        Log::info('Copying file:', [
-            'source'      => $sourcePath,
-            'destination' => $destFilePath,
-        ]);
 
         if (! file_exists($sourcePath)) {
             Log::warning('Source file not found:', ['path' => $sourcePath]);
@@ -875,11 +838,6 @@ class FileManagerService implements FileManagerInterface
             ]);
             throw new Exception(trans('panel/file_manager.copy_failed'));
         }
-
-        Log::info('File copied successfully:', [
-            'from' => $sourcePath,
-            'to'   => $destFilePath,
-        ]);
     }
 
     /**

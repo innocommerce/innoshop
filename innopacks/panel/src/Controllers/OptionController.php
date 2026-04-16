@@ -35,49 +35,54 @@ class OptionController extends BaseController
         $option_groups = OptionRepo::getInstance()->list($filters);
 
         $data = [
-            'searchFields'       => OptionRepo::getSearchFieldOptions(),
-            'filterButtons'      => OptionRepo::getFilterButtonOptions(),
-            'option_groups'      => $option_groups,
-            'option_groups_data' => $option_groups,
+            'searchFields'  => OptionRepo::getSearchFieldOptions(),
+            'filterButtons' => OptionRepo::getFilterButtonOptions(),
+            'option_groups' => $option_groups,
         ];
 
         return inno_view('panel::options.index', $data);
     }
 
     /**
-     * Store new option
+     * Option creation page.
      *
-     * @param  OptionRequest  $request
-     * @return RedirectResponse|JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function store(OptionRequest $request): RedirectResponse|JsonResponse
+    public function create(): mixed
+    {
+        return $this->form(new Option);
+    }
+
+    /**
+     * @param  OptionRequest  $request
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function store(OptionRequest $request): RedirectResponse
     {
         try {
             $data   = $request->all();
             $option = OptionRepo::getInstance()->create($data);
 
-            // 如果是AJAX请求，返回JSON响应
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => panel_trans('common.created_success'),
-                    'data'    => $option,
-                ]);
+            // Create option values for new options
+            $valuesRaw = $request->input('values', '');
+            $values    = is_string($valuesRaw) && $valuesRaw !== '' ? json_decode($valuesRaw, true) : (array) $valuesRaw;
+            if (! empty($values) && is_array($values) && $option->id) {
+                foreach ($values as $valueItem) {
+                    OptionValueRepo::getInstance()->create([
+                        'option_id' => $option->id,
+                        'name'      => $valueItem['name'] ?? [],
+                        'image'     => $valueItem['image'] ?? '',
+                        'active'    => 1,
+                    ]);
+                }
             }
 
             return redirect(panel_route('options.index'))
                 ->with('instance', $option)
                 ->with('success', panel_trans('common.created_success'));
         } catch (Exception $e) {
-            // 如果是AJAX请求，返回JSON错误响应
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                ], 422);
-            }
-
             return redirect(panel_route('options.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -85,40 +90,54 @@ class OptionController extends BaseController
     }
 
     /**
-     * Update existing option
-     *
-     * @param  OptionRequest  $request
      * @param  Option  $option
-     * @return RedirectResponse|JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function update(OptionRequest $request, Option $option): RedirectResponse|JsonResponse
+    public function edit(Option $option): mixed
+    {
+        return $this->form($option);
+    }
+
+    /**
+     * @param  $option
+     * @return mixed
+     * @throws Exception
+     */
+    public function form($option): mixed
+    {
+        $valuesJson = $option->optionValues->map(function ($v) {
+            return [
+                'id'    => $v->id,
+                'name'  => $v->name ?? [],
+                'image' => $v->image ?? '',
+            ];
+        })->values()->toArray();
+
+        $data = [
+            'option'             => $option,
+            'option_values_json' => $valuesJson,
+        ];
+
+        return inno_view('panel::options.form', $data);
+    }
+
+    /**
+     * @param  OptionRequest  $request
+     * @param  Option  $option
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function update(OptionRequest $request, Option $option): RedirectResponse
     {
         try {
             $data = $request->all();
             OptionRepo::getInstance()->update($option, $data);
 
-            // 如果是AJAX请求，返回JSON响应
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => common_trans('base.updated_success'),
-                    'data'    => $option,
-                ]);
-            }
-
             return redirect(panel_route('options.index'))
                 ->with('instance', $option)
                 ->with('success', common_trans('base.updated_success'));
         } catch (Exception $e) {
-            // 如果是AJAX请求，返回JSON错误响应
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                ], 422);
-            }
-
             return redirect(panel_route('options.index'))
                 ->withInput()
                 ->withErrors(['error' => $e->getMessage()]);
@@ -126,26 +145,22 @@ class OptionController extends BaseController
     }
 
     /**
-     * Get option data for editing (AJAX endpoint)
+     * Get option data (AJAX endpoint for product editing)
      *
      * @param  Option  $option
-     * @return JsonResponse
+     * @return mixed
      * @throws Exception
      */
-    public function show(Option $option): JsonResponse
+    public function show(Option $option): mixed
     {
         try {
-            $option->load('translations');
+            $option->load(['optionValues' => function ($query) {
+                $query->orderBy('position')->orderBy('id');
+            }]);
 
-            return response()->json([
-                'success' => true,
-                'data'    => $option,
-            ]);
+            return json_success('', $option);
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 422);
+            return json_fail($e->getMessage());
         }
     }
 
@@ -183,7 +198,6 @@ class OptionController extends BaseController
 
         $options = OptionRepo::getInstance()->all($filters);
 
-        // 格式化数据，包含选项值数量
         $formattedOptions = [];
         foreach ($options as $option) {
             $formattedOptions[] = [
@@ -221,7 +235,6 @@ class OptionController extends BaseController
 
         $optionValues = OptionValueRepo::getInstance()->all($filters);
 
-        // 格式化数据
         $formattedValues = [];
         foreach ($optionValues as $optionValue) {
             $formattedValues[] = [

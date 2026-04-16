@@ -96,7 +96,7 @@ return [
     'seo_settings'                  => 'SEO設置',
     'seo_settings_desc'             => '配置網站的SEO相關信息',
     'setting'                       => '系統設置',
-    'shop_address'                  => '店鋪地址',
+    'shop_address'                  => '公司地址',
     'slideshow'                     => '首頁幻燈片',
     'specials'                      => '固定頁',
     'store_features'                => '店鋪功能設置',

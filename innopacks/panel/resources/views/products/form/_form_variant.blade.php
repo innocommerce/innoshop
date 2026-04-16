@@ -21,7 +21,7 @@
         item-key="index">
         <template #item="{element: variant, index}">
           <div class="variant-item">
-            <div class="variant-data" v-if="!variant.variantFormShow">
+            <div class="variant-data">
               <div class="variant-header d-flex justify-content-between align-items-center mb-2">
                 <div class="d-flex align-items-center">
                   <div class="icon drag-variants-handle me-2"><i class="bi bi-grip-vertical"></i></div>
@@ -65,47 +65,6 @@
                 </div>
               </div>
             </div>
-            <div class="add-variant-form" v-else>
-              <div class="mb-3 add-variant-title">
-                <div class="variant-label">
-                  <label class="form-label">{{ __('panel/product.variant_name') }}</label>
-                  <div class="v-locales-input">
-                    <div v-for="locale in locales" class="input-group" :key="locale.code">
-                      <span class="input-group-text"><img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid">@{{ locale.name }}</span>
-                      <input type="text" class="form-control" v-model="variant.name[locale.code]" placeholder="{{ __('panel/product.variant_name_help') }}">
-                    </div>
-                    <span class="text-12 text-danger" style="margin-left: 100px" v-if="variant.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel/common.verify_required') }}</span>
-                  </div>
-                    @hookinsert('panel.product.edit.variant_name.after')
-                </div>
-              </div>
-              <div class="add-variant-values">
-                <label class="form-label">{{ __('panel/product.variant_value') }}</label>
-                <div class="add-variant-value">
-                  <div class="add-variant-value-item" v-for="(value, index) in variant.values" :key="index">
-                    <div class="icon"><i class="bi bi-grip-vertical"></i></div>
-                    <div class="v-locales-input variant-value">
-                      <div v-for="locale in locales" class="input-group" :key="locale.code">
-                        <span class="input-group-text"><img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid">@{{ locale.name }}</span>
-                        <input type="text" class="form-control" v-model="value.name[locale.code]" placeholder="{{ __('panel/product.variant_value_help') }}" ref="variantValue">
-                      </div>
-                      <span class="text-12 text-danger" style="margin-left: 100px" v-if="value.error"><i class="bi bi-exclamation-circle"></i> {{ __('panel/common.verify_required') }}</span>
-                    </div>
-                    <div class="delete-icon" v-if="variant.values.length > 1" @click="variant.values.splice(index, 1)"><i class="bi bi-trash"></i></div>
-                    <div class="delete-icon" v-else></div>
-                  </div>
-                  <div class="add-variant-btns">
-                    <div class="text-primary text-12 mb-3">
-                      <div class="d-inline-block cursor-pointer" @click="addVariantValue(index)"><i class="bi bi-plus-lg"></i> {{ __('panel/product.add_variant_value') }}</div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <button type="button" class="btn btn-outline-danger" @click="deleteVariant(index)">{{ __('common/base.delete') }}</button>
-                      <button type="button" class="btn btn-outline-primary" @click="saveVariant(index)">{{ __('panel/common.btn_save') }}</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </template>
       </draggable>
@@ -122,7 +81,7 @@
               <div class="variant-selector-container">
                 <div class="row g-2 mb-2" v-for="(variant, vIndex) in variants" :key="vIndex">
                   <div class="col-md-2">
-                    <label class="form-label small mb-1">@{{ getFirstAvailableLocaleValue(variant.name) }}</label>
+                    <label class="form-label small mb-1">@{{ variant.name[defaultLocale] || getFirstAvailableLocaleValue(variant.name) }}</label>
                   </div>
                   <div class="col-md-10">
                     <div class="d-flex flex-wrap gap-1 align-items-center">
@@ -132,7 +91,7 @@
                                v-model="batchData.selectedVariants[vIndex]"
                                :value="valueIndex">
                         <label class="form-check-label" :for="`variant_${vIndex}_${valueIndex}`">
-                          @{{ getFirstAvailableLocaleValue(value.name) }}
+                          @{{ value.name[defaultLocale] || getFirstAvailableLocaleValue(value.name) }}
                         </label>
                       </div>
                       <button type="button" class="btn btn-outline-primary btn-sm ms-2" 
@@ -293,27 +252,58 @@
           </div>
           <div class="modal-body">
             <form ref="variantForm">
-              <div class="mb-3">
-                <div v-for="locale in locales" :key="locale.code" class="input-group mb-2">
-                  <div class="input-group-text">
-                    <div class="d-flex align-items-center wh-20">
-                      <img :src="'/images/flag/'+ locale.code +'.png'" 
-                           class="img-fluid" 
-                           :alt="locale.name">
-                    </div>
+              {{-- 主语言输入行 --}}
+              <div class="locale-modal-row mb-3 p-2 rounded border border-primary" :data-locale="defaultLocale">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <div class="d-flex align-items-center wh-20">
+                    <img :src="'/images/flag/'+ defaultLocale +'.png'" class="img-fluid" :alt="defaultLocaleName">
                   </div>
-                  <input type="text" class="form-control" 
-                         v-model="dialogVariables.form.name[locale.code]" 
-                         :placeholder="'{{ __('panel/product.name') }}'"
-                         :aria-label="locale.name"
-                         :data-locale="locale.code">
+                  <span class="fw-medium">@{{ defaultLocaleName }}</span>
+                  <span class="badge bg-primary">{{ __('panel/common.panel_locale') }}</span>
                 </div>
+                <input type="text" class="form-control"
+                       v-model="dialogVariables.form.name[defaultLocale]"
+                       :placeholder="'{{ __('panel/product.name') }}'"
+                       :data-locale="defaultLocale">
+              </div>
+
+              {{-- 其余语言行 --}}
+              <div v-for="locale in otherLocales" :key="locale.code"
+                   class="locale-modal-row mb-3 p-2 rounded border" :data-locale="locale.code">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <div class="d-flex align-items-center wh-20">
+                    <img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid" :alt="locale.name">
+                  </div>
+                  <span class="fw-medium">@{{ locale.name }}</span>
+                  @if(has_translator())
+                    <button type="button" class="btn btn-sm btn-outline-primary ms-auto variant-translate-btn"
+                            :data-locale-target="locale.code"
+                            @click.prevent="translateVariantName(locale.code, $event)"
+                            :title="defaultLocaleName + ' → ' + locale.name">
+                      <i class="bi bi-translate"></i>
+                    </button>
+                  @endif
+                </div>
+                <input type="text" class="form-control"
+                       v-model="dialogVariables.form.name[locale.code]"
+                       :placeholder="'{{ __('panel/product.name') }}'"
+                       :data-locale="locale.code">
               </div>
             </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeVariantDialog">{{ __('common/base.cancel') }}</button>
-            <button type="button" class="btn btn-primary" @click="saveVariantDialog">{{ __('common/base.save') }}</button>
+          <div class="modal-footer d-flex justify-content-between">
+            @php($hasTranslator = has_translator())
+            <button type="button" class="btn btn-outline-secondary" @click="fillEmptyLocales">
+              @if($hasTranslator)
+                <i class="bi bi-translate me-1"></i>{{ __('panel/common.translate_empty') }}
+              @else
+                <i class="bi bi-arrow-right-circle me-1"></i>{{ __('panel/common.copy_empty') }}
+              @endif
+            </button>
+            <div>
+              <button type="button" class="btn btn-secondary" @click="closeVariantDialog">{{ __('common/base.cancel') }}</button>
+              <button type="button" class="btn btn-primary ms-2" @click="saveVariantDialog">{{ __('panel/common.confirm') }}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -347,6 +337,28 @@
       const instance = getCurrentInstance();
       const locales = $locales;
       const defaultLocale = @json(panel_locale_code());
+      const frontLocale = @json(setting_locale_code());
+
+      // Locale helpers for variant dialog
+      const otherLocales = computed(() => locales.filter(l => l.code !== defaultLocale));
+      const defaultLocaleName = locales.find(l => l.code === defaultLocale)?.name || defaultLocale;
+      const hasTranslator = @json(has_translator());
+
+      // LocaleModalHelper for variant dialog
+      const variantLocaleHelper = new LocaleModalHelper({
+        getLocaleValue: (code) => dialogVariables.value.form.name[code] || '',
+        setLocaleValue: (code, val) => { dialogVariables.value.form.name[code] = val; },
+      });
+
+      // Translate variant name - delegates to LocaleModalHelper
+      const translateVariantName = (targetLocale, event) => {
+        variantLocaleHelper.translate(targetLocale, event?.currentTarget);
+      };
+
+      // Smart fill: delegates to LocaleModalHelper
+      const fillEmptyLocales = () => {
+        variantLocaleHelper.fillEmpty();
+      };
       const showAllVariant = ref(false);
       const mainVariantKey = ref(0);
       
@@ -403,8 +415,14 @@
           $('.skus-single-box').addClass('d-none');
         }
 
-        // Don't generate SKUs if only one empty variant exists
-        if (variants.value.length == 1 && isObjectValuesEmpty(variants.value[0].values[0].name)) {
+        // Don't generate SKUs if only one empty variant exists (guard: modal-added variants may have values: [] until values are added)
+        const firstVariant = variants.value[0];
+        if (
+          variants.value.length === 1 &&
+          firstVariant.values &&
+          firstVariant.values[0] &&
+          isObjectValuesEmpty(firstVariant.values[0].name)
+        ) {
           return;
         }
 
@@ -461,7 +479,7 @@
         $('#product-form').on('submit', function(e) {
           if (!validateForm()) {
             e.preventDefault();
-            layer.msg('Please fill in single specification information or add multiple specification product information', {icon: 2});
+            layer.msg('{{ trans("panel/product.sku_validation_error") }}', {icon: 2});
             return false;
           }
         });
@@ -483,25 +501,6 @@
         }));
       }
 
-      // Add a new value to a variant
-      const addVariantValue = (index) => {
-        variants.value[index].values.push({name: localesFill(''), error: false, image: ''});
-      }
-
-      // Add a new variant
-      const addVariant = () => {
-        variants.value.push({
-          name: localesFill(''),
-          error: false,
-          variantFormShow: true,
-          isImage: false,
-          values: [{name: localesFill(''), error: false, image: ''}],
-        });
-        
-        // 更新规格选择器数据结构
-        batchData.value.selectedVariants.push([]);
-      }
-
       // Delete a variant and update main variant key
       const deleteVariant = (index) => {
         variants.value.splice(index, 1);
@@ -514,38 +513,6 @@
         } else if (index === mainVariantKey.value) {
           mainVariantKey.value = 0;
         }
-      }
-
-      // Save variant after validation
-      const saveVariant = (index) => {
-        let isError = true;
-
-        // Validate all variants and values
-        variants.value.forEach((e, i) => {
-          if (isObjectValuesEmpty(e.name)) {
-            e.error = true;
-            isError = false;
-          } else {
-            e.error = false;
-          }
-
-          e.values.forEach((value, j) => {
-            if (isObjectValuesEmpty(value.name)) {
-              value.error = true;
-              isError = false;
-            } else {
-              value.error = false;
-            }
-          });
-        });
-
-        if (!isError) {
-          return;
-        }
-
-        // Hide form and save variants to localStorage
-        variants.value[index].variantFormShow = false;
-        localStorage.setItem('variants', JSON.stringify(variants.value));
       }
 
       // Get first available locale value for display
@@ -1061,8 +1028,13 @@
           }
         } else {
           if (variantIndex === -1) {
-            // Creating new variant
-            variants.value.push({name, values: [], isImage: false});
+            // Creating new variant — include one empty value row so watchers / SKU gen never read values[0] on undefined
+            variants.value.push({
+              name,
+              values: [{ name: localesFill(''), error: false, image: '' }],
+              isImage: false,
+              error: false,
+            });
           } else {
             // Update existing variant
             variants.value[variantIndex].name = name;
@@ -1115,10 +1087,7 @@
       return {
         skus,
         variants,
-        addVariant,
-        addVariantValue,
         deleteVariant,
-        saveVariant,
         locales,
         defaultLocale,
         mainVariantKey,
@@ -1154,7 +1123,12 @@
         clearVariantSelection,
         batchApplySelected,
         selectBatchImage,
-        clearBatchImage
+        clearBatchImage,
+        // Locale helpers
+        otherLocales,
+        defaultLocaleName,
+        translateVariantName,
+        fillEmptyLocales
       }
     }
   }).mount('#variants-box');

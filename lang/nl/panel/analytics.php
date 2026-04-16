@@ -20,7 +20,7 @@ return [
     'date_range'            => 'Date range',
     'end_date'              => 'End date',
     'filter_all'            => 'All',
-    'filter_custom'         => '"Custom"',
+    'filter_custom'         => 'Custom',
     'filter_last_30_days'   => 'The last 30 days',
     'filter_last_7_days'    => 'The last 7 days',
     'filter_this_month'     => 'This month',

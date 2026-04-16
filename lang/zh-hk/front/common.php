@@ -19,6 +19,7 @@ return [
     'home'                       => '首頁',
     'in_stock'                   => '有貨',
     'load_more'                  => '加載更多',
+    'links'                      => '連結',
     'login'                      => '登錄',
     'logo'                       => '品牌',
     'news'                       => '文章',

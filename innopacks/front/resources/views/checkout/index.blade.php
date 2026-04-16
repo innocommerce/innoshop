@@ -265,9 +265,7 @@
             </ul>
 
             @php
-              $newsletterLocations = system_setting('newsletter_display_locations', ['footer']);
-              $newsletterLocations = is_array($newsletterLocations) ? $newsletterLocations : ['footer'];
-              $showCheckoutNewsletter = in_array('checkout', $newsletterLocations);
+              $showCheckoutNewsletter = system_setting('newsletter_checkout_enabled', false);
               $customer = current_customer();
             @endphp
             @if($showCheckoutNewsletter)

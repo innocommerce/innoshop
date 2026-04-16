@@ -20,7 +20,7 @@ return [
     'please_enter_phone' => 'Please enter your mobile phone number',
     'send_code'          => 'Send verification code',
     'send_code_failed'   => 'Failed to send the verification code',
-    'sending'            => '"Sending in progress',
+    'sending'            => 'Sending in progress',
     'sms_code'           => 'Verification code',
     'sms_code_sent'      => 'The verification code has been sent',
     'telephone'          => 'Mobile phone number',

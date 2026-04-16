@@ -19,6 +19,7 @@ return [
     'home'                       => '홈',
     'in_stock'                   => '재고 있음',
     'load_more'                  => '더 불러오기',
+    'links'                      => '링크',
     'login'                      => '로그인',
     'logo'                       => '로고',
     'news'                       => '뉴스',

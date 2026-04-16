@@ -3,19 +3,13 @@
 
 @section('title', __('panel/menu.attribute_groups'))
 @section('page-title-right')
-<button type="button" class="btn btn-primary btn-add" onclick="app.create()">
+<button type="button" class="btn btn-primary" onclick="openCreateDialog()">
   <i class="bi bi-plus-square"></i> {{ __('common/base.create') }}
 </button>
 @endsection
 
-@push('header')
-  <script src="{{ asset('vendor/vue/3.5/vue.global' . (!config('app.debug') ? '.prod' : '') . '.js') }}"></script>
-  <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
-  <script src="{{ asset('vendor/element-plus/icons.min.js') }}"></script>
-@endpush
-
 @section('content')
-<div class="card h-min-600" id="app">
+<div class="card h-min-600">
   <div class="card-body">
     <!-- Navigation links -->
     <ul class="nav nav-tabs mb-3">
@@ -41,193 +35,153 @@
     @if ($attributes->count())
     <div class="table-responsive">
       <table class="table align-middle">
-      <thead>
-        <tr>
-        <td>{{ __('common/base.id') }}</td>
-        <td>{{ __('common/base.name') }}</td>
-        <td>{{ __('common/base.created_at') }}</td>
-        <td>{{ __('panel/common.actions')}}</td>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($attributes as $item)
-        <tr>
-        <td>{{ $item->id }}</td>
-        <td>{{ $item->translation->name ?? '' }}</td>
-        <td>{{ $item->created_at }}</td>
-        <td>
-          <div class="d-flex gap-2">
-          <div>
-          <a @click="edit({{ $item->id }})">
-          <el-button size="small" plain type="primary">{{
-      __('common/base.edit')}}</el-button>
-          </a>
-          </div>
-          <div>
-          <form ref="deleteForm" action="{{ panel_route('attribute_groups.destroy', [$item->id]) }}"
-          method="POST" class="d-inline">
-          @csrf
-          @method('DELETE')
-          <el-button size="small" type="danger" plain @click="open({{ $item->id }})">{{ __('common/base.delete')}}</el-button>
-          </form>
-          </div>
-          </div>
-        </td>
-        </tr>
-    @endforeach
-      </tbody>
+        <thead>
+          <tr>
+            <td>{{ __('common/base.id') }}</td>
+            <td>{{ __('common/base.name') }}</td>
+            <td>{{ __('common/base.position') }}</td>
+            <td>{{ __('common/base.created_at') }}</td>
+            <td>{{ __('panel/common.actions') }}</td>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($attributes as $item)
+          <tr id="group-row-{{ $item->id }}">
+            <td>{{ $item->id }}</td>
+            <td>{{ $item->translation->name ?? '' }}</td>
+            <td>{{ $item->position }}</td>
+            <td>{{ $item->created_at }}</td>
+            <td>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary"
+                        onclick="openEditDialog({{ $item->id }})">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger"
+                        onclick="deleteGroup({{ $item->id }})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
       </table>
     </div>
     {{ $attributes->withQueryString()->links('panel::vendor/pagination/bootstrap-4') }}
-  @else
-  <x-common-no-data />
-@endif
+    @else
+    <x-common-no-data />
+    @endif
   </div>
-
-  <el-drawer v-model="drawer" size="500" @close="close">
-    <template #header>
-      <div class="text-dark fs-4">{{ __('panel/menu.attribute_groups') }}</div>
-    </template>
-    <el-form ref="formRef" label-position="top" :model="form" :rules="rules" label-width="auto" status-icon>
-      <el-form-item label="" prop="name">
-        <div class="w-100">
-          <ul class="nav nav-tabs mb-2" role="tablist">
-            <li class="nav-item" role="presentation" v-for="(locale, index) in locales" :key="locale . code">
-              <button :class="['nav-link py-1', !index ? 'active' : '']" :id="locale . code" data-bs-toggle="tab"
-                :data-bs-target="'#values-' + locale.code + '-pane'" type="button">
-                <img :src="'images/flag/' + locale . code + '.png'" class="me-2" style="width: 20px;">
-                @{{ locale.name }}
-              </button>
-            </li>
-          </ul>
-          <div class="tab-content pb-3">
-            <div :class="['tab-pane fade', !index ? 'show active' : '']" :id="'values-' + locale . code + '-pane'"
-              role="tabpanel" v-for="(locale, index) in locales" :key="locale . code">
-              <el-input size="large" v-model="form.translations[locale.code].name"
-                placeholder="{{ __('common/base.name') }}"></el-input>
-            </div>
-          </div>
-        </div>
-      </el-form-item>
-
-      <el-form-item label="{{ __('common/base.position')}}" prop="position">
-        <el-input size="large" v-model="form.position" placeholder="{{ __('common/base.position')}}"></el-input>
-      </el-form-item>
-    </el-form>
-
-    <template #footer>
-      <div style="flex: auto">
-        <el-button @click="drawer = false">{{ __('common/base.close') }}</el-button>
-        <el-button type="primary" @click="submit">{{ __('panel/common.btn_save') }}</el-button>
-      </div>
-    </template>
-  </el-drawer>
 </div>
+
+{{-- Shared locale modal --}}
+<x-common-form-locale-modal
+  modalId="groupEditModal"
+  inputPrefix="group-name"
+  :title="__('panel/menu.attribute_groups')">
+  <div class="mb-3 mt-3">
+    <label class="form-label">{{ __('common/base.position') }}</label>
+    <input type="number" class="form-control" id="group-position"
+           placeholder="{{ __('common/base.position') }}" value="0">
+  </div>
+</x-common-form-locale-modal>
 @endsection
 
 @push('footer')
-    <script>
-    const { createApp, ref, reactive, onMounted, getCurrentInstance } = Vue;
-    const { ElMessageBox, ElMessage } = ElementPlus;
-    const api = @json(panel_route('attribute_groups.index'));
-    const listApp = createApp({
-    setup() {
-      const drawer = ref(false)
-      const locales = ref(@json(locales()))
-      const { proxy } = getCurrentInstance();
-      const attributes = @json($attributes ?? []);
+<script>
+  const groupApiBase = '{{ panel_route("attribute_groups.index") }}';
+  let editingGroupId = null;
+  let groupModal = null;
+  let groupHelper = null;
 
-      const translationsKey = ['name']
+  document.addEventListener('DOMContentLoaded', function() {
+    groupModal = new bootstrap.Modal(document.getElementById('groupEditModal'));
+    groupHelper = new LocaleModalHelper({
+      modalId: 'groupEditModal',
+      inputPrefix: 'group-name',
+    });
 
-      const form = reactive({
-      id: 0,
-      translations: {},
-      position: '',
-      })
+    document.getElementById('groupEditModal-confirm').addEventListener('click', submitGroup);
+  });
 
-      locales.value.forEach(locale => {
-      form.translations[locale.code] = {}
-      translationsKey.forEach(key => {
-      form.translations[locale.code]['locale'] = locale.code
-      form.translations[locale.code][key] = ''
-      })
-      })
+  function resetGroupForm() {
+    editingGroupId = null;
+    document.getElementById('groupEditModal-title').textContent = '{{ __("common/base.create") }}';
+    document.getElementById('group-position').value = 0;
+    document.querySelectorAll('#groupEditModal input[id^="group-name-"]').forEach(el => el.value = '');
+  }
 
-      const rules = {
-
-      }
-
-      const edit = (id) => {
-      drawer.value = true
-      let attribute = attributes.data.find(item => item.id === id)
-      form.id = attribute.id
-      form.position = attribute.position
-      attribute.translations.forEach(item => {
-      form.translations[item.locale].name = item.name
-      })
-      }
-
-      const submit = () => {
-      const url = form.id ? `${api}/${form.id}` : api
-      const method = form.id ? 'put' : 'post'
-      axios[method](url, form).then((res) => {
-      drawer.value = false
-      inno.msg(res.message)
-      window.location.reload()
-      })
-      }
-
-      const close = () => {
-      proxy.$refs.formRef.resetFields()
-      }
-
-      const create = () => {
-      drawer.value = true
-      }
-      const deleteForm = ref(null);
-      const open = (id) => {
-     ElMessageBox.confirm(
-      '{{ __("panel/common.confirm_delete") }}',
-      '{{ __("panel/common.confirm") }}',
-      {
-      confirmButtonText: '{{ __("panel/common.confirm") }}',
-      cancelButtonText: '{{ __("panel/common.btn_back") }}',
-      type: 'warning',
-      }
-     )
-    .then(() => {
-      const deleteUrl = urls.panel_base + '/attribute_groups/' + id;
-      deleteForm.value.action = deleteUrl;
-      deleteForm.value.submit();
-     })
-  .catch(() => {
-   });
-   };
-      const exportFuns = {
-      drawer,
-      form,
-      edit,
-      rules,
-      close,
-      submit,
-      locales,
-      create,
-      open,
-      deleteForm
-      }
-
-      window.app = exportFuns
-      return exportFuns;
+  function fillGroupForm(data) {
+    editingGroupId = data.id;
+    document.getElementById('groupEditModal-title').textContent = '{{ __("common/base.edit") }}';
+    document.getElementById('group-position').value = data.position ?? 0;
+    document.querySelectorAll('#groupEditModal input[id^="group-name-"]').forEach(el => el.value = '');
+    if (data.translations) {
+      data.translations.forEach(t => {
+        const input = document.getElementById('group-name-' + t.locale);
+        if (input) input.value = t.name;
+      });
     }
-    })
+  }
 
-    listApp.use(ElementPlus);
-    listApp.mount('#app');
+  function openCreateDialog() {
+    resetGroupForm();
+    groupModal.show();
+  }
 
-    $(function () {
-    $('.btn-add').click(function () {
-      app.drawer.value = true
-    })
-    })
-    </script>
+  function openEditDialog(id) {
+    resetGroupForm();
+    axios.get(groupApiBase + '/' + id, { headers: { 'X-Skip-Loading': true } })
+      .then(res => {
+        fillGroupForm(res.data);
+        groupModal.show();
+      })
+      .catch(err => {
+        layer.msg(err.response?.data?.message || err.message, {icon: 2});
+      });
+  }
+
+  function submitGroup() {
+    const primaryInput = document.getElementById('group-name-' + groupHelper.defaultLocale);
+    if (!primaryInput || !primaryInput.value.trim()) {
+      layer.msg('{{ __("panel/common.verify_required") }}', {icon: 2});
+      return;
+    }
+
+    const translations = groupHelper.locales.map(l => ({
+      locale: l.code,
+      name: document.getElementById('group-name-' + l.code)?.value || ''
+    }));
+    const position = parseInt(document.getElementById('group-position').value) || 0;
+
+    const payload = { translations, position };
+    const url = editingGroupId ? groupApiBase + '/' + editingGroupId : groupApiBase;
+    const method = editingGroupId ? 'put' : 'post';
+
+    axios[method](url, payload, { headers: { 'X-Skip-Loading': true } }).then(res => {
+      groupModal.hide();
+      layer.msg(res.message, {icon: 1});
+      setTimeout(() => window.location.reload(), 500);
+    }).catch(err => {
+      layer.msg(err.response?.data?.message || err.message, {icon: 2});
+    });
+  }
+
+  function deleteGroup(id) {
+    if (!confirm('{{ __("panel/common.confirm_delete") }}')) return;
+
+    axios.delete(groupApiBase + '/' + id, { headers: { 'X-Skip-Loading': true } }).then(res => {
+      layer.msg(res.message, {icon: 1});
+      const row = document.getElementById('group-row-' + id);
+      if (row) row.remove();
+      const tbody = document.querySelector('table tbody');
+      if (tbody && !tbody.children.length) {
+        window.location.reload();
+      }
+    }).catch(err => {
+      layer.msg(err.response?.data?.message || err.message, {icon: 2});
+    });
+  }
+</script>
 @endpush

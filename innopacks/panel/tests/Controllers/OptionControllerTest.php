@@ -163,7 +163,7 @@ class OptionControllerTest extends TestCase
         $method     = $this->reflection->getMethod('show');
         $returnType = $method->getReturnType();
         $this->assertNotNull($returnType);
-        $this->assertEquals('Illuminate\Http\JsonResponse', $returnType->getName());
+        $this->assertEquals('mixed', $returnType->getName());
     }
 
     #[Test]

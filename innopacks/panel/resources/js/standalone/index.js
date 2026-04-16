@@ -7,3 +7,4 @@ import './panel-entity-picker';
 import './panel-locale-text';
 import './panel-image-input';
 import './panel-inno-panel';
+import './panel-menu-search';

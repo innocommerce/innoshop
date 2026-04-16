@@ -27,7 +27,7 @@ return [
     'password_required'         => 'Voer een wachtwoord in',
     'please_enter_phone'        => 'Please enter your mobile phone number',
     'send_code'                 => 'Send verification code',
-    'sending'                   => '"Sending in progress',
+    'sending'                   => 'Sending in progress',
     'sms_code'                  => 'Verification code',
     'telephone'                 => 'Mobile phone number',
 ];

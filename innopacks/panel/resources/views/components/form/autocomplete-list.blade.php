@@ -10,11 +10,13 @@
         {{-- 如果传入了已选项的完整数据，直接循环输出，避免API调用 --}}
         @if(!empty($selectedItems))
           @foreach($selectedItems as $item)
+            @if($item['id'] ?? '')
             <li class="list-group list-group-item">
               <span class="autocomplete-name">{{ $item['name'] ?? $item['title'] ?? '' }}</span>
               <button type="button" class="btn-close"></button>
-              <input name="{{ $name }}" type="hidden" value="{{ $item['id'] }}" />
+              <input name="{{ $name }}" type="hidden" value="{{ $item['id'] ?? '' }}" />
             </li>
+            @endif
           @endforeach
         @endif
       </ul>

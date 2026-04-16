@@ -32,7 +32,7 @@ return [
     'api_configuration'                 => 'Ausstattung nach API',
     'content_generation_settings'       => 'Tongabe-einstellungen erstellen',
     'content_quality'                   => 'Die qualität des inhalts.',
-    'deepseek_api_key'                  => '"DeepSeek API schlüssel"',
+    'deepseek_api_key'                  => 'DeepSeek API schlüssel',
     'deepseek_description'              => 'DeepSeek konzentriert sich auf chinesische sprachmodelle und bietet gute dialogfähigkeiten.',
     'doubao_api_key'                    => 'Sieh dir diesen trottel an',
     'doubao_description'                => 'Bohnen sind bahnbrechende bit-produkte, die mit zitternden fragen und kreativen kapazitäten ausgestattet sind.',

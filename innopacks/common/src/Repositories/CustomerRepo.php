@@ -436,15 +436,16 @@ class CustomerRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
+        $keyword = trim((string) $keyword);
         $builder = Customer::query();
-        if ($keyword) {
+        if ($keyword !== '') {
             $builder->where(function ($query) use ($keyword) {
                 $query->where('email', 'like', "%$keyword%")
                     ->orWhere('name', 'like', "%$keyword%");
             });
         }
 
-        return $builder->limit($limit)->get();
+        return $builder->orderByDesc('id')->limit($limit)->get();
     }
 
     /**

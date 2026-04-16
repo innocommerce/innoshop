@@ -128,7 +128,7 @@ class OptionValueControllerTest extends TestCase
         $method     = $this->reflection->getMethod('destroy');
         $returnType = $method->getReturnType();
         $this->assertNotNull($returnType);
-        $this->assertEquals('Illuminate\Http\RedirectResponse', $returnType->getName());
+        $this->assertEquals('mixed', $returnType->getName());
     }
 
     #[Test]

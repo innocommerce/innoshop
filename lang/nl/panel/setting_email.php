@@ -9,7 +9,7 @@
 
 return [
     'email_enable'             => 'Enable the email service',
-    'email_engine'             => '"Email engine',
+    'email_engine'             => 'Email engine',
     'email_notifications'      => 'Email notification',
     'email_notifications_desc' => 'Configure under what circumstances the system needs to send email notifications',
     'email_setting'            => 'Email Settings',

@@ -12,6 +12,7 @@
   <meta name="description" content="@yield('description', 'InnoShop')">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="api-token" content="{{ session('panel_api_token') }}">
+  <meta name="storage-base-url" content="{{ storage_url('') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
 
   <!-- 基础样式和脚本 -->
@@ -24,8 +25,10 @@
   <script>
     let urls = {
       base_url: '{{ panel_route('home.index') }}',
+      panel_base: '{{ panel_route('home.index') }}',
       upload_images: '{{ panel_route('upload.images') }}',
       ai_generate: '{{ panel_route('content_ai.generate') }}',
+      file_manager_title: '{{ __("panel/menu.file_manager") }}',
     }
 
     const lang = {

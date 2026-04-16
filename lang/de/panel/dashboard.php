@@ -24,5 +24,6 @@ return [
     'top_products'      => 'Top-Verkäufer',
     'traffic_trends'    => 'Tendenz zum fluss.',
     'unique_visitors'   => 'Unabhängiges fernsehen (tv)',
+    'order_trends'      => 'Bestelltrends',
     'vs_yesterday'      => 'Gestern kam es zum streit.',
 ];

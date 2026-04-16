@@ -61,6 +61,8 @@ return [
     'increase_quantity'           => 'Increase Product Quantity',
     'input_price'                 => 'Please enter price',
     'input_quantity'              => 'Please enter quantity',
+    'image'                       => 'Product Image',
+    'image_required'              => 'Please upload at least one product image',
     'is_image_variant'            => 'Image Variant',
     'is_virtual'                  => 'Is Virtual',
     'items'                       => 'items',

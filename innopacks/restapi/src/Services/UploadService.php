@@ -9,48 +9,35 @@
 
 namespace InnoShop\RestAPI\Services;
 
+use Illuminate\Support\Facades\Storage;
 use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Common\Requests\UploadImageRequest;
 use InnoShop\Common\Services\FileSecurityValidator;
+use InnoShop\Common\Services\StorageService;
 use InnoShop\Front\Services\BaseService;
 
 class UploadService extends BaseService
 {
     /**
-     * Generic upload method for different file types and storage disks
+     * Generic upload method for different file types and storage disks.
+     * Always returns storage key as value; URLs generated via storage_url().
      *
      * @param  mixed  $file  The uploaded file
      * @param  string  $type  File type/directory
-     * @param  string  $disk  Storage disk name
-     * @param  string  $pathPrefix  Path prefix for the final URL
      * @return array
      */
-    public function uploadFile($file, string $type = 'common', string $disk = 'upload', string $pathPrefix = 'static/uploads'): array
+    public function uploadFile($file, string $type = 'common'): array
     {
-        // Unified security validation - this is the single point of validation
         FileSecurityValidator::validateFile($file->getClientOriginalName());
 
-        $filePath  = $file->store("/{$type}", $disk);
-        $realPath  = "{$pathPrefix}/$filePath";
-        $originUrl = asset($realPath);
+        $filePath   = $file->store("/{$type}", 'media');
+        $storageKey = StorageService::storageKey($filePath);
 
         return [
-            'url'        => $originUrl, // Use original image as thumbnail is not generated yet
-            'origin_url' => $originUrl, // Original image URL
-            'value'      => $realPath,
+            'url'        => storage_url($storageKey),
+            'origin_url' => storage_url($storageKey),
+            'value'      => $storageKey,
         ];
-    }
-
-    /**
-     * Upload for Panel (using catalog disk)
-     *
-     * @param  mixed  $file  The uploaded file
-     * @param  string  $type  File type/directory
-     * @return array
-     */
-    public function uploadForPanel($file, string $type = 'common'): array
-    {
-        return $this->uploadFile($file, $type, 'catalog', 'catalog');
     }
 
     /**

@@ -12,6 +12,7 @@ namespace InnoShop\Panel\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use InnoShop\Common\Agents\ContentAgent;
 use InnoShop\Common\Services\AI\AIServiceManager;
 
 class ContentAIController extends BaseController
@@ -48,12 +49,13 @@ class ContentAIController extends BaseController
                 throw new Exception('Empty prompt');
             }
 
-            $manager = AIServiceManager::getInstance();
-            $result  = $manager->generate($prompt, $purpose, $options);
+            $agent    = new ContentAgent($options['column'] ?? '', $options['lang'] ?? '');
+            $response = $agent->prompt($prompt);
+            $result   = $response->text;
 
             $data = [
                 'message' => $result,
-                'model'   => $manager->getModelForPurpose($purpose),
+                'model'   => system_setting('ai_model', 'openai'),
             ];
 
             Log::info('AI Generate Success: '.json_encode($data));

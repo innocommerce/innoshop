@@ -77,8 +77,16 @@ class PageController extends Controller
 
         $page->increment('viewed');
 
+        $slug = $page->slug;
+
+        // Theme has a slug-specific blade → use it directly (code-defined, no template/content)
+        if (view()->exists("pages.$slug")) {
+            return inno_view("pages.$slug", ['page' => $page]);
+        }
+
+        // Fallback: backend template field (Blade code) or content (rich text)
         $data = [
-            'slug' => $page->slug,
+            'slug' => $slug,
             'page' => $page,
         ];
         $template = $page->translation->template ?? '';

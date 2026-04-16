@@ -4,6 +4,27 @@
 import { getPanelConfig } from './panel-config';
 import fileManager from './panel-file-manager';
 
+function isVideoFile(file) {
+  const url = (file.origin_url || file.url || '').toLowerCase();
+  const videoExts = ['.mp4', '.webm', '.ogg', '.mov'];
+  return videoExts.some((ext) => url.endsWith(ext));
+}
+
+function insertMediaFile(ed, file) {
+  const mediaUrl = file.origin_url || file.url;
+  if (!mediaUrl) return;
+
+  if (isVideoFile(file)) {
+    ed.insertContent(
+      `<video controls class="img-fluid" style="max-width:100%;" src="${mediaUrl}">` +
+        `<source src="${mediaUrl}" type="video/mp4" />` +
+        `</video>`,
+    );
+  } else {
+    ed.insertContent(`<img src="${mediaUrl}" class="img-fluid" alt="${file.name || ''}" />`);
+  }
+}
+
 function setupEditor(ed) {
   ed.ui.registry.addButton('toolbarImageButton', {
     icon: 'image',
@@ -12,16 +33,10 @@ function setupEditor(ed) {
         (files) => {
           if (Array.isArray(files)) {
             files.forEach((file) => {
-              const imageUrl = file.origin_url || file.url;
-              if (imageUrl) {
-                ed.insertContent(`<img src="${imageUrl}" class="img-fluid" alt="${file.name || ''}" />`);
-              }
+              insertMediaFile(ed, file);
             });
           } else {
-            const imageUrl = files.origin_url || files.url;
-            if (imageUrl) {
-              ed.insertContent(`<img src="${imageUrl}" class="img-fluid" alt="${files.name || ''}" />`);
-            }
+            insertMediaFile(ed, files);
           }
         },
         { type: 'image', multiple: true },

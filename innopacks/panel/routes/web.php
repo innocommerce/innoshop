@@ -20,6 +20,8 @@ Route::middleware(['admin_auth:admin'])
 
         Route::get('/', [Controllers\DashboardController::class, 'index'])->name('dashboard.index');
 
+        Route::get('/search/menus', [Controllers\SearchController::class, 'menus'])->name('search.menus');
+
         Route::get('/locale/{code}', [Controllers\LocaleController::class, 'switch'])->name('locale.switch');
 
         Route::post('/upload/images', [Controllers\UploadController::class, 'images'])->name('upload.images');

@@ -41,12 +41,17 @@ class ConversionDaily extends BaseModel
      */
     protected $fillable = [
         'date',
+        'home_views',
+        'category_views',
         'product_views',
         'add_to_carts',
         'checkout_starts',
         'order_placed',
         'payment_completed',
         'registers',
+        'searches',
+        'cart_views',
+        'order_cancelled',
         'cart_to_checkout_rate',
         'checkout_to_order_rate',
         'order_to_payment_rate',

@@ -24,5 +24,6 @@ return [
     'top_products'      => 'sản phẩm bán chạy',
     'traffic_trends'    => 'Xu hướng giao thông',
     'unique_visitors'   => 'Khách truy cập độc lập (UV)',
+    'order_trends'      => 'Xu hướng đơn hàng',
     'vs_yesterday'      => 'Ngày hôm qua',
 ];

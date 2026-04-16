@@ -19,6 +19,7 @@ return [
     'today_orders'      => '今日订单',
     'new_customers'     => '新增客户',
     'today_visits'      => '今日访问',
+    'order_trends'      => '订单趋势',
     'vs_yesterday'      => '较昨日',
     'revenue_orders'    => '营收与订单',
     'order_status_dist' => '订单状态分布',
@@ -30,4 +31,7 @@ return [
     'orders_unit'       => '单',
     'customers_unit'    => '人',
     'visits'            => '访问量',
+    'welcome'           => '欢迎回来',
+    'weekdays'          => ['日', '一', '二', '三', '四', '五', '六'],
+    'date_format'       => 'Y年n月j日',
 ];

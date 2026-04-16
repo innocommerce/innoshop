@@ -16,12 +16,24 @@
         <div class="swiper" id="module-swiper-1">
           <div class="module-swiper swiper-wrapper">
             @foreach ($slideshow as $slide)
-              @if ($slide['image'][front_locale_code()] ?? false)
-                <div class="swiper-slide">
-                  <a href="{{ $slide['link'] ?: 'javascript:void(0)' }}"><img
-                      src="{{ image_origin($slide['image'][front_locale_code()]) }}" class="img-fluid"></a>
-                </div>
-              @endif
+              <div class="swiper-slide">
+                <a href="{{ $slide['link'] ?: 'javascript:void(0)' }}"
+                   class="home-slideshow-link">
+                  <img src="{{ image_origin($slide['image'][$slide['locale']]) }}"
+                       class="img-fluid"
+                       alt="{{ $slide['image_alt'] }}">
+                  @if (! empty($slide['has_slideshow_caption']))
+                    <div class="home-slideshow-caption">
+                      @if ($slide['display_title'] !== '')
+                        <h2 class="home-slideshow-title">{{ $slide['display_title'] }}</h2>
+                      @endif
+                      @if ($slide['display_subtitle'] !== '')
+                        <p class="home-slideshow-subtitle">{!! nl2br(e($slide['display_subtitle'])) !!}</p>
+                      @endif
+                    </div>
+                  @endif
+                </a>
+              </div>
             @endforeach
           </div>
           <div class="swiper-pagination"></div>

@@ -76,9 +76,16 @@
 <div class="row mb-3">
   <div class="col-12 col-lg-8 mb-3">
     <div class="card h-100">
-      <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span>{{ __('panel/dashboard.traffic_trends') }}</span>
-        <small class="text-muted">{{ __('panel/dashboard.last_30_days') }}</small>
+        <div class="d-flex align-items-center gap-2">
+          <div class="btn-group btn-group-sm" id="trafficToggle">
+            <button type="button" class="btn btn-outline-secondary active" data-metric="page_views" style="font-size:12px;">PV</button>
+            <button type="button" class="btn btn-outline-secondary" data-metric="unique_visitors" style="font-size:12px;">UV</button>
+            <button type="button" class="btn btn-outline-secondary" data-metric="new_customers" style="font-size:12px;">{{ __('panel/dashboard.new_customers') }}</button>
+          </div>
+          <small class="text-muted">{{ __('panel/dashboard.last_30_days') }}</small>
+        </div>
       </div>
       <div class="card-body">
         <div style="height: 320px;">
@@ -327,7 +334,7 @@
       },
       plugins: {
         legend: {
-          position: 'top',
+          display: false
         }
       },
       scales: {
@@ -361,7 +368,7 @@
     const uniqueVisitorData = @json(collect($visits['latest_month'])->pluck('unique_visitors'));
     const newCustomerData = @json($customers['latest_month']['totals']);
 
-    new Chart(trafficCtx, {
+    const trafficChart = new Chart(trafficCtx, {
       type: 'line',
       data: {
         labels: visitLabels,
@@ -373,7 +380,8 @@
             backgroundColor: 'transparent',
             tension: 0.4,
             pointRadius: 2,
-            pointHoverRadius: 5
+            pointHoverRadius: 5,
+            hidden: false
           },
           {
             label: '{{ __('panel/dashboard.unique_visitors') }}',
@@ -382,7 +390,8 @@
             backgroundColor: 'transparent',
             tension: 0.4,
             pointRadius: 2,
-            pointHoverRadius: 5
+            pointHoverRadius: 5,
+            hidden: true
           },
           {
             label: '{{ __('panel/dashboard.new_customers') }}',
@@ -391,11 +400,27 @@
             backgroundColor: 'transparent',
             tension: 0.4,
             pointRadius: 2,
-            pointHoverRadius: 5
+            pointHoverRadius: 5,
+            hidden: true
           }
         ]
       },
       options: trafficOptions
+    });
+
+    // Toggle buttons
+    const metricIndex = { page_views: 0, unique_visitors: 1, new_customers: 2 };
+    document.querySelectorAll('#trafficToggle button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#trafficToggle button').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        const metric = btn.getAttribute('data-metric');
+        const idx = metricIndex[metric];
+        trafficChart.data.datasets.forEach(function(ds, i) {
+          ds.hidden = (i !== idx);
+        });
+        trafficChart.update();
+      });
     });
   }
 </script>

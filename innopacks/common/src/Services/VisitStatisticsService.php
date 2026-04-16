@@ -163,6 +163,13 @@ class VisitStatisticsService
         $paymentCompleted = $eventCounts->get(VisitEvent::TYPE_PAYMENT_COMPLETED, 0);
         $registers        = $eventCounts->get(VisitEvent::TYPE_REGISTER, 0);
 
+        // New event types
+        $homeViews      = $eventCounts->get(VisitEvent::TYPE_HOME_VIEW, 0);
+        $categoryViews  = $eventCounts->get(VisitEvent::TYPE_CATEGORY_VIEW, 0);
+        $searches       = $eventCounts->get(VisitEvent::TYPE_SEARCH, 0);
+        $cartViews      = $eventCounts->get(VisitEvent::TYPE_CART_VIEW, 0);
+        $orderCancelled = $eventCounts->get(VisitEvent::TYPE_ORDER_CANCELLED, 0);
+
         // Calculate conversion rates (x100 for precision)
         $cartToCheckoutRate = $addToCarts > 0
             ? (int) round(($checkoutStarts / $addToCarts) * 10000)
@@ -184,12 +191,17 @@ class VisitStatisticsService
         ConversionDaily::updateOrCreate(
             ['date' => $date->toDateString()],
             [
+                'home_views'              => $homeViews,
+                'category_views'          => $categoryViews,
                 'product_views'           => $productViews,
                 'add_to_carts'            => $addToCarts,
                 'checkout_starts'         => $checkoutStarts,
                 'order_placed'            => $orderPlaced,
                 'payment_completed'       => $paymentCompleted,
                 'registers'               => $registers,
+                'searches'                => $searches,
+                'cart_views'              => $cartViews,
+                'order_cancelled'         => $orderCancelled,
                 'cart_to_checkout_rate'   => $cartToCheckoutRate,
                 'checkout_to_order_rate'  => $checkoutToOrderRate,
                 'order_to_payment_rate'   => $orderToPaymentRate,

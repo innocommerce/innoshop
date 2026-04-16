@@ -176,8 +176,8 @@
     </div>
   </div>
 
-  <!-- Clear filters -->
-  <div class="d-grid">
+  <!-- Clear filters (wrapper keeps spacing from drawer bottom / column end; see filter-sidebar.scss) -->
+  <div class="d-grid filter-sidebar-clear-wrap">
     <button type="button" class="btn clear-filters-btn" onclick="clearAllFilters()">
       <i class="bi bi-x-circle me-2"></i>
       {{ __('front/product.clear_filters') }}

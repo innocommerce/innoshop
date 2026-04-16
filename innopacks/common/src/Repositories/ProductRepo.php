@@ -174,7 +174,7 @@ class ProductRepo extends BaseRepo
         $builder = $this->builder($filters);
         $this->applySorting($builder, $filters);
 
-        return $builder->paginate($filters['per_page'] ?? 15);
+        return $builder->paginate($filters['per_page'] ?? system_setting('product_per_page', 12));
     }
 
     /**
@@ -187,7 +187,7 @@ class ProductRepo extends BaseRepo
         $builder = $this->withActive()->builder($filters);
         $this->applySorting($builder, $filters);
 
-        return $builder->paginate($filters['per_page'] ?? 15);
+        return $builder->paginate($filters['per_page'] ?? system_setting('product_per_page', 12));
     }
 
     /**
@@ -898,14 +898,19 @@ class ProductRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
+        $keyword = trim((string) $keyword);
         $builder = Product::query()->with(['translation', 'masterSku']);
-        if ($keyword) {
-            $builder->whereHas('translation', function ($query) use ($keyword) {
-                $query->where('name', 'like', "%{$keyword}%");
+        if ($keyword !== '') {
+            $builder->where(function ($q) use ($keyword) {
+                $q->whereHas('translation', function ($query) use ($keyword) {
+                    $query->where('name', 'like', "%{$keyword}%");
+                })->orWhereHas('masterSku', function ($query) use ($keyword) {
+                    $query->where('code', 'like', "%{$keyword}%");
+                });
             });
         }
 
-        return $builder->limit($limit)->get();
+        return $builder->orderByDesc('id')->limit($limit)->get();
     }
 
     /**
@@ -935,32 +940,28 @@ class ProductRepo extends BaseRepo
      */
     public static function getCategoryOptions(): array
     {
-        // Get only active categories and build tree structure
-        $activeCategories = Category::where('active', true)
-            ->with(['translation', 'children.translation'])
+        // Load ALL active categories + translations in 3 queries, build tree in memory
+        $allCategories = Category::where('active', true)
+            ->with(['translation', 'translations'])
             ->orderBy('position')
             ->get();
 
-        // Build tree structure manually since we need to filter by active status
-        $tree      = collect();
-        $itemsById = $activeCategories->keyBy('id');
+        $itemsById = $allCategories->keyBy('id');
 
-        foreach ($activeCategories as $category) {
+        // Build tree: attach children to parents, collect roots
+        $tree = collect();
+        foreach ($allCategories as $category) {
             if ($category->parent_id && isset($itemsById[$category->parent_id])) {
                 $parent = $itemsById[$category->parent_id];
-                // Initialize children collection if not exists
-                if (! isset($parent->children)) {
-                    $parent->children = collect();
+                if (! isset($parent->inlineChildren)) {
+                    $parent->inlineChildren = collect();
                 }
-                // Only push if not already in children (avoid duplicates from eager loading)
-                if (! $parent->children->contains('id', $category->id)) {
-                    $parent->children->push($category);
-                }
+                $parent->inlineChildren->push($category);
             } else {
                 $tree->push($category);
             }
         }
 
-        return CategoryRepo::formatCategoriesForCascader($tree);
+        return CategoryRepo::formatCategoriesForCascaderInline($tree);
     }
 }

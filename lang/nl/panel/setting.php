@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'SEO-instellingen',
     'seo_settings_desc'             => 'Configureer de SEO-instellingen voor de website',
     'setting'                       => 'Systeeminstellingen',
-    'shop_address'                  => 'Winkeladres',
+    'shop_address'                  => 'Bedrijfsadres',
     'slideshow'                     => 'Startpagina diavoorstelling',
     'specials'                      => 'Vaste pagina\'s',
     'store_features'                => 'Winkelfuncties',

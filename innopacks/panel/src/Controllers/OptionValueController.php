@@ -10,7 +10,6 @@
 namespace InnoShop\Panel\Controllers;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\OptionValue;
 use InnoShop\Common\Repositories\OptionRepo;
@@ -138,19 +137,17 @@ class OptionValueController extends BaseController
      * Delete option value
      *
      * @param  OptionValue  $optionValue
-     * @return RedirectResponse
+     * @return mixed
      * @throws Exception
      */
-    public function destroy(OptionValue $optionValue): RedirectResponse
+    public function destroy(OptionValue $optionValue): mixed
     {
         try {
             OptionValueRepo::getInstance()->destroy($optionValue);
 
-            return redirect(panel_route('option_values.index'))
-                ->with('success', common_trans('base.deleted_success'));
+            return delete_json_success();
         } catch (Exception $e) {
-            return redirect(panel_route('option_values.index'))
-                ->withErrors(['error' => $e->getMessage()]);
+            return json_fail($e->getMessage());
         }
     }
 }

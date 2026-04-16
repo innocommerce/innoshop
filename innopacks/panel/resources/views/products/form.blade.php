@@ -186,7 +186,21 @@
     $(function() {
       ProductForm.init();
       ProductForm.setupBundleTabToggle();
-      
+
+      // Validate product images before submit
+      $(document).on('before-form-submit', function(e) {
+        if (e.formId !== 'product-form') return;
+        const hasImages = $(e.form).find('input[name="images[]"]').filter(function() {
+          return $(this).val().trim() !== '';
+        }).length > 0;
+        if (!hasImages) {
+          e.preventDefault();
+          layer.msg('{{ __("panel/product.image_required") }}', {icon: 2, shade: 0.3, shadeClose: true, time: 5000}, function() {
+            document.getElementById('basic-tab').click();
+          });
+        }
+      });
+
       // Element Plus is initialized in tab_pane_extra.blade.php
       // No need to initialize it here again
     });

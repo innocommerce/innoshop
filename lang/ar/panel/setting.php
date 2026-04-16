@@ -193,7 +193,7 @@ return [
     'seo_settings'                            => 'إعدادات EO',
     'seo_settings_desc'                       => 'تشكيل معلومات عن SEO على الموقع',
     'setting'                                 => 'إعدادات النظام',
-    'shop_address'                            => 'عنوان المتجر',
+    'shop_address'                            => 'عنوان الشركة',
     'slideshow'                               => 'شريط عرض الصور في الصفحة الرئيسية',
     'sms_aliyun_access_key_id'                => 'أكسيس كي',
     'sms_aliyun_access_key_secret'            => '. أنا لا أعرف ماذا أفعل',

@@ -9,8 +9,14 @@
 
 namespace InnoShop\Common\Models;
 
+use Exception;
+use InnoShop\Common\Traits\HasPackageFactory;
+use InnoShop\Common\Traits\Translatable;
+
 class Brand extends BaseModel
 {
+    use HasPackageFactory, Translatable;
+
     protected $table = 'brands';
 
     protected $fillable = [
@@ -25,7 +31,7 @@ class Brand extends BaseModel
      * Get slug url link.
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUrlAttribute(): string
     {

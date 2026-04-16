@@ -13,7 +13,7 @@ return [
     'image_resize_mode'                   => 'Image zooming mode',
     'image_resize_mode_contain'           => 'Containment pattern (Contain',
     'image_resize_mode_contain_desc'      => 'Maintain the aspect ratio and scale to fully fit within the target size. There may be some blank space',
-    'image_resize_mode_cover'             => '"Cover Mode',
+    'image_resize_mode_cover'             => 'Cover Mode',
     'image_resize_mode_cover_desc'        => 'Maintain the aspect ratio and scale to fully fill the target size, which may crop parts of the image',
     'image_resize_mode_height_cover'      => 'Height Cover',
     'image_resize_mode_height_cover_desc' => 'Stretch to the target height, maintain the aspect ratio, and cut or fill the width to fit',

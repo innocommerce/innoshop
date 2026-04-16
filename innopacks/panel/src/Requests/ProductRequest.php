@@ -31,6 +31,12 @@ class ProductRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        // Filter empty images
+        $images = $this->input('images', []);
+        if (is_array($images)) {
+            $this->merge(['images' => array_filter($images, fn ($img) => ! empty($img))]);
+        }
+
         // Convert skus JSON string to array if needed
         // Single SKU products use skus[0][price] format which Laravel handles automatically as array
         // Multiple SKU products use hidden field with JSON string that needs to be decoded
@@ -74,6 +80,9 @@ class ProductRequest extends FormRequest
             'type'       => 'required|in:normal,bundle,virtual,card',
             'weight'     => 'nullable|numeric|min:0',
 
+            'images'   => 'required|array|min:1',
+            'images.*' => 'required|string',
+
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.name"    => 'required',
             "translations.$defaultLocale.content" => 'max:20000',
@@ -107,6 +116,7 @@ class ProductRequest extends FormRequest
             'slug'   => panel_trans('common.slug'),
             'type'   => panel_trans('product.type'),
             'weight' => panel_trans('product.weight'),
+            'images' => trans('panel/product.image'),
 
             "translations.$defaultLocale.locale"  => trans('panel/product.locale'),
             "translations.$defaultLocale.name"    => trans('panel/product.name'),

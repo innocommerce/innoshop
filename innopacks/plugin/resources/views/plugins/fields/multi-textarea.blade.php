@@ -1,7 +1,7 @@
 <x-common-form-textarea
     :name="$field['name']"
     :title="$field['label']"
-    :required="(bool)$field['required']"
+    :required="(bool)($field['required'] ?? false)"
     :is-locales="true"
     :multiple="true"
     :value="old($field['name'], $field['value'] ?? '')">

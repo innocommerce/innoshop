@@ -42,7 +42,12 @@ export const panelUI = {
     // Handle main navigation tabs (update URL) - only for data-bs-target
     $("a[data-bs-target], button[data-bs-target]").on("click", function () {
       const $this = $(this);
-      
+
+      // Skip modal triggers (handled by Bootstrap)
+      if ($this.attr("data-bs-toggle") === "modal") {
+        return;
+      }
+
       // Skip if has data-target but no data-bs-target (handled above)
       if ($this.attr("data-target") && !$this.attr("data-bs-target")) {
         return;

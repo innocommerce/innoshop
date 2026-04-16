@@ -27,9 +27,9 @@ class AttributeValueController extends BaseController
 
             $attributeID = $data['attribute_id'] ?? 0;
 
-            ValueRepo::getInstance()->createAttribute($attributeID, $values);
+            $item = ValueRepo::getInstance()->createAttribute($attributeID, $values);
 
-            return create_json_success();
+            return create_json_success($item);
         } catch (\Exception $e) {
             return json_fail($e->getMessage());
         }

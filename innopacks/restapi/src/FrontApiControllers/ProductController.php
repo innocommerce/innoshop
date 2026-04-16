@@ -46,7 +46,7 @@ class ProductController extends BaseController
     public function index(Request $request): mixed
     {
         $filters = $request->all();
-        $perPage = $request->get('per_page', 15);
+        $perPage = $request->get('per_page', system_setting('product_per_page', 12));
 
         $sort  = $filters['sort'] ?? 'id';
         $order = $filters['order'] ?? 'desc';

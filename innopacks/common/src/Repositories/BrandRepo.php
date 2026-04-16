@@ -12,6 +12,7 @@ namespace InnoShop\Common\Repositories;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Brand;
 use Throwable;
 
@@ -159,6 +160,12 @@ class BrandRepo extends BaseRepo
             $brand->fill($brandData);
             $brand->saveOrFail();
 
+            $translations = $this->handleTranslations($data['translations'] ?? []);
+            if ($translations) {
+                $brand->translations()->delete();
+                $brand->translations()->createMany($translations);
+            }
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -172,14 +179,44 @@ class BrandRepo extends BaseRepo
      */
     private function handleBrandData($data): array
     {
+        // Sync name from translations (use panel locale name as main name)
+        $panelLocale = panel_locale_code();
+        $name        = $data['name'] ?? '';
+        if (empty($name)) {
+            $translations = $data['translations'] ?? [];
+            foreach ($translations as $translation) {
+                if (($translation['locale'] ?? '') === $panelLocale && ! empty($translation['name'])) {
+                    $name = $translation['name'];
+                    break;
+                }
+            }
+        }
+
         return [
-            'name'     => $data['name'],
-            'slug'     => $data['slug'],
-            'first'    => $data['first'],
+            'name'     => $name,
+            'slug'     => $data['slug'] ?? '',
+            'first'    => $data['first'] ?? '',
             'logo'     => $data['logo'] ?? '',
             'position' => $data['position'] ?? 0,
             'active'   => $data['active'] ?? true,
         ];
+    }
+
+    /**
+     * @param  $translations
+     * @return array
+     */
+    private function handleTranslations($translations): array
+    {
+        if (empty($translations)) {
+            return [];
+        }
+
+        $fieldMap = [
+            'name' => ['summary', 'content', 'meta_title', 'meta_description', 'meta_keywords'],
+        ];
+
+        return TranslationHandler::process($translations, $fieldMap);
     }
 
     /**
@@ -189,12 +226,13 @@ class BrandRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
+        $keyword = trim((string) $keyword);
         $builder = Brand::query();
-        if ($keyword) {
+        if ($keyword !== '') {
             $builder->where('name', 'like', "%{$keyword}%");
         }
 
-        return $builder->limit($limit)->get();
+        return $builder->orderBy('name')->limit($limit)->get();
     }
 
     /**

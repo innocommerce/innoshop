@@ -29,11 +29,11 @@ class CategoryController extends BaseController
      */
     #[Endpoint('List categories')]
     #[Unauthenticated]
-    #[QueryParam('per_page', 'integer', required: false, example: 15)]
+    #[QueryParam('per_page', 'integer', required: false, example: 12)]
     public function index(Request $request): AnonymousResourceCollection
     {
         $filters = $request->all();
-        $perPage = $request->get('per_page', 15);
+        $perPage = $request->get('per_page', system_setting('product_per_page', 12));
 
         $categories = CategoryRepo::getInstance()->withActive()->builder($filters)->paginate($perPage);
 

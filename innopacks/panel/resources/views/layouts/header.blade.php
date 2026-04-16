@@ -1,10 +1,19 @@
 <div class="header-box d-flex justify-content-between align-items-center">
   <div class="mb-menu d-lg-none"><i class="bi bi-list"></i></div>
-  <div class="header-logo">
+  <div class="header-logo-wrap d-none d-lg-flex align-items-center">
+    <div class="header-logo">
+      <a href="{{ panel_route('home.index') }}" class="sidebar-logo">
+        <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="sidebar-logo-normal img-fluid">
+        <img src="{{ image_origin(system_setting('panel_icon_logo', system_setting('panel_logo', 'images/logo-panel.png'))) }}" class="sidebar-logo-icon img-fluid">
+      </a>
+    </div>
+  </div>
+  <div class="header-logo d-lg-none">
     <a href="{{ panel_route('home.index') }}" class="sidebar-logo">
       <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="img-fluid">
     </a>
   </div>
+  <div id="panel-menu-search" class="header-search d-none d-lg-flex align-items-center" data-search-url="{{ panel_route('search.menus') }}" data-placeholder="{{ __('panel/common.search_menu') }}"></div>
   <div class="d-flex justify-content-end right-tool">
     <!-- Market -->
     <div class="header-item dropdown d-none d-lg-flex align-items-center">

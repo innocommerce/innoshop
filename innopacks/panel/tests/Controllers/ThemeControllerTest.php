@@ -112,4 +112,14 @@ class ThemeControllerTest extends TestCase
         $this->assertNotNull($returnType);
         $this->assertEquals('Illuminate\Http\JsonResponse', $returnType->getName());
     }
+
+    #[Test]
+    public function test_import_demo_accepts_request_and_theme_code(): void
+    {
+        $method     = $this->reflection->getMethod('importDemo');
+        $parameters = $method->getParameters();
+        $this->assertCount(2, $parameters);
+        $this->assertEquals('request', $parameters[0]->getName());
+        $this->assertEquals('code', $parameters[1]->getName());
+    }
 }

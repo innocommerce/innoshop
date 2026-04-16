@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Repositories\Attribute\GroupRepo;
+use InnoShop\Common\Repositories\Attribute\ValueRepo;
 use Throwable;
 
 class AttributeRepo extends BaseRepo
@@ -213,6 +214,14 @@ class AttributeRepo extends BaseRepo
             if ($translations) {
                 $attribute->translations()->delete();
                 $attribute->translations()->createMany($translations);
+            }
+
+            // Create attribute values (for new attributes with initial values)
+            $valuesData = $data['values'] ?? [];
+            if (! empty($valuesData) && $attribute->id) {
+                foreach ($valuesData as $valueItem) {
+                    ValueRepo::getInstance()->createAttribute($attribute->id, $valueItem);
+                }
             }
 
             DB::commit();

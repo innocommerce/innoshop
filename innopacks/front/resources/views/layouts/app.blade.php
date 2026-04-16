@@ -46,6 +46,7 @@
     const asset_url = '{{ asset('') }}';
   </script>
   @stack('header')
+  @include('common::components.echo')
   @hookinsert('front.layout.app.head.bottom')
 </head>
 
@@ -55,6 +56,7 @@
   @endif
 
   <div class="m-0 p-0" id="appContent">
+      @include('components.flash')
       @yield('content')
   </div>
 

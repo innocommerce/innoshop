@@ -272,6 +272,17 @@ class StateMachineService
                 );
             }
 
+            // Track order cancelled event
+            if ($status === self::CANCELLED) {
+                $eventService = new EventTrackingService;
+                $eventService->trackOrderCancelled(
+                    $order->id,
+                    $order->number,
+                    $comment ?? '',
+                    request()
+                );
+            }
+
             $data = ['order' => $order, 'status' => $status, 'comment' => $comment, 'notify' => $notify];
             fire_hook_action('service.state_machine.change_status.after', $data);
 

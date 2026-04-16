@@ -47,14 +47,13 @@
 <div class="main-product-img d-none d-lg-block position-relative w-100 overflow-hidden bg-light" style="aspect-ratio: 1/1;">
   @hookinsert('front.product.show.image.before')
   <img src="{{ $product->image_url }}" class="img-fluid main-image w-100 h-100" style="object-fit: cover;">
-  
+
   @if($product->video)
     <div class="video-play-overlay open-video position-absolute top-50 start-50 translate-middle text-white d-none" style="font-size: 3rem; cursor: pointer; z-index: 999;">
       <i class="bi bi-play-circle-fill"></i>
     </div>
+    @include('products.components._video', ['videoId' => 'product-video-desktop'])
   @endif
-  
-  @include('products.components._video')
 </div>
 
 <!-- Mobile slideshow -->
@@ -72,7 +71,7 @@
             </div>
           </div>
         @endif
-        
+
         @if(is_array($product->images))
           @foreach($product->images as $image)
             <div class="swiper-slide">
@@ -85,8 +84,9 @@
       </div>
       <div class="swiper-pagination mobile-product-pagination"></div>
     </div>
-    
-    @include('products.components._video')
+    @if($product->video)
+      @include('products.components._video', ['videoId' => 'product-video-mobile'])
+    @endif
   </div>
 @endif
 
@@ -111,9 +111,10 @@
      * Handle video player state - pause and hide video
      */
     function pauseAndHideVideo() {
-      if (window.pVideo) {
-        window.pVideo.pause();
-        $('#product-video').fadeOut();
+      if (window.pVideoPlayers) {
+        for (var id in window.pVideoPlayers) {
+          window.pVideoPlayers[id].pause();
+        }
       }
       $('.video-wrap').addClass('d-none');
       $('.close-video').addClass('d-none');

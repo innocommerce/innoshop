@@ -128,7 +128,7 @@ class AttributeGroupControllerTest extends TestCase
         $method     = $this->reflection->getMethod('show');
         $returnType = $method->getReturnType();
         $this->assertNotNull($returnType);
-        $this->assertEquals('InnoShop\Common\Models\Attribute\Group', $returnType->getName());
+        $this->assertEquals('mixed', $returnType->getName());
     }
 
     #[Test]

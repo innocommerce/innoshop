@@ -3,6 +3,10 @@
 
 @section('title', $type ? __('panel/plugin.'.$type) : __('panel/plugin.all'))
 
+@section('page-title-right')
+  <a href="{{ panel_route('plugin-market.index') }}" class="btn btn-primary">{{ __('panel/common.get_more') }}</a>
+@endsection
+
 @section('content')
   <div class="card h-min-600">
     <div class="card-body">

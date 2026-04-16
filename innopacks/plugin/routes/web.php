@@ -11,12 +11,9 @@ use Illuminate\Support\Facades\Route;
 use InnoShop\Plugin\Controllers\MarketplaceController;
 use InnoShop\Plugin\Controllers\PluginController;
 use InnoShop\Plugin\Controllers\PluginMarketController;
-use InnoShop\Plugin\Controllers\SettingController;
 use InnoShop\Plugin\Controllers\ThemeMarketController;
 
 Route::post('/plugins/enabled', [PluginController::class, 'updateStatus'])->name('plugins.update_status');
-Route::get('/plugins/settings', [SettingController::class, 'index'])->name('plugins.settings');
-Route::put('/plugins/settings', [SettingController::class, 'update'])->name('plugins.settings.update');
 Route::resource('/plugins', PluginController::class);
 
 Route::get('/plugin-market', [PluginMarketController::class, 'index'])->name('plugin-market.index');

@@ -24,5 +24,6 @@ return [
     'top_products'      => 'Produk Terlaris',
     'traffic_trends'    => 'Tren lalu lintas',
     'unique_visitors'   => 'Sinar ultraviolet, tamu yang berjiwa bebas.',
+    'order_trends'      => 'Tren Pesanan',
     'vs_yesterday'      => 'Dari kemarin',
 ];

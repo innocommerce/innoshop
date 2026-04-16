@@ -24,5 +24,6 @@ return [
     'top_products'      => 'លក់ដាច់បំផុត',
     'traffic_trends'    => 'និន្នាការចរាចរណ៍',
     'unique_visitors'   => 'ភ្ញៀវឯករាជ្យ (UV)',
+    'order_trends'      => 'និន្នាការបញ្ជាទិញ',
     'vs_yesterday'      => 'បើប្រៀបធៀបទៅនឹងកាលពីម្សិលមិញ',
 ];

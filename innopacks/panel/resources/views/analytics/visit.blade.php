@@ -89,57 +89,77 @@
         <h6 class="mb-0">{{ __('panel/visit.conversion_funnel') }}</h6>
       </div>
       <div class="card-body">
-        <div class="row text-center align-items-center">
-          <div class="col">
-            <div class="p-3">
-              <div class="fs-4 fw-bold text-primary">{{ number_format($conversion_funnel['product_views'] ?? 0) }}</div>
-              <div class="small text-muted">{{ __('panel/visit.product_views') }}</div>
-            </div>
+        <div class="d-flex flex-wrap justify-content-center align-items-center text-center">
+          {{-- Home Views --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold text-secondary">{{ number_format($conversion_funnel['home_views'] ?? 0) }}</div>
+            <div class="small text-muted">{{ trans('panel/visit.event_home_view') }}</div>
           </div>
-          <div class="col-auto text-muted">
-            <i class="bi bi-arrow-right"></i>
+          <div class="text-muted px-1"><i class="bi bi-arrow-right"></i></div>
+
+          {{-- Category Views --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold text-info">{{ number_format($conversion_funnel['category_views'] ?? 0) }}</div>
+            <div class="small text-muted">{{ trans('panel/visit.event_category_view') }}</div>
+            <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['home_to_category'] ?? 0, 1) }}%</div>
           </div>
-          <div class="col">
-            <div class="p-3">
-              <div class="fs-4 fw-bold text-info">{{ number_format($conversion_funnel['add_to_carts'] ?? 0) }}</div>
-              <div class="small text-muted">{{ __('panel/visit.add_to_carts') }}</div>
-              <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['product_to_cart'] ?? 0, 1) }}%</div>
-            </div>
+          <div class="text-muted px-1"><i class="bi bi-arrow-right"></i></div>
+
+          {{-- Product Views --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold text-primary">{{ number_format($conversion_funnel['product_views'] ?? 0) }}</div>
+            <div class="small text-muted">{{ __('panel/visit.product_views') }}</div>
+            <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['category_to_product'] ?? 0, 1) }}%</div>
           </div>
-          <div class="col-auto text-muted">
-            <i class="bi bi-arrow-right"></i>
+          <div class="text-muted px-1"><i class="bi bi-arrow-right"></i></div>
+
+          {{-- Add to Carts --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold" style="color: #6f42c1;">{{ number_format($conversion_funnel['add_to_carts'] ?? 0) }}</div>
+            <div class="small text-muted">{{ __('panel/visit.add_to_carts') }}</div>
+            <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['product_to_cart'] ?? 0, 1) }}%</div>
           </div>
-          <div class="col">
-            <div class="p-3">
-              <div class="fs-4 fw-bold text-warning">{{ number_format($conversion_funnel['checkout_starts'] ?? 0) }}</div>
-              <div class="small text-muted">{{ __('panel/visit.checkout_starts') }}</div>
-              <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['cart_to_checkout'] ?? 0, 1) }}%</div>
-            </div>
+          <div class="text-muted px-1"><i class="bi bi-arrow-right"></i></div>
+
+          {{-- Cart Views --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold" style="color: #fd7e14;">{{ number_format($conversion_funnel['cart_views'] ?? 0) }}</div>
+            <div class="small text-muted">{{ trans('panel/visit.event_cart_view') }}</div>
           </div>
-          <div class="col-auto text-muted">
-            <i class="bi bi-arrow-right"></i>
+          <div class="text-muted px-1"><i class="bi bi-arrow-right"></i></div>
+
+          {{-- Checkout Starts --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold text-warning">{{ number_format($conversion_funnel['checkout_starts'] ?? 0) }}</div>
+            <div class="small text-muted">{{ __('panel/visit.checkout_starts') }}</div>
+            <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['cart_to_checkout'] ?? 0, 1) }}%</div>
           </div>
-          <div class="col">
-            <div class="p-3">
-              <div class="fs-4 fw-bold">{{ number_format($conversion_funnel['order_placed'] ?? 0) }}</div>
-              <div class="small text-muted">{{ __('panel/visit.order_placed') }}</div>
-              <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['checkout_to_order'] ?? 0, 1) }}%</div>
-            </div>
+          <div class="text-muted px-1"><i class="bi bi-arrow-right"></i></div>
+
+          {{-- Order Placed --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold">{{ number_format($conversion_funnel['order_placed'] ?? 0) }}</div>
+            <div class="small text-muted">{{ __('panel/visit.order_placed') }}</div>
+            <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['checkout_to_order'] ?? 0, 1) }}%</div>
           </div>
-          <div class="col-auto text-muted">
-            <i class="bi bi-arrow-right"></i>
-          </div>
-          <div class="col">
-            <div class="p-3">
-              <div class="fs-4 fw-bold text-success">{{ number_format($conversion_funnel['payment_completed'] ?? 0) }}</div>
-              <div class="small text-muted">{{ __('panel/visit.payment_completed') }}</div>
-              <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['order_to_payment'] ?? 0, 1) }}%</div>
-            </div>
+          <div class="text-muted px-1"><i class="bi bi-arrow-right"></i></div>
+
+          {{-- Payment Completed --}}
+          <div class="px-2 py-3" style="min-width: 100px;">
+            <div class="fs-5 fw-bold text-success">{{ number_format($conversion_funnel['payment_completed'] ?? 0) }}</div>
+            <div class="small text-muted">{{ __('panel/visit.payment_completed') }}</div>
+            <div class="small text-primary">{{ number_format($conversion_funnel['conversion_rates']['order_to_payment'] ?? 0, 1) }}%</div>
           </div>
         </div>
         <div class="text-center mt-3 pt-3 border-top">
           <span class="text-muted">{{ __('panel/visit.overall_conversion') }}: </span>
           <span class="fs-5 fw-bold text-success">{{ number_format($conversion_funnel['conversion_rates']['overall_conversion'] ?? 0, 1) }}%</span>
+          @if(($conversion_funnel['order_cancelled'] ?? 0) > 0)
+            <span class="ms-3 text-muted">|</span>
+            <span class="ms-3 text-muted">{{ trans('panel/visit.event_order_cancelled') }}: </span>
+            <span class="fw-bold text-danger">{{ number_format($conversion_funnel['order_cancelled'] ?? 0) }}</span>
+            <span class="small text-muted">({{ number_format($conversion_funnel['conversion_rates']['order_cancel_rate'] ?? 0, 1) }}%)</span>
+          @endif
         </div>
       </div>
     </div>
@@ -158,8 +178,8 @@
           @php
             $dailyData = is_array($daily_statistics) ? $daily_statistics : $daily_statistics->toArray();
             $dailyLabels = array_column($dailyData, 'date');
-            $dailyPv = array_column($dailyData, 'pv');
-            $dailyUv = array_column($dailyData, 'uv');
+            $dailyPv = array_column($dailyData, 'page_views');
+            $dailyUv = array_column($dailyData, 'unique_visitors');
           @endphp
           <div style="height: 300px;">
             <canvas id="dailyChart"></canvas>

@@ -2,7 +2,7 @@
   @if (!$multiple)
     <input type="{{ $type }}" name="{{ $name }}" class="form-control {{ $error ? 'is-invalid' : '' }}"
            value="{{ $value }}" placeholder="{{ $placeholder ?: $title }}" @if ($required) required
-           @endif @if($disabled) disabled @endif @if($readonly) readonly @endif 
+           @endif @if($disabled) disabled @endif @if($readonly) readonly @endif
            data-column="{{ $column ?? '' }}" data-lang="{{ $localeCode ?? '' }}" />
 
     @if ($description ?? '')
@@ -17,64 +17,51 @@
       @endif
     </span>
   @else
-    <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
-      @foreach (locales() as $locale)
-        <li class="nav-item" role="presentation">
-          <button class="nav-link d-flex {{ $loop->first ? 'active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-tab" data-bs-toggle="tab"
-                  data-bs-target="#{{ $name }}-{{ $locale['code'] }}-pane" type="button">
-            <div class="wh-20 me-2">
-              <img src="{{ asset('images/flag/'. $locale['code'].'.png') }}" class="img-fluid {{ default_locale_class($locale->code) }}">
-            </div>
-            {{ $locale['name'] }}
-          </button>
-        </li>
-      @endforeach
-    </ul>
+    @php
+      // Normalize value to [localeCode => value] format
+      $localeValues = [];
+      $useTranslationsFormat = false;
+      foreach (locales() as $loc) {
+        $code = $loc->code;
+        $val = null;
 
-    <div class="tab-content" id="">
-      @foreach (locales() as $locale)
-        <div class="tab-pane fade {{ $loop->first ? 'show active' : ''}}" id="{{ $name }}-{{ $locale['code'] }}-pane"
-             role="tabpanel" aria-labelledby="{{ $name }}-{{ $locale['code'] }}-tab">
-          @if(empty($value) || (is_array($value) && !isset($value[$locale['code']])))
-            <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]"
-                   class="form-control {{ $error ? 'is-invalid' : '' }}" value=""
-                   placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled
-                   @endif @if($readonly) readonly @endif />
-          @elseif(is_array($value) && (is_string($value[$locale['code']]) || $value[$locale['code']] == null))
-            <input type="{{ $type }}" name="{{ $name }}[{{ $locale['code'] }}]"
-                   class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $value[$locale['code']] ?? '' }}"
-                   placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled
-                   @endif @if($readonly) readonly @endif />
-          @elseif(is_array($value) && is_array($value[$locale['code']]))
-            <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
-            <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]"
-                   class="form-control {{ $error ? 'is-invalid' : '' }}"
-                   value="{{ $value[$locale['code']]['name'] ?? '' }}" placeholder="{{ $placeholder ?: $title }}"
-                   @if ($required) required @endif @if($disabled) disabled @endif @if($readonly) readonly @endif />
-          @elseif(is_object($value))
-            @php ($o_value = $value->where('locale', $locale['code'])->first())
-            <input type="hidden" name="translations[{{ $locale['code'] }}][locale]" value="{{ $locale['code'] }}">
-            <input type="{{ $type }}" name="translations[{{ $locale['code'] }}][{{ $name }}]"
-                   class="form-control {{ $error ? 'is-invalid' : '' }}" value="{{ $o_value->name ?? '' }}"
-                   placeholder="{{ $placeholder ?: $title }}" @if ($required) required @endif @if($disabled) disabled
-                   @endif @if($readonly) readonly @endif />
-          @endif
-          @if ($description)
-            <div class="mt-2 text-muted small">
-              <i class="bi bi-info-circle me-1"></i>{!! $description !!}
-            </div>
-          @endif
+        // Try old() first
+        $oldVal = old($name . '.' . $code);
+        if ($oldVal !== null) {
+          $val = $oldVal;
+        } elseif (is_object($value)) {
+          // Eloquent Collection
+          $item = $value->where('locale', $code)->first();
+          $val = $item->name ?? ($item->value ?? null);
+          $useTranslationsFormat = true;
+        } elseif (is_array($value)) {
+          if (isset($value[$code])) {
+            if (is_array($value[$code])) {
+              $val = $value[$code]['name'] ?? ($value[$code]['value'] ?? '');
+              $useTranslationsFormat = true;
+            } else {
+              $val = $value[$code];
+            }
+          } elseif (isset($value[0]) && is_string($value[0])) {
+            $val = $value[0];
+          }
+        } elseif (is_string($value) && $value !== '') {
+          $val = $value;
+        }
 
-          <span class="invalid-feedback" role="alert">
-          @if ($error)
-              {{ $error }}
-            @else
-              {{ __('front/common.error_required', ['name' => $title]) }}
-            @endif
-        </span>
-        </div>
-      @endforeach
-    </div>
+        $localeValues[$code] = (string) ($val ?? '');
+      }
+    @endphp
+
+    <x-common-form-locale-input
+      name="{{ $name }}"
+      :translations="$localeValues"
+      :required="$required"
+      :label="$title"
+      :placeholder="$placeholder ?: $title"
+      :name-format="$useTranslationsFormat ? 'translations' : 'direct'"
+      :description="$description"
+    />
   @endif
 
   {{ $slot }}

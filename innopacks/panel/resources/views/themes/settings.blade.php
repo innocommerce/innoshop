@@ -10,6 +10,17 @@
 @endpush
 
 @section('content')
+  @php
+    $slideshowLinkTypeOptions = [
+      ['value' => 'custom', 'label' => __('panel/setting.link_type_custom')],
+      ['value' => 'product', 'label' => __('panel/setting.link_type_product')],
+      ['value' => 'category', 'label' => __('panel/setting.link_type_category')],
+      ['value' => 'brand', 'label' => __('panel/setting.link_type_brand')],
+      ['value' => 'page', 'label' => __('panel/setting.link_type_page')],
+      ['value' => 'article', 'label' => __('panel/setting.link_type_article')],
+      ['value' => 'catalog', 'label' => __('panel/setting.link_type_catalog')],
+    ];
+  @endphp
   <form class="needs-validation" novalidate action="{{ panel_route('themes_settings.update') }}" method="POST"
         id="app-form">
     @csrf
@@ -187,6 +198,10 @@
                   </thead>
                   <tbody>
                   @foreach (old('slideshow', system_setting('slideshow', [])) as $slide_index => $slide)
+                    @php
+                      $slideLinkStored = old('slideshow.'.$slide_index.'.link', $slide['link'] ?? '');
+                      $slideLinkForm = panel_link_parse($slideLinkStored);
+                    @endphp
                     <tr>
                       <td>
                         <div class="accordion accordion-sm" id="accordion-slideshow-{{ $slide_index }}">
@@ -210,15 +225,29 @@
                                   <x-common-form-image title=""
                                                        name="slideshow[{{ $slide_index }}][image][{{ $locale->code }}]"
                                                        value="{{ $slide['image'][$locale->code] ?? '' }}"/>
+                                  <p class="text-muted small mb-2 mt-2">{{ __('panel/setting.slideshow_slide_text_hint') }}</p>
+                                  <div class="mb-2">
+                                    <label class="form-label small mb-0">{{ __('panel/setting.slideshow_slide_title') }}</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                           name="slideshow[{{ $slide_index }}][title][{{ $locale->code }}]"
+                                           value="{{ old('slideshow.'.$slide_index.'.title.'.$locale->code, $slide['title'][$locale->code] ?? '') }}">
+                                  </div>
+                                  <div class="mb-0">
+                                    <label class="form-label small mb-0">{{ __('panel/setting.slideshow_slide_subtitle') }}</label>
+                                    <textarea class="form-control form-control-sm" rows="2"
+                                              name="slideshow[{{ $slide_index }}][subtitle][{{ $locale->code }}]">{{ old('slideshow.'.$slide_index.'.subtitle.'.$locale->code, $slide['subtitle'][$locale->code] ?? '') }}</textarea>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           @endforeach
                         </div>
                       </td>
-                      <td>
-                        <input type="text" name="slideshow[{{ $slide_index }}][link]" value="{{ $slide['link'] }}"
-                               class="form-control">
+                      <td class="align-top" style="min-width: 280px;">
+                        <input type="hidden" name="slideshow[{{ $slide_index }}][link]"
+                               id="panel-link-input-{{ $slide_index }}"
+                               value='@json($slideLinkForm)'>
+                        <div id="panel-link-vue-{{ $slide_index }}" class="panel-inno-link-mount"></div>
                       </td>
                       <td class="text-end">
                         <button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">删除</button>
@@ -309,6 +338,14 @@
 
     <button type="submit" class="d-none"></button>
   </form>
+
+  @once
+    @if (empty(old('slideshow', system_setting('slideshow', []))))
+      <div class="d-none" aria-hidden="true">
+        <x-common-form-image title="" name="_slideshow_filemanager_asset_placeholder" value="" />
+      </div>
+    @endif
+  @endonce
 @endsection
 
 @push('footer')
@@ -316,6 +353,157 @@
     const countryCode = @json(old('country_code', system_setting('country_code')));
     const stateCode = @json(old('state_code', system_setting('state_code')));
     const locales = @json(locales());
+
+    const panelLinkEmpty = { type: 'page', value: '', entity_label: '', link: '', entity_image: '', entity_price: '' };
+    const hfLinkTypeOptions = @json($slideshowLinkTypeOptions);
+    const linkTypeSelectPlaceholder = @json(__('panel/setting.link_type'));
+    const urlLabel = @json(__('panel/setting.slideshow_url_or_path'));
+    const linkPickerHint = @json(__('panel/setting.slideshow_link_picker_hint'));
+    const linkPickerPlaceholder = @json(__('panel/setting.slideshow_search_placeholder'));
+    const linkPickerTitleTemplate = @json(__('panel/setting.slideshow_link_picker_title'));
+    const linkChooseLabel = @json(__('panel/setting.slideshow_choose_target'));
+    const linkChangeLabel = @json(__('panel/setting.slideshow_change_target'));
+    const linkClearLabel = @json(__('panel/setting.slideshow_clear_target'));
+    const slideTextHint = @json(__('panel/setting.slideshow_slide_text_hint'));
+    const slideTitleLabel = @json(__('panel/setting.slideshow_slide_title'));
+    const slideSubtitleLabel = @json(__('panel/setting.slideshow_slide_subtitle'));
+
+    function pickerValueFromLink(link) {
+      if (!link) return null;
+      if (link.type === 'custom') {
+        return { type: 'custom', id: null, name: null, url: (link.link || '').trim() };
+      }
+      const v = link.value;
+      if (v === undefined || v === null || v === '') {
+        return {
+          type: link.type || 'page',
+          id: null,
+          name: null,
+          url: '',
+          image: link.entity_image || '',
+          price_label: link.entity_price || '',
+        };
+      }
+      return {
+        type: link.type,
+        id: v,
+        name: link.entity_label || '',
+        url: '',
+        image: link.entity_image || '',
+        price_label: link.entity_price || '',
+      };
+    }
+
+    function applyPickerToLink(link, val) {
+      if (!link) return;
+      if (!val) {
+        link.type = 'page';
+        link.value = '';
+        link.entity_label = '';
+        link.link = '';
+        link.entity_image = '';
+        link.entity_price = '';
+        return;
+      }
+      if (val.type === 'custom') {
+        link.type = 'custom';
+        link.link = val.url || '';
+        link.value = '';
+        link.entity_label = '';
+        link.entity_image = '';
+        link.entity_price = '';
+        return;
+      }
+      link.type = val.type;
+      link.link = '';
+      const id = val.id;
+      const hasId = id !== undefined && id !== null && id !== '';
+      if (!hasId) {
+        link.value = '';
+        link.entity_label = '';
+        link.entity_image = '';
+        link.entity_price = '';
+        return;
+      }
+      link.value = String(id);
+      link.entity_label = val.name || '';
+      link.entity_image = val.image || '';
+      link.entity_price = val.price_label || '';
+    }
+
+    function mountPanelLinkPicker(index) {
+      const mountEl = document.getElementById('panel-link-vue-' + index);
+      const inputEl = document.getElementById('panel-link-input-' + index);
+      if (!mountEl || !inputEl || mountEl.dataset.vueMounted) {
+        return;
+      }
+      mountEl.dataset.vueMounted = '1';
+      let initial = {};
+      try {
+        initial = JSON.parse(inputEl.value || '{}');
+      } catch (e) {
+        initial = {};
+      }
+      const link = Vue.reactive(Object.assign({}, panelLinkEmpty, initial));
+      function syncInput() {
+        inputEl.value = JSON.stringify({
+          type: link.type,
+          value: link.value,
+          entity_label: link.entity_label,
+          link: link.link,
+          entity_image: link.entity_image,
+          entity_price: link.entity_price,
+        });
+      }
+      Vue.watch(link, syncInput, { deep: true });
+      const app = Vue.createApp({
+        setup() {
+          const pickerModel = Vue.computed(function () {
+            return pickerValueFromLink(link);
+          });
+          return {
+            link,
+            pickerModel,
+            applyPickerToLink,
+            hfLinkTypeOptions,
+            linkTypeSelectPlaceholder,
+            urlLabel,
+            linkPickerHint,
+            linkPickerPlaceholder,
+            linkPickerTitleTemplate,
+            linkChooseLabel,
+            linkChangeLabel,
+            linkClearLabel,
+          };
+        },
+        template:
+          '<inno-link-picker :model-value="pickerModel" @update:model-value="(v) => applyPickerToLink(link, v)" :link-type-options="hfLinkTypeOptions" :placeholder-type="linkTypeSelectPlaceholder" :placeholder-custom-url="urlLabel" :picker-hint="linkPickerHint" :picker-placeholder="linkPickerPlaceholder" :picker-title-template="linkPickerTitleTemplate" :choose-entity-label="linkChooseLabel" :change-entity-label="linkChangeLabel" :clear-entity-label="linkClearLabel" />',
+      });
+      app.use(ElementPlus);
+      if (window.InnoPanel && typeof window.InnoPanel.installVue === 'function') {
+        window.InnoPanel.installVue(app);
+      }
+      app.mount(mountEl);
+      syncInput();
+    }
+
+    function initPanelLinkPickers() {
+      const prefix = 'panel-link-vue-';
+      document.querySelectorAll('.panel-inno-link-mount').forEach(function (el) {
+        const id = el.id || '';
+        if (id.indexOf(prefix) !== 0) {
+          return;
+        }
+        const idx = parseInt(id.slice(prefix.length), 10);
+        if (!isNaN(idx)) {
+          mountPanelLinkPicker(idx);
+        }
+      });
+    }
+
+    $(function () {
+      initPanelLinkPickers();
+    });
 
     getCountries()
     if (countryCode) {
@@ -370,14 +558,26 @@
                 </h2>
                 <div id="data-locale-${index}-${locale.code}" class="accordion-collapse collapse ${locale_index === 0 ? 'show' : ''}" data-bs-parent="#accordion-slideshow-${index}">
                   <div class="accordion-body">
-                    <div class="is-up-file slideshow-img">
-                      <div class="img-upload-item wh-80 position-relative d-flex justify-content-center rounded overflow-hidden align-items-center border border-1 mb-1 me-1">
-                        <div class="position-absolute bg-white d-none img-loading"><div class="spinner-border opacity-50"></div></div>
-                        <div class="img-info d-flex justify-content-center align-items-center h-100 w-80 cursor-pointer">
-                          <i class="bi bi-plus fs-1 text-secondary opacity-75"></i>
+                    <div class="single-image-upload-wrapper">
+                      <div class="is-up-file" data-type="image">
+                        <div class="img-upload-item bg-light wh-80 rounded border d-flex justify-content-center align-items-center me-2 mb-2 position-relative cursor-pointer overflow-hidden">
+                          <div class="position-absolute tool-wrap d-none d-flex top-0 start-0 w-100 bg-primary bg-opacity-75"><div class="show-img w-100 text-center"><i class="bi bi-eye text-white"></i></div><div class="w-100 delete-img text-center"><i class="bi bi-trash text-white"></i></div></div>
+                          <div class="position-absolute bg-white d-none img-loading"><div class="spinner-border opacity-50"></div></div>
+                          <div class="img-info rounded h-100 w-100 d-flex justify-content-center align-items-center">
+                            <i class="bi bi-plus fs-1 text-secondary opacity-75"></i>
+                          </div>
+                          <input type="hidden" value="" name="slideshow[${index}][image][${locale.code}]">
                         </div>
-                        <input class="d-none" name="slideshow[${index}][image][${locale.code}]" value="">
                       </div>
+                    </div>
+                    <p class="text-muted small mb-2 mt-2">${slideTextHint}</p>
+                    <div class="mb-2">
+                      <label class="form-label small mb-0">${slideTitleLabel}</label>
+                      <input type="text" class="form-control form-control-sm" name="slideshow[${index}][title][${locale.code}]" value="">
+                    </div>
+                    <div class="mb-0">
+                      <label class="form-label small mb-0">${slideSubtitleLabel}</label>
+                      <textarea class="form-control form-control-sm" rows="2" name="slideshow[${index}][subtitle][${locale.code}]"></textarea>
                     </div>
                   </div>
                 </div>
@@ -385,8 +585,9 @@
             `).join('')}
           </div>
         </td>
-        <td>
-          <input type="text" name="slideshow[${index}][link]" class="form-control">
+        <td class="align-top" style="min-width: 280px;">
+          <input type="hidden" name="slideshow[${index}][link]" id="panel-link-input-${index}" value='${JSON.stringify(panelLinkEmpty)}'>
+          <div id="panel-link-vue-${index}" class="panel-inno-link-mount"></div>
         </td>
         <td class="text-end">
           <button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">删除</button>
@@ -394,21 +595,8 @@
       </tr>
     `;
       tbody.append(tr);
+      mountPanelLinkPicker(index);
     }
-
-    $(document).on('click', '.is-up-file.slideshow-img .img-upload-item', function () {
-      const _self = $(this);
-      $('#form-upload').remove();
-      $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" accept="image/*" name="file" /></form>');
-      $('#form-upload input[name=\'file\']').trigger('click');
-      $('#form-upload input[name=\'file\']').change(function () {
-        let file = $(this).prop('files')[0];
-        inno.imgUploadAjax(file, _self, (data) => {
-          _self.find('input').val(data.data.value);
-          _self.find('.img-info').html('<img src="' + data.data.url + '" class="img-fluid">');
-        })
-      });
-    })
 
     $('.settings-nav').on('click', 'a', function () {
       var text = $(this).text();

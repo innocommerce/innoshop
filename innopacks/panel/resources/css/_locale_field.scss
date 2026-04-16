@@ -1,0 +1,48 @@
+// locale-field — Multi-language Modal styles
+
+.locale-field-wrapper {
+  .locale-edit-all-btn {
+    white-space: nowrap;
+  }
+
+  .locale-ai-btn {
+    white-space: nowrap;
+  }
+}
+
+// Frontend default locale hint below main input
+.locale-front-hint {
+  small {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &.locale-front-empty {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+// Modal language rows
+.locale-modal-row {
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--bs-tertiary-bg, #f8f9fa);
+  }
+
+  .locale-translate-btn {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    white-space: nowrap;
+  }
+}
+
+// Smart fill button in modal footer
+.locale-smart-fill-btn {
+  font-size: 0.875rem;
+}

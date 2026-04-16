@@ -193,7 +193,7 @@ return [
     'seo_settings'                            => 'Pengaturan SEO',
     'seo_settings_desc'                       => 'Atur informasi direktur SEO',
     'setting'                                 => 'Pengaturan sistem',
-    'shop_address'                            => 'Alamat toko',
+    'shop_address'                            => 'Alamat perusahaan',
     'slideshow'                               => 'Slide utama halaman depan',
     'sms_aliyun_access_key_id'                => 'Access Key ID',
     'sms_aliyun_access_key_secret'            => 'Access Key Secret',

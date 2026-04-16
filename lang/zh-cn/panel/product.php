@@ -61,6 +61,8 @@ return [
     'increase_quantity'           => '增加商品库存',
     'input_price'                 => '请输入价格',
     'input_quantity'              => '请输入库存',
+    'image'                       => '产品图片',
+    'image_required'              => '请至少上传一张产品图片',
     'is_image_variant'            => '图片规格',
     'is_virtual'                  => '是否虚拟产品',
     'items'                       => '项',

@@ -69,7 +69,7 @@
   </div>
 
   <!-- Email Notifications -->
-  <div class="card">
+  <div class="card mb-4">
     <div class="card-header">
       <h5 class="card-title mb-0">{{ __('panel/setting_email.email_notifications') }}</h5>
       <p class="text-muted small mb-0">{{ __('panel/setting_email.email_notifications_desc') }}</p>
@@ -110,6 +110,97 @@
               <label class="form-check-label" for="order_status_update">{{ __('panel/setting_email.order_status_update') }}</label>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Newsletter Settings -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title mb-0">{{ __('panel/setting.newsletter_settings') }}</h5>
+      <p class="text-muted small mb-0">{{ __('panel/setting.newsletter_settings_desc') }}</p>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="mb-4">
+            <x-common-form-switch-radio title="{{ __('panel/setting.newsletter_location_footer') }}" name="newsletter_footer_enabled" required
+                                    value="{{ old('newsletter_footer_enabled', system_setting('newsletter_footer_enabled', true)) }}"/>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="mb-4">
+            <x-common-form-switch-radio title="{{ __('panel/setting.newsletter_location_popup') }}" name="newsletter_popup_enabled" required
+                                    value="{{ old('newsletter_popup_enabled', system_setting('newsletter_popup_enabled', false)) }}"/>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="mb-4">
+            <x-common-form-switch-radio title="{{ __('panel/setting.newsletter_location_checkout') }}" name="newsletter_checkout_enabled" required
+                                    value="{{ old('newsletter_checkout_enabled', system_setting('newsletter_checkout_enabled', false)) }}"/>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="border-top pt-3 mb-3">{{ __('panel/setting.newsletter_footer_style') }}</h6>
+      <div class="row">
+        <div class="col-md-4">
+          <x-panel::form.row :title="__('panel/setting.newsletter_bg_color')">
+            <div class="d-flex align-items-center">
+              <input type="color"
+                     name="newsletter_bg_color"
+                     value="{{ old('newsletter_bg_color', system_setting('newsletter_bg_color', '#667eea')) }}"
+                     class="form-control form-control-color me-2"
+                     style="width: 60px; height: 38px; cursor: pointer;"
+                     oninput="this.nextElementSibling.value = this.value">
+              <input type="text"
+                     name="newsletter_bg_color_display"
+                     value="{{ old('newsletter_bg_color', system_setting('newsletter_bg_color', '#667eea')) }}"
+                     class="form-control"
+                     style="max-width: 120px;"
+                     oninput="this.previousElementSibling.value = this.value"
+                     pattern="^#[0-9A-Fa-f]{6}$">
+            </div>
+          </x-panel::form.row>
+        </div>
+        <div class="col-md-4">
+          <x-panel::form.row :title="__('panel/setting.newsletter_bg_color_end')">
+            <div class="d-flex align-items-center">
+              <input type="color"
+                     name="newsletter_bg_color_end"
+                     value="{{ old('newsletter_bg_color_end', system_setting('newsletter_bg_color_end', '#764ba2')) }}"
+                     class="form-control form-control-color me-2"
+                     style="width: 60px; height: 38px; cursor: pointer;"
+                     oninput="this.nextElementSibling.value = this.value">
+              <input type="text"
+                     name="newsletter_bg_color_end_display"
+                     value="{{ old('newsletter_bg_color_end', system_setting('newsletter_bg_color_end', '#764ba2')) }}"
+                     class="form-control"
+                     style="max-width: 120px;"
+                     oninput="this.previousElementSibling.value = this.value"
+                     pattern="^#[0-9A-Fa-f]{6}$">
+            </div>
+          </x-panel::form.row>
+        </div>
+        <div class="col-md-4">
+          <x-panel::form.row :title="__('panel/setting.newsletter_text_color')">
+            <div class="d-flex align-items-center">
+              <input type="color"
+                     name="newsletter_text_color"
+                     value="{{ old('newsletter_text_color', system_setting('newsletter_text_color', '#ffffff')) }}"
+                     class="form-control form-control-color me-2"
+                     style="width: 60px; height: 38px; cursor: pointer;"
+                     oninput="this.nextElementSibling.value = this.value">
+              <input type="text"
+                     name="newsletter_text_color_display"
+                     value="{{ old('newsletter_text_color', system_setting('newsletter_text_color', '#ffffff')) }}"
+                     class="form-control"
+                     style="max-width: 120px;"
+                     oninput="this.previousElementSibling.value = this.value"
+                     pattern="^#[0-9A-Fa-f]{6}$">
+            </div>
+          </x-panel::form.row>
         </div>
       </div>
     </div>

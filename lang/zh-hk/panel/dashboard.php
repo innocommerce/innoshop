@@ -24,5 +24,6 @@ return [
     'top_products'      => '熱賣商品',
     'traffic_trends'    => '流量趨勢',
     'unique_visitors'   => '獨立訪客 (UV)',
+    'order_trends'      => '訂單趨勢',
     'vs_yesterday'      => '較昨日',
 ];

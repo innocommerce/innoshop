@@ -10,6 +10,25 @@
       <!-- Store Functionality -->
       <div class="mb-4">
         <h6 class="mb-3">{{ __('panel/setting.store_functionality') }}</h6>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-4">
+              <x-common-form-input title="{{ __('panel/setting.product_per_page') }}" name="product_per_page"
+                               type="number"
+                               value="{{ old('product_per_page', system_setting('product_per_page', 12)) }}"
+                               :description="__('panel/setting.product_per_page_desc')" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-4">
+              <x-common-form-input title="{{ __('panel/setting.supplier_per_page') }}" name="supplier_per_page"
+                               type="number"
+                               value="{{ old('supplier_per_page', system_setting('supplier_per_page', 12)) }}"
+                               :description="__('panel/setting.supplier_per_page_desc')" />
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-md-6">
             <div class="mb-4">
@@ -89,43 +108,6 @@
                                     value="{{ old('maintenance_mode', system_setting('maintenance_mode')) }}"/>
             <div class="text-secondary"><small>{{ __('panel/setting.maintenance_mode_desc') }}</small></div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Newsletter Settings -->
-  <div class="card mb-4">
-    <div class="card-header">
-      <h5 class="card-title mb-0">{{ __('panel/setting.newsletter_settings') }}</h5>
-      <p class="text-muted small mb-0">{{ __('panel/setting.newsletter_settings_desc') }}</p>
-    </div>
-    <div class="card-body">
-      <div class="mb-3">
-        <label class="form-label">{{ __('panel/setting.newsletter_display_locations') }}</label>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="newsletter_display_locations[]"
-                 value="footer" id="newsletter-footer"
-                 {{ in_array('footer', old('newsletter_display_locations', system_setting('newsletter_display_locations', ['footer']) ?: ['footer'])) ? 'checked' : '' }}>
-          <label class="form-check-label" for="newsletter-footer">
-            {{ __('panel/setting.newsletter_location_footer') }}
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="newsletter_display_locations[]"
-                 value="popup" id="newsletter-popup"
-                 {{ in_array('popup', old('newsletter_display_locations', system_setting('newsletter_display_locations', ['footer']) ?: ['footer'])) ? 'checked' : '' }}>
-          <label class="form-check-label" for="newsletter-popup">
-            {{ __('panel/setting.newsletter_location_popup') }}
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="newsletter_display_locations[]"
-                 value="checkout" id="newsletter-checkout"
-                 {{ in_array('checkout', old('newsletter_display_locations', system_setting('newsletter_display_locations', ['footer']) ?: ['footer'])) ? 'checked' : '' }}>
-          <label class="form-check-label" for="newsletter-checkout">
-            {{ __('panel/setting.newsletter_location_checkout') }}
-          </label>
         </div>
       </div>
     </div>

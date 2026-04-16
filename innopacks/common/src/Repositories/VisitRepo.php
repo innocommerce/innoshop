@@ -13,8 +13,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Models\Visit\ConversionDaily;
 use InnoShop\Common\Models\Visit\Visit;
+use InnoShop\Common\Models\Visit\VisitDaily;
 use InnoShop\Common\Models\Visit\VisitEvent;
+use InnoShop\Common\Services\VisitStatisticsService;
 
 class VisitRepo extends BaseRepo
 {
@@ -97,45 +100,20 @@ class VisitRepo extends BaseRepo
      */
     public function getStatistics(array $filters = []): array
     {
-        $startDate = $filters['start_date'] ?? Carbon::now()->subDays(30);
-        $endDate   = $filters['end_date'] ?? Carbon::now();
+        $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
+        $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        $query = $this->modelQuery()
-            ->whereBetween('first_visited_at', [$startDate, $endDate]);
-
-        // Filter by country
-        if (isset($filters['country_code'])) {
-            $query->where('country_code', $filters['country_code']);
-        }
-
-        // Filter by device type
-        if (isset($filters['device_type'])) {
-            $query->where('device_type', $filters['device_type']);
-        }
-
-        $baseQuery = clone $query;
-
-        // Calculate PV using raw SQL JOIN (much faster than WHERE IN)
-        $prefix           = DB::getTablePrefix();
-        $countryCondition = isset($filters['country_code']) ? "AND v.country_code = '".$filters['country_code']."'" : '';
-        $deviceCondition  = isset($filters['device_type']) ? "AND v.device_type = '".$filters['device_type']."'" : '';
-
-        $pageViewsResult = DB::selectOne("
-            SELECT COUNT(*) as count
-            FROM {$prefix}visit_events e
-            INNER JOIN {$prefix}visits v ON e.session_id = v.session_id
-            WHERE v.first_visited_at BETWEEN ? AND ?
-                AND e.created_at BETWEEN ? AND ?
-                AND e.event_type = ?
-                {$countryCondition}
-                {$deviceCondition}
-        ", [$startDate, $endDate, $startDate, $endDate, VisitEvent::TYPE_PRODUCT_VIEW]);
+        // Use visit_daily summary table (no JOIN needed)
+        $aggregated = VisitDaily::query()
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->selectRaw('SUM(pv) as total_pv, SUM(uv) as total_uv, SUM(ip) as total_ip')
+            ->first();
 
         return [
-            'total_visits'    => $baseQuery->count(),
-            'unique_visitors' => $baseQuery->distinct('ip_address')->count('ip_address'),
-            'unique_sessions' => $baseQuery->distinct('session_id')->count('session_id'),
-            'page_views'      => $pageViewsResult->count ?? 0,
+            'total_visits'    => (int) ($aggregated->total_pv ?? 0),
+            'unique_visitors' => (int) ($aggregated->total_ip ?? 0),
+            'unique_sessions' => (int) ($aggregated->total_uv ?? 0),
+            'page_views'      => (int) ($aggregated->total_pv ?? 0),
         ];
     }
 
@@ -168,10 +146,61 @@ class VisitRepo extends BaseRepo
      */
     public function getConversionFunnel(array $filters = []): array
     {
-        // Use event-based funnel analysis (more accurate)
-        $eventRepo = new VisitEventRepo;
+        $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
+        $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        return $eventRepo->getConversionFunnel($filters);
+        $aggregated = ConversionDaily::query()
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->selectRaw('
+                SUM(home_views) as home_views,
+                SUM(category_views) as category_views,
+                SUM(product_views) as product_views,
+                SUM(add_to_carts) as add_to_carts,
+                SUM(cart_views) as cart_views,
+                SUM(checkout_starts) as checkout_starts,
+                SUM(order_placed) as order_placed,
+                SUM(payment_completed) as payment_completed,
+                SUM(order_cancelled) as order_cancelled,
+                SUM(registers) as registers,
+                SUM(searches) as searches
+            ')
+            ->first();
+
+        $homeViews        = (int) ($aggregated->home_views ?? 0);
+        $categoryViews    = (int) ($aggregated->category_views ?? 0);
+        $productViews     = (int) ($aggregated->product_views ?? 0);
+        $addToCarts       = (int) ($aggregated->add_to_carts ?? 0);
+        $cartViews        = (int) ($aggregated->cart_views ?? 0);
+        $checkoutStarts   = (int) ($aggregated->checkout_starts ?? 0);
+        $orderPlaced      = (int) ($aggregated->order_placed ?? 0);
+        $paymentCompleted = (int) ($aggregated->payment_completed ?? 0);
+        $orderCancelled   = (int) ($aggregated->order_cancelled ?? 0);
+        $register         = (int) ($aggregated->registers ?? 0);
+        $searches         = (int) ($aggregated->searches ?? 0);
+
+        return [
+            'home_views'        => $homeViews,
+            'category_views'    => $categoryViews,
+            'product_views'     => $productViews,
+            'add_to_carts'      => $addToCarts,
+            'cart_views'        => $cartViews,
+            'checkout_starts'   => $checkoutStarts,
+            'order_placed'      => $orderPlaced,
+            'payment_completed' => $paymentCompleted,
+            'order_cancelled'   => $orderCancelled,
+            'register'          => $register,
+            'searches'          => $searches,
+            'conversion_rates'  => [
+                'home_to_category'    => $homeViews > 0 ? round(($categoryViews / $homeViews) * 100, 2) : 0,
+                'category_to_product' => $categoryViews > 0 ? round(($productViews / $categoryViews) * 100, 2) : 0,
+                'product_to_cart'     => $productViews > 0 ? round(($addToCarts / $productViews) * 100, 2) : 0,
+                'cart_to_checkout'    => $cartViews > 0 ? round(($checkoutStarts / $cartViews) * 100, 2) : 0,
+                'checkout_to_order'   => $checkoutStarts > 0 ? round(($orderPlaced / $checkoutStarts) * 100, 2) : 0,
+                'order_to_payment'    => $orderPlaced > 0 ? round(($paymentCompleted / $orderPlaced) * 100, 2) : 0,
+                'order_cancel_rate'   => $orderPlaced > 0 ? round(($orderCancelled / $orderPlaced) * 100, 2) : 0,
+                'overall_conversion'  => $homeViews > 0 ? round(($paymentCompleted / $homeViews) * 100, 2) : 0,
+            ],
+        ];
     }
 
     /**
@@ -182,33 +211,24 @@ class VisitRepo extends BaseRepo
      */
     public function getVisitsByDeviceType(array $filters = []): array
     {
-        $startDate = $filters['start_date'] ?? Carbon::now()->subDays(30);
-        $endDate   = $filters['end_date'] ?? Carbon::now();
+        $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
+        $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        // Single query with JOIN to get all device stats including page views
-        $prefix  = DB::getTablePrefix();
-        $results = DB::select("
-            SELECT
-                v.device_type,
-                COUNT(DISTINCT v.id) as visits,
-                COUNT(DISTINCT v.ip_address) as unique_visitors,
-                COUNT(e.id) as page_views
-            FROM {$prefix}visits v
-            LEFT JOIN {$prefix}visit_events e ON v.session_id = e.session_id
-                AND e.event_type = ?
-                AND e.created_at BETWEEN ? AND ?
-            WHERE v.first_visited_at BETWEEN ? AND ?
-                AND v.device_type IS NOT NULL
-            GROUP BY v.device_type
-            ORDER BY visits DESC
-        ", [VisitEvent::TYPE_PRODUCT_VIEW, $startDate, $endDate, $startDate, $endDate]);
+        // Use visit_daily summary table (desktop_pv, mobile_pv, tablet_pv)
+        $aggregated = VisitDaily::query()
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->selectRaw('SUM(desktop_pv) as desktop_pv, SUM(mobile_pv) as mobile_pv, SUM(tablet_pv) as tablet_pv')
+            ->first();
 
-        return array_map(fn ($item) => [
-            'device_type'     => $item->device_type,
-            'visits'          => (int) $item->visits,
-            'unique_visitors' => (int) $item->unique_visitors,
-            'page_views'      => (int) $item->page_views,
-        ], $results);
+        $desktopPV = (int) ($aggregated->desktop_pv ?? 0);
+        $mobilePV  = (int) ($aggregated->mobile_pv ?? 0);
+        $tabletPV  = (int) ($aggregated->tablet_pv ?? 0);
+
+        return [
+            ['device_type' => 'desktop', 'visits' => $desktopPV, 'unique_visitors' => 0, 'page_views' => $desktopPV],
+            ['device_type' => 'mobile', 'visits' => $mobilePV, 'unique_visitors' => 0, 'page_views' => $mobilePV],
+            ['device_type' => 'tablet', 'visits' => $tabletPV, 'unique_visitors' => 0, 'page_views' => $tabletPV],
+        ];
     }
 
     /**
@@ -265,29 +285,73 @@ class VisitRepo extends BaseRepo
         $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
         $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        // Use Laravel Query Builder instead of raw SQL
-        $results = Visit::query()
-            ->selectRaw('DATE(first_visited_at) as date, COUNT(*) as visits, COUNT(DISTINCT ip_address) as unique_visitors')
-            ->whereBetween('first_visited_at', [$startDate, $endDate])
-            ->groupByRaw('DATE(first_visited_at)')
+        // Auto-aggregate missing dates into visit_daily before querying
+        $this->ensureDailyAggregated($startDate, $endDate);
+
+        // Use visit_daily summary table instead of raw visit_events for performance
+        $dailyStats = VisitDaily::query()
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->orderBy('date')
-            ->get();
+            ->get()
+            ->keyBy(fn ($item) => $item->date instanceof \DateTimeInterface ? $item->date->format('Y-m-d') : (string) $item->date);
 
-        // Get page views separately using Model
-        $pageViews = VisitEvent::query()
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as page_views')
-            ->where('event_type', VisitEvent::TYPE_PRODUCT_VIEW)
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupByRaw('DATE(created_at)')
-            ->pluck('page_views', 'date')
-            ->toArray();
+        // Generate full date range (fills gaps for days with no data)
+        $results = [];
+        $current = $startDate->copy();
+        while ($current->lte($endDate)) {
+            $dateStr   = $current->toDateString();
+            $stat      = $dailyStats->get($dateStr);
+            $results[] = [
+                'date'            => $dateStr,
+                'visits'          => $stat ? ($stat->pv ?? 0) : 0,
+                'unique_visitors' => $stat ? ($stat->uv ?? 0) : 0,
+                'page_views'      => $stat ? ($stat->pv ?? 0) : 0,
+            ];
+            $current->addDay();
+        }
 
-        return $results->map(fn ($item) => [
-            'date'            => $item->date,
-            'visits'          => (int) $item->visits,
-            'unique_visitors' => (int) $item->unique_visitors,
-            'page_views'      => (int) ($pageViews[$item->date] ?? 0),
-        ])->toArray();
+        return $results;
+    }
+
+    /**
+     * Ensure visit_daily is populated for the given date range.
+     * Auto-aggregates any missing dates on-the-fly.
+     *
+     * @param  Carbon  $startDate
+     * @param  Carbon  $endDate
+     * @return void
+     */
+    protected function ensureDailyAggregated(Carbon $startDate, Carbon $endDate): void
+    {
+        $existingDates = VisitDaily::query()
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->pluck('date')
+            ->map(fn ($date) => $date instanceof \DateTimeInterface ? $date->format('Y-m-d') : (string) $date)
+            ->flip();
+
+        $missingDates = [];
+        $current      = $startDate->copy();
+        while ($current->lte($endDate)) {
+            $dateStr = $current->toDateString();
+            if (! isset($existingDates[$dateStr])) {
+                $missingDates[] = $current->copy();
+            }
+            $current->addDay();
+        }
+
+        if (empty($missingDates)) {
+            return;
+        }
+
+        $service = new VisitStatisticsService;
+        foreach ($missingDates as $date) {
+            try {
+                $service->aggregateDaily($date);
+            } catch (\Throwable $e) {
+                // Silently skip failed aggregation to avoid blocking the dashboard
+                logger()->warning("Failed to aggregate visit stats for {$date->toDateString()}: ".$e->getMessage());
+            }
+        }
     }
 
     /**
@@ -341,25 +405,16 @@ class VisitRepo extends BaseRepo
      */
     public function getAverageVisitDuration(array $filters = []): float
     {
-        $startDate = $filters['start_date'] ?? Carbon::now()->subDays(30);
-        $endDate   = $filters['end_date'] ?? Carbon::now();
+        $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
+        $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        // Single query to calculate average duration per session
-        $prefix = DB::getTablePrefix();
-        $result = DB::select("
-            SELECT AVG(duration) as avg_duration
-            FROM (
-                SELECT
-                    session_id,
-                    TIMESTAMPDIFF(SECOND, MIN(created_at), MAX(created_at)) as duration
-                FROM {$prefix}visit_events
-                WHERE created_at BETWEEN ? AND ?
-                GROUP BY session_id
-                HAVING COUNT(*) > 1 AND duration > 0
-            ) as session_durations
-        ", [$startDate, $endDate]);
+        // Use visit_daily summary table
+        $result = VisitDaily::query()
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->selectRaw('AVG(avg_duration) as avg_duration')
+            ->first();
 
-        return $result[0]->avg_duration ? round($result[0]->avg_duration, 2) : 0;
+        return $result && $result->avg_duration ? round($result->avg_duration, 2) : 0;
     }
 
     /**

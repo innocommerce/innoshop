@@ -14,6 +14,7 @@ use Illuminate\Support\ServiceProvider;
 use InnoShop\Common\Components\Base;
 use InnoShop\Common\Components\Forms;
 use InnoShop\Common\Console\Commands;
+use InnoShop\Common\Services\StorageService;
 
 class CommonServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,7 @@ class CommonServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->loadViewsFrom($this->basePath.'resources/views', 'common');
+        $this->app->singleton(StorageService::class);
     }
 
     /**
@@ -39,12 +41,90 @@ class CommonServiceProvider extends ServiceProvider
     public function boot(): void
     {
         load_settings();
+        $this->loadAiConfig();
         $this->registerConfig();
         $this->registerMigrations();
         $this->registerCommands();
         $this->loadMailSettings();
         $this->loadViewComponents();
         $this->loadViewTemplates();
+    }
+
+    /**
+     * Load AI config from system_setting into config('ai.*')
+     */
+    private function loadAiConfig(): void
+    {
+        if (! installed()) {
+            return;
+        }
+
+        $defaultProvider = system_setting('ai_model', 'glm');
+        config(['ai.default' => $defaultProvider]);
+
+        $providers = [
+            'openai', 'anthropic', 'deepseek', 'kimi',
+            'doubao', 'qianwen', 'hunyuan', 'glm', 'minimax',
+        ];
+
+        // Map our provider names to Laravel AI SDK driver names
+        $driverMap = [
+            'anthropic' => 'anthropic',
+            'kimi'      => 'openai',
+            'doubao'    => 'openai',
+            'qianwen'   => 'openai',
+            'hunyuan'   => 'openai',
+        ];
+
+        $baseUrlMap = [
+            'openai'   => 'https://api.openai.com/v1',
+            'deepseek' => 'https://api.deepseek.com/v1',
+            'kimi'     => 'https://api.moonshot.cn/v1',
+            'doubao'   => 'https://ark.cn-beijing.volces.com/api/v3',
+            'qianwen'  => 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+            'hunyuan'  => 'https://api.hunyuan.cloud.tencent.com/v1',
+            'glm'      => 'https://open.bigmodel.cn/api/paas/v4',
+            'minimax'  => 'https://api.minimax.chat/v1',
+        ];
+
+        $defaultModelMap = [
+            'openai'   => 'gpt-4o',
+            'deepseek' => 'deepseek-chat',
+            'kimi'     => 'moonshot-v1-8k',
+            'doubao'   => 'doubao-lite-4k',
+            'qianwen'  => 'qwen-turbo',
+            'hunyuan'  => 'hunyuan-standard',
+            'glm'      => 'glm-5',
+            'minimax'  => 'MiniMax-Text-01',
+        ];
+
+        foreach ($providers as $name) {
+            $apiKey = system_setting("{$name}_api_key");
+            if (empty($apiKey)) {
+                continue;
+            }
+
+            $driver  = $driverMap[$name] ?? $name;
+            $baseUrl = system_setting("{$name}_base_url") ?: ($baseUrlMap[$name] ?? null);
+            $model   = system_setting("{$name}_model") ?: ($defaultModelMap[$name] ?? null);
+
+            $config = [
+                'driver' => $driver,
+                'key'    => $apiKey,
+                'model'  => $model,
+                'models' => [
+                    'text' => [
+                        'default' => $model,
+                    ],
+                ],
+            ];
+
+            if ($baseUrl) {
+                $config['url'] = $baseUrl;
+            }
+
+            config(["ai.providers.{$name}" => $config]);
+        }
     }
 
     /**
@@ -139,6 +219,8 @@ class CommonServiceProvider extends ServiceProvider
 
         // Form components
         $this->loadViewComponentsAs('common-form', [
+            'locale-input' => Forms\LocaleInput::class,
+            'locale-modal' => Forms\LocaleModal::class,
             'input'        => Forms\Input::class,
             'select'       => Forms\Select::class,
             'textarea'     => Forms\Textarea::class,

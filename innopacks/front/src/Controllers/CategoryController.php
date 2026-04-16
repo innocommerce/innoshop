@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Common\Services\RequestFilterParser;
 use InnoShop\Front\Traits\FilterSidebarTrait;
 
@@ -45,6 +46,10 @@ class CategoryController extends Controller
                 ->builder($filters)
                 ->orderBy('position')
                 ->paginate(12);
+
+            // Track search event
+            $eventService = new EventTrackingService;
+            $eventService->trackSearch($keyword, $categories->total(), $request);
 
             $data = [
                 'categories' => $categories,
@@ -153,6 +158,15 @@ class CategoryController extends Controller
         }
 
         $products = ProductRepo::getInstance()->getFrontList($filters);
+
+        // Track category view event
+        $eventService = new EventTrackingService;
+        $eventService->trackCategoryView($category->id, $category->fallbackName(), $request);
+
+        // Track search event if keyword present
+        if ($keyword) {
+            $eventService->trackSearch($keyword, $products->count() ?? 0, $request);
+        }
 
         // Use Trait method to get filter sidebar data
         $filterData = $this->getFilterSidebarData($request);

@@ -24,5 +24,6 @@ return [
     'top_products'      => '人気商品',
     'traffic_trends'    => '流れの傾向です',
     'unique_visitors'   => '個別訪問者(UV)です',
+    'order_trends'      => '注文トレンド',
     'vs_yesterday'      => '昨日よりです',
 ];

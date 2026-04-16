@@ -17,6 +17,11 @@
     return meta && meta.content ? meta.content.replace(/\/$/, "") : "";
   }
 
+  function storageBaseUrl() {
+    const meta = document.querySelector('meta[name="storage-base-url"]');
+    return meta && meta.content ? meta.content.replace(/\/$/, "") : "";
+  }
+
   function previewUrlFromStoredPath(path) {
     if (!path || typeof path !== "string") {
       return "";
@@ -28,7 +33,7 @@
     if (p.startsWith("http://") || p.startsWith("https://")) {
       return p;
     }
-    const base = assetBaseUrl();
+    const base = storageBaseUrl() || assetBaseUrl();
     const normalized = p.replace(/^\/+/, "");
     if (!base) {
       return "/" + normalized;

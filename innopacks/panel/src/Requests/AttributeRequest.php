@@ -36,7 +36,23 @@ class AttributeRequest extends FormRequest
             'translations'                       => 'required|array',
             "translations.$defaultLocale.locale" => 'required',
             "translations.$defaultLocale.name"   => 'required',
+
+            'values'   => 'nullable|array',
+            'values.*' => 'array',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $values = $this->input('values');
+        if (is_string($values)) {
+            $this->merge([
+                'values' => json_decode($values, true) ?? [],
+            ]);
+        }
     }
 
     /**

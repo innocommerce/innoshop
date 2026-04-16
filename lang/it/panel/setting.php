@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'Obiettivi SEO',
     'seo_settings_desc'             => 'Configurare il sito web per le informazioni SEO',
     'setting'                       => 'Impostazioni di sistema',
-    'shop_address'                  => 'Indirizzo negozio',
+    'shop_address'                  => 'Indirizzo aziendale',
     'slideshow'                     => 'Slideshow homepage',
     'specials'                      => 'Pagine fisse',
     'store_features'                => 'Impostazione funzionale dei negozi',

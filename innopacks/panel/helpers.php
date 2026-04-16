@@ -8,6 +8,7 @@
  */
 
 use Illuminate\Support\Str;
+use InnoShop\Common\Support\EntityLinkPayload;
 use InnoShop\Panel\Repositories\LocaleRepo;
 use InnoShop\Panel\Services\TranslatorService;
 
@@ -239,5 +240,153 @@ if (! function_exists('has_set_value')) {
         }
 
         return false;
+    }
+}
+
+if (! function_exists('panel_link_parse')) {
+    /**
+     * InnoLinkPicker: {@see EntityLinkPayload::normalize()} plus DB enrichment (same as {@see entity_link_enrich()}).
+     * Full storefront row + href: {@see entity_link_display()}; URL only (no DB): {@see entity_link_url()}.
+     *
+     * @param  array|string|null  $stored
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}
+     */
+    function panel_link_parse(array|string|null $stored): array
+    {
+        return entity_link_enrich(entity_link_normalize($stored));
+    }
+}
+
+if (! function_exists('panel_link_resolve')) {
+    /**
+     * @param  class-string  $modelClass
+     */
+    function panel_link_resolve(string $modelClass, string $value, array $with = []): ?object
+    {
+        return entity_link_resolve($modelClass, $value, $with);
+    }
+}
+
+if (! function_exists('panel_link_enrich')) {
+    /**
+     * @param  array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}  $row
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}
+     */
+    function panel_link_enrich(array $row): array
+    {
+        return entity_link_enrich($row);
+    }
+}
+
+if (! function_exists('panel_link_finalize')) {
+    /**
+     * @param  array{type?: string, value?: mixed, entity_label?: string, link?: string, entity_image?: string, entity_price?: string}  $row
+     * @param  array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}  $defaults
+     * @return array{type: string, value: string, entity_label: string, link: string, entity_image: string, entity_price: string}
+     */
+    function panel_link_finalize(array $row, array $defaults): array
+    {
+        return entity_link_enrich(EntityLinkPayload::mergeAndCast($row, $defaults));
+    }
+}
+
+if (! function_exists('panel_locale_field_config')) {
+    /**
+     * JSON-ready config for {@see InnoPanelLocaleText}: enabled locales, panel language, storefront default language.
+     * Merge into panel view data so plugins can reuse the same multi-locale editor.
+     *
+     * @return array{locale_list: array<int, array{code: string, name: string, image: string}>, locale_codes: array<int, string>, panel_locale_code: string, fallback_locale_code: string}
+     */
+    function panel_locale_field_config(): array
+    {
+        $localeList = locales()->map(static function ($locale) {
+            return [
+                'code'  => $locale->code,
+                'name'  => $locale->name,
+                'image' => $locale->image ? image_origin($locale->image) : asset('images/flag/'.$locale->code.'.png'),
+            ];
+        })->values()->all();
+
+        return [
+            'locale_list'          => $localeList,
+            'locale_codes'         => locales()->pluck('code')->values()->all(),
+            'panel_locale_code'    => panel_locale_code(),
+            'fallback_locale_code' => setting_locale_code(),
+        ];
+    }
+}
+
+if (! function_exists('sorted_locales')) {
+    /**
+     * Get locales sorted by priority: panel locale → fallback locale → rest.
+     */
+    function sorted_locales()
+    {
+        $panelLocale    = panel_locale_code();
+        $fallbackLocale = setting_locale_code();
+
+        return locales()->sortBy(function ($locale) use ($panelLocale, $fallbackLocale) {
+            if ($locale->code === $panelLocale) {
+                return 0;
+            }
+            if ($locale->code === $fallbackLocale) {
+                return 1;
+            }
+
+            return 2;
+        })->values();
+    }
+}
+
+if (! function_exists('locale_field_data')) {
+    /**
+     * Extract translation values for a specific field from a model.
+     * Returns [localeCode => value] array, with old() input support.
+     *
+     * @param  mixed  $model  Model with Translatable trait (or null for new)
+     * @param  string  $fieldName  Field name to extract
+     * @return array<string, string>
+     */
+    function locale_field_data($model, string $fieldName): array
+    {
+        $data = [];
+        foreach (locales() as $locale) {
+            $code  = $locale->code;
+            $value = old("translations.{$code}.{$fieldName}");
+            if ($value === null && $model) {
+                $value = $model->translate($code, $fieldName);
+            }
+            $data[$code] = (string) ($value ?? '');
+        }
+
+        return $data;
+    }
+}
+
+if (! function_exists('json_field_data')) {
+    /**
+     * Extract translation values for a specific JSON field from a model.
+     * Returns [localeCode => value] array, with old() input support.
+     * For models using JSON columns (like Option) instead of translation tables.
+     *
+     * @param  mixed  $model  Model with JSON casted field (or null for new)
+     * @param  string  $fieldName  Field name to extract (e.g. 'name', 'description')
+     * @return array<string, string>
+     */
+    function json_field_data($model, string $fieldName): array
+    {
+        $data  = [];
+        $field = $model ? ($model->{$fieldName} ?? []) : [];
+
+        foreach (locales() as $locale) {
+            $code  = $locale->code;
+            $value = old("translations.{$code}.{$fieldName}");
+            if ($value === null) {
+                $value = $field[$code] ?? '';
+            }
+            $data[$code] = (string) ($value ?? '');
+        }
+
+        return $data;
     }
 }

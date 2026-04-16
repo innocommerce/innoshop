@@ -31,14 +31,14 @@ const config = {
     }
 };
 
-// Add webpack alias for cleaner SCSS imports
+// Webpack resolve aliases for theme JS/SCSS (e.g. import '@front/js/inno-bootstrap')
 mix.webpackConfig({
     resolve: {
         alias: {
             '@front': path.resolve(__dirname, 'innopacks/front/resources'),
-            '@theme': path.resolve(__dirname, 'themes/' + config.theme)
-        }
-    }
+            '@theme': path.resolve(__dirname, 'themes/' + config.theme),
+        },
+    },
 });
 
 // Utility functions
@@ -67,20 +67,27 @@ const utils = {
 // Theme management
 const themeManager = {
     /**
-     * Clean up theme build directory
+     * Only remove compiled css/js so demo-imported assets under images/ are not wiped
+     * each time `THEME=<name> npm run dev` runs (see ThemeDemoService copy to static/themes/.../images).
      */
     cleanup: () => {
         if (config.theme && config.theme !== 'default') {
             const themeBuildPath = `${config.paths.static}/${config.theme}`;
-            
-            if (utils.fileExists(themeBuildPath)) {
-                utils.removeDir(themeBuildPath);
-                utils.log(`Cleaned up: ${themeBuildPath}`, '🧹');
+            const cssPath = `${themeBuildPath}/css`;
+            const jsPath = `${themeBuildPath}/js`;
+
+            if (utils.fileExists(cssPath)) {
+                utils.removeDir(cssPath);
+                utils.log(`Cleaned up: ${cssPath}`, '🧹');
             }
-            
-            utils.createDir(`${themeBuildPath}/css`);
-            utils.createDir(`${themeBuildPath}/js`);
-            utils.log(`Created directories: ${themeBuildPath}/css, ${themeBuildPath}/js`, '📁');
+            if (utils.fileExists(jsPath)) {
+                utils.removeDir(jsPath);
+                utils.log(`Cleaned up: ${jsPath}`, '🧹');
+            }
+
+            utils.createDir(cssPath);
+            utils.createDir(jsPath);
+            utils.log(`Prepared: ${cssPath}, ${jsPath} (images/ preserved)`, '📁');
         }
     },
     
@@ -159,10 +166,12 @@ const defaultResources = {
      */
     panel: () => {
         const { panel, build } = config.paths;
-        
+
         mix.sass(`${panel}/css/bootstrap/bootstrap.scss`, `${build}/panel/css/bootstrap.css`);
         mix.sass(`${panel}/css/app.scss`, `${build}/panel/css/app.css`);
+        mix.sass(`${panel}/css/file-manager.scss`, `${build}/panel/css/file-manager.css`);
         mix.js(`${panel}/js/app.js`, `${build}/panel/js/app.js`);
+        mix.js(`${panel}/js/standalone/index.js`, `${build}/panel/js/panel-standalone.js`);
     },
     
     /**

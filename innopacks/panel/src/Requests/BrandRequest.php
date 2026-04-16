@@ -36,12 +36,37 @@ class BrandRequest extends FormRequest
             $slugRule = 'nullable|regex:/^[a-zA-Z0-9-]+$/|unique:brands,slug';
         }
 
+        $defaultLocale = setting_locale_code();
+
         return [
-            'name'   => 'string|required|max:32',
             'slug'   => $slugRule,
-            'first'  => 'string|required',
             'logo'   => 'required',
             'active' => 'bool',
+
+            "translations.$defaultLocale.locale" => 'required',
+            "translations.$defaultLocale.name"   => 'required',
+
+            'translations.*.meta_title'       => 'max:500',
+            'translations.*.meta_keywords'    => 'max:500',
+            'translations.*.meta_description' => 'max:1000',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function attributes(): array
+    {
+        $defaultLocale = setting_locale_code();
+
+        return [
+            'slug'                               => panel_trans('common.slug'),
+            "translations.$defaultLocale.locale" => trans('panel/category.locale'),
+            "translations.$defaultLocale.name"   => trans('panel/brand.name'),
+
+            'translations.*.meta_title'       => trans('panel/common.meta_title'),
+            'translations.*.meta_keywords'    => trans('panel/common.meta_keywords'),
+            'translations.*.meta_description' => trans('panel/common.meta_description'),
         ];
     }
 }

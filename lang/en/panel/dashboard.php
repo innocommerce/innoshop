@@ -29,5 +29,9 @@ return [
     'top_products'      => 'Best Sellers',
     'traffic_trends'    => 'Traffic Trends',
     'unique_visitors'   => 'Unique Visitors (UV)',
+    'order_trends'      => 'Order Trends',
     'vs_yesterday'      => 'vs yesterday',
+    'welcome'           => 'Welcome back',
+    'weekdays'          => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    'date_format'       => 'Y/m/d',
 ];

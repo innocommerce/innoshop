@@ -31,7 +31,7 @@ return [
     'paid'                   => 'Payment has been made',
     'pending'                => 'Pending review',
     'rejected'               => 'Rejected',
-    'status'                 => '"Status"',
+    'status'                 => 'Status',
     'submit_application'     => 'Submit the application',
     'wallet_balance'         => 'Wallet balance',
     'wechat'                 => 'wechat',

@@ -24,5 +24,6 @@ return [
     'top_products'      => 'Produk terlaris',
     'traffic_trends'    => 'Trend trafik',
     'unique_visitors'   => 'Pelawat Bebas (UV)',
+    'order_trends'      => 'Trend Pesanan',
     'vs_yesterday'      => 'Berbanding semalam',
 ];

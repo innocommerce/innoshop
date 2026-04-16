@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'seo 설정',
     'seo_settings_desc'             => '웹 사이트의 seo 관련 정보 설정',
     'setting'                       => '시스템 설정',
-    'shop_address'                  => '상점 주소',
+    'shop_address'                  => '회사 주소',
     'slideshow'                     => '홈페이지 슬라이드',
     'specials'                      => '고정 페이지',
     'store_features'                => '스토어 기능 설정',

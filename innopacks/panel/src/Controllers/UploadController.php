@@ -26,8 +26,7 @@ class UploadController
         $image = $request->file('image');
         $type  = $request->file('type', 'common');
 
-        // Use unified upload service with security validation
-        $data = UploadService::getInstance()->uploadForPanel($image, $type);
+        $data = UploadService::getInstance()->uploadFile($image, $type);
 
         return json_success(trans('common/upload.upload_success'), $data);
     }
@@ -43,8 +42,7 @@ class UploadController
         $file = $request->file('file');
         $type = $request->file('type', 'files');
 
-        // Use unified upload service with security validation
-        $data = UploadService::getInstance()->uploadForPanel($file, $type);
+        $data = UploadService::getInstance()->uploadFile($file, $type);
 
         return json_success(trans('common/upload.upload_success'), $data);
     }

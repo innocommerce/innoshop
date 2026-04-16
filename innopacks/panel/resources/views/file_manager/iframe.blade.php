@@ -4,18 +4,19 @@
 
 @prepend('header')
   <meta name="api-token" content="{{ auth()->user()->api_token }}">
+  @php($enabledDrivers = $enabled_drivers ?? ['local'])
   <script>
     window.fileManagerConfig = Object.freeze({
       driver: '{{ $config['driver'] }}',
       endpoint: '{{ $config['endpoint'] }}',
       bucket: '{{ $config['bucket'] }}',
       baseUrl: '{{ $config['baseUrl'] }}',
+      enabledDrivers: @json($enabledDrivers),
       multiple: {{ $multiple ? 'true' : 'false' }},
       type: '{{ $type }}',
       uploadMaxFileSize: '{{ $uploadMaxFileSize ?? "unknown" }}',
       postMaxSize: '{{ $postMaxSize ?? "unknown" }}'
     });
-    console.log('File manager config initialized in iframe:', window.fileManagerConfig);
   </script>
 @endprepend
 
@@ -106,7 +107,6 @@
     // 从父窗口获取 token
     window.getApiToken = () => {
       const token = window.parent?.document.querySelector('meta[name="api-token"]')?.getAttribute('content');
-      console.log('Parent token:', token);
       return token;
     };
   </script>

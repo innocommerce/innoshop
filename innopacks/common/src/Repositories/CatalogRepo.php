@@ -293,14 +293,15 @@ class CatalogRepo extends BaseRepo
      */
     public function autocomplete($keyword, int $limit = 10): mixed
     {
+        $keyword = trim((string) $keyword);
         $builder = Catalog::query()->with(['translation']);
-        if ($keyword) {
+        if ($keyword !== '') {
             $builder->whereHas('translation', function ($query) use ($keyword) {
                 $query->where('title', 'like', "%{$keyword}%");
             });
         }
 
-        return $builder->limit($limit)->get();
+        return $builder->orderBy('position')->orderBy('id')->limit($limit)->get();
     }
 
     /**

@@ -94,7 +94,7 @@ return [
     'seo_settings'                  => 'SEO Settings',
     'seo_settings_desc'             => 'Configure the SEO-related information of the website',
     'setting'                       => 'System Settings',
-    'shop_address'                  => 'Store Address',
+    'shop_address'                  => 'Company Address',
     'slideshow'                     => 'Home Slideshow',
     'specials'                      => 'Fixed page',
     'store_features'                => 'Store function setting',

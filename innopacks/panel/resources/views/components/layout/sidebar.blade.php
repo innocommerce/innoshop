@@ -1,18 +1,18 @@
 <div class="sidebar">
-  <div class="accordion accordion-flush">
+  <div class="accordion accordion-flush" id="sidebar-parent">
     @foreach($menuLinks as $index => $menuLink)
       @if(isset($menuLink['type']) && $menuLink['type'] == 'divider')
-        <div class="px-3 mt-4">
-          <div class="text-secondary small opacity-75 mb-2">{{ $menuLink['title'] }}</div>
+        <div class="px-3 mt-4 sidebar-divider">
+          <div class="text-secondary small opacity-75 mb-2 menu-text">{{ $menuLink['title'] }}</div>
           <hr class="dropdown-divider mt-0 mb-2">
         </div>
       @else
-        <div class="accordion-item">
+        <div class="accordion-item" @if(isset($menuLink['has_children']) && $menuLink['has_children']) data-has-children="true" @endif>
           @if(!isset($menuLink['has_children']) || !$menuLink['has_children'])
             @if(($menuLink['url'] ?? ''))
               <a class="accordion-button {{ $menuLink['active'] ? '' : 'collapsed' }}" href="{{ $menuLink['url'] }}">
-                <span class="icon"><i
-                    class="bi {{ $menuLink['icon'] ?? 'bi-house' }}"></i></span> {{ $menuLink['title'] }}
+                <span class="icon"><i class="bi {{ $menuLink['icon'] ?? 'bi-house' }}"></i></span>
+                <span class="menu-text">{{ $menuLink['title'] }}</span>
               </a>
             @endif
           @else
@@ -24,8 +24,9 @@
                 data-bs-target="#flush-collapseOne-{{ $index }}"
                 aria-expanded="{{ $menuLink['active'] ? 'true' : 'false' }}"
                 aria-controls="flush-collapseOne-{{ $index }}">
-              <span class="icon"><i
-                  class="bi {{ $menuLink['icon'] ?? 'bi-house' }}"></i></span> {{ $menuLink['title'] }}
+                <span class="icon"><i class="bi {{ $menuLink['icon'] ?? 'bi-house' }}"></i></span>
+                <span class="menu-text">{{ $menuLink['title'] }}</span>
+                <i class="bi bi-chevron-right submenu-arrow"></i>
               </button>
             </h2>
             <div id="flush-collapseOne-{{ $index }}"
@@ -46,5 +47,11 @@
         </div>
       @endif
     @endforeach
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-toggle" id="sidebar-toggle" title="{{ __('panel/common.collapse_sidebar') }}">
+      <i class="bi bi-chevron-left"></i>
+      <span class="menu-text">{{ __('panel/common.collapse') }}</span>
+    </div>
   </div>
 </div>

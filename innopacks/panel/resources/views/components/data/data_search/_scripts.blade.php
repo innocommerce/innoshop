@@ -88,9 +88,11 @@ $(document).ready(function() {
             $('input[name="' + field + '_end"]').val('');
             $('#search-form').submit();
         } else {
+            var $form = $('#search-form');
             $('.btn-filter[data-filter-name="' + field + '"]').removeClass('btn-primary').addClass('btn-outline-secondary');
             $('.btn-filter[data-filter-name="' + field + '"][data-value=""]').removeClass('btn-outline-secondary').addClass('btn-primary');
-            updateFilterAndSubmit(field, '');
+            $form.find('input[name="' + field + '"]').remove();
+            $form.submit();
         }
     });
 
@@ -105,6 +107,7 @@ $(document).ready(function() {
         $('.custom-date-inputs').addClass('d-none');
         $('input[name="start_date"]').val('');
         $('input[name="end_date"]').val('');
+        $form.find('input[name="date_filter"]').remove();
         @endif
 
         // Clear range filters
@@ -113,6 +116,13 @@ $(document).ready(function() {
             $('input[name="' + filterName + '_start"]').val('');
             $('input[name="' + filterName + '_end"]').val('');
         });
+
+        // Remove hidden inputs for button filters (GET would otherwise keep e.g. rating=3)
+        @foreach($filters as $filterGroup)
+            @if(($filterGroup['type'] ?? 'button') !== 'range')
+                $form.find('input[name="{{ $filterGroup['name'] }}"]').remove();
+            @endif
+        @endforeach
 
         // Reset button filters
         $('.btn-filter').each(function() {
