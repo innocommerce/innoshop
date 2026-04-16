@@ -29,8 +29,11 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // 安全修复: 系统已安装后，不再注册安装路由，防止未授权重装攻击
-        if (installed()) {
+        // Security fix: skip installer route registration after installation
+        // to prevent unauthenticated reinstall/takeover attacks.
+        // Use has_install_lock() instead of installed() to avoid DB dependency,
+        // ensuring routes stay blocked even during database outages.
+        if (has_install_lock()) {
             return;
         }
 
