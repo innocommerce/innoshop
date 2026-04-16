@@ -45,7 +45,7 @@ mix.webpackConfig({
 // webpackbar@5.0.2 passes name/color/reporters/reporter which are not valid ProgressPlugin options
 mix.override(webpackConfig => {
     webpackConfig.plugins = (webpackConfig.plugins || []).filter(
-        plugin => plugin.constructor.name !== 'WebpackBar'
+        plugin => plugin.constructor.name !== 'WebpackBarPlugin'
     );
 });
 
