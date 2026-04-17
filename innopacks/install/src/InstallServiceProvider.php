@@ -29,6 +29,10 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (has_install_lock()) {
+            return;
+        }
+
         $this->registerWebRoutes();
         $this->loadTranslations();
     }
