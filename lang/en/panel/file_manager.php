@@ -119,4 +119,10 @@ return [
     'no_files_selected'     => 'No files selected',
     'refresh'               => 'Refresh',
     'storage_settings_link' => 'Storage Credential Settings',
+
+    'download_remote'           => 'Download Remote File',
+    'download_success'          => 'Downloaded successfully',
+    'download_failed'           => 'Failed to download remote file',
+    'invalid_url'               => 'Invalid URL',
+    'cannot_determine_filename' => 'Cannot determine file name from URL',
 ];

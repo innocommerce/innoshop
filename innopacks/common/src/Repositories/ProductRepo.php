@@ -694,6 +694,9 @@ class ProductRepo extends BaseRepo
         if (is_string($skus)) {
             $skus = json_decode($skus, true);
         }
+        if (empty($skus) || ! is_array($skus)) {
+            return [];
+        }
         $onlyOneSku = count($skus) == 1;
 
         $items = [];

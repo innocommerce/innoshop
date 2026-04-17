@@ -11,6 +11,7 @@ namespace InnoShop\RestAPI\Services;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Services\FileSecurityValidator;
 use InnoShop\Common\Services\StorageService;
@@ -349,6 +350,89 @@ class FileManagerService implements FileManagerInterface
         $filePath   = $file->storeAs($savePath, $originName, 'media');
 
         return StorageService::storageKey($filePath);
+    }
+
+    /**
+     * Download a remote file from URL and save to the specified directory.
+     *
+     * @param  string  $url  Remote file URL
+     * @param  string  $savePath  Target directory path in file manager
+     * @param  string|null  $fileName  Optional file name (defaults to URL basename)
+     * @return string Storage key of the saved file
+     *
+     * @throws Exception
+     */
+    public function downloadRemoteFile(string $url, string $savePath, ?string $fileName = null): string
+    {
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new Exception(trans('panel/file_manager.invalid_url'));
+        }
+
+        $savePath = FileSecurityValidator::validateDirectoryPath($savePath);
+
+        // Download the file first
+        $response = Http::timeout(60)->get($url);
+        if (! $response->successful()) {
+            throw new Exception(trans('panel/file_manager.download_failed'));
+        }
+
+        // Determine file name: explicit > URL path > content-type based
+        if (empty($fileName)) {
+            $fileName = basename(parse_url($url, PHP_URL_PATH));
+        }
+        if (empty($fileName) || ! str_contains($fileName, '.')) {
+            $extension = $this->getExtensionFromResponse($response, $url);
+            $fileName  = md5($url).'.'.$extension;
+        }
+
+        FileSecurityValidator::validateFile($fileName);
+
+        // Ensure target directory exists
+        $dirFullPath = $this->getFullPath($savePath);
+        if (! is_dir($dirFullPath)) {
+            create_directories("$this->mediaDir/$savePath");
+        }
+
+        $fileName = $this->getUniqueFileName($savePath, $fileName);
+        $filePath = ltrim($savePath, '/').'/'.ltrim($fileName, '/');
+        $fullPath = $this->getFullPath("$savePath/$fileName");
+
+        file_put_contents($fullPath, $response->body());
+
+        return StorageService::storageKey($filePath);
+    }
+
+    /**
+     * Guess file extension from response Content-Type or URL.
+     */
+    protected function getExtensionFromResponse($response, string $url): string
+    {
+        $contentType = $response->header('Content-Type') ?? '';
+        $mimeToExt   = [
+            'image/jpeg'      => 'jpg',
+            'image/png'       => 'png',
+            'image/gif'       => 'gif',
+            'image/webp'      => 'webp',
+            'image/svg+xml'   => 'svg',
+            'image/bmp'       => 'bmp',
+            'video/mp4'       => 'mp4',
+            'application/pdf' => 'pdf',
+        ];
+
+        $mime = strtolower(strtok($contentType, ';'));
+        if (isset($mimeToExt[$mime])) {
+            return $mimeToExt[$mime];
+        }
+
+        // Fallback: try to guess from URL query params
+        parse_str(parse_url($url, PHP_URL_QUERY) ?? '', $query);
+        $format    = $query['fm'] ?? '';
+        $formatMap = ['jpg' => 'jpg', 'jpeg' => 'jpg', 'png' => 'png', 'gif' => 'gif', 'webp' => 'webp'];
+        if (isset($formatMap[$format])) {
+            return $formatMap[$format];
+        }
+
+        return 'jpg';
     }
 
     /**

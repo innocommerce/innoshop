@@ -119,4 +119,10 @@ return [
     'no_files_selected'     => '未选择文件',
     'refresh'               => '刷新',
     'storage_settings_link' => '存储凭证设置',
+
+    'download_remote'           => '下载远程文件',
+    'download_success'          => '下载成功',
+    'download_failed'           => '下载远程文件失败',
+    'invalid_url'               => '无效的URL地址',
+    'cannot_determine_filename' => '无法从URL确定文件名',
 ];

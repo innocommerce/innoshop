@@ -55,4 +55,9 @@ interface FileManagerInterface
      * Rename file or directory
      */
     public function updateName(string $originPath, string $newPath): bool;
+
+    /**
+     * Download a remote file from URL and save to the specified path.
+     */
+    public function downloadRemoteFile(string $url, string $savePath, ?string $fileName = null): string;
 }

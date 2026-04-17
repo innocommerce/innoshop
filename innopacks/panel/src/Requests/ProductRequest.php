@@ -91,7 +91,7 @@ class ProductRequest extends FormRequest
             'translations.*.meta_keywords'    => 'max:500',
             'translations.*.meta_description' => 'max:1000',
 
-            'skus'         => 'array',
+            'skus'         => 'required|array',
             'skus.*.code'  => 'nullable|string|max:32',
             'skus.*.model' => 'nullable|string|max:32',
         ];

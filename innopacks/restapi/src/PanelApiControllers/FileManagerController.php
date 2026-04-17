@@ -483,6 +483,48 @@ class FileManagerController extends BaseController
     }
 
     /**
+     * Download a remote file and save to the file manager.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    #[Endpoint('Download remote file')]
+    #[BodyParam('url', type: 'string', required: true, description: 'Remote file URL')]
+    #[BodyParam('path', type: 'string', required: false, description: 'Target directory path')]
+    #[BodyParam('file_name', type: 'string', required: false, description: 'Custom file name')]
+    public function downloadRemoteFile(Request $request): mixed
+    {
+        try {
+            $url      = $request->input('url');
+            $savePath = $request->input('path', '/');
+            $fileName = $request->input('file_name');
+
+            if (empty($url)) {
+                throw new Exception(trans('panel/file_manager.invalid_url'));
+            }
+
+            $service    = $this->getService();
+            $storageKey = $service->downloadRemoteFile($url, $savePath, $fileName);
+
+            $data = [
+                'name'       => $fileName ?? basename(parse_url($url, PHP_URL_PATH)),
+                'path'       => $storageKey,
+                'url'        => storage_url($storageKey),
+                'origin_url' => storage_url($storageKey),
+            ];
+
+            return json_success(trans('panel/file_manager.download_success'), $data);
+        } catch (Exception $e) {
+            Log::error('Download remote file failed:', [
+                'error' => $e->getMessage(),
+                'url'   => $url ?? '',
+            ]);
+
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
      * Get list of enabled cloud drivers from settings.
      * Always includes 'local'.
      */

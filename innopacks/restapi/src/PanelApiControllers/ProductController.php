@@ -154,7 +154,9 @@ class ProductController extends BaseController
     public function store(Request $request): mixed
     {
         try {
-            $data    = $request->all();
+            $data = $request->all();
+            $this->validateSkus($data);
+
             $product = ProductImportService::getInstance()->import($data);
 
             return create_json_success();
@@ -179,6 +181,7 @@ class ProductController extends BaseController
         try {
             $product = ProductRepo::getInstance()->builder()->findOrFail($id);
             $data    = $request->all();
+            $this->validateSkus($data);
 
             ProductImportService::getInstance()->import($data, $product);
 
@@ -254,6 +257,8 @@ class ProductController extends BaseController
                     throw new Exception('Empty SPU code!');
                 }
 
+                $this->validateSkus($productData);
+
                 $product = ProductRepo::getInstance()->findBySpuCode($spuCode);
                 ProductImportService::getInstance()->import($productData, $product);
             }
@@ -261,6 +266,22 @@ class ProductController extends BaseController
             return create_json_success();
         } catch (Exception $e) {
             return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Validate that skus field is present and is an array.
+     *
+     * @param  array  $data
+     * @throws Exception
+     */
+    private function validateSkus(array $data): void
+    {
+        if (! isset($data['skus'])) {
+            throw new Exception('The skus field is required.');
+        }
+        if (! is_array($data['skus'])) {
+            throw new Exception('The skus field must be an array.');
         }
     }
 }

@@ -115,7 +115,7 @@ class StorageService
     public function resize(?string $image, int $width = 100, int $height = 100, ?string $mode = null): string
     {
         if (empty($image)) {
-            return '';
+            return (new ImageService(''))->resize($width, $height, $mode);
         }
 
         if (str_starts_with($image, 'http')) {

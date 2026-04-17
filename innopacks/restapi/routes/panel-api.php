@@ -109,6 +109,7 @@ Route::middleware($middlewares)->group(function () {
     Route::post('/file_manager/move_directories', [FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
     Route::post('/file_manager/move_files', [FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
     Route::post('/file_manager/copy_files', [FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
+    Route::post('/file_manager/download_remote', [FileManagerController::class, 'downloadRemoteFile'])->name('file_manager.download_remote');
 
     Route::get('/file_manager/storage_config', [FileManagerController::class, 'getStorageConfig']);
     Route::post('/file_manager/storage_config', [FileManagerController::class, 'saveStorageConfig']);
