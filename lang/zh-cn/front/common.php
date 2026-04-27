@@ -17,6 +17,8 @@ return [
     'found_categories'                => '找到 :count 个分类',
     'found_suppliers'                 => '找到 :count 个供应商',
     'home'                            => '首页',
+    'language'                        => '语言',
+    'currency'                        => '货币',
     'in_stock'                        => '有货',
     'load_more'                       => '加载更多',
     'links'                           => '链接',

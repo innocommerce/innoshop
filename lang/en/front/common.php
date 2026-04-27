@@ -17,6 +17,8 @@ return [
     'found_categories'                => 'Found :count categories',
     'found_suppliers'                 => 'Found :count suppliers',
     'home'                            => 'Home',
+    'language'                        => 'Language',
+    'currency'                        => 'Currency',
     'in_stock'                        => 'In Stock',
     'load_more'                       => 'Load more',
     'links'                           => 'Links',
