@@ -311,15 +311,15 @@ class AIServiceManager
     public function getAvailableModels(): array
     {
         $models = [
-            'openai'    => OpenAIService::class,
-            'anthropic' => OpenAIService::class,
-            'deepseek'  => OpenAIService::class,
-            'kimi'      => OpenAIService::class,
-            'doubao'    => OpenAIService::class,
-            'qianwen'   => OpenAIService::class,
-            'hunyuan'   => OpenAIService::class,
-            'glm'       => GlmService::class,
-            'minimax'   => MinimaxService::class,
+            'openai'    => LaravelAIService::class,
+            'anthropic' => LaravelAIService::class,
+            'deepseek'  => LaravelAIService::class,
+            'kimi'      => LaravelAIService::class,
+            'doubao'    => LaravelAIService::class,
+            'qianwen'   => LaravelAIService::class,
+            'hunyuan'   => LaravelAIService::class,
+            'glm'       => LaravelAIService::class,
+            'minimax'   => LaravelAIService::class,
         ];
 
         $result = [];
