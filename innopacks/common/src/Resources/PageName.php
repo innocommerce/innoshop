@@ -27,7 +27,7 @@ class PageName extends JsonResource
         $data = [
             'id'     => $this->id,
             'slug'   => $this->slug,
-            'name'   => $this->translation->title,
+            'name'   => $this->title,
             'active' => (bool) $this->active,
         ];
 

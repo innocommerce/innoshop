@@ -25,6 +25,22 @@ class Page extends BaseModel
     ];
 
     /**
+     * Get page title with fallback.
+     */
+    public function getTitleAttribute(): string
+    {
+        return $this->fallbackName('title');
+    }
+
+    /**
+     * Get page content with fallback.
+     */
+    public function getContentAttribute(): string
+    {
+        return $this->fallbackName('content');
+    }
+
+    /**
      * Get slug url link.
      * Uses page-{slug} pattern to maintain consistency with other resources (product-{slug}, category-{slug}, article-{slug})
      *

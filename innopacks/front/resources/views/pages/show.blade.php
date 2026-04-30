@@ -15,13 +15,13 @@
   @if(isset($result))
     {!! $result !!}
   @else
-    <div class="container mt-3 mt-md-5">
+    <div class="container mt-3 mt-md-5 mb-3 mb-md-5">
       <div class="row justify-content-center">
         <div class="col-12">
           <div class="newest-box">
-            <div class="newes-title">{{ $page->translation->title }}</div>
+            <div class="newes-title">{{ $page->title }}</div>
             <div class="newes-content">
-              {!! $page->translation->content !!}
+              {!! $page->content !!}
             </div>
           </div>
         </div>

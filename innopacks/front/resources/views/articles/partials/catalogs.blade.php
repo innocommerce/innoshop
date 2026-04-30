@@ -3,7 +3,7 @@
   <div class="sidebar-list">
     <ul>
       @foreach($catalogs as $catalog)
-        <li><a href="{{ $catalog->url }}">{{ $catalog->translation->title ?? '' }}</a></li>
+        <li><a href="{{ $catalog->url }}">{{ $catalog->title }}</a></li>
       @endforeach
     </ul>
   </div>

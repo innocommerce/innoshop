@@ -24,7 +24,7 @@ class PageSimple extends JsonResource
     {
         $data = [
             'id'     => $this->id,
-            'name'   => $this->translation->title ?? '',
+            'name'   => $this->title,
             'url'    => $this->url,
             'active' => (bool) $this->active,
         ];

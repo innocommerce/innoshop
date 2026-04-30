@@ -7,9 +7,9 @@
     </div>
     <div class="blog-item-info">
       @if($item->catalog->translation ?? '')
-        <div class="blog-catalog"><a href="{{ $item->url }}">{{ $item->catalog->translation->title }}</a></div>
+        <div class="blog-catalog"><a href="{{ $item->url }}">{{ $item->catalog?->title }}</a></div>
       @endif
-      <div class="blog-title"><a href="{{ $item->url }}">{{ $item->translation->title }}</a></div>
+      <div class="blog-title"><a href="{{ $item->url }}">{{ $item->title }}</a></div>
       <div class="author-wrap">
         @if($item->author)
           <div class="blog-author"><i class="bi bi-person"></i> {{ $item->author }}</div>

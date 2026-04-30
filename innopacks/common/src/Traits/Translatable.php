@@ -57,7 +57,7 @@ trait Translatable
      */
     public function translate($locale, $field): string
     {
-        return $this->translations->keyBy('locale')[$locale][$field] ?? '';
+        return $this->translations->where('locale', $locale)->first()?->{$field} ?? '';
     }
 
     /**
@@ -68,11 +68,12 @@ trait Translatable
      */
     public function translatedName(string $field = 'name'): string
     {
-        return $this->translation->{$field} ?? '';
+        return $this->translation?->{$field} ?? '';
     }
 
     /**
      * Get fallback name.
+     * 1. Current locale -> 2. System default locale -> 3. Any available locale
      *
      * @param  string  $field
      * @return string
@@ -84,6 +85,11 @@ trait Translatable
             return $translatedName;
         }
 
-        return $this->translate(setting_locale_code(), $field);
+        $defaultName = $this->translate(setting_locale_code(), $field);
+        if ($defaultName) {
+            return $defaultName;
+        }
+
+        return $this->translations->first()?->{$field} ?? '';
     }
 }

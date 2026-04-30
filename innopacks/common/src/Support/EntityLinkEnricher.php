@@ -84,7 +84,7 @@ final class EntityLinkEnricher
                 case 'page':
                     $page = self::resolveByIdOrSlug(Page::class, $value, ['translation']);
                     if ($page instanceof Page && $page->translation) {
-                        $row['entity_label'] = (string) $page->translation->title;
+                        $row['entity_label'] = (string) $page->title;
                     }
                     break;
 

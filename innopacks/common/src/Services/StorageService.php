@@ -159,7 +159,7 @@ class StorageService
     {
         return match ($mode) {
             'contain', 'pad' => 'pad',
-            default => 'fill',
+            default          => 'fill',
         };
     }
 

@@ -53,6 +53,30 @@ class Article extends BaseModel
     }
 
     /**
+     * Get article title with fallback.
+     */
+    public function getTitleAttribute(): string
+    {
+        return $this->fallbackName('title');
+    }
+
+    /**
+     * Get article content with fallback.
+     */
+    public function getContentAttribute(): string
+    {
+        return $this->fallbackName('content');
+    }
+
+    /**
+     * Get article summary with fallback.
+     */
+    public function getSummaryAttribute(): string
+    {
+        return $this->fallbackName('summary');
+    }
+
+    /**
      * Get tag names.
      *
      * @return mixed

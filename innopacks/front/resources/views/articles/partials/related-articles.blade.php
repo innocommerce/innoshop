@@ -9,14 +9,14 @@
             @if($relatedArticle->image)
               <div class="related-article-image">
                 <a href="{{ $relatedArticle->url }}">
-                  <img src="{{ image_resize($relatedArticle->image, 60, 60) }}" alt="{{ $relatedArticle->translation->title }}" class="img-fluid rounded">
+                  <img src="{{ image_resize($relatedArticle->image, 60, 60) }}" alt="{{ $relatedArticle->title }}" class="img-fluid rounded">
                 </a>
               </div>
             @endif
             <div class="related-article-content">
               <h6 class="related-article-title">
                 <a href="{{ $relatedArticle->url }}" class="text-decoration-none">
-                  {{ $relatedArticle->translation->title }}
+                  {{ $relatedArticle->title }}
                 </a>
               </h6>
               <div class="related-article-meta text-muted small">
@@ -29,9 +29,9 @@
                   </span>
                 @endif
               </div>
-              @if($relatedArticle->translation->summary)
+              @if($relatedArticle->summary)
                 <p class="related-article-summary text-muted small mt-1 mb-0">
-                  {{ Str::limit($relatedArticle->translation->summary, 80) }}
+                  {{ Str::limit($relatedArticle->summary, 80) }}
                 </p>
               @endif
             </div>

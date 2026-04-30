@@ -43,7 +43,7 @@
                     {{ sub_string($item->fallbackName('title'), 32) }}
                   </a>
                 </td>
-                <td class="d-none d-md-table-cell">{{ $item->catalog->translation->title ?? '-' }}</td>
+                <td class="d-none d-md-table-cell">{{ $item->catalog?->title ?: '-' }}</td>
                 <td class="d-none d-md-table-cell">
                   <a href="{{ $item->url }}" target="_blank" class="text-decoration-none" data-bs-toggle="tooltip" title="{{ $item->slug ?: '-' }}">
                     {{ sub_string($item->slug ?: '-', 32) }}

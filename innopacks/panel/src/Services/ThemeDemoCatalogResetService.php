@@ -57,6 +57,14 @@ class ThemeDemoCatalogResetService extends BaseService
             'categories',
             'brand_translations',
             'brands',
+            'article_tags',
+            'article_relations',
+            'article_translations',
+            'articles',
+            'catalog_translations',
+            'catalogs',
+            'page_translations',
+            'pages',
         ];
 
         Schema::disableForeignKeyConstraints();

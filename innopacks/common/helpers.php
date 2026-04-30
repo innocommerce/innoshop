@@ -121,6 +121,22 @@ if (! function_exists('system_setting_locale')) {
     }
 }
 
+if (! function_exists('front_store_name')) {
+    /**
+     * Storefront brand name per locale (contact, copyright, logo alt — not SEO meta_title).
+     */
+    function front_store_name(): string
+    {
+        $name = system_setting_locale('store_name', '');
+        if (! is_string($name)) {
+            $name = '';
+        }
+        $name = trim(strip_tags($name));
+
+        return $name !== '' ? $name : (string) config('app.name', 'InnoShop');
+    }
+}
+
 if (! function_exists('auth_method')) {
     /**
      * Get authentication method setting

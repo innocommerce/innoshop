@@ -15,18 +15,18 @@
     <div class="row">
       {{-- 主内容区 --}}
       <div class="col-12 col-md-9">
-        @if($catalog->image || $catalog->translation?->summary)
+        @if($catalog->image || $catalog->summary)
         <div class="pb-3 mb-4 border-bottom">
           <div class="row align-items-center">
             @if($catalog->image)
             <div class="col-4 col-md-3 mb-3 mb-md-0">
-              <img src="{{ image_resize($catalog->image, 200, 200) }}" alt="{{ $catalog->translation?->title ?? '' }}" class="img-fluid rounded-3">
+              <img src="{{ image_resize($catalog->image, 200, 200) }}" alt="{{ $catalog->title }}" class="img-fluid rounded-3">
             </div>
             @endif
             <div class="{{ $catalog->image ? 'col-8 col-md-9' : 'col-12' }}">
-              <h1 class="catalog-intro-title mb-2">{{ $catalog->translation?->title ?? '' }}</h1>
-              @if($catalog->translation?->summary)
-              <p class="catalog-intro-summary mb-0">{{ $catalog->translation->summary }}</p>
+              <h1 class="catalog-intro-title mb-2">{{ $catalog->title }}</h1>
+              @if($catalog->summary)
+              <p class="catalog-intro-summary mb-0">{{ $catalog->summary }}</p>
               @endif
             </div>
           </div>

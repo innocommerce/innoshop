@@ -53,6 +53,22 @@ class Catalog extends BaseModel
     ];
 
     /**
+     * Get catalog title with fallback.
+     */
+    public function getTitleAttribute(): string
+    {
+        return $this->fallbackName('title');
+    }
+
+    /**
+     * Get catalog summary with fallback.
+     */
+    public function getSummaryAttribute(): string
+    {
+        return $this->fallbackName('summary');
+    }
+
+    /**
      * @return BelongsTo
      */
     public function parent(): BelongsTo

@@ -37,6 +37,9 @@ class SettingRequest extends FormRequest
             $rules['panel_name'] = 'nullable|alpha';
         }
 
+        $rules['store_name']   = 'nullable|array';
+        $rules['store_name.*'] = 'nullable|string|max:120';
+
         return $rules;
     }
 

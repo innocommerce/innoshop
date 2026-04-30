@@ -30,6 +30,14 @@ class Fee extends BaseModel
     ];
 
     /**
+     * Get fee title with fallback.
+     */
+    public function getTitleAttribute(): string
+    {
+        return parent::getAttribute('title') ?? '';
+    }
+
+    /**
      * @return BelongsTo
      */
     public function order(): BelongsTo

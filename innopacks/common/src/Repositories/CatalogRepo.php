@@ -404,7 +404,7 @@ class CatalogRepo extends BaseRepo
     private function buildHierarchy($catalog, $allCatalogs, &$result, string $breadcrumb = '', int $level = 0): void
     {
         // Build breadcrumb path
-        $currentBreadcrumb = $breadcrumb ? $breadcrumb.' > '.$catalog->translation->title : $catalog->translation->title;
+        $currentBreadcrumb = $breadcrumb ? $breadcrumb.' > '.$catalog->title : $catalog->title;
 
         $result[] = [
             'id'        => $catalog->id,

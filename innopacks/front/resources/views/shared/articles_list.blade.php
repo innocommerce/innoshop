@@ -10,7 +10,7 @@
       </div>
       <div class="item-content d-flex flex-column justify-content-between">
         <div class="content-top">
-          <div class="item-title mt-2"><a href="{{ $article->url }}">{{ $article->translation?->title ?? '' }}</a></div>
+          <div class="item-title mt-2"><a href="{{ $article->url }}">{{ $article->title }}</a></div>
           @if ($article->tags->count())
           <div class="newes-tags">
             <i class="bi bi-tags me-1"></i>
@@ -21,7 +21,7 @@
             </div>
           </div>
           @endif
-          <div class="item-summary">{{ sub_string($article->translation?->summary ?? '', 180) }}</div>
+          <div class="item-summary">{{ sub_string($article->summary, 180) }}</div>
         </div>
         <div class="item-date text-secondary">
           <span><i class="bi bi-clock"></i> {{ $article->created_at->format('Y-m-d') }}</span>

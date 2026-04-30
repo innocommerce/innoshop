@@ -13,7 +13,7 @@
         <div class="card h-100 border-0 shadow-sm catalog-card">
           @if($catalog->image)
           <div class="overflow-hidden">
-            <img src="{{ image_resize($catalog->image, 400, 400) }}" class="card-img-top w-100" style="object-fit: cover;" alt="{{ $catalog->translation?->title ?? '' }}">
+            <img src="{{ image_resize($catalog->image, 400, 400) }}" class="card-img-top w-100" style="object-fit: cover;" alt="{{ $catalog->title }}">
           </div>
           @else
           <div class="card-img-top bg-light d-flex align-items-center justify-content-center catalog-placeholder">
@@ -21,9 +21,9 @@
           </div>
           @endif
           <div class="card-body py-2 px-3">
-            <h6 class="card-title mb-1">{{ $catalog->translation?->title ?? '' }}</h6>
-            @if($catalog->translation?->summary)
-            <p class="card-text mb-0">{{ sub_string($catalog->translation->summary, 60) }}</p>
+            <h6 class="card-title mb-1">{{ $catalog->title }}</h6>
+            @if($catalog->summary)
+            <p class="card-text mb-0">{{ sub_string($catalog->summary, 60) }}</p>
             @endif
           </div>
         </div>

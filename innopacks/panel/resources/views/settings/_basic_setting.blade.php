@@ -33,6 +33,11 @@
 	                           description="{{ __('panel/setting.favicon_desc') }}" />
 	      </div>
 	    </div>
+	    <x-common-form-input title="{{ __('panel/setting.store_name') }}" name="store_name"
+                       :value="old('store_name', system_setting('store_name'))"
+                       :multiple="true"
+                       placeholder="{{ __('panel/setting.store_name') }}"
+                       description="{{ __('panel/setting.store_name_desc') }}" />
 	  </div>
 	</div>
 
@@ -88,7 +93,7 @@
 	  </div>
 	  <div class="card-body">
 	    <x-common-form-input title="{{ __('panel/setting.meta_title') }}" name="meta_title"
-                       :value="old('meta_keywords', system_setting('meta_title'))"
+                       :value="old('meta_title', system_setting('meta_title'))"
                        :multiple="true" />
 
 	    <x-common-form-input title="{{ __('panel/setting.meta_keywords') }}" :multiple="true"

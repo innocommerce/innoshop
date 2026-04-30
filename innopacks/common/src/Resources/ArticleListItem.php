@@ -24,7 +24,7 @@ class ArticleListItem extends JsonResource
     {
         $data = [
             'id'    => $this->id,
-            'title' => $this->translation->title ?? '',
+            'title' => $this->title,
         ];
 
         return fire_hook_filter('resource.article.list_item', $data);

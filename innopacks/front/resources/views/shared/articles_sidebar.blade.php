@@ -7,14 +7,14 @@
     </div>
   </div>
 
-  @if(isset($catalogs) && $catalogs)
+  @if(isset($catalogs) && $catalogs->count() > 0)
     <div class="sidebar-item">
       <div class="sidebar-title">{{__("front/article.news_classification")}}</div>
       <div class="sidebar-list">
         <ul>
           @foreach($catalogs as $catalog)
             <li><a
-                  href="{{ $catalog->url }}" {{ isset($currentCatalogId) && $catalog->id === $currentCatalogId ? 'class="fw-bold text-primary"' : '' }}>{{ $catalog->translation?->title ?? '' }}</a>
+                  href="{{ $catalog->url }}" {{ isset($currentCatalogId) && $catalog->id === $currentCatalogId ? 'class="fw-bold text-primary"' : '' }}>{{ $catalog->title }}</a>
             </li>
           @endforeach
         </ul>
