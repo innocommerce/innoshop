@@ -46,6 +46,11 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/brands', [PanelApiControllers\BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands/names', [PanelApiControllers\BrandController::class, 'names'])->name('brands.name');
     Route::get('/brands/autocomplete', [PanelApiControllers\BrandController::class, 'autocomplete'])->name('brands.autocomplete');
+    Route::get('/brands/{id}', [PanelApiControllers\BrandController::class, 'show'])->name('brands.show');
+    Route::post('/brands', [PanelApiControllers\BrandController::class, 'store'])->name('brands.store');
+    Route::put('/brands/{id}', [PanelApiControllers\BrandController::class, 'update'])->name('brands.update');
+    Route::patch('/brands/{id}', [PanelApiControllers\BrandController::class, 'patch'])->name('brands.patch');
+    Route::delete('/brands/{id}', [PanelApiControllers\BrandController::class, 'destroy'])->name('brands.destroy');
 
     Route::get('/articles', [PanelApiControllers\ArticleController::class, 'index'])->name('articles.index');
     Route::get('/articles/names', [PanelApiControllers\ArticleController::class, 'names'])->name('articles.names');
@@ -63,8 +68,13 @@ Route::middleware($middlewares)->group(function () {
     Route::patch('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'patch'])->name('catalogs.patch');
     Route::delete('/catalogs/{catalog}', [PanelApiControllers\CatalogController::class, 'destroy'])->name('catalogs.destroy');
 
+    Route::get('/orders', [PanelApiControllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [PanelApiControllers\OrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}/status', [PanelApiControllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
     Route::post('/orders/{order}/notes', [PanelApiControllers\OrderController::class, 'updateNote'])->name('orders.update_note');
 
+    Route::get('/shipments', [PanelApiControllers\ShipmentController::class, 'index'])->name('shipments.index');
+    Route::get('/shipments/{shipment}', [PanelApiControllers\ShipmentController::class, 'show'])->name('shipments.show');
     Route::post('/orders/{order}/shipments', [PanelApiControllers\ShipmentController::class, 'store'])->name('shipments.store');
     Route::delete('/shipments/{shipment}', [PanelApiControllers\ShipmentController::class, 'destroy'])->name('shipments.destroy');
     Route::get('/shipments/{shipment}/traces', [PanelApiControllers\ShipmentController::class, 'getTraces'])->name('shipments.get_traces');
@@ -114,4 +124,50 @@ Route::middleware($middlewares)->group(function () {
     Route::post('/file_manager/storage_config', [FileManagerController::class, 'saveStorageConfig']);
 
     Route::get('/currencies', [PanelApiControllers\CurrencyController::class, 'index'])->name('currencies.index');
+    Route::post('/currencies', [PanelApiControllers\CurrencyController::class, 'store'])->name('currencies.store');
+    Route::put('/currencies/{id}', [PanelApiControllers\CurrencyController::class, 'update'])->name('currencies.update');
+
+    // Reviews
+    Route::get('/reviews', [PanelApiControllers\ReviewController::class, 'index'])->name('reviews.index');
+    Route::get('/reviews/{id}', [PanelApiControllers\ReviewController::class, 'show'])->name('reviews.show');
+    Route::put('/reviews/{id}', [PanelApiControllers\ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{id}', [PanelApiControllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    // Tax Rates
+    Route::get('/tax_rates', [PanelApiControllers\TaxRateController::class, 'index'])->name('tax_rates.index');
+    Route::get('/tax_rates/{id}', [PanelApiControllers\TaxRateController::class, 'show'])->name('tax_rates.show');
+    Route::post('/tax_rates', [PanelApiControllers\TaxRateController::class, 'store'])->name('tax_rates.store');
+    Route::put('/tax_rates/{id}', [PanelApiControllers\TaxRateController::class, 'update'])->name('tax_rates.update');
+    Route::delete('/tax_rates/{id}', [PanelApiControllers\TaxRateController::class, 'destroy'])->name('tax_rates.destroy');
+
+    // Tax Classes
+    Route::get('/tax_classes', [PanelApiControllers\TaxClassController::class, 'index'])->name('tax_classes.index');
+    Route::get('/tax_classes/{id}', [PanelApiControllers\TaxClassController::class, 'show'])->name('tax_classes.show');
+    Route::post('/tax_classes', [PanelApiControllers\TaxClassController::class, 'store'])->name('tax_classes.store');
+    Route::put('/tax_classes/{id}', [PanelApiControllers\TaxClassController::class, 'update'])->name('tax_classes.update');
+    Route::delete('/tax_classes/{id}', [PanelApiControllers\TaxClassController::class, 'destroy'])->name('tax_classes.destroy');
+
+    // Settings
+    Route::get('/settings', [PanelApiControllers\SettingController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [PanelApiControllers\SettingController::class, 'update'])->name('settings.update');
+
+    // Locales
+    Route::get('/locales', [PanelApiControllers\LocaleController::class, 'index'])->name('locales.index');
+    Route::get('/locales/{id}', [PanelApiControllers\LocaleController::class, 'show'])->name('locales.show');
+    Route::post('/locales', [PanelApiControllers\LocaleController::class, 'store'])->name('locales.store');
+    Route::put('/locales/{id}', [PanelApiControllers\LocaleController::class, 'update'])->name('locales.update');
+    Route::delete('/locales/{id}', [PanelApiControllers\LocaleController::class, 'destroy'])->name('locales.destroy');
+
+    // Countries
+    Route::get('/countries', [PanelApiControllers\CountryController::class, 'index'])->name('countries.index');
+    Route::get('/countries/{id}', [PanelApiControllers\CountryController::class, 'show'])->name('countries.show');
+
+    // Regions
+    Route::get('/regions', [PanelApiControllers\RegionController::class, 'index'])->name('regions.index');
+    Route::get('/regions/{id}', [PanelApiControllers\RegionController::class, 'show'])->name('regions.show');
+
+    // Order Returns
+    Route::get('/order_returns', [PanelApiControllers\OrderReturnController::class, 'index'])->name('order_returns.index');
+    Route::get('/order_returns/{id}', [PanelApiControllers\OrderReturnController::class, 'show'])->name('order_returns.show');
+    Route::put('/order_returns/{id}', [PanelApiControllers\OrderReturnController::class, 'update'])->name('order_returns.update');
 });

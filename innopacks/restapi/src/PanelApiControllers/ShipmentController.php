@@ -10,17 +10,46 @@
 namespace InnoShop\RestAPI\PanelApiControllers;
 
 use Exception;
+use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Services\ShippingTraceService;
 use InnoShop\RestAPI\Requests\ShipmentRequest;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\QueryParam;
 use Knuckles\Scribe\Attributes\UrlParam;
 
 #[Group('Panel - Shipments')]
 class ShipmentController extends BaseController
 {
+    #[Endpoint('List shipments')]
+    #[QueryParam('per_page', 'integer', required: false, example: 15)]
+    public function index(Request $request): mixed
+    {
+        try {
+            $perPage   = $request->get('per_page', 15);
+            $shipments = Order\Shipment::query()->with('order')->orderByDesc('id')->paginate($perPage);
+
+            return read_json_success($shipments);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    #[Endpoint('Get shipment detail')]
+    #[UrlParam('shipment', type: 'integer', description: 'Shipment ID')]
+    public function show(Order\Shipment $shipment): mixed
+    {
+        try {
+            $shipment->load('order');
+
+            return read_json_success($shipment);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
     /**
      * @param  Order  $order
      * @param  ShipmentRequest  $request
