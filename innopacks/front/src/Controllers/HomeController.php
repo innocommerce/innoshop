@@ -10,8 +10,6 @@
 namespace InnoShop\Front\Controllers;
 
 use App\Http\Controllers\Controller;
-use InnoShop\Common\Repositories\ArticleRepo;
-use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Front\Repositories\HomeRepo;
@@ -31,7 +29,7 @@ class HomeController extends Controller
             ['tab_title' => trans('front/home.new_arrival'), 'products' => $newArrivals],
         ];
 
-        $news = ArticleRepo::getInstance()->getLatestArticles();
+        $news = HomeRepo::getInstance()->getHomeArticles();
         $data = [
             'slideshow'       => HomeRepo::getInstance()->getSlideShow(),
             'tab_products'    => $tabProducts,
@@ -50,27 +48,27 @@ class HomeController extends Controller
     }
 
     /**
-     * Get hot products from settings, organized by category
-     * Returns array of category groups with their products
+     * Get hot products from settings, organized by floors.
      *
-     * @return array Array of category groups: [['category_id' => 1, 'category_name' => 'xxx', 'products' => [...]], ...]
+     * @return array Array of floors: [['name' => 'xxx', 'subtitle' => 'xxx', 'products' => [...]], ...]
      */
     private function getHotProducts(): array
     {
         $hotProductsSetting = system_setting('home_hot_products', '{}');
 
-        // Handle both string and array return types from system_setting
         if (is_array($hotProductsSetting)) {
             $hotProductsData = $hotProductsSetting;
         } else {
             $hotProductsData = json_decode($hotProductsSetting, true) ?: [];
         }
 
-        if (empty($hotProductsData) || ! isset($hotProductsData['categories']) || ! is_array($hotProductsData['categories'])) {
+        if (empty($hotProductsData) || empty($hotProductsData['floors'])) {
             return [];
         }
 
-        $categoryGroups = [];
+        $groups = $hotProductsData['floors'];
+
+        $result = [];
 
         try {
             $allProductIds = HomeRepo::getInstance()->getHomeHotProductIdsOrdered();
@@ -84,55 +82,55 @@ class HomeController extends Controller
                 ->with(['masterSku', 'skus', 'translation'])
                 ->get();
 
-            // Collect category IDs for batch category name resolution
-            $categoryIds = [];
-            foreach ($hotProductsData['categories'] as $categoryGroup) {
-                if (isset($categoryGroup['category_id'])) {
-                    $categoryIds[] = $categoryGroup['category_id'];
-                }
-            }
-
-            // Load category names in one query
-            $categories = [];
-            if (! empty($categoryIds)) {
-                $categoryModels = CategoryRepo::getInstance()
-                    ->builder(['category_ids' => array_unique($categoryIds)])
-                    ->with(['translation'])
-                    ->get();
-                foreach ($categoryModels as $category) {
-                    $categories[$category->id] = $category->fallbackName();
-                }
-            }
-
-            foreach ($hotProductsData['categories'] as $categoryGroup) {
-                if (! isset($categoryGroup['products']) || ! is_array($categoryGroup['products']) || empty($categoryGroup['products'])) {
+            foreach ($groups as $group) {
+                if (! isset($group['products']) || ! is_array($group['products']) || empty($group['products'])) {
                     continue;
                 }
 
-                $categoryId = $categoryGroup['category_id'] ?? 0;
-                // Prefer DB name over stored category_name in settings
-                $categoryName = $categories[$categoryId] ?? ($categoryGroup['category_name'] ?? "Category ID: {$categoryId}");
-
-                $categoryProducts = [];
-                foreach ($categoryGroup['products'] as $productId) {
+                $floorProducts = [];
+                foreach ($group['products'] as $productId) {
                     $product = $products->firstWhere('id', $productId);
                     if ($product) {
-                        $categoryProducts[] = HomeRepo::getInstance()->formatProductData($product);
+                        $floorProducts[] = HomeRepo::getInstance()->formatProductData($product);
                     }
                 }
 
-                if (! empty($categoryProducts)) {
-                    $categoryGroups[] = [
-                        'category_id'   => $categoryId,
-                        'category_name' => $categoryName,
-                        'products'      => $categoryProducts,
+                if (! empty($floorProducts)) {
+                    $result[] = [
+                        'name'     => $this->resolveLocaleValue($group['name'] ?? ''),
+                        'subtitle' => $this->resolveLocaleValue($group['subtitle'] ?? ''),
+                        'products' => $floorProducts,
                     ];
                 }
             }
 
-            return $categoryGroups;
+            return [
+                'display_mode' => $hotProductsData['display_mode'] ?? 'flat',
+                'title_align'  => $hotProductsData['title_align'] ?? 'left',
+                'floors'       => $result,
+            ];
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    /**
+     * Resolve a locale-aware value: if array (locale→value map), pick current locale;
+     * if string, return as-is (backward compatibility).
+     */
+    private function resolveLocaleValue(mixed $value): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            $currentLocale  = front_locale_code();
+            $fallbackLocale = setting_locale_code() ?? 'zh_cn';
+
+            return $value[$currentLocale] ?? $value[$fallbackLocale] ?? reset($value) ?: '';
+        }
+
+        return '';
     }
 }

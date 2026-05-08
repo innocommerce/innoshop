@@ -12,6 +12,7 @@ namespace InnoShop\Front\Repositories;
 use Exception;
 use Illuminate\Support\Collection;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 
@@ -229,9 +230,10 @@ class HomeRepo
             $hotProductsData = json_decode($hotProductsSetting, true) ?: [];
         }
 
-        $ids = [];
-        foreach ($hotProductsData['categories'] ?? [] as $categoryGroup) {
-            foreach ($categoryGroup['products'] ?? [] as $productId) {
+        $ids    = [];
+        $groups = $hotProductsData['floors'] ?? [];
+        foreach ($groups as $group) {
+            foreach ($group['products'] ?? [] as $productId) {
                 $id = (int) $productId;
                 if ($id > 0) {
                     $ids[] = $id;
@@ -280,5 +282,45 @@ class HomeRepo
         }
 
         return $ordered;
+    }
+
+    /**
+     * Get home articles from settings. Falls back to latest 3 when setting is empty.
+     *
+     * @return array
+     */
+    public function getHomeArticles(): array
+    {
+        $articleIds = system_setting('home_articles', []);
+
+        if (! is_array($articleIds)) {
+            $articleIds = json_decode($articleIds, true) ?: [];
+        }
+
+        // Fallback to latest 3 articles when no setting configured
+        if (empty($articleIds) || ! is_array($articleIds)) {
+            $articles = ArticleRepo::getInstance()->getLatestArticles(3);
+        } else {
+            $articles = ArticleRepo::getInstance()->getListByArticleIDs($articleIds);
+        }
+
+        $formatted = [];
+        foreach ($articles as $article) {
+            $catalogName = $article->catalog
+                ? $article->catalog->fallbackName('title')
+                : '';
+
+            $formatted[] = [
+                'id'           => $article->id,
+                'title'        => $article->title,
+                'summary'      => $article->summary,
+                'image'        => $article->image ? image_resize($article->image, 400, 300) : '',
+                'url'          => $article->url,
+                'catalog_name' => $catalogName,
+                'created_at'   => $article->created_at->format('Y-m-d'),
+            ];
+        }
+
+        return $formatted;
     }
 }

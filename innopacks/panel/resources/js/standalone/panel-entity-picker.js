@@ -25,6 +25,7 @@
       searchButtonText: { type: String, default: "Search" },
       confirmButtonText: { type: String, default: "Confirm" },
       emptyText: { type: String, default: "" },
+      multiple: { type: Boolean, default: false },
     },
     emits: ["update:modelValue", "select"],
     setup(props, { emit }) {
@@ -32,6 +33,7 @@
       const list = ref([]);
       const loading = ref(false);
       const selected = ref(null);
+      const multiSelected = ref([]);
       let debounceTimer = null;
 
       function clearDebounce() {
@@ -71,15 +73,28 @@
         }
       }
 
-      function selectRow(item) {
-        selected.value = item;
+      function isItemSelected(item) {
+        if (props.multiple) {
+          return multiSelected.value.some(function (s) { return s.id === item.id; });
+        }
+        return selected.value && selected.value.id === item.id;
       }
 
-      function onSelect(item) {
-        if (!item) {
-          return;
+      function selectRow(item) {
+        if (props.multiple) {
+          var idx = multiSelected.value.findIndex(function (s) { return s.id === item.id; });
+          if (idx >= 0) {
+            multiSelected.value.splice(idx, 1);
+          } else {
+            multiSelected.value.push(item);
+          }
+        } else {
+          selected.value = item;
         }
-        emit("select", {
+      }
+
+      function normalizeItem(item) {
+        return {
           id: item.id,
           name: item.name,
           value: item.value,
@@ -88,18 +103,39 @@
           price_label: item.price_label != null ? item.price_label : null,
           subtitle: item.subtitle != null ? item.subtitle : null,
           sku_code: item.sku_code != null && item.sku_code !== "" ? item.sku_code : null,
-        });
+        };
+      }
+
+      function onSelect(item) {
+        if (!item) {
+          return;
+        }
+        emit("select", normalizeItem(item));
         emit("update:modelValue", false);
         keyword.value = "";
         list.value = [];
         selected.value = null;
+        multiSelected.value = [];
       }
 
       function confirmSelection() {
-        if (!selected.value) {
-          return;
+        if (props.multiple) {
+          if (multiSelected.value.length === 0) {
+            return;
+          }
+          var items = multiSelected.value.map(normalizeItem);
+          emit("select", items);
+          emit("update:modelValue", false);
+          keyword.value = "";
+          list.value = [];
+          selected.value = null;
+          multiSelected.value = [];
+        } else {
+          if (!selected.value) {
+            return;
+          }
+          onSelect(selected.value);
         }
-        onSelect(selected.value);
       }
 
       function onSearchKeyup(e) {
@@ -116,6 +152,7 @@
             keyword.value = "";
             list.value = [];
             selected.value = null;
+            multiSelected.value = [];
             runSearch();
           } else {
             clearDebounce();
@@ -165,7 +202,7 @@
         }
 
         function rowVNode(item) {
-          const isSel = selected.value && selected.value.id === item.id;
+          const isSel = isItemSelected(item);
           return h(
             "div",
             {
@@ -268,14 +305,23 @@
           ),
         );
 
+        // Multi-select count hint
+        var confirmDisabled = props.multiple
+          ? multiSelected.value.length === 0
+          : !selected.value;
+        var confirmLabel = props.confirmButtonText;
+        if (props.multiple && multiSelected.value.length > 0) {
+          confirmLabel = confirmLabel + " (" + multiSelected.value.length + ")";
+        }
+
         children.push(
           h("div", { class: "mt-3 pt-2 border-top" }, [
             h(ElButton, {
               type: "success",
               class: "w-100",
-              disabled: !selected.value,
+              disabled: confirmDisabled,
               onClick: confirmSelection,
-            }, props.confirmButtonText),
+            }, confirmLabel),
           ]),
         );
 

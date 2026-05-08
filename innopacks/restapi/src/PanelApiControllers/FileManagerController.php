@@ -349,7 +349,7 @@ class FileManagerController extends BaseController
     {
         $service  = $this->getService();
         $file     = $request->file('file');
-        $savePath = $request->get('path');
+        $savePath = $request->get('path', '');
 
         $originName = $file->getClientOriginalName();
         $storageKey = $service->uploadFile($file, $savePath, $originName);

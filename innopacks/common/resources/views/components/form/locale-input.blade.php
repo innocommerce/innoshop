@@ -172,13 +172,13 @@ $modalId = 'locale-modal-' . $uid;
                 </div>
                 @if($type === 'textarea')
                   <textarea class="form-control" rows="{{ min($rows, 3) }}"
-                            name="@if($nameFormat === 'translations')translations[{{ $localeCode }}][{{ $name }}]@else{{ $name }}[{{ $localeCode }}]@endif"
+                            @unless($isPanel)name="@if($nameFormat === 'translations')translations[{{ $localeCode }}][{{ $name }}]@else{{ $name }}[{{ $localeCode }}]@endif"@endunless
                             placeholder="{{ $placeholder ?: $label }}"
                             data-locale="{{ $localeCode }}"
                   >{{ $localeValue }}</textarea>
                 @else
                   <input type="text" class="form-control"
-                         name="@if($nameFormat === 'translations')translations[{{ $localeCode }}][{{ $name }}]@else{{ $name }}[{{ $localeCode }}]@endif"
+                         @unless($isPanel)name="@if($nameFormat === 'translations')translations[{{ $localeCode }}][{{ $name }}]@else{{ $name }}[{{ $localeCode }}]@endif"@endunless
                          value="{{ $localeValue }}"
                          placeholder="{{ $placeholder ?: $label }}"
                          data-locale="{{ $localeCode }}">

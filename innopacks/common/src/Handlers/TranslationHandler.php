@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Handlers;
 
 use Exception;
+use InnoShop\Common\Services\HtmlPurifyService;
 
 /**
  * A utility class for handling translations in multilingual models
@@ -52,6 +53,9 @@ class TranslationHandler
             if (! in_array($translation['locale'], enabled_locale_codes())) {
                 continue;
             }
+
+            // Purify HTML content before processing
+            $translation = HtmlPurifyService::purifyTranslation($translation);
 
             $result = ['locale' => $translation['locale']];
 

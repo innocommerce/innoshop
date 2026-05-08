@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
@@ -67,6 +68,15 @@ class ThemeController extends BaseController
             'brands'     => BrandRepo::getInstance()->withActive()->builder()->get(),
             'specials'   => SpecialPageRepo::getInstance()->getOptions(),
             'pages'      => PageRepo::getInstance()->withActive()->builder()->get(),
+            'articles'   => ArticleRepo::getInstance()->withActive()->builder()
+                ->with(['translation', 'catalog.translation'])
+                ->orderByDesc('id')
+                ->limit(50)
+                ->get(),
+            'product_floors'    => $this->getProductFloorsForEdit(),
+            'home_category_ids' => $this->getHomeCategoryIds(),
+            'hp_display_mode'   => $this->getHotProductsSetting('display_mode', 'flat'),
+            'hp_title_align'    => $this->getHotProductsSetting('title_align', 'left'),
         ];
 
         // 允许通过 Hook 扩展数据
@@ -86,6 +96,13 @@ class ThemeController extends BaseController
         $settingUrl = panel_route('themes_settings.index');
 
         try {
+            // Assemble hot products floor data from form fields
+            $settings['home_hot_products'] = $this->assembleProductFloors($request);
+
+            // Parse home categories from JSON hidden input
+            $catIdsJson                  = $request->input('home_categories_ids', '[]');
+            $settings['home_categories'] = json_decode($catIdsJson, true) ?: [];
+
             ThemeRepo::getInstance()->updateSetting($settings);
 
             return redirect($settingUrl)
@@ -143,5 +160,107 @@ class ThemeController extends BaseController
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Parse existing hot_products setting into edit-ready floor data.
+     * Returns array of floors with name/subtitle translations and product IDs.
+     */
+    private function getProductFloorsForEdit(): array
+    {
+        $raw  = system_setting('home_hot_products', '{}');
+        $data = is_array($raw) ? $raw : (json_decode($raw, true) ?: []);
+
+        if (empty($data)) {
+            return [];
+        }
+
+        if (empty($data['floors']) || ! is_array($data['floors'])) {
+            return [];
+        }
+
+        $floors = $data['floors'];
+
+        $result = [];
+        foreach ($floors as $floor) {
+            // Ensure name/subtitle are {locale: value} objects
+            $name     = $floor['name'] ?? '';
+            $subtitle = $floor['subtitle'] ?? '';
+
+            // If name is a plain string (old format), wrap it
+            if (is_string($name)) {
+                $name = [panel_locale_code() => $name];
+            }
+            if (is_string($subtitle)) {
+                $subtitle = ! empty($subtitle) ? [panel_locale_code() => $subtitle] : [];
+            }
+
+            $result[] = [
+                'name_translations'     => $name,
+                'subtitle_translations' => $subtitle,
+                'products'              => $floor['products'] ?? [],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Assemble product floors from form submission into JSON-ready structure.
+     */
+    private function assembleProductFloors(Request $request): array
+    {
+        $floorsInput   = $request->input('floors', []);
+        $productsInput = $request->input('floors_products', []);
+
+        if (empty($floorsInput)) {
+            return ['floors' => []];
+        }
+
+        $floors = [];
+        foreach ($floorsInput as $index => $floorFields) {
+            $products = $productsInput[$index] ?? [];
+            if (is_string($products)) {
+                $products = json_decode($products, true) ?: [];
+            }
+            $products = array_map('intval', array_filter((array) $products));
+
+            $floors[] = [
+                'name'     => $floorFields['name'] ?? [],
+                'subtitle' => $floorFields['subtitle'] ?? [],
+                'products' => $products,
+            ];
+        }
+
+        return [
+            'display_mode' => in_array($request->input('hp_display_mode'), ['tab', 'flat']) ? $request->input('hp_display_mode') : 'flat',
+            'title_align'  => in_array($request->input('hp_title_align'), ['left', 'center']) ? $request->input('hp_title_align') : 'left',
+            'floors'       => $floors,
+        ];
+    }
+
+    /**
+     * Get a single hot products setting value.
+     */
+    private function getHotProductsSetting(string $key, string $default = ''): string
+    {
+        $raw  = system_setting('home_hot_products', '{}');
+        $data = is_array($raw) ? $raw : (json_decode($raw, true) ?: []);
+
+        return $data[$key] ?? $default;
+    }
+
+    /**
+     * Get home category IDs from settings.
+     */
+    private function getHomeCategoryIds(): array
+    {
+        $ids = system_setting('home_categories', []);
+
+        if (is_string($ids)) {
+            $ids = json_decode($ids, true) ?: [];
+        }
+
+        return is_array($ids) ? array_map('intval', $ids) : [];
     }
 }
