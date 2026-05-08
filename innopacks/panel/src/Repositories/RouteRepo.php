@@ -18,7 +18,7 @@ use Spatie\Permission\Models\Role;
 class RouteRepo
 {
     const IGNORE_LIST = [
-        'login.index', 'login.store', 'logout.index', 'dashboard.index', 'locale.switch', 'search.menus',
+        'login.index', 'login.store', 'cli_login.index', 'cli_login.store', 'logout.index', 'dashboard.index', 'locale.switch', 'search.menus',
     ];
 
     private Role $adminRole;

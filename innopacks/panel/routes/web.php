@@ -14,6 +14,9 @@ use InnoShop\RestAPI\PanelApiControllers\FileManagerController;
 Route::get('login', [Controllers\LoginController::class, 'index'])->name('login.index');
 Route::post('login', [Controllers\LoginController::class, 'store'])->name('login.store');
 
+Route::get('cli-login', [Controllers\CliLoginController::class, 'index'])->name('cli_login.index');
+Route::post('cli-login', [Controllers\CliLoginController::class, 'store'])->name('cli_login.store');
+
 Route::middleware(['admin_auth:admin'])
     ->group(function () {
         Route::get('logout', [Controllers\LogoutController::class, 'index'])->name('logout.index');
