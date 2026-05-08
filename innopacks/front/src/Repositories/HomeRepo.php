@@ -289,7 +289,7 @@ class HomeRepo
      *
      * @return array
      */
-    public function getHomeArticles(): array
+    public function getHomeArticles()
     {
         $articleIds = system_setting('home_articles', []);
 
@@ -299,28 +299,9 @@ class HomeRepo
 
         // Fallback to latest 3 articles when no setting configured
         if (empty($articleIds) || ! is_array($articleIds)) {
-            $articles = ArticleRepo::getInstance()->getLatestArticles(3);
-        } else {
-            $articles = ArticleRepo::getInstance()->getListByArticleIDs($articleIds);
+            return ArticleRepo::getInstance()->getLatestArticles(3);
         }
 
-        $formatted = [];
-        foreach ($articles as $article) {
-            $catalogName = $article->catalog
-                ? $article->catalog->fallbackName('title')
-                : '';
-
-            $formatted[] = [
-                'id'           => $article->id,
-                'title'        => $article->title,
-                'summary'      => $article->summary,
-                'image'        => $article->image ? image_resize($article->image, 400, 300) : '',
-                'url'          => $article->url,
-                'catalog_name' => $catalogName,
-                'created_at'   => $article->created_at->format('Y-m-d'),
-            ];
-        }
-
-        return $formatted;
+        return ArticleRepo::getInstance()->getListByArticleIDs($articleIds);
     }
 }

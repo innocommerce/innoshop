@@ -140,7 +140,7 @@
           <div class="row gx-3 gx-lg-4">
             @foreach ($news as $new)
               <div class="col-6 col-md-4 col-lg-3">
-                @include('shared.blog', ['item' => $new])
+                @include('shared.article', ['item' => $new])
               </div>
             @endforeach
           </div>

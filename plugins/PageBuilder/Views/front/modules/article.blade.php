@@ -19,7 +19,7 @@
                 <div class="row gx-3 gx-lg-4">
                     @foreach($content['articles'] as $article)
                         <div class="{{ $colClass }}">
-                            @include('shared.blog', ['item' => $article])
+                            @include('shared.article', ['item' => $article])
                         </div>
                     @endforeach
                 </div>
