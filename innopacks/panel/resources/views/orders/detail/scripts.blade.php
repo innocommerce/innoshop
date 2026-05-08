@@ -1,6 +1,6 @@
 @php
   $apiBase          = $apiBase ?? 'panel_api';
-  $routePrefix      = $routePrefix ?? 'panel';
+  $routePrefix      = $routePrefix ?? panel_name();
   $showStatusChange = $showStatusChange ?? true;
   $showShipments    = $showShipments ?? true;
 @endphp

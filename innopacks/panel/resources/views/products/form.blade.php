@@ -1,5 +1,5 @@
 @php
-  $routePrefix = $routePrefix ?? 'panel';
+  $routePrefix = $routePrefix ?? panel_name();
   $layoutView  = $layoutView  ?? 'panel::layouts.app';
 @endphp
 @extends($layoutView)

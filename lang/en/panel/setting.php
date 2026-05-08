@@ -153,6 +153,8 @@ return [
     'slideshow_slide_subtitle'            => 'Slide subtitle',
     'slideshow_slide_text_hint'           => 'Optional text overlaid on the image; set per language.',
     'specials'                            => 'Fixed page',
+    'store_name'                          => 'Store Name',
+    'store_name_desc'                     => 'The name of your store, displayed on the storefront and browser tab',
     'store_features'                      => 'Store function setting',
     'store_features_desc'                 => 'Configure the store\'s functional options and user experience',
     'store_functionality'                 => 'Store function',

@@ -167,6 +167,8 @@ return [
     'slideshow_slide_subtitle'            => '幻灯副标题',
     'slideshow_slide_text_hint'           => '可选，显示在图片上方；按语言分别填写。',
     'specials'                            => '固定页',
+    'store_name'                          => '商店名称',
+    'store_name_desc'                     => '商店名称，显示在前台页面和浏览器标签上',
     'store_features'                      => '商店功能',
     'store_features_desc'                 => '配置店铺的功能选项和用户体验',
     'store_functionality'                 => '商店功能',
