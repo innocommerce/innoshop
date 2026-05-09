@@ -1,6 +1,20 @@
 {{-- 视频模块前台展示模板 --}}
 @php
   $locale = locale_code();
+  $coverRaw = $content['coverImage'] ?? null;
+  if (is_array($coverRaw)) {
+    $resolvedCoverImage = $coverRaw[$locale] ?? '';
+    if ($resolvedCoverImage === '') {
+      foreach ($coverRaw as $v) {
+        if (is_string($v) && $v !== '') {
+          $resolvedCoverImage = $v;
+          break;
+        }
+      }
+    }
+  } else {
+    $resolvedCoverImage = is_string($coverRaw) ? $coverRaw : '';
+  }
 @endphp
 <div id="module-{{ $module_id }}" class="module-item module-video">
   <div class="module-content">
@@ -100,10 +114,10 @@
           
         @else
           {{-- 无视频或封面图片 --}}
-          @if(!empty($content['coverImage'][$locale] ?? $content['coverImage']))
+          @if($resolvedCoverImage !== '')
             <div class="video-placeholder" style="position: relative; border-radius: 8px; overflow: hidden;">
               <img 
-                src="{{ $content['coverImage'][$locale] ?? ($content['coverImage'] ?? image_resize()) }}" 
+                src="{{ $resolvedCoverImage }}"
                 alt="{{ __('PageBuilder::common.video_cover') }}"
                 style="width: 100%; height: auto; display: block;"
               >

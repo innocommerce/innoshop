@@ -1,24 +1,51 @@
-/.phpunit.cache
+# Claude Code - exclude personal (skills are committed)
+/.claude/settings.json
+/.claude/settings.local.json
+
+# Dependencies
 /node_modules
+/vendor
+
+# Laravel
+/.phpunit.cache
+/.phpunit.result.cache
 /storage/*.key
 /storage/installed
-/vendor
-/.fleet
-/.idea
-/.vscode
-/.claude
+
+# Environment
 .env
 .env.backup
 .env.production
-.phpunit.result.cache
+
+# IDE
+/.idea
+/.vscode
+/.fleet
+
+# OS
 .DS_Store
+dump.rdb
+
+# Laravel Homestead
 Homestead.json
 Homestead.yaml
-auth.json
-package-lock.json
+
+# Package manager
 npm-debug.log
 yarn-error.log
+auth.json
+
+# Misc
 webpack.mix.js
+Envoy.blade.php
+
+# Dev docs
+/docs/devdocs/
+/docs/guide
+
+# Plugin sync config (local overrides, sample.yaml is tracked)
+/scripts/config/enterprise.yaml
+/scripts/config/factory.yaml
 
 # Scribe generated files
 .scribe/

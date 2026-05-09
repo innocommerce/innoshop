@@ -10,6 +10,7 @@
     },
     "type": "marketing",
     "version": "v1.0.0",
+    "panel_route": "pbuilder.index",
     "icon": "/images/logo.png",
     "author": {
         "name": "InnoShop",
