@@ -31,7 +31,7 @@ class AdminAuthenticate extends Middleware
         $this->authenticate($request, $guards);
 
         $routeName = $request->route()->getName();
-        $routeCode = str_replace('panel.', '', $routeName);
+        $routeCode = str_replace(panel_name().'.', '', $routeName);
         if (in_array($routeCode, RouteRepo::IGNORE_LIST)) {
             return $next($request);
         }

@@ -76,12 +76,13 @@ class RouteRepo
         $routeList = [];
         $routes    = Route::getRoutes();
         foreach ($routes as $route) {
-            $routeName = $route->getName();
-            if (! Str::startsWith($route->getName(), 'panel.')) {
+            $routeName   = $route->getName();
+            $panelPrefix = panel_name().'.';
+            if (! Str::startsWith($route->getName(), $panelPrefix)) {
                 continue;
             }
 
-            $routeName = substr($routeName, strlen('panel.'));
+            $routeName = substr($routeName, strlen($panelPrefix));
             if (in_array($routeName, self::IGNORE_LIST)) {
                 continue;
             }

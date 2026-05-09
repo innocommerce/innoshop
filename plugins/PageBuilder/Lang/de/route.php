@@ -8,5 +8,13 @@
  */
 
 return [
-    'title' => 'Ein webeditor.',
+    'title'                         => 'Ein webeditor.',
+    'pbuilder_index'                => 'Seitenbuilder-Index',
+    'pbuilder_page_index'           => 'Seitenbuilder-Seite',
+    'pbuilder_modules_update'       => 'Module aktualisieren',
+    'pbuilder_page_modules_update'  => 'Seitenmodule aktualisieren',
+    'pbuilder_modules_preview'      => 'Modulvorschau',
+    'pbuilder_page_modules_preview' => 'Seitenmodulvorschau',
+    'pbuilder_demo_import'          => 'Demo importieren',
+    'pbuilder_page_demo_import'     => 'Seitendemo importieren',
 ];

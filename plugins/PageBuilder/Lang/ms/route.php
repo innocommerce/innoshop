@@ -8,5 +8,13 @@
  */
 
 return [
-    'title' => 'Penyunting web',
+    'title'                         => 'Penyunting web',
+    'pbuilder_index'                => 'Indeks Pembina Halaman',
+    'pbuilder_page_index'           => 'Halaman Pembina',
+    'pbuilder_modules_update'       => 'Kemas Kini Modul',
+    'pbuilder_page_modules_update'  => 'Kemas Kini Modul Halaman',
+    'pbuilder_modules_preview'      => 'Pratonton Modul',
+    'pbuilder_page_modules_preview' => 'Pratonton Modul Halaman',
+    'pbuilder_demo_import'          => 'Import Demo',
+    'pbuilder_page_demo_import'     => 'Import Demo Halaman',
 ];

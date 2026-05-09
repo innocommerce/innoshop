@@ -8,5 +8,13 @@
  */
 
 return [
-    'title' => 'Web editor',
+    'title'                         => 'Web editor',
+    'pbuilder_index'                => 'Sayfa oluşturucu dizini',
+    'pbuilder_page_index'           => 'Sayfa oluşturucu sayfası',
+    'pbuilder_modules_update'       => 'Modülleri güncelle',
+    'pbuilder_page_modules_update'  => 'Sayfa modüllerini güncelle',
+    'pbuilder_modules_preview'      => 'Modül önizleme',
+    'pbuilder_page_modules_preview' => 'Sayfa modülü önizleme',
+    'pbuilder_demo_import'          => 'Demo içe aktar',
+    'pbuilder_page_demo_import'     => 'Sayfa demosu içe aktar',
 ];

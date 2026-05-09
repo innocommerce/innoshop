@@ -30,6 +30,7 @@ return [
     'move_up'   => 'Move Up',
     'move_down' => 'Move Down',
     'edit'      => 'Edit',
+    'delete'    => 'Delete',
 
     // Empty state messages
     'no_products'          => 'No products, please configure products',

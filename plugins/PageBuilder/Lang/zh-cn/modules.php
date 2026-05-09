@@ -30,6 +30,7 @@ return [
     'move_up'   => '上移',
     'move_down' => '下移',
     'edit'      => '编辑',
+    'delete'    => '删除',
 
     // Empty state messages
     'no_products'          => '暂无商品,请配置商品',
