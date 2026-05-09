@@ -20,7 +20,8 @@ use InnoShop\RestAPI\FrontApiControllers\BaseController;
 class ReceiptController extends BaseController
 {
     /**
-     * Upload payment receipt for bank transfer order
+     * Upload payment receipt for bank transfer order.
+     * Supports both authenticated customers and guest checkout.
      *
      * @param  Request  $request
      * @param  string  $number
@@ -34,8 +35,9 @@ class ReceiptController extends BaseController
                 return json_fail(__('front/order.not_found'), null, 404);
             }
 
-            // Verify ownership
-            if ($order->customer_id !== token_customer_id()) {
+            // Verify ownership: logged-in user must own the order; guest orders (customer_id=0) are allowed
+            $customerId = current_customer_id();
+            if ($customerId > 0 && $order->customer_id !== $customerId) {
                 return json_fail(__('front/order.unauthorized_access'), null, 403);
             }
 

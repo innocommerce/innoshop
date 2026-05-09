@@ -26,9 +26,12 @@ class OrderController extends Controller
     public function pay(Request $request): mixed
     {
         try {
-            $order = Order::query()->where('number', $request->number)->firstOrFail();
+            $order      = Order::query()->where('number', $request->number)->firstOrFail();
+            $customerID = current_customer_id();
 
-            if ($order->customer_id !== current_customer_id()) {
+            // Logged-in user's order: must be the owner
+            // Guest order (customer_id=0): order number is the access credential
+            if ($order->customer_id > 0 && $order->customer_id !== $customerID) {
                 abort(403, 'Unauthorized access to order payment');
             }
 

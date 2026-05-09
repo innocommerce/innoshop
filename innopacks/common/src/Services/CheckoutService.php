@@ -371,6 +371,17 @@ class CheckoutService
         ];
         $checkout = CheckoutRepo::getInstance()->builder($data)->first();
 
+        if ($checkout && $this->customerID !== (int) $checkout->customer_id) {
+            // Identity mismatch (e.g. user logged out but session ID unchanged),
+            // reset checkout to match current identity and clear stale address references.
+            $checkout->update([
+                'customer_id'         => $this->customerID,
+                'shipping_address_id' => 0,
+                'billing_address_id'  => 0,
+            ]);
+            $checkout->refresh();
+        }
+
         if (empty($checkout)) {
             $checkout = $this->createCheckout($data);
         }

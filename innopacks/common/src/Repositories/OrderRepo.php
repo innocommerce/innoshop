@@ -369,17 +369,41 @@ class OrderRepo extends BaseRepo
             return null;
         }
 
-        $query = Address::query()->where('id', $addressID);
-
+        // 1. Logged-in user: match by customer_id
         if ($customerID) {
-            $query->where('customer_id', $customerID);
-        } elseif ($guestID) {
-            $query->where('customer_id', 0)->where('guest_id', $guestID);
-        } else {
-            throw new Exception('Address validation requires either customer_id or guest_id');
+            $address = Address::query()->where('id', $addressID)
+                ->where('customer_id', $customerID)
+                ->first();
+            if ($address) {
+                return $address;
+            }
+
+            // Fallback: address may have been created as guest before login
+            if ($guestID) {
+                return Address::query()->where('id', $addressID)
+                    ->where('customer_id', 0)
+                    ->where('guest_id', $guestID)
+                    ->first();
+            }
+
+            return null;
         }
 
-        return $query->firstOrFail();
+        // 2. Guest: match by guest_id
+        if ($guestID) {
+            $address = Address::query()->where('id', $addressID)
+                ->where('customer_id', 0)
+                ->where('guest_id', $guestID)
+                ->first();
+            if ($address) {
+                return $address;
+            }
+        }
+
+        // 3. Guest fallback: session changed, find any guest address
+        return Address::query()->where('id', $addressID)
+            ->where('customer_id', 0)
+            ->first();
     }
 
     /**

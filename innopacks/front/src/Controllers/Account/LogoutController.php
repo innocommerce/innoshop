@@ -23,6 +23,7 @@ class LogoutController extends Controller
     {
         Auth::guard('customer')->logout();
         session()->forget('front_api_token');
+        session()->regenerate();
 
         return redirect(front_route('home.index'));
     }

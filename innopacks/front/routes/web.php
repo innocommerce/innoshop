@@ -97,10 +97,11 @@ Route::get('/forgotten', [Account\ForgottenController::class, 'index'])->name('f
 Route::post('/forgotten/verify_code', [Account\ForgottenController::class, 'sendVerifyCode'])->name('forgotten.verify_code');
 Route::post('/forgotten/password', [Account\ForgottenController::class, 'changePassword'])->name('forgotten.password');
 
-// Orders (authenticated)
+// Orders
+Route::get('/orders/{number}/pay', [Controllers\OrderController::class, 'pay'])->name('orders.pay');
+
 Route::middleware('customer_auth:customer')->group(function () {
     Route::get('/orders/{number}', [Controllers\OrderController::class, 'numberShow'])->name('orders.number_show');
-    Route::get('/orders/{number}/pay', [Controllers\OrderController::class, 'pay'])->name('orders.pay');
 });
 
 Route::prefix('account')

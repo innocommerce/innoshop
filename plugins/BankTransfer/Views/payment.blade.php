@@ -78,7 +78,7 @@
     $btn.prop('disabled', true).html('<i class="bi bi-arrow-repeat me-1 spin"></i>{{ __("BankTransfer::common.uploading") }}');
 
     $.ajax({
-      url: '{{ route('api.orders.receipt_upload', $order->number) }}',
+      url: '{{ front_route('bank_transfer.receipt_upload', $order->number) }}',
       type: 'POST',
       data: formData,
       processData: false,
