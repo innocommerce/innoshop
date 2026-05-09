@@ -11,6 +11,7 @@ namespace InnoShop\Common\Services;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\Customer\Transaction;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Order\Shipment;
@@ -524,7 +525,11 @@ class StateMachineService
         if (! $this->notify) {
             return;
         }
-        $this->order->notifyNewOrder();
+        try {
+            $this->order->notifyNewOrder();
+        } catch (Throwable $e) {
+            Log::error("Failed to send new order notification: {$e->getMessage()}");
+        }
     }
 
     /**
@@ -539,7 +544,11 @@ class StateMachineService
         if (! $this->notify) {
             return;
         }
-        $this->order->notifyUpdateOrder($oldCode);
+        try {
+            $this->order->notifyUpdateOrder($oldCode);
+        } catch (Throwable $e) {
+            Log::error("Failed to send order update notification: {$e->getMessage()}");
+        }
     }
 
     /**
