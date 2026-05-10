@@ -10,6 +10,8 @@
 namespace InnoShop\Plugin\Core;
 
 use Illuminate\Support\Facades\Log;
+use InnoShop\Common\Services\AI\AgentDefinition;
+use InnoShop\Common\Services\AI\AgentRegistry;
 use InnoShop\Plugin\Resources\PluginResource;
 
 abstract class BaseBoot
@@ -39,6 +41,41 @@ abstract class BaseBoot
     }
 
     abstract public function init();
+
+    /**
+     * Register an AI Agent with a single method call.
+     * Automatically generates routes, permissions, and sidebar menu entry.
+     *
+     * @param  string  $scene  Unique scene identifier (snake_case)
+     * @param  string  $agentClass  Class implementing Laravel\Ai\Contracts\Agent
+     * @param  string  $label  Display name for sidebar menu
+     * @param  string  $icon  Bootstrap icon class (e.g. 'bi-pencil-square')
+     * @param  string  $description  One-line description
+     * @param  array  $tools  Array of AiTool class names
+     * @param  array  $options  Extra options (model preference, streaming, etc.)
+     */
+    protected function registerAiAgent(
+        string $scene,
+        string $agentClass,
+        string $label,
+        string $icon = 'bi-robot',
+        string $description = '',
+        array $tools = [],
+        array $options = [],
+    ): void {
+        $definition = new AgentDefinition(
+            scene: $scene,
+            label: $label,
+            agentClass: $agentClass,
+            icon: $icon,
+            description: $description,
+            tools: $tools,
+            options: $options,
+            pluginCode: $this->plugin->getCode(),
+        );
+
+        AgentRegistry::getInstance()->register($definition);
+    }
 
     /**
      * Add a dynamic relation to a model.

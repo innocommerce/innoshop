@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use InnoShop\Common\Services\AI\AgentRegistry;
+use InnoShop\Panel\Controllers\AiAgentController;
 use InnoShop\Panel\Middleware\SetPanelLocale;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Core\PluginManager;
@@ -87,6 +89,8 @@ class PluginServiceProvider extends ServiceProvider
         $this->pluginBasePath = base_path('plugins');
         $this->bootAllPlugins();
         $this->bootEnabledPlugins();
+        $this->registerAiAgentRoutes();
+        $this->registerAiSidebarMenus();
     }
 
     /**
@@ -596,5 +600,79 @@ class PluginServiceProvider extends ServiceProvider
         }
 
         return $definedVars;
+    }
+
+    /**
+     * Register panel routes for all AI agents defined by plugins.
+     */
+    protected function registerAiAgentRoutes(): void
+    {
+        $registry = AgentRegistry::getInstance();
+        $agents   = $registry->all();
+
+        if (empty($agents)) {
+            return;
+        }
+
+        $adminName = panel_name();
+        Route::prefix($adminName)
+            ->name("$adminName.")
+            ->middleware(['panel', 'admin_auth:admin'])
+            ->group(function () use ($agents) {
+                foreach ($agents as $agent) {
+                    $scene = $agent->scene;
+                    Route::get("/{$scene}/ai", [AiAgentController::class, 'index'])
+                        ->name("{$scene}_ai.index");
+                    Route::post("/{$scene}/ai/chat", [AiAgentController::class, 'chat'])
+                        ->name("{$scene}_ai.chat");
+                    Route::post("/{$scene}/ai/execute-tool", [AiAgentController::class, 'executeTool'])
+                        ->name("{$scene}_ai.execute_tool");
+                }
+                Route::get('ai/agents', [AiAgentController::class, 'listAgents'])
+                    ->name('ai_agents.list');
+            });
+    }
+
+    /**
+     * Register sidebar menu entries for all AI agents defined by plugins.
+     */
+    protected function registerAiSidebarMenus(): void
+    {
+        $registry = AgentRegistry::getInstance();
+        $agents   = $registry->all();
+
+        if (empty($agents)) {
+            return;
+        }
+
+        listen_hook_filter('panel.component.sidebar.menus', function ($menus) use ($agents) {
+            $aiRoutes = [];
+            foreach ($agents as $agent) {
+                $aiRoutes[] = [
+                    'route' => "{$agent->scene}_ai.index",
+                    'title' => $agent->label,
+                ];
+            }
+
+            // Find the system divider to insert AI group before it
+            $insertIndex = count($menus);
+            foreach ($menus as $i => $menu) {
+                if (($menu['type'] ?? '') === 'divider') {
+                    $insertIndex = $i;
+                    break;
+                }
+            }
+
+            $aiGroup = [
+                'title'    => trans('panel/menu.ai_assistant'),
+                'icon'     => 'bi-robot',
+                'prefixes' => collect($agents)->map(fn ($a) => $a->scene.'_ai')->toArray(),
+                'children' => $aiRoutes,
+            ];
+
+            array_splice($menus, $insertIndex, 0, [$aiGroup]);
+
+            return $menus;
+        });
     }
 }

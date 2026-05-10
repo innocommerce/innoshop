@@ -79,6 +79,7 @@ return [
     'top_data'               => 'Data',
     'visits'                 => 'Visit Records',
     'content_ai'             => 'AI Content',
+    'ai_assistant'           => 'AI Assistant',
     'payments'               => 'Payments',
     'plugin-market'          => 'Plugin Market',
     'plugins'                => 'Plugins',

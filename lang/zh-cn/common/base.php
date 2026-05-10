@@ -62,4 +62,6 @@ return [
     'view'                    => '查看',
     'view_more'               => '查看更多',
     'yes'                     => '是',
+    'clear'                   => '清空',
+    'ai_request_failed'       => '请求处理失败，请重试。',
 ];

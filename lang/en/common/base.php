@@ -71,4 +71,6 @@ return [
     // Panel: InnoPanelLocaleText (multi-locale editor)
     'locale_text_edit'        => 'Edit all languages',
     'locale_text_dialog_hint' => 'Storefront uses the current language first, then the default store language if empty.',
+    'clear'                   => 'Clear',
+    'ai_request_failed'       => 'An error occurred while processing your request. Please try again.',
 ];
