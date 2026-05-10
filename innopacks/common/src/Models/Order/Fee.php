@@ -32,9 +32,9 @@ class Fee extends BaseModel
     /**
      * Get fee title with fallback.
      */
-    public function getTitleAttribute(): string
+    public function getTitleAttribute($value): string
     {
-        return parent::getAttribute('title') ?? '';
+        return $value ?? '';
     }
 
     /**
@@ -50,8 +50,12 @@ class Fee extends BaseModel
      */
     public function getValueFormatAttribute(): string
     {
-        $order = $this->order;
+        $order = $this->order()->first();
 
-        return currency_format($this->value, $order->currency_code, $order->currency_value);
+        if ($order) {
+            return currency_format($this->value, $order->currency_code, $order->currency_value);
+        }
+
+        return currency_format($this->value);
     }
 }
