@@ -230,4 +230,5 @@ return [
     'tools_setting'                       => '工具设置',
     'user_experience'                     => '用户体验',
     'website_data'                        => '网站设置',
+    'sms_test_success'                    => '测试短信发送成功！',
 ];
