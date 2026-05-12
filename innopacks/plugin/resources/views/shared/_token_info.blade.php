@@ -50,9 +50,20 @@
     var routeDomainToken = '{{ panel_route("marketplaces.domain_token") }}';
     var locale = '{{ panel_locale_code() }}';
 
+    // Use only simple request headers (Content-Type, Accept) to avoid CORS preflight failures.
+    // Custom headers like X-CSRF-TOKEN, X-Requested-With, locale all trigger preflight
+    // and are blocked by the remote server's Access-Control-Allow-Headers.
     var remoteHttp = axios.create({
         baseURL: apiUrl,
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'locale': locale }
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+    });
+    delete remoteHttp.defaults.headers.common['X-CSRF-TOKEN'];
+    delete remoteHttp.defaults.headers.common['X-Requested-With'];
+    // Pass locale as a query parameter instead of a custom header to avoid CORS issues.
+    remoteHttp.interceptors.request.use(function(config) {
+        config.params = config.params || {};
+        config.params.locale = locale;
+        return config;
     });
 
     var storedToken = ref(initAuthToken);

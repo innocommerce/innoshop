@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Нехватка запасов',
     'telephone'                       => 'телефон',
     'text_hint'                       => 'подсказка',
+    'orders'                          => 'Мои Заказы',
 ];

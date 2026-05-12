@@ -112,4 +112,6 @@ return [
     'tools_setting'                 => '工具設置',
     'user_experience'               => '用戶體驗',
     'website_data'                  => '網站設置',
+    'orders'                        => '我的訂單',
+    'login'                         => '登錄',
 ];

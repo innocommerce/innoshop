@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'Messa a punto degli strumenti',
     'user_experience'               => 'Esperienza dell\'utente',
     'website_data'                  => 'Struttura del sito',
+    'orders'                        => 'I Miei Ordini',
+    'login'                         => 'Accedi',
 ];

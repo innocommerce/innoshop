@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Niet genoeg voorraad',
     'telephone'                       => 'Telefoonnummer',
     'text_hint'                       => 'Hint',
+    'orders'                          => 'Mijn Bestellingen',
 ];

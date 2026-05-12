@@ -48,4 +48,5 @@ return [
     'stock_not_enough'                => '库存不足',
     'telephone'                       => '联系电话',
     'text_hint'                       => '提示',
+    'orders'                          => '我的订单',
 ];

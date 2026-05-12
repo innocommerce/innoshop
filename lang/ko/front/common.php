@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => '재고 부족',
     'telephone'                       => '전화번호',
     'text_hint'                       => '힌트',
+    'orders'                          => '주문내역',
 ];

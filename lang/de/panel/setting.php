@@ -300,4 +300,6 @@ return [
     'tools_setting'                           => 'Toolco.',
     'user_experience'                         => 'Die erfahrung der anwender.',
     'website_data'                            => 'Website Data',
+    'orders'                                  => 'Meine Bestellungen',
+    'login'                                   => 'Anmelden',
 ];

@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Thiếu hụt hàng tồn kho',
     'telephone'                       => 'Số điện thoại',
     'text_hint'                       => 'Gợi ý',
+    'orders'                          => 'Đơn Hàng Của Tôi',
 ];

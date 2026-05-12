@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Falta de estoque',
     'telephone'                       => 'Telefone',
     'text_hint'                       => 'Dica',
+    'orders'                          => 'As Minhas Encomendas',
 ];

@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'ការកំណត់ឧបករណ៍',
     'user_experience'               => 'User experience',
     'website_data'                  => 'ការកំណត់គេហទំព័រ',
+    'orders'                        => 'ការបញ្ជាទិញរបស់ខ្ញុំ',
+    'login'                         => 'ចូល',
 ];

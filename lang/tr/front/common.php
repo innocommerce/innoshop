@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Yetersiz envanter',
     'telephone'                       => 'Telefon',
     'text_hint'                       => 'İpucu',
+    'orders'                          => 'Siparişlerim',
 ];

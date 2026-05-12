@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'Configuração da ferramenta',
     'user_experience'               => 'Experiência do usuário',
     'website_data'                  => 'Configurações do site',
+    'orders'                        => 'Meus Pedidos',
+    'login'                         => 'Entrar',
 ];

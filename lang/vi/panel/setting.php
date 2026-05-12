@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'Thiết lập công cụ',
     'user_experience'               => 'Trải nghiệm người dùng',
     'website_data'                  => 'Thiết lập trang web',
+    'orders'                        => 'Đơn Hàng Của Tôi',
+    'login'                         => 'Đăng Nhập',
 ];

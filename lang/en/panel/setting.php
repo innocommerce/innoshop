@@ -231,4 +231,6 @@ return [
     'language_features'                   => 'Language Features',
     'language_features_desc'              => 'Configure multilingual related features',
     'sms_test_success'                    => 'Test SMS sent successfully!',
+    'orders'                              => 'My Orders',
+    'login'                               => 'Login',
 ];

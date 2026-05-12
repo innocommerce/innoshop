@@ -48,4 +48,5 @@ return [
     'stock_not_enough'                => 'Stock not enough',
     'telephone'                       => 'Telephone',
     'text_hint'                       => 'Hint',
+    'orders'                          => 'My Orders',
 ];

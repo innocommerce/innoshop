@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'Tool Settings',
     'user_experience'               => 'Gebruikerservaring',
     'website_data'                  => 'Website instellingen',
+    'orders'                        => 'Mijn Bestellingen',
+    'login'                         => 'Inloggen',
 ];

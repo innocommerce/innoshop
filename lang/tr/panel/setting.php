@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'Araç ayarları',
     'user_experience'               => 'Kullanıcı deneyimi',
     'website_data'                  => 'Web sitesi ayarları',
+    'orders'                        => 'Siparişlerim',
+    'login'                         => 'Giriş Yap',
 ];

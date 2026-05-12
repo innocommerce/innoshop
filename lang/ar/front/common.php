@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'مخزون',
     'telephone'                       => 'رقم الهاتف',
     'text_hint'                       => 'تلميح نصي',
+    'orders'                          => 'طلباتي',
 ];

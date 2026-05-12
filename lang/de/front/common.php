@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Unzureichende lagerbestände.',
     'telephone'                       => 'Telefonnummer',
     'text_hint'                       => 'Hinweis',
+    'orders'                          => 'Meine Bestellungen',
 ];

@@ -27,6 +27,8 @@ class SpecialPageRepo
         $specialOptions = [
             ['type' => 'products', 'title' => trans('panel/setting.products'), 'route' => 'products.index'],
             ['type' => 'brands', 'title' => trans('panel/setting.brands'), 'route' => 'brands.index'],
+            ['type' => 'orders', 'title' => trans('panel/setting.orders'), 'route' => 'account.orders.index'],
+            ['type' => 'login', 'title' => trans('panel/setting.login'), 'route' => 'login.index'],
         ];
 
         return fire_hook_filter('repo.special.options', $specialOptions);
@@ -49,6 +51,10 @@ class SpecialPageRepo
                 $url = front_route('brands.index');
             } elseif ($special == 'products') {
                 $url = front_route('products.index');
+            } elseif ($special == 'orders') {
+                $url = front_route('account.orders.index');
+            } elseif ($special == 'login') {
+                $url = front_route('login.index');
             } else {
                 continue;
             }

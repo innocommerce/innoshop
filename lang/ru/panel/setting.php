@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'Инструменты.',
     'user_experience'               => 'Опыт пользователя',
     'website_data'                  => 'Веб-сайт.',
+    'orders'                        => 'Мои Заказы',
+    'login'                         => 'Войти',
 ];

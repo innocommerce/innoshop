@@ -300,4 +300,6 @@ return [
     'tools_setting'                           => 'Réglages des outils',
     'user_experience'                         => 'Expérience de l\'utilisateur',
     'website_data'                            => 'Configuration du site',
+    'orders'                                  => 'Mes Commandes',
+    'login'                                   => 'Connexion',
 ];

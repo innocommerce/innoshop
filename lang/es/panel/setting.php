@@ -300,4 +300,6 @@ return [
     'tools_setting'                           => 'Configuración de herramientas',
     'user_experience'                         => 'Experiencia de usuario',
     'website_data'                            => 'Configuración del sitio',
+    'orders'                                  => 'Mis Pedidos',
+    'login'                                   => 'Iniciar Sesión',
 ];

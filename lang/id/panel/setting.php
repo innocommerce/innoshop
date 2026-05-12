@@ -300,4 +300,6 @@ return [
     'tools_setting'                           => 'Pengaturan alat',
     'user_experience'                         => 'Pengalaman pengguna',
     'website_data'                            => 'Pengaturan situs',
+    'orders'                                  => 'Pesanan Saya',
+    'login'                                   => 'Masuk',
 ];

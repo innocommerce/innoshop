@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'ツールの設定です',
     'user_experience'               => 'ユーザー体験です',
     'website_data'                  => 'ウェブサイトの設定です',
+    'orders'                        => '注文履歴',
+    'login'                         => 'ログイン',
 ];

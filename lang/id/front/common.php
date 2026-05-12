@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Persediaan tidak mencukupi',
     'telephone'                       => 'Telepon',
     'text_hint'                       => 'Sūchnā',
+    'orders'                          => 'Pesanan Saya',
 ];

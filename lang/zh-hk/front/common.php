@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => '庫存不足',
     'telephone'                       => '聯繫電話',
     'text_hint'                       => '提示',
+    'orders'                          => '我的訂單',
 ];

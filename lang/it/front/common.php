@@ -44,4 +44,5 @@ return [
     'stock_not_enough'                => 'Scorte insufficienti',
     'telephone'                       => 'Telefono',
     'text_hint'                       => 'Suggerimento',
+    'orders'                          => 'I Miei Ordini',
 ];

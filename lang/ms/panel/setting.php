@@ -110,4 +110,6 @@ return [
     'tools_setting'                 => 'Tetapan alat',
     'user_experience'               => 'Pengalaman pengguna',
     'website_data'                  => 'Tetapan laman web',
+    'orders'                        => 'Pesanan Saya',
+    'login'                         => 'Log Masuk',
 ];
