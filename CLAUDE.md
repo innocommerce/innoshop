@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Commit Rules
+
+- Do NOT include "Co-Authored-By: Claude" or any similar co-author attribution in commit messages.
+
 ## Project Overview
 
 InnoShop is an open-source e-commerce system built on Laravel 12 with PHP 8.2+. It features a modular "Innopacks" architecture, plugin system, multi-language/currency support, and AI integration.
