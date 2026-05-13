@@ -22,6 +22,14 @@
           </div>
           <div class="col-md-6">
             <div class="mb-4">
+              <x-common-form-select title="{{ __('panel/setting.product_default_sort') }}" name="product_default_sort"
+                                :options="$product_sort_options" key="value" label="label" :emptyOption="false"
+                                value="{{ old('product_default_sort', system_setting('product_default_sort', 'created_at')) }}" />
+              <div class="text-secondary"><small>{{ __('panel/setting.product_default_sort_desc') }}</small></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-4">
               <x-common-form-input title="{{ __('panel/setting.supplier_per_page') }}" name="supplier_per_page"
                                type="number"
                                value="{{ old('supplier_per_page', system_setting('supplier_per_page', 12)) }}"

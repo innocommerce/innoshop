@@ -174,6 +174,8 @@ return [
     'store_functionality'                 => '商店功能',
     'product_per_page'                    => '产品每页显示数量',
     'product_per_page_desc'               => '前台产品列表每页显示的产品数量，建议设置为4的倍数（如8、12、16）',
+    'product_default_sort'                => '商品默认排序',
+    'product_default_sort_desc'           => '设置商品列表的默认排序方式，适用于前台和后台产品列表',
     'supplier_per_page'                   => '商家每页显示数量',
     'supplier_per_page_desc'              => '前台商家列表每页显示的商家数量，建议设置为4的倍数（如8、12、16）',
     'store_system_setting'                => '店铺设置',

@@ -134,6 +134,24 @@ class OptionValueController extends BaseController
     }
 
     /**
+     * Bulk update option values sort order
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function updateSort(Request $request): mixed
+    {
+        try {
+            $sortData = $request->input('sort_data', []);
+            OptionValueRepo::getInstance()->updateOptionValuesSort($sortData);
+
+            return json_success(common_trans('base.updated_success'));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
      * Delete option value
      *
      * @param  OptionValue  $optionValue

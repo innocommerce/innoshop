@@ -4,14 +4,14 @@
     <!-- Tab Navigation -->
     <ul class="nav nav-tabs mb-4" id="toolsSettingsTabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="ai-tools-tab" 
+        <button class="nav-link active" id="ai-tools-tab"
                 type="button" role="tab" aria-controls="ai-tools" aria-selected="true"
                 data-target="#ai-tools">
           {{ __('panel/setting_ai.ai_setting') }}
         </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="geolite2-tools-tab" 
+        <button class="nav-link" id="geolite2-tools-tab"
                 type="button" role="tab" aria-controls="geolite2-tools" aria-selected="false"
                 data-target="#geolite2-tools">
           {{ __('panel/setting_geolite2.geolite2_setting') }}
@@ -23,210 +23,55 @@
     <div class="tab-content" id="toolsSettingsTabContent">
       <!-- AI Tools Tab -->
       <div class="tab-pane fade show active" id="ai-tools" role="tabpanel" aria-labelledby="ai-tools-tab">
-        <!-- AI Models Configuration -->
+
+        <!-- AI Provider Management -->
         <div class="card mb-4">
-          <div class="card-header">
-            <h5 class="card-title mb-0">{{ __('panel/setting_ai.ai_model_config') }}</h5>
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">{{ __('panel/setting_ai.provider_management') }}</h5>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="aiAddProvider()">
+              <i class="bi bi-plus-lg me-1"></i>{{ __('panel/setting_ai.add_provider') }}
+            </button>
           </div>
           <div class="card-body">
-            @if(empty($ai_models))
-              <div class="alert alert-warning" role="alert">
-                <h5 class="alert-heading">
-                  <i class="bi bi-exclamation-triangle me-2"></i>{{ __('panel/setting_ai.ai_model_no_available') }}
-                </h5>
-                <p class="mb-0">{{ __('panel/setting_ai.ai_model_no_available_desc') }}</p>
+            <p class="text-muted small mb-3">{{ __('panel/setting_ai.provider_management_desc') }}</p>
+            <div id="ai-providers-list">
+              <!-- Rendered by JS -->
+            </div>
+            <input type="hidden" name="ai_providers" id="ai_providers_input" value="{{ old('ai_providers', is_string($ai_providers ?? '') ? $ai_providers : json_encode($ai_providers ?? [])) }}" />
+          </div>
+        </div>
+
+        <!-- Capability Selection -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="card-title mb-0">{{ __('panel/setting_ai.capability_selection') }}</h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted small mb-3">{{ __('panel/setting_ai.capability_selection_desc') }}</p>
+            <div class="row">
+              <div class="col-lg-6">
+                <x-common-form-select title="{{ __('panel/setting_ai.text_generation_provider') }}" name="ai_text_provider"
+                                    :options="$ai_models ?? []" key="code" label="name" :emptyOption="true"
+                                    value="{{ old('ai_text_provider', system_setting('ai_text_provider') ?: system_setting('ai_model')) }}" />
               </div>
-            @else
-              <div class="row">
-                <div class="col-lg-6">
-                  <x-common-form-select title="{{ __('panel/setting_ai.ai_model') }}" name="ai_model"
-                                      :options="$ai_models" key="code" label="name" :emptyOption="false"
-                                      value="{{ old('ai_model', system_setting('ai_model')) }}" required />
-                </div>
+              <div class="col-lg-6">
+                <x-common-form-input title="{{ __('panel/setting_ai.text_model_override') }}"
+                                   name="ai_text_model"
+                                   value="{{ old('ai_text_model', system_setting('ai_text_model')) }}"
+                                   placeholder="{{ __('panel/setting_ai.model_override_placeholder') }}" />
               </div>
-            @endif
-            
-            <!-- API Configuration Section -->
-            <div class="row mt-4">
-              <div class="col-12">
-                <h5 class="mb-3">{{ __('panel/setting_ai.api_configuration') }}</h5>
-                
-                <!-- OpenAI Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">OpenAI</h6>
-                    <x-common-form-model-switch name="openai_enabled" 
-                                               :value="old('openai_enabled', system_setting('openai_enabled', false))" 
-                                               id="openai_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.openai_description') }} <a href="https://platform.openai.com/api-keys" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.openai_api_key') }}" 
-                                         name="openai_api_key" 
-                                         value="{{ old('openai_api_key', system_setting('openai_api_key')) }}"
-                                         placeholder="sk-..." />
-                    </div>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.openai_proxy_url') }}" 
-                                         name="openai_proxy_url" 
-                                         value="{{ old('openai_proxy_url', system_setting('openai_proxy_url')) }}"
-                                         placeholder="https://api.openai.com/v1/" />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- DeepSeek Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">DeepSeek</h6>
-                    <x-common-form-model-switch name="deepseek_enabled" 
-                                               :value="old('deepseek_enabled', system_setting('deepseek_enabled', false))" 
-                                               id="deepseek_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.deepseek_description') }} <a href="https://platform.deepseek.com/api-keys" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.deepseek_api_key') }}" 
-                                         name="deepseek_api_key" 
-                                         value="{{ old('deepseek_api_key', system_setting('deepseek_api_key')) }}"
-                                         placeholder="sk-..." />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Kimi Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">Kimi (Moonshot)</h6>
-                    <x-common-form-model-switch name="kimi_enabled" 
-                                               :value="old('kimi_enabled', system_setting('kimi_enabled', false))" 
-                                               id="kimi_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.kimi_description') }} <a href="https://platform.moonshot.cn/console/api-keys" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.kimi_api_key') }}" 
-                                         name="kimi_api_key" 
-                                         value="{{ old('kimi_api_key', system_setting('kimi_api_key')) }}"
-                                         placeholder="sk-..." />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Doubao Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">{{ __('panel/setting_ai.doubao_title') }}</h6>
-                    <x-common-form-model-switch name="doubao_enabled" 
-                                               :value="old('doubao_enabled', system_setting('doubao_enabled', false))" 
-                                               id="doubao_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.doubao_description') }} <a href="https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.doubao_api_key') }}" 
-                                         name="doubao_api_key" 
-                                         value="{{ old('doubao_api_key', system_setting('doubao_api_key')) }}"
-                                         placeholder="..." />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Qianwen Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">{{ __('panel/setting_ai.qianwen_title') }}</h6>
-                    <x-common-form-model-switch name="qianwen_enabled" 
-                                               :value="old('qianwen_enabled', system_setting('qianwen_enabled', false))" 
-                                               id="qianwen_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.qianwen_description') }} <a href="https://bailian.console.aliyun.com/?apiKey=1#/api-key" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.qianwen_api_key') }}" 
-                                         name="qianwen_api_key" 
-                                         value="{{ old('qianwen_api_key', system_setting('qianwen_api_key')) }}"
-                                         placeholder="sk-..." />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Hunyuan Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">{{ __('panel/setting_ai.hunyuan_title') }}</h6>
-                    <x-common-form-model-switch name="hunyuan_enabled" 
-                                               :value="old('hunyuan_enabled', system_setting('hunyuan_enabled', false))" 
-                                               id="hunyuan_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.hunyuan_description') }} <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.hunyuan_api_key') }}" 
-                                         name="hunyuan_api_key" 
-                                         value="{{ old('hunyuan_api_key', system_setting('hunyuan_api_key')) }}"
-                                         placeholder="..." />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Anthropic Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">Anthropic (Claude)</h6>
-                    <x-common-form-model-switch name="anthropic_enabled" 
-                                               :value="old('anthropic_enabled', system_setting('anthropic_enabled', false))" 
-                                               id="anthropic_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.anthropic_description') }} <a href="https://console.anthropic.com/settings/keys" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.anthropic_api_key') }}" 
-                                         name="anthropic_api_key" 
-                                         value="{{ old('anthropic_api_key', system_setting('anthropic_api_key')) }}"
-                                         placeholder="sk-ant-..." />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- GLM Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">GLM ({{ __('panel/setting_ai.zhipu') }})</h6>
-                    <x-common-form-model-switch name="glm_enabled" 
-                                               :value="old('glm_enabled', system_setting('glm_enabled', false))" 
-                                               id="glm_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.glm_description') }} <a href="https://open.bigmodel.cn/usercenter/apikeys" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.glm_api_key') }}" 
-                                         name="glm_api_key" 
-                                         value="{{ old('glm_api_key', system_setting('glm_api_key')) }}"
-                                         placeholder="..." />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- MiniMax Configuration -->
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="card-title mb-0">MiniMax</h6>
-                    <x-common-form-model-switch name="minimax_enabled" 
-                                               :value="old('minimax_enabled', system_setting('minimax_enabled', false))" 
-                                               id="minimax_enabled" />
-                  </div>
-                  <div class="card-body">
-                    <p class="text-muted small mb-3">{{ __('panel/setting_ai.minimax_description') }} <a href="https://platform.minimaxi.com/document/Key%20management" target="_blank">{{ __('panel/setting_ai.get_api_key') }}</a></p>
-                    <div class="mb-3">
-                      <x-common-form-input title="{{ __('panel/setting_ai.minimax_api_key') }}" 
-                                         name="minimax_api_key" 
-                                         value="{{ old('minimax_api_key', system_setting('minimax_api_key')) }}"
-                                         placeholder="..." />
-                    </div>
-                  </div>
-                </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-lg-6">
+                <x-common-form-select title="{{ __('panel/setting_ai.image_generation_provider') }}" name="ai_image_provider"
+                                    :options="$ai_models ?? []" key="code" label="name" :emptyOption="true"
+                                    value="{{ old('ai_image_provider', system_setting('ai_image_provider')) }}" />
+              </div>
+              <div class="col-lg-6">
+                <x-common-form-input title="{{ __('panel/setting_ai.image_model_override') }}"
+                                   name="ai_image_model"
+                                   value="{{ old('ai_image_model', system_setting('ai_image_model')) }}"
+                                   placeholder="{{ __('panel/setting_ai.model_override_placeholder') }}" />
               </div>
             </div>
           </div>
@@ -257,7 +102,7 @@
                                     value="{{ old('ai_content_quality', system_setting('ai_content_quality', 'medium')) }}" />
               </div>
               <div class="col-lg-6">
-                <x-common-form-input title="{{ __('panel/setting_ai.max_tokens') }}" 
+                <x-common-form-input title="{{ __('panel/setting_ai.max_tokens') }}"
                                    name="ai_max_tokens" type="number"
                                    value="{{ old('ai_max_tokens', system_setting('ai_max_tokens', 1000)) }}"
                                    placeholder="1000" />
@@ -355,11 +200,233 @@
 
 @push('footer')
 <script>
+// Provider Management
+const aiPresets = {!! json_encode(($ai_presets ?? []) ?: app(\InnoShop\Common\Services\AI\ProviderRegistry::class)->getPresets()) !!};
+const aiPluginProviders = {!! json_encode($ai_plugin_providers ?? []) !!};
+let aiProviders = [];
+
+function aiInitProviders() {
+  const input = document.getElementById('ai_providers_input');
+  try {
+    aiProviders = JSON.parse(input.value || '[]');
+  } catch(e) {
+    aiProviders = [];
+  }
+  aiRenderProviders();
+}
+
+function aiRenderProviders() {
+  const list = document.getElementById('ai-providers-list');
+  if (!list) return;
+
+  const hasUser = aiProviders.length > 0;
+  const hasPlugin = aiPluginProviders.length > 0;
+
+  if (!hasUser && !hasPlugin) {
+    list.innerHTML = '<div class="text-muted text-center py-3">{{ __("panel/setting_ai.no_providers") }}</div>';
+    return;
+  }
+
+  let html = '';
+
+  // Plugin providers (read-only)
+  if (hasPlugin) {
+    html += '<div class="mb-3"><small class="text-muted fw-bold">{{ __("panel/setting_ai.plugin_providers") }}</small></div>';
+    aiPluginProviders.forEach(function(p) {
+      html += '<div class="card mb-3 border border-info">';
+      html += '<div class="card-header d-flex justify-content-between align-items-center py-2">';
+      html += '<span class="fw-bold d-flex align-items-center">';
+      html += '<i class="bi bi-puzzle me-2 text-info"></i>';
+      html += (p.name || p.code) + '</span>';
+      html += '<div>';
+      html += '<span class="badge bg-light text-dark me-2">' + (p.driver || 'openai') + '</span>';
+      html += '<span class="badge bg-info text-dark">{{ __("panel/setting_ai.from_plugin") }}</span>';
+      html += '</div></div>';
+      html += '<div class="card-body"><div class="row">';
+      html += '<div class="col-lg-6 mb-2"><label class="form-label small">{{ __("panel/setting_ai.provider_base_url") }}</label>';
+      html += '<input type="text" class="form-control form-control-sm" value="' + (p.base_url || '') + '" disabled /></div>';
+      html += '<div class="col-lg-6 mb-2"><label class="form-label small">{{ __("panel/setting_ai.text_model") }}</label>';
+      html += '<input type="text" class="form-control form-control-sm" value="' + (p.models?.text || '') + '" disabled /></div>';
+      if (p.models?.image) {
+        html += '<div class="col-lg-6 mb-2"><label class="form-label small">{{ __("panel/setting_ai.image_model") }}</label>';
+        html += '<input type="text" class="form-control form-control-sm" value="' + p.models.image + '" disabled /></div>';
+      }
+      html += '</div></div></div>';
+    });
+  }
+
+  // User providers (editable)
+  if (hasUser) {
+    if (hasPlugin) {
+      html += '<div class="mb-3 mt-4"><small class="text-muted fw-bold">{{ __("panel/setting_ai.user_providers") }}</small></div>';
+    }
+    aiProviders.forEach(function(p, idx) {
+      const isPreset = aiPresets.find(function(pr) { return pr.code === p.code; });
+      html += '<div class="card mb-3 border ' + (p.api_key ? 'border-success' : 'border-warning') + '">';
+      html += '<div class="card-header d-flex justify-content-between align-items-center py-2">';
+      html += '<span class="fw-bold d-flex align-items-center">';
+      if (isPreset && isPreset.logo) {
+        html += '<img src="' + isPreset.logo + '" alt="" width="20" height="20" class="me-2 rounded" style="object-fit:contain;" onerror="this.style.display=\'none\'">';
+      } else {
+        html += '<i class="bi bi-cpu me-2"></i>';
+      }
+      html += (p.name || p.code) + '</span>';
+      html += '<div>';
+      html += '<span class="badge bg-light text-dark me-2">' + (p.driver || 'openai') + '</span>';
+      html += '<button type="button" class="btn btn-sm btn-outline-danger" onclick="aiRemoveProvider(' + idx + ')"><i class="bi bi-trash"></i></button>';
+      html += '</div></div>';
+      html += '<div class="card-body">';
+
+      // API Key
+      html += '<div class="row">';
+      html += '<div class="col-lg-6 mb-2">';
+      html += '<label class="form-label small">{{ __("panel/setting_ai.provider_api_key") }}</label>';
+      html += '<input type="password" class="form-control form-control-sm" value="' + (p.api_key || '') + '" onchange="aiUpdateField(' + idx + ', \'api_key\', this.value)" placeholder="sk-..." />';
+      html += '</div>';
+      // Base URL
+      html += '<div class="col-lg-6 mb-2">';
+      html += '<label class="form-label small">{{ __("panel/setting_ai.provider_base_url") }}</label>';
+      html += '<input type="text" class="form-control form-control-sm" value="' + (p.base_url || '') + '" onchange="aiUpdateField(' + idx + ', \'base_url\', this.value)" placeholder="https://api.openai.com/v1" />';
+      html += '</div>';
+      html += '</div>';
+
+      // Models
+      html += '<div class="row">';
+      html += '<div class="col-lg-6 mb-2">';
+      html += '<label class="form-label small">{{ __("panel/setting_ai.text_model") }}</label>';
+      html += '<input type="text" class="form-control form-control-sm" value="' + (p.models?.text || '') + '" onchange="aiUpdateModel(' + idx + ', \'text\', this.value)" placeholder="gpt-4o" />';
+      html += '</div>';
+      html += '<div class="col-lg-6 mb-2">';
+      html += '<label class="form-label small">{{ __("panel/setting_ai.image_model") }}</label>';
+      html += '<input type="text" class="form-control form-control-sm" value="' + (p.models?.image || '') + '" onchange="aiUpdateModel(' + idx + ', \'image\', this.value)" placeholder="gpt-image-1" />';
+      html += '</div>';
+      html += '</div>';
+
+      html += '</div></div>';
+    });
+  }
+
+  list.innerHTML = html;
+}
+
+function aiUpdateField(idx, field, value) {
+  aiProviders[idx][field] = value;
+  aiSyncHidden();
+}
+
+function aiUpdateModel(idx, type, value) {
+  if (!aiProviders[idx].models) aiProviders[idx].models = {};
+  aiProviders[idx].models[type] = value;
+  aiSyncHidden();
+}
+
+function aiRemoveProvider(idx) {
+  if (!confirm('{{ __("panel/setting_ai.confirm_remove_provider") }}')) return;
+  aiProviders.splice(idx, 1);
+  aiRenderProviders();
+  aiSyncHidden();
+}
+
+function aiAddProvider() {
+  // Build preset picker modal
+  let html = '<div class="modal fade" id="aiAddModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">';
+  html += '<div class="modal-header"><h5 class="modal-title">{{ __("panel/setting_ai.add_provider") }}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>';
+  html += '<div class="modal-body"><style>.provider-card:hover{border-color:var(--bs-primary);box-shadow:0 0 0 1px var(--bs-primary)}</style><div class="row g-3">';
+  aiPresets.forEach(function(p) {
+    const exists = aiProviders.some(function(ap) { return ap.code === p.code; });
+    if (!exists) {
+      html += '<div class="col-6 col-md-4">';
+      html += '<div class="card text-center h-100 provider-card" style="cursor:pointer;" onclick="aiSelectPreset(\'' + p.code + '\')">';
+      html += '<div class="card-body d-flex flex-column align-items-center justify-content-center py-3">';
+      if (p.logo) {
+        html += '<img src="' + p.logo + '" alt="" width="36" height="36" class="mb-2 rounded" style="object-fit:contain;" onerror="this.style.display=\'none\'">';
+      }
+      html += '<strong class="small">' + p.name + '</strong>';
+      html += '</div></div></div>';
+    }
+  });
+  html += '<div class="col-6 col-md-4">';
+  html += '<div class="card text-center h-100 provider-card" style="cursor:pointer;" onclick="aiSelectPreset(\'custom\')">';
+  html += '<div class="card-body d-flex flex-column align-items-center justify-content-center py-3">';
+  html += '<div class="mb-2 rounded bg-light d-flex align-items-center justify-content-center" style="width:36px;height:36px;"><i class="bi bi-plus-lg text-secondary"></i></div>';
+  html += '<strong class="small">{{ __("panel/setting_ai.preset_custom") }}</strong>';
+  html += '</div></div></div>';
+  html += '<div class="col-6 col-md-4">';
+  html += '<div class="card text-center h-100 provider-card" style="cursor:pointer;" onclick="aiSelectPreset(\'custom_anthropic\')">';
+  html += '<div class="card-body d-flex flex-column align-items-center justify-content-center py-3">';
+  html += '<div class="mb-2 rounded bg-light d-flex align-items-center justify-content-center" style="width:36px;height:36px;"><i class="bi bi-plus-lg text-secondary"></i></div>';
+  html += '<strong class="small">{{ __("panel/setting_ai.preset_custom_anthropic") }}</strong>';
+  html += '</div></div></div>';
+  html += '</div></div></div></div></div>';
+
+  document.body.insertAdjacentHTML('beforeend', html);
+  const modal = new bootstrap.Modal(document.getElementById('aiAddModal'));
+  modal.show();
+  document.getElementById('aiAddModal').addEventListener('hidden.bs.modal', function() {
+    this.remove();
+  });
+}
+
+function aiSelectPreset(code) {
+  const modal = bootstrap.Modal.getInstance(document.getElementById('aiAddModal'));
+  modal.hide();
+
+  if (code === 'custom') {
+    aiProviders.push({
+      code: 'custom_' + Date.now(),
+      name: 'Custom Provider',
+      driver: 'openai',
+      api_key: '',
+      base_url: '',
+      models: { text: '', image: '' }
+    });
+  } else if (code === 'custom_anthropic') {
+    aiProviders.push({
+      code: 'custom_' + Date.now(),
+      name: 'Custom Provider (Anthropic)',
+      driver: 'anthropic',
+      api_key: '',
+      base_url: '',
+      models: { text: 'claude-sonnet-4-6', image: '' }
+    });
+  } else {
+    const preset = aiPresets.find(function(p) { return p.code === code; });
+    if (preset) {
+      aiProviders.push({
+        code: preset.code,
+        name: preset.name,
+        driver: preset.driver,
+        api_key: '',
+        base_url: preset.base_url,
+        models: preset.models || { text: '', image: '' }
+      });
+    }
+  }
+  aiRenderProviders();
+  aiSyncHidden();
+}
+
+function aiSyncHidden() {
+  document.getElementById('ai_providers_input').value = JSON.stringify(aiProviders);
+}
+
+// Sync on form submit
+document.addEventListener('DOMContentLoaded', function() {
+  aiInitProviders();
+  const form = document.getElementById('app-form');
+  if (form) {
+    form.addEventListener('submit', function() {
+      // Sync current input values before submit
+      aiSyncHidden();
+    });
+  }
+});
+
 function downloadGeoLite2() {
   const btn = document.getElementById('download-geolite2-btn');
   const originalText = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> {{ __('panel/setting_geolite2.downloading') }}...';
+  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> {{ __("panel/setting_geolite2.downloading") }}...';
 
   const url = document.getElementById('geolite2-download-url').value;
 
@@ -371,11 +438,11 @@ function downloadGeoLite2() {
       alert(response.data.message);
       refreshGeoLite2Info();
     } else {
-      const errorMsg = response.data.message || '{{ __('panel/setting_geolite2.download_failed') }}';
+      const errorMsg = response.data.message || '{{ __("panel/setting_geolite2.download_failed") }}';
       const message = errorMsg.replace(/\n/g, '<br>');
       const alertDiv = document.createElement('div');
       alertDiv.className = 'alert alert-danger';
-      alertDiv.innerHTML = '<strong>{{ __('panel/setting_geolite2.download_failed') }}</strong><br>' + message;
+      alertDiv.innerHTML = '<strong>{{ __("panel/setting_geolite2.download_failed") }}</strong><br>' + message;
       alertDiv.style.position = 'fixed';
       alertDiv.style.top = '20px';
       alertDiv.style.right = '20px';
@@ -393,7 +460,7 @@ function downloadGeoLite2() {
     const message = errorMsg.replace(/\n/g, '<br>');
     const alertDiv = document.createElement('div');
     alertDiv.className = 'alert alert-danger';
-    alertDiv.innerHTML = '<strong>{{ __('panel/setting_geolite2.download_failed') }}</strong><br>' + message;
+    alertDiv.innerHTML = '<strong>{{ __("panel/setting_geolite2.download_failed") }}</strong><br>' + message;
     alertDiv.style.position = 'fixed';
     alertDiv.style.top = '20px';
     alertDiv.style.right = '20px';
@@ -421,8 +488,8 @@ function refreshGeoLite2Info() {
     if (response.data.success) {
       const info = response.data.data;
       document.getElementById('geolite2-status').innerHTML = info.exists
-        ? '<span class="badge bg-success">{{ __('panel/setting_geolite2.database_exists') }}</span>'
-        : '<span class="badge bg-warning">{{ __('panel/setting_geolite2.database_not_exists') }}</span>';
+        ? '<span class="badge bg-success">{{ __("panel/setting_geolite2.database_exists") }}</span>'
+        : '<span class="badge bg-warning">{{ __("panel/setting_geolite2.database_not_exists") }}</span>';
       document.getElementById('geolite2-size').textContent = info.size_formatted;
       document.getElementById('geolite2-modified').textContent = info.modified_formatted;
       document.getElementById('geolite2-version').textContent = info.version || '-';
@@ -435,4 +502,3 @@ function refreshGeoLite2Info() {
 }
 </script>
 @endpush
-

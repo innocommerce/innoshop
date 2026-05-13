@@ -160,6 +160,8 @@ return [
     'store_functionality'                 => 'Store function',
     'product_per_page'                    => 'Products Per Page',
     'product_per_page_desc'               => 'Number of products displayed per page on the storefront. Recommended to use multiples of 4 (e.g. 8, 12, 16)',
+    'product_default_sort'                => 'Default Product Sort',
+    'product_default_sort_desc'           => 'Default sort order for product listing on storefront and admin panel',
     'supplier_per_page'                   => 'Suppliers Per Page',
     'supplier_per_page_desc'              => 'Number of suppliers displayed per page on the storefront. Recommended to use multiples of 4 (e.g. 8, 12, 16)',
     'system_features'                     => 'System function',

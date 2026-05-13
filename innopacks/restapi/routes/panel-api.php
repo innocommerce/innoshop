@@ -123,6 +123,9 @@ Route::middleware($middlewares)->group(function () {
     Route::get('/file_manager/storage_config', [FileManagerController::class, 'getStorageConfig']);
     Route::post('/file_manager/storage_config', [FileManagerController::class, 'saveStorageConfig']);
 
+    Route::post('/ai/generate_image', [PanelApiControllers\AIImageController::class, 'generate'])->name('ai.generate_image');
+    Route::get('/ai/models_info', [PanelApiControllers\AIImageController::class, 'modelsInfo'])->name('ai.models_info');
+
     Route::get('/currencies', [PanelApiControllers\CurrencyController::class, 'index'])->name('currencies.index');
     Route::post('/currencies', [PanelApiControllers\CurrencyController::class, 'store'])->name('currencies.store');
     Route::put('/currencies/{id}', [PanelApiControllers\CurrencyController::class, 'update'])->name('currencies.update');

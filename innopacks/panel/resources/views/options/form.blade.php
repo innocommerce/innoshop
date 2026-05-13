@@ -102,7 +102,7 @@
               <input type="hidden" name="values" :value="isNewOption ? JSON.stringify(getValuesForSubmit()) : ''">
 
               <div v-if="localValues.length">
-                <draggable v-model="localValues" handle=".drag-handle" :animation="300" item-key="index">
+                <draggable v-model="localValues" handle=".drag-handle" :animation="300" item-key="index" @end="onDragEnd">
                   <template #item="{ element: value, index }">
                     <div class="d-flex align-items-center mb-2 p-2 border rounded">
                       <div class="drag-handle me-2 text-muted cursor-pointer"><i class="bi bi-grip-vertical"></i></div>
@@ -388,6 +388,22 @@
         valueLocaleHelper.fillEmpty();
       };
 
+      // --- Drag end: save sort order ---
+      const onDragEnd = () => {
+        if (isNewOption) return;
+        const sortData = localValues.value
+          .filter(v => v.id)
+          .map((v, i) => ({ id: v.id, position: i }));
+        if (!sortData.length) return;
+        axios.post(urls.panel_base + '/option_values/sort', {
+          sort_data: sortData,
+        }, { headers: { 'X-Skip-Loading': true } }).then(res => {
+          layer.msg(res.message, {icon: 1});
+        }).catch(err => {
+          layer.msg(err.response?.data?.message || err.message, {icon: 2});
+        });
+      };
+
       // --- Image handling ---
       const pickValueImage = () => {
         window.inno.fileManagerIframe((file) => {
@@ -449,6 +465,7 @@
         closeValueDialog,
         saveValueDialog,
         deleteValue,
+        onDragEnd,
         getValuesForSubmit,
         translateValueName,
         fillEmptyValueLocales,

@@ -65,6 +65,7 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/options/{option}/active', [Controllers\OptionController::class, 'active'])->name('options.active');
 
         Route::resource('/option_values', Controllers\OptionValueController::class);
+        Route::post('/option_values/sort', [Controllers\OptionValueController::class, 'updateSort'])->name('option_values.sort');
         Route::put('/option_values/{option_value}/active', [Controllers\OptionValueController::class, 'active'])->name('option_values.active');
 
         Route::resource('/brands', Controllers\BrandController::class);

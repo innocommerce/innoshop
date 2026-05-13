@@ -200,7 +200,7 @@ class ProductRepo extends BaseRepo
      */
     private function applySorting(Builder $builder, array $filters): void
     {
-        $sort  = $filters['sort'] ?? 'created_at';
+        $sort  = $filters['sort'] ?? system_setting('product_default_sort', 'created_at');
         $order = $filters['order'] ?? 'desc';
 
         if ($sort == 'pt.name') {

@@ -28,7 +28,7 @@ class RequestFilterParser
     {
         $filters = array_merge($defaultFilters, [
             'keyword'  => $request->get('keyword'),
-            'sort'     => $request->get('sort', 'created_at'),
+            'sort'     => $request->get('sort', system_setting('product_default_sort', 'created_at')),
             'order'    => $request->get('order', 'desc'),
             'per_page' => $request->get('per_page', system_setting('product_per_page', 12)),
         ]);

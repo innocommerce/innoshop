@@ -16,10 +16,11 @@ use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\MailRepo;
 use InnoShop\Common\Repositories\PageRepo;
+use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Repositories\SmsRepo;
 use InnoShop\Common\Repositories\WeightClassRepo;
-use InnoShop\Common\Services\AI\AIServiceManager;
+use InnoShop\Common\Services\AI\ProviderRegistry;
 use InnoShop\Common\Services\GeoLite2Service;
 use InnoShop\Common\Services\SmsService;
 use InnoShop\Panel\Repositories\ContentAIRepo;
@@ -35,18 +36,22 @@ class SettingController
     public function index(): mixed
     {
         $data = [
-            'locales'        => locales()->toArray(),
-            'currencies'     => CurrencyRepo::getInstance()->enabledList()->toArray(),
-            'weight_classes' => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
-            'categories'     => CategoryRepo::getInstance()->getTwoLevelCategories(),
-            'catalogs'       => CatalogRepo::getInstance()->getTopCatalogs(),
-            'pages'          => PageRepo::getInstance()->withActive()->builder()->get(),
-            'mail_engines'   => MailRepo::getInstance()->getEngines(),
-            'sms_gateways'   => SmsRepo::getInstance()->getGateways(),
-            'sms_repo'       => SmsRepo::getInstance(),
-            'ai_models'      => AIServiceManager::getInstance()->getModelsForSelect(),
-            'ai_prompts'     => ContentAIRepo::getInstance()->getPrompts(),
-            'geolite2_info'  => (new GeoLite2Service)->getDatabaseInfo(),
+            'locales'              => locales()->toArray(),
+            'currencies'           => CurrencyRepo::getInstance()->enabledList()->toArray(),
+            'weight_classes'       => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
+            'categories'           => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'catalogs'             => CatalogRepo::getInstance()->getTopCatalogs(),
+            'pages'                => PageRepo::getInstance()->withActive()->builder()->get(),
+            'mail_engines'         => MailRepo::getInstance()->getEngines(),
+            'sms_gateways'         => SmsRepo::getInstance()->getGateways(),
+            'sms_repo'             => SmsRepo::getInstance(),
+            'ai_providers'         => app(ProviderRegistry::class)->getUserProviders(),
+            'ai_plugin_providers'  => app(ProviderRegistry::class)->getPluginProviders(),
+            'ai_presets'           => app(ProviderRegistry::class)->getPresets(),
+            'ai_models'            => app(ProviderRegistry::class)->getConfiguredProviders(),
+            'ai_prompts'           => ContentAIRepo::getInstance()->getPrompts(),
+            'geolite2_info'        => (new GeoLite2Service)->getDatabaseInfo(),
+            'product_sort_options' => collect(ProductRepo::getSortOptions())->map(fn ($label, $value) => ['value' => $value, 'label' => $label])->values()->toArray(),
         ];
 
         return inno_view('panel::settings.index', $data);

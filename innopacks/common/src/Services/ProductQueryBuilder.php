@@ -257,7 +257,7 @@ class ProductQueryBuilder
 
         if ($keyword) {
             if ($searchField === 'name') {
-                $builder->whereHas('translation', function (Builder $query) use ($keyword) {
+                $builder->whereHas('translations', function (Builder $query) use ($keyword) {
                     $query->where('name', 'like', "%$keyword%");
                 });
             } elseif ($searchField === 'sku_code') {
@@ -269,7 +269,7 @@ class ProductQueryBuilder
             } else {
                 // Search all fields
                 $builder->where(function ($query) use ($keyword) {
-                    $query->whereHas('translation', function (Builder $q) use ($keyword) {
+                    $query->whereHas('translations', function (Builder $q) use ($keyword) {
                         $q->where('name', 'like', "%$keyword%");
                     })->orWhereHas('skus', function (Builder $q) use ($keyword) {
                         $q->where('code', 'like', "%$keyword%");
