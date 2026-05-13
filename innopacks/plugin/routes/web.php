@@ -28,4 +28,9 @@ Route::get('/marketplaces/order_status/{number}', [MarketplaceController::class,
 Route::put('/marketplaces/domain_token', [MarketplaceController::class, 'updateDomainToken'])->name('marketplaces.domain_token');
 Route::put('/marketplaces/auth_token', [MarketplaceController::class, 'updateAuthToken'])->name('marketplaces.auth_token');
 Route::get('/marketplaces/get_token', [MarketplaceController::class, 'getToken'])->name('marketplaces.get_token');
+Route::get('/marketplaces/billing_methods', [MarketplaceController::class, 'billingMethods'])->name('marketplaces.billing_methods');
+Route::post('/marketplaces/login', [MarketplaceController::class, 'proxyLogin'])->name('marketplaces.login');
+Route::post('/marketplaces/register', [MarketplaceController::class, 'proxyRegister'])->name('marketplaces.register');
+Route::post('/marketplaces/bind_domain', [MarketplaceController::class, 'proxyBindDomain'])->name('marketplaces.bind_domain');
+Route::get('/marketplaces/account', [MarketplaceController::class, 'proxyAccountMe'])->name('marketplaces.account');
 Route::post('/marketplaces/clear_cache', [MarketplaceController::class, 'clearCache'])->name('marketplaces.clear_cache');

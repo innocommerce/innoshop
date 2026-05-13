@@ -136,6 +136,126 @@ class MarketplaceController
     }
 
     /**
+     * Proxy billing methods from innoshop.cn API to avoid CORS issues.
+     *
+     * @return mixed
+     */
+    public function billingMethods(): mixed
+    {
+        try {
+            $baseUrl  = config('innoshop.api_url');
+            $response = Http::baseUrl($baseUrl)
+                ->withOptions(['verify' => false])
+                ->get('/api/checkout/billing_methods');
+
+            if ($response->successful()) {
+                $data    = $response->json();
+                $methods = is_array($data) && isset($data['data']) ? $data['data'] : $data;
+
+                return response()->json($methods);
+            }
+
+            return json_fail($response->json()['message'] ?? 'Failed to fetch billing methods');
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Proxy login request to innoshop.cn API.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function proxyLogin(Request $request): mixed
+    {
+        try {
+            $baseUrl  = config('innoshop.api_url');
+            $response = Http::baseUrl($baseUrl)
+                ->withOptions(['verify' => false])
+                ->post('/api/login', $request->only('email', 'password'));
+
+            return response()->json($response->json(), $response->status());
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Proxy register request to innoshop.cn API.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function proxyRegister(Request $request): mixed
+    {
+        try {
+            $baseUrl  = config('innoshop.api_url');
+            $response = Http::baseUrl($baseUrl)
+                ->withOptions(['verify' => false])
+                ->post('/api/register', $request->only('email', 'password', 'password_confirmation'));
+
+            return response()->json($response->json(), $response->status());
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Proxy domain bind request to innoshop.cn API.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function proxyBindDomain(Request $request): mixed
+    {
+        try {
+            $baseUrl   = config('innoshop.api_url');
+            $headers   = [];
+            $authToken = $request->input('auth_token') ?: system_setting('marketplace_auth_token');
+            if ($authToken) {
+                $headers['Authorization'] = 'Bearer '.$authToken;
+            }
+            $response = Http::baseUrl($baseUrl)
+                ->withOptions(['verify' => false])
+                ->withHeaders($headers)
+                ->post('/api/marketplace/domains/bind', [
+                    'domain' => $request->input('domain', $request->getHost()),
+                ]);
+
+            return response()->json($response->json(), $response->status());
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Proxy account/me request to innoshop.cn API.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function proxyAccountMe(Request $request): mixed
+    {
+        try {
+            $baseUrl   = config('innoshop.api_url');
+            $authToken = $request->input('auth_token') ?: system_setting('marketplace_auth_token');
+            $headers   = [];
+            if ($authToken) {
+                $headers['Authorization'] = 'Bearer '.$authToken;
+            }
+            $response = Http::baseUrl($baseUrl)
+                ->withOptions(['verify' => false])
+                ->withHeaders($headers)
+                ->get('/api/account/me');
+
+            return response()->json($response->json(), $response->status());
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
      * Clear marketplace cache
      *
      * @return mixed

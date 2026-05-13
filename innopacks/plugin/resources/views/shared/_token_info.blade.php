@@ -48,23 +48,10 @@
     var initDomainToken = '{{ system_setting("domain_token") }}';
     var routeAuthToken = '{{ panel_route("marketplaces.auth_token") }}';
     var routeDomainToken = '{{ panel_route("marketplaces.domain_token") }}';
-    var locale = '{{ panel_locale_code() }}';
-
-    // Use only simple request headers (Content-Type, Accept) to avoid CORS preflight failures.
-    // Custom headers like X-CSRF-TOKEN, X-Requested-With, locale all trigger preflight
-    // and are blocked by the remote server's Access-Control-Allow-Headers.
-    var remoteHttp = axios.create({
-        baseURL: apiUrl,
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-    });
-    delete remoteHttp.defaults.headers.common['X-CSRF-TOKEN'];
-    delete remoteHttp.defaults.headers.common['X-Requested-With'];
-    // Pass locale as a query parameter instead of a custom header to avoid CORS issues.
-    remoteHttp.interceptors.request.use(function(config) {
-        config.params = config.params || {};
-        config.params.locale = locale;
-        return config;
-    });
+    var routeLogin = '{{ panel_route("marketplaces.login") }}';
+    var routeRegister = '{{ panel_route("marketplaces.register") }}';
+    var routeBindDomain = '{{ panel_route("marketplaces.bind_domain") }}';
+    var routeAccount = '{{ panel_route("marketplaces.account") }}';
 
     var storedToken = ref(initAuthToken);
 
@@ -95,12 +82,12 @@
                 errorMsg.value = '';
                 if (!loginForm.email || !loginForm.password) { errorMsg.value = i18n.auth_invalid_credentials; return; }
                 loading.value = true;
-                remoteHttp.post('/api/login', { email: loginForm.email, password: loginForm.password }).then(function(res) {
-                    if (res.data && res.data.success && res.data.data && res.data.data.token) {
-                        doBind(res.data.data.token);
+                axios.post(routeLogin, { email: loginForm.email, password: loginForm.password }).then(function(res) {
+                    if (res && res.success && res.data && res.data.token) {
+                        doBind(res.data.token);
                     } else {
                         loading.value = false;
-                        errorMsg.value = (res.data && res.data.message) || i18n.auth_invalid_credentials;
+                        errorMsg.value = (res && res.message) || i18n.auth_invalid_credentials;
                     }
                 }).catch(function(err) { loading.value = false; errorMsg.value = extractMsg(err); });
             }
@@ -110,21 +97,21 @@
                 if (!registerForm.email || !registerForm.password) { errorMsg.value = i18n.auth_invalid_credentials; return; }
                 if (registerForm.password !== registerForm.password_confirmation) { errorMsg.value = i18n.auth_password_mismatch; return; }
                 loading.value = true;
-                remoteHttp.post('/api/register', { email: registerForm.email, password: registerForm.password, password_confirmation: registerForm.password_confirmation }).then(function(res) {
-                    if (res.data && res.data.success && res.data.data && res.data.data.token) {
-                        doBind(res.data.data.token);
+                axios.post(routeRegister, { email: registerForm.email, password: registerForm.password, password_confirmation: registerForm.password_confirmation }).then(function(res) {
+                    if (res && res.success && res.data && res.data.token) {
+                        doBind(res.data.token);
                     } else {
                         loading.value = false;
-                        errorMsg.value = (res.data && res.data.message) || i18n.auth_register_fail;
+                        errorMsg.value = (res && res.message) || i18n.auth_register_fail;
                     }
                 }).catch(function(err) { loading.value = false; errorMsg.value = extractMsg(err); });
             }
 
             function doBind(sanctumToken) {
                 loading.value = true;
-                remoteHttp.post('/api/marketplace/domains/bind', { domain: currentDomain }, { headers: authHeaders(sanctumToken) }).then(function(res) {
-                    var tk = res.data.data.domain_token;
-                    if (!tk) { loading.value = false; errorMsg.value = res.data.message || i18n.auth_bind_fail; return; }
+                axios.post(routeBindDomain, { auth_token: sanctumToken, domain: currentDomain }).then(function(res) {
+                    var tk = res.data && res.data.domain_token;
+                    if (!tk) { loading.value = false; errorMsg.value = res.message || i18n.auth_bind_fail; return; }
                     axios.all([
                         axios.put(routeAuthToken, { auth_token: sanctumToken }),
                         axios.put(routeDomainToken, { domain_token: tk })
@@ -138,8 +125,8 @@
             function doBindCurrent() {
                 loading.value = true;
                 errorMsg.value = '';
-                remoteHttp.post('/api/marketplace/domains/bind', { domain: currentDomain }, { headers: authHeaders() }).then(function(res) {
-                    var tk = res.data.data.domain_token;
+                axios.post(routeBindDomain, { domain: currentDomain }).then(function(res) {
+                    var tk = res.data && res.data.domain_token;
                     if (tk) {
                         axios.put(routeDomainToken, { domain_token: tk }).then(function() {
                             domainToken.value = tk;
@@ -148,16 +135,16 @@
                         });
                     } else {
                         loading.value = false;
-                        errorMsg.value = res.data.message || i18n.auth_bind_fail;
+                        errorMsg.value = res.message || i18n.auth_bind_fail;
                     }
                 }).catch(function(err) { loading.value = false; errorMsg.value = extractMsg(err); });
             }
 
             function loadMe() {
-                remoteHttp.get('/api/account/me', { headers: authHeaders() }).then(function(res) {
-                    if (res.data && res.data.success) {
-                        customer.name = res.data.data.name || '';
-                        customer.email = res.data.data.email || '';
+                axios.get(routeAccount).then(function(res) {
+                    if (res && res.success) {
+                        customer.name = res.data.name || '';
+                        customer.email = res.data.email || '';
                     }
                 }).catch(function() { loggedIn.value = false; storedToken.value = ''; });
             }

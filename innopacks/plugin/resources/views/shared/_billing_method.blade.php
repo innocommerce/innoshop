@@ -30,17 +30,17 @@
             return originalName;
         }
 
-        axios.get("{{config('innoshop.api_url').'/api/checkout/billing_methods'}}").then(function (res) {
-            var methods = res.data
-            for (i = 0; i < res.data.length; i++) {
-                var paymentCode = res.data[i].code;
-                var paymentName = getPaymentMethodName(paymentCode, res.data[i].name);
+        axios.get('/{{ panel_name() }}/marketplaces/billing_methods', { hload: true }).then(function (res) {
+            var methods = Array.isArray(res) ? res : (res.data || []);
+            for (i = 0; i < methods.length; i++) {
+                var paymentCode = methods[i].code;
+                var paymentName = getPaymentMethodName(paymentCode, methods[i].name);
 
                 if (i === 0){
                     $('#billingMethodsContent').append(
                         "<div class='form-check form-check-inline method-checks rounded-1 p-1 cursor-pointer' id='method-"+ paymentCode +"' style='border: 1px solid #409eff'>" +
                         "<input class='form-check-input billing-method-check mx-1 my-2' checked type='radio' name='shipping_method_code' id='shippingMethodCode" + paymentCode + "' value=" + paymentCode + ">" +
-                        "<label class='form-check-label align-middle cursor-pointer' for='shippingMethodCode" + paymentCode + "'><img src='" + res.data[i].icon + "' alt='" + paymentName + "' style='height: 2rem' class='mx-2 rounded align-middle'>" + paymentName + "</label>" +
+                        "<label class='form-check-label align-middle cursor-pointer' for='shippingMethodCode" + paymentCode + "'><img src='" + methods[i].icon + "' alt='" + paymentName + "' style='height: 2rem' class='mx-2 rounded align-middle'>" + paymentName + "</label>" +
                         "</div>")
                     billingMethod = paymentCode
                     continue
@@ -48,7 +48,7 @@
                 $('#billingMethodsContent').append(
                     "<div class='form-check form-check-inline method-checks rounded-1 p-1 cursor-pointer' id='method-"+ paymentCode +"'>" +
                     "<input class='form-check-input billing-method-check mx-1 my-2' type='radio' name='shipping_method_code' id='shippingMethodCode" + paymentCode + "' value=" + paymentCode + ">" +
-                    "<label class='form-check-label align-middle cursor-pointer' for='shippingMethodCode" + paymentCode + "'><img src='" + res.data[i].icon + "' alt='" + paymentName + "' style='height: 2rem' class='mx-2 rounded align-middle'>" + paymentName + "</label>" +
+                    "<label class='form-check-label align-middle cursor-pointer' for='shippingMethodCode" + paymentCode + "'><img src='" + methods[i].icon + "' alt='" + paymentName + "' style='height: 2rem' class='mx-2 rounded align-middle'>" + paymentName + "</label>" +
                     "</div>")
             }
             $('.billing-method-check').on('change', function () {
@@ -71,7 +71,7 @@
                 'sku_id': $(this).data('sku-id'),
                 'product_id': $(this).data('product-id'),
                 'billing_method_code': billingMethod,
-            }).then(function (res) {
+            }, { hload: true }).then(function (res) {
                 if (res.status === 422){
                     layer.msg( res.message ,{ icon:2 })
                     return
@@ -142,7 +142,7 @@
                     clearInterval(pollTimer);
                     return;
                 }
-                axios.get(statusUrl).then(function (res) {
+                axios.get(statusUrl, { hload: true }).then(function (res) {
                     if (res.success && res.data && res.data.paid) {
                         clearInterval(pollTimer);
                         $('#paymentStatusTip').text('{{ __("panel/plugin.auth_pay_success") }}').show();
