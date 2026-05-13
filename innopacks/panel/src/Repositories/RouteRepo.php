@@ -77,7 +77,7 @@ class RouteRepo
         $routes    = Route::getRoutes();
         foreach ($routes as $route) {
             $routeName   = $route->getName();
-            $panelPrefix = panel_name().'.';
+            $panelPrefix = 'panel.';
             if (! Str::startsWith($route->getName(), $panelPrefix)) {
                 continue;
             }

@@ -20,7 +20,7 @@
                     <i class="bi bi-list-ul me-2"></i>{{ __('panel/product.available_options') }}
                     <span class="badge bg-secondary ms-2">@{{ availableOptionsFiltered.length }}</span>
                   </span>
-                  @php $optionsRoute = ($routePrefix ?? panel_name()) === panel_name() ? panel_route('options.index') : ''; @endphp
+                  @php $optionsRoute = ($routePrefix ?? 'panel') === 'panel' ? panel_route('options.index') : ''; @endphp
                   @if($optionsRoute)
                   <a href="{{ $optionsRoute }}" class="btn btn-sm btn-outline-primary" target="_blank" title="{{ __('panel/options.option_management') }}">
                     <i class="bi bi-gear me-1"></i>{{ __('panel/options.option_management') }}

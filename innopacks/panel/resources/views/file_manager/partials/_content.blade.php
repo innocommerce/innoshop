@@ -342,7 +342,7 @@
       </div>
       <template #footer>
       <span class="storage-dialog-footer">
-        <a href="{{ route(panel_name().'.settings.index') }}?tab=tab-setting-storage" target="_blank" class="storage-settings-link">
+        <a href="{{ route('panel.settings.index') }}?tab=tab-setting-storage" target="_blank" class="storage-settings-link">
           <el-icon><component :is="'Link'"></component></el-icon> {{ __('panel/file_manager.storage_settings_link') }}
         </a>
         <el-button @click="storageConfigDialog.visible = false">{{ __('panel/file_manager.cancel_btn') }}</el-button>

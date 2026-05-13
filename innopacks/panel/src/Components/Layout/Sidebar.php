@@ -34,7 +34,7 @@ class Sidebar extends Component
         $this->adminUser = current_admin();
 
         $routeNameWithPrefix = request()->route()->getName();
-        $this->currentRoute  = (string) str_replace(panel_name().'.', '', $routeNameWithPrefix);
+        $this->currentRoute  = (string) str_replace('panel.', '', $routeNameWithPrefix);
 
         $patterns = explode('.', $this->currentRoute);
 

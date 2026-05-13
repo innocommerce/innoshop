@@ -99,7 +99,7 @@ class PluginServiceProvider extends ServiceProvider
         $adminName = panel_name();
         Route::prefix($adminName)
             ->middleware(['web', 'admin_auth:admin', SetPanelLocale::class])
-            ->name("$adminName.")
+            ->name('panel.')
             ->group(function () {
                 $path = __DIR__.'/../routes/web.php';
                 if (is_file($path)) {
@@ -386,7 +386,7 @@ class PluginServiceProvider extends ServiceProvider
         if (file_exists($adminRoutePath)) {
             $adminName = panel_name();
             Route::prefix($adminName)
-                ->name("$adminName.")
+                ->name('panel.')
                 ->middleware(['panel', 'admin_auth:admin'])
                 ->group(function () use ($adminRoutePath) {
                     $this->loadRoutesFrom($adminRoutePath);

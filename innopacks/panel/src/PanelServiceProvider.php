@@ -169,7 +169,7 @@ class PanelServiceProvider extends ServiceProvider
         $adminName = panel_name();
         Route::prefix($adminName)
             ->middleware('panel')
-            ->name("$adminName.")
+            ->name('panel.')
             ->group(function () {
                 $path = __DIR__.'/../routes/web.php';
                 if (is_file($path)) {
