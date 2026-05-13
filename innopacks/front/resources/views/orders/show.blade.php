@@ -104,6 +104,7 @@
         </div>
       </div>
     </div>
+  </div>
 
     @hookinsert('order.show.top')
 

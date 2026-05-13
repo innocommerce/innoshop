@@ -246,6 +246,14 @@ class AIServiceManager
 
             Log::info('AIServiceManager generateImage started', ['prompt' => substr($prompt, 0, 100)]);
 
+            // Allow plugins to provide custom image generation driver (e.g., async APIs)
+            $imageDriver = fire_hook_filter('ai.image_generate_driver', null);
+            if ($imageDriver) {
+                $result = (new $imageDriver)->generate($prompt, $options);
+
+                return fire_hook_filter('ai.image_result', $result);
+            }
+
             $prompt = fire_hook_filter('ai.image_prompt', $prompt);
 
             $provider = $options['provider'] ?? config('ai.default_for_images', 'openai');

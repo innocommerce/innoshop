@@ -279,6 +279,7 @@
         </div>
       </div>
     </div>
+  </div>
     @hookinsert('account.order_info.bottom')
     @endsection
     @push('footer')
