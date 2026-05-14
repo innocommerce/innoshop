@@ -111,7 +111,7 @@ Vue.component('single-image-selector', {
           console.log("File selected:", file);
           
           // 修复URL
-          let fileUrl = file.origin_url || file.path;
+          let fileUrl = file.url || file.origin_url || file.path;
           if (fileUrl && !fileUrl.match(/^https?:\/\//)) {
             if (!fileUrl.startsWith("/")) {
               fileUrl = "/" + fileUrl;
