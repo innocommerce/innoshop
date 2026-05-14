@@ -809,6 +809,12 @@
   border: 1px solid #e9ecef;
   border-radius: 6px;
   margin-bottom: 12px;
+  overflow: hidden;
+  transition: margin-bottom 0.3s ease;
+}
+
+.image-item.collapsed {
+  margin-bottom: 4px;
 }
 
 .image-header {
@@ -848,6 +854,7 @@
 .image-actions {
   display: flex;
   align-items: center;
+  gap: 6px;
 }
 
 .remove-btn {
@@ -870,11 +877,14 @@
 /* 图片内容区域 */
 .image-content {
   max-height: 0;
-  transition: max-height 0.3s ease;
+  overflow: hidden;
+  padding: 0;
+  transition: max-height 0.3s ease, padding 0.3s ease;
 }
 
-.image-content.active {
-  max-height: 500px;
+.image-content.active,
+.image-content.expanded {
+  max-height: 2000px;
   padding: 16px;
 }
 

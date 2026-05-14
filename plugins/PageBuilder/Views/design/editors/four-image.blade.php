@@ -56,40 +56,59 @@
         </div>
 
         <draggable ghost-class="dragabble-ghost" :list="form.images"
-          :options="{ animation: 330, handle: '.icon-rank' }">
-          <div class="image-item" v-for="(item, index) in form.images" :key="index">
-            <div class="image-header" @click="itemShow(index)">
-              <div class="image-info">
-                <el-tooltip class="drag-handle" effect="dark" :content="lang.drag_sort" placement="left">
+          :options="{ animation: 330, handle: '.drag-handle' }">
+          <div class="slide-item" v-for="(item, index) in form.images" :key="index">
+            <div class="slide-header" @click="toggleImage(index)">
+              <div class="slide-info">
+                <div class="drag-handle">
                   <i class="el-icon-rank"></i>
-                </el-tooltip>
-                <img :src="thumbnail(item.image[source.locale])" class="image-preview">
-                <span class="image-label">@{{ lang.image }} @{{ index + 1 }}</span>
+                </div>
+                <div class="slide-preview">
+                  <img :src="thumbnail(item.image)" class="preview-img">
+                  <div class="slide-number"># @{{ index + 1 }}</div>
+                </div>
+                <div class="slide-title">
+                  @{{ lang.image }} @{{ index + 1 }}
+                </div>
               </div>
-              <div class="image-actions">
-                <el-tooltip effect="dark" :content="lang.delete" placement="left">
-                  <div class="remove-btn" @click.stop="removeImage(index)">
-                    <i class="el-icon-delete"></i>
-                  </div>
-                </el-tooltip>
-                <i :class="'el-icon-arrow-' + (item.show ? 'up' : 'down')"></i>
+
+              <div class="slide-actions">
+                <el-button
+                  type="danger"
+                  size="mini"
+                  icon="el-icon-delete"
+                  circle
+                  @click.stop="removeImage(index)"
+                ></el-button>
+                <i :class="'el-icon-arrow-' + (item.show ? 'up' : 'down') + ' toggle-icon'"></i>
               </div>
             </div>
-            <div :class="'image-content ' + (item.show ? 'active' : '')">
-              <div class="image-upload-section">
+
+            <div :class="'slide-content ' + (item.show ? 'expanded' : '')">
+              <div class="content-section">
+                <div class="section-subtitle">
+                  <i class="el-icon-picture-outline"></i>
+                  @{{ lang.image_settings }}
+                </div>
                 <single-image-selector v-model="item.image" :aspectRatio="1" :targetWidth="400"
                   :targetHeight="400"></single-image-selector>
-                <div class="upload-tip">@{{ lang.recommended_size_400 }}</div>
+                <div class="image-tips">@{{ lang.recommended_size_400 }}</div>
               </div>
-              <div class="image-settings">
-                <div class="setting-group">
-                  <div class="setting-label">@{{ lang.image_description }}</div>
-                  <text-i18n v-model="item.description" @change="onChange" :placeholder="lang.enter_image_description"></text-i18n>
+
+              <div class="content-section">
+                <div class="section-subtitle">
+                  <i class="el-icon-edit"></i>
+                  @{{ lang.image_description }}
                 </div>
-                <div class="setting-group">
-                  <div class="setting-label">@{{ lang.image_link }}</div>
-                  <link-selector :hide-types="['catalog', 'static']" v-model="item.link" @change="onChange"></link-selector>
+                <text-i18n v-model="item.description" @change="onChange" :placeholder="lang.enter_image_description"></text-i18n>
+              </div>
+
+              <div class="content-section">
+                <div class="section-subtitle">
+                  <i class="el-icon-link"></i>
+                  @{{ lang.image_link }}
                 </div>
+                <link-selector :hide-types="['catalog', 'static']" v-model="item.link" @change="onChange"></link-selector>
               </div>
             </div>
           </div>
@@ -113,6 +132,7 @@
     data: function() {
       return {
         debounceTimer: null,
+        isToggling: false,
         form: {
           title: {},
           subtitle: {},
@@ -127,7 +147,9 @@
     watch: {
       form: {
         handler: function(val) {
-          this.onChange();
+          if (!this.isToggling) {
+            this.onChange();
+          }
         },
         deep: true
       }
@@ -147,6 +169,16 @@
 
       if (!this.form.images) {
         this.$set(this.form, 'images', []);
+      }
+
+      // Ensure each image has a reactive 'show' property for collapse/expand
+      // Default to false (collapsed) like slideshow - accordion style
+      if (this.form.images && this.form.images.length > 0) {
+        this.form.images.forEach(function(img) {
+          if (img.show === undefined) {
+            this.$set(img, 'show', false);
+          }
+        }.bind(this));
       }
 
       if (!this.form.width) {
@@ -180,12 +212,22 @@
         if (!image) {
           return PLACEHOLDER_IMAGE_URL;
         }
-        if (typeof image === 'string' && image.indexOf('http') === 0) {
-          return image;
-        }
         if (typeof image === 'object') {
           const locale = this.source.locale;
-          return image[locale] || (Object.values(image)[0] || PLACEHOLDER_IMAGE_URL);
+          const img = image[locale] || Object.values(image).find(v => v);
+          if (img) {
+            if (img.indexOf('http') === 0) {
+              return img;
+            }
+            return asset + img;
+          }
+          return PLACEHOLDER_IMAGE_URL;
+        }
+        if (typeof image === 'string') {
+          if (image.indexOf('http') === 0) {
+            return image;
+          }
+          return asset + image;
         }
         return PLACEHOLDER_IMAGE_URL;
       },
@@ -194,8 +236,14 @@
           this.$message.warning(lang.max_4_images);
           return;
         }
+
+        // Close all existing images
+        this.form.images.forEach(item => {
+          this.$set(item, 'show', false);
+        });
+
         this.form.images.push({
-          image: this.languagesFill(''),
+          image: '',
           description: this.languagesFill(''),
           link: {
             type: 'product',
@@ -207,8 +255,23 @@
       removeImage(index) {
         this.form.images.splice(index, 1);
       },
-      itemShow(index) {
-        this.form.images[index].show = !this.form.images[index].show;
+      toggleImage(index) {
+        this.isToggling = true;
+
+        // Close other images (accordion style)
+        this.form.images.forEach((item, key) => {
+          if (key !== index) {
+            this.$set(item, 'show', false);
+          }
+        });
+
+        // Toggle current image
+        const currentShow = this.form.images[index].show;
+        this.$set(this.form.images[index], 'show', !currentShow);
+
+        this.$nextTick(() => {
+          this.isToggling = false;
+        });
       }
     }
   });
