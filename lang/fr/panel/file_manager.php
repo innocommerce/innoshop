@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Type de stockage',
     'title'                         => 'Gestionnaire de fichiers',
     'upload'                        => 'Télécharger un fichier',
+    'root_directory'                => 'Répertoire racine',
 ];

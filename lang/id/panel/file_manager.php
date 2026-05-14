@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Jenis penyimpanan',
     'title'                         => 'Manajer berkascomment',
     'upload'                        => 'Mengunggah file',
+    'root_directory'                => 'Direktori utama',
 ];

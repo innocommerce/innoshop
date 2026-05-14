@@ -138,5 +138,6 @@ return [
     'ai_image_to_image'     => 'AI Generate',
     'ai_reference_image'    => 'Reference Image',
     'ai_use'                => 'Use',
+    'root_directory'        => 'Root',
     'ai_model_info'         => 'Model',
 ];

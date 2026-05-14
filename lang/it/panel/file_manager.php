@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Tipo di deposito',
     'title'                         => 'Gestori di documenti',
     'upload'                        => 'Caricamento di documenti',
+    'root_directory'                => 'Directory principale',
 ];

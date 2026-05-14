@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'نوع التخزين',
     'title'                         => 'مدير الملفات',
     'upload'                        => 'تحميل الملفات',
+    'root_directory'                => 'الدليل الجذر',
 ];

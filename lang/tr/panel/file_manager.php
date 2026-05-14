@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Storage type',
     'title'                         => 'Dosya Yöneticisi',
     'upload'                        => 'Dosya yükleme',
+    'root_directory'                => 'Kök dizin',
 ];

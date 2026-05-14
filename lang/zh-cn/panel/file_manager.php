@@ -138,5 +138,6 @@ return [
     'ai_image_to_image'     => 'AI 生图',
     'ai_reference_image'    => '参考图片',
     'ai_use'                => '使用',
+    'root_directory'        => '根目录',
     'ai_model_info'         => '模型',
 ];

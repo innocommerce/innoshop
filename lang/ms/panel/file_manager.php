@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Jenis storan',
     'title'                         => 'Pengurus fail',
     'upload'                        => 'Muat naik fail',
+    'root_directory'                => 'Direktori akar',
 ];

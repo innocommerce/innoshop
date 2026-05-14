@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Loại lưu trữ',
     'title'                         => 'Quản lý tập tin',
     'upload'                        => 'Tải lên tập tin',
+    'root_directory'                => 'Thư mục gốc',
 ];

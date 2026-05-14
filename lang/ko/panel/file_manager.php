@@ -61,4 +61,5 @@ return [
     'storage_type'                  => '저장소 형식',
     'title'                         => '파일 관리자',
     'upload'                        => '파일 업로드',
+    'root_directory'                => '루트 디렉토리',
 ];

@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Storage type',
     'title'                         => 'File Manager',
     'upload'                        => 'ផ្ទុកឯកសារ',
+    'root_directory'                => 'ថតឫស',
 ];

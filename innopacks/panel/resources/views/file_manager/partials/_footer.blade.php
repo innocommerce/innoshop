@@ -572,9 +572,21 @@
           this.loadFiles(savedPath);
           this.updateUploadPath();
 
+          // Set root node as the initial tree data so user can click it to go back to root
+          this.folders = [{
+            id: '/',
+            name: '{{ __("panel/file_manager.root_directory") }}',
+            path: '/',
+            isRoot: true,
+            hasChildren: true,
+          }];
+
           // Restore last expanded/selected folder
           if (savedPath && savedPath !== '/') {
             this.$nextTick(() => this.expandToPath(savedPath));
+          } else {
+            // At root, expand root node to show first-level directories
+            this.$nextTick(() => this.expandToPath('/'));
           }
         },
 
@@ -583,11 +595,23 @@
           const tree = this.$refs.folderTree;
           if (!tree) return;
 
+          // Root only: just expand and highlight the root node
+          if (targetPath === '/') {
+            const node = tree.getNode('/');
+            if (node) {
+              if (!node.expanded && typeof node.expand === 'function') {
+                node.expand();
+              }
+              tree.setCurrentKey('/');
+            }
+            return;
+          }
+
           const hasSlash = targetPath.startsWith('/');
           const segments = targetPath.replace(/^\//, '').split('/').filter(Boolean);
           if (!segments.length) return;
 
-          const keys = [];
+          const keys = ['/'];
           let cur = '';
           for (const seg of segments) {
             cur += (cur ? '/' : '') + seg;
@@ -665,13 +689,24 @@
         // Refresh tree after directory change
         refreshFolders() {
           this.foldersKey++;
-          this.folders = [];
+          this.folders = [{
+            id: '/',
+            name: '{{ __("panel/file_manager.root_directory") }}',
+            path: '/',
+            isRoot: true,
+            hasChildren: true,
+          }];
           this.folderCache = {};
         },
 
         // Shared lazy loader for main tree and dialog trees (cached)
         loadTreeNode(node, resolve) {
-          const path = node.data ? (node.data.path || '/') : '/';
+          // Virtual root call (no real data) — root node is in folders data, skip
+          if (!node.data || !node.data.id) {
+            resolve([]);
+            return;
+          }
+          const path = node.data.path || '/';
           if (this.folderCache[path]) {
             resolve(this.folderCache[path]);
             return;

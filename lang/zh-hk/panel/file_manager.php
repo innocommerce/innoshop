@@ -61,4 +61,5 @@ return [
     'storage_type'                  => '存儲類型',
     'title'                         => '文件管理器',
     'upload'                        => '上傳文件',
+    'root_directory'                => '根目錄',
 ];

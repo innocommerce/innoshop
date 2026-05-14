@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Art des ladens',
     'title'                         => 'Der dateimanager.',
     'upload'                        => 'Datei hochladen',
+    'root_directory'                => 'Stammverzeichnis',
 ];

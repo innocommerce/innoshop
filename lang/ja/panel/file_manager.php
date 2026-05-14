@@ -61,4 +61,5 @@ return [
     'storage_type'                  => '記憶型です',
     'title'                         => 'ファイルマネージャです',
     'upload'                        => 'ファイルをアップロードします',
+    'root_directory'                => 'ルートディレクトリ',
 ];

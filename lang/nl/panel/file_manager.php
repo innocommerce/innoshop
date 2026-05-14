@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Opslagtype',
     'title'                         => 'Bestandsbeheerder',
     'upload'                        => 'Upload files',
+    'root_directory'                => 'Hoofddirectory',
 ];

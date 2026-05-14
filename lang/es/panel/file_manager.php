@@ -61,4 +61,5 @@ return [
     'storage_type'                  => 'Tipo de almacenamiento',
     'title'                         => 'Gestor de archivos',
     'upload'                        => 'Subir un archivo',
+    'root_directory'                => 'Directorio raíz',
 ];
