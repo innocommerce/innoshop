@@ -11,6 +11,7 @@ namespace InnoShop\RestAPI\Services;
 
 use Aws\S3\S3Client;
 use Exception;
+use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Services\StorageService;
 
@@ -335,47 +336,22 @@ class OSSService implements FileManagerInterface
     public function getDirectories(string $baseFolder = '/'): array
     {
         try {
-            $root = [
-                'id'     => '/',
-                'name'   => '/',
-                'path'   => '/',
-                'parent' => null,
-                'isRoot' => true,
-            ];
+            // Root request: return tree root with top-level children for initial load
+            if ($baseFolder === '/' || $baseFolder === '') {
+                $root = [
+                    'id'       => '/',
+                    'name'     => '/',
+                    'path'     => '/',
+                    'parent'   => null,
+                    'isRoot'   => true,
+                    'children' => $this->fetchChildDirectories(''),
+                ];
 
-            // Collect all prefixes recursively
-            $allPrefixes = $this->collectAllPrefixes('');
-
-            if (empty($allPrefixes)) {
                 return [$root];
             }
 
-            // Build flat node list
-            $nodes = ['/' => $root];
-            foreach ($allPrefixes as $prefix) {
-                $path   = rtrim($prefix, '/');
-                $name   = basename($path);
-                $parent = dirname($path);
-                $parent = $parent === '.' ? '/' : $parent;
-
-                $nodes[$path] = [
-                    'id'     => $path,
-                    'name'   => $name,
-                    'path'   => $path,
-                    'parent' => $parent,
-                    'isRoot' => false,
-                ];
-            }
-
-            // Build tree with children
-            foreach ($nodes as $key => &$node) {
-                if (isset($node['parent']) && isset($nodes[$node['parent']])) {
-                    $nodes[$node['parent']]['children'][] = &$node;
-                }
-            }
-            unset($node);
-
-            return [$nodes['/']];
+            // Sub-directory request: return flat list of immediate children (for lazy loading)
+            return $this->fetchChildDirectories($baseFolder);
         } catch (Exception $e) {
             Log::error('OSS get directories failed:', [
                 'error' => $e->getMessage(),
@@ -385,26 +361,76 @@ class OSSService implements FileManagerInterface
     }
 
     /**
-     * Recursively collect all directory prefixes from S3.
-     * Uses Delimiter to get CommonPrefixes at each level.
+     * Fetch immediate child directories with hasChildren flag (parallel check).
      */
-    protected function collectAllPrefixes(string $prefix): array
+    protected function fetchChildDirectories(string $prefix): array
     {
-        $result = $this->s3Client->listObjectsV2([
+        $params = [
             'Bucket'    => $this->bucket,
-            'Prefix'    => $prefix,
             'Delimiter' => '/',
-        ]);
-
-        $prefixes = [];
-        foreach ($result['CommonPrefixes'] ?? [] as $commonPrefix) {
-            $p          = $commonPrefix['Prefix'];
-            $prefixes[] = $p;
-            // Recurse into subdirectory
-            $prefixes = array_merge($prefixes, $this->collectAllPrefixes($p));
+        ];
+        if ($prefix !== '') {
+            $params['Prefix'] = rtrim($prefix, '/').'/';
         }
 
-        return $prefixes;
+        $result = $this->s3Client->listObjectsV2($params);
+
+        $children = [];
+        foreach ($result['CommonPrefixes'] ?? [] as $commonPrefix) {
+            $fullPath            = rtrim($commonPrefix['Prefix'], '/');
+            $name                = basename($fullPath);
+            $children[$fullPath] = [
+                'id'     => $fullPath,
+                'name'   => $name,
+                'path'   => $fullPath,
+                'parent' => $prefix === '' ? '/' : rtrim($prefix, '/'),
+                'isRoot' => false,
+            ];
+        }
+
+        // Parallel check hasChildren for all directories
+        if (! empty($children)) {
+            $hasChildrenMap = $this->batchCheckHasChildren(array_keys($children));
+            foreach ($children as $path => &$child) {
+                $child['hasChildren'] = $hasChildrenMap[$path] ?? false;
+            }
+            unset($child);
+        }
+
+        return array_values($children);
+    }
+
+    /**
+     * Check multiple directories in parallel for sub-directory existence.
+     * Uses async S3 calls via Guzzle promises — N checks take ~1 round-trip.
+     *
+     * @return array<string, bool> Map of path => hasChildren
+     */
+    protected function batchCheckHasChildren(array $paths): array
+    {
+        $promises = [];
+        foreach ($paths as $path) {
+            $prefix          = rtrim($path, '/').'/';
+            $promises[$path] = $this->s3Client->listObjectsV2Async([
+                'Bucket'    => $this->bucket,
+                'Prefix'    => $prefix,
+                'Delimiter' => '/',
+                'MaxKeys'   => 1,
+            ]);
+        }
+
+        $results = Utils::settle($promises)->wait();
+
+        $map = [];
+        foreach ($results as $path => $result) {
+            if ($result['state'] === 'fulfilled') {
+                $map[$path] = ! empty($result['value']['CommonPrefixes']);
+            } else {
+                $map[$path] = false;
+            }
+        }
+
+        return $map;
     }
 
     public function createDirectory($path): bool

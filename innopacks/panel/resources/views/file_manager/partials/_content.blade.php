@@ -62,13 +62,13 @@
         </el-row>
       </div>
       <el-row :gutter="0">
-        <!-- 左侧文件夹树 -->
+        <!-- Left folder tree -->
         <el-col :xs="8" :sm="6" :md="5" :lg="4"
           :xl="3">
           <div class="folder-tree">
-            <el-tree ref="folderTree" :data="folders" :props="defaultProps" @node-click="handleNodeClick"
-              :highlight-current="true" :default-expanded-keys="defaultExpandedKeys"
-              :expand-on-click-node="false"
+            <el-tree ref="folderTree" :key="foldersKey" :data="folders" :props="defaultProps" @node-click="handleNodeClick"
+              :highlight-current="true"
+              :expand-on-click-node="false" lazy :load="loadTreeNode"
               :current-node-key="currentFolder ? currentFolder.id : '/'" node-key="id" draggable
               :allow-drop="handleAllowDrop" :allow-drag="handleAllowDrag" @node-drag-start="handleDragStart"
               @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave" @node-drag-end="handleNodeDragEnd"
@@ -88,7 +88,7 @@
             </el-tree>
           </div>
         </el-col>
-        <!-- 右侧文件列表 -->
+        <!-- Right file list -->
         <el-col :xs="16" :sm="18" :md="19" :lg="20"
           :xl="21">
           <div class="file-list">
@@ -153,7 +153,7 @@
                     </div>
                   </el-col>
                 </el-row>
-                <!-- 分页 -->
+                <!-- Pagination -->
                 <div class="pagination-container">
                   <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                     v-model:current-page="pagination.page" :page-sizes="[18, 36, 54, 72]" v-model:page-size="pagination.per_page"
@@ -163,7 +163,7 @@
                   </el-pagination>
                 </div>
                 </template>
-                <!-- 添加空状态 -->
+                <!-- Empty state -->
                 <el-empty v-else :description="'{{ __('panel/file_manager.empty') }}'" :image-size="120"></el-empty>
               </div>
             </div>
@@ -172,7 +172,7 @@
       </el-row>
     </div>
 
-    <!-- 新建文件夹对话框 -->
+    <!-- New folder dialog -->
     <el-dialog title="{{ __('panel/file_manager.new_folder_dialog') }}" v-model="folderDialog.visible" width="400px">
       <el-form :model="folderDialog.form" label-width="80px">
         <el-form-item label="{{ __('panel/file_manager.folder_name') }}">
@@ -185,7 +185,7 @@
       </template>
     </el-dialog>
 
-    <!-- 上传文件对话框 -->
+    <!-- Upload file dialog -->
     <el-dialog title="{{ __('panel/file_manager.upload_dialog') }}" v-model="uploadDialog.visible" width="500px" @open="onUploadDialogOpen">
       <el-upload class="file-uploader" drag multiple :action="uploadUrl" :headers="uploadHeaders"
         :data="uploadData" :before-upload="beforeUpload" :on-success="handleUploadSuccess"
@@ -200,7 +200,7 @@
       </el-upload>
     </el-dialog>
 
-    <!-- 修改重命名对话框 -->
+    <!-- Rename dialog -->
     <el-dialog title="{{ __('panel/file_manager.rename') }}" v-model="renameDialog.visible" custom-class="rename-dialog" width="500px">
       <el-form :model="renameDialog.form" label-width="100px">
         <el-form-item :label="'{{ __('panel/file_manager.rename') }}'">
@@ -215,10 +215,10 @@
       </template>
     </el-dialog>
 
-    <!-- 移动文件对话框 -->
+    <!-- Move file dialog -->
     <el-dialog title="{{ __('panel/file_manager.move_to') }}" v-model="moveDialog.visible" width="400px">
-      <el-tree :data="folders" :props="defaultProps" @node-click="handleMoveTargetSelect"
-        :highlight-current="true" node-key="id">
+      <el-tree v-if="moveDialog.visible" :data="folders" :props="defaultProps" @node-click="handleMoveTargetSelect"
+        :highlight-current="true" node-key="id" lazy :load="loadTreeNode">
         <template #default="{ node, data }">
         <span class="custom-tree-node">
           <el-icon><component :is="'Folder'"></component></el-icon>
@@ -232,7 +232,7 @@
       </template>
     </el-dialog>
 
-    <!-- 在文件卡片上添加右键菜单 -->
+    <!-- Context menu on file cards -->
     <div class="file-card-context-menu" v-show="contextMenu.visible" :style="contextMenu.style">
       <ul>
         <li v-if="isImageFile(contextMenu.file)" @click="imageToImage(contextMenu.file)"><el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('panel/file_manager.ai_image_to_image') }}</li>
@@ -243,10 +243,10 @@
       </ul>
     </div>
 
-    <!-- 复制文件对话框 -->
+    <!-- Copy file dialog -->
     <el-dialog title="{{ __('panel/file_manager.copy_to') }}" v-model="copyDialog.visible" width="400px">
-      <el-tree :data="folders" :props="defaultProps" @node-click="handleCopyTargetSelect"
-        :highlight-current="true" node-key="id">
+      <el-tree v-if="copyDialog.visible" :data="folders" :props="defaultProps" @node-click="handleCopyTargetSelect"
+        :highlight-current="true" node-key="id" lazy :load="loadTreeNode">
         <template #default="{ node, data }">
         <span class="custom-tree-node">
           <el-icon><component :is="'Folder'"></component></el-icon>
@@ -260,7 +260,7 @@
       </template>
     </el-dialog>
 
-    <!-- 文件夹右键菜单 -->
+    <!-- Folder context menu -->
     <div v-if="folderContextMenu.visible" class="file-card-context-menu"
       :style="{
           top: folderContextMenu.style.top,
@@ -279,7 +279,7 @@
       </ul>
     </div>
 
-    <!-- 文件夹重命名对话框 -->
+    <!-- Rename folder dialog -->
     <el-dialog title="{{ __('panel/file_manager.rename_folder') }}" v-model="folderRenameDialog.visible" width="400px">
       <el-form :model="folderRenameDialog.form" label-width="80px">
         <el-form-item :label="'{{ __('panel/file_manager.folder_name') }}'">
@@ -292,10 +292,10 @@
       </template>
     </el-dialog>
 
-    <!-- 文件夹移动对话框 -->
+    <!-- Move folder dialog -->
     <el-dialog title="{{ __('panel/file_manager.move_folder') }}" v-model="folderMoveDialog.visible" width="400px">
-      <el-tree :data="folders" :props="defaultProps" @node-click="handleFolderMoveTargetSelect"
-        :highlight-current="true" node-key="id">
+      <el-tree v-if="folderMoveDialog.visible" :data="folders" :props="defaultProps" @node-click="handleFolderMoveTargetSelect"
+        :highlight-current="true" node-key="id" lazy :load="loadTreeNode">
         <template #default="{ node, data }">
         <span class="custom-tree-node">
           <el-icon><component :is="'Folder'"></component></el-icon>
@@ -309,14 +309,14 @@
       </template>
     </el-dialog>
 
-    <!-- 视频播放对话框 -->
+    <!-- Video playback dialog -->
     <el-dialog v-model="videoDialog.visible" width="800px" :show-close="true" @close="onVideoDialogClose"
       custom-class="video-dialog" append-to-body>
       <video v-if="videoDialog.visible" :src="videoDialog.url" controls autoplay
         class="video-player"></video>
     </el-dialog>
 
-    <!-- 存储配置对话框 -->
+    <!-- Storage config dialog -->
     <el-dialog v-model="storageConfigDialog.visible" width="560px" custom-class="storage-config-dialog" :close-on-click-modal="false">
       <template #header>
       <div class="storage-dialog-header">

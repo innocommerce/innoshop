@@ -4,7 +4,7 @@
 
   @php($enabledDrivers = $enabled_drivers ?? ['local'])
   <script>
-    // 从 URL 参数获取配置
+    // Get config from URL params
     const urlParams = new URLSearchParams(window.location.search);
     window.fileManagerConfig = {
       multiple: urlParams.get('multiple') === '1',
@@ -22,7 +22,7 @@
   </script>
 
   <script>
-    // http 请求封装
+    // HTTP request wrapper
     (function(window) {
       'use strict';
 
@@ -32,7 +32,7 @@
         return currentToken || parentToken;
       };
 
-      // 创建 axios 实例
+      // Create axios instance
       const http = axios.create({
         baseURL: '/api/panel/',
         timeout: 30000,
@@ -41,12 +41,12 @@
         }
       });
 
-      // 添加请求拦截器，确保每次请求都使用最新的 token
+      // Request interceptor: refresh token on every request
       http.interceptors.request.use(config => {
-        // 每次请求前重新获取 token
+        // Refresh token before each request
         config.headers.Authorization = 'Bearer ' + window.getApiToken();
 
-        // 添加 loading
+        // Show loading spinner
         if (window.layer) {
           layer.load(2, {
             shade: [0.3, '#fff']
@@ -55,7 +55,7 @@
         return config;
       });
 
-      // 响应拦截器
+      // Response interceptor
       http.interceptors.response.use(
         response => {
           if (window.layer) {
@@ -68,33 +68,33 @@
             layer.closeAll('loading');
           }
 
-          // 错误处理
+          // Error handling
           if (error.response) {
-            const message = error.response.data.message || '请求失败';
-            // 使用 Element Plus 的消息提示
+            const message = error.response.data.message || 'Request failed';
+            // Use Element Plus message notification
             if (window.ElementPlus) {
               ElementPlus.ElMessage.error(message);
             }
 
             switch (error.response.status) {
               case 401:
-                // 未授权处理
+                // Unauthorized
                 break;
               case 403:
-                // 禁止访问处理
+                // Forbidden
                 break;
               case 404:
-                // 未找到处理
+                // Not found
                 break;
               default:
-                // 其他错误
+                // Other errors
                 break;
             }
           }
           return Promise.reject(error);
         }
       );
-      window.http = http; // 确保 http 也被添加到 window 对象上
+      window.http = http; // Expose http on window
     })(window);
   </script>
 

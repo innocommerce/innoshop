@@ -60,12 +60,36 @@ class FileManagerService implements FileManagerInterface
             return [];
         }
 
+        // Root request: return tree root with top-level children for initial load
+        if ($baseFolder === '/' || $baseFolder === '') {
+            $currentBasePath = rtrim($this->fileBasePath, '/');
+            $directories     = glob("$currentBasePath/*", GLOB_ONLYDIR) ?: [];
+
+            $children = [];
+            foreach ($directories as $directory) {
+                $processed = $this->processDirectorySingleLevel($directory, $realBasePath);
+                if ($processed !== null) {
+                    $children[] = $processed;
+                }
+            }
+
+            return [[
+                'id'       => '/',
+                'name'     => '/',
+                'path'     => '/',
+                'parent'   => null,
+                'isRoot'   => true,
+                'children' => $children,
+            ]];
+        }
+
+        // Sub-directory request: return flat list of immediate children (for lazy loading)
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
         $directories     = glob("$currentBasePath/*", GLOB_ONLYDIR) ?: [];
 
         $result = [];
         foreach ($directories as $directory) {
-            $processed = $this->processDirectoryIterative($directory, $realBasePath);
+            $processed = $this->processDirectorySingleLevel($directory, $realBasePath);
             if ($processed !== null) {
                 $result[] = $processed;
             }
@@ -542,6 +566,32 @@ class FileManagerService implements FileManagerInterface
         }
 
         return $item;
+    }
+
+    /**
+     * Process a single directory entry without recursing into children.
+     * Used for lazy loading — only returns the directory itself, no nested children.
+     */
+    protected function processDirectorySingleLevel(string $directory, string $realBasePath): ?array
+    {
+        $realDirectory = realpath($directory);
+        if ($realDirectory === false || ! str_starts_with($realDirectory, $realBasePath)) {
+            return null;
+        }
+
+        if (! is_dir($realDirectory)) {
+            return null;
+        }
+
+        $baseName = basename($directory);
+        $dirName  = str_replace($this->fileBasePath, '', $directory);
+        if (! str_starts_with($dirName, '/')) {
+            $dirName = '/'.$dirName;
+        }
+
+        return array_merge($this->handleFolder($dirName, $baseName), [
+            'hasChildren' => ! empty(glob(rtrim($directory, '/').'/*', GLOB_ONLYDIR)),
+        ]);
     }
 
     /**
