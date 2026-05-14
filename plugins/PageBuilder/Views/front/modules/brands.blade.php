@@ -19,7 +19,7 @@
             <a href="{{ $brand['url'] ?? '#' }}" class="brand-link" @if(isset($brand['url']) && $brand['url'] !== '#') target="_blank" @endif>
               <div class="brand-logo-wrapper">
                 <img 
-                  src="{{ $brand['logo_medium'] ?? $brand['logo_url'] ?? '' }}" 
+                  src="{{ $brand['logo_original'] ?? $brand['logo_url'] ?? '' }}" 
                   alt="{{ $brand['name'] ?? '' }}" 
                   class="brand-logo"
                   style="max-height: {{ $content['itemHeight'] ?? 80 }}px; max-width: 100%;"
@@ -123,6 +123,7 @@
   
   .brand-logo {
     height: 60px !important;
+    object-fit: contain !important;
   }
 }
 
@@ -134,6 +135,7 @@
   
   .brand-logo {
     height: 40px !important;
+    object-fit: contain !important;
   }
   
   .brand-name {
