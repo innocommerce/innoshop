@@ -1,5 +1,5 @@
 @php
-  $routePrefix      = $routePrefix ?? panel_name();
+  $routePrefix      = $routePrefix ?? 'panel';
   $layoutView       = $layoutView  ?? 'panel::layouts.app';
   $showBulkActions  = $showBulkActions ?? true;
   $showCopyAction   = $showCopyAction ?? true;
