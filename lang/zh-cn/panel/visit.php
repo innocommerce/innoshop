@@ -19,6 +19,7 @@ return [
     'event_search'            => '搜索',
     'event_cart_view'         => '购物车浏览',
     'event_order_cancelled'   => '订单取消',
+    'event_page_view'         => '页面浏览',
     'visit_detail'            => '访问详情',
     'basic_info'              => '基本信息',
     'location_info'           => '位置信息',
@@ -69,4 +70,8 @@ return [
     'hourly_distribution' => '24小时分布',
     'country'             => '国家',
     'hour'                => '小时',
+    'session_info'        => '会话信息',
+    'browsing_history'    => '浏览记录',
+    'event_type'          => '事件类型',
+    'event_time'          => '事件时间',
 ];

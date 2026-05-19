@@ -163,6 +163,79 @@
         <code class="small text-break">{{ $visit->user_agent }}</code>
       </div>
     </div>
+
+    {{-- Browsing History --}}
+    <div class="card mt-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          {{ __('panel/visit.browsing_history') }}
+          <span class="badge bg-secondary ms-2">{{ $visit->visitEvents->count() }}</span>
+        </h5>
+      </div>
+      <div class="card-body">
+        @if($visit->visitEvents->count())
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <td>#</td>
+                  <td>{{ __('panel/visit.event_type') }}</td>
+                  <td>URL</td>
+                  <td>{{ __('panel/visit.referrer') }}</td>
+                  <td>{{ __('panel/visit.event_time') }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($visit->visitEvents as $event)
+                  <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>
+                      @php
+                        $typeColors = [
+                          'page_view'      => 'bg-secondary',
+                          'product_view'   => 'bg-primary',
+                          'home_view'      => 'bg-success',
+                          'category_view'  => 'bg-info',
+                          'search'         => 'bg-warning text-dark',
+                          'add_to_cart'    => 'bg-danger',
+                          'cart_view'      => 'bg-warning',
+                          'checkout_start' => 'bg-dark',
+                          'order_placed'   => 'bg-success',
+                        ];
+                        $color = $typeColors[$event->event_type] ?? 'bg-secondary';
+                      @endphp
+                      <span class="badge {{ $color }}">{{ $event->event_type }}</span>
+                    </td>
+                    <td>
+                      @if($event->page_url)
+                        <a href="{{ $event->page_url }}" target="_blank" class="text-decoration-none"
+                           data-bs-toggle="tooltip" title="{{ $event->page_url }}">
+                          {{ \Illuminate\Support\Str::limit($event->page_url, 50) }}
+                        </a>
+                      @else
+                        -
+                      @endif
+                    </td>
+                    <td>
+                      @if($event->referrer)
+                        <span data-bs-toggle="tooltip" title="{{ $event->referrer }}">
+                          {{ \Illuminate\Support\Str::limit($event->referrer, 30) }}
+                        </span>
+                      @else
+                        -
+                      @endif
+                    </td>
+                    <td>{{ $event->created_at?->format('Y-m-d H:i:s') }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        @else
+          <x-common-no-data :width="200" />
+        @endif
+      </div>
+    </div>
   </div>
 </div>
 @endsection

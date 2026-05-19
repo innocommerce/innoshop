@@ -49,4 +49,6 @@ return [
     'customer_trend'        => '客户趋势',
     'new_customers'         => '新客户',
     'new_products'          => '新产品',
+    'reaggregate'           => '重新聚合',
+    'reaggregate_success'   => '重新聚合完成',
 ];

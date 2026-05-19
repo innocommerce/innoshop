@@ -65,7 +65,9 @@ class PluginController
             PluginService::getInstance()->installPlugin($plugin);
             Artisan::call('view:clear');
 
-            return json_success(common_trans('base.saved_success'));
+            $data = $this->getPluginResourceData($code, true, false);
+
+            return json_success(common_trans('base.installed_success'), $data);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -82,7 +84,9 @@ class PluginController
             PluginService::getInstance()->uninstallPlugin($plugin);
             Artisan::call('view:clear');
 
-            return json_success(common_trans('base.deleted_success'));
+            $data = $this->getPluginResourceData($code, false, false);
+
+            return json_success(common_trans('base.uninstalled_success'), $data);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
@@ -165,11 +169,32 @@ class PluginController
             SettingRepo::getInstance()->updatePluginValue($code, 'active', $enabled);
             Artisan::call('view:clear');
 
-            return json_success(common_trans('base.updated_success'));
+            $data = $this->getPluginResourceData($code, true, (bool) $enabled);
+
+            return json_success(common_trans('base.updated_success'), $data);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         } catch (Throwable $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Get plugin resource data with explicit installed/enabled state.
+     * Cannot rely on checkActive()/checkInstalled() because setting()
+     * reads from config cache which is cleared mid-request.
+     *
+     * @param  string  $code
+     * @param  bool  $installed
+     * @param  bool  $enabled
+     * @return array
+     */
+    private function getPluginResourceData(string $code, bool $installed, bool $enabled): array
+    {
+        $plugin = app('plugin')->getPluginOrFail($code);
+        $plugin->setInstalled($installed);
+        $plugin->setEnabled($enabled);
+
+        return (new PluginResource($plugin))->toArray(request());
     }
 }

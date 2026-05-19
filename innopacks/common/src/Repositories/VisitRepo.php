@@ -110,7 +110,7 @@ class VisitRepo extends BaseRepo
             ->first();
 
         return [
-            'total_visits'    => (int) ($aggregated->total_pv ?? 0),
+            'total_visits'    => (int) ($aggregated->total_uv ?? 0),
             'unique_visitors' => (int) ($aggregated->total_ip ?? 0),
             'unique_sessions' => (int) ($aggregated->total_uv ?? 0),
             'page_views'      => (int) ($aggregated->total_pv ?? 0),
@@ -303,8 +303,8 @@ class VisitRepo extends BaseRepo
             $stat      = $dailyStats->get($dateStr);
             $results[] = [
                 'date'            => $dateStr,
-                'visits'          => $stat ? ($stat->pv ?? 0) : 0,
-                'unique_visitors' => $stat ? ($stat->uv ?? 0) : 0,
+                'visits'          => $stat ? ($stat->uv ?? 0) : 0,
+                'unique_visitors' => $stat ? ($stat->ip ?? 0) : 0,
                 'page_views'      => $stat ? ($stat->pv ?? 0) : 0,
             ];
             $current->addDay();
@@ -323,32 +323,39 @@ class VisitRepo extends BaseRepo
      */
     protected function ensureDailyAggregated(Carbon $startDate, Carbon $endDate): void
     {
+        // Quick check: if there are no visit_events at all, skip aggregation
+        if (VisitEvent::query()->doesntExist()) {
+            return;
+        }
+
+        $today = Carbon::today()->toDateString();
+
         $existingDates = VisitDaily::query()
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->pluck('date')
             ->map(fn ($date) => $date instanceof \DateTimeInterface ? $date->format('Y-m-d') : (string) $date)
             ->flip();
 
-        $missingDates = [];
-        $current      = $startDate->copy();
+        $datesToAggregate = [];
+        $current          = $startDate->copy();
         while ($current->lte($endDate)) {
             $dateStr = $current->toDateString();
-            if (! isset($existingDates[$dateStr])) {
-                $missingDates[] = $current->copy();
+            // Aggregate if no record exists, or if it's today (data still growing)
+            if (! isset($existingDates[$dateStr]) || $dateStr === $today) {
+                $datesToAggregate[] = $current->copy();
             }
             $current->addDay();
         }
 
-        if (empty($missingDates)) {
+        if (empty($datesToAggregate)) {
             return;
         }
 
         $service = new VisitStatisticsService;
-        foreach ($missingDates as $date) {
+        foreach ($datesToAggregate as $date) {
             try {
                 $service->aggregateDaily($date);
             } catch (\Throwable $e) {
-                // Silently skip failed aggregation to avoid blocking the dashboard
                 logger()->warning("Failed to aggregate visit stats for {$date->toDateString()}: ".$e->getMessage());
             }
         }
@@ -457,7 +464,8 @@ class VisitRepo extends BaseRepo
     public function list(array $filters = []): LengthAwarePaginator
     {
         return $this->builder($filters)
-            ->with(['customer', 'visitEvents'])
+            ->with(['customer'])
+            ->withCount('visitEvents')
             ->orderByDesc('id')
             ->paginate();
     }

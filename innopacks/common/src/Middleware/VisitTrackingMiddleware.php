@@ -11,6 +11,7 @@ namespace InnoShop\Common\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Common\Services\VisitTrackingService;
 
 class VisitTrackingMiddleware
@@ -47,6 +48,12 @@ class VisitTrackingMiddleware
 
         // Track visit
         $this->visitTrackingService->trackVisit($request, $sessionId, $customerId);
+
+        // Track page view event (GET requests only, skip POST/AJAX)
+        if ($request->isMethod('GET') && ! $request->ajax()) {
+            $eventTrackingService = new EventTrackingService;
+            $eventTrackingService->trackPageView($request);
+        }
 
         // Process request
         return $next($request);

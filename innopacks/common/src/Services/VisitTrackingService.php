@@ -68,10 +68,18 @@ class VisitTrackingService
 
             if ($visit) {
                 // Update existing visit: update last visited time
-                $visit->update([
+                $updateData = [
                     'last_visited_at' => now(),
                     'customer_id'     => $customerId ?: $visit->customer_id,
-                ]);
+                ];
+
+                // Backfill browser/os if empty
+                if (empty($visit->browser) || empty($visit->os)) {
+                    $updateData['browser'] = $this->getBrowser();
+                    $updateData['os']      = $this->getOperatingSystem();
+                }
+
+                $visit->update($updateData);
             } else {
                 // Create new visit record (first visit of the session)
                 $visit = Visit::create([
@@ -166,55 +174,71 @@ class VisitTrackingService
     }
 
     /**
-     * Get browser name
+     * Get browser name from User-Agent string.
+     * MobileDetect only matches mobile browsers, so we parse the UA directly.
      *
      * @return string
      */
     private function getBrowser(): string
     {
-        if ($this->detect->isChrome()) {
-            return 'Chrome';
-        }
-        if ($this->detect->isFirefox()) {
-            return 'Firefox';
-        }
-        if ($this->detect->isSafari()) {
-            return 'Safari';
-        }
-        if ($this->detect->isOpera()) {
-            return 'Opera';
-        }
-        if ($this->detect->isIE()) {
-            return 'IE';
+        $ua = $this->detect->getUserAgent() ?? '';
+
+        $patterns = [
+            'Edg/'            => 'Edge',
+            'OPR/'            => 'Opera',
+            'Opera'           => 'Opera',
+            'Vivaldi/'        => 'Vivaldi',
+            'Brave/'          => 'Brave',
+            'SamsungBrowser/' => 'Samsung Browser',
+            'UCBrowser/'      => 'UC Browser',
+            'MicroMessenger/' => 'WeChat',
+            'QQBrowser/'      => 'QQ Browser',
+            'Firefox/'        => 'Firefox',
+            'FxiOS/'          => 'Firefox',
+            'Chrome/'         => 'Chrome',
+            'CriOS/'          => 'Chrome',
+            'Safari/'         => 'Safari',
+            'MSIE'            => 'IE',
+            'Trident/'        => 'IE',
+        ];
+
+        foreach ($patterns as $pattern => $name) {
+            if (str_contains($ua, $pattern)) {
+                return $name;
+            }
         }
 
         return '';
     }
 
     /**
-     * Get operating system name
+     * Get operating system name from User-Agent string.
+     * MobileDetect only matches mobile OS, so we parse the UA directly.
      *
      * @return string
      */
     private function getOperatingSystem(): string
     {
-        if ($this->detect->isIOS()) {
-            return 'iOS';
-        }
-        if ($this->detect->isAndroidOS()) {
-            return 'Android';
-        }
-        if ($this->detect->isWindowsPhoneOS()) {
-            return 'Windows Phone';
-        }
-        if ($this->detect->isWindows()) {
-            return 'Windows';
-        }
-        if ($this->detect->isMac()) {
-            return 'macOS';
-        }
-        if ($this->detect->isLinux()) {
-            return 'Linux';
+        $ua = $this->detect->getUserAgent() ?? '';
+
+        $patterns = [
+            'HarmonyOS'     => 'HarmonyOS',
+            'Android'       => 'Android',
+            'iPhone'        => 'iOS',
+            'iPad'          => 'iPadOS',
+            'iPod'          => 'iOS',
+            'Windows Phone' => 'Windows Phone',
+            'Windows NT'    => 'Windows',
+            'Mac OS X'      => 'macOS',
+            'Macintosh'     => 'macOS',
+            'Linux'         => 'Linux',
+            'CrOS'          => 'Chrome OS',
+        ];
+
+        foreach ($patterns as $pattern => $name) {
+            if (str_contains($ua, $pattern)) {
+                return $name;
+            }
         }
 
         return '';

@@ -54,14 +54,14 @@ class VisitStatisticsService
         $eventsTable = $prefix.$eventsTableName;
         $visitsTable = $prefix.$visitsTableName;
 
-        // Get page views (product_view events)
+        // Get page views (page_view events)
         $pvData = DB::table($eventsTableName)
             ->select(
                 DB::raw('COUNT(*) as pv'),
                 DB::raw('COUNT(DISTINCT session_id) as uv'),
                 DB::raw('COUNT(DISTINCT ip_address) as ip')
             )
-            ->where('event_type', VisitEvent::TYPE_PRODUCT_VIEW)
+            ->where('event_type', VisitEvent::TYPE_PAGE_VIEW)
             ->whereBetween('created_at', [$dateStart, $dateEnd])
             ->first();
 
@@ -72,7 +72,7 @@ class VisitStatisticsService
                 'v.device_type',
                 DB::raw('COUNT(*) as pv')
             )
-            ->where('ve.event_type', VisitEvent::TYPE_PRODUCT_VIEW)
+            ->where('ve.event_type', VisitEvent::TYPE_PAGE_VIEW)
             ->whereBetween('ve.created_at', [$dateStart, $dateEnd])
             ->groupBy('v.device_type')
             ->pluck('pv', 'device_type');
@@ -92,7 +92,7 @@ class VisitStatisticsService
         // Calculate bounces (sessions with only one page view)
         $bounces = DB::table($eventsTableName)
             ->select('session_id', DB::raw('COUNT(*) as event_count'))
-            ->where('event_type', VisitEvent::TYPE_PRODUCT_VIEW)
+            ->where('event_type', VisitEvent::TYPE_PAGE_VIEW)
             ->whereBetween('created_at', [$dateStart, $dateEnd])
             ->groupBy('session_id')
             ->having('event_count', '=', 1)

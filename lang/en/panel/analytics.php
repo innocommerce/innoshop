@@ -49,4 +49,6 @@ return [
     'customer_trend'        => 'Customer Trend',
     'new_customers'         => 'New Customers',
     'new_products'          => 'New Products',
+    'reaggregate'           => 'Re-aggregate',
+    'reaggregate_success'   => 'Re-aggregation completed successfully',
 ];

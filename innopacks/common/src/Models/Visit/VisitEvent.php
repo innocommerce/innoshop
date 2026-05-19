@@ -51,6 +51,8 @@ class VisitEvent extends BaseModel
     /**
      * Event types
      */
+    public const TYPE_PAGE_VIEW = 'page_view';
+
     public const TYPE_PRODUCT_VIEW = 'product_view';
 
     public const TYPE_ADD_TO_CART = 'add_to_cart';
@@ -91,6 +93,7 @@ class VisitEvent extends BaseModel
     public function getEventTypeDisplayAttribute(): string
     {
         $types = [
+            self::TYPE_PAGE_VIEW         => trans('panel/visit.event_page_view'),
             self::TYPE_PRODUCT_VIEW      => trans('panel/visit.event_product_view'),
             self::TYPE_ADD_TO_CART       => trans('panel/visit.event_add_to_cart'),
             self::TYPE_CHECKOUT_START    => trans('panel/visit.event_checkout_start'),

@@ -111,8 +111,12 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/analytics/product', [Controllers\AnalyticsController::class, 'product'])->name('analytics_product');
         Route::get('/analytics/customer', [Controllers\AnalyticsController::class, 'customer'])->name('analytics_customer');
         Route::get('/analytics/visit', [Controllers\AnalyticsController::class, 'visit'])->name('analytics_visit');
+        Route::post('/analytics/reaggregate', [Controllers\AnalyticsController::class, 'reaggregate'])->name('analytics.reaggregate');
 
         Route::resource('/visits', Controllers\VisitController::class)->only(['index', 'show']);
+        Route::post('/visits/batch-locate', [Controllers\VisitController::class, 'batchLocate'])->name('visits.batch_locate');
+        Route::post('/visits/{visit}/locate', [Controllers\VisitController::class, 'locate'])->name('visits.locate');
+        Route::post('/visits/{visit}/parse-ua', [Controllers\VisitController::class, 'parseUA'])->name('visits.parse_ua');
 
         Route::get('/locales', [Controllers\LocaleController::class, 'index'])->name('locales.index');
         Route::post('/locales/install', [Controllers\LocaleController::class, 'install'])->name('locales.install');

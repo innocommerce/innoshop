@@ -84,6 +84,9 @@
             <button type="button" class="btn btn-outline-secondary" data-metric="unique_visitors" style="font-size:12px;">UV</button>
             <button type="button" class="btn btn-outline-secondary" data-metric="new_customers" style="font-size:12px;">{{ __('panel/dashboard.new_customers') }}</button>
           </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="reaggregate()" title="{{ __('panel/analytics.reaggregate') }}">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
           <small class="text-muted">{{ __('panel/dashboard.last_30_days') }}</small>
         </div>
       </div>
@@ -175,6 +178,15 @@
 
 @push('footer')
 <script>
+  function reaggregate() {
+    axios.post('{{ panel_route("analytics.reaggregate") }}').then(function(data) {
+      inno.msg(data.message || '{{ __("panel/analytics.reaggregate_success") }}');
+      setTimeout(function() { location.reload(); }, 1000);
+    }).catch(function(err) {
+      inno.msg(err.response?.data?.message || '{{ __("common/base.error") }}');
+    });
+  }
+
   // Revenue & Orders Dual-Axis Chart
   const revenueCtx = document.getElementById('chart-revenue-orders');
   if (revenueCtx) {

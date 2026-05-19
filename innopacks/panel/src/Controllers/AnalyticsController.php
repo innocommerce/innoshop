@@ -299,4 +299,28 @@ class AnalyticsController extends BaseController
 
         return inno_view('panel::analytics.visit', $data);
     }
+
+    /**
+     * Re-aggregate visit statistics for a date range.
+     *
+     * @param  Request  $request
+     * @return array
+     */
+    public function reaggregate(Request $request)
+    {
+        try {
+            $startInput = $request->input('start_date');
+            $endInput   = $request->input('end_date');
+
+            $startDate = $startInput ? Carbon::parse($startInput) : Carbon::now()->subDays(29);
+            $endDate   = $endInput ? Carbon::parse($endInput) : Carbon::now();
+
+            $service = new VisitStatisticsService;
+            $service->aggregateRange($startDate, $endDate);
+
+            return json_success(trans('panel/analytics.reaggregate_success'));
+        } catch (\Throwable $e) {
+            return json_fail($e->getMessage());
+        }
+    }
 }

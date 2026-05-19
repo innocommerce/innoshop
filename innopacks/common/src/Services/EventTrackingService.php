@@ -98,6 +98,19 @@ class EventTrackingService
     }
 
     /**
+     * Track page view event
+     *
+     * @param  Request|null  $request
+     * @return VisitEvent|null
+     */
+    public function trackPageView(?Request $request = null): ?VisitEvent
+    {
+        return $this->track(VisitEvent::TYPE_PAGE_VIEW, [
+            'url' => $request ? $request->fullUrl() : null,
+        ], $request);
+    }
+
+    /**
      * Track product view event
      *
      * @param  int  $productId

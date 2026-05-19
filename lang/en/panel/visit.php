@@ -19,6 +19,7 @@ return [
     'event_search'            => 'Search',
     'event_cart_view'         => 'Cart View',
     'event_order_cancelled'   => 'Order Cancelled',
+    'event_page_view'         => 'Page View',
     'visit_detail'            => 'Visit Detail',
     'basic_info'              => 'Basic Information',
     'location_info'           => 'Location Information',
@@ -69,4 +70,8 @@ return [
     'hourly_distribution' => '24H Distribution',
     'country'             => 'Country',
     'hour'                => 'Hour',
+    'session_info'        => 'Session Info',
+    'browsing_history'    => 'Browsing History',
+    'event_type'          => 'Event Type',
+    'event_time'          => 'Event Time',
 ];

@@ -40,12 +40,33 @@ class GeoLocationService
     }
 
     /**
-     * Get location information by IP address
+     * Get location information by IP address.
+     * Tries local GeoIP database first, then falls back to plugin-provided
+     * remote lookups via the geo_location.lookup hook.
      *
      * @param  string  $ip
      * @return array
      */
     public function getLocation(string $ip): array
+    {
+        $result = $this->lookupLocalDatabase($ip);
+
+        if (empty($result['country_name']) && empty($result['city'])) {
+            $result['ip'] = $ip;
+            $result       = fire_hook_filter('geo_location.lookup', $result);
+            unset($result['ip']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Lookup location from local GeoIP database.
+     *
+     * @param  string  $ip
+     * @return array
+     */
+    private function lookupLocalDatabase(string $ip): array
     {
         $databasePath = $this->geoLite2Service->getDatabasePath();
 
@@ -54,8 +75,6 @@ class GeoLocationService
         }
 
         try {
-            $databasePath = $this->geoLite2Service->getDatabasePath();
-
             if ($this->reader === null) {
                 $this->reader = new Reader($databasePath);
             }
@@ -70,7 +89,6 @@ class GeoLocationService
                 'longitude'    => $record->location->longitude ?? null,
             ];
         } catch (AddressNotFoundException $e) {
-            // IP address not found in database
             return $this->getDefaultLocation();
         } catch (Exception $e) {
             Log::warning('GeoLocationService: Failed to get location', [

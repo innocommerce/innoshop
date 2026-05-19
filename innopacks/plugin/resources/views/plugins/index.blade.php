@@ -39,7 +39,6 @@
               <div class="image-wrap">
                 <div class="image"><img src="{{ $plugin['icon'] }}" alt="{{ $plugin['name'] }}" class="img-fluid"></div>
                 <div class="title">
-                  <span class="badge bg-light text-dark small fw-light">{{ $plugin['first_letter'] }}</span>
                   {{ $plugin['name'] }}
                 </div>
               </div>
@@ -58,9 +57,7 @@
                   <div class="btns">
                     @if ($plugin['installed'])
                       @if($plugin['menu_url'])
-                        <a href="{{ $plugin['menu_url'] }}" class="btn btn-success btn-sm" title="{{ __('common/base.use') }}">
-                          <i class="bi bi-box-arrow-up-right"></i> {{ __('common/base.use') }}
-                        </a>
+                        <a href="{{ $plugin['menu_url'] }}" class="btn btn-success btn-sm">{{ __('common/base.use') }}</a>
                       @endif
                       @if($plugin['edit_url'])
                         <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('common/base.edit') }}</a>
@@ -85,43 +82,81 @@
 
 @push('footer')
   <script>
+    var pluginLabels = {
+      use: '{{ __("common/base.use") }}',
+      edit: '{{ __("common/base.edit") }}',
+      uninstall: '{{ __("panel/common.uninstall") }}',
+      install: '{{ __("panel/common.install") }}'
+    };
+
     $(function () {
-      $('.install-plugin').click(function () {
-        var code = $(this).parents('.plugin-item').data('code');
-        pluginsUpdate(code, 'install');
+      $(document).on('click', '.install-plugin', function () {
+        var $item = $(this).closest('.plugin-item');
+        var code = $item.data('code');
+        pluginsUpdate($item, code, 'install');
       });
 
-      $('.uninstall-plugin').click(function () {
-        var code = $(this).parents('.plugin-item').data('code');
-        pluginsUpdate(code, 'uninstall');
+      $(document).on('click', '.uninstall-plugin', function () {
+        var $item = $(this).closest('.plugin-item');
+        var code = $item.data('code');
+        pluginsUpdate($item, code, 'uninstall');
       });
     });
 
-    $('.plugin-enabled-switch input').change(function () {
-      var code = $(this).parents('.plugin-item').data('code');
+    $(document).on('change', '.plugin-enabled-switch input', function () {
+      var $item = $(this).closest('.plugin-item');
+      var code = $item.data('code');
       var enabled = $(this).prop('checked') ? 1 : 0;
+      var $switch = $(this);
       axios.post('/{{ panel_name() }}/plugins/enabled', {code: code, enabled: enabled}).then(function (res) {
         if (res.success) {
-          window.location.reload();
+          updatePluginCard($item, res.data);
+          layer.msg(res.message, { icon: 1 });
         } else {
-          inno.alert(res.message);
+          $switch.prop('checked', !enabled);
+          inno.alert(res.message || '{{ __("common/base.error") }}');
         }
+      }).catch(function () {
+        $switch.prop('checked', !enabled);
       });
     });
 
-    function pluginsUpdate(code, type) {
-      const url = type === 'install' ? '/{{ panel_name() }}/plugins' : '/{{ panel_name() }}/plugins/' + code;
-      const method = type === 'install' ? 'post' : 'delete';
+    function updatePluginCard($item, plugin) {
+      $item.attr('data-installed', plugin.installed ? 1 : 0);
+      var $btns = $item.find('.btns');
+      var $switch = $item.find('.plugin-enabled-switch input');
+
+      if (plugin.installed) {
+        var html = '';
+        if (plugin.menu_url) {
+          html += '<a href="' + plugin.menu_url + '" class="btn btn-success btn-sm">' + pluginLabels.use + '</a> ';
+        }
+        if (plugin.edit_url) {
+          html += '<a href="' + plugin.edit_url + '" class="btn btn-primary btn-sm">' + pluginLabels.edit + '</a> ';
+        }
+        html += '<div class="btn btn-danger btn-sm uninstall-plugin">' + pluginLabels.uninstall + '</div>';
+        $btns.html(html);
+        $switch.prop('disabled', false).prop('checked', !!plugin.enabled);
+      } else {
+        $btns.html('<div class="btn btn-primary btn-sm install-plugin">' + pluginLabels.install + '</div>');
+        $switch.prop('disabled', true).prop('checked', false);
+      }
+    }
+
+    function pluginsUpdate($item, code, type) {
+      var url = type === 'install' ? '/{{ panel_name() }}/plugins' : '/{{ panel_name() }}/plugins/' + code;
+      var method = type === 'install' ? 'post' : 'delete';
 
       axios[method](url, {code: code}).then(function (res) {
         if (res.success) {
-          window.location.reload();
+          updatePluginCard($item, res.data);
+          layer.msg(res.message, { icon: 1 });
         } else {
-          inno.alert(res.message);
+          inno.alert(res.message || '{{ __("common/base.error") }}');
         }
-      }).catch(error => {
-        data = error.response.data
-        layer.msg(data.message, { icon: 2 });
+      }).catch(function (error) {
+        var data = error.response && error.response.data;
+        layer.msg((data && data.message) || '{{ __("common/base.error") }}', { icon: 2 });
       });
     }
   </script>

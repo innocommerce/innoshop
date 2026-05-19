@@ -170,8 +170,18 @@
 <div class="row g-3 mb-4">
   <div class="col-12 col-lg-8">
     <div class="card h-100">
-      <div class="card-header">
+      <div class="card-header d-flex align-items-center justify-content-between">
         <h6 class="mb-0">{{ __('panel/visit.daily_trends') }}</h6>
+        <div class="d-flex align-items-center gap-2">
+          <div class="btn-group btn-group-sm" id="metricTabs">
+            <button class="btn btn-outline-primary active" data-metric="pv" onclick="switchMetric('pv')">PV</button>
+            <button class="btn btn-outline-primary" data-metric="uv" onclick="switchMetric('uv')">UV</button>
+            <button class="btn btn-outline-primary" data-metric="ip" onclick="switchMetric('ip')">IP</button>
+          </div>
+          <button class="btn btn-sm btn-outline-secondary" onclick="reaggregate()" title="{{ __('panel/analytics.reaggregate') }}">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+        </div>
       </div>
       <div class="card-body">
         @if($daily_statistics && (is_countable($daily_statistics) ? count($daily_statistics) : $daily_statistics->count()) > 0)
@@ -179,7 +189,8 @@
             $dailyData = is_array($daily_statistics) ? $daily_statistics : $daily_statistics->toArray();
             $dailyLabels = array_column($dailyData, 'date');
             $dailyPv = array_column($dailyData, 'page_views');
-            $dailyUv = array_column($dailyData, 'unique_visitors');
+            $dailyUv = array_column($dailyData, 'visits');
+            $dailyIp = array_column($dailyData, 'unique_visitors');
           @endphp
           <div style="height: 300px;">
             <canvas id="dailyChart"></canvas>
@@ -331,53 +342,67 @@
 
 @push('footer')
 <script>
+let dailyChart = null;
+const dailyLabels = {!! json_encode($dailyLabels ?? []) !!};
+const allMetrics = {
+  pv: { data: {!! json_encode($dailyPv ?? []) !!}, label: 'PV', color: '#0d6efd', bg: 'rgba(13, 110, 253, 0.1)' },
+  uv: { data: {!! json_encode($dailyUv ?? []) !!}, label: 'UV', color: '#0dcaf0', bg: 'rgba(13, 202, 240, 0.1)' },
+  ip: { data: {!! json_encode($dailyIp ?? []) !!}, label: 'IP', color: '#6f42c1', bg: 'rgba(111, 66, 193, 0.1)' },
+};
+let currentMetric = 'pv';
+
+function switchMetric(metric) {
+  currentMetric = metric;
+  document.querySelectorAll('#metricTabs .btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.metric === metric);
+  });
+  renderDailyChart();
+}
+
+function renderDailyChart() {
+  const ctx = document.getElementById('dailyChart');
+  if (!ctx) return;
+  if (dailyChart) dailyChart.destroy();
+  const m = allMetrics[currentMetric];
+  dailyChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dailyLabels,
+      datasets: [{
+        label: m.label,
+        data: m.data,
+        borderColor: m.color,
+        backgroundColor: m.bg,
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+}
+
+function reaggregate() {
+  const params = new URLSearchParams(window.location.search);
+  axios.post('{{ panel_route("analytics.reaggregate") }}', {
+    start_date: params.get('start_date') || '{{ $start_date }}',
+    end_date: params.get('end_date') || '{{ $end_date }}'
+  }).then(function(data) {
+    inno.msg(data.message || '{{ __("panel/analytics.reaggregate_success") }}');
+    setTimeout(function() { location.reload(); }, 1000);
+  }).catch(function(err) {
+    inno.msg(err.response?.data?.message || '{{ __("common/base.error") }}');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // 每日趋势图
   @if($daily_statistics && (is_countable($daily_statistics) ? count($daily_statistics) : $daily_statistics->count()) > 0)
-  const dailyCtx = document.getElementById('dailyChart');
-  if (dailyCtx) {
-    new Chart(dailyCtx, {
-      type: 'line',
-      data: {
-        labels: {!! json_encode($dailyLabels ?? []) !!},
-        datasets: [
-          {
-            label: '{{ __('panel/visit.page_views') }}',
-            data: {!! json_encode($dailyPv ?? []) !!},
-            borderColor: '#0d6efd',
-            backgroundColor: 'rgba(13, 110, 253, 0.1)',
-            fill: true,
-            tension: 0.4
-          },
-          {
-            label: '{{ __('panel/visit.unique_visitors') }}',
-            data: {!! json_encode($dailyUv ?? []) !!},
-            borderColor: '#0dcaf0',
-            backgroundColor: 'rgba(13, 202, 240, 0.1)',
-            fill: true,
-            tension: 0.4
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              precision: 0
-            }
-          }
-        }
-      }
-    });
-  }
+  renderDailyChart();
   @endif
 
   // 设备分布图
