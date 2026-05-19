@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'First letter',
     'headquarters'   => 'Headquarters',
     'no_products'    => 'This brand currently has no products',
+    'no_brands'      => 'Er zijn nog geen merken',
     'products_count' => 'count products',
     'view_all'       => 'View all',
     'website'        => 'Official website',

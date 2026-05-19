@@ -17,6 +17,7 @@ return [
     'first_letter'   => '首字母',
     'headquarters'   => '总部',
     'no_products'    => '该品牌暂无产品',
+    'no_brands'      => '暂无品牌',
     'products_count' => ':count 个产品',
     'view_all'       => '查看全部',
     'website'        => '官方网站',

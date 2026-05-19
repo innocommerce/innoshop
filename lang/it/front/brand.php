@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'iniziale',
     'headquarters'   => 'Quartier generale',
     'no_products'    => 'Il marchio è temporaneo',
+    'no_brands'      => 'Nessun marchio da visualizzare',
     'products_count' => '(’) tenuto conto della situazione del mercato',
     'view_all'       => 'Controllare tutti',
     'website'        => 'Siti internet ufficiali',

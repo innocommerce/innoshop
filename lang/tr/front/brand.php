@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'Baş harfler',
     'headquarters'   => 'Merkez',
     'no_products'    => 'Markanın şu anda herhangi bir ürünü yok',
+    'no_brands'      => 'Henüz görüntülenecek marka yok',
     'products_count' => ':sayı çarpımları',
     'view_all'       => 'Hepsini gör',
     'website'        => 'Resmi web sitesi',

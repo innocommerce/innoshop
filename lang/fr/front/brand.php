@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'Les initiales',
     'headquarters'   => 'Le siège',
     'no_products'    => 'Aucun produit pour cette marque',
+    'no_brands'      => 'Aucune marque à afficher pour le moment',
     'products_count' => ':count produits disponibles',
     'view_all'       => 'Voir tout voir',
     'website'        => 'Le site officiel',

@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'Инициалы.',
     'headquarters'   => 'Штаб-квартир',
     'no_products'    => 'Бренд пока не имеет продукции',
+    'no_brands'      => 'Брендов пока нет',
     'products_count' => '— продукт kunt',
     'view_all'       => 'Проверьте все.',
     'website'        => 'Официальный сайт.',

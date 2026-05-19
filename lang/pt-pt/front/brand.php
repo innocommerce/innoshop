@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'As iniciais',
     'headquarters'   => 'Zero,',
     'no_products'    => 'Não existem produtos para esta marca',
+    'no_brands'      => 'Ainda não há marcas para exibir',
     'products_count' => ': contagem de produtos',
     'view_all'       => 'Ver tudo ver',
     'website'        => 'O site oficial',

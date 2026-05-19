@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'inisial',
     'headquarters'   => 'Kantor pusat',
     'no_products'    => 'Tidak ada yang bersifat sementara',
+    'no_brands'      => 'Belum ada merek untuk ditampilkan',
     'products_count' => 'Hitung produknya',
     'view_all'       => 'Lihat semua',
     'website'        => 'Situs resmi',

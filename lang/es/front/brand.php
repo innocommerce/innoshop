@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'iniciales',
     'headquarters'   => 'La sede',
     'no_products'    => 'No hay productos para esta marca',
+    'no_brands'      => 'Aún no hay marcas para mostrar',
     'products_count' => ':count productos disponibles',
     'view_all'       => 'Ver todo ver',
     'website'        => 'Sitio web oficial',

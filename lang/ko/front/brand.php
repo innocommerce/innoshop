@@ -17,6 +17,7 @@ return [
     'first_letter'   => '이니셜',
     'headquarters'   => '본부',
     'no_products'    => '이 브랜드는 잠시 제품이 없다',
+    'no_brands'      => '등록된 브랜드가 없습니다',
     'products_count' => '(영어) 카운트-상품',
     'view_all'       => '모두 보기',
     'website'        => '공식 웹사이트',

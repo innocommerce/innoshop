@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'Inisial',
     'headquarters'   => 'ibu pejabat',
     'no_products'    => 'Jenama itu tidak mempunyai sebarang produk pada masa ini',
+    'no_brands'      => 'Tiada jenama untuk dipaparkan buat masa ini',
     'products_count' => ':kira produk',
     'view_all'       => 'Lihat semua',
     'website'        => 'Laman web rasmi',

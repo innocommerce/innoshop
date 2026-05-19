@@ -17,6 +17,7 @@
     </div>
     <div class="col-12 col-md-9">
       @include('brands.partials._intro', ['brand' => $brand])
+      @if ($products->isNotEmpty())
       <div class="category-wrap">
         <div class="top-order-wrap">
           <div class="d-none d-md-block">
@@ -67,6 +68,11 @@
       </div>
 
       {{ $products->links('panel::vendor/pagination/bootstrap-4') }}
+      @else
+      <div class="brand-products-empty text-center">
+        <x-common-no-data text="{{ __('front/brand.no_products') }}" />
+      </div>
+      @endif
     </div>
   </div>
 </div>

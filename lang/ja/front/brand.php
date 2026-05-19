@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'イニシャルです',
     'headquarters'   => '本部です',
     'no_products'    => '当ブランドの製品はまだありません。',
+    'no_brands'      => '表示できるブランドはまだありません',
     'products_count' => '製品をカウントします。',
     'view_all'       => '全部調べます',
     'website'        => '公式サイトです',

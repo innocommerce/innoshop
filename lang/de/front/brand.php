@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'Eine initiale.',
     'headquarters'   => 'Die firma.',
     'no_products'    => 'Die marke eignet sich vorübergehend als marktlos',
+    'no_brands'      => 'Es sind noch keine Marken vorhanden',
     'products_count' => 'Vor langer zeit haben sie sie aufgegeben',
     'view_all'       => 'Durchkämmt alles.',
     'website'        => 'Meine website',

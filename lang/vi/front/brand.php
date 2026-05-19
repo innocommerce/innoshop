@@ -17,6 +17,7 @@ return [
     'first_letter'   => 'Viết tắt',
     'headquarters'   => 'Trụ sở trung ương',
     'no_products'    => 'Thương hiệu không có sản phẩm',
+    'no_brands'      => 'Chưa có thương hiệu để hiển thị',
     'products_count' => ': đếm sản phẩm',
     'view_all'       => 'Xem tất cả',
     'website'        => 'Trang web chính thức',

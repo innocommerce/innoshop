@@ -13,6 +13,7 @@ return [
     'all_brands'     => 'All Brands',
     'brand_list'     => 'Brand List',
     'no_products'    => 'No products found for this brand',
+    'no_brands'      => 'No brands to display yet',
     'products_count' => ':count Products',
     'view_all'       => 'View All',
     'brand_info'     => 'Brand Information',

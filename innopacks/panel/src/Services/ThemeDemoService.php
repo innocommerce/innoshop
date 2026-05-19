@@ -118,7 +118,7 @@ class ThemeDemoService extends BaseService
 
     /**
      * Copy demo images to the public directory.
-     * Copies both {@see $dir}/public/images (e.g. preview.png) and {@see $dir}/demo/images (e.g. figma/*.jpg)
+     * Copies both {@see $dir}/public/images (e.g. preview.png) and {@see $dir}/demo/images (flattened *.jpg, etc.)
      * when present — themes often keep only preview assets under public/images while bulk demo art lives in demo/images.
      *
      * @throws Exception
