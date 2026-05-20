@@ -147,14 +147,16 @@ class HomeRepo
         $productName = $product->fallbackName();
 
         $data = [
-            'id'       => $product->id,
-            'name'     => $productName,
-            'image'    => $image,
-            'url'      => $product->url,
-            'price'    => number_format($price, 2),
-            'moq'      => $moq,
-            'category' => '',
-            'sku_id'   => $masterSku ? $masterSku->id : null,
+            'id'           => $product->id,
+            'name'         => $productName,
+            'image'        => $image,
+            'url'          => $product->url,
+            'price'        => number_format($price, 2),
+            'origin_price' => $masterSku && $masterSku->origin_price ? (float) $masterSku->origin_price : null,
+            'summary'      => $product->fallbackName('summary'),
+            'moq'          => $moq,
+            'category'     => '',
+            'sku_id'       => $masterSku ? $masterSku->id : null,
         ];
 
         $payload = [
