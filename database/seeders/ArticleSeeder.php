@@ -82,6 +82,15 @@ class ArticleSeeder extends BaseSeeder
                 'author'     => 'InnoShop',
                 'active'     => 1,
             ],
+            [
+                'id'         => 5,
+                'catalog_id' => 1,
+                'slug'       => 'multi-language-ecommerce-guide',
+                'position'   => 0,
+                'viewed'     => 12,
+                'author'     => 'InnoShop',
+                'active'     => 1,
+            ],
         ];
     }
 
@@ -178,6 +187,28 @@ class ArticleSeeder extends BaseSeeder
                 'meta_title'       => 'InnoShop - Innovative ecommerce',
                 'meta_description' => 'InnoShop - Innovative ecommerce',
                 'meta_keywords'    => 'InnoShop - Innovative ecommerce',
+            ],
+            [
+                'article_id'       => 5,
+                'locale'           => 'zh-cn',
+                'title'            => '多语言电商实践指南',
+                'summary'          => '探索如何利用多语言、多货币功能拓展全球市场，InnoShop 为您提供一站式跨境电商解决方案。',
+                'image'            => 'images/demo/news/1.jpg',
+                'content'          => '<p>全球化电商离不开多语言和多货币支持。InnoShop 原生支持多语言内容管理，让您轻松拓展海外市场。</p>',
+                'meta_title'       => '多语言电商实践指南 - InnoShop',
+                'meta_description' => '多语言电商实践指南',
+                'meta_keywords'    => '多语言, 电商, InnoShop',
+            ],
+            [
+                'article_id'       => 5,
+                'locale'           => 'en',
+                'title'            => 'Multi-Language E-Commerce Guide',
+                'summary'          => 'Explore how multi-language and multi-currency features can expand your global reach with InnoShop.',
+                'image'            => 'images/demo/news/1.jpg',
+                'content'          => '<p>Global e-commerce requires robust multi-language support. InnoShop provides native multi-language content management to help you expand into overseas markets effortlessly.</p>',
+                'meta_title'       => 'Multi-Language E-Commerce Guide - InnoShop',
+                'meta_description' => 'Multi-Language E-Commerce Guide',
+                'meta_keywords'    => 'multi-language, e-commerce, InnoShop',
             ],
         ];
     }

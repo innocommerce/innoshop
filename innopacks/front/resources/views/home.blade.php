@@ -65,6 +65,31 @@
 
     @hookinsert('home.swiper.after')
 
+    @if (!empty($home_categories))
+      <section class="module-line home-categories-section">
+        <div class="container">
+          <div class="module-title-wrap">
+            <div class="module-title">{{ __('front/home.shop_by_category') }}</div>
+            <div class="module-sub-title">{{ __('front/home.shop_by_category_text') }}</div>
+          </div>
+          <div class="row g-3 g-lg-4 home-cat-grid">
+            @foreach ($home_categories as $cat)
+              <div class="col-4 col-md-4 col-lg-2">
+                <a href="{{ $cat['url'] }}" class="home-cat-card text-decoration-none">
+                  <div class="home-cat-card__media">
+                    @if (!empty($cat['image']))
+                      <img src="{{ $cat['image'] }}" alt="{{ $cat['name'] }}" loading="lazy">
+                    @endif
+                  </div>
+                  <div class="home-cat-card__name">{{ $cat['name'] }}</div>
+                </a>
+              </div>
+            @endforeach
+          </div>
+        </div>
+      </section>
+    @endif
+
     @if (0)
       <section class="module-line">
         <div class="module-banner-2">

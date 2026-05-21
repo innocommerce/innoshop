@@ -50,6 +50,7 @@ class SettingSeeder extends BaseSeeder
             ['space' => 'system', 'name' => 'email', 'value' => 'team@innoshop.com'],
             ['space' => 'system', 'name' => 'currency', 'value' => 'usd'],
             ['space' => 'system', 'name' => 'menu_header_categories', 'value' => ['1', '4', '7', '10', '13']],
+            ['space' => 'system', 'name' => 'home_categories', 'value' => ['1', '2', '3', '4', '5']],
             ['space' => 'system', 'name' => 'menu_header_pages', 'value' => ['3']],
             ['space' => 'system', 'name' => 'menu_footer_categories', 'value' => ['1', '4', '7']],
             ['space' => 'system', 'name' => 'menu_footer_specials', 'value' => ['products', 'brands']],

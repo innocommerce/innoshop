@@ -2,7 +2,13 @@
   <div class="blog-item">
     <div class="image">
       <a href="{{ $item->url }}">
-        <img src="{{ image_resize($item->image, 300, 300) }}" class="img-fluid">
+        @if ($item->image)
+          <img src="{{ image_resize($item->image, 300, 300) }}" class="img-fluid" alt="{{ $item->title }}">
+        @else
+          <div class="bg-light d-flex align-items-center justify-content-center" style="aspect-ratio: 3/2;">
+            <i class="bi bi-image text-muted" style="font-size: 48px;"></i>
+          </div>
+        @endif
       </a>
     </div>
     <div class="blog-item-info">

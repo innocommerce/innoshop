@@ -287,7 +287,7 @@ class HomeRepo
     }
 
     /**
-     * Get home articles from settings. Falls back to latest 3 when setting is empty.
+     * Get home articles from settings. Falls back to latest 4 when setting is empty.
      *
      * @return array
      */
@@ -299,9 +299,9 @@ class HomeRepo
             $articleIds = json_decode($articleIds, true) ?: [];
         }
 
-        // Fallback to latest 3 articles when no setting configured
+        // Fallback to latest 4 articles when no setting configured
         if (empty($articleIds) || ! is_array($articleIds)) {
-            return ArticleRepo::getInstance()->getLatestArticles(3);
+            return ArticleRepo::getInstance()->getLatestArticles(4);
         }
 
         return ArticleRepo::getInstance()->getListByArticleIDs($articleIds);
