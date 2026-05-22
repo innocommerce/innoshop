@@ -7,6 +7,10 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+if (! class_exists(\Knuckles\Scribe\Config\Defaults::class)) {
+    return [];
+}
+
 use InnoShop\RestAPI\Middleware\EnsureApiDocumentationEnabled;
 use Knuckles\Scribe\Config\Defaults;
 use Knuckles\Scribe\Extracting\Strategies;
