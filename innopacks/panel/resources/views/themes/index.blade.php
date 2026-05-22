@@ -68,15 +68,19 @@
               </div>
               <div class="card-body d-flex flex-column">
                 <div class="theme-header mb-3">
-                  <h6 class="theme-name mb-2 fw-semibold @if($theme['selected']) text-primary @endif d-flex flex-wrap align-items-center gap-2">
-                    <span class="flex-grow-1 min-w-0">{{ $theme['name'] }}</span>
+                  <h6 class="theme-name mb-2 fw-semibold @if($theme['selected']) text-primary @endif d-flex align-items-center gap-2">
+                    <span class="text-truncate" title="{{ $theme['name'] }}" data-bs-toggle="tooltip">{{ $theme['name'] }}</span>
                     @if(data_get($theme, 'has_demo'))
-                      <span class="badge bg-warning text-dark flex-shrink-0">
+                      <span class="badge bg-warning text-dark flex-shrink-0 ms-auto">
                         <i class="bi bi-database me-1"></i>{{ __('panel/themes.theme_badge_demo') }}
                       </span>
                     @endif
                   </h6>
                   <div class="theme-meta d-flex align-items-center gap-3 text-muted small">
+                    <span class="theme-code d-flex align-items-center">
+                      <i class="bi bi-code-slash me-1" style="font-size: 0.7rem;"></i>
+                      <span class="font-monospace">{{ $theme['code'] }}</span>
+                    </span>
                     @if(isset($theme['version']) && $theme['version'])
                       <span class="theme-version d-flex align-items-center">
                         <i class="bi bi-tag-fill me-1" style="font-size: 0.7rem;"></i>
@@ -176,6 +180,7 @@
 @push('footer')
 <script>
 $(function () {
+  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) { new bootstrap.Tooltip(el); });
   var demoInstalledMsg = @json(__('panel/themes.demo_installed'));
   var importFailedMsg = @json(__('panel/themes.import_failed'));
   var operationFailedMsg = @json(__('panel/common.operation_failed'));
