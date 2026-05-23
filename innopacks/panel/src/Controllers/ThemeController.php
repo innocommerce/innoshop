@@ -122,14 +122,16 @@ class ThemeController extends BaseController
     public function enable(Request $request, string $themeCode): mixed
     {
         try {
-            $status = $request->get('status');
+            $status = $request->input('status');
             if (empty($status)) {
                 SettingRepo::getInstance()->updateSystemValue('theme', '');
+                $activeCode = '';
             } else {
                 SettingRepo::getInstance()->updateSystemValue('theme', $themeCode);
+                $activeCode = $themeCode;
             }
 
-            return json_success(common_trans('base.updated_success'));
+            return json_success(common_trans('base.updated_success'), ['active_code' => $activeCode]);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

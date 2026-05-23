@@ -104,9 +104,11 @@
                     {{ __('common/base.view') }}
                   </button>
                   @include('panel::shared.list_switch', [
-                    'value' => $theme['selected'] ?? false, 
-                    'url' => panel_route('themes.active', $theme['code']), 
-                    'reload' => true
+                    'value' => $theme['selected'] ?? false,
+                    'url' => panel_route('themes.active', $theme['code']),
+                    'reload' => false,
+                    'class' => 'theme-switch',
+                    'data_code' => $theme['code'],
                   ])
                 </div>
               </div>
@@ -184,9 +186,46 @@ $(function () {
   var demoInstalledMsg = @json(__('panel/themes.demo_installed'));
   var importFailedMsg = @json(__('panel/themes.import_failed'));
   var operationFailedMsg = @json(__('panel/common.operation_failed'));
+  var currentThemeLabel = @json(__('panel/themes.current_theme'));
   var csrf = function () {
     return $('meta[name="csrf-token"]').attr('content');
   };
+
+  function applyActiveTheme(activeCode) {
+    var found = false;
+    $('.themes-item').each(function () {
+      var $card = $(this);
+      var $wrap = $card.find('.theme-switch');
+      var code = $wrap.attr('data-code');
+      var isActive = (code === activeCode);
+
+      if (isActive) found = true;
+
+      $card.toggleClass('theme-current', isActive);
+      $wrap.find('input[role="switch"]').prop('checked', isActive);
+
+      var $badge = $card.find('.theme-current-badge');
+      if (isActive) {
+        if (!$badge.length) {
+          $card.find('.theme-image-wrapper').append(
+            '<div class="theme-current-badge"><i class="bi bi-check-circle-fill me-1"></i>' + currentThemeLabel + '</div>'
+          );
+        }
+      } else {
+        $badge.remove();
+      }
+
+      $card.find('.theme-name').toggleClass('text-primary', isActive);
+    });
+    console.log('[theme] applyActiveTheme:', activeCode || '(none)', 'found:', found);
+  }
+
+  function getErrMsg(err) {
+    if (err.response && err.response.data) {
+      return err.response.data.message || err.response.data.error || operationFailedMsg;
+    }
+    return operationFailedMsg;
+  }
 
   $(document).on('click', '.theme-enable-btn', function (e) {
     var $btn = $(this);
@@ -208,20 +247,46 @@ $(function () {
       processData: false,
       headers: {'X-CSRF-TOKEN': csrf()},
       success: function (res) {
+        var activeCode = (res.data && res.data.active_code) || '';
+        applyActiveTheme(activeCode);
         inno.msg(res.message);
         var inst = bootstrap.Modal.getInstance($modal[0]);
         if (inst) {
           inst.hide();
         }
-        location.reload();
       },
       error: function (xhr) {
-        var msg = (xhr.responseJSON && xhr.responseJSON.message) || operationFailedMsg;
+        var msg = operationFailedMsg;
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          msg = xhr.responseJSON.message;
+        }
         inno.msg(msg);
       },
       complete: function () {
         layer.closeAll('loading');
       },
+    });
+  });
+
+  $(document).on('change', '.theme-switch > input[role="switch"]', function () {
+    var $input = $(this);
+    var checked = $input.prop('checked');
+    var status = checked ? 1 : 0;
+    var $wrap = $input.closest('.theme-switch');
+    var url = $wrap.attr('data-url');
+
+    layer.load(2, {shade: [0.3,'#fff']});
+    axios.put(url, {status: status}, {
+      headers: {'X-CSRF-TOKEN': csrf()}
+    }).then(function (res) {
+      var activeCode = (res.data && res.data.active_code) || '';
+      applyActiveTheme(activeCode);
+      inno.msg(res.message || '');
+    }).catch(function (err) {
+      $input.prop('checked', !checked);
+      inno.msg(getErrMsg(err));
+    }).finally(function () {
+      layer.closeAll('loading');
     });
   });
 
@@ -255,9 +320,6 @@ $(function () {
             inst.hide();
           }
           inno.msg(data.message || demoInstalledMsg);
-          setTimeout(function () {
-            location.reload();
-          }, 1000);
         } else {
           $errMsg.text(data.message || data.error || importFailedMsg);
           $err.removeClass('d-none');

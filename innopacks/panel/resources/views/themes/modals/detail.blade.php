@@ -163,7 +163,7 @@
                   <div class="flex-grow-1">
                     <div class="fw-semibold mb-2">{{ __('panel/themes.no_demo_data') }}</div>
                     <div class="text-secondary small">
-                      {{ __('panel/themes.no_demo_data_description', ['code' => $theme['code']]) }}
+                      {!! __('panel/themes.no_demo_data_description', ['code' => $theme['code']]) !!}
                     </div>
                   </div>
                 </div>
