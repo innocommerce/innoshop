@@ -98,42 +98,6 @@ footer {
   overflow: hidden;
   margin-top: 0;
 
-  &::after, &::before {
-    content: '';
-    position: absolute;
-    width: 20%;
-    height: 300px;
-    background-image: url('/images/icons/footer-1.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-    width: 50%;
-    background-image: url('/images/icons/footer-1.svg');
-
-    @media (min-width: 768px) {
-      top: -5%;
-      width: 30%;
-    }
-  }
-
-  &::after {
-    bottom: 0;
-    right: 0;
-    width: 36%;
-    background-position: bottom;
-    background-image: url('/images/icons/footer-2.svg');
-
-    @media (min-width: 768px) {
-      bottom: -5%;
-      width: 15%;
-    }
-  }
-
   .footer-box {
     color: #aaa;
     position: relative;
