@@ -76,7 +76,11 @@ if (! function_exists('plugin_resize')) {
             return $image;
         }
 
-        $plugin        = plugin($pluginCode);
+        $plugin = plugin($pluginCode);
+        if (! $plugin) {
+            return '';
+        }
+
         $pluginDirName = $plugin->getDirname();
 
         return ImageService::getInstance($image)->setPluginDirName($pluginDirName)->resize($width, $height);
@@ -98,7 +102,11 @@ if (! function_exists('plugin_origin')) {
             return $image;
         }
 
-        $plugin        = plugin($pluginCode);
+        $plugin = plugin($pluginCode);
+        if (! $plugin) {
+            return '';
+        }
+
         $pluginDirName = $plugin->getDirname();
 
         return ImageService::getInstance($image)->setPluginDirName($pluginDirName)->originUrl();
