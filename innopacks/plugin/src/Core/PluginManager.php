@@ -138,8 +138,13 @@ class PluginManager
      */
     public function getPlugin($code): ?Plugin
     {
-        $code    = Str::snake($code);
         $plugins = $this->getPlugins();
+
+        if (isset($plugins[$code])) {
+            return $plugins[$code];
+        }
+
+        $code = Str::snake($code);
 
         return $plugins[$code] ?? null;
     }

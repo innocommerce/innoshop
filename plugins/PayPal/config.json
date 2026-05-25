@@ -1,18 +1,18 @@
 {
-    "code": "pay_pal",
-    "name": {
-        "zh-cn": "PayPal",
-        "en": "PayPal"
-    },
-    "description": {
-        "zh-cn": "PayPal 是全球最大的在线支付平台之一，支持 PayPal 账户、信用卡、借记卡等多种支付方式，覆盖全球 200+ 个国家和地区，为超过 4 亿用户提供安全便捷的支付服务。",
-        "en": "PayPal is one of the world's largest online payment platforms, supporting PayPal accounts, credit cards, debit cards, and more. Available in 200+ countries and regions, serving over 400 million users with secure and convenient payment services."
-    },
-    "type": "payment",
-    "version": "v2.0.0",
-    "icon": "/images/logo2.png",
-    "author": {
-        "name": "InnoShop",
-        "email": "team@innoshop.com"
-    }
+  "code": "PayPal",
+  "name": {
+    "zh-cn": "PayPal",
+    "en": "PayPal"
+  },
+  "description": {
+    "zh-cn": "PayPal 是全球最大的在线支付平台之一，支持 PayPal 账户、信用卡、借记卡等多种支付方式，覆盖全球 200+ 个国家和地区，为超过 4 亿用户提供安全便捷的支付服务。",
+    "en": "PayPal is one of the world's largest online payment platforms, supporting PayPal accounts, credit cards, debit cards, and more. Available in 200+ countries and regions, serving over 400 million users with secure and convenient payment services."
+  },
+  "type": "payment",
+  "version": "v2.0.0",
+  "icon": "/images/logo2.png",
+  "author": {
+    "name": "InnoShop",
+    "email": "team@innoshop.com"
+  }
 }
