@@ -16,12 +16,11 @@
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
 
   <!-- 基础样式和脚本 -->
-  <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('build/panel/css/app.css') }}">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
-  <script src="{{ mix('build/panel/js/app.js') }}"></script>
+  <script src="{{ asset('build/panel/js/app.js') }}"></script>
   <script>
     let urls = {
       base_url: '{{ panel_route('home.index') }}',

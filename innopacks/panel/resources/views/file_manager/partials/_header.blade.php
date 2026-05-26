@@ -97,6 +97,4 @@
       window.http = http; // Expose http on window
     })(window);
   </script>
-
-  <link rel="stylesheet" href="{{ mix('build/panel/css/file-manager.css') }}">
 @endpush

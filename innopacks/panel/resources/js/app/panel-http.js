@@ -1,6 +1,5 @@
 /**
  * Axios defaults, CSRF, and layer loading interceptors for the panel.
- * Role matches front `inno-bootstrap.js` (HTTP client setup); not Bootstrap CSS/JS.
  */
 import axios from 'axios';
 

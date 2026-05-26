@@ -4,7 +4,13 @@
     <div class="header-logo">
       <a href="{{ panel_route('home.index') }}" class="sidebar-logo">
         <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="sidebar-logo-normal img-fluid">
-        <img src="{{ image_origin(system_setting('panel_icon_logo', system_setting('panel_logo', 'images/logo-panel.png'))) }}" class="sidebar-logo-icon img-fluid">
+        @php
+          $iconLogo = system_setting('panel_icon_logo', system_setting('panel_logo', 'images/logo-panel.png'));
+          if (!file_exists(public_path($iconLogo))) {
+            $iconLogo = 'images/logo-icon.svg';
+          }
+        @endphp
+        <img src="{{ image_origin($iconLogo) }}" class="sidebar-logo-icon img-fluid">
       </a>
     </div>
   </div>

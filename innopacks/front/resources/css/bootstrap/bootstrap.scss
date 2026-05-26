@@ -1,28 +1,27 @@
-$primary: #E91E63;
-$btn-primary-color: #fff;
+$primary: #E91E63 !default;
+$btn-primary-color: #fff !default;
 
-$font-size-base: 0.84rem;
-$border-radius: 0.275rem;
+$font-size-base: 0.84rem !default;
+$border-radius: 0.275rem !default;
 
 // Enable negative margins
-$enable-negative-margins: true;
+$enable-negative-margins: true !default;
 // $body-bg: #f7f8f4;
 
-$input-btn-focus-box-shadow: 0 0 11px 0 rgba($color: $primary, $alpha: .1);
-$input-bg: #fff;
+$input-btn-focus-box-shadow: 0 0 11px 0 rgba($color: $primary, $alpha: .1) !default;
+$input-bg: #fff !default;
 
-$form-select-focus-box-shadow: none;
+$form-select-focus-box-shadow: none !default;
 // $input-focus-box-shadow: none;
 
-$table-border-color: #e9ecef;
-$table-bg: transparent;
+$table-border-color: #e9ecef !default;
+$table-bg: transparent !default;
 
-$font-family-base: "Jost", Arial, sans-serif;
+$font-family-base: "Jost", Arial, sans-serif !default;
 
-$border-radius: 0.275rem;
-$btn-border-radius-sm: 0.175rem;
-$btn-border-radius-lg: 0.275rem;
-$border-radius-lg: 0.275rem;
+$btn-border-radius-sm: 0.175rem !default;
+$btn-border-radius-lg: 0.275rem !default;
+$border-radius-lg: 0.275rem !default;
 
 $bootstrap-icons-font: "bootstrap-icons" !default;
 $bootstrap-icons-font-src: url("/vendor/bootstrap-icons/bootstrap-icons.woff2?08efbba7c53d8c5413793eecb19b20bb") format("woff2"),
@@ -34,16 +33,16 @@ url("/vendor/bootstrap-icons/bootstrap-icons.woff?08efbba7c53d8c5413793eecb19b20
   src: $bootstrap-icons-font-src;
 }
 
-$pagination-border-width: 0;
-$pagination-bg: #f4f4f5;
-$pagination-color: #606266;
-$pagination-border-radius: 2px;
-$pagination-disabled-bg: $pagination-bg;
-$pagination-disabled-color: #c0c4cc;
-$pagination-hover-color: $primary;
-$pagination-padding-x: 4px;
-$pagination-padding-y: .3rem;
-$pagination-focus-color: #606266;
+$pagination-border-width: 0 !default;
+$pagination-bg: #f4f4f5 !default;
+$pagination-color: #606266 !default;
+$pagination-border-radius: 2px !default;
+$pagination-disabled-bg: $pagination-bg !default;
+$pagination-disabled-color: #c0c4cc !default;
+$pagination-hover-color: $primary !default;
+$pagination-padding-x: 4px !default;
+$pagination-padding-y: .3rem !default;
+$pagination-focus-color: #606266 !default;
 
 .pagination-wrap {
   justify-content: center;

@@ -78,9 +78,15 @@
   <div class="header-desktop">
     <div class="container d-flex justify-content-between align-items-center">
       <div class="left">
+        @php $frontLogo = system_setting('front_logo'); @endphp
         <h1 class="logo">
-          <a href="{{ front_route('home.index') }}">
-            <img src="{{ image_origin(system_setting('front_logo', 'images/logo.svg')) }}" class="img-fluid">
+          <a href="{{ front_route('home.index') }}" class="d-flex align-items-center text-decoration-none gap-2">
+            @if ($frontLogo)
+              <img src="{{ image_origin($frontLogo) }}" class="img-fluid" alt="{{ front_store_name() }}">
+            @else
+              <span class="d-inline-flex align-items-center" style="width:36px;height:36px;color:rgb(139,82,224);flex-shrink:0;">@include('components.logo-icon')</span>
+              <span class="fw-bold" style="font-size:20px;color:#222;">InnoShop</span>
+            @endif
           </a>
         </h1>
         <div class="menu">
@@ -178,8 +184,13 @@
     </div>
 
     <div class="logo">
-      <a href="{{ front_route('home.index') }}">
-        <img src="{{ image_origin(system_setting('front_logo', 'images/logo.svg')) }}" class="img-fluid">
+      <a href="{{ front_route('home.index') }}" class="d-flex align-items-center text-decoration-none gap-1">
+        @if ($frontLogo)
+          <img src="{{ image_origin($frontLogo) }}" class="img-fluid" alt="{{ front_store_name() }}">
+        @else
+          <span class="d-inline-flex align-items-center" style="width:28px;height:28px;color:rgb(139,82,224);flex-shrink:0;">@include('components.logo-icon')</span>
+          <span class="fw-bold" style="font-size:16px;color:#222;">InnoShop</span>
+        @endif
       </a>
     </div>
 

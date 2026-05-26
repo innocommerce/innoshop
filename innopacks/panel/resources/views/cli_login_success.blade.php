@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ipanel CLI Login</title>
   <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
-  <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('build/panel/css/app.css') }}">>>
 </head>
 <body style="display:flex;justify-content:center;align-items:center;height:100vh;margin:0;font-family:system-ui,sans-serif;background:#f0f4f8;color:#1a202c">
   <div style="text-align:center;padding:2rem 3rem;background:#fff;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,.07)">

@@ -8,7 +8,7 @@
   <title>{{ __('install/common.install_wizard') }}</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
-  <link rel="stylesheet" href="{{ asset('build/front/css/bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ asset('build/front/css/app.css') }}">
   <link rel="stylesheet" href="{{ asset('build/install/css/app.css') }}">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>

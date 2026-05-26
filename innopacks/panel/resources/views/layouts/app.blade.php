@@ -15,8 +15,7 @@
   <meta name="storage-base-url" content="{{ storage_url('') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
   <link rel="stylesheet" href="{{ asset('vendor/element-plus/index.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('build/panel/css/app.css') }}">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
   <script src="{{ asset('vendor/vue/3.5/vue.global' . (config('app.debug') ? '' : '.prod') . '.js') }}"></script>
   <script src="{{ asset('vendor/element-plus/index.full.js') }}"></script>
@@ -27,8 +26,7 @@
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script src="{{ asset('vendor/laydate/laydate.js') }}"></script>
-  <script src="{{ mix('build/panel/js/app.js') }}"></script>
-  <script src="{{ mix('build/panel/js/panel-standalone.js') }}"></script>
+  <script src="{{ asset('build/panel/js/app.js') }}"></script>
   <script src="{{ asset('vendor/locale-modal/locale-modal.js') }}"></script>
   <script>
     const urls = {

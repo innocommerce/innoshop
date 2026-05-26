@@ -20,7 +20,7 @@ body.page-my-plugins {
         flex: 0 0 60px;
         background-color: #EEEEEE;
         border-radius: 20%;
-        margin-right: 10px;
+        margin-right: 12px;
         overflow: hidden;
         border: 1px solid #EEEEEE;
 
@@ -30,13 +30,34 @@ body.page-my-plugins {
         }
       }
 
+      .title-wrap {
+        min-width: 0;
+        flex: 1;
+      }
+
       .title {
         font-size: 16px;
         font-weight: bold;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        white-space: nowrap;
         overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .plugin-meta {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        color: #999;
+        font-size: 0.75rem;
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .plugin-meta-dot {
+          margin: 0 5px;
+          color: #ccc;
+        }
       }
     }
 

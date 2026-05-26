@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>{{ config('app.name') }} {{ __('panel/order.ship_list') }}</title>
-  <link href="{{ mix('/build/panel/css/bootstrap.css') }}" rel="stylesheet">
+  <link href="{{ asset('build/panel/css/app.css') }}" rel="stylesheet">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
   <script src="{{ asset('vendor/jsbarcode/JsBarcode.all.min.js') }}"></script>
 

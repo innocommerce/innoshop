@@ -38,8 +38,15 @@
                  data-installed="{{ $plugin['installed'] ? 1 : 0 }}">
               <div class="image-wrap">
                 <div class="image"><img src="{{ $plugin['icon'] }}" alt="{{ $plugin['name'] }}" class="img-fluid"></div>
-                <div class="title">
-                  {{ $plugin['name'] }}
+                <div class="title-wrap">
+                  <div class="title">{{ $plugin['name'] }}</div>
+                  <div class="plugin-meta">
+                    <span class="font-monospace">{{ $plugin['code'] }}</span>
+                    @if(!empty($plugin['version']))
+                      <span class="plugin-meta-dot">·</span>
+                      <span>{{ $plugin['version'] }}</span>
+                    @endif
+                  </div>
                 </div>
               </div>
 

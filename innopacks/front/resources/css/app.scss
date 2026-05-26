@@ -5,7 +5,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  *
  * Front SCSS entry (default theme).
- * Structure: base/ (variables, global, font) -> layout/ -> components/ -> modules/ -> pages/
+ * Structure: bootstrap -> base/ -> layout/ -> components/ -> modules/ -> pages/
  *
  * Theme reuse (themes/<theme>/css/app.scss):
  *   @import './_variables';          // optional (define $primary/$price/$default)
@@ -13,6 +13,9 @@
  *   @import '@front/css/<group>/<file>'; // optional: import extra styles not included by default entry
  *   @import './...';                 // theme overrides
  */
+
+// Bootstrap (custom build with variables override)
+@import './bootstrap/bootstrap';
 
 // Base: variables -> global -> font
 @import './base/variables';

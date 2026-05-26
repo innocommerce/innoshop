@@ -1,3 +1,6 @@
+// Bootstrap (custom build with variables override)
+@import './bootstrap/bootstrap';
+
 @import './_variables';
 @import './global';
 @import './dashboard';
@@ -14,6 +17,7 @@
 @import './entity-picker';
 @import './panel_locale_text';
 @import './locale_field';
+@import './file-manager';
 
 // Components
 @import "components/sidebar";

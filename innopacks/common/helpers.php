@@ -11,6 +11,7 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 use Detection\Exception\MobileDetectException;
 use Detection\MobileDetect;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
