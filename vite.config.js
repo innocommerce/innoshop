@@ -11,7 +11,7 @@
  * invoked once per entry by build.js. It does NOT use Vite's multi-input or dev server.
  *
  * Environment variables:
- *   BUILD_INPUT       — Source file path (e.g. innopacks/front/resources/css/app.scss)
+ *   BUILD_INPUT       — Source file path (e.g. innopacks/front/resources/assets/scss/app.scss)
  *   BUILD_OUTDIR      — Output directory (e.g. public/build/front/css)
  *   BUILD_OUTPUT_NAME — Output filename for JS entries (default: 'app')
  *   THEME             — Theme name, used to resolve @theme alias (default: 'scandihome')

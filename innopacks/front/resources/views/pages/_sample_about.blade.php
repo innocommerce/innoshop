@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12 col-md-6">
         <div class="about-img">
-          <img src="{{ asset('images/front/about/bg-2.png') }}" class="img-fluid">
+          <img src="{{ asset('images/front/about/bg-2.svg') }}" class="img-fluid">
         </div>
       </div>
       <div class="col-12 col-md-6">

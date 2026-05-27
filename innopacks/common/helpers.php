@@ -11,7 +11,6 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 use Detection\Exception\MobileDetectException;
 use Detection\MobileDetect;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -1662,39 +1661,6 @@ if (! function_exists('theme_js')) {
 
         // If compiled file doesn't exist, return empty string
         return '';
-    }
-}
-
-if (! function_exists('theme_mix')) {
-    /**
-     * Smart theme resource mix loading
-     * Priority: Theme compiled resources > Default frontend compiled resources
-     *
-     * @param  string  $path  Resource path
-     * @param  string  $theme  Theme name
-     * @return string Resource URL
-     */
-    function theme_mix(string $path, string $theme = ''): string
-    {
-        if (empty($theme)) {
-            $theme = system_setting('theme', 'default');
-        }
-
-        // Priority 1: Theme compiled resources
-        $themeMixPath = "static/themes/{$theme}/{$path}";
-        $themeMixFile = public_path($themeMixPath);
-
-        // Priority 2: Default frontend compiled resources
-        $frontMixPath = "build/front/{$path}";
-        $frontMixFile = public_path($frontMixPath);
-
-        if (file_exists($themeMixFile)) {
-            return asset($themeMixPath);
-        } elseif (file_exists($frontMixFile)) {
-            return asset($frontMixPath);
-        }
-
-        return asset($path);
     }
 }
 

@@ -106,13 +106,13 @@
                         <a class="nav-link {{ (request()->route() && equal_url($menu['url'])) ? 'active' : '' }}"
                            href="{{ $menu['url'] }}">{{ $menu['name'] }}</a>
                       @endif
-                      <ul class="dropdown-menu">
+                      <div class="dropdown-menu">
                         @foreach ($menu['children'] as $child)
                           @if ($child['name'])
-                            <li><a class="dropdown-item" href="{{ $child['url'] }}">{{ $child['name'] }}</a></li>
+                            <a class="dropdown-item" href="{{ $child['url'] }}">{{ $child['name'] }}</a>
                           @endif
                         @endforeach
-                      </ul>
+                      </div>
                     </div>
                   </li>
                 @else
@@ -130,11 +130,9 @@
         </div>
       </div>
       <div class="right">
-        <form action="{{ front_route('products.index') }}" method="get" class="search-group">
-          <input type="text" class="form-control" name="keyword" placeholder="{{ __('common/base.search') }}"
-                 value="{{ request('keyword') }}">
-          <button type="submit" class="btn"><i class="bi bi-search"></i></button>
-        </form>
+        <button type="button" class="search-overlay-btn" aria-label="Search">
+          <i class="bi bi-search"></i>
+        </button>
         <div class="icons">
           <div class="item">
             <div class="dropdown account-icon">
@@ -262,6 +260,20 @@
 </header>
 
 @hookinsert('layout.header.bottom')
+
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-overlay__backdrop"></div>
+  <div class="search-overlay__content">
+    <button type="button" class="search-overlay__close" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+    <form action="{{ front_route('products.index') }}" method="get" class="search-overlay__form">
+      <div class="search-overlay__input-wrap">
+        <i class="bi bi-search"></i>
+        <input type="text" class="form-control" name="keyword" placeholder="{{ __('common/base.search') }}"
+               value="{{ request('keyword') }}" autofocus>
+      </div>
+    </form>
+  </div>
+</div>
 
 @if(!empty($announcementItems))
 @push('footer')

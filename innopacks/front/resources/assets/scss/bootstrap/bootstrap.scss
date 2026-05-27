@@ -1,0 +1,92 @@
+$primary: #E91E63 !default;
+$btn-primary-color: #fff !default;
+
+$font-size-base: 0.84rem !default;
+$border-radius: 0.275rem !default;
+
+// Enable negative margins
+$enable-negative-margins: true !default;
+// $body-bg: #f7f8f4;
+
+$input-btn-focus-box-shadow: 0 0 11px 0 rgba($color: $primary, $alpha: .1) !default;
+$input-bg: #fff !default;
+
+$form-select-focus-box-shadow: none !default;
+// $input-focus-box-shadow: none;
+
+$table-border-color: #e9ecef !default;
+$table-bg: transparent !default;
+
+$font-family-base: "Jost", Arial, sans-serif !default;
+
+$btn-border-radius-sm: 0.175rem !default;
+$btn-border-radius-lg: 0.275rem !default;
+$border-radius-lg: 0.275rem !default;
+
+$bootstrap-icons-font: "bootstrap-icons" !default;
+$bootstrap-icons-font-src: url("/vendor/bootstrap-icons/bootstrap-icons.woff2?08efbba7c53d8c5413793eecb19b20bb") format("woff2"),
+url("/vendor/bootstrap-icons/bootstrap-icons.woff?08efbba7c53d8c5413793eecb19b20bb") format("woff") !default;
+
+@font-face {
+  font-display: block;
+  font-family: $bootstrap-icons-font;
+  src: $bootstrap-icons-font-src;
+}
+
+$pagination-border-width: 0 !default;
+$pagination-bg: #f4f4f5 !default;
+$pagination-color: #606266 !default;
+$pagination-border-radius: 2px !default;
+$pagination-disabled-bg: $pagination-bg !default;
+$pagination-disabled-color: #c0c4cc !default;
+$pagination-hover-color: $primary !default;
+$pagination-padding-x: 4px !default;
+$pagination-padding-y: .3rem !default;
+$pagination-focus-color: #606266 !default;
+
+.pagination-wrap {
+  justify-content: center;
+}
+
+.pagination {
+  > li {
+    margin: 0 5px;
+    font-weight: bold;
+    a, span {
+      text-align: center;
+      border-radius: 2px !important;
+      min-width: 30px;
+    }
+  }
+}
+ 
+.accordion-button:not(.collapsed) {
+  background-color:$primary;
+  color: #fff;
+}
+
+$form-validation-states: (
+  "invalid": (
+    "color": #dc3545,
+    "icon": url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e")
+  )
+);
+
+// $container-max-widths: (
+//   sm: 540px,
+//   md: 720px,
+//   lg: 960px,
+//   xl: 1180px,
+//   xxl: 1380px
+// );
+
+@import 'bootstrap-icons';
+@import '~bootstrap/scss/bootstrap';
+
+// Force white text on primary buttons (Bootstrap 5.3 auto-contrast overrides $btn-primary-color)
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+}

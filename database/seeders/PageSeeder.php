@@ -77,55 +77,68 @@ class PageSeeder extends Seeder
                 'locale'   => 'zh-cn',
                 'title'    => '产品',
                 'content'  => '',
-                'template' => '<div class="page-product-content">
+                'template' => '<style>.product-card{border:1px solid #eee;border-radius:8px;padding:32px 24px;transition:box-shadow .25s,transform .25s;}.product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px);}</style>
+<div class="py-4 py-md-5">
     <div class="container">
-      <div class="title-box">
-        <div class="title">我们的产品</div>
-        <div class="sub-title">Our Creations</div>
+      <div class="text-center mb-4 mb-md-5">
+        <h2 class="fw-bold mb-2">我们的产品</h2>
+        <p class="text-secondary">全场景电商解决方案，助力您的业务增长</p>
       </div>
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <div class="product-item">
-            <div class="top">
-              <div class="left"><i class="bi bi-box-seam-fill"></i></div>
-              <div class="name">InnoShop</div>
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-github" style="font-size:36px;color:#E91E63;"></i>
             </div>
-            <div class="content">
-              InnoShop是一款面向中小企业的电子商务平台，提供一站式在线商店解决方案。它以用户友好的界面和强大的后台管理功能著称，帮助商家轻松管理商品、订单和客户关系。InnoShop支持多种支付方式，并集成了社交媒体营销工具，助力商家扩大市场影响力。
-            </div>
+            <h5 class="fw-bold mb-2">InnoShop 社区版</h5>
+            <p class="text-secondary mb-0">开源免费的电商系统，Laravel 12 框架，模块化架构，支持多语言、多货币、插件市场和主题系统。</p>
           </div>
         </div>
-        <div class="col-12 col-md-6">
-          <div class="product-item">
-            <div class="top">
-              <div class="left"><i class="bi bi-box-seam-fill"></i></div>
-              <div class="name">InnoShop Pro</div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-building" style="font-size:36px;color:#E91E63;"></i>
             </div>
-            <div class="content">
-              InnoShop Pro是InnoShop的高级版本，专为需要更高级功能和定制服务的企业设计。除了基础版所有功能外，Pro版本提供高级数据分析、个性化推荐引擎和API集成，以满足更复杂的业务需求。它还包含专业的客户支持和优先更新服务，确保商家能够充分利用平台潜力。
-            </div>
+            <h5 class="fw-bold mb-2">InnoShop 工厂版</h5>
+            <p class="text-secondary mb-0">专为制造业打造，支持批量报价、生产订单跟踪、供应链管理和经销商分级体系。</p>
           </div>
         </div>
-        <div class="col-12 col-md-6">
-          <div class="product-item">
-            <div class="top">
-              <div class="left"><i class="bi bi-wechat"></i></div>
-              <div class="name">小程序</div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-briefcase-fill" style="font-size:36px;color:#E91E63;"></i>
             </div>
-            <div class="content">
-              我们的小程序为移动用户提供了便捷的购物体验。它轻量级、易于访问，特别适合快速浏览和购买。小程序与主流社交媒体和通讯工具无缝集成，支持一键分享和邀请朋友，通过社交网络快速传播，增加用户粘性和品牌曝光度。
-            </div>
+            <h5 class="fw-bold mb-2">InnoShop 企业版</h5>
+            <p class="text-secondary mb-0">面向中大型企业，高级数据分析、AI 智能推荐、API 集成、专属客户经理与优先技术支持。</p>
           </div>
         </div>
-        <div class="col-12 col-md-6">
-          <div class="product-item">
-            <div class="top">
-              <div class="left"><i class="bi bi-phone-fill"></i></div>
-              <div class="name">APP</div>
+      </div>
+      <div class="row g-4">
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-people-fill" style="font-size:36px;color:#E91E63;"></i>
             </div>
-            <div class="content">
-              我们的App是一款为移动设备优化的应用程序，提供更加丰富和个性化的用户体验。它不仅包含了小程序的所有功能，还增加了个性化推送、增强的搜索功能和更高级的用户互动元素。App的设计注重流畅性和互动性，确保用户在移动设备上也能享受到优质的购物和服务体验。
+            <h5 class="fw-bold mb-2">InnoShop 多商家</h5>
+            <p class="text-secondary mb-0">多商户入驻平台，商家独立管理店铺，统一收款、自动分账、商户审核与佣金管理。</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-truck" style="font-size:36px;color:#E91E63;"></i>
             </div>
+            <h5 class="fw-bold mb-2">InnoShop 供应商</h5>
+            <p class="text-secondary mb-0">供应商管理平台，入驻、商品托管、采购订单管理与库存同步，打通上下游供应链。</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-phone-fill" style="font-size:36px;color:#E91E63;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">InnoShop App</h5>
+            <p class="text-secondary mb-0">原生 iOS/Android 应用，个性化推送、增强搜索、流畅购物体验与社交分享。</p>
           </div>
         </div>
       </div>
@@ -142,60 +155,58 @@ class PageSeeder extends Seeder
                 'content'  => '',
                 'template' => "<div class=\"page-service-content\">
     <div class=\"container\">
-      <div class=\"row\">
+      <div class=\"row align-items-center\">
         <div class=\"col-12 col-md-5\">
-          <div class=\"service-icon\"><img src=\"{{ asset('images/front/service/bg-1.png') }}\" class=\"img-fluid\"></div>
+          <div class=\"service-icon\"><img src=\"{{ asset('images/front/service/bg-1.svg') }}\" class=\"img-fluid\"></div>
         </div>
         <div class=\"col-12 col-md-7\">
-          <div class=\"row\">
-            <div class=\"col-12\">
-              <div class=\"title-box\">
-                <div class=\"title\">我们的服务</div>
-                <div class=\"sub-title\">我们不仅提供定制化的解决方案，还以专业的技术知识、创新的思维方式和全方位的支持，确保您能够享受到卓越而高效的服务体验。我们承诺，无论您的需求如何变化，我们都能为您提供最匹配的专业服务。</div>
-              </div>
-            </div>
-            <div class=\"col-12 col-md-6\">
-              <div class=\"service-item\">
-                <div class=\"icon\"><i class=\"bi bi-house-door-fill\"></i></div>
-                <div class=\"title\">开源系统</div>
-                <div class=\"sub-title\">致力于提供高度灵活和可定制的解决方案。利用开放源代码的优势，我们帮助企业构建可扩展的系统，同时确保透明度和社区支持。</div>
-              </div>
-            </div>
-            <div class=\"col-12 col-md-6\">
-              <div class=\"service-item\">
-                <div class=\"icon\"><i class=\"bi bi-house-door-fill\"></i></div>
-                <div class=\"title\">插件市场</div>
-                <div class=\"sub-title\">通过我们的插件市场，用户可以轻松扩展其系统功能。我们提供丰富的插件选择，以满足不同的业务需求，让定制化服务触手可及</div>
-              </div>
-            </div>
+          <div class=\"title-box\">
+            <div class=\"title\">我们的服务</div>
+            <div class=\"sub-title\">我们不仅提供定制化的解决方案，还以专业的技术知识、创新的思维方式和全方位的支持，确保您能够享受到卓越而高效的服务体验。</div>
           </div>
         </div>
       </div>
-      <div class=\"row\">
-        <div class=\"col-12 col-md-1\"></div>
-        <div class=\"col-12 col-md-11 service-row-2\">
-          <div class=\"row\">
-            <div class=\"col-12 col-md-4\">
-              <div class=\"service-item\">
-                <div class=\"icon\"><i class=\"bi bi-house-door-fill\"></i></div>
-                <div class=\"title\">定制开发</div>
-                <div class=\"sub-title\">专注于根据您的具体需求，打造独一无二的软件解决方案。从概念到实现，我们与您紧密合作，确保最终产品超出您的期望。</div>
-              </div>
-            </div>
-            <div class=\"col-12 col-md-4\">
-              <div class=\"service-item\">
-                <div class=\"icon\"><i class=\"bi bi-house-door-fill\"></i></div>
-                <div class=\"title\">安装维护</div>
-                <div class=\"sub-title\">我们的安装维护服务确保您的系统运行平稳，通过定期更新和故障排除，我们提供无忧的技术支持，让您专注于核心业务。</div>
-              </div>
-            </div>
-            <div class=\"col-12 col-md-4\">
-              <div class=\"service-item\">
-                <div class=\"icon\"><i class=\"bi bi-house-door-fill\"></i></div>
-                <div class=\"title\">技术培训</div>
-                <div class=\"sub-title\">通过我们的技术培训服务，您的团队将获得必要的技能和知识。我们的培训课程旨在提升效率，促进创新，并确保长期的技术自给自足。</div>
-              </div>
-            </div>
+      <div class=\"row mt-4 mt-md-5\">
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-gear-fill\"></i></div>
+            <div class=\"title\">开源系统</div>
+            <div class=\"sub-title\">致力于提供高度灵活和可定制的解决方案，利用开放源代码的优势，帮助企业构建可扩展的系统。</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-puzzle-fill\"></i></div>
+            <div class=\"title\">插件市场</div>
+            <div class=\"sub-title\">通过插件市场轻松扩展系统功能，丰富的插件选择满足不同业务需求，让定制化服务触手可及。</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-code-slash\"></i></div>
+            <div class=\"title\">定制开发</div>
+            <div class=\"sub-title\">根据具体需求打造独一无二的软件解决方案，从概念到实现紧密合作，确保产品超出期望。</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-wrench-adjustable-circle-fill\"></i></div>
+            <div class=\"title\">安装维护</div>
+            <div class=\"sub-title\">确保系统运行平稳，通过定期更新和故障排除提供无忧技术支持，让您专注核心业务。</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-mortarboard-fill\"></i></div>
+            <div class=\"title\">技术培训</div>
+            <div class=\"sub-title\">帮助团队获得必要的技能和知识，培训课程旨在提升效率、促进创新，确保长期技术自给自足。</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-headset\"></i></div>
+            <div class=\"title\">售后支持</div>
+            <div class=\"sub-title\">提供全天候技术支持服务，快速响应并解决您在使用过程中遇到的任何问题，保障业务持续稳定运行。</div>
           </div>
         </div>
       </div>
@@ -215,7 +226,7 @@ class PageSeeder extends Seeder
     <div class=\"row\">
       <div class=\"col-12 col-md-6\">
         <div class=\"about-img\">
-          <img src=\"{{ asset('images/front/about/bg-2.png') }}\" class=\"img-fluid\">
+          <img src=\"{{ asset('images/front/about/bg-2.svg') }}\" class=\"img-fluid\">
         </div>
       </div>
       <div class=\"col-12 col-md-6\">
@@ -258,28 +269,197 @@ class PageSeeder extends Seeder
                 'meta_keywords'    => '关于',
             ],
             [
-                'page_id'          => 1,
-                'locale'           => 'en',
-                'title'            => 'Creations',
-                'content'          => 'This is Creations page for English',
+                'page_id'  => 1,
+                'locale'   => 'en',
+                'title'    => 'Creations',
+                'content'  => '',
+                'template' => '<style>.product-card{border:1px solid #eee;border-radius:8px;padding:32px 24px;transition:box-shadow .25s,transform .25s;}.product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px);}</style>
+<div class="py-4 py-md-5">
+    <div class="container">
+      <div class="text-center mb-4 mb-md-5">
+        <h2 class="fw-bold mb-2">Our Products</h2>
+        <p class="text-secondary">Full-spectrum e-commerce solutions to power your business growth</p>
+      </div>
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-github" style="font-size:36px;color:#E91E63;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">InnoShop Community</h5>
+            <p class="text-secondary mb-0">Open-source and free, built on Laravel 12 with modular architecture. Multi-language, multi-currency, plugin marketplace and theme system.</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-building" style="font-size:36px;color:#E91E63;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">InnoShop Factory</h5>
+            <p class="text-secondary mb-0">Tailored for manufacturing with bulk quoting, production order tracking, supply chain management, and dealer tier systems.</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-briefcase-fill" style="font-size:36px;color:#E91E63;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">InnoShop Enterprise</h5>
+            <p class="text-secondary mb-0">Advanced analytics, AI recommendations, deep API integration, dedicated account managers, and priority support.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-people-fill" style="font-size:36px;color:#E91E63;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">InnoShop Multi-Vendor</h5>
+            <p class="text-secondary mb-0">Multi-merchant marketplace with vendor-managed stores, unified payments, automated settlement, and commission management.</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-truck" style="font-size:36px;color:#E91E63;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">InnoShop Supplier</h5>
+            <p class="text-secondary mb-0">Supplier management with vendor onboarding, product consignment, purchase orders, and inventory sync for streamlined supply chain.</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="product-card text-center">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:80px;height:80px;background:rgba(233,30,99,.08);">
+              <i class="bi bi-phone-fill" style="font-size:36px;color:#E91E63;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">InnoShop App</h5>
+            <p class="text-secondary mb-0">Native iOS and Android app with push notifications, enhanced search, smooth shopping experience, and social sharing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>',
                 'meta_title'       => 'Creations',
                 'meta_description' => 'Creations',
                 'meta_keywords'    => 'Creations',
             ],
             [
-                'page_id'          => 2,
-                'locale'           => 'en',
-                'title'            => 'Services',
-                'content'          => 'This is Services page for English',
+                'page_id'  => 2,
+                'locale'   => 'en',
+                'title'    => 'Services',
+                'content'  => '',
+                'template' => "<div class=\"page-service-content\">
+    <div class=\"container\">
+      <div class=\"row align-items-center\">
+        <div class=\"col-12 col-md-5\">
+          <div class=\"service-icon\"><img src=\"{{ asset('images/front/service/bg-1.svg') }}\" class=\"img-fluid\"></div>
+        </div>
+        <div class=\"col-12 col-md-7\">
+          <div class=\"title-box\">
+            <div class=\"title\">Our Services</div>
+            <div class=\"sub-title\">We go beyond ready-made solutions — with deep technical expertise, innovative thinking, and comprehensive support, we ensure you receive an outstanding and efficient service experience.</div>
+          </div>
+        </div>
+      </div>
+      <div class=\"row mt-4 mt-md-5\">
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-gear-fill\"></i></div>
+            <div class=\"title\">Open Source System</div>
+            <div class=\"sub-title\">Committed to providing highly flexible and customizable solutions. Leveraging open source, we help businesses build scalable systems with transparency and community support.</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-puzzle-fill\"></i></div>
+            <div class=\"title\">Plugin Marketplace</div>
+            <div class=\"sub-title\">Through our plugin marketplace, users can easily extend system functionality. A rich selection of plugins makes customization easily accessible.</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-code-slash\"></i></div>
+            <div class=\"title\">Custom Development</div>
+            <div class=\"sub-title\">Focused on building unique software solutions tailored to your needs. From concept to delivery, we work closely with you to exceed expectations.</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-wrench-adjustable-circle-fill\"></i></div>
+            <div class=\"title\">Installation &amp; Maintenance</div>
+            <div class=\"sub-title\">Our services ensure your system runs smoothly. With regular updates and troubleshooting, we provide worry-free technical support.</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-mortarboard-fill\"></i></div>
+            <div class=\"title\">Technical Training</div>
+            <div class=\"sub-title\">Empower your team with essential skills and knowledge. Our courses boost efficiency, foster innovation, and ensure long-term self-sufficiency.</div>
+          </div>
+        </div>
+        <div class=\"col-12 col-md-4\">
+          <div class=\"service-item\">
+            <div class=\"icon\"><i class=\"bi bi-headset\"></i></div>
+            <div class=\"title\">After-Sales Support</div>
+            <div class=\"sub-title\">Round-the-clock technical support with fast response times. We resolve any issues you encounter to keep your business running smoothly.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>",
                 'meta_title'       => 'Services',
                 'meta_description' => 'Services',
                 'meta_keywords'    => 'Services',
             ],
             [
-                'page_id'          => 3,
-                'locale'           => 'en',
-                'title'            => 'About',
-                'content'          => 'This is About page for English',
+                'page_id'  => 3,
+                'locale'   => 'en',
+                'title'    => 'About',
+                'content'  => '',
+                'template' => "<div class=\"page-about-content\">
+  <div class=\"container\">
+    <div class=\"row\">
+      <div class=\"col-12 col-md-6\">
+        <div class=\"about-img\">
+          <img src=\"{{ asset('images/front/about/bg-2.svg') }}\" class=\"img-fluid\">
+        </div>
+      </div>
+      <div class=\"col-12 col-md-6\">
+        <div class=\"about-text\">
+          <div class=\"main-title\">Innovation-driven, professional team, outstanding technology, shaping the future together.</div>
+          <div class=\"about-text-item\">
+            <div class=\"left\"><i class=\"bi bi-check-circle\"></i></div>
+            <div class=\"right\">
+              <div class=\"title\">Our Team</div>
+              <div class=\"sub-title\">
+                Our team is made up of passionate and creative professionals from diverse backgrounds, united by a shared enthusiasm for technology and a pursuit of excellence. We encourage collaboration and open communication to spark innovative thinking and knowledge sharing.
+              </div>
+            </div>
+          </div>
+          <div class=\"about-text-item\">
+            <div class=\"left\"><i class=\"bi bi-check-circle\"></i></div>
+            <div class=\"right\">
+              <div class=\"title\">Work Environment</div>
+              <div class=\"sub-title\">
+                Our modern and comfortable workspace is designed to inspire creativity and boost productivity. Open-plan areas promote communication and teamwork, while quiet zones offer a place to recharge during busy days.
+              </div>
+            </div>
+          </div>
+          <div class=\"about-text-item\">
+            <div class=\"left\"><i class=\"bi bi-check-circle\"></i></div>
+            <div class=\"right\">
+              <div class=\"title\">Technical Expertise</div>
+              <div class=\"sub-title\">
+                We possess strong technical capabilities. Our team is proficient in the latest programming languages and development tools, with deep understanding and hands-on experience in AI, machine learning, and data analytics. We are committed to leveraging these technologies to create efficient, intelligent solutions for our users.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>",
                 'meta_title'       => 'About Us',
                 'meta_description' => 'About Us',
                 'meta_keywords'    => 'About Us',

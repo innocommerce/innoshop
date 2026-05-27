@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-5">
-        <div class="service-icon"><img src="{{ asset('images/front/service/bg-1.png') }}" class="img-fluid"></div>
+        <div class="service-icon"><img src="{{ asset('images/front/service/bg-1.svg') }}" class="img-fluid"></div>
       </div>
       <div class="col-12 col-md-7">
         <div class="row">

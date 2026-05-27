@@ -39,13 +39,13 @@ class ProductSeeder extends BaseSeeder
                 'spu_code' => 'galaxy-glow-evening-gown',
                 'slug'     => 'galaxy-glow-evening-gown',
                 'images'   => [
-                    'images/demo/product/1.png',
-                    'images/demo/product/3.png',
-                    'images/demo/product/4.png',
-                    'images/demo/product/5.png',
-                    'images/demo/product/6.png',
+                    'images/demo/product/1.webp',
+                    'images/demo/product/3.webp',
+                    'images/demo/product/4.webp',
+                    'images/demo/product/5.webp',
+                    'images/demo/product/6.webp',
                 ],
-                'hover_image'  => 'images/demo/product/7.png',
+                'hover_image'  => 'images/demo/product/7.webp',
                 'active'       => true,
                 'translations' => [
                     [
@@ -72,7 +72,7 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'GGE001',
-                        'image'        => 'images/demo/product/1.png',
+                        'image'        => 'images/demo/product/1.webp',
                         'price'        => 111.00,
                         'origin_price' => 112.00,
                         'quantity'     => 50,
@@ -81,7 +81,7 @@ class ProductSeeder extends BaseSeeder
                     ],
                     [
                         'code'         => 'GGE002',
-                        'image'        => 'images/demo/product/1.png',
+                        'image'        => 'images/demo/product/1.webp',
                         'price'        => 222.00,
                         'origin_price' => 223.00,
                         'quantity'     => 50,
@@ -89,7 +89,7 @@ class ProductSeeder extends BaseSeeder
                     ],
                     [
                         'code'         => 'GGE003',
-                        'image'        => 'images/demo/product/7.png',
+                        'image'        => 'images/demo/product/7.webp',
                         'price'        => 333.00,
                         'origin_price' => 334.00,
                         'quantity'     => 50,
@@ -97,7 +97,7 @@ class ProductSeeder extends BaseSeeder
                     ],
                     [
                         'code'         => 'GGE004',
-                        'image'        => 'images/demo/product/7.png',
+                        'image'        => 'images/demo/product/7.webp',
                         'price'        => 444.00,
                         'origin_price' => 445.00,
                         'quantity'     => 50,
@@ -105,7 +105,7 @@ class ProductSeeder extends BaseSeeder
                     ],
                     [
                         'code'         => 'GGE005',
-                        'image'        => 'images/demo/product/3.png',
+                        'image'        => 'images/demo/product/3.webp',
                         'price'        => 555.00,
                         'origin_price' => 556.00,
                         'quantity'     => 50,
@@ -113,7 +113,7 @@ class ProductSeeder extends BaseSeeder
                     ],
                     [
                         'code'         => 'GGE006',
-                        'image'        => 'images/demo/product/3.png',
+                        'image'        => 'images/demo/product/3.webp',
                         'price'        => 666.00,
                         'origin_price' => 667.00,
                         'quantity'     => 50,
@@ -124,9 +124,9 @@ class ProductSeeder extends BaseSeeder
                     [
                         'name'   => ['en' => 'Color', 'zh-cn' => '颜色'],
                         'values' => [
-                            ['image' => 'images/demo/product/1.png', 'name' => ['en' => 'Red', 'zh-cn' => '红色']],
-                            ['image' => 'images/demo/product/7.png', 'name' => ['en' => 'White', 'zh-cn' => '白色']],
-                            ['image' => 'images/demo/product/3.png', 'name' => ['en' => 'Pink', 'zh-cn' => '粉色']],
+                            ['image' => 'images/demo/product/1.webp', 'name' => ['en' => 'Red', 'zh-cn' => '红色']],
+                            ['image' => 'images/demo/product/7.webp', 'name' => ['en' => 'White', 'zh-cn' => '白色']],
+                            ['image' => 'images/demo/product/3.webp', 'name' => ['en' => 'Pink', 'zh-cn' => '粉色']],
                         ],
                     ],
                     [
@@ -162,13 +162,13 @@ class ProductSeeder extends BaseSeeder
                     ],
                 ],
 
-                'categories' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [1, 2],
             ],
             [
                 'brand_id'     => 1,
                 'spu_code'     => 'urban-elite-suit-jacket',
                 'slug'         => 'urban-elite-suit-jacket',
-                'images'       => ['images/demo/product/2.png'],
+                'images'       => ['images/demo/product/2.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -182,18 +182,18 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'UES002',
-                        'image'        => 'images/demo/product/2.png',
+                        'image'        => 'images/demo/product/2.webp',
                         'price'        => 599.99,
                         'origin_price' => null,
                         'quantity'     => 30,
                     ],
                 ],
-                'categories' => [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [4, 5],
             ],
             [
                 'brand_id'     => 1,
                 'slug'         => 'dawn-stroll-light-trench',
-                'images'       => ['images/demo/product/3.png'],
+                'images'       => ['images/demo/product/3.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -208,18 +208,18 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'DSLT003',
-                        'image'        => 'images/demo/product/3.png',
+                        'image'        => 'images/demo/product/3.webp',
                         'price'        => 399.99,
                         'origin_price' => 2199.99,
                         'quantity'     => 40,
                     ],
                 ],
-                'categories' => [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [1, 3],
             ],
             [
                 'brand_id'     => 1,
                 'slug'         => 'star-orbit-casual-sweater',
-                'images'       => ['images/demo/product/4.png'],
+                'images'       => ['images/demo/product/4.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -234,18 +234,18 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'SOCS004',
-                        'image'        => 'images/demo/product/4.png',
+                        'image'        => 'images/demo/product/4.webp',
                         'price'        => 299.99,
                         'origin_price' => 2199.99,
                         'quantity'     => 60,
                     ],
                 ],
-                'categories' => [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [1, 13, 14],
             ],
             [
                 'brand_id'     => 1,
                 'slug'         => 'rainbow-fringe-scarf',
-                'images'       => ['images/demo/product/5.png'],
+                'images'       => ['images/demo/product/5.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -260,18 +260,18 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'RFS005',
-                        'image'        => 'images/demo/product/5.png',
+                        'image'        => 'images/demo/product/5.webp',
                         'price'        => 199.99,
                         'origin_price' => 2199.99,
                         'quantity'     => 70,
                     ],
                 ],
-                'categories' => [1, 2, 3,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [16, 18],
             ],
             [
                 'brand_id'     => 2,
                 'slug'         => 'minimalist-classic-shirt',
-                'images'       => ['images/demo/product/6.png'],
+                'images'       => ['images/demo/product/6.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -286,18 +286,18 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'MSCS006',
-                        'image'        => 'images/demo/product/6.png',
+                        'image'        => 'images/demo/product/6.webp',
                         'price'        => 99.66,
                         'origin_price' => null,
                         'quantity'     => 80,
                     ],
                 ],
-                'categories' => [1, 2, 3, 4,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [4, 6],
             ],
             [
                 'brand_id'     => 2,
                 'slug'         => 'retro-high-waist-jeans',
-                'images'       => ['images/demo/product/7.png'],
+                'images'       => ['images/demo/product/7.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -312,18 +312,18 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'MRHWJ007',
-                        'image'        => 'images/demo/product/7.png',
+                        'image'        => 'images/demo/product/7.webp',
                         'price'        => 69.66,
                         'origin_price' => null,
                         'quantity'     => 90,
                     ],
                 ],
-                'categories' => [1, 2, 3, 4, 5,  7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [1, 3],
             ],
             [
                 'brand_id'     => 2,
                 'slug'         => 'elegant-lace-sexy-top',
-                'images'       => ['images/demo/product/8.png'],
+                'images'       => ['images/demo/product/8.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -338,18 +338,18 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'ELSXT008',
-                        'image'        => 'images/demo/product/8.png',
+                        'image'        => 'images/demo/product/8.webp',
                         'price'        => 49.66,
                         'origin_price' => null,
                         'quantity'     => 100,
                     ],
                 ],
-                'categories' => [1, 2, 3, 4, 5,  6, 8, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [1, 3],
             ],
             [
                 'brand_id'     => 2,
                 'slug'         => 'men-white-sweatsuit',
-                'images'       => ['images/demo/product/9.png'],
+                'images'       => ['images/demo/product/9.webp'],
                 'active'       => true,
                 'translations' => [
                     [
@@ -364,13 +364,13 @@ class ProductSeeder extends BaseSeeder
                 'skus' => [
                     [
                         'code'         => 'MWS009',
-                        'image'        => 'images/demo/product/9.png',
+                        'image'        => 'images/demo/product/9.webp',
                         'price'        => 49.66,
                         'origin_price' => null,
                         'quantity'     => 110,
                     ],
                 ],
-                'categories' => [1, 2, 3, 4, 5,  7, 9, 10, 11, 12, 13, 14, 15],
+                'categories' => [4, 13, 14],
             ],
         ];
     }

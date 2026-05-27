@@ -29,11 +29,11 @@ const target = process.env.TARGET || '';
 const startTime = Date.now();
 
 const coreEntries = [
-    { name: 'front/css', input: 'innopacks/front/resources/css/app.scss', outDir: 'public/build/front/css', outputName: 'app', group: 'front' },
-    { name: 'front/js',  input: 'innopacks/front/resources/js/app.js',   outDir: 'public/build/front/js',  outputName: 'app', group: 'front' },
-    { name: 'panel/css', input: 'innopacks/panel/resources/css/app.scss', outDir: 'public/build/panel/css', outputName: 'app', group: 'panel' },
-    { name: 'panel/js',  input: 'innopacks/panel/resources/js/app.js',    outDir: 'public/build/panel/js',  outputName: 'app', group: 'panel' },
-    { name: 'install/css', input: 'innopacks/install/resources/css/app.scss', outDir: 'public/build/install/css', outputName: 'app', group: 'install' },
+    { name: 'front/css', input: 'innopacks/front/resources/assets/scss/app.scss', outDir: 'public/build/front/css', outputName: 'app', group: 'front' },
+    { name: 'front/js',  input: 'innopacks/front/resources/assets/js/app.js',   outDir: 'public/build/front/js',  outputName: 'app', group: 'front' },
+    { name: 'panel/css', input: 'innopacks/panel/resources/assets/scss/app.scss', outDir: 'public/build/panel/css', outputName: 'app', group: 'panel' },
+    { name: 'panel/js',  input: 'innopacks/panel/resources/assets/js/app.js',    outDir: 'public/build/panel/js',  outputName: 'app', group: 'panel' },
+    { name: 'install/css', input: 'innopacks/install/resources/assets/scss/app.scss', outDir: 'public/build/install/css', outputName: 'app', group: 'install' },
 ];
 
 // Filter by TARGET (front/panel/install), or skip core when building a theme
@@ -49,10 +49,10 @@ if (theme) {
         if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
     });
 
-    if (fs.existsSync(`${themeDir}/css/app.scss`))
-        entries.push({ name: 'theme/css', input: `${themeDir}/css/app.scss`, outDir: `${themeOut}/css`, outputName: 'app' });
-    if (fs.existsSync(`${themeDir}/js/app.js`))
-        entries.push({ name: 'theme/js', input: `${themeDir}/js/app.js`, outDir: `${themeOut}/js`, outputName: 'app' });
+    if (fs.existsSync(`${themeDir}/assets/scss/app.scss`))
+        entries.push({ name: 'theme/css', input: `${themeDir}/assets/scss/app.scss`, outDir: `${themeOut}/css`, outputName: 'app' });
+    if (fs.existsSync(`${themeDir}/assets/js/app.js`))
+        entries.push({ name: 'theme/js', input: `${themeDir}/assets/js/app.js`, outDir: `${themeOut}/js`, outputName: 'app' });
 }
 
 if (entries.length === 0) {

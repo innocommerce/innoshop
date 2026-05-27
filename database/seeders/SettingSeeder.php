@@ -49,8 +49,8 @@ class SettingSeeder extends BaseSeeder
             ['space' => 'system', 'name' => 'telephone', 'value' => '13688886666'],
             ['space' => 'system', 'name' => 'email', 'value' => 'team@innoshop.com'],
             ['space' => 'system', 'name' => 'currency', 'value' => 'usd'],
-            ['space' => 'system', 'name' => 'menu_header_categories', 'value' => ['1', '4', '7', '10', '13']],
-            ['space' => 'system', 'name' => 'home_categories', 'value' => ['1', '2', '3', '4', '5']],
+            ['space' => 'system', 'name' => 'menu_header_categories', 'value' => ['1', '4', '10', '16']],
+            ['space' => 'system', 'name' => 'home_categories', 'value' => ['1', '4', '7', '10', '13', '16']],
             ['space' => 'system', 'name' => 'menu_header_pages', 'value' => ['3']],
             ['space' => 'system', 'name' => 'menu_footer_categories', 'value' => ['1', '4', '7']],
             ['space' => 'system', 'name' => 'menu_footer_specials', 'value' => ['products', 'brands']],
@@ -86,17 +86,33 @@ class SettingSeeder extends BaseSeeder
                 'value' => [
                     [
                         'image' => [
-                            'en'    => 'images/demo/banner/banner-1-en.jpg',
-                            'zh-cn' => 'images/demo/banner/banner-1-cn.jpg',
+                            'en'    => 'images/demo/banner/hero-1.webp',
+                            'zh-cn' => 'images/demo/banner/hero-1.webp',
+                        ],
+                        'title' => [
+                            'en'    => 'New Season Arrivals',
+                            'zh-cn' => '新品上市',
+                        ],
+                        'subtitle' => [
+                            'en'    => 'Discover the latest trends in women\'s fashion',
+                            'zh-cn' => '探索女装最新潮流',
                         ],
                         'link' => '/en/category-women-clothing',
                     ],
                     [
                         'image' => [
-                            'en'    => 'images/demo/banner/banner-2-en.jpg',
-                            'zh-cn' => 'images/demo/banner/banner-2-cn.jpg',
+                            'en'    => 'images/demo/banner/hero-2.webp',
+                            'zh-cn' => 'images/demo/banner/hero-2.webp',
                         ],
-                        'link' => '/en/category-women-clothing',
+                        'title' => [
+                            'en'    => 'Men\'s Collection',
+                            'zh-cn' => '男装系列',
+                        ],
+                        'subtitle' => [
+                            'en'    => 'Elevate your style with premium menswear',
+                            'zh-cn' => '精品男装，提升你的品味',
+                        ],
+                        'link' => '/en/category-men-clothing',
                     ],
                 ],
             ],
