@@ -13,7 +13,7 @@
   <meta name="api-token" content="{{ session('panel_api_token') }}">
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
   <link rel="stylesheet" href="{{ asset('vendor/element-ui/element-ui.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ asset('build/panel/css/app.css') }}">
   <link rel="stylesheet" href="{{ plugin_asset('PageBuilder', 'css/cropper.min.css') }}">
   <link rel="stylesheet" href="{{ plugin_asset('PageBuilder', 'css/design/base.css') }}">
   <link rel="stylesheet" href="{{ plugin_asset('PageBuilder', 'css/design/editor-unified.css') }}">
@@ -30,7 +30,7 @@
   <script src="{{ asset('vendor/element-ui/element-ui.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
-  <script src="{{ mix('build/panel/js/app.js') }}"></script>
+  <script src="{{ asset('build/panel/js/app.js') }}"></script>
   <script src="{{ asset('vendor/tinymce/5.9.1/tinymce.min.js') }}"></script>
   <script src="{{ plugin_asset('PageBuilder', 'js/vuedraggable.js') }}"></script>
   <script src="{{ plugin_asset('PageBuilder', 'js/cropper.min.js') }}"></script>
