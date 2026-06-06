@@ -202,12 +202,13 @@ class HomeRepo
             $formatted = [];
             foreach ($categories as $category) {
                 $formatted[] = [
-                    'id'          => $category->id,
-                    'name'        => $category->fallbackName(),
-                    'slug'        => $category->slug,
-                    'url'         => $category->url,
-                    'image'       => $category->image ? image_resize($category->image, 300, 300) : '',
-                    'description' => $category->translation->description ?? '',
+                    'id'            => $category->id,
+                    'name'          => $category->fallbackName(),
+                    'slug'          => $category->slug,
+                    'url'           => $category->url,
+                    'image'         => $category->image ? image_resize($category->image, 300, 300) : '',
+                    'description'   => $category->translation->description ?? '',
+                    'product_count' => $category->products_count,
                 ];
             }
 

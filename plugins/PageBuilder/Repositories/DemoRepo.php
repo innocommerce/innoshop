@@ -25,8 +25,18 @@ class DemoRepo
                 'content'   => [
                     'images' => [
                         [
-                            'image' => asset('images/demo/banner/banner-1-cn.jpg'),
-                            'show'  => false,
+                            'image'       => asset('images/demo/banner/hero-1.webp'),
+                            'show'        => false,
+                            'title'       => ['zh-cn' => '新品首发 限时特惠', 'en' => 'New Arrivals Limited Offer'],
+                            'subtitle'    => ['zh-cn' => '精选好物低至5折，错过再等一年', 'en' => 'Up to 50% off selected items'],
+                            'button_text' => ['zh-cn' => '立即抢购', 'en' => 'Shop Now'],
+                            'title_color'       => '#ffffff',
+                            'subtitle_color'    => '#ffffff',
+                            'button_color'      => '#C9A87C',
+                            'button_text_color' => '#ffffff',
+                            'title_size'        => 36,
+                            'subtitle_size'     => 20,
+                            'title_align'       => 'left',
                             'link'  => [
                                 'type'  => 'product',
                                 'value' => 1,
@@ -34,8 +44,18 @@ class DemoRepo
                             ],
                         ],
                         [
-                            'image' => asset('images/demo/banner/banner-2-cn.jpg'),
-                            'show'  => true,
+                            'image'       => asset('images/demo/banner/hero-2.webp'),
+                            'show'        => true,
+                            'title'       => ['zh-cn' => '夏日焕新 潮流来袭', 'en' => 'Summer Collection'],
+                            'subtitle'    => ['zh-cn' => '探索本季最热门的单品', 'en' => 'Discover the hottest items this season'],
+                            'button_text' => ['zh-cn' => '查看更多', 'en' => 'Explore'],
+                            'title_color'       => '#ffffff',
+                            'subtitle_color'    => '#ffffff',
+                            'button_color'      => '#C9A87C',
+                            'button_text_color' => '#ffffff',
+                            'title_size'        => 36,
+                            'subtitle_size'     => 20,
+                            'title_align'       => 'center',
                             'link'  => [
                                 'type'  => 'category',
                                 'value' => 1,
@@ -56,7 +76,7 @@ class DemoRepo
                     ],
                     'images' => [
                         [
-                            'image' => asset('images/demo/banner/banner-2-en.jpg'),
+                            'image' => asset('images/demo/banner/hero-2.webp'),
                             'show'  => true,
                             'link'  => [
                                 'type'  => 'category',
@@ -109,7 +129,7 @@ class DemoRepo
                         [
                             'id'           => 1,
                             'name'         => '摩登复风高腰牛仔裤经典再现',
-                            'image_big'    => asset('images/demo/product/5-600x600.png'),
+                            'image_big'    => asset('images/demo/product/5.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
@@ -117,7 +137,7 @@ class DemoRepo
                         [
                             'id'           => 2,
                             'name'         => '幻彩流苏时尚个性围巾绚丽多彩',
-                            'image_big'    => asset('images/demo/product/6-600x600.png'),
+                            'image_big'    => asset('images/demo/product/6.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
@@ -125,7 +145,7 @@ class DemoRepo
                         [
                             'id'           => 3,
                             'name'         => '男士白色卫衣套装',
-                            'image_big'    => asset('images/demo/product/7-600x600.png'),
+                            'image_big'    => asset('images/demo/product/7.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
@@ -133,7 +153,7 @@ class DemoRepo
                         [
                             'id'           => 4,
                             'name'         => '优雅蕾丝边透视性感上衣女性魅力',
-                            'image_big'    => asset('images/demo/product/8-600x600.png'),
+                            'image_big'    => asset('images/demo/product/8.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
@@ -163,7 +183,7 @@ class DemoRepo
                         [
                             'id'           => 1,
                             'name'         => '都市精英风尚西装外套经典剪裁',
-                            'image_big'    => asset('images/demo/product/1-600x600.png'),
+                            'image_big'    => asset('images/demo/product/1.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
@@ -171,7 +191,7 @@ class DemoRepo
                         [
                             'id'           => 2,
                             'name'         => '银河流光璀璨晚礼服闪耀全场',
-                            'image_big'    => asset('images/demo/product/2-600x600.png'),
+                            'image_big'    => asset('images/demo/product/2.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
@@ -179,7 +199,7 @@ class DemoRepo
                         [
                             'id'           => 3,
                             'name'         => '晨曦漫步轻盈薄款风衣春意盎然',
-                            'image_big'    => asset('images/demo/product/3-600x600.png'),
+                            'image_big'    => asset('images/demo/product/3.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
@@ -187,7 +207,7 @@ class DemoRepo
                         [
                             'id'           => 4,
                             'name'         => '极简风格主义经典衬衫简约不简单',
-                            'image_big'    => asset('images/demo/product/4-600x600.png'),
+                            'image_big'    => asset('images/demo/product/4.webp'),
                             'image_format' => '',
                             'price_format' => '$123.50',
                             'active'       => true,
