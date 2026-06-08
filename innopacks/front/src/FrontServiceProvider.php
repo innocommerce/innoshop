@@ -47,6 +47,7 @@ class FrontServiceProvider extends ServiceProvider
         $this->loadViewComponents();
         $this->loadThemeTranslations();
         $this->loadThemeRoutes();
+        $this->bootTheme();
     }
 
     /**
@@ -257,6 +258,28 @@ class FrontServiceProvider extends ServiceProvider
         }
 
         $this->loadTranslationsFrom($themeLangPath, "theme-{$currentTheme}");
+    }
+
+    /**
+     * Load theme boot file (setup/boot.php) for runtime hook registration.
+     * Follows the same require → callable → call pattern as demo seeder.
+     */
+    protected function bootTheme(): void
+    {
+        $currentTheme = system_setting('theme');
+        if (! $currentTheme) {
+            return;
+        }
+
+        $bootFile = base_path("themes/{$currentTheme}/setup/boot.php");
+        if (! is_file($bootFile)) {
+            return;
+        }
+
+        $boot = require $bootFile;
+        if (is_callable($boot)) {
+            $boot();
+        }
     }
 
     /**

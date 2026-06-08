@@ -116,8 +116,22 @@ if (! function_exists('system_setting_locale')) {
     function system_setting_locale($key, $default = null): mixed
     {
         $localeCode = front_locale_code();
+        $value      = setting("system.{$key}.$localeCode");
 
-        return setting("system.{$key}.$localeCode", $default);
+        if (! is_null($value)) {
+            return $value;
+        }
+
+        $fallbackCode = setting_locale_code();
+
+        if ($fallbackCode !== $localeCode) {
+            $value = setting("system.{$key}.$fallbackCode");
+            if (! is_null($value)) {
+                return $value;
+            }
+        }
+
+        return $default;
     }
 }
 

@@ -19,35 +19,21 @@ use RecursiveIteratorIterator;
 class ThemeDemoService extends BaseService
 {
     /**
-     * Resolve the PHP file used for demo import (same rules as import).
-     * Supports: demo/Seeder.php (any case basename), *Seeder.php, or exactly one demo/*.php.
+     * Resolve the PHP file used for demo import.
+     * Lookup order: setup/seeder.php → demo/seeder.php → demo/Seeder.php (legacy).
      */
     public function resolveDemoSeederPath(string $dir): ?string
     {
-        $demoDir = $dir.'/demo';
-        if (! is_dir($demoDir)) {
-            return null;
-        }
+        $candidates = [
+            $dir.'/setup/seeder.php',
+            $dir.'/demo/seeder.php',
+            $dir.'/demo/Seeder.php',
+        ];
 
-        $phpFiles = glob($demoDir.'/*.php') ?: [];
-        if ($phpFiles === []) {
-            return null;
-        }
-
-        foreach ($phpFiles as $path) {
-            if (strcasecmp(basename($path), 'Seeder.php') === 0) {
+        foreach ($candidates as $path) {
+            if (is_file($path)) {
                 return $path;
             }
-        }
-
-        foreach ($phpFiles as $path) {
-            if (preg_match('/Seeder\.php$/i', basename($path))) {
-                return $path;
-            }
-        }
-
-        if (count($phpFiles) === 1) {
-            return $phpFiles[0];
         }
 
         return null;
