@@ -25,11 +25,11 @@ class DemoRepo
                 'content'   => [
                     'images' => [
                         [
-                            'image'       => asset('images/demo/banner/hero-1.webp'),
-                            'show'        => false,
-                            'title'       => ['zh-cn' => '新品首发 限时特惠', 'en' => 'New Arrivals Limited Offer'],
-                            'subtitle'    => ['zh-cn' => '精选好物低至5折，错过再等一年', 'en' => 'Up to 50% off selected items'],
-                            'button_text' => ['zh-cn' => '立即抢购', 'en' => 'Shop Now'],
+                            'image'             => asset('images/demo/banner/hero-1.webp'),
+                            'show'              => false,
+                            'title'             => ['zh-cn' => '新品首发 限时特惠', 'en' => 'New Arrivals Limited Offer'],
+                            'subtitle'          => ['zh-cn' => '精选好物低至5折，错过再等一年', 'en' => 'Up to 50% off selected items'],
+                            'button_text'       => ['zh-cn' => '立即抢购', 'en' => 'Shop Now'],
                             'title_color'       => '#ffffff',
                             'subtitle_color'    => '#ffffff',
                             'button_color'      => '#C9A87C',
@@ -37,18 +37,18 @@ class DemoRepo
                             'title_size'        => 36,
                             'subtitle_size'     => 20,
                             'title_align'       => 'left',
-                            'link'  => [
+                            'link'              => [
                                 'type'  => 'product',
                                 'value' => 1,
                                 'link'  => '',
                             ],
                         ],
                         [
-                            'image'       => asset('images/demo/banner/hero-2.webp'),
-                            'show'        => true,
-                            'title'       => ['zh-cn' => '夏日焕新 潮流来袭', 'en' => 'Summer Collection'],
-                            'subtitle'    => ['zh-cn' => '探索本季最热门的单品', 'en' => 'Discover the hottest items this season'],
-                            'button_text' => ['zh-cn' => '查看更多', 'en' => 'Explore'],
+                            'image'             => asset('images/demo/banner/hero-2.webp'),
+                            'show'              => true,
+                            'title'             => ['zh-cn' => '夏日焕新 潮流来袭', 'en' => 'Summer Collection'],
+                            'subtitle'          => ['zh-cn' => '探索本季最热门的单品', 'en' => 'Discover the hottest items this season'],
+                            'button_text'       => ['zh-cn' => '查看更多', 'en' => 'Explore'],
                             'title_color'       => '#ffffff',
                             'subtitle_color'    => '#ffffff',
                             'button_color'      => '#C9A87C',
@@ -56,7 +56,7 @@ class DemoRepo
                             'title_size'        => 36,
                             'subtitle_size'     => 20,
                             'title_align'       => 'center',
-                            'link'  => [
+                            'link'              => [
                                 'type'  => 'category',
                                 'value' => 1,
                                 'link'  => '',

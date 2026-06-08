@@ -76,21 +76,21 @@
                       </span>
                     @endif
                   </h6>
-                  <div class="theme-meta d-flex align-items-center gap-3 text-muted small">
-                    <span class="theme-code d-flex align-items-center">
+                  <div class="theme-meta d-flex text-muted small w-100">
+                    <span class="flex-fill d-flex align-items-center text-truncate" title="{{ $theme['code'] }}">
                       <i class="bi bi-code-slash me-1" style="font-size: 0.7rem;"></i>
-                      <span class="font-monospace">{{ $theme['code'] }}</span>
+                      <span class="font-monospace text-truncate" style="max-width: 90px; display: inline-block;">{{ $theme['code'] }}</span>
                     </span>
                     @if(isset($theme['version']) && $theme['version'])
-                      <span class="theme-version d-flex align-items-center">
+                      <span class="flex-fill d-flex align-items-center">
                         <i class="bi bi-tag-fill me-1" style="font-size: 0.7rem;"></i>
                         {{ $theme['version'] }}
                       </span>
                     @endif
                     @if(isset($theme['author']['name']) && $theme['author']['name'])
-                      <span class="theme-author d-flex align-items-center">
+                      <span class="flex-fill d-flex align-items-center text-truncate" title="{{ $theme['author']['name'] }}">
                         <i class="bi bi-person-fill me-1" style="font-size: 0.7rem;"></i>
-                        {{ $theme['author']['name'] }}
+                        <span class="text-truncate" style="max-width: 90px; display: inline-block;">{{ $theme['author']['name'] }}</span>
                       </span>
                     @endif
                   </div>
