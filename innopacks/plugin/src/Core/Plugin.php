@@ -582,7 +582,6 @@ final class Plugin implements Arrayable, ArrayAccess
             'type'        => 'required',
             'name'        => 'required',
             'description' => 'required',
-            'code'        => 'required|string|min:3|max:64',
             'version'     => 'required|string',
         ]);
     }

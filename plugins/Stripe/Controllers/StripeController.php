@@ -62,6 +62,44 @@ class StripeController extends Controller
     }
 
     /**
+     * Create PaymentIntent for Elements checkout (PaymentIntents API)
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function createPaymentIntentAction(Request $request): JsonResponse
+    {
+        try {
+            $filters = [
+                'number'      => $request->get('order_number'),
+                'customer_id' => current_customer_id(),
+            ];
+
+            $order = OrderRepo::getInstance()->builder($filters)->first();
+
+            if (! $order) {
+                return json_fail(trans('Stripe::common.order_not_found'));
+            }
+
+            $stripeService = new StripeService($order);
+            $paymentIntent = $stripeService->createElementsPaymentIntent();
+
+            PaymentRepo::getInstance()->createOrUpdatePayment($order->id, [
+                'amount'    => $order->total,
+                'paid'      => false,
+                'reference' => ['payment_intent_id' => $paymentIntent->id],
+            ]);
+
+            return read_json_success([
+                'client_secret' => $paymentIntent->client_secret,
+            ]);
+
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
      * Webhook from stripe
      * https://dashboard.stripe.com/webhooks
      * @param  Request  $request
@@ -82,7 +120,7 @@ class StripeController extends Controller
             Log::info('Request type: '.$type);
             Log::info('Request number: '.$orderNumber);
 
-            if ($type == 'charge.succeeded' && $order) {
+            if (in_array($type, ['charge.succeeded', 'payment_intent.succeeded']) && $order) {
                 StateMachineService::getInstance($order)->setShipment()->changeStatus(StateMachineService::PAID);
 
                 return json_success(trans('Stripe::common.capture_success'));
@@ -146,5 +184,77 @@ class StripeController extends Controller
     public function checkoutCancel(Request $request): JsonResponse
     {
         return json_success(trans('Stripe::common.checkout_cancel'));
+    }
+
+    /**
+     * 创建 Stripe Embedded Checkout Session
+     * 支持 Apple Pay / Google Pay / Link 快捷支付
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function createEmbeddedSession(Request $request): JsonResponse
+    {
+        try {
+            $filters = [
+                'number'      => $request->get('order_number'),
+                'customer_id' => current_customer_id(),
+            ];
+
+            $order = OrderRepo::getInstance()->builder($filters)->first();
+
+            if (! $order) {
+                return json_fail(trans('Stripe::common.order_not_found'));
+            }
+
+            $stripeService = new StripeService($order);
+            $session       = $stripeService->createEmbeddedSession([
+                'return_url' => front_route('stripe_embedded_return', ['order_number' => $order->number]),
+                'metadata'   => [
+                    'order_number' => $order->number,
+                    'customer_id'  => $order->customer_id,
+                ],
+            ]);
+
+            PaymentRepo::getInstance()->createOrUpdatePayment($order->id, [
+                'amount'    => $order->total,
+                'paid'      => false,
+                'reference' => ['session_id' => $session->id],
+            ]);
+
+            return read_json_success([
+                'client_secret' => $session->client_secret,
+            ]);
+
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Embedded Checkout 支付完成返回页
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function embeddedReturn(Request $request): JsonResponse
+    {
+        try {
+            $orderNumber = $request->get('order_number');
+            $order       = OrderRepo::getInstance()->getOrderByNumber($orderNumber);
+
+            if (! $order) {
+                return json_fail(trans('Stripe::common.order_not_found'));
+            }
+
+            if ($order->status == StateMachineService::PAID) {
+                return json_success(trans('Stripe::common.capture_success'));
+            }
+
+            return json_success(trans('Stripe::common.capture_fail'));
+
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
     }
 }

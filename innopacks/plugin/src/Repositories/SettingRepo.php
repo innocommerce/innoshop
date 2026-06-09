@@ -9,6 +9,7 @@
 
 namespace InnoShop\Plugin\Repositories;
 
+use Illuminate\Support\Str;
 use InnoShop\Common\Repositories\SettingRepo as CommonSettingRepo;
 use InnoShop\Plugin\Models\Setting;
 
@@ -61,7 +62,7 @@ class SettingRepo extends CommonSettingRepo
     public function getPluginFields($pluginCode): mixed
     {
         return Setting::query()
-            ->where('space', $pluginCode)
+            ->where('space', Str::snake($pluginCode))
             ->get()
             ->keyBy('name');
     }

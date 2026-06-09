@@ -62,6 +62,8 @@
     el: '#stripe-form',
 
     data: {
+      clientSecret: '',
+
       form: {
         order_number: '',
         cardnum: '',
@@ -88,6 +90,7 @@
 
     mounted() {
       this.createAndMountFormElements()
+      this.fetchClientSecret()
     },
 
     methods: {
@@ -141,6 +144,17 @@
         }
       },
 
+      fetchClientSecret() {
+        axios.post("{{ front_route('stripe_payment_intent') }}", {
+          order_number: orderNumber,
+        }).then((res) => {
+          this.clientSecret = res.data.client_secret
+        }).catch((err) => {
+          const msg = err.response?.data?.message || err.message || 'Failed to initialize payment'
+          layer.msg(msg, () => {})
+        })
+      },
+
       checkedBtnCheckoutConfirm() {
         // 判断 stripeForm.errors 里面的值是否都为空
         if (stripeForm.form.cardholder_Name == '') {
@@ -154,19 +168,24 @@
 
         //layer.load(2, {shade: [0.3, '#fff']})
 
-        stripe.createToken(cardNumberElement, options).then(function (stripeResult) {
+        if (!this.clientSecret) {
+          layer.msg('Payment not initialized, please wait...', () => {})
+          return
+        }
+
+        stripe.confirmCardPayment(this.clientSecret, {
+          payment_method: {
+            card: cardNumberElement,
+            billing_details: {
+              name: stripeForm.form.cardholder_Name,
+            }
+          }
+        }).then(function (stripeResult) {
           if (stripeResult.error) {
-            layer.msg(stripeResult.error.message, () => {
-            })
+            layer.msg(stripeResult.error.message, () => {})
             layer.closeAll('loading')
-          } else {
-            axios.post(`{{ front_route('stripe_capture') }}`, {token: stripeResult.token.id, order_number: orderNumber}).then(function (pay) {
-              if (pay.status === 'success') {
-                location = "{{ front_route('stripe_capture') }} checkout/success?order_number=" + orderNumber
-              } else {
-                layer.msg(pay.message, () => {})
-              }
-            })
+          } else if (stripeResult.paymentIntent && stripeResult.paymentIntent.status === 'succeeded') {
+            location.href = "{{ front_route('payment.success') }}?order_number=" + orderNumber
           }
         })
       },

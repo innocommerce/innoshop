@@ -17,6 +17,7 @@ return [
     'disabled'         => 'Disabled',
     'on_site_payment'  => 'On-site Payment (Stripe Elements)',
     'redirect_payment' => 'Redirect Payment (Stripe Checkout)',
+    'embedded_payment' => 'Embedded Checkout (Express Pay)',
 
     'title_info'      => 'Card information',
     'cardnum'         => 'Cardnum',
@@ -34,4 +35,15 @@ return [
 
     'capture_success' => 'Capture Successfully',
     'capture_fail'    => 'Capture Failed',
+    'order_not_found' => 'Order Not Found',
+    'loading_payment' => 'Loading payment...',
+
+    'express_checkout' => 'Express Checkout',
+    'or_pay_with_card' => 'Or pay with card',
+    'cardholder_name'  => 'Cardholder Name',
+    'card_number'      => 'Card Number',
+    'error_cardholder' => 'Please enter the cardholder name',
+
+    'embedded_hint'     => 'Apple Pay, Google Pay, Link and credit cards accepted',
+    'embedded_hint_sub' => 'Click "Place Order" to begin payment',
 ];

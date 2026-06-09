@@ -20,6 +20,8 @@ return [
     'order_comment'         => '订单备注',
     'password'              => '密码错误。',
     'place_order'           => '提交订单',
+    'processing'            => '处理中...',
+    'payment_failed'        => '支付失败',
     'please_create_address' => '请创建地址',
     'same_shipping_address' => '账单地址同收货地址',
     'shipping_address'      => '收货地址',

@@ -21,6 +21,8 @@ return [
     'order_comment'         => 'Order Comment',
     'password'              => 'Password is incorrect.',
     'place_order'           => 'Place Order',
+    'processing'            => 'Processing...',
+    'payment_failed'        => 'Payment failed',
     'same_shipping_address' => 'Same as Shipping Address',
     'shipping_address'      => 'Shipping Address',
     'shipping_methods'      => 'Shipping Methods',

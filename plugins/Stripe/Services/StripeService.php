@@ -40,6 +40,10 @@ class StripeService extends PaymentService
         'card', 'klarna',
     ];
 
+    public const EMBEDDED_PAYMENT_METHODS = [
+        'card', 'link',
+    ];
+
     private StripeClient $stripeClient;
 
     /**
@@ -88,6 +92,20 @@ class StripeService extends PaymentService
         ];
 
         return $this->stripeClient->charges->create($stripeChargeParameters);
+    }
+
+    /**
+     * Create PaymentIntent for Elements checkout (PaymentIntents API)
+     * Replaces legacy Charges API flow
+     *
+     * @return PaymentIntent
+     * @throws ApiErrorException
+     */
+    public function createElementsPaymentIntent(): PaymentIntent
+    {
+        $stripeCustomer = $this->createCustomer();
+
+        return $this->createPaymentIntent($stripeCustomer);
     }
 
     /**
@@ -287,5 +305,62 @@ class StripeService extends PaymentService
         $sessionOptions = array_merge($defaultOptions, $options);
 
         return $this->stripeClient->checkout->sessions->create($sessionOptions);
+    }
+
+    /**
+     * 创建 Stripe Embedded Checkout Session
+     * 支持 Apple Pay / Google Pay / Link 快捷支付
+     *
+     * @param  array  $options
+     * @return Session
+     * @throws ApiErrorException
+     */
+    public function createEmbeddedSession(array $options = []): Session
+    {
+        $currency = $this->order->currency_code;
+        if (! in_array($currency, self::ZERO_DECIMAL)) {
+            $total = round($this->order->total, 2) * 100;
+        } else {
+            $total = floor($this->order->total);
+        }
+
+        $defaultOptions = [
+            'ui_mode'              => 'embedded',
+            'mode'                 => 'payment',
+            'payment_method_types' => self::EMBEDDED_PAYMENT_METHODS,
+            'line_items'           => [[
+                'price_data' => [
+                    'currency'     => $currency,
+                    'product_data' => [
+                        'name'        => 'Order #'.$this->order->number,
+                        'description' => system_setting_locale('meta_title') ?: 'Order Payment',
+                    ],
+                    'unit_amount' => $total,
+                ],
+                'quantity' => 1,
+            ]],
+            'customer_email'      => $this->order->email,
+            'client_reference_id' => $this->order->number,
+            'metadata'            => [
+                'order_number' => $this->order->number,
+                'customer_id'  => $this->order->customer_id,
+            ],
+        ];
+
+        $sessionOptions = array_merge($defaultOptions, $options);
+
+        return $this->stripeClient->checkout->sessions->create($sessionOptions);
+    }
+
+    /**
+     * 获取 Embedded Checkout Session 状态
+     *
+     * @param  string  $sessionId
+     * @return Session
+     * @throws ApiErrorException
+     */
+    public function retrieveSession(string $sessionId): Session
+    {
+        return $this->stripeClient->checkout->sessions->retrieve($sessionId);
     }
 }

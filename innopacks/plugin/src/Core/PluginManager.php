@@ -66,22 +66,9 @@ class PluginManager
                 continue;
             }
 
-            // Check if plugin code is in hidden plugins list from .env
-            $pluginCode = $package['code'] ?? '';
+            // Plugin code is derived from directory name
+            $pluginCode = $dirname;
             if (in_array($pluginCode, $hiddenPlugins)) {
-                continue;
-            }
-
-            $normalizedDirname = strtolower(Str::snake($dirname));
-            $normalizedCode    = strtolower(Str::snake($pluginCode));
-
-            if ($normalizedDirname !== $normalizedCode) {
-                Log::warning("Plugin code mismatch: Directory '{$dirname}' does not match config.json code '{$pluginCode}'. Plugin will be skipped.", [
-                    'directory' => $dirname,
-                    'code'      => $pluginCode,
-                    'path'      => $this->getPluginsDir().DIRECTORY_SEPARATOR.$dirname,
-                ]);
-
                 continue;
             }
 
@@ -112,7 +99,7 @@ class PluginManager
                 continue;
             }
 
-            $plugin->setCode($package['code']);
+            $plugin->setCode($dirname);
             $plugin->setType($package['type']);
             $plugin->setName($package['name']);
             $plugin->setDescription($package['description']);
@@ -374,8 +361,8 @@ class PluginManager
         }
         closedir($resource);
 
-        return collect($installed)->sortBy(function ($item) {
-            return strtolower($item['code'] ?? '');
+        return collect($installed)->sortBy(function ($item, $key) {
+            return strtolower($key);
         })->all();
     }
 
