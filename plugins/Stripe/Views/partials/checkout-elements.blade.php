@@ -191,7 +191,6 @@
         return Promise.reject(new Error('{{ __("Stripe::common.error_cardholder") }}'));
       }
 
-      var errorEl = document.getElementById('stripe-checkout-errors');
       var successUrl = "{{ front_route('payment.success') }}";
 
       return axios.post("{{ front_route('stripe_payment_intent') }}", {
@@ -206,8 +205,6 @@
         });
       }).then(function(result) {
         if (result.error) {
-          errorEl.textContent = result.error.message;
-          errorEl.style.display = 'block';
           throw new Error(result.error.message);
         }
         if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {

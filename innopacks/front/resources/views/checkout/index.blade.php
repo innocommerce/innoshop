@@ -467,9 +467,8 @@
               var handler = window.innoPaymentHandlers && window.innoPaymentHandlers[current.billing_method_code]
               if (handler) {
                 handler(orderNumber).catch(function(err) {
-                  btn.disabled = false
-                  btn.innerHTML = originalHtml
-                  layer.msg(err.message || '{{ __("front/checkout.payment_failed") }}', function() {})
+                  // Order created but payment failed, redirect to order payment page for retry
+                  location.href = inno.getBase() + '/orders/' + orderNumber + '/pay'
                 })
               } else {
                 location.href = inno.getBase() + '/orders/' + orderNumber + '/pay'
