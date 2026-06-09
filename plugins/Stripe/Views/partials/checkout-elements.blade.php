@@ -1,47 +1,78 @@
+<style>
+.stripe-checkout-wrap .stripe-field-wrap { margin-bottom: 12px; }
+.stripe-checkout-wrap .stripe-field-wrap label {
+  display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 4px;
+}
+.stripe-checkout-wrap .stripe-card-element {
+  height: 44px; padding: 10px 12px;
+  border: 1px solid #d9d9d9; border-radius: 8px; background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.stripe-checkout-wrap .stripe-card-element.StripeElement--focus {
+  border-color: #000; box-shadow: 0 0 0 1px #000;
+}
+.stripe-checkout-wrap .stripe-card-element.StripeElement--invalid {
+  border-color: #dc3545; box-shadow: 0 0 0 1px #dc3545;
+}
+.stripe-checkout-wrap .stripe-input {
+  height: 44px; border-radius: 8px; border: 1px solid #d9d9d9;
+  padding: 0 12px; font-size: 15px; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.stripe-checkout-wrap .stripe-input:focus {
+  border-color: #000; box-shadow: 0 0 0 1px #000; outline: none;
+}
+.stripe-checkout-wrap .stripe-divider {
+  display: flex; align-items: center; margin: 16px 0;
+}
+.stripe-checkout-wrap .stripe-divider::before,
+.stripe-checkout-wrap .stripe-divider::after {
+  content: ''; flex: 1; border-top: 1px solid #e5e5e5;
+}
+.stripe-checkout-wrap .stripe-divider span {
+  padding: 0 12px; font-size: 13px; color: #999;
+}
+.stripe-checkout-wrap .stripe-errors {
+  font-size: 13px; color: #dc3545; margin-top: 8px; display: none;
+}
+</style>
+
 <div class="checkout-payment-form" data-code="Stripe" style="display:none;">
-  <div class="stripe-checkout-wrap mt-2 mb-3">
+  <div class="stripe-checkout-wrap mt-1 mb-3">
 
     @php
       $currencyCode = system_setting('currency', 'USD');
-      $cartTotal = session('checkout_total', 0);
-      if (!$cartTotal) {
-        $cartTotal = \InnoShop\Common\Services\CheckoutService::getInstance()->getCheckoutResult()['amount'] ?? 0;
-      }
+      $cartTotal = \InnoShop\Common\Services\CheckoutService::getInstance()->getCheckoutResult()['amount'] ?? 0;
       $stripeAmount = in_array(strtoupper($currencyCode), ['BIF','CLP','DJF','GNF','JPY','KMF','KRW','MGA','PYG','RWF','UGX','VND','VUV','XAF','XOF','XPF'])
         ? floor($cartTotal)
         : round($cartTotal * 100);
     @endphp
 
     <div id="stripe-express-checkout" style="display:none;">
-      <div id="stripe-payment-request-button" class="mb-3"></div>
-      <div class="stripe-divider d-flex align-items-center my-3">
-        <span class="stripe-divider-line flex-grow-1 border-top"></span>
-        <span class="px-3 text-muted small">{{ __('Stripe::common.or_pay_with_card') }}</span>
-        <span class="stripe-divider-line flex-grow-1 border-top"></span>
-      </div>
+      <div id="stripe-payment-request-button"></div>
+      <div class="stripe-divider"><span>{{ __('Stripe::common.or_pay_with_card') }}</span></div>
     </div>
 
     <div id="stripe-card-form">
-      <div class="mb-2">
-        <label class="form-label small text-muted mb-1">{{ __('Stripe::common.cardholder_name') }}</label>
+      <div class="stripe-field-wrap">
+        <label for="stripe-checkout-cardholder">{{ __('Stripe::common.cardholder_name') }}</label>
         <input type="text" id="stripe-checkout-cardholder"
-               class="form-control" placeholder="Jane Doe" style="height: 42px;">
+               class="form-control stripe-input" placeholder="Jane Doe">
       </div>
-      <div class="mb-2">
-        <label class="form-label small text-muted mb-1">{{ __('Stripe::common.card_number') }}</label>
-        <div id="stripe-checkout-card-number" style="height: 42px; padding: 10px 12px; border: 1px solid #dee2e6; border-radius: 6px;"></div>
+      <div class="stripe-field-wrap">
+        <label>{{ __('Stripe::common.card_number') }}</label>
+        <div id="stripe-checkout-card-number" class="stripe-card-element"></div>
       </div>
-      <div class="row g-2 mb-1">
-        <div class="col-sm-6">
-          <label class="form-label small text-muted mb-1">{{ __('Stripe::common.expiration_date') }}</label>
-          <div id="stripe-checkout-card-expiry" style="height: 42px; padding: 10px 12px; border: 1px solid #dee2e6; border-radius: 6px;"></div>
+      <div class="row g-2">
+        <div class="col-6 stripe-field-wrap">
+          <label>{{ __('Stripe::common.expiration_date') }}</label>
+          <div id="stripe-checkout-card-expiry" class="stripe-card-element"></div>
         </div>
-        <div class="col-sm-6">
-          <label class="form-label small text-muted mb-1">CVV</label>
-          <div id="stripe-checkout-card-cvc" style="height: 42px; padding: 10px 12px; border: 1px solid #dee2e6; border-radius: 6px;"></div>
+        <div class="col-6 stripe-field-wrap">
+          <label>CVV</label>
+          <div id="stripe-checkout-card-cvc" class="stripe-card-element"></div>
         </div>
       </div>
-      <div id="stripe-checkout-errors" class="text-danger small mt-2" style="display:none;"></div>
+      <div id="stripe-checkout-errors" class="stripe-errors"></div>
     </div>
 
   </div>
@@ -55,11 +86,11 @@
 
     var elementStyle = {
       base: {
-        color: "#32325d",
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        color: "#333",
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
         fontSmoothing: "antialiased",
         fontSize: "15px",
-        "::placeholder": { color: "#aab7c4" }
+        "::placeholder": { color: "#aaa" }
       },
       invalid: { color: "#dc3545", iconColor: "#dc3545" }
     };
@@ -101,7 +132,7 @@
         paymentRequestButton: {
           type: 'buy',
           theme: 'dark',
-          height: '42px',
+          height: '44px',
         },
       },
     });
@@ -152,7 +183,7 @@
       });
     });
 
-    // Card payment handler (called by checkout page submitCheckout)
+    // Card payment handler
     window.innoPaymentHandlers = window.innoPaymentHandlers || {};
     window.innoPaymentHandlers['Stripe'] = function(orderNumber) {
       var cardholderName = document.getElementById('stripe-checkout-cardholder').value.trim();

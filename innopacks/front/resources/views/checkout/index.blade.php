@@ -168,11 +168,17 @@
                 placeholder="{{ __('front/checkout.order_comment') }}"></textarea>
             </div>
           </div>
+
+          @hookinsert('checkout.confirm.before')
+          <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout mt-3" :disabled="isCheckout" type="button"
+            @click="submitCheckout">{{ __('front/checkout.place_order') }}
+          </button>
+
         </div>
       </div>
 
       <div class="col-12 col-md-5">
-        <div class="checkout-data">
+        <div class="checkout-data" style="position: sticky; top: 20px;">
           <div class="checkout-data-content">
             <div class="title-wrap">
               <div class="title">{{ __('front/checkout.my_order') }}</div>
@@ -302,10 +308,6 @@
               </div>
             @endif
 
-            @hookinsert('checkout.confirm.before')
-            <button class="btn btn-primary btn-lg fw-bold w-100 to-checkout" :disabled="isCheckout" type="button"
-              @click="submitCheckout">{{ __('front/checkout.place_order') }}
-            </button>
           </div>
         </div>
       </div>
