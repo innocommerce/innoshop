@@ -6,4 +6,6 @@
   @include('Stripe::partials.elements')
 @elseif($paymentMode === 'checkout')
   @include('Stripe::partials.checkout')
+@elseif($paymentMode === 'embedded')
+  @include('Stripe::partials.embedded')
 @endif

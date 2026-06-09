@@ -147,4 +147,98 @@ class StripeController extends Controller
     {
         return json_success(trans('Stripe::common.checkout_cancel'));
     }
+
+    /**
+     * 创建 Stripe Embedded Checkout Session
+     * 支持 Apple Pay / Google Pay / Link 快捷支付
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function createEmbeddedSession(Request $request): JsonResponse
+    {
+        try {
+            $filters = [
+                'number'      => $request->get('order_number'),
+                'customer_id' => current_customer_id(),
+            ];
+
+            $order = OrderRepo::getInstance()->builder($filters)->first();
+
+            if (! $order) {
+                return json_fail(trans('Stripe::common.order_not_found'));
+            }
+
+            $stripeService = new StripeService($order);
+            $session       = $stripeService->createEmbeddedSession([
+                'return_url' => front_route('stripe_embedded_return', ['order_number' => $order->number]),
+                'metadata'   => [
+                    'order_number' => $order->number,
+                    'customer_id'  => $order->customer_id,
+                ],
+            ]);
+
+            PaymentRepo::getInstance()->createOrUpdatePayment($order->id, [
+                'amount'    => $order->total,
+                'paid'      => false,
+                'reference' => ['session_id' => $session->id],
+            ]);
+
+            return read_json_success([
+                'client_secret' => $session->client_secret,
+            ]);
+
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Embedded Checkout 支付完成返回页
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function embeddedReturn(Request $request): JsonResponse
+    {
+        try {
+            $orderNumber = $request->get('order_number');
+            $order       = OrderRepo::getInstance()->getOrderByNumber($orderNumber);
+
+            if (! $order) {
+                return json_fail(trans('Stripe::common.order_not_found'));
+            }
+
+            if ($order->status == StateMachineService::PAID) {
+                return json_success(trans('Stripe::common.capture_success'));
+            }
+
+            $stripeService = new StripeService($order);
+            $payment       = PaymentRepo::getInstance()->getByOrderId($order->id);
+            $sessionId     = $payment->reference['session_id'] ?? '';
+
+            if (empty($sessionId)) {
+                return json_fail(trans('Stripe::common.capture_fail'));
+            }
+
+            $session = $stripeService->retrieveSession($sessionId);
+
+            if ($session->payment_status === 'paid') {
+                PaymentRepo::getInstance()->createOrUpdatePayment($order->id, [
+                    'amount'    => $order->total,
+                    'paid'      => true,
+                    'reference' => ['session_id' => $session->id, 'payment_intent' => $session->payment_intent],
+                ]);
+
+                StateMachineService::getInstance($order)->setShipment()->changeStatus(StateMachineService::PAID);
+
+                return json_success(trans('Stripe::common.capture_success'));
+            }
+
+            return json_success(trans('Stripe::common.capture_fail'));
+
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
 }

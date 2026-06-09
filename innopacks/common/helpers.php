@@ -1150,7 +1150,8 @@ if (! function_exists('current_currency')) {
      */
     function current_currency(): mixed
     {
-        $currency = currencies()->where('code', current_currency_code())->first();
+        $code     = strtolower(current_currency_code());
+        $currency = currencies()->where('code', $code)->first();
         if ($currency) {
             return $currency;
         }
@@ -1205,7 +1206,13 @@ if (! function_exists('default_currency')) {
      */
     function default_currency(): mixed
     {
-        return currencies()->where('code', system_setting('currency'))->first();
+        $code     = strtolower(system_setting('currency'));
+        $currency = currencies()->where('code', $code)->first();
+        if ($currency) {
+            return $currency;
+        }
+
+        return currencies()->first();
     }
 }
 

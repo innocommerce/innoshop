@@ -12,6 +12,7 @@ namespace InnoShop\Common\Repositories;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use InnoShop\Common\Models\Currency;
 use InnoShop\Common\Models\Setting;
 use Throwable;
@@ -140,6 +141,8 @@ class SettingRepo extends BaseRepo
      */
     private function updateValue($name, $value, string $space): mixed
     {
+        $space = Str::snake($space);
+
         if ($value === null) {
             $value = '';
         }

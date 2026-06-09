@@ -18,3 +18,7 @@ Route::post('/callback/stripe', [StripeController::class, 'callback'])->name('st
 Route::post('/stripe/checkout-session', [StripeController::class, 'createCheckoutSession'])->name('stripe_checkout_session');
 Route::get('/stripe/checkout-success', [StripeController::class, 'checkoutSuccess'])->name('stripe_checkout_success');
 Route::get('/stripe/checkout-cancel', [StripeController::class, 'checkoutCancel'])->name('stripe_checkout_cancel');
+
+// Embedded Checkout
+Route::post('/stripe/embedded-session', [StripeController::class, 'createEmbeddedSession'])->name('stripe_embedded_session');
+Route::get('/stripe/embedded-return', [StripeController::class, 'embeddedReturn'])->name('stripe_embedded_return');

@@ -17,10 +17,13 @@ return [
     'disabled'         => '禁用',
     'on_site_payment'  => '站内支付（Stripe Elements）',
     'redirect_payment' => '跳转支付（Stripe Checkout）',
+    'embedded_payment' => '嵌入式结账（Apple Pay / Google Pay）',
 
     'btn_submit'      => '提交支付',
     'capture_fail'    => '支付失败',
     'capture_success' => '支付成功',
+    'order_not_found' => '订单未找到',
+    'loading_payment' => '正在加载支付...',
     'cardnum'         => '卡号',
     'cvv'             => '安全码',
     'error_cardnum'   => '请输入卡号',

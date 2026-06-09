@@ -11,6 +11,7 @@ namespace InnoShop\Plugin\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use InnoShop\Plugin\Models\Plugin;
 
 class PluginRepo
@@ -103,6 +104,8 @@ class PluginRepo
      */
     public function checkActive($pluginCode): bool
     {
+        $pluginCode = Str::snake($pluginCode);
+
         return (bool) setting("{$pluginCode}.active");
     }
 

@@ -46,6 +46,7 @@ return [
         'options'   => [
             ['value' => 'elements', 'label_key' => 'common.on_site_payment'],
             ['value' => 'checkout', 'label_key' => 'common.redirect_payment'],
+            ['value' => 'embedded', 'label_key' => 'common.embedded_payment'],
         ],
         'required'    => true,
         'emptyOption' => false,
