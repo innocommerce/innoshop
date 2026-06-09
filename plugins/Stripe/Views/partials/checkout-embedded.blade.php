@@ -37,7 +37,14 @@
         container.innerHTML = '';
         checkout.mount('#stripe-checkout-embedded-container');
       }).then(function() {
+        var attempts = 0;
+        var maxAttempts = 60;
         var checkInterval = setInterval(function() {
+          attempts++;
+          if (attempts > maxAttempts) {
+            clearInterval(checkInterval);
+            return;
+          }
           axios.get("{{ front_route('stripe_embedded_return') }}?order_number=" + orderNumber).then(function(res) {
             if (res.data && res.data.success) {
               clearInterval(checkInterval);

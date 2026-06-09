@@ -251,28 +251,6 @@ class StripeController extends Controller
                 return json_success(trans('Stripe::common.capture_success'));
             }
 
-            $stripeService = new StripeService($order);
-            $payment       = PaymentRepo::getInstance()->getByOrderId($order->id);
-            $sessionId     = $payment->reference['session_id'] ?? '';
-
-            if (empty($sessionId)) {
-                return json_fail(trans('Stripe::common.capture_fail'));
-            }
-
-            $session = $stripeService->retrieveSession($sessionId);
-
-            if ($session->payment_status === 'paid') {
-                PaymentRepo::getInstance()->createOrUpdatePayment($order->id, [
-                    'amount'    => $order->total,
-                    'paid'      => true,
-                    'reference' => ['session_id' => $session->id, 'payment_intent' => $session->payment_intent],
-                ]);
-
-                StateMachineService::getInstance($order)->setShipment()->changeStatus(StateMachineService::PAID);
-
-                return json_success(trans('Stripe::common.capture_success'));
-            }
-
             return json_success(trans('Stripe::common.capture_fail'));
 
         } catch (\Exception $e) {
