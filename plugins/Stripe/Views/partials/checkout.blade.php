@@ -6,7 +6,7 @@
     axios.post("{{ front_route('stripe_checkout_session') }}", {
       order_number: @json($order->number ?? ''),
     }).then(function (res) {
-      return stripe.redirectToCheckout({ sessionId: res.data.session_id });
+      return stripe.redirectToCheckout({ sessionId: res.data.data.session_id });
     }).then(function (result) {
       if (result.error) {
         alert(result.error.message);

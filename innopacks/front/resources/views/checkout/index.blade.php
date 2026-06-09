@@ -454,15 +454,19 @@
 
         const submitCheckout = () => {
           if (isCheckout.value) return
-          layer.load(2, { shade: [0.3, '#fff'] })
+          var btn = document.querySelector('.to-checkout')
+          var originalHtml = btn.innerHTML
+          btn.disabled = true
+          btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ __("front/checkout.processing") }}'
 
           axios.post(api.checkoutConfirm, current).then(function(res) {
             if (res.success) {
               var orderNumber = res.data.number
               var handler = window.innoPaymentHandlers && window.innoPaymentHandlers[current.billing_method_code]
-              layer.closeAll('loading')
               if (handler) {
                 handler(orderNumber).catch(function(err) {
+                  btn.disabled = false
+                  btn.innerHTML = originalHtml
                   layer.msg(err.message || '{{ __("front/checkout.payment_failed") }}', function() {})
                 })
               } else {
@@ -470,7 +474,8 @@
               }
             }
           }).catch(function() {
-            layer.closeAll('loading')
+            btn.disabled = false
+            btn.innerHTML = originalHtml
           })
         }
 

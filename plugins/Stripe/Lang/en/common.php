@@ -37,4 +37,13 @@ return [
     'capture_fail'    => 'Capture Failed',
     'order_not_found' => 'Order Not Found',
     'loading_payment' => 'Loading payment...',
+
+    'express_checkout' => 'Express Checkout',
+    'or_pay_with_card' => 'Or pay with card',
+    'cardholder_name'  => 'Cardholder Name',
+    'card_number'      => 'Card Number',
+    'error_cardholder' => 'Please enter the cardholder name',
+
+    'embedded_hint'     => 'Apple Pay, Google Pay, Link and credit cards accepted',
+    'embedded_hint_sub' => 'Click "Place Order" to begin payment',
 ];
