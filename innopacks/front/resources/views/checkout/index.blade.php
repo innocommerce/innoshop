@@ -153,6 +153,10 @@
               <div v-if="!source.billingMethods.length" class="alert alert-warning"><i
                   class="bi bi-exclamation-circle-fill"></i> {{ __('front/checkout.no_billing_methods') }}</div>
             </div>
+
+            <div id="checkout-payment-form-area">
+              @hookinsert('checkout.billing.form')
+            </div>
           </div>
 
           <div class="checkout-item">
@@ -381,6 +385,12 @@
             current.billing_address_id = value;
           }
 
+          if (key === 'billing_method_code') {
+            document.querySelectorAll('.checkout-payment-form').forEach(function(el) {
+              el.style.display = el.dataset.code === value ? 'block' : 'none'
+            })
+          }
+
           axios.put(api.checkout, current).then(function(res) {
             if (res.success) {
               source.feeList = res.data.fee_list;
@@ -443,20 +453,26 @@
         }
 
         const submitCheckout = () => {
-          layer.load(2, {
-            shade: [0.3, '#fff']
-          })
+          if (isCheckout.value) return
+          layer.load(2, { shade: [0.3, '#fff'] })
+
           axios.post(api.checkoutConfirm, current).then(function(res) {
             if (res.success) {
-              layer.msg(res.message, {
-                time: 1000
-              }, function() {
-                location.href = inno.getBase() + '/orders/' + res.data.number + '/pay'
-              })
+              var orderNumber = res.data.number
+              var handler = window.innoPaymentHandlers && window.innoPaymentHandlers[current.billing_method_code]
+              if (handler) {
+                handler(orderNumber).catch(function(err) {
+                  layer.closeAll('loading')
+                  layer.msg(err.message || '{{ __("front/checkout.payment_failed") }}', function() {})
+                })
+              } else {
+                layer.closeAll('loading')
+                location.href = inno.getBase() + '/orders/' + orderNumber + '/pay'
+              }
             }
-          }).finally(function() {
+          }).catch(function() {
             layer.closeAll('loading')
-          });
+          })
         }
 
         const login = () => {
@@ -542,6 +558,15 @@
         }
       }
     }).mount('#app-checkout')
+
+;(function() {
+  var code = @json($checkout['billing_method_code'] ?? '');
+  if (code) {
+    document.querySelectorAll('.checkout-payment-form').forEach(function(el) {
+      el.style.display = el.dataset.code === code ? 'block' : 'none'
+    })
+  }
+})()
 
     function updateAddress(params) {
       checkoutApp.updateAddress(params)

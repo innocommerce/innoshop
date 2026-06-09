@@ -17,7 +17,7 @@ return [
     'disabled'         => 'Disabled',
     'on_site_payment'  => 'On-site Payment (Stripe Elements)',
     'redirect_payment' => 'Redirect Payment (Stripe Checkout)',
-    'embedded_payment' => 'Embedded Checkout (Apple Pay / Google Pay)',
+    'embedded_payment' => 'Embedded Checkout (Express Pay)',
 
     'title_info'      => 'Card information',
     'cardnum'         => 'Cardnum',

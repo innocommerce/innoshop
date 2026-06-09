@@ -17,7 +17,7 @@ return [
     'disabled'         => '禁用',
     'on_site_payment'  => '站内支付（Stripe Elements）',
     'redirect_payment' => '跳转支付（Stripe Checkout）',
-    'embedded_payment' => '嵌入式结账（Apple Pay / Google Pay）',
+    'embedded_payment' => '嵌入式结账（快捷支付）',
 
     'btn_submit'      => '提交支付',
     'capture_fail'    => '支付失败',

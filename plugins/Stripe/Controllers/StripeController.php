@@ -62,6 +62,44 @@ class StripeController extends Controller
     }
 
     /**
+     * Create PaymentIntent for Elements checkout (PaymentIntents API)
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function createPaymentIntentAction(Request $request): JsonResponse
+    {
+        try {
+            $filters = [
+                'number'      => $request->get('order_number'),
+                'customer_id' => current_customer_id(),
+            ];
+
+            $order = OrderRepo::getInstance()->builder($filters)->first();
+
+            if (! $order) {
+                return json_fail(trans('Stripe::common.order_not_found'));
+            }
+
+            $stripeService = new StripeService($order);
+            $paymentIntent = $stripeService->createElementsPaymentIntent();
+
+            PaymentRepo::getInstance()->createOrUpdatePayment($order->id, [
+                'amount'    => $order->total,
+                'paid'      => false,
+                'reference' => ['payment_intent_id' => $paymentIntent->id],
+            ]);
+
+            return read_json_success([
+                'client_secret' => $paymentIntent->client_secret,
+            ]);
+
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
      * Webhook from stripe
      * https://dashboard.stripe.com/webhooks
      * @param  Request  $request
@@ -82,7 +120,7 @@ class StripeController extends Controller
             Log::info('Request type: '.$type);
             Log::info('Request number: '.$orderNumber);
 
-            if ($type == 'charge.succeeded' && $order) {
+            if (in_array($type, ['charge.succeeded', 'payment_intent.succeeded']) && $order) {
                 StateMachineService::getInstance($order)->setShipment()->changeStatus(StateMachineService::PAID);
 
                 return json_success(trans('Stripe::common.capture_success'));

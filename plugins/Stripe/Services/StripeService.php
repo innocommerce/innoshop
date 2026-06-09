@@ -41,7 +41,7 @@ class StripeService extends PaymentService
     ];
 
     public const EMBEDDED_PAYMENT_METHODS = [
-        'card', 'apple_pay', 'google_pay', 'link',
+        'card', 'link',
     ];
 
     private StripeClient $stripeClient;
@@ -92,6 +92,20 @@ class StripeService extends PaymentService
         ];
 
         return $this->stripeClient->charges->create($stripeChargeParameters);
+    }
+
+    /**
+     * Create PaymentIntent for Elements checkout (PaymentIntents API)
+     * Replaces legacy Charges API flow
+     *
+     * @return PaymentIntent
+     * @throws ApiErrorException
+     */
+    public function createElementsPaymentIntent(): PaymentIntent
+    {
+        $stripeCustomer = $this->createCustomer();
+
+        return $this->createPaymentIntent($stripeCustomer);
     }
 
     /**

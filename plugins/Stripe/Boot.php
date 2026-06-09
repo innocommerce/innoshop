@@ -22,6 +22,20 @@ class Boot
      */
     public function init(): void
     {
+        listen_blade_insert('checkout.billing.form', function ($data) {
+            $paymentMode = plugin_setting('stripe', 'payment_mode', 'elements');
+
+            if ($paymentMode === 'elements') {
+                return view('Stripe::partials.checkout-elements')->render();
+            }
+
+            if ($paymentMode === 'embedded') {
+                return view('Stripe::partials.checkout-embedded')->render();
+            }
+
+            return null;
+        });
+
         listen_hook_filter('service.payment.mobile_pay.data', function ($data) {
             $order = $data['order'];
             if ($order->payment_method_code != 'stripe') {

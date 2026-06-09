@@ -12,6 +12,7 @@ use Plugin\Stripe\Controllers\StripeController;
 
 // Elements
 Route::post('/stripe/capture', [StripeController::class, 'capture'])->name('stripe_capture');
+Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntentAction'])->name('stripe_payment_intent');
 Route::post('/callback/stripe', [StripeController::class, 'callback'])->name('stripe_callback');
 
 // Checkout
