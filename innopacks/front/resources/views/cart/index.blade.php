@@ -11,15 +11,6 @@
   @hookinsert('cart.top')
 
   <div class="container">
-    @if (session()->has('errors'))
-      <x-common-alert type="danger" msg="{{ session('errors')->first() }}" class="mt-4" />
-    @endif
-    @if (session('error'))
-      <x-common-alert type="danger" msg="{{ session('error') }}" class="mt-4" />
-    @endif
-    @if (session('success'))
-      <x-common-alert type="success" msg="{{ session('success') }}" class="mt-4" />
-    @endif
 
     <div id="app-cart" v-cloak>
       <div class="row" v-if="list.length">
