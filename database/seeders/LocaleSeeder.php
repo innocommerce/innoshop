@@ -31,14 +31,14 @@ class LocaleSeeder extends Seeder
             [
                 'name'     => 'English',
                 'code'     => 'en',
-                'image'    => 'images/flag/en.png',
+                'image'    => 'images/flags/en.svg',
                 'position' => 0,
                 'active'   => 1,
             ],
             [
                 'name'     => '简体中文',
                 'code'     => 'zh-cn',
-                'image'    => 'images/flag/zh-cn.png',
+                'image'    => 'images/flags/zh-cn.svg',
                 'position' => 1,
                 'active'   => 1,
             ],

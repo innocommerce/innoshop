@@ -38,6 +38,7 @@ class SettingSeeder extends BaseSeeder
         return [
             ['space' => 'system', 'name' => 'front_logo', 'value' => 'images/logo.png'],
             ['space' => 'system', 'name' => 'panel_logo', 'value' => 'images/logo-panel.svg'],
+            ['space' => 'system', 'name' => 'panel_icon_logo', 'value' => 'images/logo-mini.png'],
             ['space' => 'system', 'name' => 'placeholder', 'value' => 'images/placeholder.png'],
             ['space' => 'system', 'name' => 'favicon', 'value' => 'images/favicon.png'],
             ['space' => 'system', 'name' => 'country_code', 'value' => 'US'],
