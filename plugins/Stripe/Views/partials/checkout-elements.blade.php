@@ -160,11 +160,11 @@
 
       axios.post(confirmUrl, checkoutData).then(function(res) {
         if (!res.data || !res.data.success) throw new Error(res.data && res.data.message ? res.data.message : 'Order creation failed');
-        orderNumber = res.data.data.number;
+        orderNumber = res.data.number;
         return axios.post(intentUrl, { order_number: orderNumber });
       }).then(function(res) {
         if (!res.data || !res.data.success) throw new Error('Payment setup failed');
-        return stripe.confirmCardPayment(res.data.data.client_secret, {
+        return stripe.confirmCardPayment(res.data.client_secret, {
           payment_method: ev.paymentMethod.id
         });
       }).then(function(result) {
@@ -198,7 +198,7 @@
         order_number: orderNumber,
       }).then(function(res) {
         if (!res.data || !res.data.success) throw new Error('Payment setup failed');
-        return stripe.confirmCardPayment(res.data.data.client_secret, {
+        return stripe.confirmCardPayment(res.data.client_secret, {
           payment_method: {
             card: cardNumber,
             billing_details: { name: cardholderName }

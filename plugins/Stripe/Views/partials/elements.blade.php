@@ -148,7 +148,7 @@
         axios.post("{{ front_route('stripe_payment_intent') }}", {
           order_number: orderNumber,
         }).then((res) => {
-          this.clientSecret = res.data.data.client_secret
+          this.clientSecret = res.data.client_secret
         }).catch((err) => {
           const msg = err.response?.data?.message || err.message || 'Failed to initialize payment'
           layer.msg(msg, () => {})

@@ -16,7 +16,7 @@
     axios.post("{{ front_route('stripe_embedded_session') }}", {
       order_number: orderNumber,
     }).then(function (res) {
-      const clientSecret = res.data.data.client_secret;
+      const clientSecret = res.data.client_secret;
       if (!clientSecret) {
         throw new Error('Missing client_secret');
       }
