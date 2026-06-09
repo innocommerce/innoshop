@@ -460,13 +460,12 @@
             if (res.success) {
               var orderNumber = res.data.number
               var handler = window.innoPaymentHandlers && window.innoPaymentHandlers[current.billing_method_code]
+              layer.closeAll('loading')
               if (handler) {
                 handler(orderNumber).catch(function(err) {
-                  layer.closeAll('loading')
                   layer.msg(err.message || '{{ __("front/checkout.payment_failed") }}', function() {})
                 })
               } else {
-                layer.closeAll('loading')
                 location.href = inno.getBase() + '/orders/' + orderNumber + '/pay'
               }
             }
