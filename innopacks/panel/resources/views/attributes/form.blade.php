@@ -114,7 +114,7 @@
               <div class="locale-modal-row mb-3 p-2 rounded border border-primary">
                 <div class="d-flex align-items-center gap-2 mb-1">
                   <div class="d-flex align-items-center wh-20">
-                    <img :src="'/images/flag/'+ defaultLocale +'.png'" class="img-fluid" :alt="defaultLocaleName">
+                    <img :src="'/images/flags/'+ defaultLocale +'.svg'" class="img-fluid" :alt="defaultLocaleName">
                   </div>
                   <span class="fw-medium">@{{ defaultLocaleName }}</span>
                   <span class="badge bg-primary">{{ __('panel/common.panel_locale') }}</span>
@@ -129,7 +129,7 @@
                    class="locale-modal-row mb-3 p-2 rounded border">
                 <div class="d-flex align-items-center gap-2 mb-1">
                   <div class="d-flex align-items-center wh-20">
-                    <img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid" :alt="locale.name">
+                    <img :src="'/images/flags/'+ locale.code +'.svg'" class="img-fluid" :alt="locale.name">
                   </div>
                   <span class="fw-medium">@{{ locale.name }}</span>
                   @if(has_translator())
@@ -175,7 +175,7 @@
               <div v-for="locale in locales" :key="locale.code" class="mb-2">
                 <div class="d-flex align-items-center gap-2 mb-1">
                   <div class="d-flex align-items-center wh-20">
-                    <img :src="'/images/flag/'+ locale.code +'.png'" class="img-fluid" :alt="locale.name">
+                    <img :src="'/images/flags/'+ locale.code +'.svg'" class="img-fluid" :alt="locale.name">
                   </div>
                   <span class="fw-medium">@{{ locale.name }}</span>
                 </div>

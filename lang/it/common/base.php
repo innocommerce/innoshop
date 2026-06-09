@@ -32,6 +32,7 @@ return [
     'filter'                  => 'screening',
     'hint'                    => 'Suggerimento',
     'hint_delete'             => 'Sei sicuro di voler eliminare?',
+    'hint_unload'             => 'Sei sicuro di voler disinstallare?',
     'id'                      => 'ID',
     'image'                   => 'immagini',
     'language_name'           => 'Italiano',

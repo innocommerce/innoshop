@@ -38,7 +38,7 @@
 
     <!-- Language -->
     <div class="header-item dropdown d-none d-lg-flex align-items-center">
-      <div class="wh-20 me-2"><img src="{{ image_origin('images/flag/'. panel_locale_code().'.png') }}" class="img-fluid"></div>
+      <div class="wh-20 me-2"><img src="{{ image_origin('images/flags/'. panel_locale_code().'.svg') }}" class="img-fluid"></div>
       <span class="dropdown-toggle" data-bs-toggle="dropdown">
         <span>{{ current_panel_locale()['name'] }}</span>
       </span>

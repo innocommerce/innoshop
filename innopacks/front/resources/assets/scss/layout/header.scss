@@ -63,7 +63,7 @@ header {
           }
         }
 
-        > a {
+        > a, > button {
           color: inherit;
           border-radius: 0;
           border: none;
@@ -73,6 +73,7 @@ header {
 
           img {
             width: 20px;
+            height: 14px;
           }
         }
       }

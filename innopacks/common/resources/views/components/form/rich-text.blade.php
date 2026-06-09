@@ -13,7 +13,7 @@
         <li class="nav-item" role="presentation">
           <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $name }}-{{ $locale['code'] }}-tab" data-bs-toggle="tab"
             data-bs-target="#{{ $name }}-{{ $locale['code'] }}-pane" type="button">
-            <img src="{{ asset('images/flag/' . $locale['code'] . '.png') }}" class="me-2" style="width: 20px;">
+            <img src="{{ asset('images/flags/' . $locale['code'] . '.svg') }}" class="me-2" style="width: 20px;">
             {{ $locale['name'] }}
           </button>
         </li>

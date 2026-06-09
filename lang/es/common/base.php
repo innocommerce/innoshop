@@ -32,6 +32,7 @@ return [
     'filter'                  => 'selección',
     'hint'                    => 'Sugerencia',
     'hint_delete'             => '¿Está seguro de que desea eliminar?',
+    'hint_unload'             => '¿Está seguro de que desea desinstalar?',
     'id'                      => 'ID',
     'image'                   => 'imágenes',
     'language_name'           => 'Español',

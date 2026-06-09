@@ -3,7 +3,7 @@
     <div class="image">
       <a href="{{ $item->url }}">
         @if ($item->image)
-          <img src="{{ image_resize($item->image, 300, 300) }}" class="img-fluid" alt="{{ $item->title }}">
+          <img src="{{ image_resize($item->image, 300, 300) }}" class="img-fluid" alt="{{ $item->title }}" width="300" height="300">
         @else
           <div class="bg-light d-flex align-items-center justify-content-center" style="aspect-ratio: 3/2;">
             <i class="bi bi-image text-muted" style="font-size: 48px;"></i>

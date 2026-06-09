@@ -17,7 +17,7 @@
           <div class="module-swiper swiper-wrapper">
             @foreach ($slideshow as $slide)
               <div class="swiper-slide">
-                <a href="{{ $slide['link'] ?: 'javascript:void(0)' }}"
+                <a href="{{ $slide['link'] ?: '#' }}"
                    class="home-slideshow-link">
                   @if(!empty($slide['is_video']))
                     <video autoplay muted loop playsinline class="home-slideshow-video">

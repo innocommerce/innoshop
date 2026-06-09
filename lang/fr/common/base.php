@@ -32,6 +32,7 @@ return [
     'filter'                  => 'sélection',
     'hint'                    => 'Indice',
     'hint_delete'             => 'Êtes-vous sûr de vouloir supprimer ?',
+    'hint_unload'             => 'Êtes-vous sûr de vouloir désinstaller ?',
     'id'                      => 'ID',
     'image'                   => 'photo',
     'language_name'           => 'Français',

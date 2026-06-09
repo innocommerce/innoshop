@@ -3,7 +3,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#data-locale-{{ $locale }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="data-locale-{{ $locale }}">
-          <div class="wh-20 me-2"><img src="{{ asset('images/flag/'. $locale . '.png') }}" class="img-fluid"></div>
+          <div class="wh-20 me-2"><img src="{{ asset('images/flags/'. $locale . '.svg') }}" class="img-fluid"></div>
           {{ $localeName }}
         </button>
       </h2>

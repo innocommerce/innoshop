@@ -32,6 +32,7 @@ return [
     'filter'                  => 'Selektion.',
     'hint'                    => 'Hinweis',
     'hint_delete'             => 'Sind Sie sicher, dass Sie löschen möchten?',
+    'hint_unload'             => 'Sind Sie sicher, dass Sie deinstallieren möchten?',
     'id'                      => 'ID',
     'image'                   => 'Henry pillay.',
     'language_name'           => 'Deutsch',

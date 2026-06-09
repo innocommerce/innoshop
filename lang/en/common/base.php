@@ -39,6 +39,7 @@ return [
     'filter'        => 'Filter',
     'hint'          => 'Hint',
     'hint_delete'   => 'Are you sure you want to delete?',
+    'hint_unload'   => 'Are you sure you want to uninstall?',
     'loading'       => 'Loading...',
     'no'            => 'No',
     'no_data'       => 'No data',

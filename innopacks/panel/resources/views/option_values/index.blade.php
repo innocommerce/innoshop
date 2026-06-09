@@ -186,7 +186,7 @@
                             data-bs-target="#lang-{{ $locale['code'] }}-pane"
                             type="button" role="tab">
                       <div class="wh-20 me-2">
-                        <img src="{{ asset('images/flag/'. $locale['code'].'.png') }}" 
+                        <img src="{{ asset('images/flags/'. $locale['code'].'.svg') }}" 
                              class="img-fluid" 
                              alt="{{ $locale['name'] }}">
                       </div>

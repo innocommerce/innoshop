@@ -777,7 +777,7 @@
             @foreach($locales as $locale)
               <li class="nav-item" role="presentation">
                 <button class="nav-link d-flex {{ $loop->first ? 'active' : '' }}" id="common-{{ $locale['code'] }}-tab" data-bs-toggle="tab" data-bs-target="#common-{{ $locale['code'] }}-pane" type="button">
-                  <div class="wh-20 me-2"><img src="{{ asset('images/flag/'. $locale['code'].'.png') }}" class="img-fluid"></div>
+                  <div class="wh-20 me-2"><img src="{{ asset('images/flags/'. $locale['code'].'.svg') }}" class="img-fluid"></div>
                   {{ $locale['name'] }}
                 </button>
               </li>

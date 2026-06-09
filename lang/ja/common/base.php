@@ -32,6 +32,7 @@ return [
     'filter'                  => '選別します',
     'hint'                    => 'ヒント',
     'hint_delete'             => '削除してもよろしいですか？',
+    'hint_unload'             => 'アンインストールしてもよろしいですか？',
     'id'                      => 'IDです',
     'image'                   => '画像です',
     'language_name'           => '日本語',

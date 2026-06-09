@@ -32,6 +32,7 @@ return [
     'filter'                  => '\\\"Screening',
     'hint'                    => 'Hint',
     'hint_delete'             => 'Weet je zeker dat je wilt verwijderen?',
+    'hint_unload'             => 'Weet je zeker dat je wilt de-installeren?',
     'id'                      => 'ID',
     'image'                   => 'Picture',
     'language_name'           => 'Nederlands',

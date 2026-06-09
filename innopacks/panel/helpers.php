@@ -302,7 +302,7 @@ if (! function_exists('panel_locale_field_config')) {
             return [
                 'code'  => $locale->code,
                 'name'  => $locale->name,
-                'image' => $locale->image ? image_origin($locale->image) : asset('images/flag/'.$locale->code.'.png'),
+                'image' => $locale->image ? image_origin($locale->image) : asset('images/flags/'.$locale->code.'.svg'),
             ];
         })->values()->all();
 

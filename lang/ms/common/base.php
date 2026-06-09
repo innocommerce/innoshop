@@ -32,6 +32,7 @@ return [
     'filter'                  => 'Pemeriksaan',
     'hint'                    => 'Petunjuk',
     'hint_delete'             => 'Adakah anda pasti mahu memadam?',
+    'hint_unload'             => 'Adakah anda pasti mahu menyahpasang?',
     'id'                      => 'ID',
     'image'                   => 'Imej',
     'language_name'           => 'Bahasa Melayu',

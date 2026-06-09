@@ -32,6 +32,7 @@ return [
     'filter'                  => 'Chọn lọc',
     'hint'                    => 'Gợi ý',
     'hint_delete'             => 'Bạn có chắc muốn xóa không?',
+    'hint_unload'             => 'Bạn có chắc muốn gỡ cài đặt không?',
     'id'                      => 'ID',
     'image'                   => 'Hình ảnh',
     'language_name'           => 'Tiếng Việt',

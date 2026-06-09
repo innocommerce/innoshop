@@ -34,6 +34,7 @@ return [
     'filter'                  => '筛选',
     'hint'                    => '提示',
     'hint_delete'             => '确定要删除吗？',
+    'hint_unload'             => '确定要卸载吗？',
     'id'                      => 'ID',
     'image'                   => '图片',
     'language_name'           => '简体中文',

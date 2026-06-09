@@ -32,6 +32,7 @@ return [
     'filter'                  => '압축',
     'hint'                    => '힌트',
     'hint_delete'             => '삭제하시겠습니까?',
+    'hint_unload'             => '제거하시겠습니까?',
     'id'                      => 'id',
     'image'                   => '사진',
     'language_name'           => '한국어',

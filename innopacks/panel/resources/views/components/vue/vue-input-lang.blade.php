@@ -3,7 +3,7 @@
   @foreach (locales() as $locale)
   <div class="input-group mb-2">
    <span class="input-group-text flag-input-group-text">
-    <img src="{{ asset('images/flag/'. $locale['code'].'.png') }}" 
+    <img src="{{ asset('images/flags/'. $locale['code'].'.svg') }}" 
      class="flag-icon" 
      alt="{{ $locale['name'] }}"
      onerror="this.style.display='none';">

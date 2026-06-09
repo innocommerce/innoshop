@@ -32,6 +32,7 @@ return [
     'filter'                  => 'Gösterim',
     'hint'                    => 'İpucu',
     'hint_delete'             => 'Silmek istediğinizden emin misiniz?',
+    'hint_unload'             => 'Kaldırmak istediğinizden emin misiniz?',
     'id'                      => 'ID',
     'image'                   => 'İmaj',
     'language_name'           => 'Türkçe',

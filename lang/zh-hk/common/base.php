@@ -32,6 +32,7 @@ return [
     'filter'            => '篩選',
     'hint'              => '提示',
     'hint_delete'       => '確定要刪除嗎?',
+    'hint_unload'       => '確定要卸載嗎?',
     'id'                => 'ID',
     'image'             => '圖片',
     'language_name'     => '繁體中文',

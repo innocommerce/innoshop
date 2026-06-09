@@ -31,7 +31,7 @@ class LocaleRepo extends BaseRepo
             $items[]  = [
                 'code'  => $localeCode,
                 'name'  => $name,
-                'image' => "images/flag/$localeCode.png",
+                'image' => "images/flags/$localeCode.svg",
             ];
         }
 
