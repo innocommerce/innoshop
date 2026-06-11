@@ -573,6 +573,16 @@ final class Plugin implements Arrayable, ArrayAccess
     }
 
     /**
+     * Check if plugin has seeders.
+     *
+     * @return bool
+     */
+    public function hasSeeders(): bool
+    {
+        return is_dir($this->path.'/Database/Seeders');
+    }
+
+    /**
      * Field validation
      */
     public function validateConfig(): void

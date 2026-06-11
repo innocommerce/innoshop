@@ -64,11 +64,12 @@
                   <div class="btns">
                     @if ($plugin['installed'])
                       @if($plugin['menu_url'])
-                        <a href="{{ $plugin['menu_url'] }}" class="btn btn-success btn-sm">{{ __('common/base.use') }}</a>
+                        <a href="{{ $plugin['menu_url'] }}" target="_blank" class="btn btn-success btn-sm">{{ __('common/base.use') }}</a>
                       @endif
                       @if($plugin['edit_url'])
-                        <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('common/base.edit') }}</a>
+                        <a href="{{ $plugin['edit_url'] }}" class="btn btn-primary btn-sm">{{ __('panel/common.setting') }}</a>
                       @endif
+                      <div class="btn btn-warning btn-sm reset-plugin" data-code="{{ $plugin['code'] }}">{{ __('panel/common.reset') }}</div>
                       <div class="btn btn-danger btn-sm uninstall-plugin">{{ __('panel/common.uninstall') }}</div>
                     @else
                       <div class="btn btn-primary btn-sm install-plugin">{{ __('panel/common.install') }}</div>
@@ -91,7 +92,8 @@
   <script>
     var pluginLabels = {
       use: '{{ __("common/base.use") }}',
-      edit: '{{ __("common/base.edit") }}',
+      setting: '{{ __("panel/common.setting") }}',
+      reset: '{{ __("panel/common.reset") }}',
       uninstall: '{{ __("panel/common.uninstall") }}',
       install: '{{ __("panel/common.install") }}'
     };
@@ -107,6 +109,26 @@
         var $item = $(this).closest('.plugin-item');
         var code = $item.data('code');
         pluginsUpdate($item, code, 'uninstall');
+      });
+
+      $(document).on('click', '.reset-plugin', function () {
+        var $item = $(this).closest('.plugin-item');
+        var code = $item.data('code');
+        if (!confirm(pluginLabels.reset + '?')) return;
+        var $btn = $(this);
+        $btn.prop('disabled', true);
+        axios.post('/{{ panel_name() }}/plugins/reset', {code: code}).then(function (res) {
+          $btn.prop('disabled', false);
+          if (res && res.success) {
+            layer.msg(res.message, { icon: 1 });
+          } else {
+            inno.alert((res && res.message) || '{{ __("common/base.error") }}');
+          }
+        }).catch(function (error) {
+          $btn.prop('disabled', false);
+          var data = error.response && error.response.data;
+          layer.msg((data && data.message) || '{{ __("common/base.error") }}', { icon: 2 });
+        });
       });
     });
 
@@ -129,6 +151,7 @@
     });
 
     function updatePluginCard($item, plugin) {
+      var code = $item.data('code');
       $item.attr('data-installed', plugin.installed ? 1 : 0);
       var $btns = $item.find('.btns');
       var $switch = $item.find('.plugin-enabled-switch input');
@@ -136,11 +159,12 @@
       if (plugin.installed) {
         var html = '';
         if (plugin.menu_url) {
-          html += '<a href="' + plugin.menu_url + '" class="btn btn-success btn-sm">' + pluginLabels.use + '</a> ';
+          html += '<a href="' + plugin.menu_url + '" target="_blank" class="btn btn-success btn-sm">' + pluginLabels.use + '</a> ';
         }
         if (plugin.edit_url) {
-          html += '<a href="' + plugin.edit_url + '" class="btn btn-primary btn-sm">' + pluginLabels.edit + '</a> ';
+          html += '<a href="' + plugin.edit_url + '" class="btn btn-primary btn-sm">' + pluginLabels.setting + '</a> ';
         }
+        html += '<div class="btn btn-warning btn-sm reset-plugin" data-code="' + code + '">' + pluginLabels.reset + '</div> ';
         html += '<div class="btn btn-danger btn-sm uninstall-plugin">' + pluginLabels.uninstall + '</div>';
         $btns.html(html);
         $switch.prop('disabled', false).prop('checked', !!plugin.enabled);

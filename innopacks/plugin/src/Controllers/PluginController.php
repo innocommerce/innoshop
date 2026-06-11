@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\SettingRepo;
 use InnoShop\Plugin\Resources\PluginResource;
@@ -157,6 +158,47 @@ class PluginController
     }
 
     /**
+     * Run plugin seeders.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function runSeeders(Request $request): mixed
+    {
+        try {
+            $code      = $request->get('code');
+            $clearData = (bool) $request->get('clear_data', false);
+            $plugin    = app('plugin')->getPluginOrFail($code);
+            PluginService::getInstance()->runSeeders($plugin, $clearData);
+
+            return json_success(common_trans('base.updated_success'));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage().' at '.$e->getFile().':'.$e->getLine());
+        }
+    }
+
+    /**
+     * Reset plugin database: rollback → migrate → seed.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function reset(Request $request): mixed
+    {
+        try {
+            $code      = $request->get('code');
+            $clearData = (bool) $request->get('clear_data', false);
+            $plugin    = app('plugin')->getPluginOrFail($code);
+            PluginService::getInstance()->resetPlugin($plugin, $clearData);
+            Artisan::call('view:clear');
+
+            return json_success(common_trans('base.updated_success'));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage().' at '.$e->getFile().':'.$e->getLine());
+        }
+    }
+
+    /**
      * @param  Request  $request
      * @return mixed
      */
@@ -165,9 +207,13 @@ class PluginController
         try {
             $code    = $request->get('code');
             $enabled = $request->get('enabled');
-            app('plugin')->getPluginOrFail($code);
+            $plugin  = app('plugin')->getPluginOrFail($code);
             SettingRepo::getInstance()->updatePluginValue($code, 'active', $enabled);
             Artisan::call('view:clear');
+
+            if ($enabled) {
+                $this->loadPluginRoutesOnDemand($plugin->getDirname());
+            }
 
             $data = $this->getPluginResourceData($code, true, (bool) $enabled);
 
@@ -177,6 +223,34 @@ class PluginController
         } catch (Throwable $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Dynamically load plugin routes after enabling,
+     * so menu_url is correct in the AJAX response.
+     */
+    private function loadPluginRoutesOnDemand(string $pluginCode): void
+    {
+        $pluginBasePath = base_path('plugins');
+
+        $routes = [
+            ['path' => "$pluginBasePath/$pluginCode/Routes/panel.php", 'prefix' => panel_name(), 'name' => 'panel.', 'middleware' => ['panel', 'admin_auth:admin']],
+            ['path' => "$pluginBasePath/$pluginCode/Routes/root.php", 'prefix' => '', 'name' => 'front.', 'middleware' => ['front']],
+            ['path' => "$pluginBasePath/$pluginCode/Routes/front.php", 'prefix' => '', 'name' => 'front.', 'middleware' => ['front']],
+            ['path' => "$pluginBasePath/$pluginCode/Routes/front-api.php", 'prefix' => 'api', 'name' => 'api.', 'middleware' => ['api']],
+            ['path' => "$pluginBasePath/$pluginCode/Routes/panel-api.php", 'prefix' => 'api/panel', 'name' => 'api.panel.', 'middleware' => ['panel_api']],
+        ];
+
+        foreach ($routes as $route) {
+            if (file_exists($route['path'])) {
+                Route::prefix($route['prefix'])
+                    ->name($route['name'])
+                    ->middleware($route['middleware'])
+                    ->group($route['path']);
+            }
+        }
+
+        app('router')->getRoutes()->refreshNameLookups();
     }
 
     /**

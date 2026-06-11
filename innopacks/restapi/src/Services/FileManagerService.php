@@ -621,7 +621,8 @@ class FileManagerService implements FileManagerInterface
                     'name'         => $baseName,
                     'path'         => $dirPath,
                     'is_dir'       => true,
-                    'thumb'        => asset('images/icons/folder.png'),
+                    'icon'         => 'bi bi-folder-fill',
+                    'thumb'        => '',
                     'url'          => '',
                     'mime'         => 'directory',
                     'created_time' => @filemtime($realDirectory) ?: time(),
@@ -682,6 +683,45 @@ class FileManagerService implements FileManagerInterface
     }
 
     /**
+     * Map a mime type to a Bootstrap Icons class.
+     */
+    protected function mimeToIcon(string $mime): string
+    {
+        if (str_starts_with($mime, 'image/')) {
+            return 'bi bi-file-earmark-image';
+        }
+        if (str_starts_with($mime, 'video/')) {
+            return 'bi bi-file-earmark-play';
+        }
+        if (str_starts_with($mime, 'audio/')) {
+            return 'bi bi-file-earmark-music';
+        }
+        if ($mime === 'application/pdf') {
+            return 'bi bi-file-earmark-pdf';
+        }
+        if (in_array($mime, ['application/zip', 'application/x-rar-compressed', 'application/x-tar', 'application/gzip', 'application/x-7z-compressed'], true)) {
+            return 'bi bi-file-earmark-zip';
+        }
+        if (in_array($mime, ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'], true)) {
+            return 'bi bi-file-earmark-word';
+        }
+        if (in_array($mime, ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'], true)) {
+            return 'bi bi-file-earmark-spreadsheet';
+        }
+        if (in_array($mime, ['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'], true)) {
+            return 'bi bi-file-earmark-slides';
+        }
+        if (in_array($mime, ['application/json', 'application/javascript', 'application/x-php', 'text/html', 'text/css', 'text/xml', 'application/xml'], true)) {
+            return 'bi bi-file-earmark-code';
+        }
+        if (str_starts_with($mime, 'text/')) {
+            return 'bi bi-file-earmark-text';
+        }
+
+        return 'bi bi-file-earmark';
+    }
+
+    /**
      * Enrich page items with full metadata (mime, thumbnails).
      * Only called for items on the current page to avoid unnecessary I/O.
      */
@@ -707,9 +747,10 @@ class FileManagerService implements FileManagerInterface
             }
 
             $item['mime']       = $mime;
+            $item['icon']       = $this->mimeToIcon($mime);
             $item['origin_url'] = storage_url($path);
-            $item['url']        = str_starts_with($mime, 'image/') ? image_resize($path, 300, 300, 'contain') : asset('images/panel/doc.png');
-            $item['thumb']      = str_starts_with($mime, 'image/') ? storage_url($path) : asset('images/panel/doc.png');
+            $item['url']        = str_starts_with($mime, 'image/') ? image_resize($path, 300, 300, 'contain') : '';
+            $item['thumb']      = str_starts_with($mime, 'image/') ? storage_url($path) : '';
 
             unset($item['_realPath'], $item['created_time']);
 

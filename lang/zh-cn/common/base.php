@@ -26,6 +26,7 @@ return [
     'delete'                  => '删除',
     'delete_confirm'          => '确定要删除吗？',
     'deleted_success'         => '删除成功',
+    'error'                   => '操作失败',
     'installed_success'       => '安装成功',
     'uninstalled_success'     => '卸载成功',
     'description'             => '描述',

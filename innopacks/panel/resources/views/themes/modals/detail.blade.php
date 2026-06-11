@@ -7,7 +7,7 @@
           <div class="flex-grow-1">
             <h5 class="modal-title fw-bold mb-0">{{ $theme['name'] }}</h5>
             @if($theme['selected'])
-              <span class="badge bg-primary mt-1">
+              <span class="badge bg-primary mt-1 theme-detail-current-badge">
                 <i class="bi bi-check-circle-fill me-1"></i>
                 {{ __('panel/themes.current_theme') }}
               </span>
@@ -20,26 +20,26 @@
         {{-- Tab Navigation --}}
         <ul class="nav nav-tabs mb-4" id="themeDetailTabs{{ $theme['code'] }}" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" 
-                    id="basic-info-tab{{ $theme['code'] }}" 
-                    data-bs-toggle="tab" 
-                    data-bs-target="#basic-info-pane{{ $theme['code'] }}" 
-                    type="button" 
-                    role="tab" 
-                    aria-controls="basic-info-pane{{ $theme['code'] }}" 
+            <button class="nav-link active"
+                    id="basic-info-tab{{ $theme['code'] }}"
+                    data-bs-toggle="tab"
+                    data-bs-target="#basic-info-pane{{ $theme['code'] }}"
+                    type="button"
+                    role="tab"
+                    aria-controls="basic-info-pane{{ $theme['code'] }}"
                     aria-selected="true">
               <i class="bi bi-info-circle me-1"></i>
               {{ __('panel/common.basic_info') }}
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" 
-                    id="data-tab{{ $theme['code'] }}" 
-                    data-bs-toggle="tab" 
-                    data-bs-target="#data-pane{{ $theme['code'] }}" 
-                    type="button" 
-                    role="tab" 
-                    aria-controls="data-pane{{ $theme['code'] }}" 
+            <button class="nav-link"
+                    id="data-tab{{ $theme['code'] }}"
+                    data-bs-toggle="tab"
+                    data-bs-target="#data-pane{{ $theme['code'] }}"
+                    type="button"
+                    role="tab"
+                    aria-controls="data-pane{{ $theme['code'] }}"
                     aria-selected="false">
               <i class="bi bi-database me-1"></i>
               {{ __('panel/themes.import_export_data') }}
@@ -50,9 +50,9 @@
         {{-- Tab Content --}}
         <div class="tab-content" id="themeDetailTabContent{{ $theme['code'] }}">
           {{-- Basic Info Tab --}}
-          <div class="tab-pane fade show active" 
-               id="basic-info-pane{{ $theme['code'] }}" 
-               role="tabpanel" 
+          <div class="tab-pane fade show active"
+               id="basic-info-pane{{ $theme['code'] }}"
+               role="tabpanel"
                aria-labelledby="basic-info-tab{{ $theme['code'] }}">
             {{-- Description Section --}}
             @if(isset($theme['description']) && $theme['description'])
@@ -109,7 +109,7 @@
                     <i class="bi bi-info-circle me-1"></i>
                     {{ __('common/base.status') }}
                   </div>
-                  <div>
+                  <div class="theme-detail-status">
                     @if($theme['selected'])
                       <span class="badge bg-success">
                         <i class="bi bi-check-circle-fill me-1"></i>
@@ -128,9 +128,9 @@
           </div>
 
           {{-- Import/Export Data Tab --}}
-          <div class="tab-pane fade" 
-               id="data-pane{{ $theme['code'] }}" 
-               role="tabpanel" 
+          <div class="tab-pane fade"
+               id="data-pane{{ $theme['code'] }}"
+               role="tabpanel"
                aria-labelledby="data-tab{{ $theme['code'] }}">
             @if($theme['has_demo'])
               {{-- Import Demo Data Section --}}
@@ -176,8 +176,8 @@
       <div class="modal-footer border-top">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.close') }}</button>
         @if(!$theme['selected'])
-          <button type="button" 
-                  class="btn btn-primary theme-enable-btn"
+          <button type="button"
+                  class="btn btn-primary theme-enable-btn theme-detail-enable-btn"
                   data-url="{{ panel_route('themes.active', $theme['code']) }}"
                   data-code="{{ $theme['code'] }}">
             <i class="bi bi-check-circle me-1"></i>

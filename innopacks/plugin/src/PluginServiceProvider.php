@@ -129,7 +129,6 @@ class PluginServiceProvider extends ServiceProvider
         $commands   = [];
         foreach ($allPlugins as $plugin) {
             $pluginCode = $plugin->getDirname();
-            $this->loadPluginMigrations($pluginCode);
             $this->loadPluginViews($pluginCode);
             $this->loadPluginTranslations($pluginCode);
             $this->loadPluginHelpers($pluginCode);
@@ -251,24 +250,6 @@ class PluginServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands($commands);
-        }
-    }
-
-    /**
-     * Load plugin migrations
-     *
-     * @param  $pluginCode
-     */
-    private function loadPluginMigrations($pluginCode): void
-    {
-        $pluginPath = $this->pluginBasePath.'/'.$pluginCode.'/';
-
-        if (is_dir($pluginPath.'Migrations')) {
-            $this->loadMigrationsFrom($pluginPath.'Migrations');
-        }
-
-        if (is_dir($pluginPath.'Database/Migrations')) {
-            $this->loadMigrationsFrom($pluginPath.'Database/Migrations');
         }
     }
 

@@ -112,7 +112,7 @@
                       <div class="file-thumb">
                         <template v-if="file.is_dir">
                           <div class="folder-icon">
-                            <img :src="file.thumb" alt="folder" class="folder-image"></img>
+                            <i :class="file.icon || 'bi bi-folder-fill'"></i>
                           </div>
                         </template>
                         <template v-else>
@@ -132,16 +132,15 @@
                             <template v-else-if="file.mime && file.mime.startsWith('video/')">
                               <div class="preview-button"
                                 @click.stop="playVideo(file)">
-                                <el-icon><component :is="'VideoPlay'"></component></el-icon>
-                              </div>
+                                <i class="bi bi-play-circle-fill"></i>
                               </div>
                               <div class="video-thumb">
-                                <el-icon><component :is="'VideoCamera'"></component></el-icon>
+                                <i :class="file.icon || 'bi bi-file-earmark-play'"></i>
                               </div>
                             </template>
                             <template v-else>
                               <div class="file-icon-default">
-                                <el-icon><component :is="'Document'"></component></el-icon>
+                                <i :class="file.icon || 'bi bi-file-earmark'"></i>
                               </div>
                             </template>
                         </template>

@@ -193,6 +193,8 @@ $(function () {
 
   function applyActiveTheme(activeCode) {
     var found = false;
+    var activeLabel = @json(__('panel/common.active'));
+    var notUsedLabel = @json(__('panel/common.not_used'));
     $('.themes-item').each(function () {
       var $card = $(this);
       var $wrap = $card.find('.theme-switch');
@@ -216,6 +218,40 @@ $(function () {
       }
 
       $card.find('.theme-name').toggleClass('text-primary', isActive);
+
+      // Update detail modal
+      var $modal = $('#themeDetail' + code);
+      if ($modal.length) {
+        var $headerBadge = $modal.find('.theme-detail-current-badge');
+        if (isActive) {
+          if (!$headerBadge.length) {
+            $modal.find('.modal-title').after(
+              '<span class="badge bg-primary mt-1 theme-detail-current-badge"><i class="bi bi-check-circle-fill me-1"></i>' + currentThemeLabel + '</span>'
+            );
+          }
+        } else {
+          $headerBadge.remove();
+        }
+
+        var $status = $modal.find('.theme-detail-status');
+        if (isActive) {
+          $status.html('<span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> ' + activeLabel + '</span>');
+        } else {
+          $status.html('<span class="badge bg-secondary"><i class="bi bi-circle me-1"></i> ' + notUsedLabel + '</span>');
+        }
+
+        var $enableBtn = $modal.find('.theme-detail-enable-btn');
+        if (isActive) {
+          $enableBtn.remove();
+        } else {
+          if (!$enableBtn.length) {
+            var btnUrl = '/{{ panel_name() }}/themes/' + code + '/active';
+            $modal.find('.modal-footer .btn-secondary').after(
+              '<button type="button" class="btn btn-primary theme-enable-btn theme-detail-enable-btn" data-url="' + btnUrl + '" data-code="' + code + '"><i class="bi bi-check-circle me-1"></i> ' + activeLabel + '</button>'
+            );
+          }
+        }
+      }
     });
     console.log('[theme] applyActiveTheme:', activeCode || '(none)', 'found:', found);
   }

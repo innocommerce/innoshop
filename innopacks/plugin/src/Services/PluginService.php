@@ -29,7 +29,7 @@ class PluginService
      */
     public static function getInstance(): static
     {
-        return new static;
+        return new self;
     }
 
     /**
@@ -63,19 +63,20 @@ class PluginService
      */
     public function migrateDatabase(CPlugin $CPlugin): void
     {
-        $migrationPath = "{$CPlugin->getPath()}/Migrations";
-        if (is_dir($migrationPath)) {
-            $files = glob($migrationPath.'/*');
-            asort($files);
+        $migrationPath = "{$CPlugin->getPath()}/Database/Migrations";
+        if (! is_dir($migrationPath)) {
+            return;
+        }
+        $files = glob($migrationPath.'/*');
+        asort($files);
 
-            foreach ($files as $file) {
-                $file = str_replace(base_path(), '', $file);
-                Artisan::call('migrate', [
-                    '--force' => true,
-                    '--step'  => 1,
-                    '--path'  => $file,
-                ]);
-            }
+        foreach ($files as $file) {
+            $file = str_replace(base_path(), '', $file);
+            Artisan::call('migrate', [
+                '--force' => true,
+                '--step'  => 1,
+                '--path'  => $file,
+            ]);
         }
     }
 
@@ -101,7 +102,7 @@ class PluginService
      */
     public function rollbackDatabase(CPlugin $CPlugin): void
     {
-        $migrationPath = "{$CPlugin->getPath()}/Migrations";
+        $migrationPath = "{$CPlugin->getPath()}/Database/Migrations";
         if (! is_dir($migrationPath)) {
             return;
         }
@@ -115,6 +116,53 @@ class PluginService
                 '--step'  => 1,
                 '--path'  => $file,
             ]);
+        }
+    }
+
+    /**
+     * Reset plugin database: rollback → migrate → seed.
+     *
+     * @param  CPlugin  $CPlugin
+     * @param  bool  $clearData
+     * @return void
+     */
+    public function resetPlugin(CPlugin $CPlugin, bool $clearData = false): void
+    {
+        $this->rollbackDatabase($CPlugin);
+        $this->migrateDatabase($CPlugin);
+        $this->runSeeders($CPlugin, $clearData);
+    }
+
+    /**
+     * Run plugin seeders manually.
+     *
+     * @param  CPlugin  $CPlugin
+     * @param  bool  $clearData
+     * @return void
+     */
+    public function runSeeders(CPlugin $CPlugin, bool $clearData = false): void
+    {
+        $seederPath = "{$CPlugin->getPath()}/Database/Seeders";
+        if (! is_dir($seederPath)) {
+            return;
+        }
+
+        $pluginCode = $CPlugin->getDirname();
+        $files      = glob("$seederPath/*.php");
+        sort($files);
+
+        foreach ($files as $file) {
+            $className = basename($file, '.php');
+            $fullClass = "Plugin\\{$pluginCode}\\Database\\Seeders\\{$className}";
+            if (class_exists($fullClass) && method_exists($fullClass, 'run')) {
+                $ref  = new \ReflectionMethod($fullClass, 'run');
+                $args = $ref->getNumberOfParameters();
+                if ($args > 0) {
+                    (new $fullClass)->run($clearData);
+                } else {
+                    (new $fullClass)->run();
+                }
+            }
         }
     }
 }

@@ -429,8 +429,8 @@ $fm-text-secondary: #909399;
   color: $fm-text-secondary;
 }
 
-.file-card:hover .video-thumb .el-icon,
-.file-card:hover .file-icon-default .el-icon {
+.file-card:hover .video-thumb i,
+.file-card:hover .file-icon-default i {
   color: $fm-primary;
   transform: scale(1.1);
   transition: all 0.3s;
@@ -779,7 +779,9 @@ $fm-text-secondary: #909399;
   width: 100%;
 }
 
-.folder-icon .el-icon {
+.folder-icon i {
+  font-size: 64px;
+  color: #f0c674;
   transition: all 0.3s;
 }
 
@@ -790,7 +792,7 @@ $fm-text-secondary: #909399;
   transition: all 0.3s;
 }
 
-.file-card:hover .folder-icon .el-icon {
+.file-card:hover .folder-icon i {
   transform: scale(1.1);
   color: $fm-primary-light;
 }

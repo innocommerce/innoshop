@@ -16,6 +16,7 @@ return [
     'delete'              => 'Delete',
     'delete_confirm'      => 'Are you sure you want to delete?',
     'deleted_success'     => 'Deleted successfully',
+    'error'               => 'Operation failed',
     'installed_success'   => 'Installed successfully',
     'uninstalled_success' => 'Uninstalled successfully',
     'edit'                => 'Edit',

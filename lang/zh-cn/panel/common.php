@@ -97,6 +97,8 @@ return [
     'summary_description'          => '不超过50个字符，简明扼要，有助于搜索引擎收录。',
     'summary_help'                 => '简要概括产品核心卖点，利于SEO展示。',
     'total_records'                => '共 :total 条记录，当前第 :current/:last 页',
+    'reset'                        => '重置',
+    'reset_confirm'                => '将重置插件数据库（回滚 → 迁移 → 重新导入数据），是否继续？',
     'uninstall'                    => '卸载',
     'unlimited'                    => '不限',
     'up_image_text'                => '点击上传，或将文件拖拽至此，建议尺寸为方形，比如 800*800',
