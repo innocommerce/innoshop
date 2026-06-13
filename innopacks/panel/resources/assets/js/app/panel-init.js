@@ -20,8 +20,6 @@ export function bindPanelOnReady() {
   window.inno.fileManagerIframe = fileManager.init;
   window.inno.productSelectorIframe = ProductSelector.init;
 
-  setupApiHeaders();
-
   panelUI.initTooltips();
   panelUI.initTabNavigation();
   panelUI.initHoverEffects();

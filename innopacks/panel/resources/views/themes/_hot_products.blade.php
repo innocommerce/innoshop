@@ -98,7 +98,7 @@
     const langPickerHint = @json(__('panel/setting.hot_products_picker_hint'));
     const langPickerPlaceholder = @json(__('panel/setting.hot_products_picker_placeholder'));
     const langPickerEmpty = @json(__('panel/setting.hot_products_picker_empty'));
-    const placeholderImage = @json(asset("vendor/innoshop/images/placeholder.png"));
+    const placeholderImage = @json(asset("images/placeholder.png"));
 
     const productsData = {};
     const panelLocale = @json(panel_locale_code());

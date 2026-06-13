@@ -204,13 +204,108 @@ class PluginManager
      */
     protected function getPluginsConfig(): array
     {
+        $pluginsDir = $this->getPluginsDir();
+        if (! is_dir($pluginsDir)) {
+            return [];
+        }
+
+        if ($this->loadCachedPluginsConfig($pluginsDir, $installed)) {
+            return $installed;
+        }
+
+        $installed = $this->scanPluginsDirectory($pluginsDir);
+        $this->writeCachedPluginsConfig($pluginsDir, $installed);
+
+        return $installed;
+    }
+
+    /**
+     * Try to load cached plugin config. Returns false on miss / invalidation.
+     * Cache invalidates when plugins/ dir mtime changes (add/remove/rename subdir).
+     * Skipped entirely when APP_DEBUG=true to surface config edits immediately.
+     */
+    protected function loadCachedPluginsConfig(string $pluginsDir, ?array &$installed): bool
+    {
+        if (config('app.debug')) {
+            return false;
+        }
+
+        $cacheFile = $this->getPluginsCacheFile();
+        if (! is_file($cacheFile)) {
+            return false;
+        }
+
+        $cached = @json_decode((string) file_get_contents($cacheFile), true);
+        if (! is_array($cached) || ! isset($cached['mtime'], $cached['data'])) {
+            return false;
+        }
+
+        $dirMtime = @filemtime($pluginsDir);
+        if ($dirMtime === false || $cached['mtime'] !== $dirMtime) {
+            return false;
+        }
+
+        $installed = $cached['data'];
+
+        return true;
+    }
+
+    /**
+     * Persist scanned plugin config to disk, tagged with current plugins/ dir mtime
+     * so {@see loadCachedPluginsConfig()} can detect drift on next read.
+     * No-op when APP_DEBUG=true to surface config edits immediately.
+     *
+     * @param  string  $pluginsDir  Absolute path to plugins/ directory.
+     * @param  array  $installed  Plugin config list returned by {@see scanPluginsDirectory()}.
+     * @return void
+     */
+    protected function writeCachedPluginsConfig(string $pluginsDir, array $installed): void
+    {
+        if (config('app.debug')) {
+            return;
+        }
+
+        $dirMtime = @filemtime($pluginsDir);
+        if ($dirMtime === false) {
+            return;
+        }
+
+        $cacheFile = $this->getPluginsCacheFile();
+        @file_put_contents(
+            $cacheFile,
+            json_encode(['mtime' => $dirMtime, 'data' => $installed], JSON_PRETTY_PRINT)
+        );
+    }
+
+    /**
+     * Absolute path to the plugin config cache file.
+     * Lives next to Laravel's framework cache (storage/framework/).
+     *
+     * @return string
+     */
+    protected function getPluginsCacheFile(): string
+    {
+        return storage_path('framework/plugins-cache.json');
+    }
+
+    /**
+     * Scan plugins/ directory and parse every subdir's config.json.
+     * Returns a sorted list keyed by directory name. Subdirs without a
+     * valid config.json are logged and skipped (install state preserved
+     * by dirname keys so the install/uninstall flow stays consistent).
+     *
+     * @param  string  $pluginsDir  Absolute path to plugins/ directory (must exist).
+     * @return array<string, array> Map of [dirname => config.json array], sorted by code.
+     */
+    protected function scanPluginsDirectory(string $pluginsDir): array
+    {
         $installed = [];
-        $resource  = opendir($this->getPluginsDir());
+        $resource  = opendir($pluginsDir);
         while ($filename = @readdir($resource)) {
             if ($filename == '.' || $filename == '..') {
                 continue;
             }
-            $path = $this->getPluginsDir().DIRECTORY_SEPARATOR.$filename;
+            $path = $pluginsDir.DIRECTORY_SEPARATOR.$filename;
             if (is_dir($path)) {
                 $packageJsonPath = $path.DIRECTORY_SEPARATOR.'config.json';
                 if (file_exists($packageJsonPath)) {

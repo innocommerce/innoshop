@@ -26,7 +26,7 @@
     var hcPickerHint = @json(__('panel/setting.home_categories_picker_hint'));
     var hcPickerPlaceholder = @json(__('panel/setting.home_categories_picker_placeholder'));
     var hcPickerEmpty = @json(__('panel/setting.home_categories_picker_empty'));
-    var hcPlaceholderImg = @json(asset("vendor/innoshop/images/placeholder.png"));
+    var hcPlaceholderImg = @json(asset("images/placeholder.png"));
 
     var categoriesData = {};
     var categoryIds = @json($home_category_ids ?? []);

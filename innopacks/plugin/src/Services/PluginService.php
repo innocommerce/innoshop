@@ -53,6 +53,7 @@ class PluginService
         if (empty($plugin)) {
             Plugin::query()->create($params);
         }
+        PluginRepo::resetCache();
     }
 
     /**
@@ -94,6 +95,7 @@ class PluginService
             'code' => $CPlugin->getCode(),
         ];
         $this->pluginRepo->getBuilder($filters)->delete();
+        PluginRepo::resetCache();
     }
 
     /**

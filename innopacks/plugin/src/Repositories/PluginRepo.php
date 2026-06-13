@@ -15,19 +15,16 @@ use InnoShop\Plugin\Models\Plugin;
 
 class PluginRepo
 {
-    public static Collection $installedPlugins;
-
-    public function __construct()
-    {
-        self::$installedPlugins = new Collection;
-    }
+    public static ?Collection $installedPlugins = null;
 
     /**
      * @return self
      */
     public static function getInstance(): PluginRepo
     {
-        return new self;
+        static $instance = null;
+
+        return $instance ??= new self;
     }
 
     /**
@@ -37,11 +34,21 @@ class PluginRepo
      */
     public function allPlugins(): Collection
     {
-        if (self::$installedPlugins->count() > 0) {
+        if (self::$installedPlugins instanceof Collection && self::$installedPlugins->count() > 0) {
             return self::$installedPlugins;
         }
 
         return self::$installedPlugins = Plugin::all();
+    }
+
+    /**
+     * Reset the cached installed plugins collection. Call after plugin
+     * install/uninstall/enable/disable/priority change so subsequent reads
+     * reflect DB state.
+     */
+    public static function resetCache(): void
+    {
+        self::$installedPlugins = null;
     }
 
     /**
