@@ -56,3 +56,7 @@ public/docs/
 storage/framework/scribe_panel_build/
 public/vendor/scribe/
 public/vendor/scribe_panel/
+
+# SEO generated files (runtime generated, do not commit)
+public/llms.txt
+public/robots.txt
