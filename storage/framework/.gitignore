@@ -3,7 +3,9 @@ config.php
 down
 events.scanned.php
 maintenance.php
+plugins-cache.json
 routes.php
 routes.scanned.php
 schedule-*
 services.json
+htmlpurifier

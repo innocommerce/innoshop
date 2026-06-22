@@ -248,6 +248,7 @@ return [
     'weight_classes_store'               => 'Save weight units',
     'weight_classes_update'              => 'Update weight units',
     'analytics_visit'                    => 'Visit Analytics',
+    'analytics_bot'                      => 'Bot Analytics',
     'announcements_active'               => 'Activate Announcement',
     'announcements_create'               => 'Create Announcement',
     'announcements_destroy'              => 'Destroy Announcement',

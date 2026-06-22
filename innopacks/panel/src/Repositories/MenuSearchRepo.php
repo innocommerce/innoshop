@@ -219,6 +219,7 @@ class MenuSearchRepo
             ['route' => 'analytics_product', 'title' => __('panel/menu.analytics_product')],
             ['route' => 'analytics_customer', 'title' => __('panel/menu.analytics_customer')],
             ['route' => 'analytics_visit', 'title' => __('panel/menu.analytics_visit')],
+            ['route' => 'analytics_bot', 'title' => __('panel/menu.analytics_bot')],
         ]);
     }
 

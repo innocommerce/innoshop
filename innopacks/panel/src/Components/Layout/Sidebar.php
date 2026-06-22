@@ -113,7 +113,7 @@ class Sidebar extends Component
             [
                 'title'    => __('panel/menu.top_analytic'),
                 'icon'     => 'bi-bar-chart',
-                'prefixes' => ['analytics', 'analytics_order', 'analytics_product', 'analytics_customer', 'analytics_visit'],
+                'prefixes' => ['analytics', 'analytics_order', 'analytics_product', 'analytics_customer', 'analytics_visit', 'analytics_bot'],
                 'children' => $this->getAnalyticSubRoutes(),
             ],
 
@@ -334,6 +334,7 @@ class Sidebar extends Component
             ['route' => 'analytics_product', 'title' => __('panel/menu.analytics_product')],
             ['route' => 'analytics_customer', 'title' => __('panel/menu.analytics_customer')],
             ['route' => 'analytics_visit', 'title' => __('panel/menu.analytics_visit')],
+            ['route' => 'analytics_bot', 'title' => __('panel/menu.analytics_bot')],
         ];
 
         return fire_hook_filter('panel.component.sidebar.analytic.routes', $routes);

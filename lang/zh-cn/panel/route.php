@@ -248,6 +248,7 @@ return [
     'weight_classes_store'               => '保存重量单位',
     'weight_classes_update'              => '更新重量单位',
     'analytics_visit'                    => '访问分析',
+    'analytics_bot'                      => '爬虫分析',
     'announcements_active'               => '启用公告',
     'announcements_create'               => '创建公告',
     'announcements_destroy'              => '删除公告',

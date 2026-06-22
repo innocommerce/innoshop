@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Kunjungi rincian',
     'visit_duration'        => 'Menteri kunjungan',
     'visits'                => 'Jumlah kunjungan',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Panduan Penggunaan',
+    'guide_intro'             => 'Analitik kunjungan mengandalkan tabel visits yang diagregasi sebelumnya. Data baru diagregasi sekali sehari. Jika angka terlihat salah atau Anda memulihkan database, jalankan perintah berikut di server secara berurutan.',
+    'guide_cmd_migrate'       => 'Jalankan migrasi DB untuk menambah kolom baru (mis. is_bot)',
+    'guide_cmd_backfill_geo'  => 'Isi massal country/browser/os untuk catatan yang kurang data geo (city dilewati)',
+    'guide_cmd_aggregate'     => 'Agregasi ulang visits/visit_events ke visit_daily (memperbaiki angka yang kurang)',
+    'guide_cmd_tag_bots'      => 'Tandai crawler/bot/scanner lewat kata kunci User-Agent agar difilter dari statistik',
+    'guide_cron_laravel_desc' => 'Penjadwalan sudah dibundel di innopacks/common — server hanya butuh satu entri cron schedule:run.',
+    'bot_guide_intro'         => 'Mesin pencari, crawler, dan scanner dideteksi lewat kata kunci User-Agent dan difilter dari statistik utama. Tandai ulang secara berkala untuk menjaga akurasi filter.',
+    'bot_guide_cron_desc'     => 'Penjadwalan bawaan: menandai ulang setiap Senin 03:00. Server hanya butuh satu entri cron schedule:run.',
 ];

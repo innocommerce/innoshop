@@ -77,14 +77,12 @@ class ThemeRepo
      */
     private function getPreviewPath(string $themeCode): string
     {
-        $path = theme_path($themeCode.'/public/images/preview.png');
-        if (file_exists($path)) {
-            return 'images/preview.png';
-        }
-
-        $path = theme_path($themeCode.'/public/images/preview.jpg');
-        if (file_exists($path)) {
-            return 'images/preview.jpg';
+        foreach (['webp', 'png', 'jpg'] as $ext) {
+            $relative = "images/preview.$ext";
+            $path     = theme_path($themeCode.'/public/images/preview.'.$ext);
+            if (file_exists($path)) {
+                return $relative;
+            }
         }
 
         return '';

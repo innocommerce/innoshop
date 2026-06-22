@@ -15,6 +15,7 @@ return [
     'analytics_order'    => 'Orders',
     'analytics_product'  => 'Products',
     'analytics_visit'    => 'Visits',
+    'analytics_bot'      => 'Bots',
     'articles'           => 'Articles',
     'attribute_groups'   => 'Attribute Groups',
     'attribute_values'   => 'Attribute Values',

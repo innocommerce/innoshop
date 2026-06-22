@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Detalles de acceso',
     'visit_duration'        => 'Duración de la visita',
     'visits'                => 'Número de visitas',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Guía de uso',
+    'guide_intro'             => 'Las estadísticas de visitas dependen de la pre-agregación de la tabla visits. Los datos nuevos se agregan una vez al día. Si los números parecen incorrectos o restauró la base de datos, ejecute estos comandos en el servidor en orden.',
+    'guide_cmd_migrate'       => 'Ejecutar migraciones para añadir nuevas columnas (p. ej. is_bot)',
+    'guide_cmd_backfill_geo'  => 'Rellenar country/browser/os en lote para registros sin datos geográficos (se omite city)',
+    'guide_cmd_aggregate'     => 'Re-agregar visits/visit_events en visit_daily (corrige subcontajes)',
+    'guide_cmd_tag_bots'      => 'Marcar crawlers/bots/scanners mediante palabras clave del User-Agent para excluirlos de las estadísticas',
+    'guide_cron_laravel_desc' => 'Las programaciones están incluidas en innopacks/common — solo se necesita una entrada cron schedule:run en el servidor.',
+    'bot_guide_intro'         => 'Los motores de búsqueda, crawlers y scanners se detectan mediante palabras clave del User-Agent y se excluyen de las estadísticas principales. Vuelva a etiquetar periódicamente para mantener la precisión del filtro.',
+    'bot_guide_cron_desc'     => 'Programación integrada: re-etiqueta cada lunes a las 03:00. Solo se necesita una entrada cron schedule:run en el servidor.',
 ];

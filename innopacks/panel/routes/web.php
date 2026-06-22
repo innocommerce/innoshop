@@ -111,6 +111,7 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/analytics/product', [Controllers\AnalyticsController::class, 'product'])->name('analytics_product');
         Route::get('/analytics/customer', [Controllers\AnalyticsController::class, 'customer'])->name('analytics_customer');
         Route::get('/analytics/visit', [Controllers\AnalyticsController::class, 'visit'])->name('analytics_visit');
+        Route::get('/analytics/bot', [Controllers\AnalyticsController::class, 'bot'])->name('analytics_bot');
         Route::post('/analytics/reaggregate', [Controllers\AnalyticsController::class, 'reaggregate'])->name('analytics.reaggregate');
 
         Route::resource('/visits', Controllers\VisitController::class)->only(['index', 'show']);
@@ -139,6 +140,7 @@ Route::middleware(['admin_auth:admin'])
         Route::post('/settings/test-sms', [Controllers\SettingController::class, 'testSms'])->name('settings.test_sms');
         Route::post('/settings/download-geolite2', [Controllers\SettingController::class, 'downloadGeoLite2'])->name('settings.download_geolite2');
         Route::get('/settings/geolite2-info', [Controllers\SettingController::class, 'getGeoLite2Info'])->name('settings.geolite2_info');
+        Route::get('/settings/generate-txt', [Controllers\SettingController::class, 'generateTxt'])->name('settings.generate_txt');
 
         Route::get('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'index'])->name('plugin_coordination.index');
         Route::put('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'update'])->name('plugin_coordination.update');

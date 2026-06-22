@@ -10,6 +10,7 @@
 namespace InnoShop\Common;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\ServiceProvider;
 use InnoShop\Common\Components\Base;
 use InnoShop\Common\Components\Forms;
@@ -48,6 +49,7 @@ class CommonServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerMigrations();
         $this->registerCommands();
+        $this->registerSchedules();
         $this->loadMailSettings();
         $this->loadViewComponents();
         $this->loadViewTemplates();
@@ -130,8 +132,39 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\MigrateImagePaths::class,
                 Commands\OrderComplete::class,
                 Commands\AggregateVisitStatistics::class,
+                Commands\BackfillVisitGeo::class,
+                Commands\TagBots::class,
             ]);
         }
+    }
+
+    /**
+     * Register scheduled tasks. Activated on the server by adding this cron entry:
+     *   * * * * * cd /path/to/innoshop && php artisan schedule:run >> /dev/null 2>&1
+     *
+     * @return void
+     */
+    private function registerSchedules(): void
+    {
+        // Aggregate yesterday's visit stats (pv/uv/conversion/country/hour/device) shortly after midnight.
+        Schedule::command('visits:aggregate --date=yesterday')
+            ->dailyAt('00:05')
+            ->withoutOverlapping()
+            ->name('visits:aggregate-yesterday')
+            ->description('Aggregate yesterday\'s visit data into daily summary tables');
+
+        // Re-scan for crawlers/scanners weekly (new UA patterns emerge over time).
+        Schedule::command('visits:tag-bots --include-suspicious')
+            ->weeklyOn(1, '03:00')
+            ->name('visits:tag-bots-weekly')
+            ->description('Tag bots/crawlers/scanners via User-Agent and behavior');
+
+        // Backfill missing geo data nightly in small chunks.
+        Schedule::command('visits:backfill-geo --limit=10000')
+            ->dailyAt('03:30')
+            ->withoutOverlapping()
+            ->name('visits:backfill-geo-nightly')
+            ->description('Backfill country/browser/os for visits missing geo data');
     }
 
     /**

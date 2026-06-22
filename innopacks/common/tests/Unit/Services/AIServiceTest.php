@@ -58,11 +58,11 @@ class AIServiceTest extends TestCase
     }
 
     #[Test]
-    public function test_ai_service_manager_has_get_model_for_purpose_method(): void
+    public function test_ai_service_manager_has_get_fallback_model_method(): void
     {
-        $this->assertTrue($this->reflection->hasMethod('getModelForPurpose'));
-        $method = $this->reflection->getMethod('getModelForPurpose');
-        $this->assertTrue($method->isPublic());
+        $this->assertTrue($this->reflection->hasMethod('getFallbackModel'));
+        $method = $this->reflection->getMethod('getFallbackModel');
+        $this->assertTrue($method->isPrivate());
     }
 
     #[Test]
@@ -136,7 +136,7 @@ class AIServiceTest extends TestCase
     {
         // Document fallback model support
         $source = file_get_contents($this->reflection->getFileName());
-        $this->assertStringContainsString('fallback_models', $source);
+        $this->assertStringContainsString('fallbackMap', $source);
         $this->assertStringContainsString('getFallbackModel', $source);
     }
 
@@ -145,7 +145,7 @@ class AIServiceTest extends TestCase
     {
         // Document hook filter usage for extensibility
         $source = file_get_contents($this->reflection->getFileName());
-        $this->assertStringContainsString('apply_filters', $source);
+        $this->assertStringContainsString('fire_hook_filter', $source);
         $this->assertStringContainsString('ai.generate_prompt', $source);
         $this->assertStringContainsString('ai.generate_options', $source);
         $this->assertStringContainsString('ai.generate_result', $source);

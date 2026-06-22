@@ -13,8 +13,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Visit\ConversionDaily;
 use InnoShop\Common\Models\Visit\Visit;
+use InnoShop\Common\Models\Visit\VisitCountryDaily;
 use InnoShop\Common\Models\Visit\VisitDaily;
+use InnoShop\Common\Models\Visit\VisitDeviceDaily;
 use InnoShop\Common\Models\Visit\VisitEvent;
+use InnoShop\Common\Models\Visit\VisitHourlyDaily;
 
 class VisitStatisticsService
 {
@@ -35,6 +38,9 @@ class VisitStatisticsService
 
         $this->aggregateVisitDaily($date);
         $this->aggregateConversionDaily($date);
+        $this->aggregateCountryDaily($date);
+        $this->aggregateHourlyDaily($date);
+        $this->aggregateDeviceDaily($date);
     }
 
     /**
@@ -54,26 +60,46 @@ class VisitStatisticsService
         $eventsTable = $prefix.$eventsTableName;
         $visitsTable = $prefix.$visitsTableName;
 
-        // Get page views (page_view events)
-        $pvData = DB::table($eventsTableName)
-            ->select(
-                DB::raw('COUNT(*) as pv'),
-                DB::raw('COUNT(DISTINCT session_id) as uv'),
-                DB::raw('COUNT(DISTINCT ip_address) as ip')
-            )
-            ->where('event_type', VisitEvent::TYPE_PAGE_VIEW)
-            ->whereBetween('created_at', [$dateStart, $dateEnd])
-            ->first();
+        // All page-view-class events count as PV (浏览页面行为):
+        // page_view / home_view / category_view / product_view / cart_view
+        $pageViewTypes = [
+            VisitEvent::TYPE_PAGE_VIEW,
+            VisitEvent::TYPE_HOME_VIEW,
+            VisitEvent::TYPE_CATEGORY_VIEW,
+            VisitEvent::TYPE_PRODUCT_VIEW,
+            VisitEvent::TYPE_CART_VIEW,
+        ];
 
-        // Get device breakdown
-        $deviceData = DB::table("{$eventsTableName} as ve")
+        // Bot session ids to exclude (from visits.is_bot). Pre-fetched for performance:
+        // single query instead of JOIN on every aggregation.
+        $botSessionIds = DB::table($visitsTableName)
+            ->where('is_bot', true)
+            ->pluck('session_id')
+            ->toArray();
+
+        // Get page views (PV/UV/IP) — exclude bot sessions
+        $pvQuery = DB::table($eventsTableName)
+            ->whereIn('event_type', $pageViewTypes)
+            ->whereBetween('created_at', [$dateStart, $dateEnd]);
+        if (! empty($botSessionIds)) {
+            $pvQuery->whereNotIn('session_id', $botSessionIds);
+        }
+        $pvData = $pvQuery->select(
+            DB::raw('COUNT(*) as pv'),
+            DB::raw('COUNT(DISTINCT session_id) as uv'),
+            DB::raw('COUNT(DISTINCT ip_address) as ip')
+        )->first();
+
+        // Get device breakdown — exclude bot sessions (they have device_type='bot')
+        $deviceQuery = DB::table("{$eventsTableName} as ve")
             ->join("{$visitsTableName} as v", 've.session_id', '=', 'v.session_id')
-            ->select(
-                'v.device_type',
-                DB::raw('COUNT(*) as pv')
-            )
-            ->where('ve.event_type', VisitEvent::TYPE_PAGE_VIEW)
+            ->whereIn('ve.event_type', $pageViewTypes)
             ->whereBetween('ve.created_at', [$dateStart, $dateEnd])
+            ->where('v.is_bot', false);
+        $deviceData = $deviceQuery->select(
+            'v.device_type',
+            DB::raw('COUNT(*) as pv')
+        )
             ->groupBy('v.device_type')
             ->pluck('pv', 'device_type');
 
@@ -81,6 +107,7 @@ class VisitStatisticsService
         $newVisitors = DB::table($visitsTableName)
             ->where('first_visited_at', '>=', $dateStart)
             ->where('first_visited_at', '<=', $dateEnd)
+            ->where('is_bot', false)
             ->whereNotExists(function ($query) use ($dateStart, $visitsTableName) {
                 $query->select(DB::raw(1))
                     ->from("{$visitsTableName} as v2")
@@ -89,12 +116,15 @@ class VisitStatisticsService
             })
             ->count();
 
-        // Calculate bounces (sessions with only one page view)
-        $bounces = DB::table($eventsTableName)
+        // Calculate bounces (sessions with only one page view) — exclude bot sessions
+        $bounceQuery = DB::table($eventsTableName)
             ->select('session_id', DB::raw('COUNT(*) as event_count'))
-            ->where('event_type', VisitEvent::TYPE_PAGE_VIEW)
-            ->whereBetween('created_at', [$dateStart, $dateEnd])
-            ->groupBy('session_id')
+            ->whereIn('event_type', $pageViewTypes)
+            ->whereBetween('created_at', [$dateStart, $dateEnd]);
+        if (! empty($botSessionIds)) {
+            $bounceQuery->whereNotIn('session_id', $botSessionIds);
+        }
+        $bounces = $bounceQuery->groupBy('session_id')
             ->having('event_count', '=', 1)
             ->get()
             ->count();
@@ -208,6 +238,150 @@ class VisitStatisticsService
                 'overall_conversion_rate' => $overallConversionRate,
             ]
         );
+    }
+
+    /**
+     * Aggregate per-country daily statistics (visits + pre-computed ip_count).
+     * Replaces runtime COUNT(DISTINCT ip_address) GROUP BY country on raw visits table.
+     */
+    public function aggregateCountryDaily(Carbon $date): void
+    {
+        $dateStart   = $date->copy()->startOfDay();
+        $dateEnd     = $date->copy()->endOfDay();
+        $visitsTable = (new Visit)->getTable();
+        $table       = (new VisitCountryDaily)->getTable();
+
+        $rows = DB::table($visitsTable)
+            ->select('country_code', 'country_name')
+            ->selectRaw('COUNT(*) as visits, COUNT(DISTINCT ip_address) as ip_count')
+            ->whereBetween('first_visited_at', [$dateStart, $dateEnd])
+            ->where('is_bot', false)
+            ->whereNotNull('country_code')
+            ->where('country_code', '!=', '')
+            ->groupBy('country_code', 'country_name')
+            ->get();
+
+        DB::table($table)->where('date', $date->toDateString())->delete();
+
+        if ($rows->isEmpty()) {
+            return;
+        }
+
+        $insertRows = [];
+        $now        = now();
+        foreach ($rows as $row) {
+            $insertRows[] = [
+                'date'         => $date->toDateString(),
+                'country_code' => $row->country_code,
+                'country_name' => $row->country_name ?? '',
+                'visits'       => $row->visits,
+                'ip_count'     => $row->ip_count,
+                'created_at'   => $now,
+                'updated_at'   => $now,
+            ];
+        }
+        foreach (array_chunk($insertRows, 500) as $chunk) {
+            DB::table($table)->insert($chunk);
+        }
+    }
+
+    /**
+     * Aggregate per-hour daily statistics.
+     * Replaces runtime HOUR(first_visited_at) + COUNT(DISTINCT ip_address) GROUP BY hour.
+     */
+    public function aggregateHourlyDaily(Carbon $date): void
+    {
+        $dateStart   = $date->copy()->startOfDay();
+        $dateEnd     = $date->copy()->endOfDay();
+        $visitsTable = (new Visit)->getTable();
+        $table       = (new VisitHourlyDaily)->getTable();
+
+        $rows = DB::table($visitsTable)
+            ->selectRaw('HOUR(first_visited_at) as hour, COUNT(*) as visits, COUNT(DISTINCT ip_address) as ip_count')
+            ->whereBetween('first_visited_at', [$dateStart, $dateEnd])
+            ->where('is_bot', false)
+            ->groupBy('hour')
+            ->get();
+
+        DB::table($table)->where('date', $date->toDateString())->delete();
+
+        if ($rows->isEmpty()) {
+            return;
+        }
+
+        $insertRows = [];
+        $now        = now();
+        foreach ($rows as $row) {
+            $insertRows[] = [
+                'date'       => $date->toDateString(),
+                'hour'       => $row->hour,
+                'visits'     => $row->visits,
+                'ip_count'   => $row->ip_count,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+        DB::table($table)->insert($insertRows);
+    }
+
+    /**
+     * Aggregate per-device daily statistics (visits + ip_count + page_views).
+     * Replaces runtime GROUP BY device_type on raw visits table.
+     */
+    public function aggregateDeviceDaily(Carbon $date): void
+    {
+        $dateStart   = $date->copy()->startOfDay();
+        $dateEnd     = $date->copy()->endOfDay();
+        $eventsTable = (new VisitEvent)->getTable();
+        $visitsTable = (new Visit)->getTable();
+        $table       = (new VisitDeviceDaily)->getTable();
+
+        $pageViewTypes = [
+            VisitEvent::TYPE_PAGE_VIEW,
+            VisitEvent::TYPE_HOME_VIEW,
+            VisitEvent::TYPE_CATEGORY_VIEW,
+            VisitEvent::TYPE_PRODUCT_VIEW,
+            VisitEvent::TYPE_CART_VIEW,
+        ];
+
+        $pvRows = DB::table("{$eventsTable} as ve")
+            ->join("{$visitsTable} as v", 've.session_id', '=', 'v.session_id')
+            ->whereIn('ve.event_type', $pageViewTypes)
+            ->whereBetween('ve.created_at', [$dateStart, $dateEnd])
+            ->where('v.is_bot', false)
+            ->select('v.device_type', DB::raw('COUNT(*) as pv'))
+            ->groupBy('v.device_type')
+            ->pluck('pv', 'device_type');
+
+        $visitRows = DB::table($visitsTable)
+            ->select('device_type')
+            ->selectRaw('COUNT(*) as visits, COUNT(DISTINCT ip_address) as ip_count')
+            ->whereBetween('first_visited_at', [$dateStart, $dateEnd])
+            ->where('is_bot', false)
+            ->groupBy('device_type')
+            ->get();
+
+        DB::table($table)->where('date', $date->toDateString())->delete();
+
+        if ($visitRows->isEmpty()) {
+            return;
+        }
+
+        $insertRows = [];
+        $now        = now();
+        foreach ($visitRows as $row) {
+            $deviceType   = $row->device_type ?: 'unknown';
+            $insertRows[] = [
+                'date'        => $date->toDateString(),
+                'device_type' => $deviceType,
+                'visits'      => $row->visits,
+                'ip_count'    => $row->ip_count,
+                'page_views'  => $pvRows[$deviceType] ?? 0,
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ];
+        }
+        DB::table($table)->insert($insertRows);
     }
 
     /**

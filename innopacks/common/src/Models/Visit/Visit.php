@@ -38,6 +38,7 @@ class Visit extends BaseModel
         'city',
         'referrer',
         'device_type',
+        'is_bot',
         'browser',
         'os',
         'locale',

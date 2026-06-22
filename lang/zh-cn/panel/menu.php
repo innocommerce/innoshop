@@ -15,6 +15,7 @@ return [
     'analytics_order'        => '订单统计',
     'analytics_product'      => '产品统计',
     'analytics_visit'        => '访问分析',
+    'analytics_bot'          => '爬虫分析',
     'articles'               => '文章管理',
     'attribute_groups'       => '属性分组',
     'attribute_values'       => '属性值',

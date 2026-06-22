@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Ziyaret detayları',
     'visit_duration'        => 'Ziyaret süresi',
     'visits'                => 'Ziyaret sayısı',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Kullanım Kılavuzu',
+    'guide_intro'             => 'Ziyaret istatistikleri, önceden toplanan visits tablosuna dayanır. Yeni veriler günde bir kez toplanır. Rakamlar yanlış görünüyorsa veya veritabanını geri yüklediyseniz, bu komutları sunucuda sırayla çalıştırın.',
+    'guide_cmd_migrate'       => 'Yeni sütunlar eklemek için DB migrasyonlarını çalıştır (örn. is_bot)',
+    'guide_cmd_backfill_geo'  => 'Geo verisi olmayan kayıtlar için country/browser/os toplu doldur (city atlanır)',
+    'guide_cmd_aggregate'     => 'visits/visit_events verilerini visit_daily içinde yeniden topla (düşük sayımları düzeltir)',
+    'guide_cmd_tag_bots'      => 'User-Agent anahtar kelimeleriyle crawler/bot/tarayıcı işaretle ve istatistiklerden dışla',
+    'guide_cron_laravel_desc' => 'Zamanlamalar innopacks/common içinde gömülüdür — sunucuda yalnızca bir schedule:run cron girişi gerekir.',
+    'bot_guide_intro'         => 'Arama motorları, crawler ve tarayıcılar User-Agent anahtar kelimeleriyle tespit edilip ana istatistiklerden dışlanır. Filtre doğruluğunu korumak için periyodik olarak yeniden etiketleyin.',
+    'bot_guide_cron_desc'     => 'Yerleşik zamanlama: her Pazartesi 03:00\'ta yeniden etiketler. Sunucuda yalnızca bir schedule:run cron girişi gerekir.',
 ];

@@ -61,4 +61,15 @@ return [
     'visit_detail'          => '訪問詳情',
     'visit_duration'        => '訪問時長',
     'visits'                => '訪問次數',
+
+    // Visit analytics guide
+    'usage_guide'             => '使用指南',
+    'guide_intro'             => '訪問統計依賴 visits 表的預聚合。新數據每天聚合一次，如果數據不準或換了資料庫，需要在伺服器按順序執行以下命令補全。',
+    'guide_cmd_migrate'       => '執行資料庫遷移，補齊新增欄位（如 is_bot）',
+    'guide_cmd_backfill_geo'  => '為缺失地理資訊的記錄批次補全 country/browser/os（city 不處理）',
+    'guide_cmd_aggregate'     => '把 visits/visit_events 重新聚合到 visit_daily（修復偏低數據）',
+    'guide_cmd_tag_bots'      => '透過 User-Agent 關鍵字標記爬蟲/機器人/掃描器，從統計中過濾',
+    'guide_cron_laravel_desc' => '排程已內建於 innopacks/common，伺服器只需設定一行 schedule:run。',
+    'bot_guide_intro'         => '透過 User-Agent 關鍵字識別搜尋引擎、爬蟲、掃描器等非人類流量並從主統計中過濾。可定期重新標記以保持過濾準確。',
+    'bot_guide_cron_desc'     => '已內建排程，每週一 03:00 自動重新標記。伺服器只需設定一行 schedule:run。',
 ];

@@ -61,7 +61,15 @@ class VisitEnrichService
     }
 
     /**
-     * Batch enrich all visits with missing data (geo + UA).
+     * Batch enrich all visits with missing data (geo country + UA).
+     * city is intentionally skipped — GeoLite2 frequently returns no city for
+     * public IPs, so most city=NULL records will never resolve and would just
+     * churn the queue forever. Statistics/maps only need country.
+     *
+     * Treats NULL as "未处理" and '' as "已查询但无结果". Always writes a value
+     * (even empty string) so the NULL state is consumed and the record won't
+     * be re-selected on the next pass — avoids infinite loop on IPs the mmdb
+     * has no data for (127.0.0.1, private ranges, unmapped public IPs).
      *
      * @return array ['success' => bool, 'updated' => int]
      */
@@ -71,13 +79,8 @@ class VisitEnrichService
 
         $visits = Visit::where(function ($q) {
             $q->whereNull('country_name')
-                ->orWhere('country_name', '')
-                ->orWhereNull('city')
-                ->orWhere('city', '')
                 ->orWhereNull('browser')
-                ->orWhere('browser', '')
-                ->orWhereNull('os')
-                ->orWhere('os', '');
+                ->orWhereNull('os');
         })
             ->limit(500)
             ->get();
@@ -87,16 +90,13 @@ class VisitEnrichService
         foreach ($visits as $visit) {
             $fields = [];
 
-            if ($visit->ip_address && (empty($visit->country_name) || empty($visit->city))) {
-                $result = $geoService->getLocation($visit->ip_address);
-                if (! empty($result['country_name']) || ! empty($result['city'])) {
-                    $fields['country_code'] = $result['country_code'] ?? '';
-                    $fields['country_name'] = $result['country_name'] ?? '';
-                    $fields['city']         = $result['city'] ?? '';
-                }
+            if ($visit->ip_address && is_null($visit->country_name)) {
+                $result                 = $geoService->getLocation($visit->ip_address);
+                $fields['country_code'] = $result['country_code'] ?? '';
+                $fields['country_name'] = $result['country_name'] ?? '';
             }
 
-            if ($visit->user_agent && (empty($visit->browser) || empty($visit->os))) {
+            if ($visit->user_agent && (is_null($visit->browser) || is_null($visit->os))) {
                 $fields['browser'] = self::detectBrowser($visit->user_agent);
                 $fields['os']      = self::detectOS($visit->user_agent);
             }

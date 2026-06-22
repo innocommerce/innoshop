@@ -61,4 +61,15 @@ return [
     'visit_detail'          => '訪問の詳細です',
     'visit_duration'        => '訪問時間です',
     'visits'                => '訪問回数です',
+
+    // Visit analytics guide
+    'usage_guide'             => '使い方ガイド',
+    'guide_intro'             => 'アクセス解析は visits テーブルの事前集計に依存します。新データは1日1回集計されます。数値が不正確な場合やDBを復元した場合は、サーバーで以下のコマンドを順番に実行してください。',
+    'guide_cmd_migrate'       => 'DBマイグレーションを実行して新規カラム（例: is_bot）を追加',
+    'guide_cmd_backfill_geo'  => '地理情報が欠落しているレコードの country/browser/os を一括補完（city は対象外）',
+    'guide_cmd_aggregate'     => 'visits/visit_events を visit_daily に再集計（過少カウントを修正）',
+    'guide_cmd_tag_bots'      => 'User-Agent キーワードでクローラー/ボット/スキャナーをマークし統計から除外',
+    'guide_cron_laravel_desc' => 'スケジュールは innopacks/common に内蔵済み。サーバー側で schedule:run の cron エントリを1行追加するだけです。',
+    'bot_guide_intro'         => 'User-Agent キーワードで検索エンジン、クローラー、スキャナーを検出し、メイン統計から除外します。フィルタの精度を保つため定期的に再タグ付けしてください。',
+    'bot_guide_cron_desc'     => '内蔵スケジュール：毎週月曜 03:00 に自動再タグ付け。サーバー側で schedule:run の cron エントリを1行追加するだけです。',
 ];

@@ -61,4 +61,15 @@ return [
     'visit_detail'          => '방문 정보',
     'visit_duration'        => '방문한 시간',
     'visits'                => '방문 횟수',
+
+    // Visit analytics guide
+    'usage_guide'             => '사용 가이드',
+    'guide_intro'             => '방문 통계는 visits 테이블의 사전 집계에 의존합니다. 신규 데이터는 하루 한 번 집계됩니다. 데이터가 부정확하거나 DB를 복원한 경우 서버에서 아래 명령을 순서대로 실행하세요.',
+    'guide_cmd_migrate'       => 'DB 마이그레이션을 실행하여 신규 컬럼(예: is_bot) 추가',
+    'guide_cmd_backfill_geo'  => 'geo 데이터가 누락된 레코드의 country/browser/os 일괄 채우기(city는 제외)',
+    'guide_cmd_aggregate'     => 'visits/visit_events를 visit_daily에 재집계(과소 집계된 수치 수정)',
+    'guide_cmd_tag_bots'      => 'User-Agent 키워드로 크롤러/봇/스캐너를 표시하여 통계에서 제외',
+    'guide_cron_laravel_desc' => '스케줄은 innopacks/common에 내장되어 있어 서버에는 schedule:run cron 항목 한 줄만 필요합니다.',
+    'bot_guide_intro'         => 'User-Agent 키워드로 검색엔진, 크롤러, 스캐너를 감지하여 주 통계에서 제외합니다. 필터 정확도를 유지하려면 주기적으로 다시 태깅하세요.',
+    'bot_guide_cron_desc'     => '내장 스케줄: 매주 월요일 03:00에 자동으로 다시 태깅. 서버에는 schedule:run cron 항목 한 줄만 필요합니다.',
 ];

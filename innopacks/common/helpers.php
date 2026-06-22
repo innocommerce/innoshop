@@ -23,6 +23,7 @@ use InnoShop\Common\Libraries\Weight;
 use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\LocaleRepo;
 use InnoShop\Common\Repositories\SettingRepo;
+use InnoShop\Common\Services\GeoLocationService;
 use InnoShop\Common\Services\ImageService;
 use InnoShop\Common\Services\StorageService;
 use InnoShop\Common\Support\EntityLinkEnricher;
@@ -1001,11 +1002,15 @@ if (! function_exists('account_route')) {
      */
     function account_route($name, mixed $parameters = [], bool $absolute = true): string
     {
-        if (hide_url_locale() || locales()->isEmpty()) {
-            return route('front.account.'.$name, $parameters, $absolute);
-        }
+        try {
+            if (hide_url_locale() || locales()->isEmpty()) {
+                return route('front.account.'.$name, $parameters, $absolute);
+            }
 
-        return route(front_locale_code().'.front.account.'.$name, $parameters, $absolute);
+            return route(front_locale_code().'.front.account.'.$name, $parameters, $absolute);
+        } catch (Exception $e) {
+            return url('/');
+        }
     }
 }
 
@@ -1750,5 +1755,82 @@ if (! function_exists('smart_log')) {
 
         // Log the message using Laravel's Log facade
         Log::{$level}($message, $context);
+    }
+}
+
+if (! function_exists('geo_location')) {
+    /**
+     * Resolve geographic location for an IP address via the system service.
+     * Plugins and views should always use this helper instead of reading
+     * the GeoLite2 mmdb directly — the underlying service handles env override
+     * and storage/plugins fallback automatically.
+     *
+     * @param  string  $ip
+     * @return array{country_code: string, country_name: string, region_code: string, region_name: string, city: string, latitude: ?float, longitude: ?float}
+     */
+    function geo_location(string $ip): array
+    {
+        if ($ip === '' || $ip === '127.0.0.1' || $ip === '::1') {
+            return [
+                'country_code' => '',
+                'country_name' => '',
+                'region_code'  => '',
+                'region_name'  => '',
+                'city'         => '',
+                'latitude'     => null,
+                'longitude'    => null,
+            ];
+        }
+
+        return app(GeoLocationService::class)->getLocation($ip);
+    }
+}
+
+if (! function_exists('geo_location_label')) {
+    /**
+     * Convenience wrapper returning a human-readable "Country Region City" label,
+     * falling back to '-' when nothing was resolved. Useful for tables/lists.
+     *
+     * @param  string  $ip
+     * @return string
+     */
+    function geo_location_label(string $ip): string
+    {
+        if ($ip === '' || $ip === '127.0.0.1' || $ip === '::1') {
+            return '-';
+        }
+
+        $loc   = geo_location($ip);
+        $parts = array_filter([
+            trim((string) $loc['country_name']),
+            trim((string) $loc['region_name']),
+            trim((string) $loc['city']),
+        ]);
+
+        return $parts ? implode(' ', $parts) : '-';
+    }
+}
+
+if (! function_exists('geo_location_lines')) {
+    /**
+     * Return non-empty location parts as an ordered array (country, region).
+     * Empty array when nothing was resolved. Use this when each part should
+     * render on its own line in the view.
+     *
+     * @param  string  $ip
+     * @return string[]
+     */
+    function geo_location_lines(string $ip): array
+    {
+        if ($ip === '' || $ip === '127.0.0.1' || $ip === '::1') {
+            return [];
+        }
+
+        $loc = geo_location($ip);
+
+        return array_values(array_filter([
+            trim((string) $loc['country_name']),
+            trim((string) $loc['region_name']),
+        ]));
     }
 }

@@ -20,19 +20,19 @@
             <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-today" value="today" {{ $date_filter == 'today' ? 'checked' : '' }}>
             <label class="btn btn-outline-secondary btn-sm" for="{{ $uniqueId }}-filter-today">{{ __('panel/analytics.filter_today') }}</label>
 
-            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-yesterday" value="yesterday" {{ $date_filter == 'yesterday' ? 'checked' : '' }}">
+            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-yesterday" value="yesterday" {{ $date_filter == 'yesterday' ? 'checked' : '' }}>
             <label class="btn btn-outline-secondary btn-sm" for="{{ $uniqueId }}-filter-yesterday">{{ __('panel/analytics.filter_yesterday') }}</label>
 
             <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-this-week" value="this_week" {{ $date_filter == 'this_week' ? 'checked' : '' }}>
             <label class="btn btn-outline-secondary btn-sm" for="{{ $uniqueId }}-filter-this-week">{{ __('panel/analytics.filter_this_week') }}</label>
 
-            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-this-month" value="this_month" {{ $date_filter == 'this_month' ? 'checked' : '' }}">
+            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-this-month" value="this_month" {{ $date_filter == 'this_month' ? 'checked' : '' }}>
             <label class="btn btn-outline-secondary btn-sm" for="{{ $uniqueId }}-filter-this-month">{{ __('panel/analytics.filter_this_month') }}</label>
 
-            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-last-7" value="last_7_days" {{ $date_filter == 'last_7_days' ? 'checked' : '' }}">
+            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-last-7" value="last_7_days" {{ $date_filter == 'last_7_days' ? 'checked' : '' }}>
             <label class="btn btn-outline-secondary btn-sm" for="{{ $uniqueId }}-filter-last-7">{{ __('panel/analytics.filter_last_7_days') }}</label>
 
-            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-last-30" value="last_30_days" {{ $date_filter == 'last_30_days' ? 'checked' : '' }}">
+            <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-last-30" value="last_30_days" {{ $date_filter == 'last_30_days' ? 'checked' : '' }}>
             <label class="btn btn-outline-secondary btn-sm" for="{{ $uniqueId }}-filter-last-30">{{ __('panel/analytics.filter_last_30_days') }}</label>
 
             <input type="radio" class="btn-check" name="date_filter" id="{{ $uniqueId }}-filter-custom" value="custom" {{ $date_filter == 'custom' ? 'checked' : '' }}>

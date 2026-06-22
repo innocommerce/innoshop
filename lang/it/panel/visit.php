@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Dettagli relativi all’accesso',
     'visit_duration'        => 'Durata della visita',
     'visits'                => 'Numero di visite',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Guida',
+    'guide_intro'             => 'Le statistiche degli accessi si basano sulla pre-aggregazione della tabella visits. I nuovi dati vengono aggregati una volta al giorno. Se i numeri sembrano errati o hai ripristinato il database, esegui questi comandi sul server in ordine.',
+    'guide_cmd_migrate'       => 'Esegui le migrazioni DB per aggiungere nuove colonne (es. is_bot)',
+    'guide_cmd_backfill_geo'  => 'Compila in blocco country/browser/os per i record senza dati geografici (city saltato)',
+    'guide_cmd_aggregate'     => 'Ri-aggrega visits/visit_events in visit_daily (corregge conteggi bassi)',
+    'guide_cmd_tag_bots'      => 'Marca crawler/bot/scanner tramite parole chiave User-Agent per filtrarli dalle statistiche',
+    'guide_cron_laravel_desc' => 'Le pianificazioni sono incluse in innopacks/common — sul server serve solo una voce cron schedule:run.',
+    'bot_guide_intro'         => 'Motori di ricerca, crawler e scanner vengono rilevati tramite parole chiave User-Agent e filtrati dalle statistiche principali. Ri-etichetta periodicamente per mantenere la precisione del filtro.',
+    'bot_guide_cron_desc'     => 'Pianificazione integrata: ri-etichetta ogni lunedì alle 03:00. Sul server serve solo una voce cron schedule:run.',
 ];

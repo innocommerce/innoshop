@@ -231,4 +231,47 @@ class AnalyticsControllerTest extends TestCase
         $this->assertArrayHasKey('hourly_statistics', $data);
         $this->assertArrayHasKey('conversion_funnel', $data);
     }
+
+    #[Test]
+    public function test_bot_method_exists(): void
+    {
+        $this->assertTrue($this->reflection->hasMethod('bot'));
+        $method = $this->reflection->getMethod('bot');
+        $this->assertTrue($method->isPublic());
+    }
+
+    #[Test]
+    public function test_bot_method_accepts_request_parameter(): void
+    {
+        $method     = $this->reflection->getMethod('bot');
+        $parameters = $method->getParameters();
+        $this->assertCount(1, $parameters);
+        $this->assertEquals('request', $parameters[0]->getName());
+    }
+
+    #[Test]
+    public function test_bot_data_structure(): void
+    {
+        $data = [
+            'statistics' => [
+                'sessions'        => 0,
+                'unique_visitors' => 0,
+                'page_views'      => 0,
+                'event_sessions'  => 0,
+            ],
+            'daily_statistics'     => [],
+            'bot_by_brand'         => [],
+            'bot_category_summary' => [],
+            'start_date'           => '',
+            'end_date'             => '',
+            'date_filter'          => '',
+        ];
+
+        $this->assertArrayHasKey('statistics', $data);
+        $this->assertArrayHasKey('daily_statistics', $data);
+        $this->assertArrayHasKey('bot_by_brand', $data);
+        $this->assertArrayHasKey('bot_category_summary', $data);
+        $this->assertSame(0, $data['statistics']['sessions']);
+        $this->assertIsArray($data['bot_by_brand']);
+    }
 }

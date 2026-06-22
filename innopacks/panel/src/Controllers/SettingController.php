@@ -23,6 +23,8 @@ use InnoShop\Common\Repositories\WeightClassRepo;
 use InnoShop\Common\Services\AI\ProviderRegistry;
 use InnoShop\Common\Services\GeoLite2Service;
 use InnoShop\Common\Services\SmsService;
+use InnoShop\Front\Services\LlmsService;
+use InnoShop\Front\Services\RobotsService;
 use InnoShop\Panel\Repositories\ContentAIRepo;
 use InnoShop\Panel\Requests\SettingRequest;
 use Throwable;
@@ -76,6 +78,13 @@ class SettingController
 
             // Update settings
             SettingRepo::getInstance()->updateValues($settings);
+
+            // Reload config so generate() reads fresh values
+            load_settings();
+
+            // Regenerate static files
+            RobotsService::getInstance()->writeFile();
+            LlmsService::getInstance()->writeFile();
 
             // Build redirect URL manually using the new panel_name
             // Since routes are registered at boot time, we need to manually construct the URL
@@ -185,6 +194,30 @@ class SettingController
                 'success' => false,
                 'message' => $e->getMessage(),
             ], 400);
+        }
+    }
+
+    /**
+     * Generate robots.txt or llms.txt preview content.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function generateTxt(Request $request): mixed
+    {
+        try {
+            $type = $request->get('type');
+            if ($type === 'robots') {
+                $content = RobotsService::getInstance()->generateDefault();
+            } elseif ($type === 'llms') {
+                $content = LlmsService::getInstance()->generateDefault();
+            } else {
+                return response()->json(['success' => false, 'message' => 'Invalid type'], 400);
+            }
+
+            return response()->json(['success' => true, 'data' => ['content' => $content]]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 }

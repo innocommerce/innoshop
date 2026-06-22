@@ -76,14 +76,24 @@ class GeoLocationService
 
         try {
             if ($this->reader === null) {
-                $this->reader = new Reader($databasePath);
+                $appLocale = app()->getLocale();
+                $localeMap = [
+                    'zh'    => 'zh-CN',
+                    'zh-cn' => 'zh-CN',
+                    'zh-tw' => 'zh-TW',
+                ];
+                $preferred    = $localeMap[strtolower($appLocale)] ?? $appLocale;
+                $this->reader = new Reader($databasePath, [$preferred, 'en']);
             }
 
-            $record = $this->reader->city($ip);
+            $record      = $this->reader->city($ip);
+            $subdivision = $record->subdivisions[0] ?? null;
 
             return [
                 'country_code' => $record->country->isoCode ?? '',
                 'country_name' => $record->country->name ?? '',
+                'region_code'  => $subdivision?->isoCode ?? '',
+                'region_name'  => $subdivision?->name ?? '',
                 'city'         => $record->city->name ?? '',
                 'latitude'     => $record->location->latitude ?? null,
                 'longitude'    => $record->location->longitude ?? null,
@@ -110,6 +120,8 @@ class GeoLocationService
         return [
             'country_code' => '',
             'country_name' => '',
+            'region_code'  => '',
+            'region_name'  => '',
             'city'         => '',
             'latitude'     => null,
             'longitude'    => null,

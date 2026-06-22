@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Besuche für weitere einzelheiten',
     'visit_duration'        => 'Dauer des interviews?',
     'visits'                => 'Anzahl der interviews',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Benutzerhandbuch',
+    'guide_intro'             => 'Die Besuchsstatistiken basieren auf voraggregierten visits-Daten. Neue Daten werden einmal pro Tag aggregiert. Falls die Zahlen falsch aussehen oder eine Datenbank wiederhergestellt wurde, führen Sie diese Befehle auf dem Server in dieser Reihenfolge aus.',
+    'guide_cmd_migrate'       => 'DB-Migrationen ausführen, um neue Spalten hinzuzufügen (z. B. is_bot)',
+    'guide_cmd_backfill_geo'  => 'country/browser/os für Datensätze ohne Geo-Daten massenhaft nachfüllen (city wird übersprungen)',
+    'guide_cmd_aggregate'     => 'visits/visit_events erneut in visit_daily aggregieren (korrigiert zu niedrige Zahlen)',
+    'guide_cmd_tag_bots'      => 'Crawler/Bots/Scanner über User-Agent-Schlüsselwörter markieren und aus Statistiken filtern',
+    'guide_cron_laravel_desc' => 'Die Zeitpläne sind in innopacks/common integriert — auf dem Server ist nur ein einzelner schedule:run-Cron-Eintrag nötig.',
+    'bot_guide_intro'         => 'Suchmaschinen, Crawler und Scanner werden über User-Agent-Schlüsselwörter erkannt und aus den Hauptstatistiken gefiltert. Markieren Sie regelmäßig neu, um die Filtergenauigkeit zu erhalten.',
+    'bot_guide_cron_desc'     => 'Integrierter Zeitplan: neu markieren jeden Montag um 03:00. Auf dem Server ist nur ein schedule:run-Cron-Eintrag nötig.',
 ];

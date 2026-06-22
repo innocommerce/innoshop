@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Lawati butiran',
     'visit_duration'        => 'Tempoh lawatan',
     'visits'                => 'Bilangan lawatan',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Panduan Penggunaan',
+    'guide_intro'             => 'Analitik lawatan bergantung pada jadual visits yang diagregatkan terlebih dahulu. Data baharu diagregatkan sekali sehari. Jika nombor kelihatan salah atau anda memulihkan pangkalan data, jalankan arahan berikut di pelayan mengikut urutan.',
+    'guide_cmd_migrate'       => 'Jalankan migrasi DB untuk menambah lajur baharu (cth. is_bot)',
+    'guide_cmd_backfill_geo'  => 'Isi secara pukal country/browser/os untuk rekod yang tiada data geo (city dilangkau)',
+    'guide_cmd_aggregate'     => 'Agregat semula visits/visit_events ke visit_daily (membaiki nombor yang kurang)',
+    'guide_cmd_tag_bots'      => 'Tanda crawler/bot/scanner melalui kata kunci User-Agent untuk ditapis dari statistik',
+    'guide_cron_laravel_desc' => 'Penjadualan telah dibundel dalam innopacks/common — pelayan hanya memerlukan satu entri cron schedule:run.',
+    'bot_guide_intro'         => 'Enjin carian, crawler dan scanner dikesan melalui kata kunci User-Agent dan ditapis dari statistik utama. Tanda semula secara berkala untuk mengekalkan ketepatan penapis.',
+    'bot_guide_cron_desc'     => 'Penjadualan terbina dalam: menanda semula setiap Isnin 03:00. Pelayan hanya memerlukan satu entri cron schedule:run.',
 ];

@@ -4,6 +4,7 @@
 
 @push('header')
 <script src="{{ asset('vendor/chart/chart.min.js') }}"></script>
+<script src="{{ asset('vendor/echarts/echarts.min.js') }}"></script>
 @endpush
 
 @section('content')
@@ -181,6 +182,9 @@
           <button class="btn btn-sm btn-outline-secondary" onclick="reaggregate()" title="{{ __('panel/analytics.reaggregate') }}">
             <i class="bi bi-arrow-clockwise"></i>
           </button>
+          <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#visitGuideModal" title="{{ __('panel/visit.usage_guide') }}">
+            <i class="bi bi-question-circle"></i>
+          </button>
         </div>
       </div>
       <div class="card-body">
@@ -254,6 +258,35 @@
   </div>
 </div>
 
+{{-- 世界地图 --}}
+<div class="row g-3 mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h6 class="mb-0">{{ __('panel/visit.by_country_map') }}</h6>
+        <div class="d-flex align-items-center gap-2">
+          @if($world_map_total > 0)
+            <span class="text-muted small">{{ number_format($world_map_total) }} {{ __('panel/visit.visits') }} · {{ count($world_map_data) }} {{ __('panel/visit.countries') }}</span>
+          @endif
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="worldMapLockBtn" title="{{ __('panel/visit.map_unlock_zoom') }}">
+            <i class="bi bi-lock-fill"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        @if(! empty($world_map_data))
+          <div id="worldMap" style="height: 480px;"></div>
+        @else
+          <div class="text-center py-5">
+            <i class="bi bi-globe d-block mx-auto mb-3" style="font-size: 3rem; color: #dee2e6;"></i>
+            <p class="text-muted mb-0">{{ __('common/base.no_data') }}</p>
+          </div>
+        @endif
+      </div>
+    </div>
+  </div>
+</div>
+
 {{-- 国家分布和24小时分布 --}}
 <div class="row g-3 mb-4">
   <div class="col-12 col-md-6">
@@ -318,8 +351,11 @@
           <div class="d-flex justify-content-between align-items-end" style="height: 150px;">
             @for($i = 0; $i < 24; $i++)
               @php $visits = $hourlyByHour[$i] ?? 0; $percent = $maxVisits > 0 ? ($visits / $maxVisits * 100) : 0; @endphp
-              <div class="text-center" style="flex: 1;">
-                <div class="rounded bg-primary" style="height: {{ max(4, $percent * 1.3) }}px; min-height: 4px; margin: 0 auto;"></div>
+              <div class="text-center" style="flex: 1; padding: 0 3px;">
+                <div class="rounded bg-primary bar-hover"
+                     style="height: {{ max(4, $percent * 1.3) }}px; min-height: 4px; cursor: pointer; transition: opacity .15s;"
+                     data-bs-toggle="tooltip" data-bs-placement="top"
+                     title="{{ $i }}:00 · {{ number_format($visits) }} {{ __('panel/visit.visits') }}"></div>
                 <div class="small text-muted mt-1">{{ $i }}</div>
               </div>
             @endfor
@@ -338,9 +374,53 @@
   </div>
 </div>
 
+{{-- 使用指南弹窗 --}}
+<div class="modal fade" id="visitGuideModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-question-circle me-1"></i>{{ __('panel/visit.usage_guide') }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">{{ __('panel/visit.guide_intro') }}</p>
+
+        <ul class="list-unstyled small mb-3">
+          <li class="mb-2">
+            <code>php artisan migrate</code>
+            <div class="text-muted">{{ __('panel/visit.guide_cmd_migrate') }}</div>
+          </li>
+          <li class="mb-2">
+            <code>php artisan visits:backfill-geo</code>
+            <div class="text-muted">{{ __('panel/visit.guide_cmd_backfill_geo') }}</div>
+          </li>
+          <li class="mb-2">
+            <code>php artisan visits:aggregate --backfill --from=YYYY-MM-DD --to=YYYY-MM-DD</code>
+            <div class="text-muted">{{ __('panel/visit.guide_cmd_aggregate') }}</div>
+          </li>
+        </ul>
+
+        <div class="alert alert-light border small mb-0">
+          <i class="bi bi-clock-history me-1"></i>
+          {{ __('panel/visit.guide_cron_laravel_desc') }}
+          <code class="d-block mt-2">* * * * * cd /var/www/innoshop && php artisan schedule:run >> /dev/null 2>&1</code>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common/base.close') }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @push('footer')
+<style>
+.bar-hover:hover { opacity: 0.7; }
+</style>
 <script>
 let dailyChart = null;
 const dailyLabels = {!! json_encode($dailyLabels ?? []) !!};
@@ -399,10 +479,101 @@ function reaggregate() {
   });
 }
 
+const worldMapData = {!! json_encode($world_map_data ?? []) !!};
+const worldMapTotal = {{ (int) ($world_map_total ?? 0) }};
+let worldMapChart = null;
+let worldMapZoomUnlocked = false;
+
+function renderWorldMap() {
+  const el = document.getElementById('worldMap');
+  if (!el || typeof echarts === 'undefined') return;
+
+  fetch('{{ asset("vendor/echarts/world.json") }}')
+    .then(r => r.json())
+    .then(geo => {
+      echarts.registerMap('world', geo);
+
+      const max = Math.max(1, ...worldMapData.map(d => d.value));
+
+      worldMapChart = echarts.init(el);
+      worldMapChart.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: function(p) {
+            const v = p.data ? p.data.value : 0;
+            const pct = worldMapTotal > 0 ? (v / worldMapTotal * 100).toFixed(1) : '0.0';
+            return p.name + ': <b>' + Number(v).toLocaleString() + '</b> ' +
+              '({{ __("panel/visit.visits") }}) <span class="text-muted">' + pct + '%</span>';
+          }
+        },
+        visualMap: {
+          left: 'left',
+          bottom: 20,
+          min: 0,
+          max: max,
+          inRange: {
+            color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695']
+          },
+          text: ['{{ __("panel/visit.map_high") }}', '{{ __("panel/visit.map_low") }}'],
+          calculable: true
+        },
+        series: [{
+          name: '{{ __("panel/visit.visits") }}',
+          type: 'map',
+          map: 'world',
+          roam: 'move',
+          scaleLimit: { min: 1, max: 10 },
+          emphasis: {
+            label: { show: true },
+            itemStyle: { areaColor: '#f59e0b' }
+          },
+          data: worldMapData
+        }]
+      });
+
+      window.addEventListener('resize', function() {
+        worldMapChart && worldMapChart.resize();
+      });
+    })
+    .catch(function(err) {
+      console.error('World map load failed:', err);
+      el.innerHTML = '<div class="text-center text-danger py-5">{{ __("common/base.error") }}</div>';
+    });
+}
+
+function toggleWorldMapLock() {
+  if (!worldMapChart) return;
+  worldMapZoomUnlocked = !worldMapZoomUnlocked;
+  worldMapChart.setOption({ series: [{ roam: worldMapZoomUnlocked ? true : 'move' }] });
+
+  const btn = document.getElementById('worldMapLockBtn');
+  if (btn) {
+    btn.innerHTML = worldMapZoomUnlocked
+      ? '<i class="bi bi-unlock-fill"></i>'
+      : '<i class="bi bi-lock-fill"></i>';
+    btn.title = worldMapZoomUnlocked
+      ? '{{ __("panel/visit.map_lock_zoom") }}'
+      : '{{ __("panel/visit.map_unlock_zoom") }}';
+    btn.classList.toggle('active', worldMapZoomUnlocked);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+  // 24小时分布柱状图 tooltip
+  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+    if (window.bootstrap) new bootstrap.Tooltip(el);
+  });
+
   // 每日趋势图
   @if($daily_statistics && (is_countable($daily_statistics) ? count($daily_statistics) : $daily_statistics->count()) > 0)
   renderDailyChart();
+  @endif
+
+  // 世界地图
+  @if(! empty($world_map_data))
+  renderWorldMap();
+  const lockBtn = document.getElementById('worldMapLockBtn');
+  if (lockBtn) lockBtn.addEventListener('click', toggleWorldMapLock);
   @endif
 
   // 设备分布图

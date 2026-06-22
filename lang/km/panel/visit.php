@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'ព័ត៌មានលម្អិតទស្សនា',
     'visit_duration'        => 'រយៈពេលនៃដំណើរទស្សនកិច្ច',
     'visits'                => 'ចំនួនទស្សនា',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Use Guide',
+    'guide_intro'             => 'Visit analytics rely on pre-aggregated visit_daily. New data aggregates once per day. If numbers look wrong or you restored a DB backup, run these commands on the server in order.',
+    'guide_cmd_migrate'       => 'Run DB migrations to add new columns (e.g. is_bot)',
+    'guide_cmd_backfill_geo'  => 'Batch-fill country/browser/os for records missing geo data (city is skipped)',
+    'guide_cmd_aggregate'     => 'Re-aggregate visits/visit_events into visit_daily (fixes under-counted numbers)',
+    'guide_cmd_tag_bots'      => 'Mark crawlers/bots/scanners via User-Agent keywords so they are filtered out of stats',
+    'guide_cron_laravel_desc' => 'Schedules are bundled inside innopacks/common — only one schedule:run cron entry is needed on the server.',
+    'bot_guide_intro'         => 'Search engines, crawlers and scanners are detected by User-Agent keywords and filtered out of the main stats. Re-tag periodically to keep the filter accurate.',
+    'bot_guide_cron_desc'     => 'Schedule is built-in: re-tags every Monday 03:00. Only one schedule:run cron entry needed on the server.',
 ];

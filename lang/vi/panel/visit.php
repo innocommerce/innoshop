@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Truy cập vào chi tiết',
     'visit_duration'        => 'Thời gian truy cập',
     'visits'                => 'Số lần truy cập',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Hướng dẫn sử dụng',
+    'guide_intro'             => 'Thống kê truy cập dựa vào bảng visits được tổng hợp sẵn. Dữ liệu mới được tổng hợp mỗi ngày một lần. Nếu số liệu sai hoặc bạn khôi phục cơ sở dữ liệu, hãy chạy các lệnh sau trên máy chủ theo thứ tự.',
+    'guide_cmd_migrate'       => 'Chạy migration để thêm cột mới (ví dụ: is_bot)',
+    'guide_cmd_backfill_geo'  => 'Điền hàng loạt country/browser/os cho bản ghi thiếu dữ liệu địa lý (bỏ qua city)',
+    'guide_cmd_aggregate'     => 'Tổng hợp lại visits/visit_events vào visit_daily (khắc phục số liệu bị thấp)',
+    'guide_cmd_tag_bots'      => 'Đánh dấu crawler/bot/scanner qua từ khóa User-Agent để loại khỏi thống kê',
+    'guide_cron_laravel_desc' => 'Lịch trình đã được đóng gói trong innopacks/common — máy chủ chỉ cần một dòng cron schedule:run.',
+    'bot_guide_intro'         => 'Công cụ tìm kiếm, crawler và scanner được phát hiện qua từ khóa User-Agent và loại khỏi thống kê chính. Đánh dấu lại định kỳ để bộ lọc chính xác.',
+    'bot_guide_cron_desc'     => 'Lịch trình tích hợp sẵn: tự động đánh dấu lại vào 03:00 mỗi thứ Hai. Máy chủ chỉ cần một dòng cron schedule:run.',
 ];

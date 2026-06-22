@@ -66,6 +66,9 @@ class VisitTrackingService
             // Get or create visit record (single table design: one record per session)
             $visit = Visit::where('session_id', $sessionId)->first();
 
+            $isBot     = $this->isBotUserAgent($request->userAgent());
+            $deviceTyp = $isBot ? 'bot' : $this->getDeviceType();
+
             if ($visit) {
                 // Update existing visit: update last visited time
                 $updateData = [
@@ -77,6 +80,12 @@ class VisitTrackingService
                 if (empty($visit->browser) || empty($visit->os)) {
                     $updateData['browser'] = $this->getBrowser();
                     $updateData['os']      = $this->getOperatingSystem();
+                }
+
+                // Set is_bot/device_type once (don't overwrite real visit data on bot traffic)
+                if (! $visit->is_bot && $isBot) {
+                    $updateData['is_bot']      = true;
+                    $updateData['device_type'] = 'bot';
                 }
 
                 $visit->update($updateData);
@@ -91,7 +100,8 @@ class VisitTrackingService
                     'country_name'     => $location['country_name'],
                     'city'             => $location['city'],
                     'referrer'         => $request->header('referer'),
-                    'device_type'      => $this->getDeviceType(),
+                    'device_type'      => $deviceTyp,
+                    'is_bot'           => $isBot,
                     'browser'          => $this->getBrowser(),
                     'os'               => $this->getOperatingSystem(),
                     'locale'           => front_locale_code(),
@@ -171,6 +181,48 @@ class VisitTrackingService
         }
 
         return 'desktop';
+    }
+
+    /**
+     * Detect crawler/bot/spider/scanner User-Agent.
+     * Common bot UA keywords covering Googlebot, Bingbot, Baiduspider, AhrefsBot,
+     * semrush, GPTBot, python-requests, curl, wget, scanner families, etc.
+     *
+     * @param  string|null  $userAgent
+     * @return bool
+     */
+    private function isBotUserAgent(?string $userAgent): bool
+    {
+        if (empty($userAgent)) {
+            return true;
+        }
+
+        $ua = strtolower($userAgent);
+
+        $botPatterns = [
+            'bot', 'crawler', 'spider', 'scrap', 'scout', 'scan', 'check', 'fetch',
+            'archive', 'heritrix', 'archive.org',
+            'slurp', 'teoma', 'ia_archiver',
+            'googlebot', 'bingbot', 'baiduspider', 'sogou', 'yisouspider', 'bytespider',
+            'duckduckbot', 'yandexbot', 'exabot', 'konqueror', 'facebot', 'facebookexternalhit',
+            'twitterbot', 'linkedinbot', 'telegrambot', 'whatsapp', 'skypeuripreview',
+            'ahrefsbot', 'semrushbot', 'dotbot', 'mj12bot', 'petalbot', 'applebot',
+            'gptbot', 'chatgpt-user', 'claudebot', 'claude-user', 'ccbot', 'perplexitybot',
+            'uptimerobot', 'statuscake', 'pingdom', 'site24x7', 'newrelicpinger',
+            'python-requests', 'python-urllib', 'aiohttp', 'httpx', 'axios',
+            'curl', 'wget', 'httpclient', 'okhttp', 'java/', 'go-http-client',
+            'node-fetch', 'got ', 'lwp-',
+            'masscan', 'nmap', 'nikto', 'sqlmap', 'wpscan', 'dirbuster', 'gobuster',
+            'zgrab', 'censys', 'shodan', 'shadow',
+        ];
+
+        foreach ($botPatterns as $pattern) {
+            if (str_contains($ua, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

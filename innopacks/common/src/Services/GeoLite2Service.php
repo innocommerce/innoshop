@@ -18,20 +18,6 @@ use Illuminate\Support\Facades\Log;
 class GeoLite2Service
 {
     /**
-     * GeoLite2 database storage path
-     *
-     * @var string
-     */
-    private string $storagePath;
-
-    /**
-     * GeoLite2 database file path
-     *
-     * @var string
-     */
-    private string $databasePath;
-
-    /**
      * Default download URL
      *
      * @var string
@@ -39,16 +25,13 @@ class GeoLite2Service
     private string $defaultDownloadUrl = 'https://res.innoshop.net/GeoLite2-City.mmdb';
 
     /**
-     * Constructor
+     * Constructor — ensure the database directory exists.
      */
     public function __construct()
     {
-        $this->storagePath  = storage_path('app/geolite2');
-        $this->databasePath = $this->storagePath.'/GeoLite2-City.mmdb';
-
-        // Create storage directory if not exists
-        if (! File::exists($this->storagePath)) {
-            File::makeDirectory($this->storagePath, 0755, true);
+        $dir = dirname($this->getDatabasePath());
+        if (! File::exists($dir)) {
+            File::makeDirectory($dir, 0755, true);
         }
     }
 
@@ -94,15 +77,16 @@ class GeoLite2Service
             }
 
             // Save file
-            File::put($this->databasePath, $content);
+            $path = $this->getDatabasePath();
+            File::put($path, $content);
 
             // Verify database file
             try {
-                $reader = new Reader($this->databasePath);
+                $reader = new Reader($path);
                 $reader->city('8.8.8.8'); // Test query
                 $reader = null;
             } catch (Exception $e) {
-                File::delete($this->databasePath);
+                File::delete($path);
 
                 return [
                     'success' => false,
@@ -115,7 +99,7 @@ class GeoLite2Service
             return [
                 'success' => true,
                 'message' => __('panel/setting_geolite2.download_success'),
-                'path'    => $this->databasePath,
+                'path'    => $path,
             ];
         } catch (Exception $e) {
             Log::error('GeoLite2Service: Failed to download database', [
@@ -139,18 +123,20 @@ class GeoLite2Service
      */
     public function getDatabaseInfo(): array
     {
-        // 清除文件系统缓存，确保获取最新状态
-        clearstatcache(true, $this->databasePath);
+        $path = $this->getDatabasePath();
 
-        $exists   = File::exists($this->databasePath);
-        $size     = $exists ? File::size($this->databasePath) : 0;
-        $modified = $exists ? File::lastModified($this->databasePath) : 0;
+        // 清除文件系统缓存，确保获取最新状态
+        clearstatcache(true, $path);
+
+        $exists   = File::exists($path);
+        $size     = $exists ? File::size($path) : 0;
+        $modified = $exists ? File::lastModified($path) : 0;
 
         $version = '';
 
         if ($exists) {
             try {
-                $reader   = new Reader($this->databasePath);
+                $reader   = new Reader($path);
                 $metadata = $reader->metadata();
                 $version  = $metadata->databaseType ?? '';
                 $reader   = null;
@@ -168,7 +154,7 @@ class GeoLite2Service
             'modified'           => $modified,
             'modified_formatted' => $modified ? date('Y-m-d H:i:s', $modified) : '-',
             'version'            => $version,
-            'path'               => $this->databasePath,
+            'path'               => $path,
         ];
     }
 
@@ -179,17 +165,17 @@ class GeoLite2Service
      */
     public function isAvailable(): bool
     {
-        return File::exists($this->databasePath);
+        return File::exists($this->getDatabasePath());
     }
 
     /**
-     * Get database path
+     * Resolve the active database path from config('innoshop.geo_lite_path').
      *
      * @return string
      */
     public function getDatabasePath(): string
     {
-        return $this->databasePath;
+        return (string) config('innoshop.geo_lite_path');
     }
 
     /**

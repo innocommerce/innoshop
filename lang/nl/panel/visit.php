@@ -61,4 +61,15 @@ return [
     'visit_detail'          => 'Visit details',
     'visit_duration'        => 'Duration of visit',
     'visits'                => 'Number of visits',
+
+    // Visit analytics guide
+    'usage_guide'             => 'Gebruikshandleiding',
+    'guide_intro'             => 'Bezoekstatistieken zijn afhankelijk van vooraf geaggregeerde visits-gegevens. Nieuwe gegevens worden eenmaal per dag geaggregeerd. Als de cijfers verkeerd lijken of een database is hersteld, voer deze commando\'s op de server in volgorde uit.',
+    'guide_cmd_migrate'       => 'Voer DB-migraties uit om nieuwe kolommen toe te voegen (bijv. is_bot)',
+    'guide_cmd_backfill_geo'  => 'Vul country/browser/os bulksgewijs in voor records zonder geo-gegevens (city wordt overgeslagen)',
+    'guide_cmd_aggregate'     => 'Aggregeer visits/visit_events opnieuw naar visit_daily (herstelt te lage tellingen)',
+    'guide_cmd_tag_bots'      => 'Markeer crawlers/bots/scanners via User-Agent-trefwoorden zodat ze uit statistieken worden gefilterd',
+    'guide_cron_laravel_desc' => 'Planningen zijn ingebouwd in innopacks/common — op de server is slechts één schedule:run cron-vermelding nodig.',
+    'bot_guide_intro'         => 'Zoekmachines, crawlers en scanners worden gedetecteerd via User-Agent-trefwoorden en uit de hoofdstatistieken gefilterd. Markeer regelmatig opnieuw om de filter nauwkeurig te houden.',
+    'bot_guide_cron_desc'     => 'Ingebouwde planning: markeert elke maandag om 03:00 opnieuw. Op de server is slechts één schedule:run cron-vermelding nodig.',
 ];
