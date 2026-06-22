@@ -7,9 +7,9 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Detection\Exception\MobileDetectException;
 use Detection\MobileDetect;
+use Fruitcake\LaravelDebugbar\Facades\Debugbar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

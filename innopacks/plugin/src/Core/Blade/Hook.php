@@ -11,8 +11,8 @@
 
 namespace InnoShop\Plugin\Core\Blade;
 
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Exception;
+use Fruitcake\LaravelDebugbar\Facades\Debugbar;
 use Illuminate\Support\Arr;
 
 class Hook
