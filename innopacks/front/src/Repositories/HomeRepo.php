@@ -11,9 +11,9 @@ namespace InnoShop\Front\Repositories;
 
 use Exception;
 use Illuminate\Support\Collection;
+use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\ArticleRepo;
-use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 
 class HomeRepo
@@ -193,9 +193,11 @@ class HomeRepo
         }
 
         try {
-            $categories = CategoryRepo::getInstance()
-                ->builder(['category_ids' => $categoryIds, 'active' => true])
+            $categories = Category::query()
+                ->whereIn('id', $categoryIds)
+                ->where('active', 1)
                 ->with(['translation'])
+                ->withCount('products')
                 ->orderBy('position')
                 ->get();
 

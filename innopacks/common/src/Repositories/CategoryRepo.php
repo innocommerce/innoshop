@@ -33,14 +33,22 @@ class CategoryRepo extends BaseRepo
      */
     public function getTwoLevelCategories(?array $categoryIDs = []): array
     {
-        $filters = ['active' => true, 'parent_id' => 0];
+        $query = Category::query()
+            ->with([
+                'translation',
+                'children.translation',
+                'children.children.translation',
+            ])
+            ->where(function (Builder $q) {
+                $q->where('parent_id', 0)->orWhereNull('parent_id');
+            })
+            ->where('active', 1);
+
         if ($categoryIDs) {
-            $filters['category_ids'] = $categoryIDs;
+            $query->whereIn('id', $categoryIDs);
         }
 
-        $catalogs = $this->builder($filters)
-            ->orderBy('position')
-            ->get();
+        $catalogs = $query->orderBy('position')->get();
 
         return CategoryFrontend::collection($catalogs)->jsonSerialize();
     }

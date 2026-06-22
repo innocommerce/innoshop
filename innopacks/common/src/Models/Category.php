@@ -74,7 +74,9 @@ class Category extends BaseModel
      */
     public function activeChildren(): HasMany
     {
-        return $this->hasMany(Category::class, 'parent_id', 'id')->where('active', 1);
+        return $this->hasMany(Category::class, 'parent_id', 'id')
+            ->where('active', 1)
+            ->withCount('products');
     }
 
     /**
@@ -135,10 +137,18 @@ class Category extends BaseModel
     /**
      * Get product count
      *
+     * Falls back to a live count() query when the attribute has not been
+     * preloaded via withCount('products'), so callers that forget to eager-load
+     * still work but pay the N+1 cost.
+     *
      * @return int
      */
     public function getProductsCountAttribute(): int
     {
+        if (array_key_exists('products_count', $this->attributes)) {
+            return (int) $this->attributes['products_count'];
+        }
+
         return $this->products()->count();
     }
 }

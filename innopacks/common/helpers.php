@@ -302,21 +302,25 @@ if (! function_exists('installed')) {
     /**
      * Check installed by DB connection.
      *
+     * Result is memoized per-request to avoid repeated information_schema lookups.
+     *
      * @return bool
      */
     function installed(): bool
     {
-        try {
-            if (Schema::hasTable('settings') && has_install_lock()) {
-                return true;
-            }
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-
-            return false;
+        static $cache = null;
+        if ($cache !== null) {
+            return $cache;
         }
 
-        return false;
+        try {
+            $cache = Schema::hasTable('settings') && has_install_lock();
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            $cache = false;
+        }
+
+        return $cache;
     }
 }
 
