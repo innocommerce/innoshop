@@ -14,7 +14,10 @@
 .module-item.module-item-design:hover {
   border: 1px solid #8b5cf6 !important;
   box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
-  z-index: 10;
+  /* Must outrank theme fixed headers (Bootstrap/gemma use z-index:1030) so the
+     hover edit bar on the first module (e.g. hero slideshow) is not covered
+     inside the design iframe. */
+  z-index: 1100;
   position: relative;
 }
 
