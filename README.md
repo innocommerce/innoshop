@@ -40,6 +40,43 @@ InnoShop - Innovative Open Source E-commerce System.
 
 Innoshop is an Open Source eCommerce System based on Laravel 12, supporting multiple languages, multiple currencies, integrated with OpenAI, and featuring plugin mechanisms and theme template development for enhanced user experience and system extensibility.
 
+## Quick Start
+
+### Requirements
+- PHP >= 8.3 with extensions: bcmath, cURL, dom, fileinfo, libxml, OpenSSL, PDO, simplexml
+- Composer 2.x
+- MySQL 5.7+ / 8.0+ (or SQLite for local try-out)
+
+### Option 1: Composer (Recommended)
+
+```bash
+composer create-project innoshop/innoshop
+cd innoshop
+php artisan serve
+```
+
+Open http://localhost:8000 in your browser, the installation wizard will guide you through database setup and admin account creation.
+
+### Option 2: Download ZIP
+
+Grab the latest release package and unzip it into your web root:
+
+- Official Site: <https://www.innoshop.com>
+- GitHub Releases: <https://github.com/innocommerce/innoshop/releases>
+
+Then visit the site URL in your browser to start the installation wizard.
+
+### Option 3: Git Clone (For Contributors)
+
+```bash
+git clone https://github.com/innocommerce/innoshop.git
+cd innoshop
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan serve
+```
+
 ## Introduction
 - A globally oriented open source e-commerce system, a culmination of 15 years of continuous industry development.
 - User-friendly, intuitive interface, quick to get started, responsive design.

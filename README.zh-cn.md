@@ -40,6 +40,43 @@ InnoShop - 创新开源电商系统
 
 Innoshop 是一个基于 Laravel 12 的开源电子商务系统，支持多语言、多货币，并集成了 OpenAI。它还具有插件机制和主题模板开发功能，以增强用户体验和系统的可扩展性。
 
+## 快速开始
+
+### 环境要求
+- PHP >= 8.3，需安装扩展：bcmath、cURL、dom、fileinfo、libxml、OpenSSL、PDO、simplexml
+- Composer 2.x
+- MySQL 5.7+ / 8.0+（本地试用也可使用 SQLite）
+
+### 方式一：Composer 安装（推荐）
+
+```bash
+composer create-project innoshop/innoshop
+cd innoshop
+php artisan serve
+```
+
+浏览器打开 http://localhost:8000 ，根据安装向导完成数据库配置和管理员账号创建即可。
+
+### 方式二：下载 ZIP 安装包
+
+下载最新版安装包，解压到 Web 根目录：
+
+- 官方网站：<https://www.innoshop.cn>
+- GitHub Releases：<https://github.com/innocommerce/innoshop/releases>
+
+然后浏览器访问站点 URL，按安装向导完成安装。
+
+### 方式三：Git Clone（适合贡献者）
+
+```bash
+git clone https://github.com/innocommerce/innoshop.git
+cd innoshop
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan serve
+```
+
 ## 介绍
 - 面向全球的开源电商系统, 15年行业持续深耕集大成者。
 - 用户友好、界面直观、快速上手、响应式设计。

@@ -1,9 +1,9 @@
 {
-    "name": "laravel/laravel",
+    "name": "innoshop/innoshop",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
+    "description": "InnoShop - Innovative Open Source E-commerce System based on Laravel 12.",
+    "keywords": ["innoshop", "laravel", "ecommerce", "shop", "cart", "ai", "plugin", "theme", "multilingual", "multi-currency"],
+    "license": "OSL-3.0",
     "require": {
         "php": "^8.3",
         "ext-bcmath": "*",
@@ -102,9 +102,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
+            "@php artisan key:generate --ansi"
         ],
         "pint": [
             "./vendor/bin/pint --config=pint.json"
