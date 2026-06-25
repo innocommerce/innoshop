@@ -55,8 +55,8 @@ class Order extends BaseModel
      *
      * The token is the high-entropy proof required by PaymentController to
      * render the public payment result pages (/payment/success etc.). The
-     * session whitelist covers the standard guest flow (place order -> redirect
-     * to gateway -> return) without any plugin URL change; the token remains
+     * session whitelist covers the standard guest flow (place order → redirect
+     * to gateway → return) without any plugin URL change; the token remains
      * available for cross-session links such as order confirmation emails.
      */
     protected static function booted(): void

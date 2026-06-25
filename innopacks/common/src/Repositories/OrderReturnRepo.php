@@ -198,7 +198,7 @@ class OrderReturnRepo extends BaseRepo
         // Ownership check: prevent IDOR on attacker-supplied order_item_id.
         // Both web (Account/OrderReturnController) and api (RestAPI) call sites
         // force customer_id to the authenticated customer, so verifying against
-        // $data['customer_id'] is sufficient to cover both entry points.
+        // $data['customer_id'] locks down both entry points.
         $callerCustomerId = (int) ($data['customer_id'] ?? 0);
         abort_if(
             ! $originOrder || (int) $originOrder->customer_id !== $callerCustomerId,

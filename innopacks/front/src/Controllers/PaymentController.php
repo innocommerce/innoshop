@@ -64,7 +64,7 @@ class PaymentController extends Controller
      *   1. The caller is the order's owning customer (logged-in owner check).
      *   2. The order number is in the session whitelist `guest_payment_order_numbers`
      *      — written by Order::created for the current browser session. This covers
-     *      the standard guest checkout flow: place order -> redirect to gateway -> return.
+     *      the standard guest checkout flow: place order → redirect to gateway → return.
      *   3. The request carries a payment_token that hash_equals the stored token —
      *      the high-entropy fallback used by cross-session links (e.g. order emails).
      * Otherwise null is returned and the view renders the generic placeholder,
