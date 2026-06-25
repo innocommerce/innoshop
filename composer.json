@@ -102,7 +102,9 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "npm install --no-audit --no-fund",
+            "npm run build"
         ],
         "pint": [
             "./vendor/bin/pint --config=pint.json"

@@ -45,6 +45,7 @@ Innoshop is an Open Source eCommerce System based on Laravel 12, supporting mult
 ### Requirements
 - PHP >= 8.3 with extensions: bcmath, cURL, dom, fileinfo, libxml, OpenSSL, PDO, simplexml
 - Composer 2.x
+- Node.js >= 18 with npm 9+
 - MySQL 5.7+ / 8.0+ (or SQLite for local try-out)
 
 ### Option 1: Composer (Recommended)
@@ -54,6 +55,11 @@ composer create-project innoshop/innoshop
 cd innoshop
 php artisan serve
 ```
+
+The create-project command automatically:
+1. Installs PHP dependencies
+2. Generates the application key
+3. Runs `npm install` and `npm run build` to compile front-end assets
 
 Open http://localhost:8000 in your browser, the installation wizard will guide you through database setup and admin account creation.
 
@@ -72,6 +78,8 @@ Then visit the site URL in your browser to start the installation wizard.
 git clone https://github.com/innocommerce/innoshop.git
 cd innoshop
 composer install
+npm install
+npm run build
 cp .env.example .env
 php artisan key:generate
 php artisan serve
