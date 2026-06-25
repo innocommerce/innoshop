@@ -63,14 +63,21 @@ php artisan serve
 
 浏览器打开 http://localhost:8000 ，根据安装向导完成数据库配置和管理员账号创建即可。
 
-### 方式二：下载 ZIP 安装包
+### 方式二：下载 ZIP 安装包（无需 Node.js）
 
-下载最新版安装包，解压到 Web 根目录：
+从 **GitHub Releases** 下载 `innoshop-vX.Y.Z.zip` —— 该安装包已预装 PHP 依赖并编译前端资源，服务器只需 PHP 即可部署：
 
-- 官方网站：<https://www.innoshop.cn>
 - GitHub Releases：<https://github.com/innocommerce/innoshop/releases>
+- 官方网站：<https://www.innoshop.cn>
 
-然后浏览器访问站点 URL，按安装向导完成安装。
+```bash
+unzip innoshop-vX.Y.Z.zip -d innoshop
+cd innoshop
+chmod -R 775 storage bootstrap/cache
+php artisan serve
+```
+
+浏览器访问站点 URL，按安装向导完成数据库和管理员账号配置。
 
 ### 方式三：Git Clone（适合贡献者）
 

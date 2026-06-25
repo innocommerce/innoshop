@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: bcmath, curl, dom, fileinfo, libxml, openssl, pdo, simplexml
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Prepare .env
+        run: cp .env.example .env
+
+      - name: Install PHP dependencies (production)
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+      - name: Install Node dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build front-end assets
+        run: npm run build
+
+      - name: Generate APP_KEY
+        run: php artisan key:generate --force
+
+      - name: Clear optimization caches
+        run: |
+          php artisan config:clear || true
+          php artisan route:clear || true
+          php artisan view:clear || true
+          php artisan event:clear || true
+
+      - name: Strip dev-only files
+        run: |
+          rm -rf \
+            node_modules \
+            tests \
+            .git \
+            .github \
+            .phpunit.cache \
+            .phpunit.result.cache \
+            phpunit.xml \
+            phpstan.neon.dist \
+            phpstan_baseline.neon \
+            pint.json \
+            database/database.sqlite
+
+      - name: Resolve artifact name
+        id: vars
+        run: echo "name=innoshop-${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Build distribution zip
+        run: |
+          ARTIFACT_NAME="${{ steps.vars.outputs.name }}"
+          cd ..
+          rm -rf "$ARTIFACT_NAME"
+          cp -r innoshop "$ARTIFACT_NAME"
+          zip -rq "$ARTIFACT_NAME.zip" "$ARTIFACT_NAME"
+
+      - name: Attach to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ../${{ steps.vars.outputs.name }}.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false

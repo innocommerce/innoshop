@@ -63,14 +63,21 @@ The create-project command automatically:
 
 Open http://localhost:8000 in your browser, the installation wizard will guide you through database setup and admin account creation.
 
-### Option 2: Download ZIP
+### Option 2: Download ZIP (No Node.js Required)
 
-Grab the latest release package and unzip it into your web root:
+Grab the latest `innoshop-vX.Y.Z.zip` from **GitHub Releases** — it ships with PHP dependencies and compiled front-end assets pre-packaged, so you only need PHP on the server:
 
-- Official Site: <https://www.innoshop.com>
 - GitHub Releases: <https://github.com/innocommerce/innoshop/releases>
+- Official Site: <https://www.innoshop.com>
 
-Then visit the site URL in your browser to start the installation wizard.
+```bash
+unzip innoshop-vX.Y.Z.zip -d innoshop
+cd innoshop
+chmod -R 775 storage bootstrap/cache
+php artisan serve
+```
+
+Open the site URL in your browser and follow the installation wizard to configure the database and admin account.
 
 ### Option 3: Git Clone (For Contributors)
 
