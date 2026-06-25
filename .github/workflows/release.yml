@@ -27,8 +27,28 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Prepare .env
-        run: cp .env.example .env
+      - name: Verify code version matches tag
+        run: |
+          CODE_VERSION=$(grep "'version'" innopacks/common/config/innoshop.php | head -1 | sed "s/.*=> *'\([^']*\)'.*/\1/")
+          TAG_VERSION=${GITHUB_REF_NAME#v}
+          echo "Code version: $CODE_VERSION"
+          echo "Tag version:   $TAG_VERSION"
+          if [ "$CODE_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Version mismatch — code says $CODE_VERSION but tag is $TAG_VERSION. Update innopacks/common/config/innoshop.php before tagging."
+            exit 1
+          fi
+          echo "✓ Versions aligned"
+
+      - name: Prepare .env (production-safe defaults)
+        run: |
+          cp .env.example .env
+          sed -i 's/^APP_DEBUG=true/APP_DEBUG=false/' .env
+          sed -i 's|^APP_URL=http://localhost|APP_URL=http://localhost:8000|' .env
+
+      - name: Drop scribe configs (avoid discovery errors under --no-dev)
+        run: |
+          rm -f innopacks/restapi/config/scribe_front.php
+          rm -f innopacks/restapi/config/scribe_panel.php
 
       - name: Install PHP dependencies (production)
         run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
@@ -49,6 +69,38 @@ jobs:
           php artisan view:clear || true
           php artisan event:clear || true
 
+      - name: Clean runtime artifacts
+        run: |
+          # storage runtime data
+          rm -rf storage/app/* \
+                 storage/debugbar/* \
+                 storage/framework/cache/* \
+                 storage/framework/sessions/* \
+                 storage/framework/testing/* \
+                 storage/framework/views/* \
+                 storage/logs/* \
+                 storage/upload/*
+
+          # public runtime caches/uploads
+          rm -rf public/cache public/upload
+
+          # plugin Storage: drop large runtime data, keep templates
+          find plugins -type d -name "Storage" 2>/dev/null | while read -r dir; do
+            [ -d "$dir" ] || continue
+            find "$dir" -mindepth 1 -type f \( -name "*.mmdb" -o -name "*.db" -o -name "*.sqlite" \) ! -name "template*" -delete 2>/dev/null || true
+            find "$dir" -mindepth 1 -type f -size +1M \
+              ! -name "*.xlsx" ! -name "*.xls" ! -name "*.csv" \
+              ! -name "template*" ! -name "demo.*" ! -name "*.json" -delete 2>/dev/null || true
+            find "$dir" -mindepth 1 -type f \( -name "*.log" -o -name "*.tmp" -o -name "*.cache" \) \
+              ! -name "template*" ! -name "demo.*" -delete 2>/dev/null || true
+          done
+
+          # defensive: any nested .git (vendored plugins / submodules)
+          find . -name ".git" -type d -prune -exec rm -rf {} + 2>/dev/null || true
+
+          # defensive: macOS files
+          find . -name '.DS_Store' -type f -delete 2>/dev/null || true
+
       - name: Strip dev-only files
         run: |
           rm -rf \
@@ -56,6 +108,7 @@ jobs:
             tests \
             .git \
             .github \
+            .idea \
             .phpunit.cache \
             .phpunit.result.cache \
             phpunit.xml \

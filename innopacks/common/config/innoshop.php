@@ -9,8 +9,8 @@
 
 return [
     'edition' => 'community',
-    'version' => '0.8.5',
-    'build'   => '20260622',
+    'version' => '0.8.6',
+    'build'   => '20260625',
     'api_url' => env('INNOSHOP_API_URL', 'https://www.innoshop.cn'),
 
     // Override GeoLite2-City.mmdb path via GEOLITE2_PATH; defaults to storage/app/geolite2/geolite2-city.mmdb.
