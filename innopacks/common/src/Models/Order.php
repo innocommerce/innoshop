@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use InnoShop\Common\Models\Order\Fee;
 use InnoShop\Common\Models\Order\History;
 use InnoShop\Common\Models\Order\Item;
@@ -40,13 +41,41 @@ class Order extends BaseModel
         'shipping_city', 'shipping_address_1', 'shipping_address_2', 'shipping_zipcode', 'billing_method_code',
         'billing_method_name', 'billing_customer_name', 'billing_calling_code', 'billing_telephone', 'billing_country',
         'billing_country_id', 'billing_state_id', 'billing_state', 'billing_city', 'billing_address_1',
-        'billing_address_2', 'billing_zipcode', 'comment', 'admin_note', 'created_at', 'updated_at',
+        'billing_address_2', 'billing_zipcode', 'comment', 'admin_note', 'created_at', 'updated_at', 'payment_token',
     ];
 
     protected $appends = [
         'total_format',
         'status_format',
     ];
+
+    /**
+     * Auto-generate a high-entropy payment token on creation, and seed the
+     * session whitelist used by PaymentController to authorize guest checkouts.
+     *
+     * The token is the high-entropy proof required by PaymentController to
+     * render the public payment result pages (/payment/success etc.). The
+     * session whitelist covers the standard guest flow (place order -> redirect
+     * to gateway -> return) without any plugin URL change; the token remains
+     * available for cross-session links such as order confirmation emails.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Order $order) {
+            if (empty($order->payment_token)) {
+                $order->payment_token = Str::random(64);
+            }
+        });
+
+        static::created(function (Order $order) {
+            if (! session()->isStarted()) {
+                return;
+            }
+            $whitelist   = (array) session()->get('guest_payment_order_numbers', []);
+            $whitelist[] = $order->number;
+            session(['guest_payment_order_numbers' => array_values(array_unique($whitelist))]);
+        });
+    }
 
     /**
      * @return HasMany

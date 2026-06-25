@@ -195,6 +195,17 @@ class OrderReturnRepo extends BaseRepo
         $orderItem   = Item::query()->findOrFail($orderItemID);
         $originOrder = $orderItem->order;
 
+        // Ownership check: prevent IDOR on attacker-supplied order_item_id.
+        // Both web (Account/OrderReturnController) and api (RestAPI) call sites
+        // force customer_id to the authenticated customer, so verifying against
+        // $data['customer_id'] is sufficient to cover both entry points.
+        $callerCustomerId = (int) ($data['customer_id'] ?? 0);
+        abort_if(
+            ! $originOrder || (int) $originOrder->customer_id !== $callerCustomerId,
+            403,
+            'Unauthorized: order item does not belong to the current customer'
+        );
+
         return [
             'customer_id'   => $data['customer_id'],
             'order_id'      => $orderItem->order_id,
