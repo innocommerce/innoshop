@@ -2,9 +2,9 @@ name: Laravel
 
 on:
   push:
-    branches: [ "master", "dev" ]
+    branches: [ "main", "master", "dev" ]
   pull_request:
-    branches: [ "master", "dev" ]
+    branches: [ "main", "master", "dev" ]
 
 jobs:
   laravel-tests:
@@ -15,6 +15,7 @@ jobs:
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
+        extensions: bcmath, curl, dom, fileinfo, libxml, openssl, pdo, simplexml
     - uses: actions/checkout@v4
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
