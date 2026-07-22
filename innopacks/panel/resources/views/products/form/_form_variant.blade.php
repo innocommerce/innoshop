@@ -5,8 +5,18 @@
 @endpush
 
 <div class="card variants-box mb-3" id="variants-box">
-  <div class="card-header">
+  @php($weightUnit = $product->weight_class ?: system_setting('weight_class', 'kg'))
+  <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="card-title mb-0">{{ __('panel/product.variant') }}</h5>
+    <div>
+      <button type="button" class="btn btn-outline-primary btn-sm" @click="openSaveTemplateModal">
+        {{ __('panel/product.save_as_template') }}
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-sm ms-2" @click="openLoadTemplateModal" :disabled="templateDialog.loading">
+        <span v-if="templateDialog.loading" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+        {{ __('panel/product.load_template') }}
+      </button>
+    </div>
   </div>
 
   <div class="card-body py-0">
@@ -109,43 +119,8 @@
             </div>
             
             <div class="row g-2">
-              <!-- SKU编码前缀 -->
-              <div class="col-md-2">
-                <label class="form-label small mb-1">SKU {{ __('panel/product.bulk_fill') }}</label>
-                <input type="text" class="form-control form-control-sm" v-model="batchData.skuPrefix" 
-                       placeholder="{{ __('panel/product.bulk_fill_sku') }}" style="height: 31px;">
-              </div>
-              
-              <!-- 价格 -->
-              <div class="col-md-2">
-                <label class="form-label small mb-1">{{ __('panel/product.price') }}</label>
-                <input type="number" class="form-control form-control-sm" v-model="batchData.price" 
-                       placeholder="{{ __('panel/product.bulk_fill_price') }}" min="0" @change="validateBatchPrice" style="height: 31px;">
-              </div>
-              
-              <!-- 原价 -->
-              <div class="col-md-2">
-                <label class="form-label small mb-1">{{ __('panel/product.origin_price') }}</label>
-                <input type="number" class="form-control form-control-sm" v-model="batchData.originPrice" 
-                       placeholder="{{ __('panel/product.bulk_fill_origin_price') }}" min="0" @change="validateBatchOriginPrice" style="height: 31px;">
-              </div>
-              
-              <!-- 型号 -->
-              <div class="col-md-2">
-                <label class="form-label small mb-1">{{ __('panel/product.model') }}</label>
-                <input type="text" class="form-control form-control-sm" v-model="batchData.model" 
-                       placeholder="{{ __('panel/product.bulk_fill_model') }}" style="height: 31px;">
-              </div>
-              
-              <!-- 数量 -->
-              <div class="col-md-2">
-                <label class="form-label small mb-1">{{ __('panel/product.quantity') }}</label>
-                <input type="number" class="form-control form-control-sm" v-model="batchData.quantity" 
-                       placeholder="{{ __('panel/product.bulk_fill_quantity') }}" min="0" @input="validateBatchQuantity" style="height: 31px;">
-              </div>
-              
               <!-- SKU图片 -->
-              <div class="col-md-2">
+              <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.sku_image') }}</label>
                 <div class="d-flex align-items-center" style="height: 31px;">
                   <input type="hidden" v-model="batchData.image">
@@ -160,16 +135,58 @@
                   </button>
                 </div>
               </div>
-              
-              <!-- 批量设置按钮 -->
-              <div class="col-md-2">
-                <label class="form-label small mb-1" style="visibility: hidden;">占位</label>
-                <button type="button" class="btn btn-success w-100 fw-bold" @click="batchApplySelected" style="height: 31px; font-size: 12px;">
+
+              <!-- SKU编码前缀 -->
+              <div class="col">
+                <label class="form-label small mb-1">SKU {{ __('panel/product.bulk_fill') }}</label>
+                <input type="text" class="form-control form-control-sm" v-model="batchData.skuPrefix"
+                       placeholder="{{ __('panel/product.bulk_fill_sku') }}" style="height: 31px;">
+              </div>
+
+              <!-- 价格 -->
+              <div class="col">
+                <label class="form-label small mb-1">{{ __('panel/product.price') }}</label>
+                <input type="number" class="form-control form-control-sm" v-model="batchData.price"
+                       placeholder="{{ __('panel/product.bulk_fill_price') }}" min="0" @change="validateBatchPrice" style="height: 31px;">
+              </div>
+
+              <!-- 原价 -->
+              <div class="col">
+                <label class="form-label small mb-1">{{ __('panel/product.origin_price') }}</label>
+                <input type="number" class="form-control form-control-sm" v-model="batchData.originPrice"
+                       placeholder="{{ __('panel/product.bulk_fill_origin_price') }}" min="0" @change="validateBatchOriginPrice" style="height: 31px;">
+              </div>
+
+              <!-- 型号 -->
+              <div class="col">
+                <label class="form-label small mb-1">{{ __('panel/product.model') }}</label>
+                <input type="text" class="form-control form-control-sm" v-model="batchData.model"
+                       placeholder="{{ __('panel/product.bulk_fill_model') }}" style="height: 31px;">
+              </div>
+
+              <!-- 数量 -->
+              <div class="col">
+                <label class="form-label small mb-1">{{ __('panel/product.quantity') }}</label>
+                <input type="number" class="form-control form-control-sm" v-model="batchData.quantity"
+                       placeholder="{{ __('panel/product.bulk_fill_quantity') }}" min="0" @input="validateBatchQuantity" style="height: 31px;">
+              </div>
+
+              <!-- 重量 -->
+              <div class="col">
+                <label class="form-label small mb-1">{{ __('panel/product.weight') }} ({{ $weightUnit }})</label>
+                <input type="number" class="form-control form-control-sm" v-model="batchData.weight"
+                       placeholder="{{ __('panel/product.weight') }}" min="0" style="height: 31px;">
+              </div>
+
+              @hookinsert('panel.product.edit.sku.batch.input.item.after')
+            </div>
+
+            <div class="row g-2 mt-2">
+              <div class="col-12 text-end">
+                <button type="button" class="btn btn-success fw-bold" @click="batchApplySelected" style="height: 31px; font-size: 12px;">
                   <i class="bi bi-lightning-charge-fill me-1"></i>{{ __('panel/product.bulk_fill') }}
                 </button>
               </div>
-              
-              @hookinsert('panel.product.edit.sku.batch.input.item.after')
             </div>
           </div>
         </div>
@@ -186,7 +203,8 @@
               <th>{{ __('panel/product.origin_price') }}</th>
               <th>{{ __('panel/product.model') }}</th>
               <th>{{ __('panel/product.quantity') }}</th>
-            </tr>
+              <th>{{ __('panel/product.weight') }} ({{ $weightUnit }})</th>
+                </tr>
           </thead>
           <tbody>
             <tr v-for="(sku, index) in skus" :key="index">
@@ -233,6 +251,11 @@
                 <input type="text" class="form-control form-control-sm"
                   v-model="sku.quantity" placeholder="{{ __('panel/product.quantity') }}"
                   @input="validateQuantity(sku)">
+              </td>
+              <td>
+                <input type="number" class="form-control form-control-sm"
+                  v-model="sku.weight" placeholder="{{ __('panel/product.weight') }}"
+                  min="0">
               </td>
             </tr>
           </tbody>
@@ -308,6 +331,69 @@
         </div>
       </div>
     </div>
+
+    <!-- 保存为规格模板弹窗 -->
+    <div class="modal fade" id="saveTemplateModal" tabindex="-1" aria-hidden="true" v-if="templateDialog.saveShow">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ __('panel/product.save_as_template') }}</h5>
+            <button type="button" class="btn-close" @click="closeSaveTemplateModal"></button>
+          </div>
+          <div class="modal-body">
+            <label class="form-label">{{ __('panel/product.template_name') }}</label>
+            <input type="text" class="form-control" v-model="templateDialog.saveName" :placeholder="'{{ __('panel/product.template_name') }}'">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeSaveTemplateModal">{{ __('common/base.cancel') }}</button>
+            <button type="button" class="btn btn-primary" @click="saveTemplate" :disabled="templateDialog.loading">
+              {{ __('panel/common.confirm') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 导入规格模板弹窗 -->
+    <div class="modal fade" id="loadTemplateModal" tabindex="-1" aria-hidden="true" v-if="templateDialog.loadShow">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content position-relative">
+          <div v-if="templateDialog.loading" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-white bg-opacity-75" style="z-index: 1055;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="mt-2 text-primary">{{ __('panel/product.loading_template') }}</div>
+          </div>
+          <div class="modal-header">
+            <h5 class="modal-title">{{ __('panel/product.load_template') }}</h5>
+            <button type="button" class="btn-close" @click="closeLoadTemplateModal"></button>
+          </div>
+          <div class="modal-body">
+            <div v-if="templateDialog.templates.length === 0" class="text-muted py-3 text-center">
+              {{ __('panel/product.no_templates') }}
+            </div>
+            <div v-else class="list-group">
+              <label v-for="template in templateDialog.templates" :key="template.id" class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="variant_template_id" :value="template.id" v-model="templateDialog.selectedId" :disabled="templateDialog.loading">
+                  <span class="form-check-label ms-2">@{{ template.name }}</span>
+                </div>
+                <button type="button" class="btn btn-link btn-sm text-danger text-decoration-none" @click.stop="deleteTemplate(template.id)" :disabled="templateDialog.loading">
+                  {{ __('common/base.delete') }}
+                </button>
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeLoadTemplateModal" :disabled="templateDialog.loading">{{ __('common/base.cancel') }}</button>
+            <button type="button" class="btn btn-primary" @click="applyTemplate" :disabled="!templateDialog.selectedId || templateDialog.loading">
+              <span v-if="templateDialog.loading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              {{ __('panel/common.confirm') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 
 @push('footer')
@@ -324,6 +410,19 @@
     })
     return obj;
   }
+
+  // Product-level weight default for newly generated SKUs
+  const productWeight = @json($product->weight ?? 0);
+
+  // Variant template API routes and CSRF token
+  @php($variantTemplateRoutes = [
+    'index'   => route('panel.variant_templates.index'),
+    'store'   => route('panel.variant_templates.store'),
+    'show'    => route('panel.variant_templates.show', ['variant_template' => '__ID__']),
+    'destroy' => route('panel.variant_templates.destroy', ['variant_template' => '__ID__']),
+  ])
+  const variantTemplateRoutes = @json($variantTemplateRoutes);
+  const csrfToken = @json(csrf_token());
 
   // Create Vue application for variants management
   let variantsBoxApp = createApp({
@@ -391,6 +490,7 @@
         originPrice: '',
         model: '',
         quantity: '',
+        weight: '',
         image: '',
         selectedVariants: [] // 存储每个规格的选中值索引数组
       });
@@ -404,6 +504,16 @@
         form: {
           name: {}
         }
+      });
+
+      // Variant template dialog state
+      const templateDialog = ref({
+        saveShow: false,
+        loadShow: false,
+        saveName: '',
+        templates: [],
+        selectedId: null,
+        loading: false,
       });
 
       // Watch for changes in main variant key or variants array
@@ -451,6 +561,7 @@
               firstSku.price = singleSkuPrice || '';
               firstSku.quantity = singleSkuQuantity || '';
               firstSku.code = singleSkuCode || '';
+              firstSku.weight = $('input[name="skus[0][weight]"]').val() || '';
               firstSku.is_default = 1;
             }
 
@@ -458,6 +569,7 @@
             $('input[name="skus[0][price]"]').val('');
             $('input[name="skus[0][quantity]"]').val('');
             $('input[name="skus[0][code]"]').val('');
+            $('input[name="skus[0][weight]"]').val('');
           }
         } else {
           // Sync default SKU back to single SKU form when removing variants
@@ -466,6 +578,7 @@
             $('input[name="skus[0][price]"]').val(defaultSku.price);
             $('input[name="skus[0][quantity]"]').val(defaultSku.quantity);
             $('input[name="skus[0][code]"]').val(defaultSku.code);
+            $('input[name="skus[0][weight]"]').val(defaultSku.weight);
           }
         }
       }, { deep: true });
@@ -563,6 +676,7 @@
             image_url: skus.value[i] ? skus.value[i].image_url : '',
             model: skus.value[i] ? skus.value[i].model : '',
             origin_price: skus.value[i] ? skus.value[i].origin_price : '',
+            weight: skus.value[i] ? (skus.value[i].weight ?? productWeight) : productWeight,
             is_default: skus.value[i] ? skus.value[i].is_default : 0,
             error: false,
             text: '',
@@ -905,7 +1019,15 @@
           });
           appliedCount++;
         }
-        
+
+        // 批量设置重量
+        if (batchData.value.weight) {
+          matchingSKUs.forEach(sku => {
+            sku.weight = batchData.value.weight;
+          });
+          appliedCount++;
+        }
+
         // 批量设置图片
         if (batchData.value.image) {
           matchingSKUs.forEach(sku => {
@@ -1083,6 +1205,173 @@
         }
       };
 
+      // Open save template modal
+      const openSaveTemplateModal = () => {
+        templateDialog.value.saveName = '';
+        templateDialog.value.saveShow = true;
+        nextTick(() => {
+          const modal = new bootstrap.Modal(document.getElementById('saveTemplateModal'));
+          modal.show();
+        });
+      };
+
+      // Close save template modal
+      const closeSaveTemplateModal = () => {
+        templateDialog.value.saveShow = false;
+        const modal = bootstrap.Modal.getInstance(document.getElementById('saveTemplateModal'));
+        if (modal) {
+          modal.hide();
+        }
+      };
+
+      // Persist current variants/SKUs as a template
+      const saveTemplate = async () => {
+        const name = templateDialog.value.saveName.trim();
+        if (!name) {
+          layer.msg('{{ __('panel/common.verify_required') }}', {icon: 2});
+          return;
+        }
+        if (variants.value.length === 0) {
+          layer.msg('{{ __('panel/product.sku_validation_error') }}', {icon: 2});
+          return;
+        }
+
+        templateDialog.value.loading = true;
+        try {
+          const response = await fetch(variantTemplateRoutes.store, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfToken,
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              name: name,
+              variables: variants.value,
+              sku_matrix: skus.value,
+            }),
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || 'Save failed');
+          }
+          layer.msg(data.message || '{{ __('panel/product.template_saved') }}', {icon: 1});
+          closeSaveTemplateModal();
+        } catch (error) {
+          layer.msg(error.message, {icon: 2});
+        } finally {
+          templateDialog.value.loading = false;
+        }
+      };
+
+      // Open load template modal and fetch list
+      const openLoadTemplateModal = async () => {
+        templateDialog.value.loading = true;
+        templateDialog.value.loadShow = true;
+        templateDialog.value.selectedId = null;
+        try {
+          await fetchTemplates();
+          nextTick(() => {
+            const modal = new bootstrap.Modal(document.getElementById('loadTemplateModal'));
+            modal.show();
+          });
+        } finally {
+          templateDialog.value.loading = false;
+        }
+      };
+
+      // Close load template modal
+      const closeLoadTemplateModal = () => {
+        templateDialog.value.loadShow = false;
+        const modal = bootstrap.Modal.getInstance(document.getElementById('loadTemplateModal'));
+        if (modal) {
+          modal.hide();
+        }
+      };
+
+      // Fetch all variant templates
+      const fetchTemplates = async () => {
+        try {
+          const response = await fetch(variantTemplateRoutes.index, {
+            headers: { 'Accept': 'application/json' },
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || 'Load failed');
+          }
+          templateDialog.value.templates = data;
+        } catch (error) {
+          layer.msg(error.message, {icon: 2});
+        }
+      };
+
+      // Apply selected template to current product
+      const applyTemplate = async () => {
+        const id = templateDialog.value.selectedId;
+        if (!id) {
+          return;
+        }
+        if (!confirm('{{ __('panel/product.confirm_load_template') }}')) {
+          return;
+        }
+
+        templateDialog.value.loading = true;
+        try {
+          const response = await fetch(variantTemplateRoutes.show.replace('__ID__', id), {
+            headers: { 'Accept': 'application/json' },
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || 'Load failed');
+          }
+
+          const newVariables = data.variables || [];
+          const newSkus = (data.sku_matrix || []).map((sku, index) => ({
+            ...sku,
+            code: sku.code ? `${sku.code}-${String(Math.floor(Math.random() * 90000) + 10000)}` : sku.code,
+            is_default: index === 0 ? 1 : (sku.is_default ? 1 : 0),
+          }));
+
+          skus.value = newSkus;
+          variants.value = newVariables;
+          mainVariantKey.value = 0;
+
+          generateSku();
+          smallVariantsFormat();
+          initializeVariantSelectors();
+
+          closeLoadTemplateModal();
+          layer.msg('{{ __('panel/product.template_loaded') }}', {icon: 1});
+        } catch (error) {
+          layer.msg(error.message, {icon: 2});
+        } finally {
+          templateDialog.value.loading = false;
+        }
+      };
+
+      // Delete a template and refresh list
+      const deleteTemplate = async (id) => {
+        if (!confirm('{{ __('panel/product.delete_template_confirm') }}')) {
+          return;
+        }
+        try {
+          const response = await fetch(variantTemplateRoutes.destroy.replace('__ID__', id), {
+            method: 'DELETE',
+            headers: {
+              'X-CSRF-TOKEN': csrfToken,
+              'Accept': 'application/json',
+            },
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || 'Delete failed');
+          }
+          await fetchTemplates();
+        } catch (error) {
+          layer.msg(error.message, {icon: 2});
+        }
+      };
+
       // Expose methods and state to the template
       return {
         skus,
@@ -1128,7 +1417,16 @@
         otherLocales,
         defaultLocaleName,
         translateVariantName,
-        fillEmptyLocales
+        fillEmptyLocales,
+        // Variant template methods
+        templateDialog,
+        openSaveTemplateModal,
+        closeSaveTemplateModal,
+        saveTemplate,
+        openLoadTemplateModal,
+        closeLoadTemplateModal,
+        applyTemplate,
+        deleteTemplate,
       }
     }
   }).mount('#variants-box');

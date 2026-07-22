@@ -92,9 +92,10 @@ class ProductRequest extends FormRequest
             'translations.*.meta_keywords'    => 'max:500',
             'translations.*.meta_description' => 'max:1000',
 
-            'skus'         => 'array',
-            'skus.*.code'  => $this->buildSkuCodeRules(),
-            'skus.*.model' => 'nullable|string|max:32',
+            'skus'          => 'array',
+            'skus.*.code'   => $this->buildSkuCodeRules(),
+            'skus.*.model'  => 'nullable|string|max:32',
+            'skus.*.weight' => 'nullable|numeric|min:0',
         ];
 
         if ($this->type === 'bundle') {

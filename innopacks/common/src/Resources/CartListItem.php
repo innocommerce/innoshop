@@ -45,6 +45,9 @@ class CartListItem extends JsonResource
             }
         }
 
+        $weight      = $sku ? $sku->weight : $product->weight;
+        $weightClass = $product->weight_class;
+
         $data = [
             'id'                  => $this->id,
             'quantity'            => $this->quantity,
@@ -55,7 +58,8 @@ class CartListItem extends JsonResource
             'sku_id'              => $sku->id,
             'sku_code'            => $sku->code,
             'is_virtual'          => $product->is_virtual,
-            'weight'              => $product->weight,
+            'weight'              => $weight,
+            'weight_class'        => $weightClass,
             'price'               => $price,
             'price_format'        => currency_format($price),
             'origin_price'        => $sku->origin_price,

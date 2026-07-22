@@ -49,6 +49,15 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/products/selector', [Controllers\ProductSelectorController::class, 'selectorPage'])->name('products.selector');
         Route::resource('/products', Controllers\ProductController::class);
 
+        Route::apiResource('/variant-templates', Controllers\VariantTemplateController::class)
+            ->names([
+                'index'   => 'variant_templates.index',
+                'store'   => 'variant_templates.store',
+                'show'    => 'variant_templates.show',
+                'destroy' => 'variant_templates.destroy',
+            ])
+            ->except(['update']);
+
         Route::put('/payments/{payment}/active', [Controllers\PaymentController::class, 'active'])->name('payments.active');
 
         Route::resource('/categories', Controllers\CategoryController::class);

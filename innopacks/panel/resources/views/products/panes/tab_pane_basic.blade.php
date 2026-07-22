@@ -85,6 +85,12 @@
           <input type="hidden" name="skus[0][model]" value="">
           <input type="hidden" name="skus[0][is_default]" value="1">
         </div>
+        <div class="row mt-3">
+          <div class="col-12 col-md-3">
+            <x-common-form-input :title="__('panel/product.weight') . ' (' . ($product->weight_class ?: system_setting('weight_class', 'kg')) . ')'" name="skus[0][weight]"
+                               value="{{ old('skus.0.weight', $product->masterSku->weight ?? '') }}"/>
+          </div>
+        </div>
       </div>
       
       <!-- Variant -->

@@ -46,6 +46,7 @@ class SkuListItem extends JsonResource
             'quantity'            => $this->quantity,
             'is_default'          => $this->is_default,
             'position'            => $this->position,
+            'weight'              => $this->weight,
         ];
 
         return fire_hook_filter('resource.sku.item', $data);

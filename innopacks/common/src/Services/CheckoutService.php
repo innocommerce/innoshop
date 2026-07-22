@@ -12,6 +12,7 @@ namespace InnoShop\Common\Services;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Exceptions\Unauthorized;
+use InnoShop\Common\Libraries\Weight;
 use InnoShop\Common\Models\Checkout;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Repositories\AddressRepo;
@@ -150,10 +151,34 @@ class CheckoutService
         $weightTotal = 0;
         $cartList    = $this->getCartList();
         foreach ($cartList as $product) {
-            $weightTotal += $product['weight'] * $product['quantity'];
+            $weight = $this->normalizeCartWeight($product);
+            $weightTotal += $weight * $product['quantity'];
         }
 
         return $weightTotal;
+    }
+
+    /**
+     * Convert a cart item's weight to the system base unit when a weight class
+     * is present, falling back to the raw value otherwise.
+     *
+     * @param  array  $product
+     * @return float
+     */
+    private function normalizeCartWeight(array $product): float
+    {
+        $weight      = (float) ($product['weight'] ?? 0);
+        $weightClass = $product['weight_class'] ?? '';
+
+        if ($weight <= 0 || $weightClass === '') {
+            return $weight;
+        }
+
+        try {
+            return Weight::getInstance()->toDefault($weight, $weightClass);
+        } catch (Exception) {
+            return $weight;
+        }
     }
 
     /**

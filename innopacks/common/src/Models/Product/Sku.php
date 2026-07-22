@@ -24,12 +24,13 @@ class Sku extends BaseModel
 
     protected $fillable = [
         'product_id', 'images', 'model', 'code', 'price', 'origin_price', 'quantity', 'is_default', 'position',
-        'variants',
+        'variants', 'weight',
     ];
 
     protected $casts = [
         'images'   => 'array',
         'variants' => 'array',
+        'weight'   => 'float',
     ];
 
     protected $appends = ['image'];

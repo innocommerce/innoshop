@@ -49,36 +49,13 @@ class ProductRepoTest extends TestCase
             ],
         ];
 
-        // Test the SKU handling logic
-        $onlyOneSku = count($skus) == 1;
-        $items      = [];
-
-        foreach ($skus as $sku) {
-            $variants = $sku['variants'] ?? [];
-            if (is_string($variants)) {
-                $variants = json_decode($variants);
-            }
-
-            $isDefault = $onlyOneSku ? true : ($sku['is_default'] ?? false);
-            $code      = $sku['code'];
-
-            $items[] = [
-                'images'       => [$sku['image'] ?? ''],
-                'variants'     => $variants,
-                'code'         => $code,
-                'model'        => $sku['model'] ?? $code,
-                'price'        => (float) ($sku['price'] ?? 0),
-                'origin_price' => (float) ($sku['origin_price'] ?? 0),
-                'quantity'     => (int) ($sku['quantity'] ?? 0),
-                'is_default'   => (bool) $isDefault,
-                'position'     => (int) ($sku['position'] ?? 0),
-            ];
-        }
+        $items = ProductRepo::getInstance()->handleSkus($skus, ['weight' => 1.2]);
 
         $this->assertCount(1, $items);
         $this->assertEquals('SKU001', $items[0]['code']);
         $this->assertEquals(99.99, $items[0]['price']);
         $this->assertTrue($items[0]['is_default']);
+        $this->assertEquals(1.2, $items[0]['weight']);
     }
 
     /**
@@ -87,25 +64,17 @@ class ProductRepoTest extends TestCase
     public function test_handle_skus_processes_multiple_skus(): void
     {
         $skus = [
-            ['code' => 'SKU001', 'price' => 99.99, 'is_default' => true],
+            ['code' => 'SKU001', 'price' => 99.99, 'is_default' => true, 'weight' => 0.5],
             ['code' => 'SKU002', 'price' => 89.99, 'is_default' => false],
         ];
 
-        $onlyOneSku = count($skus) == 1;
-        $items      = [];
-
-        foreach ($skus as $sku) {
-            $isDefault = $onlyOneSku ? true : ($sku['is_default'] ?? false);
-            $items[]   = [
-                'code'       => $sku['code'],
-                'price'      => (float) ($sku['price'] ?? 0),
-                'is_default' => (bool) $isDefault,
-            ];
-        }
+        $items = ProductRepo::getInstance()->handleSkus($skus, ['weight' => 1.0]);
 
         $this->assertCount(2, $items);
         $this->assertTrue($items[0]['is_default']);
         $this->assertFalse($items[1]['is_default']);
+        $this->assertEquals(0.5, $items[0]['weight']);
+        $this->assertEquals(1.0, $items[1]['weight']);
     }
 
     /**
@@ -132,7 +101,7 @@ class ProductRepoTest extends TestCase
         }
 
         $slug = $data['slug'] ?? null;
-        if (is_string($slug) && empty($slug)) {
+        if ($slug === '') {
             $slug = null;
         }
 

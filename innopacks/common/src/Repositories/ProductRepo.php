@@ -550,7 +550,7 @@ class ProductRepo extends BaseRepo
                 OptionValueRepo::getInstance()->createProductOptionValues($product->id, $data['product_options']);
             }
 
-            $skus = $this->handleSkus($data['skus'] ?? []);
+            $skus = $this->handleSkus($data['skus'] ?? [], $productData);
             if (isset($data['price_type']) && $data['price_type'] === 'single' && ! empty($skus)) {
                 $product->update(['variables' => []]);
                 $skus = [$skus[0]];
@@ -694,7 +694,8 @@ class ProductRepo extends BaseRepo
 
             if (isset($data['skus'])) {
                 $product->skus()->delete();
-                $this->createProductSkus($product, $this->handleSkus($data['skus']));
+                $defaults = ['weight' => $data['weight'] ?? $product->weight];
+                $this->createProductSkus($product, $this->handleSkus($data['skus'], $defaults));
             }
 
             if (isset($data['bundles'])) {
@@ -769,14 +770,17 @@ class ProductRepo extends BaseRepo
 
     /**
      * @param  $skus
+     * @param  array  $defaults
      * @return array
      */
-    public function handleSkus($skus): array
+    public function handleSkus($skus, array $defaults = []): array
     {
         if (is_string($skus)) {
             $skus = json_decode($skus, true);
         }
         $onlyOneSku = count($skus) == 1;
+
+        $defaultWeight = $defaults['weight'] ?? 0;
 
         $items = [];
         foreach ($skus as $sku) {
@@ -803,6 +807,7 @@ class ProductRepo extends BaseRepo
                 'quantity'     => (int) ($sku['quantity'] ?? 0),
                 'is_default'   => (bool) $isDefault,
                 'position'     => (int) ($sku['position'] ?? 0),
+                'weight'       => (float) ($sku['weight'] ?? $defaultWeight),
             ];
         }
 
