@@ -83,11 +83,11 @@ class OptionSeeder extends BaseSeeder
                 'values'   => [
                     [
                         'name'  => ['zh-cn' => '胸针', 'en' => 'Brooch'],
-                        'image' => 'images/demo/product/7.png',
+                        'image' => 'images/demo/product/7.webp',
                     ],
                     [
                         'name'  => ['zh-cn' => '腰带', 'en' => 'Belt'],
-                        'image' => 'images/demo/product/8.png',
+                        'image' => 'images/demo/product/8.webp',
                     ],
                 ],
             ],

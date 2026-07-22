@@ -83,6 +83,14 @@ class SettingSeeder extends BaseSeeder
             ],
             [
                 'space' => 'system',
+                'name'  => 'store_description',
+                'value' => [
+                    'zh-cn' => 'InnoShop 是一款创新的开源电子商务平台，基于 Laravel 11 开发，具有多语言和多货币支持的特性。它采用了基于 Hook 的强大而灵活的插件架构，为用户提供了丰富的定制和扩展功能。欢迎体验 InnoShop, 打造属于您自己的电子商务平台！',
+                    'en'    => 'InnoShop is an innovative open-source e-commerce platform developed based on Laravel 11, featuring multi-language and multi-currency support. It adopts a powerful and flexible plugin architecture based on Hooks, providing users with a wealth of customization and extension capabilities. Welcome to experience InnoShop and create your own e-commerce platform!',
+                ],
+            ],
+            [
+                'space' => 'system',
                 'name'  => 'slideshow',
                 'value' => [
                     [
@@ -144,8 +152,33 @@ class SettingSeeder extends BaseSeeder
             ],
             [
                 'space' => 'system',
+                'name'  => 'ai_prompt_article_content',
+                'value' => '请根据以下文章信息生成正文内容。要求：仅输出可直接粘贴到富文本编辑器的 HTML 片段（如 h2/h3 标题、段落、无序列表、加粗文本、引用、图片占位等）；禁止输出 <!DOCTYPE>、<html>、<head>、<body> 等文档级标签；禁止用 Markdown 代码块包裹；禁止添加任何解释性文字。',
+            ],
+            [
+                'space' => 'system',
+                'name'  => 'ai_prompt_category_content',
+                'value' => '请根据以下分类信息生成分类描述内容。要求：仅输出可直接粘贴到富文本编辑器的 HTML 片段（如 h2/h3 标题、段落、无序列表、加粗文本等）；禁止输出 <!DOCTYPE>、<html>、<head>、<body> 等文档级标签；禁止用 Markdown 代码块包裹；禁止添加任何解释性文字。',
+            ],
+            [
+                'space' => 'system',
+                'name'  => 'ai_prompt_brand_content',
+                'value' => '请根据以下品牌信息生成品牌描述内容。要求：仅输出可直接粘贴到富文本编辑器的 HTML 片段（如 h2/h3 标题、段落、无序列表、加粗文本等）；禁止输出 <!DOCTYPE>、<html>、<head>、<body> 等文档级标签；禁止用 Markdown 代码块包裹；禁止添加任何解释性文字。',
+            ],
+            [
+                'space' => 'system',
+                'name'  => 'ai_prompt_page_content',
+                'value' => '请根据以下页面信息生成单页正文内容。要求：仅输出可直接粘贴到富文本编辑器的 HTML 片段（如 h2/h3 标题、段落、无序列表、加粗文本等）；禁止输出 <!DOCTYPE>、<html>、<head>、<body> 等文档级标签；禁止用 Markdown 代码块包裹；禁止添加任何解释性文字。',
+            ],
+            [
+                'space' => 'system',
                 'name'  => 'ai_prompt_product_selling_point',
                 'value' => '请为该商品生成一份简洁有力的产品卖点描述。请突出产品的核心优势和独特功能，明确其与竞争产品的不同之处。描述应能引发目标用户的兴趣，强调产品如何为他们带来特定好处或解决问题。语言应具有吸引力，并能清晰传达产品的价值和使用场景，请用1.2.3.....段落形式输出方便用快速阅读，并加上适当的表情\'',
+            ],
+            [
+                'space' => 'system',
+                'name'  => 'ai_prompt_product_content',
+                'value' => '请根据以下商品信息生成若干段商品描述片段。要求：仅输出可直接粘贴到富文本编辑器的 HTML 片段（如 h2/h3 标题、段落、无序列表、加粗文本等）；禁止输出 <!DOCTYPE>、<html>、<head>、<body> 等文档级标签；禁止用 Markdown 代码块包裹；禁止添加任何解释性文字。',
             ],
             [
                 'space' => 'system',
