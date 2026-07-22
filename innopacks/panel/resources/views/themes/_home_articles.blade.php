@@ -60,7 +60,7 @@
 
         const $item = $(`
           <li class="list-group-item d-flex align-items-center" data-article-id="${articleId}">
-            <i class="bi bi-grip-vertical text-muted me-2" style="cursor:move;flex-shrink:0;"></i>
+            <i class="bi bi-grip-vertical drag-handle text-muted me-2 flex-shrink-0"></i>
             <div class="me-2" style="flex-shrink:0;">
               ${image ? '<img src="' + image + '" class="rounded" style="width:36px;height:36px;object-fit:cover;border:1px solid #dee2e6;">' : '<div class="bg-light rounded d-flex align-items-center justify-content-center" style="width:36px;height:36px;"><i class="bi bi-file-earmark-text text-muted"></i></div>'}
             </div>

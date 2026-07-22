@@ -120,14 +120,14 @@
               <div class="col-md-2">
                 <label class="form-label small mb-1">{{ __('panel/product.price') }}</label>
                 <input type="number" class="form-control form-control-sm" v-model="batchData.price" 
-                       placeholder="{{ __('panel/product.bulk_fill_price') }}" min="0" @input="validateBatchPrice" style="height: 31px;">
+                       placeholder="{{ __('panel/product.bulk_fill_price') }}" min="0" @change="validateBatchPrice" style="height: 31px;">
               </div>
               
               <!-- 原价 -->
               <div class="col-md-2">
                 <label class="form-label small mb-1">{{ __('panel/product.origin_price') }}</label>
                 <input type="number" class="form-control form-control-sm" v-model="batchData.originPrice" 
-                       placeholder="{{ __('panel/product.bulk_fill_origin_price') }}" min="0" @input="validateBatchOriginPrice" style="height: 31px;">
+                       placeholder="{{ __('panel/product.bulk_fill_origin_price') }}" min="0" @change="validateBatchOriginPrice" style="height: 31px;">
               </div>
               
               <!-- 型号 -->
@@ -217,13 +217,13 @@
               <td>
                 <input type="text" class="form-control form-control-sm"
                   v-model="sku.price" placeholder="{{ __('panel/product.price') }}"
-                  @input="validatePrice(sku)">
+                  @change="validatePrice(sku)">
                   @hookinsert('panel.product.edit.sku.input.item.price.after')
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"
                   v-model="sku.origin_price" placeholder="{{ __('panel/product.origin_price') }}"
-                  @input="validateOriginPrice(sku)">
+                  @change="validateOriginPrice(sku)">
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"

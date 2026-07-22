@@ -223,49 +223,5 @@ export const panelUI = {
         lang: $("html").prop("lang") == "zh-cn" ? "cn" : "en",
       });
     });
-  },
-
-  initAIGenerate: () => {
-    $(document).on("click", ".ai-generate", function (e) {
-      // Find the form-row containing the current button
-      const $row = $(this).closest(".form-row");
-      // Find input or textarea within the row
-      const $input = $row.find("input[data-column], textarea[data-column]");
-      if ($input.length === 0) {
-        layer.msg('Input field not found', { icon: 2 });
-        return;
-      }
-      // Get field name, language, and current value
-      const column = $input.data('column');
-      const lang = $input.data('lang');
-      const name = $input.attr('name');
-      const value = $input.val();
-
-      // Assemble request data
-      const formData = {
-        column: column,
-        lang: lang,
-        name: name,
-        value: value,
-        // Add product_id and other parameters as needed
-      };
-
-      layer.load(2, { shade: [0.3, "#fff"] });
-      axios
-        .post(urls.panel_ai, formData, {})
-        .then(function (res) {
-          if (res.data && res.data.generated_text) {
-            $input.val(res.data.generated_text);
-          } else if (res.data && res.data.message) {
-            $input.val(res.data.message);
-          }
-        })
-        .catch(function (err) {
-          layer.msg(err.response?.data?.message || 'AI generation failed, please try again', { icon: 2 });
-        })
-        .finally(function () {
-          layer.closeAll("loading");
-        });
-    });
   }
 };

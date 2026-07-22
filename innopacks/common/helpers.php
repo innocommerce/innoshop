@@ -152,6 +152,30 @@ if (! function_exists('front_store_name')) {
     }
 }
 
+if (! function_exists('front_store_description')) {
+    /**
+     * Storefront company introduction per locale (footer About section).
+     * Falls back to meta_description for backward compatibility when store_description is empty.
+     */
+    function front_store_description(): string
+    {
+        $description = system_setting_locale('store_description', '');
+        if (! is_string($description)) {
+            $description = '';
+        }
+        $description = trim($description);
+
+        if ($description !== '') {
+            return $description;
+        }
+
+        // Backward compatibility: fall back to meta_description when store_description is empty.
+        $fallback = system_setting_locale('meta_description', '');
+
+        return is_string($fallback) ? trim($fallback) : '';
+    }
+}
+
 if (! function_exists('auth_method')) {
     /**
      * Get authentication method setting
@@ -806,6 +830,10 @@ if (! function_exists('image_origin')) {
      */
     function image_origin($image)
     {
+        if (empty($image)) {
+            return asset('images/placeholder.png');
+        }
+
         return storage_url($image);
     }
 }

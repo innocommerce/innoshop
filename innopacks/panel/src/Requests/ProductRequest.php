@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -85,14 +86,14 @@ class ProductRequest extends FormRequest
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.name"    => 'required',
-            "translations.$defaultLocale.content" => 'max:20000',
+            "translations.$defaultLocale.content" => ['string', rich_text_max_rule(20000)],
 
             'translations.*.meta_title'       => 'max:500',
             'translations.*.meta_keywords'    => 'max:500',
             'translations.*.meta_description' => 'max:1000',
 
             'skus'         => 'array',
-            'skus.*.code'  => 'nullable|string|max:32',
+            'skus.*.code'  => $this->buildSkuCodeRules(),
             'skus.*.model' => 'nullable|string|max:32',
         ];
 
@@ -103,6 +104,48 @@ class ProductRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Validation rules for a single SKU code. Combines:
+     *  - DB uniqueness on product_skus.code. On update, ignore the current
+     *    product's own SKUs (matched by product_id), because the update flow
+     *    deletes + recreates them inside the repo *after* validation, so they
+     *    still exist in the table at validation time.
+     *  - Intra-form dedupe so two variants in the same submission that share a
+     *    code are caught before reaching the DB (the unique rule cannot see
+     *    rows that have not been inserted yet).
+     * Translating the 1062 collision is also reinforced in ProductRepo as a
+     * safety net for API/patch paths that bypass this FormRequest.
+     *
+     * @return array
+     */
+    private function buildSkuCodeRules(): array
+    {
+        $productId = $this->product?->id;
+
+        $unique = Rule::unique('product_skus', 'code');
+        if ($productId) {
+            $unique->ignore($productId, 'product_id');
+        }
+
+        return [
+            'nullable',
+            'string',
+            'max:32',
+            $unique,
+            function ($attribute, $value, $fail) {
+                if (empty($value)) {
+                    return;
+                }
+                $sameCodes = collect($this->input('skus', []))
+                    ->pluck('code')
+                    ->filter(fn ($code) => ! empty($code) && $code === $value);
+                if ($sameCodes->count() > 1) {
+                    $fail(panel_trans('product.error_sku_repeat'));
+                }
+            },
+        ];
     }
 
     /**

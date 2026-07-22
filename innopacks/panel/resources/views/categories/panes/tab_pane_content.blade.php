@@ -1,5 +1,7 @@
 <div class="tab-pane fade mt-3" id="content-tab-pane" role="tabpanel" aria-labelledby="content-tab" tabindex="0">
 
+  <div class="mb-1 fs-6 fw-medium">{{ panel_trans('category.content') }}</div>
+
   @if(has_translator())
     <div
       class="col-md-5 d-flex align-items-center my-3 py-2 px-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3"
@@ -24,7 +26,7 @@
   @endif
 
   {{-- 多语言内容Tab导航 --}}
-  <ul class="nav nav-tabs mb-4" id="locales-content-tab" role="tablist">
+  <ul class="nav nav-tabs mb-2" id="locales-content-tab" role="tablist">
     @foreach (locales() as $locale)
       <li class="nav-item" role="presentation">
         <button class="nav-link d-flex {{ $loop->first ? 'active' : '' }}" id="locale-{{ $locale->code }}-content-tab"
@@ -41,7 +43,7 @@
   </ul>
 
   {{-- 多语言内容Tab面板 --}}
-  <div class="tab-content" id="locales-content-tabContent">
+  <div class="tab-content pt-1" id="locales-content-tabContent">
     @foreach (locales() as $locale)
       <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
         id="locale-{{ $locale->code }}-content-pane" role="tabpanel"
@@ -51,13 +53,16 @@
 
         {{-- 分类详细描述 --}}
         <div class="mb-3">
-          <label class="form-label">{{ panel_trans('category.content') }}</label>
           <x-common-form-rich-text name="translations[{{ $locale->code }}][content]"
                                    elID="content-{{ $locale->code }}"
                                    value="{{ old('translations.' . $locale->code . '.content', $category->translate($locale->code, 'content')) }}"
                                    placeholder="{{ panel_trans('category.content') }}"
                                    maxlength="20000"
-                                   data-locale="{{ $locale->code }}"/>
+                                   data-locale="{{ $locale->code }}"
+                                   :generate="true"
+                                   column="category_content"
+                                   entity-type="category"
+                                   :entity-id="$category->id ?? 0"/>
           <div class="mt-2 text-muted small">
             <i class="bi bi-info-circle me-1"></i>{{ panel_trans('category.content_description') }}
           </div>

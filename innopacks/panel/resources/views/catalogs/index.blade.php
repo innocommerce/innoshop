@@ -20,9 +20,10 @@
 
       @if ($catalogs->count())
       <div class="table-responsive">
-        <table class="table align-middle">
+        <table class="table align-middle catalog-list-table">
         <thead>
         <tr>
+        <td class="col-drag"></td>
         <td>{{ __('common/base.id') }}</td>
         <td>{{ __('panel/catalog.title') }}</td>
         <td>{{ __('panel/catalog.parent') }}</td>
@@ -34,7 +35,10 @@
         </thead>
         <tbody>
         @foreach($catalogs as $item)
-        <tr>
+        <tr data-id="{{ $item->id }}">
+        <td class="col-drag text-center">
+          <i class="bi bi-grip-vertical drag-handle text-muted" title="{{ __('panel/common.drag_sort_hint') }}"></i>
+        </td>
         <td>{{ $item->id }}</td>
         <td>{{ $item->fallbackName('title') }}</td>
         <td>{{ $item->parent ? $item->parent->fallbackName('title') : '-' }}</td>
@@ -67,6 +71,7 @@
 @endsection
 
 @push('footer')
+    <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
     <script>
      const { createApp, ref } = Vue;
     const { ElMessageBox, ElMessage } = ElementPlus;
@@ -101,5 +106,33 @@
 
     app.use(ElementPlus);
     app.mount('#app');
+
+    function initCatalogSortable() {
+      if (typeof Sortable === 'undefined') return;
+      const tbody = document.querySelector('table tbody');
+      if (!tbody || tbody.dataset.sortableInit) return;
+      tbody.dataset.sortableInit = '1';
+      new Sortable(tbody, {
+        handle: '.drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        onEnd: function(evt) {
+          const ids = [];
+          Array.prototype.forEach.call(evt.to.querySelectorAll(':scope > tr'), function(tr) {
+            const id = tr.getAttribute('data-id');
+            if (id) ids.push(parseInt(id));
+          });
+          if (ids.length < 1) return;
+          axios.post(@json(panel_route('catalogs.reorder')), { ids: ids })
+            .then(function(res) { inno.msg(res.message); })
+            .catch(function(err) {
+              if (err.response && err.response.data && err.response.data.message) {
+                inno.msg(err.response.data.message);
+              }
+            });
+        }
+      });
+    }
+    initCatalogSortable();
     </script>
 @endpush

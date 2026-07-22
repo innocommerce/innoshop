@@ -81,7 +81,9 @@ class Catalog extends BaseModel
      */
     public function children(): HasMany
     {
-        return $this->hasMany(Catalog::class, 'parent_id', 'id');
+        return $this->hasMany(Catalog::class, 'parent_id', 'id')
+            ->orderBy('position')
+            ->orderBy('id');
     }
 
     /**

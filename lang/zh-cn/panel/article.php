@@ -10,7 +10,7 @@
 return [
     'author'                   => '作者',
     'catalog'                  => '分类',
-    'content'                  => '内容',
+    'content'                  => '文章内容',
     'image'                    => '图片',
     'locale_image'             => '本地化图片',
     'locale_image_description' => '针对特定语言的文章图片，可以为不同语言设置不同的图片。',

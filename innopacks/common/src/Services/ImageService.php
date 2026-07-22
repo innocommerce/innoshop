@@ -39,12 +39,10 @@ class ImageService
         $this->image     = $image ?: $this->placeholderImage;
         $this->imagePath = public_path($this->image);
 
-        // Check if file exists and is a valid image
-        if (! is_file($this->imagePath)) {
-            $this->image     = $this->placeholderImage;
-            $this->imagePath = public_path($this->placeholderImage);
-        } elseif (! $this->isValidImage($this->imagePath)) {
-            // File exists but is not a valid image, use placeholder
+        // Lightweight existence check only. getimagesize() is deferred to
+        // resize() so list pages that hit the thumbnail cache do not pay for
+        // a full image header read per item.
+        if (! is_file($this->imagePath) || ! is_readable($this->imagePath)) {
             $this->image     = $this->placeholderImage;
             $this->imagePath = public_path($this->placeholderImage);
         }
@@ -109,6 +107,19 @@ class ImageService
                 return $this->originUrl();
             }
 
+            // Resolve resize mode + cache filename early so we can short-circuit
+            // when a fresh cached thumbnail already exists. This avoids the
+            // expensive getimagesize() / memory checks on hot paths such as
+            // the plugin list page, where the same icon is requested repeatedly.
+            $mode         = $this->getResizeMode($mode);
+            $newImage     = $this->generateCacheFilename($width, $height, $mode);
+            $newImagePath = public_path($newImage);
+
+            $sourceMtime = @filemtime($this->imagePath);
+            if ($sourceMtime !== false && is_file($newImagePath) && $sourceMtime <= @filemtime($newImagePath)) {
+                return asset($newImage);
+            }
+
             // Get and validate image dimensions
             $dimensions = $this->getImageDimensions();
             if ($dimensions === null) {
@@ -127,15 +138,8 @@ class ImageService
                 return $this->originUrl();
             }
 
-            // Get and validate resize mode
-            $mode = $this->getResizeMode($mode);
-
-            // Generate cache filename
-            $newImage     = $this->generateCacheFilename($width, $height, $mode);
-            $newImagePath = public_path($newImage);
-
             // Process image if cache doesn't exist or source is newer
-            if (! is_file($newImagePath) || (filemtime($this->imagePath) > filemtime($newImagePath))) {
+            if (! is_file($newImagePath) || ($sourceMtime > @filemtime($newImagePath))) {
                 $this->processImage($newImagePath, $width, $height, $mode, $originalWidth, $originalHeight);
             }
 
@@ -149,58 +153,6 @@ class ImageService
 
             return $this->originUrl();
         }
-    }
-
-    /**
-     * Check if file is a valid image
-     *
-     * @param  string  $filePath
-     * @return bool
-     */
-    private function isValidImage(string $filePath): bool
-    {
-        if (! is_file($filePath) || ! is_readable($filePath)) {
-            return false;
-        }
-
-        // Check file extension
-        $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-
-        // SVG files need special handling as getimagesize() doesn't work well with SVG
-        if ($extension === 'svg') {
-            return $this->isValidSvg($filePath);
-        }
-
-        // For other image formats, use getimagesize() to validate
-        $imageInfo = @getimagesize($filePath);
-
-        return $imageInfo !== false;
-    }
-
-    /**
-     * Check if file is a valid SVG
-     *
-     * @param  string  $filePath
-     * @return bool
-     */
-    private function isValidSvg(string $filePath): bool
-    {
-        // Read first few bytes to check for SVG signature
-        $handle = @fopen($filePath, 'r');
-        if ($handle === false) {
-            return false;
-        }
-
-        $content = @fread($handle, 1024);
-        @fclose($handle);
-
-        if ($content === false) {
-            return false;
-        }
-
-        // Check if content contains SVG tag
-        // SVG can be XML format with <?xml> or direct <svg> tag
-        return preg_match('/<svg\b/i', $content) === 1 || preg_match('/<\?xml[^>]*>\s*<svg\b/i', $content) === 1;
     }
 
     /**

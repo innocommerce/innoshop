@@ -147,6 +147,8 @@ class OrderRepo extends BaseRepo
         $relations = [
             'customer',
             'items',
+            'items.productSku',
+            'items.product',
             'children',
         ];
 

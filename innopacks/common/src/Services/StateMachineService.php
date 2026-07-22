@@ -87,7 +87,7 @@ class StateMachineService
             self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder', 'fireCancelledHook'],
         ],
         self::PAID => [
-            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'notifyUpdateOrder', 'fireCancelledHook'],
+            self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'addStock', 'notifyUpdateOrder', 'fireCancelledHook'],
             self::SHIPPED   => ['updateStatus', 'addHistory', 'addShipment', 'notifyUpdateOrder'],
             self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireCompletedHook'],
         ],
@@ -420,6 +420,32 @@ class StateMachineService
     }
 
     /**
+     * Restore the inventory that was deducted when the order transitioned to PAID.
+     *
+     * Used when a paid order is cancelled (e.g. COD rejection, manual refund,
+     * risk-control cancellation) — without this the stock stays "consumed"
+     * forever and the inventory ledger drifts away from physical reality.
+     *
+     * @param  $oldCode
+     * @param  $newCode
+     * @return void
+     */
+    private function addStock($oldCode, $newCode): void
+    {
+        $this->order->loadMissing([
+            'items.productSku',
+        ]);
+        $orderItems = $this->order->items;
+        foreach ($orderItems as $orderItem) {
+            $productSku = $orderItem->productSku;
+            if (empty($productSku)) {
+                continue;
+            }
+            $productSku->increment('quantity', $orderItem->quantity);
+        }
+    }
+
+    /**
      * @param  $oldCode
      * @param  $newCode
      * @return void
@@ -467,7 +493,7 @@ class StateMachineService
             'customer_id' => $this->order->customer_id,
             'amount'      => $balanceFee->value,
             'type'        => $type,
-            'comment'     => $data['comment'] ?? '',
+            'comment'     => $this->comment,
         ];
         TransactionRepo::getInstance()->create($data);
     }

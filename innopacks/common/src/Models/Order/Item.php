@@ -97,6 +97,27 @@ class Item extends BaseModel
     }
 
     /**
+     * 订单项图片：优先取下单时快照，缺失时回退到当前 SKU 或商品首图。
+     * 用于兼容历史订单 image 字段为空的情况。
+     *
+     * @param  string|null  $value
+     * @return string
+     */
+    public function getImageAttribute($value): string
+    {
+        if ($value) {
+            return $value;
+        }
+
+        $skuImage = $this->productSku?->getImageUrl();
+        if ($skuImage) {
+            return $skuImage;
+        }
+
+        return $this->product?->image ?? '';
+    }
+
+    /**
      * @return float
      */
     public function getSubtotalAttribute(): float

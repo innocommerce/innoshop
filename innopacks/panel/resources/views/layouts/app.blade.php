@@ -26,7 +26,7 @@
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script src="{{ asset('vendor/laydate/laydate.js') }}"></script>
-  <script src="{{ asset('build/panel/js/app.js') }}"></script>
+  <script src="{{ asset('build/panel/js/app.js') }}?v={{ filemtime(public_path('build/panel/js/app.js')) }}"></script>
   <script src="{{ asset('vendor/locale-modal/locale-modal.js') }}"></script>
   <script>
     const urls = {
@@ -34,6 +34,7 @@
       panel_base: '{{ panel_route('home.index') }}',
       panel_upload: '{{ panel_route('upload.images') }}',
       panel_ai: '{{ panel_route('content_ai.generate') }}',
+      panel_ai_batch: '{{ panel_route('content_ai.generate_batch') }}',
       file_manager_title: '{{ __("panel/menu.file_manager") }}',
     };
 
@@ -114,6 +115,8 @@
   </div>
 
   @include('panel::layouts.footer')
+
+  @include('panel::components.ai_generate_modal')
 
   @stack('footer')
 </body>

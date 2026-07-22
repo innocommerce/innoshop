@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Services\AI;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Services\StorageService;
 use Laravel\Ai\Image;
@@ -306,5 +307,60 @@ class AIServiceManager
     public function reloadConfig(): void
     {
         app(ProviderRegistry::class)->buildLaravelAiConfig();
+    }
+
+    /**
+     * Fetch the list of available models from a provider's /models endpoint.
+     * Useful for letting admin pick from a dropdown instead of typing model names.
+     *
+     * @param  string  $providerCode
+     * @return array List of model ids
+     *
+     * @throws \RuntimeException When provider is not configured or the HTTP request fails
+     */
+    public function fetchAvailableModels(string $providerCode): array
+    {
+        $providers = app(ProviderRegistry::class)->getProviders();
+        $provider  = null;
+        foreach ($providers as $p) {
+            if (($p['code'] ?? '') === $providerCode) {
+                $provider = $p;
+
+                break;
+            }
+        }
+        if (! $provider) {
+            throw new \RuntimeException("Provider '{$providerCode}' is not configured.");
+        }
+        if (empty($provider['api_key'])) {
+            throw new \RuntimeException("Provider '{$providerCode}' has no API key configured.");
+        }
+
+        $baseUrl = rtrim((string) ($provider['base_url'] ?? ''), '/');
+        if ($baseUrl === '') {
+            throw new \RuntimeException("Provider '{$providerCode}' has no base_url configured.");
+        }
+
+        $url = $baseUrl.'/models';
+
+        $response = Http::withToken($provider['api_key'])
+            ->withHeaders(['Accept' => 'application/json'])
+            ->timeout(15)
+            ->connectTimeout(10)
+            ->get($url);
+
+        if ($response->failed()) {
+            throw new \RuntimeException("Provider returned HTTP {$response->status()}: ".substr((string) $response->body(), 0, 500));
+        }
+
+        $data   = $response->json() ?? [];
+        $models = [];
+        foreach (($data['data'] ?? []) as $m) {
+            if (! empty($m['id'])) {
+                $models[] = $m['id'];
+            }
+        }
+
+        return $models;
     }
 }

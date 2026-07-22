@@ -16,7 +16,7 @@
   {{-- Logo --}}
   <div class="mb-3 col-12 col-md-6">
     <x-common-form-image title="{{ __('panel/brand.logo') }}" name="logo"
-      value="{{ old('logo', $brand->logo ?? '') }}" required />
+      value="{{ old('logo', $brand->logo ?? '') }}" />
   </div>
 
   {{-- 首字母 --}}

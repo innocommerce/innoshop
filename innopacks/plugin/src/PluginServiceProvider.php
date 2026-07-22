@@ -46,6 +46,29 @@ class PluginServiceProvider extends ServiceProvider
         });
 
         $this->loadViewsFrom(inno_path('plugin/resources/views'), 'plugin');
+
+        if ($this->app->runningInConsole()) {
+            $this->registerPluginCommands();
+        }
+    }
+
+    /**
+     * Register plugin management artisan commands.
+     *
+     * @return void
+     */
+    private function registerPluginCommands(): void
+    {
+        $this->commands([
+            Commands\PluginListCommand::class,
+            Commands\PluginInstallCommand::class,
+            Commands\PluginUninstallCommand::class,
+            Commands\PluginEnableCommand::class,
+            Commands\PluginDisableCommand::class,
+            Commands\PluginToggleCommand::class,
+            Commands\PluginInfoCommand::class,
+            Commands\PluginSeedCommand::class,
+        ]);
     }
 
     /**

@@ -68,6 +68,7 @@
       </div>
 
       {{ $products->links('panel::vendor/pagination/bootstrap-4') }}
+      @include('brands.partials._description', ['brand' => $brand])
       @else
       <div class="brand-products-empty text-center">
         <x-common-no-data text="{{ __('front/brand.no_products') }}" />

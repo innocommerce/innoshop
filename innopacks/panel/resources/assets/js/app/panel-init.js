@@ -10,6 +10,7 @@ import { panelUI } from './panel-ui';
 import fileManager from './panel-file-manager';
 import { initEditor } from './panel-editor';
 import localeField from './locale-field';
+import aiModal from './ai-modal';
 
 export function initPanelInno() {
   window.inno = inno;
@@ -26,7 +27,6 @@ export function bindPanelOnReady() {
   panelUI.initAlerts();
   panelUI.initSidebar();
   panelUI.initDatePickers();
-  panelUI.initAIGenerate();
 
   initEditor();
 
@@ -34,4 +34,5 @@ export function bindPanelOnReady() {
   inno.initSlugFormatting();
 
   localeField.init();
+  aiModal.init();
 }

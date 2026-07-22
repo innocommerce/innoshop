@@ -59,7 +59,11 @@
                                    value="{{ old('translations.' . $localeCode . '.content', $product->translate($localeCode, 'content')) }}"
                                    required placeholder="{{ __('panel/product.describe') }}"
                                    maxlength="20000"
-                                   data-locale="{{ $localeCode }}"/>
+                                   data-locale="{{ $localeCode }}"
+                                   :generate="true"
+                                   column="product_content"
+                                   entity-type="product"
+                                   :entity-id="$product->id ?? 0"/>
         </div>
       </div>
     @endforeach

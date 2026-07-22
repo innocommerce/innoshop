@@ -40,7 +40,7 @@ class BrandRequest extends FormRequest
 
         return [
             'slug'   => $slugRule,
-            'logo'   => 'required',
+            'logo'   => 'nullable',
             'active' => 'bool',
 
             "translations.$defaultLocale.locale" => 'required',

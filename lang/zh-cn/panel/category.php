@@ -8,7 +8,7 @@
  */
 
 return [
-    'content'             => '详细描述',
+    'content'             => '分类描述',
     'content_description' => '分类详细描述内容，支持富文本编辑',
     'description_tab'     => '分类描述',
     'extra_tab'           => '扩展信息',

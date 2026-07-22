@@ -123,6 +123,28 @@ if (! function_exists('panel_trans')) {
     }
 }
 
+if (! function_exists('rich_text_max_rule')) {
+    /**
+     * Build a validation closure that limits a rich-text (HTML) field by its
+     * VISIBLE character count, not the raw HTML length. Matches the TinyMCE
+     * front-end counter (getContent text length): without it, HTML tags,
+     * inline styles and image URLs inflate the length and trip max:N long
+     * before the visible text reaches N.
+     *
+     * @param  int  $max  Max visible characters allowed.
+     * @return Closure
+     */
+    function rich_text_max_rule(int $max): Closure
+    {
+        return function ($attribute, $value, $fail) use ($max) {
+            $text = trim(html_entity_decode(strip_tags((string) $value), ENT_QUOTES, 'UTF-8'));
+            if (mb_strlen($text) > $max) {
+                $fail(panel_trans('common.rich_text_too_long', ['max' => $max]));
+            }
+        };
+    }
+}
+
 if (! function_exists('panel_route')) {
     /**
      * Get backend panel route
@@ -355,7 +377,14 @@ if (! function_exists('locale_field_data')) {
             if ($value === null && $model) {
                 $value = $model->translate($code, $fieldName);
             }
-            $data[$code] = (string) ($value ?? '');
+            // Fallback to the model's main column when no translation exists (e.g. legacy brands)
+            if (($value === null || $value === '') && $model) {
+                $fallback = $model->getAttribute($fieldName);
+                if ($fallback !== null && $fallback !== '') {
+                    $value = $fallback;
+                }
+            }
+            $data[$code] = (string) $value;
         }
 
         return $data;
@@ -383,7 +412,7 @@ if (! function_exists('json_field_data')) {
             if ($value === null) {
                 $value = $field[$code] ?? '';
             }
-            $data[$code] = (string) ($value ?? '');
+            $data[$code] = (string) $value;
         }
 
         return $data;

@@ -56,7 +56,7 @@ class ProviderRegistry
         ],
         'qianwen' => [
             'name'     => 'Qianwen (通义千问)',
-            'driver'   => 'openai',
+            'driver'   => 'deepseek',
             'base_url' => 'https://dashscope.aliyuncs.com/compatible-mode/v1',
             'logo'     => '/images/ai/qianwen.svg',
             'models'   => [
@@ -65,7 +65,7 @@ class ProviderRegistry
         ],
         'glm' => [
             'name'     => 'GLM (智谱)',
-            'driver'   => 'openai',
+            'driver'   => 'deepseek',
             'base_url' => 'https://open.bigmodel.cn/api/paas/v4',
             'logo'     => '/images/ai/glm.svg',
             'models'   => [
@@ -74,7 +74,7 @@ class ProviderRegistry
         ],
         'kimi' => [
             'name'     => 'Kimi (Moonshot)',
-            'driver'   => 'openai',
+            'driver'   => 'deepseek',
             'base_url' => 'https://api.moonshot.cn/v1',
             'logo'     => '/images/ai/kimi.svg',
             'models'   => [
@@ -83,7 +83,7 @@ class ProviderRegistry
         ],
         'doubao' => [
             'name'     => 'Doubao (豆包)',
-            'driver'   => 'openai',
+            'driver'   => 'deepseek',
             'base_url' => 'https://ark.cn-beijing.volces.com/api/v3',
             'logo'     => '/images/ai/doubao.svg',
             'models'   => [
@@ -92,7 +92,7 @@ class ProviderRegistry
         ],
         'hunyuan' => [
             'name'     => 'Hunyuan (混元)',
-            'driver'   => 'openai',
+            'driver'   => 'deepseek',
             'base_url' => 'https://api.hunyuan.cloud.tencent.com/v1',
             'logo'     => '/images/ai/hunyuan.svg',
             'models'   => [
@@ -101,7 +101,7 @@ class ProviderRegistry
         ],
         'minimax' => [
             'name'     => 'MiniMax',
-            'driver'   => 'openai',
+            'driver'   => 'deepseek',
             'base_url' => 'https://api.minimax.chat/v1',
             'logo'     => '/images/ai/minimax.svg',
             'models'   => [
@@ -190,6 +190,16 @@ class ProviderRegistry
             $textModel  = $provider['models']['text'] ?? '';
             $imageModel = $provider['models']['image'] ?? '';
 
+            // laravel/ai's `openai` driver hits POST /responses (OpenAI Responses API),
+            // which most OpenAI-compatible Chinese vendors (GLM, Qianwen, Kimi,
+            // Doubao, Hunyuan, MiniMax, ...) do not implement — they only support
+            // POST /chat/completions and return 404 on /responses. Remap any
+            // non-OpenAI host to the `deepseek` driver, which uses the standard
+            // OpenAI Chat Completions contract against the configured base_url.
+            if ($driver === 'openai' && ! $this->isOpenAiOfficialHost($baseUrl)) {
+                $driver = 'deepseek';
+            }
+
             $config = [
                 'driver' => $driver,
                 'key'    => $apiKey,
@@ -265,6 +275,20 @@ class ProviderRegistry
         }
 
         return $presets;
+    }
+
+    /**
+     * Whether the given base URL points to OpenAI's official API.
+     * Only the official host supports the Responses API (`POST /responses`).
+     *
+     * @param  string  $baseUrl
+     * @return bool
+     */
+    private function isOpenAiOfficialHost(string $baseUrl): bool
+    {
+        $host = parse_url($baseUrl, PHP_URL_HOST) ?: '';
+
+        return str_ends_with(strtolower($host), 'api.openai.com');
     }
 
     /**

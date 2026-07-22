@@ -27,7 +27,7 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="content-tab" data-bs-toggle="tab" data-bs-target="#content-tab-pane"
                 type="button" role="tab" aria-controls="content-tab-pane"
-                aria-selected="false">{{ __('panel/article.content') }}</button>
+                aria-selected="false">{{ __('panel/page.content') }}</button>
             </li>
 
             <li class="nav-item" role="presentation">

@@ -12,6 +12,7 @@ namespace InnoShop\Panel\Controllers;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use InnoShop\Common\Jobs\GenerateProductContentJob;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Common\Repositories\BrandRepo;
@@ -285,6 +286,37 @@ class ProductController extends BaseController
             $deletedCount = ProductRepo::getInstance()->bulkDestroy($ids);
 
             return json_success(__('panel/product.bulk_delete_success', ['count' => $deletedCount]));
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Bulk dispatch AI content generation for selected products.
+     * Only empty fields are filled; existing content is preserved.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function bulkAIGenerate(Request $request): mixed
+    {
+        try {
+            $ids = $request->input('ids', []);
+            if (empty($ids)) {
+                return json_fail(__('panel/common.select_items'));
+            }
+
+            $dispatched = 0;
+            foreach ($ids as $id) {
+                $id = (int) $id;
+                if ($id <= 0) {
+                    continue;
+                }
+                GenerateProductContentJob::dispatch($id);
+                $dispatched++;
+            }
+
+            return json_success(__('panel/product.bulk_ai_dispatched', ['count' => $dispatched]));
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

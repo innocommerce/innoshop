@@ -1,3 +1,5 @@
+@import '../base/rich-text';
+
 body.page-articles {
   .newest-box {
     @media (min-width: 992px) {
@@ -184,6 +186,11 @@ body.page-articles-details {
           color: $primary;
         }
       }
+    }
+
+    .content,
+    .newes-content {
+      @include rich-text-content;
     }
   }
 }

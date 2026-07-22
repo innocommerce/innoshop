@@ -344,6 +344,28 @@
             });
         };
 
+        const bulkAIGenerate = () => {
+          if (checkedIds.value.length === 0) {
+            ElMessage({ type: 'warning', message: '{{ __("panel/common.select_items") }}' });
+            return;
+          }
+          ElMessageBox.confirm(
+            '{{ __("panel/product.bulk_ai_generate") }} · ' + checkedIds.value.length,
+            '{{ __("panel/product.bulk_ai_generate") }}',
+            { confirmButtonText: '{{ __("common/base.confirm") }}', cancelButtonText: '{{ __("common/base.cancel") }}', type: 'warning' }
+          ).then(() => {
+            const loading = ElLoading.service({ lock: true, text: '{{ __("panel/product.processing") }}', background: 'rgba(0, 0, 0, 0.7)' });
+            axios.post("{{ $showBulkActions ? route($routePrefix . '.products.bulk.ai_generate') : '' }}", { ids: checkedIds.value })
+              .then(response => {
+                ElMessage({ type: 'success', message: response?.data?.message || response?.message || 'OK' });
+              })
+              .catch(error => {
+                ElMessage({ type: 'error', message: error.response?.data?.message || error.message || 'Error' });
+              })
+              .finally(() => loading.close());
+          }).catch(() => {});
+        };
+
         const checkAll = () => {
           if (checkAllBox.value.checked) {
             checkedIds.value = Array.from(document.querySelectorAll('input[type="checkbox"][value]')).map(el => parseInt(el.value));
@@ -379,6 +401,7 @@
           dialogVisible,
           bulkFormData,
           submitBulkUpdate,
+          bulkAIGenerate,
           categoryCascaderOptions
         };
       }

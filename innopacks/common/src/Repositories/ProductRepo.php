@@ -12,11 +12,13 @@ namespace InnoShop\Common\Repositories;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Repositories\Product\BundleRepo;
 use InnoShop\Common\Repositories\Product\OptionValueRepo;
 use InnoShop\Common\Repositories\Product\RelationRepo;
@@ -553,7 +555,7 @@ class ProductRepo extends BaseRepo
                 $product->update(['variables' => []]);
                 $skus = [$skus[0]];
             }
-            $product->skus()->createMany($skus);
+            $this->createProductSkus($product, $skus);
 
             DB::commit();
 
@@ -562,6 +564,86 @@ class ProductRepo extends BaseRepo
             DB::rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Persist a product's SKUs, converting a DB unique collision on the SKU
+     * code into a user-facing message so raw SQLSTATE 1062 never surfaces.
+     * Runs inside the caller's transaction; a throw rolls the caller back too.
+     *
+     * @param  Product  $product
+     * @param  array  $skus
+     * @return void
+     * @throws Exception
+     */
+    private function createProductSkus(Product $product, array $skus): void
+    {
+        if (empty($skus)) {
+            return;
+        }
+        try {
+            $product->skus()->createMany($skus);
+        } catch (QueryException $e) {
+            // product_skus.code is the only unique index on this table, so any
+            // duplicate-key collision here is an SKU code clash. Match it across
+            // drivers: MySQL (1062 / "Duplicate entry" / index name sku_code)
+            // and SQLite (19 / "UNIQUE constraint failed").
+            $sqlCode    = $e->errorInfo[1] ?? null;
+            $message    = (string) $e->getMessage();
+            $isSkuClash = $sqlCode === 1062
+                || $sqlCode === 19
+                || str_contains($message, 'sku_code')
+                || str_contains($message, 'Duplicate entry')
+                || str_contains($message, 'UNIQUE constraint failed');
+            if ($isSkuClash) {
+                // Name the offending code(s) so the message points at the exact
+                // value the merchant must change, not a vague "sku cannot repeat".
+                $code = $this->findConflictingSkuCode($skus);
+
+                throw new Exception(panel_trans('product.error_sku_repeat', ['code' => $code]));
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Resolve which SKU code(s) in the payload actually collided, so the error
+     * message can name the exact value. By the time we land here the caller has
+     * already deleted this product's own SKUs, so a DB hit means the code is
+     * held by another product; if there is no DB hit the clash is inside the
+     * submitted form itself (two variants sharing one code).
+     *
+     * @param  array  $skus
+     * @return string
+     */
+    private function findConflictingSkuCode(array $skus): string
+    {
+        $codes = collect($skus)
+            ->pluck('code')
+            ->filter(fn ($c) => ! empty($c))
+            ->values()
+            ->all();
+
+        if (empty($codes)) {
+            return '';
+        }
+
+        $taken = Sku::query()
+            ->whereIn('code', $codes)
+            ->pluck('code')
+            ->unique()
+            ->values()
+            ->all();
+
+        if (! empty($taken)) {
+            return implode(' / ', $taken);
+        }
+
+        // No DB hit → the collision is between rows in the same submission.
+        $counts = array_count_values($codes);
+        $dups   = array_keys(array_filter($counts, fn ($n) => $n > 1));
+
+        return implode(' / ', $dups) ?: ($codes[0] ?? '');
     }
 
     /**
@@ -612,7 +694,7 @@ class ProductRepo extends BaseRepo
 
             if (isset($data['skus'])) {
                 $product->skus()->delete();
-                $product->skus()->createMany($this->handleSkus($data['skus']));
+                $this->createProductSkus($product, $this->handleSkus($data['skus']));
             }
 
             if (isset($data['bundles'])) {

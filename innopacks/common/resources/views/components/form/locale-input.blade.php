@@ -11,6 +11,8 @@
     'generate'      => false,
     'column'        => '',
     'translate'     => true,
+    'entityType'    => '',
+    'entityId'      => 0,
 ])
 
 @php
@@ -85,7 +87,12 @@ $modalId = 'locale-modal-' . $uid;
     @endif
 
     @if($generate)
-      <button type="button" class="btn btn-outline-secondary locale-ai-btn" title="{{ __('panel/common.ai_generate') }}">
+      <button type="button" class="btn btn-outline-secondary locale-ai-btn"
+              data-column="{{ $column }}"
+              data-field="{{ $name }}"
+              data-entity-type="{{ $entityType }}"
+              data-entity-id="{{ $entityId }}"
+              title="{{ __('panel/common.ai_generate') }}">
         <i class="bi bi-stars"></i>
       </button>
     @endif

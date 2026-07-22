@@ -44,6 +44,8 @@ return [
     'shipped'         => '已发货',
     'state'           => '状态',
     'subtotal'        => '小计',
+    'shipping'        => '运费',
+    'balance'         => '余额抵扣',
     'time'            => '时间',
     'to_be_bound'     => '待绑定',
     'to_be_used'      => '待使用',

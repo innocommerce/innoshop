@@ -21,7 +21,15 @@ trait PatchRequestTrait
     protected function applySometimesToRules(array $rules): array
     {
         foreach ($rules as $key => $rule) {
-            $rules[$key] = 'sometimes|'.$rule;
+            // Rules may be a pipe-delimited string or an array (e.g. when a
+            // Closure rule such as rich_text_max_rule is used). Prepend
+            // 'sometimes' in whichever form the rule is expressed.
+            if (is_array($rule)) {
+                array_unshift($rule, 'sometimes');
+                $rules[$key] = $rule;
+            } else {
+                $rules[$key] = 'sometimes|'.$rule;
+            }
         }
 
         return $rules;

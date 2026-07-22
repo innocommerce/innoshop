@@ -49,7 +49,7 @@ class PageRequest extends FormRequest
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.title"   => 'required',
-            "translations.$defaultLocale.content" => 'required|string|max:1000000',
+            "translations.$defaultLocale.content" => ['required', 'string', rich_text_max_rule(100000)],
 
             'translations.*.meta_title'       => 'max:500',
             'translations.*.meta_keywords'    => 'max:500',

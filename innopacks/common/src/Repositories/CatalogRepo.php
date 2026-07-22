@@ -77,7 +77,43 @@ class CatalogRepo extends BaseRepo
      */
     public function list($filters = []): LengthAwarePaginator
     {
-        return $this->builder($filters)->paginate();
+        return $this->builder($filters)->orderBy('position')->orderBy('id')->paginate();
+    }
+
+    /**
+     * Reorder catalogs by an ordered ID list.
+     *
+     * Uses the minimum current position among the given IDs as the base,
+     * so reordering one page does not collide with items on other pages.
+     *
+     * @param  array  $ids  Ordered catalog IDs (typically the current page).
+     * @return void
+     * @throws Throwable
+     */
+    public function reorder(array $ids): void
+    {
+        $ids = array_values(array_filter(array_map('intval', $ids)));
+        if (empty($ids)) {
+            return;
+        }
+
+        $base = (int) Catalog::query()->whereIn('id', $ids)->min('position');
+        if ($base < 0) {
+            $base = 0;
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($ids as $index => $id) {
+                if ($id > 0) {
+                    Catalog::query()->where('id', $id)->update(['position' => $base + $index]);
+                }
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**

@@ -9,7 +9,7 @@
       </h5>
     </div>
     <div class="card-body p-4">
-      <div class="text-muted lh-lg">
+      <div class="category-description-content">
         {!! $category->fallbackName('content') !!}
       </div>
     </div>

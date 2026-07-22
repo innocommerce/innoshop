@@ -78,4 +78,5 @@ return [
     'view_all'                     => '查看全部',
     'viewed'                       => '查看次數',
     'whether_enable'               => '是否啟用',
+    'drag_sort_hint'               => '拖曳排序',
 ];

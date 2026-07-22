@@ -126,6 +126,29 @@ class StateMachineServiceTest extends TestCase
     }
 
     #[Test]
+    public function test_paid_to_cancelled_restores_stock(): void
+    {
+        $machines  = StateMachineService::MACHINES;
+        $functions = $machines[StateMachineService::PAID][StateMachineService::CANCELLED];
+
+        // Without addStock, cancelling a paid order would silently leak inventory.
+        $this->assertContains('addStock', $functions);
+        $this->assertContains('revokeBalance', $functions);
+        $this->assertContains('fireCancelledHook', $functions);
+    }
+
+    #[Test]
+    public function test_unpaid_to_cancelled_does_not_touch_stock(): void
+    {
+        $machines  = StateMachineService::MACHINES;
+        $functions = $machines[StateMachineService::UNPAID][StateMachineService::CANCELLED];
+
+        // unpaid means stock has never been deducted, so no restoration needed.
+        $this->assertNotContains('addStock', $functions);
+        $this->assertNotContains('subStock', $functions);
+    }
+
+    #[Test]
     public function test_get_valid_statuses_returns_correct_statuses(): void
     {
         $validStatuses = StateMachineService::getValidStatuses();

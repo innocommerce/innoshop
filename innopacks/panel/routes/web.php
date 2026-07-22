@@ -44,6 +44,7 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
         Route::get('/products/{product}/copy', [Controllers\ProductController::class, 'copy'])->name('products.copy');
         Route::post('/products/bulk/update', [Controllers\ProductController::class, 'bulkUpdate'])->name('products.bulk.update');
+        Route::post('/products/bulk/ai_generate', [Controllers\ProductController::class, 'bulkAIGenerate'])->name('products.bulk.ai_generate');
         Route::delete('/products/bulk/destroy', [Controllers\ProductController::class, 'bulkDestroy'])->name('products.destroy.batch');
         Route::get('/products/selector', [Controllers\ProductSelectorController::class, 'selectorPage'])->name('products.selector');
         Route::resource('/products', Controllers\ProductController::class);
@@ -52,6 +53,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/categories', Controllers\CategoryController::class);
         Route::put('/categories/{category}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');
+        Route::post('/categories/reorder', [Controllers\CategoryController::class, 'reorder'])->name('categories.reorder');
 
         Route::resource('/attribute_groups', Controllers\AttributeGroupController::class);
 
@@ -79,6 +81,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/catalogs', Controllers\CatalogController::class);
         Route::put('/catalogs/{catalog}/active', [Controllers\CatalogController::class, 'active'])->name('catalogs.active');
+        Route::post('/catalogs/reorder', [Controllers\CatalogController::class, 'reorder'])->name('catalogs.reorder');
 
         Route::resource('/tags', Controllers\TagController::class);
         Route::put('/tags/{tag}/active', [Controllers\TagController::class, 'active'])->name('tags.active');
@@ -145,7 +148,9 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'index'])->name('plugin_coordination.index');
         Route::put('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'update'])->name('plugin_coordination.update');
 
-        Route::post('/content_ai/generate', [Controllers\ContentAIController::class, 'generate'])->name('content_ai.generate');
+        Route::post('/content-ai/generate', [Controllers\ContentAIController::class, 'generate'])->name('content_ai.generate');
+        Route::post('/content-ai/generate-batch', [Controllers\ContentAIController::class, 'generateBatch'])->name('content_ai.generate_batch');
+        Route::post('/content-ai/list-models', [Controllers\ContentAIController::class, 'listModels'])->name('content_ai.list_models');
 
         Route::resource('/admins', Controllers\AdminController::class);
         Route::put('/admins/{currency}/active', [Controllers\AdminController::class, 'active'])->name('admins.active');

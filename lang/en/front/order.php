@@ -43,6 +43,8 @@ return [
     'shipped'         => 'Shipped',
     'state'           => 'State',
     'subtotal'        => 'Subtotal',
+    'shipping'        => 'Shipping',
+    'balance'         => 'Balance',
     'time'            => 'Time',
     'to_be_bound'     => 'To Be Bound',
     'to_be_used'      => 'To Be Used',

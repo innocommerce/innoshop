@@ -46,6 +46,7 @@ class ProductDetail extends JsonResource
         }
 
         $data = [
+            'id'                  => $this->id,
             'sku_id'              => $sku->id,
             'product_id'          => $this->id,
             'slug'                => $this->slug,
@@ -63,6 +64,9 @@ class ProductDetail extends JsonResource
             'attributes'          => $this->groupedAttributes(),
             'sales'               => $this->sales,
             'viewed'              => $this->viewed,
+            'rating'              => (float) $this->rating,
+            'reviews_count'       => (int) $this->reviews_count,
+            'category_id'         => $this->categories()->first()?->id,
             'related'             => ProductSimple::collection($this->relationProducts),
         ];
 

@@ -170,7 +170,7 @@ class AttributeRepo extends BaseRepo
             $builder->where('attribute_group_id', $attributeGroupId);
         }
 
-        return $builder;
+        return $builder->orderBy('position')->orderByDesc('id');
     }
 
     /**
@@ -317,6 +317,8 @@ class AttributeRepo extends BaseRepo
                     $query->where('locale', $locale);
                 },
             ])
+            ->orderBy('position')
+            ->orderBy('id')
             ->get();
 
         // Format data as three-dimensional array

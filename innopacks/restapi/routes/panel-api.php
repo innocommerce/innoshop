@@ -132,6 +132,7 @@ Route::middleware($middlewares)->group(function () {
 
     // Reviews
     Route::get('/reviews', [PanelApiControllers\ReviewController::class, 'index'])->name('reviews.index');
+    Route::post('/reviews', [PanelApiControllers\ReviewController::class, 'store'])->name('reviews.store');
     Route::get('/reviews/{id}', [PanelApiControllers\ReviewController::class, 'show'])->name('reviews.show');
     Route::put('/reviews/{id}', [PanelApiControllers\ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{id}', [PanelApiControllers\ReviewController::class, 'destroy'])->name('reviews.destroy');

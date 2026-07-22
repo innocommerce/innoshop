@@ -22,10 +22,13 @@
 @endsection
 
 @push('footer')
+<script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
 <script>
   const api = @json(panel_route('categories.index'));
   const categories = @json($categories);
   const categoryIndexUrl = @json(panel_route('categories.index'));
+  const reorderUrl = @json(panel_route('categories.reorder'));
+  const dragSortHint = @json(__('panel/common.drag_sort_hint'));
 
   function createAccordionItem(item, parentId, index) {
     const itemId = `${parentId}-${index}`;
@@ -36,9 +39,12 @@
       <div class="accordion-item">
         <h2 class="accordion-header" id="heading${itemId}">
           <div class="d-flex justify-content-between align-items-center">
-            <button class="accordion-button collapsed ${!hasChildren ? 'no-children' : ''}" type="button" ${hasChildren ? `data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}"` : ''}>
-              <span>${item.name}</span>
-            </button>
+            <div class="d-flex align-items-center flex-grow-1">
+              <i class="bi bi-grip-vertical drag-handle text-muted me-2 flex-shrink-0" title="${dragSortHint}"></i>
+              <button class="accordion-button collapsed ${!hasChildren ? 'no-children' : ''}" type="button" ${hasChildren ? `data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}"` : ''}>
+                <span>${item.name}</span>
+              </button>
+            </div>
             <div class="d-flex align-items-center tool-btn" data-id="${item.id}">
               <div class="form-check form-switch list-switch ms-2">
                 <input class="form-check-input" type="checkbox" role="switch" ${item.active ? 'checked' : ''}>
@@ -51,7 +57,7 @@
 
     if (hasChildren) {
       html += `
-        <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading${itemId}" data-bs-parent="#${parentId}">
+        <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading${itemId}">
           <div class="accordion-body">
             <div class="accordion" id="accordion${itemId}">`;
 
@@ -74,8 +80,38 @@
     $(`#${parentId}`).html(html);
   }
 
+  function initCategorySortables() {
+    if (typeof Sortable === 'undefined') return;
+    $('#categories-top, #categories-top .accordion').each(function() {
+      const container = this;
+      if (container.dataset.sortableInit) return;
+      container.dataset.sortableInit = '1';
+      new Sortable(container, {
+        handle: '.drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        onEnd: function(evt) {
+          const ids = [];
+          $(evt.to).children('.accordion-item').each(function() {
+            const id = $(this).find('.tool-btn').first().data('id');
+            if (id) ids.push(parseInt(id));
+          });
+          if (ids.length < 1) return;
+          axios.post(reorderUrl, { ids: ids }).then(function(res) {
+            inno.msg(res.message);
+          }).catch(function(err) {
+            if (err.response && err.response.data && err.response.data.message) {
+              inno.msg(err.response.data.message);
+            }
+          });
+        }
+      });
+    });
+  }
+
   $(document).ready(function() {
     renderAccordion(categories, 'categories-top');
+    initCategorySortables();
   });
 
   $(document).on('change', '.form-check-input', function() {

@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\ReviewRepo;
 use InnoShop\RestAPI\FrontApiControllers\BaseController;
+use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
@@ -44,6 +45,24 @@ class ReviewController extends BaseController
             $review = ReviewRepo::getInstance()->builder()->findOrFail($id);
 
             return read_json_success($review);
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    #[Endpoint('Create review')]
+    #[BodyParam('product_id', type: 'integer', required: true)]
+    #[BodyParam('customer_id', type: 'integer', required: false)]
+    #[BodyParam('rating', type: 'integer', required: true, example: 5)]
+    #[BodyParam('content', type: 'string', required: false)]
+    #[BodyParam('active', type: 'integer', required: false, example: 1)]
+    public function store(Request $request): mixed
+    {
+        try {
+            $data   = $request->all();
+            $review = ReviewRepo::getInstance()->create($data);
+
+            return create_json_success($review);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

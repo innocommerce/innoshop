@@ -8,9 +8,28 @@
 @endsection
 
 @section('content')
+  @if (config('app.debug'))
+    @php
+      $cacheStatus = \InnoShop\Plugin\Core\PluginManager::getLastCacheStatus();
+      $cacheStatusMap = [
+          'hit'           => ['label' => 'HIT',                          'class' => 'text-success'],
+          'miss_no_data'  => ['label' => 'MISS · no cached data',       'class' => 'text-warning'],
+          'miss_stale'    => ['label' => 'MISS · config.json changed',  'class' => 'text-warning'],
+          'skipped_debug' => ['label' => 'SKIPPED · APP_DEBUG=true',    'class' => 'text-secondary'],
+      ];
+      $cacheStatusInfo = $cacheStatusMap[$cacheStatus] ?? null;
+    @endphp
+    @if ($cacheStatusInfo)
+      <div class="alert alert-light border py-2 mb-3 small d-flex align-items-center gap-2">
+        <span class="font-monospace text-muted">plugins.config cache:</span>
+        <span class="fw-bold {{ $cacheStatusInfo['class'] }}">{{ $cacheStatusInfo['label'] }}</span>
+        <span class="text-muted">· key: <code>{{ \InnoShop\Plugin\Core\PluginManager::PLUGINS_CONFIG_CACHE_KEY }}</code></span>
+      </div>
+    @endif
+  @endif
   <div class="card h-min-600">
     <div class="card-body">
-      
+
       <ul class="nav nav-tabs mb-4" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link {{ !$type ? 'active' : '' }}" 

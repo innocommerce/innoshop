@@ -178,7 +178,7 @@
    * Module 3: Menu Search (Vue el-autocomplete)
    * ======================================================= */
   function initMenuSearch() {
-    if (typeof Vue === "undefined" || typeof ElementPlus === "undefined") return;
+    if (typeof Vue === "undefined" || typeof ElementPlus === "undefined" || typeof Vue.createApp !== "function") return;
 
     var container = document.getElementById("panel-menu-search");
     if (!container) return;

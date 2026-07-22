@@ -404,23 +404,14 @@ final class Plugin implements Arrayable, ArrayAccess
     }
 
     /**
-     * Get panel route from plugin config.json
+     * Get panel route from already-parsed packageInfo.
+     * Avoids re-opening config.json on every PluginResource serialization.
      *
      * @return string
      */
     protected function getPanelRouteFromConfig(): string
     {
-        $configFile = $this->getPath().'/config.json';
-        if (! file_exists($configFile)) {
-            return '';
-        }
-
-        $config = json_decode(file_get_contents($configFile), true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return '';
-        }
-
-        $route = $config['panel_route'] ?? '';
+        $route = $this->packageInfo['panel_route'] ?? '';
         if (empty($route)) {
             return '';
         }

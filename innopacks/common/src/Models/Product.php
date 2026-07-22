@@ -35,7 +35,7 @@ class Product extends BaseModel
 
     protected $fillable = [
         'type', 'brand_id', 'images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
-        'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed', 'minimum', 'created_at', 'updated_at', 'published_at',
+        'spu_code', 'active', 'weight', 'weight_class', 'sales', 'rating', 'reviews_count', 'viewed', 'minimum', 'created_at', 'updated_at', 'published_at',
     ];
 
     protected $casts = [
@@ -234,8 +234,12 @@ class Product extends BaseModel
             'productAttributes.attribute.group.translation',
             'productAttributes.attributeValue.translation',
         ]);
+        $productAttributes = $this->productAttributes->sortBy(function ($productAttribute) {
+            return $productAttribute->attribute->position ?? 0;
+        });
+
         $attributes = [];
-        foreach ($this->productAttributes as $productAttribute) {
+        foreach ($productAttributes as $productAttribute) {
             $attribute = $productAttribute->attribute;
             $groupID   = $attribute->attribute_group_id;
             if (! isset($attributes[$groupID]['attribute_group_name'])) {

@@ -108,6 +108,10 @@ trait HasSystemPrompt
             'article_title'       => 'ai_prompt_article_seo_title',
             'article_description' => 'ai_prompt_article_seo_description',
             'article_keywords'    => 'ai_prompt_article_seo_keywords',
+            'article_content'     => 'ai_prompt_article_content',
+            'category_content'    => 'ai_prompt_category_content',
+            'brand_content'       => 'ai_prompt_brand_content',
+            'page_content'        => 'ai_prompt_page_content',
         ];
     }
 }

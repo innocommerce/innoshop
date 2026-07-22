@@ -668,6 +668,12 @@ body {
   cursor: pointer;
 }
 
+// 拖拽排序手柄（catalogs/categories/themes 等可拖拽列表共用）
+// :where 保持零 specificity，使 .cursor-pointer 等工具类仍可覆盖
+:where(.drag-handle) {
+  cursor: move;
+}
+
 .is-up-file {
   .img-upload-item {
     border-style: dashed !important;

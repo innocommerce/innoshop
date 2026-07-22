@@ -177,7 +177,7 @@ class CategoryRepo extends BaseRepo
             });
         }
 
-        return fire_hook_filter('repo.category.builder', $builder);
+        return fire_hook_filter('repo.category.builder', $builder->orderBy('position')->orderBy('id'));
     }
 
     /**
@@ -465,6 +465,34 @@ class CategoryRepo extends BaseRepo
         }
 
         return $options;
+    }
+
+    /**
+     * Reorder categories within the same parent by an ordered ID list.
+     *
+     * @param  array  $ids  Ordered category IDs (same parent).
+     * @return void
+     * @throws Throwable
+     */
+    public function reorder(array $ids): void
+    {
+        $ids = array_values(array_filter(array_map('intval', $ids)));
+        if (empty($ids)) {
+            return;
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($ids as $position => $id) {
+                if ($id > 0) {
+                    Category::query()->where('id', $id)->update(['position' => $position]);
+                }
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**

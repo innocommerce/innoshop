@@ -148,4 +148,22 @@ class CatalogController extends BaseController
                 ->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Reorder catalogs (drag-and-drop).
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function reorder(Request $request): mixed
+    {
+        try {
+            $ids = (array) $request->input('ids', []);
+            CatalogRepo::getInstance()->reorder($ids);
+
+            return json_success(common_trans('base.updated_success'));
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
 }

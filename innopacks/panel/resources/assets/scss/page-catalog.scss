@@ -1,0 +1,18 @@
+// Catalog 列表页样式
+.catalog-list-table {
+  // 拖拽手柄列宽
+  .col-drag {
+    width: 40px;
+  }
+
+  // 拖拽手柄视觉（cursor 由 global.scss 的 :where(.drag-handle) 兜底）
+  .drag-handle {
+    font-size: .75rem;
+    opacity: .4;
+    transition: opacity .15s ease-in-out;
+  }
+
+  tbody tr:hover .drag-handle {
+    opacity: .6;
+  }
+}

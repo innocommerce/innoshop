@@ -92,6 +92,12 @@ class PaymentService
         $hookName    = "service.payment.api.$orderPaymentCode.data";
         $paymentData = fire_hook_filter($hookName, $paymentData);
 
+        // Some plugins (PayPal/Stripe) only register service.payment.mobile_pay.data
+        $params = $paymentData['params'] ?? [];
+        if (empty($params)) {
+            $paymentData = fire_hook_filter('service.payment.mobile_pay.data', $paymentData);
+        }
+
         $paramError = $paymentData['error'] ?? '';
         if ($paramError) {
             throw new Exception($paramError);

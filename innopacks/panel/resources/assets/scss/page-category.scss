@@ -1,5 +1,15 @@
 body.page-category {
   #categories-top {
+    .drag-handle {
+      font-size: .75rem;
+      opacity: .4;
+      transition: opacity .15s ease-in-out;
+    }
+
+    .accordion-header:hover .drag-handle {
+      opacity: .6;
+    }
+
     .accordion-button.no-children {
       &:after {
         display: none;

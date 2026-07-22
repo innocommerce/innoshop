@@ -294,11 +294,17 @@ function aiRenderProviders() {
       html += '<div class="row">';
       html += '<div class="col-lg-6 mb-2">';
       html += '<label class="form-label small">{{ __("panel/setting_ai.text_model") }}</label>';
-      html += '<input type="text" class="form-control form-control-sm" value="' + (p.models?.text || '') + '" onchange="aiUpdateModel(' + idx + ', \'text\', this.value)" placeholder="gpt-4o" />';
+      html += '<div class="input-group input-group-sm">';
+      html += '<input type="text" class="form-control form-control-sm" id="ai_text_model_' + idx + '" value="' + (p.models?.text || '') + '" onchange="aiUpdateModel(' + idx + ', \'text\', this.value)" placeholder="gpt-4o / deepseek-v4-flash" />';
+      html += '<button type="button" class="btn btn-outline-secondary" onclick="aiFetchModels(' + idx + ', \'text\', this)" title="{{ __("panel/setting_ai.fetch_models") }}"><i class="bi bi-arrow-down-circle"></i></button>';
+      html += '</div>';
       html += '</div>';
       html += '<div class="col-lg-6 mb-2">';
       html += '<label class="form-label small">{{ __("panel/setting_ai.image_model") }}</label>';
-      html += '<input type="text" class="form-control form-control-sm" value="' + (p.models?.image || '') + '" onchange="aiUpdateModel(' + idx + ', \'image\', this.value)" placeholder="gpt-image-1" />';
+      html += '<div class="input-group input-group-sm">';
+      html += '<input type="text" class="form-control form-control-sm" id="ai_image_model_' + idx + '" value="' + (p.models?.image || '') + '" onchange="aiUpdateModel(' + idx + ', \'image\', this.value)" placeholder="gpt-image-1" />';
+      html += '<button type="button" class="btn btn-outline-secondary" onclick="aiFetchModels(' + idx + ', \'image\', this)" title="{{ __("panel/setting_ai.fetch_models") }}"><i class="bi bi-arrow-down-circle"></i></button>';
+      html += '</div>';
       html += '</div>';
       html += '</div>';
 
@@ -318,6 +324,61 @@ function aiUpdateModel(idx, type, value) {
   if (!aiProviders[idx].models) aiProviders[idx].models = {};
   aiProviders[idx].models[type] = value;
   aiSyncHidden();
+}
+
+function aiFetchModels(idx, type, btn) {
+  const provider = aiProviders[idx];
+  if (!provider) return;
+  if (!provider.api_key) {
+    alert('{{ __("panel/setting_ai.fetch_models_need_key") }}');
+    return;
+  }
+  if (!provider.base_url) {
+    alert('{{ __("panel/setting_ai.fetch_models_need_base_url") }}');
+    return;
+  }
+
+  const $btn = $(btn);
+  const originalHtml = $btn.html();
+  $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
+
+  axios.post('{{ panel_route("content_ai.list_models") }}', {
+    provider_code: provider.code,
+  }).then(res => {
+    const models = res?.data?.models || [];
+    if (models.length === 0) {
+      alert('{{ __("panel/setting_ai.fetch_models_empty") }}');
+      return;
+    }
+
+    const inputId = 'ai_' + type + '_model_' + idx;
+    const $old = $('#' + inputId);
+    const currentValue = $old.val() || '';
+    const $select = $('<select></select>')
+      .attr('id', inputId)
+      .addClass('form-control form-control-sm')
+      .on('change', function () { aiUpdateModel(idx, type, this.value); });
+
+    models.forEach(m => {
+      const $opt = $('<option></option>').val(m).text(m);
+      if (m === currentValue) $opt.prop('selected', true);
+      $select.append($opt);
+    });
+    if (currentValue && !models.includes(currentValue)) {
+      const $opt = $('<option></option>').val(currentValue).text(currentValue + ' (custom)');
+      $opt.prop('selected', true);
+      $select.append($opt);
+    }
+
+    $old.replaceWith($select);
+    if (currentValue !== $select.val()) {
+      aiUpdateModel(idx, type, $select.val());
+    }
+  }).catch(err => {
+    alert('{{ __("panel/setting_ai.fetch_models_failed") }}' + (err.response?.data?.message || err.message));
+  }).finally(() => {
+    $btn.prop('disabled', false).html(originalHtml);
+  });
 }
 
 function aiRemoveProvider(idx) {

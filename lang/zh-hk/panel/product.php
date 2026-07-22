@@ -51,7 +51,7 @@ return [
     'edit_variant'                => '編輯規格',
     'edit_variant_value'          => '編輯規格值',
     'enter_valid_value'           => '請輸入有效數值',
-    'error_sku_repeat'            => 'sku 不能重複',
+    'error_sku_repeat'            => 'SKU 編碼「:code」已被其他商品佔用，請修改後再儲存',
     'expand_all'                  => '全部展開',
     'extend_information'          => '擴展資料',
     'group_by'                    => '通過...分組',

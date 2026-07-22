@@ -3,6 +3,7 @@
  */
 import { getPanelConfig } from './panel-config';
 import fileManager from './panel-file-manager';
+import aiModal from './ai-modal';
 
 function isVideoFile(file) {
   const url = (file.origin_url || file.url || '').toLowerCase();
@@ -81,6 +82,37 @@ function addCharCounter(ed) {
 }
 
 function setupEditor(ed) {
+  // AI generate toolbar button (only shown for editors with data-column)
+  ed.ui.registry.addIcon('ai', '<svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.829-1.828l-1.936-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.936z"/><path d="M3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.734 1.734 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.97.278a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 3.407l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 9.31 1.31l.387-1.162z"/></svg>');
+  ed.ui.registry.addButton('aiGenerateButton', {
+    icon: 'ai',
+    tooltip: 'AI Generate',
+    onAction: () => {
+      const el = ed.getElement();
+      const column = el.getAttribute('data-column') || '';
+      if (!column) return;
+
+      const editorId = ed.id;
+      const m = editorId.match(/^content-(.+)$/);
+      const sourceLocale = m ? m[1] : '';
+
+      aiModal.openFromState({
+        column,
+        field: '',
+        entityType: el.getAttribute('data-entity-type') || '',
+        entityId: parseInt(el.getAttribute('data-entity-id'), 10) || 0,
+        isRichText: true,
+        isMultilingual: !['product_slug', 'article_slug'].includes(column),
+        editorId,
+        sourceLocale,
+      });
+    },
+    onSetup: (api) => {
+      const hasColumn = !!(ed.getElement() && ed.getElement().getAttribute('data-column'));
+      api.setDisabled(!hasColumn);
+    },
+  });
+
   ed.ui.registry.addButton('toolbarImageButton', {
     icon: 'image',
     onAction: () => {
@@ -165,7 +197,7 @@ export function initEditor() {
     plugins: 'link lists fullscreen table hr wordcount image imagetools code',
     menubar: '',
     toolbar:
-      'undo redo | toolbarImageButton | lineheight | bold italic underline strikethrough | forecolor backcolor | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify numlist bullist formatpainter removeformat charmap emoticons | preview template link anchor table toolbarImageUrlButton fullscreen code',
+      'undo redo | toolbarImageButton | lineheight | bold italic underline strikethrough | forecolor backcolor | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify numlist bullist formatpainter removeformat charmap emoticons | preview template link anchor table toolbarImageUrlButton fullscreen code | aiGenerateButton',
     toolbar_items_size: 'small',
     image_caption: true,
     imagetools_toolbar: '',

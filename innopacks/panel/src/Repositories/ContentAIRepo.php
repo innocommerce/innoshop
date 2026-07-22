@@ -42,12 +42,18 @@ class ContentAIRepo extends BaseRepo
             'ai_prompt_product_seo_title',
             'ai_prompt_product_seo_description',
             'ai_prompt_product_seo_keywords',
+            'ai_prompt_product_content',
 
             'ai_prompt_article_summary',
             'ai_prompt_article_slug',
             'ai_prompt_article_seo_title',
             'ai_prompt_article_seo_description',
             'ai_prompt_article_seo_keywords',
+            'ai_prompt_article_content',
+
+            'ai_prompt_category_content',
+            'ai_prompt_brand_content',
+            'ai_prompt_page_content',
         ];
     }
 }

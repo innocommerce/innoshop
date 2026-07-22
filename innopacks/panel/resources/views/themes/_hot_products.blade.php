@@ -36,7 +36,7 @@
         <div class="card mb-3 floor-card" data-floor-index="{{ $floorIndex }}">
           <div class="card-header d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center flex-grow-1">
-              <i class="bi bi-grip-vertical text-muted me-2" style="cursor:move;flex-shrink:0;"></i>
+              <i class="bi bi-grip-vertical drag-handle text-muted me-2 flex-shrink-0"></i>
               <strong>{{ __('panel/setting.hot_products') }} #{{ $floorIndex + 1 }}</strong>
             </div>
             <button type="button" class="btn btn-sm btn-danger remove-floor-btn">
@@ -180,7 +180,7 @@
         $list.append(
           '<li class="list-group-item d-flex justify-content-between align-items-center" data-product-id="' + productId + '">' +
             '<div class="d-flex align-items-center flex-grow-1" style="min-width:0;">' +
-              '<i class="bi bi-grip-vertical text-muted me-2" style="cursor:move;flex-shrink:0;"></i>' +
+              '<i class="bi bi-grip-vertical drag-handle text-muted me-2 flex-shrink-0"></i>' +
               '<div class="me-2" style="flex-shrink:0;">' +
                 '<img src="' + imageUrl + '" alt="' + name + '" class="rounded" style="width:40px;height:40px;object-fit:cover;border:1px solid #dee2e6;">' +
               '</div>' +
@@ -265,7 +265,7 @@
           '<div class="card mb-3 floor-card" data-floor-index="' + newIndex + '">' +
             '<div class="card-header d-flex justify-content-between align-items-center">' +
               '<div class="d-flex align-items-center flex-grow-1">' +
-                '<i class="bi bi-grip-vertical text-muted me-2" style="cursor:move;flex-shrink:0;"></i>' +
+                '<i class="bi bi-grip-vertical drag-handle text-muted me-2 flex-shrink-0"></i>' +
                 '<strong>' + name + '</strong>' +
               '</div>' +
               '<button type="button" class="btn btn-sm btn-danger remove-floor-btn">' +

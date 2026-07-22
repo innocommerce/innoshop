@@ -162,6 +162,8 @@ return [
     'specials'                            => 'Fixed page',
     'store_name'                          => 'Store Name',
     'store_name_desc'                     => 'The name of your store, displayed on the storefront and browser tab',
+    'store_description'                   => 'Company Introduction',
+    'store_description_desc'              => 'A brief introduction to your company, displayed in the storefront company introduction area',
     'store_features'                      => 'Store function setting',
     'store_features_desc'                 => 'Configure the store\'s functional options and user experience',
     'store_functionality'                 => 'Store function',
@@ -245,4 +247,11 @@ return [
     'preview_close'                       => 'Close',
     'preview_use'                         => 'Use This Content',
     'login'                               => 'Login',
+
+    // Newsletter popup customization
+    'newsletter_popup_text'           => 'Popup Content Settings',
+    'newsletter_popup_custom_enabled' => 'Enable Custom Content',
+    'newsletter_popup_title'          => 'Popup Title',
+    'newsletter_popup_content'        => 'Popup Content',
+    'newsletter_popup_content_desc'   => 'Turn on the switch to customize the popup title and content. Leave empty to use the default. Turn off to restore defaults.',
 ];

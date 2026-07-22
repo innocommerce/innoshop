@@ -153,11 +153,13 @@
       </ul>
       <div class="tab-content">
         <div class="tab-pane fade show active" id="product-description-description">
-          @if($product->fallbackName('selling_point'))
-            {!! parsedown($product->fallbackName('selling_point')) !!}
-          @endif
-          {!! $product->fallbackName('content') !!}
-          @hookinsert('product.detail.description.after')
+          <div class="product-description-content">
+            @if($product->fallbackName('selling_point'))
+              {!! parsedown($product->fallbackName('selling_point')) !!}
+            @endif
+            {!! $product->fallbackName('content') !!}
+            @hookinsert('product.detail.description.after')
+          </div>
         </div>
 
         @if($attributes)

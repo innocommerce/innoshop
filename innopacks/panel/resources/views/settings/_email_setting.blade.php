@@ -143,6 +143,29 @@
         </div>
       </div>
 
+      <h6 class="border-top pt-3 mb-3">{{ __('panel/setting.newsletter_popup_text') }}</h6>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <x-common-form-switch-radio title="{{ __('panel/setting.newsletter_popup_custom_enabled') }}" name="newsletter_popup_custom_enabled" required
+                                  value="{{ old('newsletter_popup_custom_enabled', system_setting('newsletter_popup_custom_enabled', false)) }}"/>
+        </div>
+      </div>
+      <p class="text-muted small mb-3">{{ __('panel/setting.newsletter_popup_content_desc') }}</p>
+      <div class="row">
+        <div class="col-md-6">
+          <x-common-form-input title="{{ __('panel/setting.newsletter_popup_title') }}" name="newsletter_popup_title"
+                             :value="old('newsletter_popup_title', system_setting('newsletter_popup_title'))"
+                             :multiple="true"
+                             placeholder="{{ __('front/newsletter.newsletter') }}"/>
+        </div>
+        <div class="col-12">
+          <x-common-form-textarea title="{{ __('panel/setting.newsletter_popup_content') }}" name="newsletter_popup_content"
+                               :value="old('newsletter_popup_content', system_setting('newsletter_popup_content'))"
+                               :multiple="true"
+                               placeholder="{{ __('front/newsletter.newsletter_desc') }}"/>
+        </div>
+      </div>
+
       <h6 class="border-top pt-3 mb-3">{{ __('panel/setting.newsletter_footer_style') }}</h6>
       <div class="row">
         <div class="col-md-4">
@@ -219,6 +242,16 @@
       }
     });
     elm.trigger('change');
+
+    // Toggle newsletter popup custom title/content fields
+    let popupCustomSwitch = $('input[type="checkbox"][name="newsletter_popup_custom_enabled"]');
+    function togglePopupCustomFields() {
+      let enabled = popupCustomSwitch.prop('checked');
+      $('input[name^="newsletter_popup_title"]').prop('disabled', !enabled);
+      $('textarea[name^="newsletter_popup_content"]').prop('disabled', !enabled);
+    }
+    popupCustomSwitch.on('change', togglePopupCustomFields);
+    togglePopupCustomFields();
   });
 </script>
 @endpush

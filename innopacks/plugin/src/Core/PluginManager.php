@@ -12,6 +12,7 @@ namespace InnoShop\Plugin\Core;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InnoShop\Plugin\Traits\CleansUpExtractedFiles;
@@ -20,7 +21,29 @@ class PluginManager
 {
     use CleansUpExtractedFiles;
 
+    /**
+     * Cache key for the parsed plugins config (mtime + data payload).
+     * Lives in the default Cache store so `php artisan cache:clear` flushes it.
+     */
+    public const PLUGINS_CONFIG_CACHE_KEY = 'innoshop.plugins.config';
+
     protected static ?Collection $plugins = null;
+
+    /**
+     * Diagnostics from the most recent loadCachedPluginsConfig() call.
+     * Values: 'hit' | 'miss_no_data' | 'miss_stale' | 'skipped_debug' | null.
+     * Static so any caller (including the panel view) can read it after the
+     * singleton has parsed config, without depending on instance identity.
+     */
+    protected static ?string $lastCacheStatus = null;
+
+    /**
+     * @return string|null Cache status from the last getPlugins() call.
+     */
+    public static function getLastCacheStatus(): ?string
+    {
+        return self::$lastCacheStatus;
+    }
 
     /**
      * Get all plugins.
@@ -221,39 +244,43 @@ class PluginManager
 
     /**
      * Try to load cached plugin config. Returns false on miss / invalidation.
-     * Cache invalidates when plugins/ dir mtime changes (add/remove/rename subdir).
-     * Skipped entirely when APP_DEBUG=true to surface config edits immediately.
+     * Cache invalidates when any plugin's config.json mtime changes (edit /
+     * add / remove / rename subdir). Skipped entirely when APP_DEBUG=true to
+     * surface config edits immediately.
      */
     protected function loadCachedPluginsConfig(string $pluginsDir, ?array &$installed): bool
     {
         if (config('app.debug')) {
+            self::$lastCacheStatus = 'skipped_debug';
+
             return false;
         }
 
-        $cacheFile = $this->getPluginsCacheFile();
-        if (! is_file($cacheFile)) {
+        $cached = Cache::get(self::PLUGINS_CONFIG_CACHE_KEY);
+        if (! is_array($cached) || ! isset($cached['mtimes'], $cached['data'])) {
+            self::$lastCacheStatus = 'miss_no_data';
+
             return false;
         }
 
-        $cached = @json_decode((string) file_get_contents($cacheFile), true);
-        if (! is_array($cached) || ! isset($cached['mtime'], $cached['data'])) {
+        $currentMtimes = $this->scanConfigMtimes($pluginsDir);
+        if ($currentMtimes !== $cached['mtimes']) {
+            self::$lastCacheStatus = 'miss_stale';
+
             return false;
         }
 
-        $dirMtime = @filemtime($pluginsDir);
-        if ($dirMtime === false || $cached['mtime'] !== $dirMtime) {
-            return false;
-        }
-
-        $installed = $cached['data'];
+        self::$lastCacheStatus = 'hit';
+        $installed             = $cached['data'];
 
         return true;
     }
 
     /**
-     * Persist scanned plugin config to disk, tagged with current plugins/ dir mtime
-     * so {@see loadCachedPluginsConfig()} can detect drift on next read.
-     * No-op when APP_DEBUG=true to surface config edits immediately.
+     * Persist scanned plugin config to the default Cache store, tagged with
+     * the current mtimes of every plugin's config.json so any edit triggers
+     * a rescan on next read. No-op when APP_DEBUG=true to surface config
+     * edits immediately.
      *
      * @param  string  $pluginsDir  Absolute path to plugins/ directory.
      * @param  array  $installed  Plugin config list returned by {@see scanPluginsDirectory()}.
@@ -265,27 +292,44 @@ class PluginManager
             return;
         }
 
-        $dirMtime = @filemtime($pluginsDir);
-        if ($dirMtime === false) {
-            return;
-        }
+        $mtimes = $this->scanConfigMtimes($pluginsDir);
 
-        $cacheFile = $this->getPluginsCacheFile();
-        @file_put_contents(
-            $cacheFile,
-            json_encode(['mtime' => $dirMtime, 'data' => $installed], JSON_PRETTY_PRINT)
-        );
+        Cache::forever(self::PLUGINS_CONFIG_CACHE_KEY, [
+            'mtimes' => $mtimes,
+            'data'   => $installed,
+        ]);
     }
 
     /**
-     * Absolute path to the plugin config cache file.
-     * Lives next to Laravel's framework cache (storage/framework/).
+     * Build a map of [plugin_dir => config.json mtime] for cache invalidation.
+     * Cheap: stat() only, no file reads. Detects edits to existing config.json
+     * (mtime changes), new plugins (new key), removed plugins (missing key),
+     * and renames (key swap).
      *
-     * @return string
+     * @return array<string, int>
      */
-    protected function getPluginsCacheFile(): string
+    protected function scanConfigMtimes(string $pluginsDir): array
     {
-        return storage_path('framework/plugins-cache.json');
+        if (! is_dir($pluginsDir)) {
+            return [];
+        }
+
+        $mtimes = [];
+        foreach ((array) scandir($pluginsDir) as $subdir) {
+            if ($subdir === '.' || $subdir === '..') {
+                continue;
+            }
+            $configPath = $pluginsDir.DIRECTORY_SEPARATOR.$subdir.DIRECTORY_SEPARATOR.'config.json';
+            if (! is_file($configPath)) {
+                continue;
+            }
+            $mtime = @filemtime($configPath);
+            if ($mtime !== false) {
+                $mtimes[$subdir] = $mtime;
+            }
+        }
+
+        return $mtimes;
     }
 
     /**

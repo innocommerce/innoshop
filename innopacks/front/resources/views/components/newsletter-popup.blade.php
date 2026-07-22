@@ -1,5 +1,8 @@
 @php
   $showPopupNewsletter = system_setting('newsletter_popup_enabled', false);
+  $popupCustomEnabled = system_setting('newsletter_popup_custom_enabled', false);
+  $popupTitle   = $popupCustomEnabled ? system_setting_locale('newsletter_popup_title') : '';
+  $popupContent = $popupCustomEnabled ? system_setting_locale('newsletter_popup_content') : '';
 @endphp
 
 @if($showPopupNewsletter)
@@ -14,8 +17,8 @@
           <div class="mb-3">
             <i class="bi bi-envelope-heart" style="font-size: 3rem; color: var(--bs-primary);"></i>
           </div>
-          <h4 class="modal-title mb-3" id="newsletterPopupModalLabel">{{ __('front/newsletter.newsletter') }}</h4>
-          <p class="text-muted mb-4">{{ __('front/newsletter.newsletter_desc') }}</p>
+          <h4 class="modal-title mb-3" id="newsletterPopupModalLabel">{{ $popupTitle ?: __('front/newsletter.newsletter') }}</h4>
+          <p class="text-muted mb-4">{!! nl2br(e($popupContent ?: __('front/newsletter.newsletter_desc'))) !!}</p>
           <form class="newsletter-popup-form" action="{{ front_route('newsletter.subscribe') }}" method="POST">
             @csrf
             <input type="hidden" name="source" value="popup">

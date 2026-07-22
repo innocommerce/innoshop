@@ -56,7 +56,7 @@ class OrderController extends BaseController
         if ($order->customer_id != token_customer_id()) {
             return json_fail('Unauthorized', null, 403);
         }
-        $order->load(['items.review', 'fees']);
+        $order->load(['items.review', 'items.productSku', 'items.product', 'fees']);
         $result = new OrderDetail($order);
 
         return read_json_success($result);
@@ -78,7 +78,7 @@ class OrderController extends BaseController
                 return json_fail('Unauthorized', null, 403);
             }
 
-            $order->load(['items.review', 'fees']);
+            $order->load(['items.review', 'items.productSku', 'items.product', 'fees']);
             $result = new OrderDetail($order);
 
             return read_json_success($result);

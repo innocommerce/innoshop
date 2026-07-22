@@ -6,7 +6,7 @@
         <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="sidebar-logo-normal img-fluid">
         @php
           $iconLogo = system_setting('panel_icon_logo', system_setting('panel_logo', 'images/logo-panel.png'));
-          if (!file_exists(public_path($iconLogo))) {
+          if (empty($iconLogo) || !file_exists(public_path($iconLogo))) {
             $iconLogo = 'images/logo-icon.svg';
           }
         @endphp

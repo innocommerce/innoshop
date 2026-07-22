@@ -176,6 +176,8 @@ return [
     'specials'                            => '固定页',
     'store_name'                          => '商店名称',
     'store_name_desc'                     => '商店名称，显示在前台页面和浏览器标签上',
+    'store_description'                   => '公司介绍',
+    'store_description_desc'              => '公司的简要介绍，显示在前台公司介绍等相关区域',
     'store_features'                      => '商店功能',
     'store_features_desc'                 => '配置店铺的功能选项和用户体验',
     'store_functionality'                 => '商店功能',
@@ -245,4 +247,11 @@ return [
     'preview_close'                       => '关闭',
     'preview_use'                         => '使用此内容',
     'login'                               => '登录',
+
+    // Newsletter popup customization
+    'newsletter_popup_text'           => '弹窗内容设置',
+    'newsletter_popup_custom_enabled' => '启用自定义内容',
+    'newsletter_popup_title'          => '弹窗标题',
+    'newsletter_popup_content'        => '弹窗内容',
+    'newsletter_popup_content_desc'   => '开启开关后可自定义弹窗标题与内容，留空仍使用默认文案；关闭开关则恢复默认。',
 ];

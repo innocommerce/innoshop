@@ -40,6 +40,9 @@ class SettingRequest extends FormRequest
         $rules['store_name']   = 'nullable|array';
         $rules['store_name.*'] = 'nullable|string|max:120';
 
+        $rules['store_description']   = 'nullable|array';
+        $rules['store_description.*'] = 'nullable|string';
+
         return $rules;
     }
 

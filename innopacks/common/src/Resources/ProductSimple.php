@@ -43,6 +43,8 @@ class ProductSimple extends JsonResource
             'origin_price_format' => $sku->origin_price_format,
             'sales'               => $this->sales,
             'viewed'              => $this->viewed,
+            'rating'              => (float) $this->rating,
+            'reviews_count'       => (int) $this->reviews_count,
             'active'              => (bool) $this->active,
         ];
 

@@ -50,7 +50,7 @@ class ArticleRequest extends FormRequest
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.title"   => 'required',
-            "translations.$defaultLocale.content" => 'required|max:20000',
+            "translations.$defaultLocale.content" => ['required', 'string', rich_text_max_rule(20000)],
 
             'translations.*.summary'          => 'max:320',
             'translations.*.meta_title'       => 'max:500',

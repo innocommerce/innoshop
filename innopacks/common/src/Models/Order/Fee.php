@@ -31,10 +31,26 @@ class Fee extends BaseModel
 
     /**
      * Get fee title with fallback.
+     *
+     * The fee title is persisted to the database when the order is placed.
+     * It is re-translated by code when the language changes, falling back
+     * to the original stored value when no translation is found.
      */
     public function getTitleAttribute($value): string
     {
-        return $value ?? '';
+        $value = $value ?? '';
+
+        $code = $this->code;
+        if (empty($code)) {
+            return $value;
+        }
+
+        $translated = __("front/order.{$code}");
+        if ($translated !== "front/order.{$code}") {
+            return $translated;
+        }
+
+        return $value;
     }
 
     /**

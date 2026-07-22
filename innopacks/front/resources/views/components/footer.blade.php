@@ -47,7 +47,7 @@
               </div>
               <div class="about-text footer-item-content">
                 <p>
-                  <b>{{ system_setting_locale('meta_description', '') }}</b>
+                  <b>{{ front_store_description() }}</b>
                 </p>
               </div>
               @hookinsert('layout.footer.about.after')

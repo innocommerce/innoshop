@@ -83,7 +83,7 @@
         $list.append(
           '<li class="list-group-item d-flex justify-content-between align-items-center" data-category-id="' + catId + '">' +
             '<div class="d-flex align-items-center flex-grow-1" style="min-width:0;">' +
-              '<i class="bi bi-grip-vertical text-muted me-2" style="cursor:move;flex-shrink:0;"></i>' +
+              '<i class="bi bi-grip-vertical drag-handle text-muted me-2 flex-shrink-0"></i>' +
               '<div class="me-2" style="flex-shrink:0;">' +
                 '<img src="' + imageUrl + '" alt="' + name + '" class="rounded" style="width:40px;height:40px;object-fit:cover;border:1px solid #dee2e6;">' +
               '</div>' +

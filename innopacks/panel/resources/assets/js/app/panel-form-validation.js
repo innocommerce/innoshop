@@ -66,11 +66,13 @@ $(function () {
 
         // Get required input elements with empty values
         const requiredInputs = document.querySelectorAll('input[required], textarea[required], select[required]');
-        // Check if these elements have error messages, if not, show .invalid-feedback after parent element
+        // Show invalid-feedback for empty required fields (handles form-row / locale-field-wrapper layouts)
         requiredInputs.forEach((el) => {
           if (!$(el).val()) {
-            if (!$(el).next('.invalid-feedback').length) {
-              $(el).parent().next('.invalid-feedback').addClass('d-block');
+            $(el).addClass('is-invalid');
+            const $feedback = $(el).closest('.form-row, .locale-field-wrapper').find('.invalid-feedback').first();
+            if ($feedback.length) {
+              $feedback.addClass('d-block');
             }
           }
         });
@@ -90,7 +92,10 @@ $(function () {
               // Highlight corresponding tab
               $(el).parents('.tab-pane').each(function (index, el) {
                 const id = $(el).prop('id');
-                $(`a[href="#${id}"], button[data-bs-target="#${id}"]`).addClass('error-invalid')[0].click();
+                const $tab = $(`a[href="#${id}"], button[data-bs-target="#${id}"]`);
+                if ($tab.length) {
+                  $tab.addClass('error-invalid').first().trigger('click');
+                }
               })
             }
 
