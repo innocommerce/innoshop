@@ -16,7 +16,7 @@ jobs:
       with:
         php-version: '8.3'
         extensions: bcmath, curl, dom, fileinfo, libxml, openssl, pdo, simplexml
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
