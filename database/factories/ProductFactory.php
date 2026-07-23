@@ -36,7 +36,6 @@ class ProductFactory extends Factory
             'spu_code'     => 'SPU-'.strtoupper(Str::random(8)),
             'slug'         => Str::slug($name).'-'.Str::random(5),
             'is_virtual'   => false,
-            'variables'    => null,
             'position'     => fake()->numberBetween(0, 100),
             'active'       => true,
             'weight'       => fake()->randomFloat(2, 0.1, 10),

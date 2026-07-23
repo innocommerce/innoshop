@@ -59,7 +59,7 @@ class ProductTest extends TestCase
 
         $requiredFields = [
             'type', 'brand_id', 'images', 'video', 'price', 'tax_class_id',
-            'spu_code', 'slug', 'is_virtual', 'variables', 'position',
+            'spu_code', 'slug', 'is_virtual', 'position',
             'active', 'weight', 'weight_class', 'sales', 'viewed',
         ];
 
@@ -74,13 +74,11 @@ class ProductTest extends TestCase
         $property = $this->reflection->getProperty('casts');
         $casts    = $property->getDefaultValue();
 
-        $this->assertArrayHasKey('variables', $casts);
         $this->assertArrayHasKey('images', $casts);
         $this->assertArrayHasKey('video', $casts);
         $this->assertArrayHasKey('active', $casts);
         $this->assertArrayHasKey('is_virtual', $casts);
 
-        $this->assertEquals('array', $casts['variables']);
         $this->assertEquals('array', $casts['images']);
         $this->assertEquals('boolean', $casts['active']);
         $this->assertEquals('boolean', $casts['is_virtual']);

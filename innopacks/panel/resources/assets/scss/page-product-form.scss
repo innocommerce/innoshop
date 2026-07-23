@@ -1,4 +1,45 @@
 body.page-product-form {
+  // Single / Multi-spec segmented control — both options always visible,
+  // selected one filled with the theme primary. Underlying value is kept
+  // in a hidden input (handled in form.blade.php setupPriceTypeToggle).
+  #spec-type-group .spec-type-segmented {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    background: #f1f3f5;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    gap: 2px;
+
+    .spec-type-btn {
+      border: none;
+      background: transparent;
+      color: #495057;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1;
+      padding: 6px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+
+      &:hover:not(.active):not(:disabled) {
+        background: rgba(15, 23, 42, 0.05);
+      }
+
+      &.active {
+        background: var(--bs-primary, #0d6efd);
+        color: #ffffff;
+        box-shadow: 0 1px 2px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.3);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
   .category-select {
     .category-cascader {
       &:not(.no-data) {
@@ -89,7 +130,7 @@ body.page-product-form {
       min-width: 80px;
       
       &:hover {
-        border-color: #0d6efd;
+        border-color: var(--bs-primary, #0d6efd);
         background: #e7f1ff;
         
         .variant-value-delete-btn {
@@ -111,7 +152,7 @@ body.page-product-form {
       transition: border-color 0.2s;
       
       &:hover {
-        border-color: #0d6efd;
+        border-color: var(--bs-primary, #0d6efd);
       }
     }
     
@@ -149,9 +190,9 @@ body.page-product-form {
       transition: all 0.2s;
       
       &:hover {
-        border-color: #007bff;
+        border-color: var(--bs-primary, #007bff);
         background-color: #e7f3ff;
-        color: #007bff;
+        color: var(--bs-primary, #007bff);
       }
       
       i {
@@ -206,8 +247,8 @@ body.page-product-form {
     }
     
     .form-check-input:checked {
-      background-color: #0d6efd;
-      border-color: #0d6efd;
+      background-color: var(--bs-primary, #0d6efd);
+      border-color: var(--bs-primary, #0d6efd);
     }
     
     .batch-settings-panel {
@@ -298,16 +339,15 @@ body.page-product-form {
       transition: all 0.3s ease;
 
       &:hover {
-        border-color: #0d6efd;
+        border-color: var(--bs-primary, #0d6efd);
         background: #e7f1ff;
 
         .cursor-pointer {
-          color: #0d6efd;
+          color: var(--bs-primary, #0d6efd);
         }
       }
 
       &:not(.no-variants) {
-        border-top: 2px dashed #dee2e6;
         margin-top: 20px;
       }
 
@@ -331,7 +371,7 @@ body.page-product-form {
 
         &:hover {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          border-color: #0d6efd;
+          border-color: var(--bs-primary, #0d6efd);
         }
 
         &:last-child {
@@ -365,7 +405,7 @@ body.page-product-form {
         min-width: 80px;
 
         &:hover {
-          border-color: #0d6efd;
+          border-color: var(--bs-primary, #0d6efd);
           background: #e7f1ff;
 
           .variant-value-delete-btn {
@@ -387,7 +427,7 @@ body.page-product-form {
         transition: border-color 0.2s;
 
         &:hover {
-          border-color: #0d6efd;
+          border-color: var(--bs-primary, #0d6efd);
         }
       }
 
@@ -425,9 +465,9 @@ body.page-product-form {
         transition: all 0.2s;
 
         &:hover {
-          border-color: #007bff;
+          border-color: var(--bs-primary, #007bff);
           background-color: #e7f3ff;
-          color: #007bff;
+          color: var(--bs-primary, #007bff);
         }
 
         i {
@@ -496,19 +536,20 @@ body.page-product-form {
             }
 
             .title {
-              font-size: 16px;
-              font-weight: 600;
+              font-size: 18px;
+              font-weight: 700;
+              letter-spacing: 0.2px;
               color: #212529;
               margin: 0;
               display: flex;
               align-items: center;
-              gap: 8px;
+              gap: 10px;
 
               &::before {
                 content: '';
                 width: 4px;
-                height: 16px;
-                background: linear-gradient(135deg, #0d6efd, #6610f2);
+                height: 20px;
+                background: linear-gradient(135deg, var(--bs-primary, #0d6efd), #6610f2);
                 border-radius: 2px;
               }
             }
@@ -532,6 +573,33 @@ body.page-product-form {
               }
             }
           }
+
+          // "图片规格" toggle — keep the switch visually quiet so the
+          // variant name remains the focal point of the row.
+          .form-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0;
+
+            .form-check-input {
+              cursor: pointer;
+              width: 2.25em;
+              height: 1.25em;
+              margin: 0;
+            }
+
+            .form-check-label {
+              font-size: 13px;
+              color: #6c757d;
+              cursor: pointer;
+              user-select: none;
+            }
+
+            .form-check-input:checked ~ .form-check-label {
+              color: var(--bs-primary, #0d6efd);
+            }
+          }
         }
 
         .variant-values {
@@ -545,117 +613,216 @@ body.page-product-form {
             margin-top: 0;
             width: 100%;
 
-            .form-check-label {
-              font-size: 13px;
-              color: #6c757d;
-              margin-bottom: 12px;
-              display: inline-flex;
+            .variant-values-list {
+              display: flex;
+              flex-wrap: wrap;
               align-items: center;
-              gap: 6px;
-
-              .form-check-input {
-                margin: 0;
-              }
+              gap: 8px;
             }
 
-            .variant-values-list {
-              .variant-value-item {
-                background: white;
-                border: 1px solid #e9ecef;
-                border-radius: 6px;
-                padding: 8px 12px;
-                font-size: 13px;
-                color: #495057;
-                transition: all 0.2s ease;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                position: relative;
-                min-height: 48px;
+            // Shopify-inspired value chip: horizontal flex, fixed 40px height,
+            // generous hover state (bg tint + soft shadow), unified toolbar
+            // on the right that appears on hover. Image variant chips add a
+            // 28x28 thumbnail between grip and name; layout stays consistent.
+            .variant-value-item {
+              display: inline-flex;
+              flex-direction: row;
+              flex-wrap: nowrap;
+              align-items: center;
+              gap: 6px;
+              height: 40px;
+              padding: 0 6px 0 2px;
+              background: #ffffff;
+              border: 1px solid #e9ecef;
+              border-radius: 8px;
+              font-size: 14px;
+              color: #212529;
+              position: relative;
+              transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+              cursor: default;
 
-                &:not(:has(.variant-image-container)) {
-                  .variant-value-name {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 32px;
-                  }
+              &:hover,
+              &:focus-within {
+                background: #f8f9fa;
+                border-color: #dde1e6;
+                box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+              }
+
+              &.sortable-chosen {
+                opacity: 0.6;
+                box-shadow: 0 4px 12px rgba(13, 110, 253, 0.18);
+                border-color: var(--bs-primary, #0d6efd);
+              }
+
+              &.is-editing {
+                border-color: var(--bs-primary, #0d6efd);
+                box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+                background: #ffffff;
+              }
+
+              // Drag handle — hover-only affordance
+              .value-grip {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 18px;
+                height: 100%;
+                color: #adb5bd;
+                cursor: grab;
+                opacity: 0;
+                transition: opacity 0.15s ease, color 0.15s ease;
+
+                i { font-size: 14px; }
+
+                &:hover { color: #495057; }
+                &:active { cursor: grabbing; }
+              }
+
+              &:hover .value-grip,
+              &:focus-within .value-grip,
+              &.sortable-chosen .value-grip {
+                opacity: 1;
+              }
+
+              // Image thumbnail — click to replace
+              .value-image {
+                width: 28px;
+                height: 28px;
+                border-radius: 4px;
+                overflow: hidden;
+                flex-shrink: 0;
+                background: #f1f3f5;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: background-color 0.15s ease, transform 0.15s ease;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;
+                }
+
+                i {
+                  font-size: 13px;
+                  color: #94a3b8;
                 }
 
                 &:hover {
-                  border-color: #0d6efd;
-                  color: #0d6efd;
-                  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.1);
+                  background: #e9ecef;
+                  transform: scale(1.04);
                 }
+              }
 
-                &.add-value-btn {
-                  background: #f8f9fa;
-                  border-style: dashed;
-                  color: #6c757d;
-                  cursor: pointer;
+              // Value name — single click to inline-edit
+              .value-name {
+                display: flex;
+                align-items: center;
+                padding: 0 4px;
+                height: 100%;
+                font-size: 13px;
+                color: #495057;
+                max-width: 220px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: text;
+              }
 
-                  &:hover {
-                    background: #e7f1ff;
-                    border-color: #0d6efd;
-                    color: #0d6efd;
-                  }
+              // Inline edit input — replaces .value-name while editing
+              .value-name-edit {
+                display: flex;
+                align-items: center;
+                height: 100%;
 
-                  i {
-                    font-size: 14px;
-                  }
-                }
-
-                .variant-value-delete-btn {
-                  position: absolute;
-                  top: -6px;
-                  right: -6px;
-                  width: 16px;
-                  height: 16px;
-                  background: #dc3545;
-                  border-radius: 50%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  cursor: pointer;
-                  opacity: 0;
-                  transition: opacity 0.2s ease;
-
-                  i {
-                    font-size: 10px;
-                    color: white;
-                  }
-                }
-
-                &:hover .variant-value-delete-btn {
-                  opacity: 1;
-                }
-
-                .variant-image-container {
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 6px;
-                  overflow: hidden;
-                  flex-shrink: 0;
-
-                  img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                  }
-
-                  i {
-                    font-size: 16px;
-                    color: #6c757d;
-                  }
-                }
-
-                .variant-value-name {
+                input {
+                  width: 140px;
+                  height: 28px;
+                  padding: 4px 8px;
                   font-size: 14px;
-                  line-height: 1.2;
-                  display: flex;
-                  align-items: center;
-                  min-height: 32px;
+                  color: #212529;
+                  background: #ffffff;
+                  border: 1px solid var(--bs-primary, #0d6efd);
+                  border-radius: 4px;
+                  outline: none;
+
+                  &:focus {
+                    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.18);
+                  }
                 }
+              }
+
+              // Hover toolbar — right side, 3 icon buttons
+              .value-toolbar {
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                opacity: 0;
+                transition: opacity 0.15s ease;
+              }
+
+              &:hover .value-toolbar,
+              &:focus-within .value-toolbar {
+                opacity: 1;
+              }
+
+              &.is-editing .value-toolbar {
+                display: none;
+              }
+
+              .value-toolbar-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 26px;
+                height: 26px;
+                padding: 0;
+                background: transparent;
+                border: none;
+                border-radius: 4px;
+                color: #6c757d;
+                cursor: pointer;
+                transition: background-color 0.15s ease, color 0.15s ease;
+
+                i { font-size: 13px; }
+
+                &:hover {
+                  background: #e9ecef;
+                  color: var(--bs-primary, #0d6efd);
+                }
+
+                &.value-toolbar-btn-danger:hover {
+                  background: #fde8e8;
+                  color: #dc3545;
+                }
+              }
+            }
+
+            // "Add value" button — dashed card with text label
+            .add-value-btn {
+              display: inline-flex;
+              flex-direction: row;
+              flex-wrap: nowrap;
+              align-items: center;
+              gap: 6px;
+              height: 40px;
+              padding: 0 14px;
+              background: transparent;
+              border: 1px dashed #ced4da;
+              border-radius: 8px;
+              color: #495057;
+              font-size: 13px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+
+              i { font-size: 14px; }
+
+              &:hover {
+                border-color: var(--bs-primary, #0d6efd);
+                color: var(--bs-primary, #0d6efd);
+                background: #f8f9fa;
               }
             }
           }
@@ -711,7 +878,7 @@ body.page-product-form {
                   border-color: #dee2e6;
 
                   &:focus {
-                    border-color: #0d6efd;
+                    border-color: var(--bs-primary, #0d6efd);
                     box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
                   }
                 }
@@ -754,7 +921,7 @@ body.page-product-form {
               transition: all 0.2s ease;
 
               &:hover {
-                border-color: #0d6efd;
+                border-color: var(--bs-primary, #0d6efd);
                 background: #e7f1ff;
               }
 
@@ -938,7 +1105,7 @@ body.page-product-form {
               transition: all 0.2s ease;
 
               &:focus {
-                border-color: #0d6efd;
+                border-color: var(--bs-primary, #0d6efd);
                 box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
               }
 
@@ -1007,7 +1174,7 @@ body.page-product-form {
             flex-shrink: 0;
 
             &:hover {
-              border-color: #0d6efd;
+              border-color: var(--bs-primary, #0d6efd);
               background: #e7f1ff;
               transform: scale(1.05);
             }
@@ -1026,7 +1193,7 @@ body.page-product-form {
             }
 
             &:hover i {
-              color: #0d6efd;
+              color: var(--bs-primary, #0d6efd);
             }
           }
 
@@ -1080,7 +1247,7 @@ body.page-product-form {
             transition: all 0.2s ease;
 
             &:hover {
-              color: #0d6efd;
+              color: var(--bs-primary, #0d6efd);
               background: #e7f1ff;
             }
           }
@@ -1155,7 +1322,7 @@ body.page-product-form {
     transition: all 0.2s ease;
 
     &:focus {
-      border-color: #0d6efd;
+      border-color: var(--bs-primary, #0d6efd);
       box-shadow: none;
     }
 
@@ -1177,8 +1344,8 @@ body.page-product-form {
     white-space: nowrap;
 
     &:hover {
-      background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
-      border-color: #0d6efd;
+      background: linear-gradient(135deg, var(--bs-primary, #0d6efd) 0%, #6610f2 100%);
+      border-color: var(--bs-primary, #0d6efd);
       color: #fff;
       transform: translateY(-1px);
       box-shadow: 0 2px 4px rgba(13, 110, 253, 0.25);
@@ -1221,8 +1388,8 @@ body.page-product-form {
       }
 
       &.active {
-        color: #0d6efd;
-        border-bottom-color: #0d6efd;
+        color: var(--bs-primary, #0d6efd);
+        border-bottom-color: var(--bs-primary, #0d6efd);
         background: none;
       }
     }
@@ -1237,7 +1404,7 @@ body.page-product-form {
     cursor: pointer;
 
     &:hover {
-      border-color: #0d6efd;
+      border-color: var(--bs-primary, #0d6efd);
       background-color: #f8f9ff;
     }
   }
@@ -1264,7 +1431,7 @@ body.page-product-form {
     color: #0c5aa6;
 
     i {
-      color: #0d6efd;
+      color: var(--bs-primary, #0d6efd);
     }
   }
 

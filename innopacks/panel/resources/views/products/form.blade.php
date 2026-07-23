@@ -140,14 +140,30 @@
 
       // Setup price type toggle functionality
       setupPriceTypeToggle() {
-        // Toggle price visibility when radio changes
-        $('input[name="price_type"]').on('change', function() {
-          const isMultiple = $(this).val() === 'multiple';
-          ProductForm.togglePriceVisibility(isMultiple);
+        // Segmented control drives a hidden input — the selected button
+        // doesn't have a `value` attribute that submits, so the hidden
+        // field carries the canonical price_type for the backend
+        // (ProductRepo only acts on the literal 'single').
+        const $hidden = $('input[name="price_type"]');
+        const $buttons = $('.spec-type-btn');
+        const $group   = $('.spec-type-segmented');
+
+        // Highlight the button matching the initial price_type
+        const setButtonState = (value) => {
+          $buttons.removeClass('active').attr('aria-pressed', 'false');
+          $buttons.filter(`[data-value="${value}"]`).addClass('active').attr('aria-pressed', 'true');
+        };
+
+        $buttons.on('click', function() {
+          if ($(this).is(':disabled')) return;
+          const value = $(this).data('value');
+          $hidden.val(value);
+          setButtonState(value);
+          ProductForm.togglePriceVisibility(value === 'multiple');
         });
 
-        // Set initial visibility state
-        this.togglePriceVisibility($('#price_type_multiple').is(':checked'));
+        setButtonState($hidden.val() || 'single');
+        this.togglePriceVisibility($hidden.val() === 'multiple');
       },
 
       // Toggle price-related elements visibility
@@ -160,12 +176,11 @@
       setupTypeVariantLinkage() {
         $('#product-type').on('change', function() {
           if ($(this).val() === 'bundle') {
-            // Bundle product only single variant
-            $('#price_type_single').prop('checked', true);
-            $('#price_type_multiple').prop('disabled', true);
-            ProductForm.togglePriceVisibility(false);
+            // Bundle only allows single — force-click it and lock the group.
+            $('.spec-type-btn[data-value="single"]').trigger('click');
+            $('.spec-type-btn').prop('disabled', true);
           } else {
-            $('#price_type_multiple').prop('disabled', false);
+            $('.spec-type-btn').prop('disabled', false);
           }
         }).trigger('change');
       },

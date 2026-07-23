@@ -35,7 +35,6 @@ class ProductSkuFactory extends Factory
             'quantity'     => fake()->numberBetween(0, 100),
             'is_default'   => true,
             'position'     => 0,
-            'variants'     => null,
         ];
     }
 

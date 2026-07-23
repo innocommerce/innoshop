@@ -11,8 +11,11 @@ namespace InnoShop\Common\Models\Product;
 
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Models\Product\Sku\VariantValue;
+use InnoShop\Common\Models\Product\Variant\Value;
 use InnoShop\Common\Services\ProductPriceService;
 
 /**
@@ -24,13 +27,12 @@ class Sku extends BaseModel
 
     protected $fillable = [
         'product_id', 'images', 'model', 'code', 'price', 'origin_price', 'quantity', 'is_default', 'position',
-        'variants', 'weight',
+        'weight',
     ];
 
     protected $casts = [
-        'images'   => 'array',
-        'variants' => 'array',
-        'weight'   => 'float',
+        'images' => 'array',
+        'weight' => 'float',
     ];
 
     protected $appends = ['image'];
@@ -44,21 +46,58 @@ class Sku extends BaseModel
     }
 
     /**
+     * Variant values picked by this SKU across all dimensions.
+     *
+     * Normalized replacement for the legacy product_skus.variants JSON index
+     * array. The pivot table's UNIQUE(sku_id, variant_id) constraint
+     * guarantees one value per dimension at the DB layer.
+     *
+     * @return BelongsToMany
+     */
+    public function variantValues(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Value::class,
+            'product_sku_variant_values',
+            'sku_id',
+            'value_id'
+        )
+            ->withPivot('variant_id')
+            ->using(VariantValue::class)
+            ->orderBy('position');
+    }
+
+    /**
+     * Render localized labels for this SKU across its variant dimensions.
+     *
+     * Reads from normalized variant_values + translations. Output order
+     * follows the product's variant dimensions (Color, Size, ...), NOT the
+     * pivot's natural order, so labels stay consistent across SKUs.
+     *
      * @return array
      */
     public function getLocaleLabels(): array
     {
-        $labels    = [];
-        $variables = $this->product->variables;
-        if (empty($variables) || empty($this->variants)) {
+        $this->loadMissing([
+            'variantValues.translation',
+            'variantValues.variant.translation',
+            'product.variants',
+        ]);
+
+        if ($this->variantValues->isEmpty() || $this->product->variants->isEmpty()) {
             return [];
         }
 
-        $localeCode = front_locale_code();
-        foreach ($this->variants as $key => $value) {
+        $valueByVariant = $this->variantValues->keyBy('variant_id');
+        $labels         = [];
+        foreach ($this->product->variants as $variant) {
+            $value = $valueByVariant->get($variant->id);
+            if (! $value) {
+                continue;
+            }
             $labels[] = [
-                'name'  => $variables[$key]['name'][$localeCode] ?? '',
-                'value' => $variables[$key]['values'][$value]['name'][$localeCode] ?? '',
+                'name'  => $variant->translation?->name ?? '',
+                'value' => $value->translation?->name ?? '',
             ];
         }
 

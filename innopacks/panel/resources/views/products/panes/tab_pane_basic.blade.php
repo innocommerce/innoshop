@@ -47,21 +47,16 @@
 
   <div class="row mt-5 mb-4">
     <div class="col-12">
-      <div class="mb-3" id="spec-type-group">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="price_type" id="price_type_single" value="single"
-                {{ (!$product->isMultiple()) ? 'checked' : '' }}>
-          <label class="form-check-label" for="price_type_single">
+      <div class="d-flex align-items-center gap-3 mb-3" id="spec-type-group">
+        <div class="spec-type-segmented" role="group" aria-label="{{ __('panel/product.multi_variant') }}">
+          <button type="button" class="spec-type-btn" data-value="single">
             {{ __('panel/product.price_type_single') }}
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="price_type" id="price_type_multiple" value="multiple"
-                {{ ($product->isMultiple()) ? 'checked' : '' }}>
-          <label class="form-check-label" for="price_type_multiple">
+          </button>
+          <button type="button" class="spec-type-btn" data-value="multiple">
             {{ __('panel/product.price_type_multiple') }}
-          </label>
+          </button>
         </div>
+        <input type="hidden" name="price_type" value="{{ $product->isMultiple() ? 'multiple' : 'single' }}">
       </div>
 
       <div id="single_price_box" class="{{ $product->isMultiple() ? 'd-none' : '' }}">
@@ -95,10 +90,6 @@
       
       <!-- Variant -->
       <div id="specifications_box" class="{{ !$product->isMultiple() ? 'd-none' : '' }}">
-        <div class="alert alert-info mb-3" id="multi_spec_notice">
-          <i class="bi bi-info-circle me-2"></i>
-          {{ __('panel/product.multiple_spec_notice') }}
-        </div>
         @include('panel::products.form._form_variant')
         @hookinsert('panel.product.edit.form_variant.after')
       </div>

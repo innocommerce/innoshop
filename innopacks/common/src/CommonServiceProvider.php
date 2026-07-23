@@ -137,6 +137,7 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\RecomputeProductRating::class,
                 Commands\MediaRegisterExisting::class,
                 Commands\MediaMigrateReferences::class,
+                Commands\VerifyVariants::class,
             ]);
         }
     }

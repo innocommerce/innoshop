@@ -9,74 +9,126 @@
 
 namespace InnoShop\Common\Repositories\Product;
 
+use Illuminate\Support\Facades\DB;
+use InnoShop\Common\Models\Product;
+
 class VariantRepo
 {
-    /**
-     * @return static
-     */
     public static function getInstance(): static
     {
         return new static;
     }
 
     /**
-     * @param  $originData
-     * @param  $newData
-     * @return mixed
+     * Full-sync a product's variant dimensions and values from the legacy
+     * variables JSON shape. Wipes pre-existing normalized rows first to
+     * guarantee idempotency.
+     *
+     * Returns a 2-level position-keyed map so callers can translate the
+     * legacy `sku.variants = [0, 1]` index array into value_ids without
+     * a second round-trip:
+     *   [
+     *     'variantIdMap' => [variant_position => variant_id],
+     *     'valueIdMap'   => [variant_position => [value_position => value_id]],
+     *   ]
+     *
+     * @param  Product  $product
+     * @param  array  $variableDefs  Legacy shape: [{name:{locale}, isImage, values:[{name:{locale}, image}]}]
+     * @return array{variantIdMap: array, valueIdMap: array}
      */
-    public function mergeVariant($originData, $newData): mixed
+    public function syncVariables(Product $product, array $variableDefs): array
     {
-        if (empty($originData)) {
-            return $newData;
-        }
+        $this->clearProductNormalizedData($product->id);
 
-        if (empty($newData)) {
-            return $originData;
-        }
+        $now          = now();
+        $variantIdMap = [];
+        $valueIdMap   = [];
 
-        // 创建原始变体的索引
-        $variantIndex = [];
-        foreach ($originData as $index => &$variant) {
-            $variantName                = $variant['name']['en'] ?? '';
-            $variantIndex[$variantName] = $index;
-        }
+        foreach (array_values($variableDefs) as $vPos => $variant) {
+            if (! is_array($variant)) {
+                continue;
+            }
+            $variantId = DB::table('product_variants')->insertGetId([
+                'product_id' => $product->id,
+                'position'   => $vPos,
+                'is_image'   => (bool) ($variant['isImage'] ?? false),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+            $variantIdMap[$vPos] = $variantId;
 
-        $result = $originData;
-        foreach ($newData as $newVariant) {
-            $newVariantName = $newVariant['name']['en'] ?? '';
-
-            // 使用索引直接定位变体
-            if (isset($variantIndex[$newVariantName])) {
-                $index = $variantIndex[$newVariantName];
-
-                // 更新基本信息
-                $result[$index]['name'] = $newVariant['name'];
-
-                // 为 values 创建索引
-                $valueIndex = [];
-                foreach ($result[$index]['values'] as $vIndex => &$value) {
-                    $valueName              = $value['name']['en'] ?? '';
-                    $valueIndex[$valueName] = $vIndex;
+            foreach ($variant['name'] ?? [] as $locale => $name) {
+                if (! is_string($name) || $name === '') {
+                    continue;
                 }
+                DB::table('product_variant_translations')->insert([
+                    'variant_id' => $variantId,
+                    'locale'     => $locale,
+                    'name'       => $name,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]);
+            }
 
-                // 更新或添加新的 values
-                foreach ($newVariant['values'] as $newValue) {
-                    $newValueName = $newValue['name']['en'] ?? '';
-                    if (isset($valueIndex[$newValueName])) {
-                        $result[$index]['values'][$valueIndex[$newValueName]] = array_replace_recursive(
-                            $result[$index]['values'][$valueIndex[$newValueName]],
-                            $newValue
-                        );
-                    } else {
-                        $result[$index]['values'][] = $newValue;
+            $valueIdMap[$vPos] = [];
+            foreach ($variant['values'] ?? [] as $valPos => $value) {
+                if (! is_array($value)) {
+                    continue;
+                }
+                $valueId = DB::table('product_variant_values')->insertGetId([
+                    'variant_id' => $variantId,
+                    'image'      => is_string($value['image'] ?? null) ? $value['image'] : '',
+                    'position'   => $valPos,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]);
+                $valueIdMap[$vPos][$valPos] = $valueId;
+
+                foreach ($value['name'] ?? [] as $locale => $name) {
+                    if (! is_string($name) || $name === '') {
+                        continue;
                     }
+                    DB::table('product_variant_value_translations')->insert([
+                        'value_id'   => $valueId,
+                        'locale'     => $locale,
+                        'name'       => $name,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
                 }
-            } else {
-                $result[]                      = $newVariant;
-                $variantIndex[$newVariantName] = count($result) - 1;
             }
         }
 
-        return $result;
+        return ['variantIdMap' => $variantIdMap, 'valueIdMap' => $valueIdMap];
+    }
+
+    /**
+     * Remove pre-existing normalized rows for a product (idempotent re-runs).
+     */
+    public function clearProductNormalizedData(int $productId): void
+    {
+        $variantIds = DB::table('product_variants')
+            ->where('product_id', $productId)
+            ->pluck('id')
+            ->all();
+
+        if (empty($variantIds)) {
+            return;
+        }
+
+        $valueIds = DB::table('product_variant_values')
+            ->whereIn('variant_id', $variantIds)
+            ->pluck('id')
+            ->all();
+
+        DB::table('product_variant_value_translations')->whereIn('value_id', $valueIds)->delete();
+        DB::table('product_variant_values')->whereIn('variant_id', $variantIds)->delete();
+        DB::table('product_variant_translations')->whereIn('variant_id', $variantIds)->delete();
+        DB::table('product_variants')->where('product_id', $productId)->delete();
+
+        $skuIds = DB::table('product_skus')->where('product_id', $productId)->pluck('id')->all();
+        if (! empty($skuIds)) {
+            DB::table('product_sku_variant_values')->whereIn('sku_id', $skuIds)->delete();
+        }
     }
 }

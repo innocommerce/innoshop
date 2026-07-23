@@ -525,6 +525,16 @@ class ProductRepo extends BaseRepo
             $product->updated_at = now();
             $product->saveOrFail();
 
+            // Sync normalized variant dimensions and capture valueIdMap for SKU
+            // index translation. Variant definitions come in as `variables` or
+            // legacy `variants` key from the front-end payload.
+            $variableDefs = $this->extractVariableDefs($data);
+            $variantMaps  = VariantRepo::getInstance()->syncVariables($product, $variableDefs);
+            // Build client_id → (variant_id, value_id) map for the ID-based
+            // SKU payload (sku.variant_value_ids). Empty when the payload uses
+            // the legacy positional `sku.variants: [0, 1]` shape.
+            $clientIdMap = $this->buildClientIdMap($variableDefs, $variantMaps);
+
             if ($isUpdating) {
                 $product->skus()->delete();
                 $product->translations()->delete();
@@ -550,9 +560,10 @@ class ProductRepo extends BaseRepo
                 OptionValueRepo::getInstance()->createProductOptionValues($product->id, $data['product_options']);
             }
 
-            $skus = $this->handleSkus($data['skus'] ?? [], $productData);
+            $skus = $this->handleSkus($data['skus'] ?? [], $productData, $clientIdMap);
             if (isset($data['price_type']) && $data['price_type'] === 'single' && ! empty($skus)) {
-                $product->update(['variables' => []]);
+                // Single-price mode: drop variant dimensions and keep only one SKU.
+                VariantRepo::getInstance()->clearProductNormalizedData($product->id);
                 $skus = [$skus[0]];
             }
             $this->createProductSkus($product, $skus);
@@ -582,7 +593,20 @@ class ProductRepo extends BaseRepo
             return;
         }
         try {
-            $product->skus()->createMany($skus);
+            $created = $product->skus()->createMany($skus);
+
+            // Attach normalized variant_value mappings (replaces product_skus.variants JSON indexes).
+            foreach ($created as $index => $sku) {
+                $variantValueRows = $skus[$index]['_variant_value_ids'] ?? [];
+                if (empty($variantValueRows)) {
+                    continue;
+                }
+                $pivotRows = [];
+                foreach ($variantValueRows as $row) {
+                    $pivotRows[$row['value_id']] = ['variant_id' => $row['variant_id']];
+                }
+                $sku->variantValues()->attach($pivotRows);
+            }
         } catch (QueryException $e) {
             // product_skus.code is the only unique index on this table, so any
             // duplicate-key collision here is an SKU code clash. Match it across
@@ -659,13 +683,29 @@ class ProductRepo extends BaseRepo
         DB::beginTransaction();
 
         try {
-            if (isset($data['variants'])) {
-                $variables         = VariantRepo::getInstance()->mergeVariant($product->variables ?? [], $data['variants']);
-                $data['variables'] = $variables;
+            // Front-end submits variant definitions as `variants` (legacy key name).
+            // Normalize into `variables` for downstream processing.
+            if (isset($data['variants']) && ! isset($data['variables'])) {
+                $data['variables'] = $data['variants'];
             }
+
+            // variables/variants are consumed by syncVariables() below; they
+            // must not bleed into $product->fill() (the products table no longer
+            // has a variables column since P4).
+            $variableDefs = $this->extractVariableDefs($data);
+            unset($data['variables'], $data['variants']);
 
             $product->fill($data);
             $product->saveOrFail();
+
+            // Sync normalized variants whenever variables were patched; capture
+            // valueIdMap for SKU index translation below.
+            $variantMaps = ['variantIdMap' => [], 'valueIdMap' => []];
+            $clientIdMap = [];
+            if (! empty($variableDefs)) {
+                $variantMaps = VariantRepo::getInstance()->syncVariables($product, $variableDefs);
+                $clientIdMap = $this->buildClientIdMap($variableDefs, $variantMaps);
+            }
 
             if (isset($data['translations'])) {
                 $translations = $this->handleTranslations($data['translations']);
@@ -695,7 +735,7 @@ class ProductRepo extends BaseRepo
             if (isset($data['skus'])) {
                 $product->skus()->delete();
                 $defaults = ['weight' => $data['weight'] ?? $product->weight];
-                $this->createProductSkus($product, $this->handleSkus($data['skus'], $defaults));
+                $this->createProductSkus($product, $this->handleSkus($data['skus'], $defaults, $clientIdMap));
             }
 
             if (isset($data['bundles'])) {
@@ -720,6 +760,23 @@ class ProductRepo extends BaseRepo
      * @param  $data
      * @return string[]
      */
+    /**
+     * Pull the variant definitions from the payload, accepting either the
+     * canonical `variables` key or the legacy `variants` key the Panel Vue
+     * editor still submits.
+     */
+    private function extractVariableDefs(array $data): array
+    {
+        $defs = $data['variables'] ?? ($data['variants'] ?? []);
+        if (is_string($defs)) {
+            $decoded = json_decode($defs, true);
+
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return is_array($defs) ? $defs : [];
+    }
+
     public function handleProductData($data): array
     {
         $images = $data['images'] ?? null;
@@ -730,11 +787,6 @@ class ProductRepo extends BaseRepo
         $video = $data['video'] ?? null;
         if (is_string($video)) {
             $video = json_decode($video, true);
-        }
-
-        $variables = $data['variables'] ?? ($data['variants'] ?? []);
-        if (is_string($variables)) {
-            $variables = json_decode($variables, true);
         }
 
         $slug = $data['slug'] ?? null;
@@ -756,7 +808,6 @@ class ProductRepo extends BaseRepo
             'hover_image'  => $data['hover_image'] ?? '',
             'video'        => $video,
             'tax_class_id' => $data['tax_class_id'] ?? 0,
-            'variables'    => $variables,
             'position'     => (int) ($data['position'] ?? 0),
             'weight'       => $data['weight'] ?? 0,
             'weight_class' => $data['weight_class'] ?? '',
@@ -771,9 +822,12 @@ class ProductRepo extends BaseRepo
     /**
      * @param  $skus
      * @param  array  $defaults
+     * @param  array  $valueIdMap  Normalized position map: [variant_position => [value_position => value_id]]
+     * @param  array  $variantIdMap  [variant_position => variant_id]
+     * @param  array  $clientIdMap  [client_value_id => ['variant_id'=>int,'value_id'=>int]] for new ID-based payload
      * @return array
      */
-    public function handleSkus($skus, array $defaults = []): array
+    public function handleSkus($skus, array $defaults = [], array $clientIdMap = []): array
     {
         if (is_string($skus)) {
             $skus = json_decode($skus, true);
@@ -784,10 +838,8 @@ class ProductRepo extends BaseRepo
 
         $items = [];
         foreach ($skus as $sku) {
-            $variants = $sku['variants'] ?? [];
-            if (is_string($variants)) {
-                $variants = json_decode($variants);
-            }
+            $variantValueIds  = $sku['variant_value_ids'] ?? [];
+            $variantValueRows = $this->resolveVariantValueRowsFromClientIds($variantValueIds, $clientIdMap);
 
             if ($onlyOneSku) {
                 $isDefault = true;
@@ -799,7 +851,6 @@ class ProductRepo extends BaseRepo
 
             $items[] = [
                 'images'       => [$sku['image'] ?? ''],
-                'variants'     => $variants,
                 'code'         => $code,
                 'model'        => $sku['model'] ?? $code,
                 'price'        => (float) ($sku['price'] ?? 0),
@@ -808,10 +859,72 @@ class ProductRepo extends BaseRepo
                 'is_default'   => (bool) $isDefault,
                 'position'     => (int) ($sku['position'] ?? 0),
                 'weight'       => (float) ($sku['weight'] ?? $defaultWeight),
+
+                // Consumed by createProductSkus() to populate product_sku_variant_values.
+                // Stripped from the createMany payload by Eloquent's mass-assignment guard.
+                '_variant_value_ids' => $variantValueRows,
             ];
         }
 
         return $items;
+    }
+
+    /**
+     * Build client_id → (variant_id, value_id) lookup from the variable defs
+     * the front-end sent. Each value carries a stable `id` (either a DB id
+     * echoed back from the API or a client-generated UUID for newly created
+     * values). Lets SKU payloads reference values by id without depending on
+     * positional ordering.
+     */
+    private function buildClientIdMap(array $variableDefs, array $variantMaps): array
+    {
+        if (empty($variableDefs)) {
+            return [];
+        }
+
+        $map = [];
+        foreach (array_values($variableDefs) as $vPos => $variant) {
+            if (! is_array($variant)) {
+                continue;
+            }
+            $variantId = $variantMaps['variantIdMap'][$vPos] ?? null;
+            if ($variantId === null) {
+                continue;
+            }
+            foreach ($variant['values'] ?? [] as $valPos => $value) {
+                if (! is_array($value)) {
+                    continue;
+                }
+                $clientId  = $value['id'] ?? null;
+                $dbValueId = $variantMaps['valueIdMap'][$vPos][$valPos] ?? null;
+                if ($clientId === null || $dbValueId === null) {
+                    continue;
+                }
+                $map[(string) $clientId] = [
+                    'variant_id' => (int) $variantId,
+                    'value_id'   => (int) $dbValueId,
+                ];
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * Translate a SKU's variant_value_ids (client IDs) into normalized pivot rows.
+     */
+    private function resolveVariantValueRowsFromClientIds(array $clientIds, array $clientIdMap): array
+    {
+        $rows = [];
+        foreach ($clientIds as $clientId) {
+            $clientId = (string) $clientId;
+            if (! isset($clientIdMap[$clientId])) {
+                continue;
+            }
+            $rows[] = $clientIdMap[$clientId];
+        }
+
+        return $rows;
     }
 
     /**

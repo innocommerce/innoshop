@@ -27,51 +27,88 @@
         v-model="variants"
         handle=".drag-variants-handle"
         :animation="300"
-        @end="dragVariantsEnd"
-        item-key="index">
-        <template #item="{element: variant, index}">
+        item-key="id">
+        <template #item="{element: variant}">
           <div class="variant-item">
             <div class="variant-data">
-              <div class="variant-header d-flex justify-content-between align-items-center mb-2">
-                <div class="d-flex align-items-center">
+              <div class="variant-header d-flex justify-content-between align-items-center mb-3">
+                <div class="left d-flex align-items-center">
                   <div class="icon drag-variants-handle me-2"><i class="bi bi-grip-vertical"></i></div>
                   <div class="title">@{{ variant.name[defaultLocale] || getFirstAvailableLocaleValue(variant.name) }}</div>
-                  <label class="form-check-label ms-3">
-                    <input type="checkbox" class="form-check-input" v-model="variant.isImage" @change="toggleVariantImage(index)">
-                    {{ __('panel/product.is_image_variant') }}
-                  </label>
+                  <div class="form-check form-switch ms-3 mb-0">
+                    <input class="form-check-input" type="checkbox" role="switch"
+                           v-model="variant.isImage" :id="`variant-is-image-${variant.id}`">
+                    <label class="form-check-label" :for="`variant-is-image-${variant.id}`">
+                      {{ __('panel/product.is_image_variant') }}
+                    </label>
+                  </div>
                 </div>
-                <div class="action-buttons">
-                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openVariantDialog(index, null)">{{ __('common/base.edit') }}</button>
-                  <button type="button" class="btn btn-outline-danger btn-sm ms-2" @click="deleteVariant(index)">{{ __('common/base.delete') }}</button>
+                <div class="action-buttons right">
+                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openVariantDialog(variant.id, null)">{{ __('common/base.edit') }}</button>
+                  <button type="button" class="btn btn-outline-danger btn-sm ms-2" @click="deleteVariant(variant.id)">{{ __('common/base.delete') }}</button>
                 </div>
               </div>
               <div class="variant-values">
                 <div class="variant-values-container">
-                  <div class="variant-values-list d-flex flex-wrap">
-                    <div v-for="(value, valueIndex) in variant.values" :key="valueIndex" 
-                         class="variant-value-item me-2 mb-2 position-relative" 
-                         @dblclick="openVariantDialog(index, valueIndex)">
-                      <div class="variant-value-delete-btn" @click="deleteVariantValue(index, valueIndex)">
-                        <i class="bi bi-x-circle-fill"></i>
+                  <draggable
+                    v-model="variant.values"
+                    handle=".value-grip"
+                    :animation="200"
+                    item-key="id"
+                    class="variant-values-list d-flex flex-wrap align-items-center">
+                    <template #item="{element: value}">
+                      <div class="variant-value-item"
+                           :class="{ 'has-image': variant.isImage, 'is-editing': inlineEdit.variantId === variant.id && inlineEdit.valueId === value.id }"
+                           @dblclick="openVariantDialog(variant.id, value.id)">
+                        <div class="value-grip" @click.stop @mousedown.stop title="{{ __('panel/product.drag_to_reorder') }}">
+                          <i class="bi bi-grip-vertical"></i>
+                        </div>
+                        <div v-if="variant.isImage" class="value-image open-media"
+                             @click.stop="selectVariantValueImage(variant.id, value.id)"
+                             title="{{ __('panel/product.sku_image') }}">
+                          <img v-if="value.image" :src="thumbnail(value.image)">
+                          <i v-else class="bi bi-image"></i>
+                        </div>
+                        <div v-if="inlineEdit.variantId === variant.id && inlineEdit.valueId === value.id"
+                             class="value-name-edit" @click.stop>
+                          <input type="text"
+                                 :data-inline-edit="value.id"
+                                 v-model="inlineEdit.draft"
+                                 @keydown.enter.prevent="commitInlineEdit"
+                                 @keydown.esc.prevent="cancelInlineEdit"
+                                 @blur="commitInlineEdit">
+                        </div>
+                        <span v-else class="value-name"
+                              @click="startInlineEdit(variant.id, value.id)"
+                              title="{{ __('panel/product.click_to_edit') }}">
+                          @{{ value.name[defaultLocale] || getFirstAvailableLocaleValue(value.name) }}
+                        </span>
+                        <div class="value-toolbar">
+                          <button type="button" class="value-toolbar-btn"
+                                  @click.stop="startInlineEdit(variant.id, value.id)"
+                                  title="{{ __('panel/product.click_to_edit') }}">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <button type="button" class="value-toolbar-btn"
+                                  @click.stop="openVariantDialog(variant.id, value.id)"
+                                  title="{{ __('panel/product.edit_translations') }}">
+                            <i class="bi bi-translate"></i>
+                          </button>
+                          <button type="button" class="value-toolbar-btn value-toolbar-btn-danger"
+                                  @click.stop="deleteVariantValue(variant.id, value.id)"
+                                  title="{{ __('common/base.delete') }}">
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        </div>
                       </div>
-                      <div v-if="variant.isImage" class="variant-image-container open-media" 
-                           @click="selectVariantValueImage(index, valueIndex)">
-                        <img v-if="value.image" :src="thumbnail(value.image)" class="variant-value-image">
-                        <i v-else class="bi bi-image variant-placeholder-icon"></i>
-                      </div>
-                      <span class="variant-value-name">@{{ value.name[defaultLocale] || getFirstAvailableLocaleValue(value.name) }}</span>
-                    </div>
-                    <div class="variant-value-item me-2 mb-2 add-value-btn" @click="openVariantDialog(index, -1)">
-                      <i class="bi bi-plus-circle"></i>
-                    </div>
-                  </div>
-                  <div class="mt-2">
-                    <small class="text-muted">
-                      <i class="bi bi-info-circle me-1"></i>
-                      {{ __('panel/product.variant_value_edit_tip') }}
-                    </small>
-                  </div>
+                    </template>
+                    <template #footer>
+                      <button type="button" class="add-value-btn" @click="openVariantDialog(variant.id, '__NEW__')">
+                        <i class="bi bi-plus-lg"></i>
+                        <span>{{ __('panel/product.add_variant_value') }}</span>
+                      </button>
+                    </template>
+                  </draggable>
                 </div>
               </div>
             </div>
@@ -80,36 +117,36 @@
       </draggable>
     </div>
     <div :class="['text-primary add-variant', !variants.length ? 'no-variants' : '']">
-      <div class="d-inline-block cursor-pointer" @click="openVariantDialog(-1, null)"><i class="bi bi-plus-square me-1"></i> {{ __('panel/product.add_variant') }}</div>
+      <div class="d-inline-block cursor-pointer" @click="openVariantDialog('__NEW__', null)"><i class="bi bi-plus-square me-1"></i> {{ __('panel/product.add_variant') }}</div>
     </div>
-    <div class="variant-skus-wrap" v-if="smallVariants.length">
+    <div class="variant-skus-wrap" v-if="skus.length">
       <div class="batch-settings-panel mb-3">
         <div class="card shadow-sm" style="border: none;">
           <div class="card-body py-3">
             <div class="mb-2" v-if="variants.length > 0">
               <label class="form-label small fw-bold mb-2">{{ __('panel/product.sku_batch_setting') }}</label>
               <div class="variant-selector-container">
-                <div class="row g-2 mb-2" v-for="(variant, vIndex) in variants" :key="vIndex">
+                <div class="row g-2 mb-2" v-for="variant in variants" :key="variant.id">
                   <div class="col-md-2">
                     <label class="form-label small mb-1">@{{ variant.name[defaultLocale] || getFirstAvailableLocaleValue(variant.name) }}</label>
                   </div>
                   <div class="col-md-10">
                     <div class="d-flex flex-wrap gap-1 align-items-center">
-                      <div class="form-check me-2" v-for="(value, valueIndex) in variant.values" :key="valueIndex">
-                        <input class="form-check-input" type="checkbox" 
-                               :id="`variant_${vIndex}_${valueIndex}`"
-                               v-model="batchData.selectedVariants[vIndex]"
-                               :value="valueIndex">
-                        <label class="form-check-label" :for="`variant_${vIndex}_${valueIndex}`">
+                      <div class="form-check me-2" v-for="value in variant.values" :key="value.id">
+                        <input class="form-check-input" type="checkbox"
+                               :id="`variant_${variant.id}_${value.id}`"
+                               :value="value.id"
+                               v-model="batchData.selectedValueIds">
+                        <label class="form-check-label" :for="`variant_${variant.id}_${value.id}`">
                           @{{ value.name[defaultLocale] || getFirstAvailableLocaleValue(value.name) }}
                         </label>
                       </div>
-                      <button type="button" class="btn btn-outline-primary btn-sm ms-2" 
-                              @click="selectAllVariantValues(vIndex)">
+                      <button type="button" class="btn btn-outline-primary btn-sm ms-2"
+                              @click="selectAllVariantValues(variant.id)">
                         {{ __('panel/product.select_all') }}
                       </button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm" 
-                              @click="clearVariantSelection(vIndex)">
+                      <button type="button" class="btn btn-outline-secondary btn-sm"
+                              @click="clearVariantSelection(variant.id)">
                         {{ __('panel/product.clear') }}
                       </button>
                     </div>
@@ -117,9 +154,8 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="row g-2">
-              <!-- SKU图片 -->
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.sku_image') }}</label>
                 <div class="d-flex align-items-center" style="height: 31px;">
@@ -136,42 +172,36 @@
                 </div>
               </div>
 
-              <!-- SKU编码前缀 -->
               <div class="col">
                 <label class="form-label small mb-1">SKU {{ __('panel/product.bulk_fill') }}</label>
                 <input type="text" class="form-control form-control-sm" v-model="batchData.skuPrefix"
                        placeholder="{{ __('panel/product.bulk_fill_sku') }}" style="height: 31px;">
               </div>
 
-              <!-- 价格 -->
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.price') }}</label>
                 <input type="number" class="form-control form-control-sm" v-model="batchData.price"
                        placeholder="{{ __('panel/product.bulk_fill_price') }}" min="0" @change="validateBatchPrice" style="height: 31px;">
               </div>
 
-              <!-- 原价 -->
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.origin_price') }}</label>
                 <input type="number" class="form-control form-control-sm" v-model="batchData.originPrice"
                        placeholder="{{ __('panel/product.bulk_fill_origin_price') }}" min="0" @change="validateBatchOriginPrice" style="height: 31px;">
               </div>
 
-              <!-- 型号 -->
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.model') }}</label>
                 <input type="text" class="form-control form-control-sm" v-model="batchData.model"
                        placeholder="{{ __('panel/product.bulk_fill_model') }}" style="height: 31px;">
               </div>
 
-              <!-- 数量 -->
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.quantity') }}</label>
                 <input type="number" class="form-control form-control-sm" v-model="batchData.quantity"
                        placeholder="{{ __('panel/product.bulk_fill_quantity') }}" min="0" @input="validateBatchQuantity" style="height: 31px;">
               </div>
 
-              <!-- 重量 -->
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.weight') }} ({{ $weightUnit }})</label>
                 <input type="number" class="form-control form-control-sm" v-model="batchData.weight"
@@ -191,8 +221,7 @@
           </div>
         </div>
       </div>
-      
-      <!-- SKU数据表格 -->
+
       <div class="variant-skus-table table-responsive">
         <table class="table align-middle table-bordered">
           <thead class="table-light">
@@ -204,13 +233,13 @@
               <th>{{ __('panel/product.model') }}</th>
               <th>{{ __('panel/product.quantity') }}</th>
               <th>{{ __('panel/product.weight') }} ({{ $weightUnit }})</th>
-                </tr>
+            </tr>
           </thead>
           <tbody>
-            <tr v-for="(sku, index) in skus" :key="index">
+            <tr v-for="(sku, index) in skus" :key="sku.id">
               <td>
                 <div class="sku-image-name">
-                  <div class="up-variant-image" @click="upVariantImage(null, index)">
+                  <div class="up-variant-image" @click="upVariantImage(index)">
                     <img :src="thumbnail(sku.image, 50, 50)" v-if="sku.image" class="img-fluid">
                     <i class="bi bi-folder-plus" v-else></i>
                   </div>
@@ -236,7 +265,7 @@
                 <input type="text" class="form-control form-control-sm"
                   v-model="sku.price" placeholder="{{ __('panel/product.price') }}"
                   @change="validatePrice(sku)">
-                  @hookinsert('panel.product.edit.sku.input.item.price.after')
+                @hookinsert('panel.product.edit.sku.input.item.price.after')
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"
@@ -263,158 +292,149 @@
       </div>
     </div>
   </div>
-    @hookinsert('panel.product.edit.variant.after')
+  @hookinsert('panel.product.edit.variant.after')
 
-    <!-- 规格/规格值编辑弹窗 -->
-    <div class="modal fade" id="variantEditModal" tabindex="-1" aria-hidden="true" v-if="dialogVariables.show">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">@{{ dialogVariables.title }}</h5>
-            <button type="button" class="btn-close" @click="closeVariantDialog"></button>
-          </div>
-          <div class="modal-body">
-            <form ref="variantForm">
-              {{-- 主语言输入行 --}}
-              <div class="locale-modal-row mb-3 p-2 rounded border border-primary" :data-locale="defaultLocale">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                  <div class="d-flex align-items-center wh-20">
-                    <img :src="'/images/flags/'+ defaultLocale +'.svg'" class="img-fluid" :alt="defaultLocaleName">
-                  </div>
-                  <span class="fw-medium">@{{ defaultLocaleName }}</span>
-                  <span class="badge bg-primary">{{ __('panel/common.panel_locale') }}</span>
+  <!-- variant/value edit modal -->
+  <div class="modal fade" id="variantEditModal" tabindex="-1" aria-hidden="true" v-if="dialogVariables.show">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">@{{ dialogVariables.title }}</h5>
+          <button type="button" class="btn-close" @click="closeVariantDialog"></button>
+        </div>
+        <div class="modal-body">
+          <form ref="variantForm">
+            <div class="locale-modal-row mb-3 p-2 rounded border border-primary" :data-locale="defaultLocale">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <div class="d-flex align-items-center wh-20">
+                  <img :src="'/images/flags/'+ defaultLocale +'.svg'" class="img-fluid" :alt="defaultLocaleName">
                 </div>
-                <input type="text" class="form-control"
-                       v-model="dialogVariables.form.name[defaultLocale]"
-                       :placeholder="'{{ __('panel/product.name') }}'"
-                       :data-locale="defaultLocale">
+                <span class="fw-medium">@{{ defaultLocaleName }}</span>
+                <span class="badge bg-primary">{{ __('panel/common.panel_locale') }}</span>
               </div>
+              <input type="text" class="form-control"
+                     v-model="dialogVariables.form.name[defaultLocale]"
+                     :placeholder="'{{ __('panel/product.name') }}'"
+                     :data-locale="defaultLocale">
+            </div>
 
-              {{-- 其余语言行 --}}
-              <div v-for="locale in otherLocales" :key="locale.code"
-                   class="locale-modal-row mb-3 p-2 rounded border" :data-locale="locale.code">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                  <div class="d-flex align-items-center wh-20">
-                    <img :src="'/images/flags/'+ locale.code +'.svg'" class="img-fluid" :alt="locale.name">
-                  </div>
-                  <span class="fw-medium">@{{ locale.name }}</span>
-                  @if(has_translator())
-                    <button type="button" class="btn btn-sm btn-outline-primary ms-auto variant-translate-btn"
-                            :data-locale-target="locale.code"
-                            @click.prevent="translateVariantName(locale.code, $event)"
-                            :title="defaultLocaleName + ' → ' + locale.name">
-                      <i class="bi bi-translate"></i>
-                    </button>
-                  @endif
+            <div v-for="locale in otherLocales" :key="locale.code"
+                 class="locale-modal-row mb-3 p-2 rounded border" :data-locale="locale.code">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <div class="d-flex align-items-center wh-20">
+                  <img :src="'/images/flags/'+ locale.code +'.svg'" class="img-fluid" :alt="locale.name">
                 </div>
-                <input type="text" class="form-control"
-                       v-model="dialogVariables.form.name[locale.code]"
-                       :placeholder="'{{ __('panel/product.name') }}'"
-                       :data-locale="locale.code">
+                <span class="fw-medium">@{{ locale.name }}</span>
+                @if(has_translator())
+                  <button type="button" class="btn btn-sm btn-outline-primary ms-auto variant-translate-btn"
+                          :data-locale-target="locale.code"
+                          @click.prevent="translateVariantName(locale.code, $event)"
+                          :title="defaultLocaleName + ' → ' + locale.name">
+                    <i class="bi bi-translate"></i>
+                  </button>
+                @endif
               </div>
-            </form>
-          </div>
-          <div class="modal-footer d-flex justify-content-between">
-            @php($hasTranslator = has_translator())
-            <button type="button" class="btn btn-outline-secondary" @click="fillEmptyLocales">
-              @if($hasTranslator)
-                <i class="bi bi-translate me-1"></i>{{ __('panel/common.translate_empty') }}
-              @else
-                <i class="bi bi-arrow-right-circle me-1"></i>{{ __('panel/common.copy_empty') }}
-              @endif
-            </button>
-            <div>
-              <button type="button" class="btn btn-secondary" @click="closeVariantDialog">{{ __('common/base.cancel') }}</button>
-              <button type="button" class="btn btn-primary ms-2" @click="saveVariantDialog">{{ __('panel/common.confirm') }}</button>
+              <input type="text" class="form-control"
+                     v-model="dialogVariables.form.name[locale.code]"
+                     :placeholder="'{{ __('panel/product.name') }}'"
+                     :data-locale="locale.code">
             </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          @php($hasTranslator = has_translator())
+          <button type="button" class="btn btn-outline-secondary" @click="fillEmptyLocales">
+            @if($hasTranslator)
+              <i class="bi bi-translate me-1"></i>{{ __('panel/common.translate_empty') }}
+            @else
+              <i class="bi bi-arrow-right-circle me-1"></i>{{ __('panel/common.copy_empty') }}
+            @endif
+          </button>
+          <div>
+            <button type="button" class="btn btn-secondary" @click="closeVariantDialog">{{ __('common/base.cancel') }}</button>
+            <button type="button" class="btn btn-primary ms-2" @click="saveVariantDialog">{{ __('panel/common.confirm') }}</button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 保存为规格模板弹窗 -->
-    <div class="modal fade" id="saveTemplateModal" tabindex="-1" aria-hidden="true" v-if="templateDialog.saveShow">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ __('panel/product.save_as_template') }}</h5>
-            <button type="button" class="btn-close" @click="closeSaveTemplateModal"></button>
-          </div>
-          <div class="modal-body">
-            <label class="form-label">{{ __('panel/product.template_name') }}</label>
-            <input type="text" class="form-control" v-model="templateDialog.saveName" :placeholder="'{{ __('panel/product.template_name') }}'">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeSaveTemplateModal">{{ __('common/base.cancel') }}</button>
-            <button type="button" class="btn btn-primary" @click="saveTemplate" :disabled="templateDialog.loading">
-              {{ __('panel/common.confirm') }}
-            </button>
-          </div>
+  <div class="modal fade" id="saveTemplateModal" tabindex="-1" aria-hidden="true" v-if="templateDialog.saveShow">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ __('panel/product.save_as_template') }}</h5>
+          <button type="button" class="btn-close" @click="closeSaveTemplateModal"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label">{{ __('panel/product.template_name') }}</label>
+          <input type="text" class="form-control" v-model="templateDialog.saveName" :placeholder="'{{ __('panel/product.template_name') }}'">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="closeSaveTemplateModal">{{ __('common/base.cancel') }}</button>
+          <button type="button" class="btn btn-primary" @click="saveTemplate" :disabled="templateDialog.loading">
+            {{ __('panel/common.confirm') }}
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 导入规格模板弹窗 -->
-    <div class="modal fade" id="loadTemplateModal" tabindex="-1" aria-hidden="true" v-if="templateDialog.loadShow">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content position-relative">
-          <div v-if="templateDialog.loading" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-white bg-opacity-75" style="z-index: 1055;">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="mt-2 text-primary">{{ __('panel/product.loading_template') }}</div>
+  <div class="modal fade" id="loadTemplateModal" tabindex="-1" aria-hidden="true" v-if="templateDialog.loadShow">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content position-relative">
+        <div v-if="templateDialog.loading" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-white bg-opacity-75" style="z-index: 1055;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
           </div>
-          <div class="modal-header">
-            <h5 class="modal-title">{{ __('panel/product.load_template') }}</h5>
-            <button type="button" class="btn-close" @click="closeLoadTemplateModal"></button>
+          <div class="mt-2 text-primary">{{ __('panel/product.loading_template') }}</div>
+        </div>
+        <div class="modal-header">
+          <h5 class="modal-title">{{ __('panel/product.load_template') }}</h5>
+          <button type="button" class="btn-close" @click="closeLoadTemplateModal"></button>
+        </div>
+        <div class="modal-body">
+          <div v-if="templateDialog.templates.length === 0" class="text-muted py-3 text-center">
+            {{ __('panel/product.no_templates') }}
           </div>
-          <div class="modal-body">
-            <div v-if="templateDialog.templates.length === 0" class="text-muted py-3 text-center">
-              {{ __('panel/product.no_templates') }}
-            </div>
-            <div v-else class="list-group">
-              <label v-for="template in templateDialog.templates" :key="template.id" class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="variant_template_id" :value="template.id" v-model="templateDialog.selectedId" :disabled="templateDialog.loading">
-                  <span class="form-check-label ms-2">@{{ template.name }}</span>
-                </div>
-                <button type="button" class="btn btn-link btn-sm text-danger text-decoration-none" @click.stop="deleteTemplate(template.id)" :disabled="templateDialog.loading">
-                  {{ __('common/base.delete') }}
-                </button>
-              </label>
-            </div>
+          <div v-else class="list-group">
+            <label v-for="template in templateDialog.templates" :key="template.id" class="list-group-item d-flex justify-content-between align-items-center">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="variant_template_id" :value="template.id" v-model="templateDialog.selectedId" :disabled="templateDialog.loading">
+                <span class="form-check-label ms-2">@{{ template.name }}</span>
+              </div>
+              <button type="button" class="btn btn-link btn-sm text-danger text-decoration-none" @click.stop="deleteTemplate(template.id)" :disabled="templateDialog.loading">
+                {{ __('common/base.delete') }}
+              </button>
+            </label>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeLoadTemplateModal" :disabled="templateDialog.loading">{{ __('common/base.cancel') }}</button>
-            <button type="button" class="btn btn-primary" @click="applyTemplate" :disabled="!templateDialog.selectedId || templateDialog.loading">
-              <span v-if="templateDialog.loading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-              {{ __('panel/common.confirm') }}
-            </button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="closeLoadTemplateModal" :disabled="templateDialog.loading">{{ __('common/base.cancel') }}</button>
+          <button type="button" class="btn btn-primary" @click="applyTemplate" :disabled="!templateDialog.selectedId || templateDialog.loading">
+            <span v-if="templateDialog.loading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            {{ __('panel/common.confirm') }}
+          </button>
         </div>
       </div>
     </div>
+  </div>
 </div>
 
 @push('footer')
 <script>
-  const { createApp, ref, watch, watchEffect, onMounted, getCurrentInstance, nextTick, computed } = Vue
+  const { createApp, ref, watch, onMounted, getCurrentInstance, nextTick, computed } = Vue
   const draggable = window.vuedraggable;
 
-  // Initialize locale utilities
   const $locales = @json(locales());
   const localesFill = (text) => {
     let obj = {};
-    $locales.map(e => {
-      obj[e.code] = text
-    })
+    $locales.map(e => { obj[e.code] = text; })
     return obj;
   }
 
-  // Product-level weight default for newly generated SKUs
   const productWeight = @json($product->weight ?? 0);
 
-  // Variant template API routes and CSRF token
   @php($variantTemplateRoutes = [
     'index'   => route('panel.variant_templates.index'),
     'store'   => route('panel.variant_templates.store'),
@@ -424,66 +444,119 @@
   const variantTemplateRoutes = @json($variantTemplateRoutes);
   const csrfToken = @json(csrf_token());
 
-  // Create Vue application for variants management
+  // Client-side id generator. Used for newly created variants/values that
+  // don't yet have a DB id; persisted ones echo back the DB id (string) on
+  // load. Collisions are practically impossible with this prefix scheme.
+  const newId = (prefix) => `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+
   let variantsBoxApp = createApp({
-    components: {
-      draggable,
-    },
+    components: { draggable },
 
     setup() {
-
-      // Core state variables
       const instance = getCurrentInstance();
       const locales = $locales;
       const defaultLocale = @json(panel_locale_code());
-      const frontLocale = @json(setting_locale_code());
-
-      // Locale helpers for variant dialog
       const otherLocales = computed(() => locales.filter(l => l.code !== defaultLocale));
       const defaultLocaleName = locales.find(l => l.code === defaultLocale)?.name || defaultLocale;
-      const hasTranslator = @json(has_translator());
 
-      // LocaleModalHelper for variant dialog
       const variantLocaleHelper = new LocaleModalHelper({
         getLocaleValue: (code) => dialogVariables.value.form.name[code] || '',
         setLocaleValue: (code, val) => { dialogVariables.value.form.name[code] = val; },
       });
-
-      // Translate variant name - delegates to LocaleModalHelper
       const translateVariantName = (targetLocale, event) => {
         variantLocaleHelper.translate(targetLocale, event?.currentTarget);
       };
+      const fillEmptyLocales = () => { variantLocaleHelper.fillEmpty(); };
 
-      // Smart fill: delegates to LocaleModalHelper
-      const fillEmptyLocales = () => {
-        variantLocaleHelper.fillEmpty();
+      // Normalize incoming variant definitions (DB-loaded or user-resubmitted)
+      // into the canonical editor shape. Accepts both the API shape
+      // (is_image snake_case, DB id as string) and the legacy editor shape
+      // (isImage camelCase, no id).
+      const normalizeVariants = (raw) => {
+        if (!Array.isArray(raw)) return [];
+        return raw.map((v, vIdx) => ({
+          id: v.id || newId('var'),
+          name: v.name || localesFill(''),
+          isImage: !!(v.isImage ?? v.is_image),
+          error: false,
+          values: (v.values || []).map((val, valIdx) => ({
+            id: val.id || newId('val'),
+            name: val.name || localesFill(''),
+            image: val.image || '',
+            error: false,
+          })),
+        }));
       };
-      const showAllVariant = ref(false);
-      const mainVariantKey = ref(0);
-      
-      // Initialize variants from product data
-      const variants = ref(@json(old('variants', $product->variables ?? [])));
-      if (typeof variants.value === 'string') {
-        variants.value = JSON.parse(variants.value);
-      }
-      
-      // Initialize SKUs with proper parsing
-      const skus = ref((() => {
-        let rawSkus = @json(old('skus', $skus ?? []));
-        if (typeof rawSkus === 'string') {
-          try {
-            rawSkus = JSON.parse(rawSkus);
-          } catch (e) {
-            rawSkus = [];
-          }
-        }
-        return rawSkus;
-      })());
-      
-      // Initialize small variants array for UI display
-      const smallVariants = ref([]);
 
-      // Batch data for bulk operations
+      // Normalize SKUs into the canonical editor shape, accepting whichever
+      // payload format the controller happened to send:
+      //   - SkuListItem resource: { image, variant_value_ids }
+      //   - Eloquent model toArray: { images: [...], variant_values: [{pivot:{value_id}}] }
+      //   - Legacy positional: { variants: [0, 1] }
+      const normalizeSkus = (raw, normalizedVariants) => {
+        if (!Array.isArray(raw)) return [];
+        return raw.map((s, idx) => {
+          // 1. Resolve image: SkuListItem uses `image` (string), Eloquent uses `images` (array)
+          let image = s.image ?? '';
+          if (!image && Array.isArray(s.images) && s.images.length > 0) {
+            image = s.images[0] ?? '';
+          }
+          let imageUrl = s.image_url ?? '';
+          if (!imageUrl && image) {
+            imageUrl = image.indexOf('http') === 0 ? image : '';
+          }
+
+          // 2. Resolve variant_value_ids — try multiple sources
+          let valueIds = null;
+          if (Array.isArray(s.variant_value_ids)) {
+            // SkuListItem shape — already DB ids as strings
+            valueIds = s.variant_value_ids.map(String);
+          } else if (Array.isArray(s.variant_values) && s.variant_values.length > 0) {
+            // Eloquent shape — extract from pivot or direct value_id
+            valueIds = s.variant_values
+              .map(v => v.pivot?.value_id ?? v.value_id)
+              .filter(Boolean)
+              .map(String);
+          } else if (Array.isArray(s.variants)) {
+            // Legacy positional index — translate via normalized variants
+            valueIds = s.variants
+              .map((valIdx, vIdx) => normalizedVariants[vIdx]?.values[valIdx]?.id)
+              .filter(Boolean)
+              .map(String);
+          }
+
+          return {
+            id: s.id || newId('sku'),
+            code: s.code ?? '',
+            price: s.price ?? '',
+            origin_price: s.origin_price ?? '',
+            quantity: s.quantity ?? '',
+            weight: s.weight ?? productWeight,
+            model: s.model ?? '',
+            image: image,
+            image_url: imageUrl,
+            is_default: s.is_default ?? (idx === 0 ? 1 : 0),
+            variant_value_ids: valueIds || [],
+            error: false,
+            text: '',
+          };
+        });
+      };
+
+      // Load existing variant definitions with their stable DB ids so SKUs
+      // can match by variant_value_ids during regenerateSkus(). On a failed
+      // form submission, `old('variants')` repopulates the user's last edit.
+      const variants = ref(normalizeVariants(@json(old('variants', $product->variant_dimensions ?? []))));
+      if (typeof variants.value === 'string') {
+        variants.value = normalizeVariants(JSON.parse(variants.value));
+      }
+
+      const skus = ref(normalizeSkus(@json(old('skus', $skus ?? [])), variants.value));
+      if (typeof skus.value === 'string') {
+        try { skus.value = normalizeSkus(JSON.parse(skus.value), variants.value); }
+        catch (e) { skus.value = []; }
+      }
+
       const batchData = ref({
         skuPrefix: '',
         price: '',
@@ -492,21 +565,22 @@
         quantity: '',
         weight: '',
         image: '',
-        selectedVariants: [] // 存储每个规格的选中值索引数组
+        selectedValueIds: [],   // Set<value.id> — replaces 2D selectedVariants index array
       });
 
-      // Dialog variables for variant/value editing
       const dialogVariables = ref({
         show: false,
-        variantIndex: null,
-        variantValueIndex: null,
+        variantId: null,        // variant client/DB id, or '__NEW__'
+        valueId: null,          // value client/DB id, '__NEW__', or null (editing variant itself)
         title: '',
-        form: {
-          name: {}
-        }
+        form: { name: {} },
       });
 
-      // Variant template dialog state
+      // Inline edit state for a value's default-locale name. Only one value
+      // is editable at a time; commit on blur/Enter, abort on Esc. Other
+      // locales are still edited through the modal (double-click the chip).
+      const inlineEdit = ref({ variantId: null, valueId: null, draft: '' });
+
       const templateDialog = ref({
         saveShow: false,
         loadShow: false,
@@ -516,64 +590,117 @@
         loading: false,
       });
 
-      // Watch for changes in main variant key or variants array
-      watch([mainVariantKey, variants.value], ([newValue1, newValue2], [oldValue1, oldValue2]) => {
-        // Show single SKU box if no variants exist
+      // Regenerate SKU cartesian product whenever variants change. Existing
+      // SKUs are matched by sorted value-id set so user-entered data (price,
+      // code, image, ...) is preserved across reorder/delete/add operations.
+      const regenerateSkus = () => {
+        if (variants.value.length === 0) {
+          skus.value = [];
+          return;
+        }
+        if (variants.value.some(v => v.values.length === 0)) {
+          return;
+        }
+
+        const existingByKey = {};
+        skus.value.forEach(s => {
+          const key = [...(s.variant_value_ids || [])].sort().join('|');
+          existingByKey[key] = s;
+        });
+
+        const newSkus = [];
+        const indices = variants.value.map(() => 0);
+
+        while (true) {
+          const valueIds = variants.value.map((v, i) => v.values[indices[i]].id);
+          const key = [...valueIds].sort().join('|');
+          const text = variants.value
+            .map((v, i) => v.values[indices[i]].name[defaultLocale] || getFirstAvailableLocaleValue(v.values[indices[i]].name))
+            .join(' / ');
+
+          const existing = existingByKey[key];
+          if (existing) {
+            existing.text = ' ' + text;
+            existing.variant_value_ids = valueIds;
+            newSkus.push(existing);
+          } else {
+            newSkus.push({
+              id: newId('sku'),
+              code: '',
+              price: '',
+              origin_price: '',
+              quantity: '',
+              weight: productWeight,
+              model: '',
+              image: '',
+              image_url: '',
+              is_default: 0,
+              variant_value_ids: valueIds,
+              error: false,
+              text: ' ' + text,
+            });
+          }
+
+          let i = variants.value.length - 1;
+          while (i >= 0) {
+            indices[i]++;
+            if (indices[i] < variants.value[i].values.length) break;
+            indices[i] = 0;
+            i--;
+          }
+          if (i < 0) break;
+        }
+
+        if (!newSkus.some(s => s.is_default == 1)) {
+          newSkus[0].is_default = 1;
+        }
+
+        skus.value = newSkus;
+      };
+
+      // Show/hide single-SKU box based on variants presence.
+      watch(variants, () => {
         if (!variants.value.length) {
           $('.skus-single-box').removeClass('d-none');
         } else {
           $('.skus-single-box').addClass('d-none');
         }
 
-        // Don't generate SKUs if only one empty variant exists (guard: modal-added variants may have values: [] until values are added)
         const firstVariant = variants.value[0];
         if (
           variants.value.length === 1 &&
-          firstVariant.values &&
-          firstVariant.values[0] &&
+          firstVariant?.values?.[0] &&
           isObjectValuesEmpty(firstVariant.values[0].name)
         ) {
           return;
         }
 
-        // Generate SKUs and update small variants
-        generateSku();
-        smallVariantsFormat(newValue1 != oldValue1);
-      });
+        regenerateSkus();
+      }, { deep: true });
 
-      // Watch for changes in SKUs to validate
-      watch(skus, () => {
-        validateSkus();
-      }, {deep: true});
-
-      // Watch for changes in variants to sync with single SKU
-      watch(variants, (newValue) => {
-        if (newValue.length > 0) {
-          // Get existing single SKU data
+      // Single-SKU box sync. Variants present → pull single-SKU form values
+      // into the first variant SKU; no variants → push default SKU back.
+      watch(() => variants.value.length, (len) => {
+        if (len > 0) {
           const singleSkuPrice = $('input[name="skus[0][price]"]').val();
           const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
           const singleSkuCode = $('input[name="skus[0][code]"]').val();
-
           if (singleSkuPrice || singleSkuQuantity || singleSkuCode) {
-            // Transfer single SKU data to the first variant SKU
             const firstSku = skus.value[0];
             if (firstSku) {
               firstSku.price = singleSkuPrice || '';
               firstSku.quantity = singleSkuQuantity || '';
               firstSku.code = singleSkuCode || '';
-              firstSku.weight = $('input[name="skus[0][weight]"]').val() || '';
+              firstSku.weight = $('input[name="skus[0][weight]"]').val() || firstSku.weight;
               firstSku.is_default = 1;
             }
-
-            // Clear single SKU form
             $('input[name="skus[0][price]"]').val('');
             $('input[name="skus[0][quantity]"]').val('');
             $('input[name="skus[0][code]"]').val('');
             $('input[name="skus[0][weight]"]').val('');
           }
         } else {
-          // Sync default SKU back to single SKU form when removing variants
-          const defaultSku = skus.value.find(sku => sku.is_default === 1);
+          const defaultSku = skus.value.find(s => s.is_default == 1);
           if (defaultSku) {
             $('input[name="skus[0][price]"]').val(defaultSku.price);
             $('input[name="skus[0][quantity]"]').val(defaultSku.quantity);
@@ -581,14 +708,12 @@
             $('input[name="skus[0][weight]"]').val(defaultSku.weight);
           }
         }
-      }, { deep: true });
+      });
 
-      // Initialize on component mount
+      watch(skus, () => { validateSkus(); }, { deep: true });
+
       onMounted(() => {
-        generateSku();
-        smallVariantsFormat();
-        
-        // Validate form on submit
+        regenerateSkus();
         $('#product-form').on('submit', function(e) {
           if (!validateForm()) {
             e.preventDefault();
@@ -598,614 +723,296 @@
         });
       });
 
-      // Format small variants for display
-      const smallVariantsFormat = () => {
-        if (variants.value.length === 0) {
-          smallVariants.value = [];
-          return;
-        }
-
-        // Map SKUs to small variants with additional properties
-        smallVariants.value = skus.value.map((sku, index) => ({
-          ...sku,
-          init_index: index,
-          show_variant: false,
-          sku_quantity: null
-        }));
-      }
-
-      // Delete a variant and update main variant key
-      const deleteVariant = (index) => {
-        variants.value.splice(index, 1);
-        
-        // 同步删除规格选择器对应的数据
-        batchData.value.selectedVariants.splice(index, 1);
-
-        if (index < mainVariantKey.value) {
-          mainVariantKey.value--;
-        } else if (index === mainVariantKey.value) {
-          mainVariantKey.value = 0;
-        }
-      }
-
-      // Get first available locale value for display
       const getFirstAvailableLocaleValue = (localeObject) => {
         if (!localeObject) return '';
-
-        // First try the default system locale
         const systemDefaultLocale = @json(setting_locale_code());
         if (localeObject[systemDefaultLocale]) return localeObject[systemDefaultLocale];
-
-        // Otherwise get the first non-empty value
         for (const locale of locales) {
           if (localeObject[locale.code] && localeObject[locale.code].trim() !== '') {
             return localeObject[locale.code];
           }
         }
-
         return '';
       };
 
-      // Generate SKU combinations based on variants
-      const generateSku = () => {
-        if (variants.value.length === 0) {
-          return;
-        }
+      const findVariantIndex = (variantId) => variants.value.findIndex(v => v.id === variantId);
+      const findValueIndex = (variant, valueId) => variant.values.findIndex(val => val.id === valueId);
 
-        // Prepare variants for SKU generation (main variant first)
-        let mainVariant = variants.value[mainVariantKey.value];
-        let tempVariants = [mainVariant, ...variants.value.filter((e, i) => i !== mainVariantKey.value)];
-        
-        // Initialize SKU generation variables
-        let sku = [];
-        let skuVariantsLength = tempVariants.length;
-        let skuVariantsIndex = Array(skuVariantsLength).fill(0);
-        let skuVariantsValues = tempVariants.map(e => e.values.length);
-        
-        // Calculate total number of combinations
-        const totalCombinations = skuVariantsValues.reduce((a, b) => a * b);
+      const deleteVariant = (variantId) => {
+        const idx = findVariantIndex(variantId);
+        if (idx < 0) return;
+        variants.value.splice(idx, 1);
+      };
 
-        // Generate each SKU combination
-        for (let i = 0; i < totalCombinations; i++) {
-          // Create SKU item (preserve existing values if available)
-          let skuItem = {
-            code: skus.value[i] ? skus.value[i].code : '',
-            price: skus.value[i] ? skus.value[i].price : '',
-            quantity: skus.value[i] ? skus.value[i].quantity : '',
-            image: skus.value[i] ? skus.value[i].image : '',
-            image_url: skus.value[i] ? skus.value[i].image_url : '',
-            model: skus.value[i] ? skus.value[i].model : '',
-            origin_price: skus.value[i] ? skus.value[i].origin_price : '',
-            weight: skus.value[i] ? (skus.value[i].weight ?? productWeight) : productWeight,
-            is_default: skus.value[i] ? skus.value[i].is_default : 0,
-            error: false,
-            text: '',
-            variants: []
-          };
-
-          // Build SKU text and variants array
-          for (let j = 0; j < skuVariantsLength; j++) {
-            skuItem.variants.push(skuVariantsIndex[j]);
-            const valueName = tempVariants[j].values[skuVariantsIndex[j]].name[defaultLocale] ||
-                            getFirstAvailableLocaleValue(tempVariants[j].values[skuVariantsIndex[j]].name);
-            skuItem.text += ' ' + valueName + ' /';
-          }
-
-          // Clean up text and add SKU to array
-          skuItem.text = skuItem.text.slice(0, -1);
-          sku.push(skuItem);
-
-          // Increment indices for next combination
-          for (let j = skuVariantsLength - 1; j >= 0; j--) {
-            if (skuVariantsIndex[j] < skuVariantsValues[j] - 1) {
-              skuVariantsIndex[j]++;
-              break;
-            } else {
-              skuVariantsIndex[j] = 0;
-            }
-          }
-        }
-
-        // Set first SKU as default if none is marked
-        let isMaster = sku.filter((e, i) => e.is_default == 1);
-        if (isMaster.length === 0) {
-          sku[0].is_default = 1;
-        }
-
-        skus.value = sku;
-        
-        // 初始化规格选择器数据结构
-        initializeVariantSelectors();
-      }
-
-      // Modify SKU values in batch or individually
-      const modifySku = (init_index, index, type) => {
-        let sku_quantity = smallVariants.value[index].sku_quantity;
-        let sku = smallVariants.value[index];
-        let tempSkus = skus.value.slice(init_index * sku_quantity, (init_index + 1) * sku_quantity);
-
-        // Apply value to all SKUs in the group
-        tempSkus.forEach((e) => {
-          e[type] = sku[type];
-        });
-
-        // Update SKU codes with sequential numbering
-        if (typeof init_index != 'undefined') {
-          let sameSku = skus.value.filter((e) => e.code.split('-')[0] === sku.code);
-          sameSku.forEach((e, i) => {
-            e.code = sku.code + '-' + i;
-          });
-        }
-      }
-
-      // Open file manager to upload variant image
-      const upVariantImage = (init_index, index) => {
+      const upVariantImage = (skuIndex) => {
         inno.mediaIframe((file) => {
-          if (file.path) {
-            skus.value[index].image = file.path;
-          }
-        }, {
-          type: 'image',
-          multiple: false
-        });
-      }
+          if (file.path) skus.value[skuIndex].image = file.path;
+        }, { type: 'image', multiple: false });
+      };
 
-      // Update main variant key after drag and drop
-      const dragVariantsEnd = (evt) => {
-        const oldIndex = evt.oldIndex;
-        const newIndex = evt.newIndex;
-
-        // Adjust main variant key based on drag direction
-        if (oldIndex === mainVariantKey.value) {
-          mainVariantKey.value = newIndex;
-        } else if (oldIndex < mainVariantKey.value && newIndex >= mainVariantKey.value) {
-          mainVariantKey.value--;
-        } else if (oldIndex > mainVariantKey.value && newIndex <= mainVariantKey.value) {
-          mainVariantKey.value++;
-        }
-      }
-
-      // Generate thumbnail URL for images
       const thumbnail = (image) => {
         const asset = document.querySelector('meta[name="asset"]').content;
-        if (!image) {
-          return 'image/placeholder.png';
-        }
-
-        // Return URL directly if it's absolute
-        if (image.indexOf('http') === 0) {
-          return image;
-        }
-
+        if (!image) return 'image/placeholder.png';
+        if (image.indexOf('http') === 0) return image;
         return asset + image;
-      }
+      };
 
-      // Set a SKU as the master/default
       const setMasterSku = (index) => {
-        // Reset all SKUs
-        skus.value.forEach((e) => {
-          e.is_default = 0;
-        });
+        skus.value.forEach(s => { s.is_default = 0; });
+        skus.value[index].is_default = 1;
+      };
 
-        // Set the selected SKU as default
-        getSkusItem(index).is_default = 1;
-      }
-
-      // Find matching SKU from smallVariants
-      const getSkusItem = (index) => {
-        return skus.value.find((e) => {
-          return e.variants.toString() === smallVariants.value[index].variants.toString();
-        });
-      }
-
-      // Validate variants have values
       const validateVariants = () => {
-        variants.value.forEach((e) => {
+        variants.value.forEach(e => {
           e.error = isObjectValuesEmpty(e.name);
-
-          e.values.forEach((value) => {
-            value.error = isObjectValuesEmpty(value.name);
-          });
+          e.values.forEach(value => { value.error = isObjectValuesEmpty(value.name); });
         });
-      }
+      };
 
-      // Check for duplicate SKU codes
       const validateSkus = () => {
-        skus.value.forEach((e) => {
-          const sameSku = skus.value.filter((s) => s.code === e.code);
+        skus.value.forEach(e => {
+          const sameSku = skus.value.filter(s => s.code === e.code);
           e.error = sameSku.length > 1;
         });
-      }
+      };
 
-      // Toggle expanded/collapsed view for all variants
-      const allVariantEC = () => {
-        showAllVariant.value = !showAllVariant.value;
-        
-        // Update all small variants
-        smallVariants.value.forEach((e) => {
-          e.show_variant = showAllVariant.value;
-        });
-
-        smallVariantsFormat();
-      }
-
-      // Validate form before submission
       const validateForm = () => {
-        // Check single SKU form
         const singleSkuPrice = $('input[name="skus[0][price]"]').val();
         const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
-
-        // Check multi-variant SKUs
         const hasValidVariants = variants.value.length > 0 && skus.value.some(sku => {
           return sku.price && sku.quantity && (sku.is_default === 1);
         });
-
-        // Ensure at least one complete SKU exists
         return hasValidVariants || (singleSkuPrice && singleSkuQuantity);
-      }
+      };
 
-      // Batch data validation methods
       const validateBatchPrice = () => {
-        if (batchData.value.price < 0) {
-          batchData.value.price = 0;
-        }
+        if (batchData.value.price < 0) batchData.value.price = 0;
         if (batchData.value.originPrice && parseFloat(batchData.value.price) > parseFloat(batchData.value.originPrice)) {
           batchData.value.price = batchData.value.originPrice;
         }
-      }
-
+      };
       const validateBatchOriginPrice = () => {
-        if (batchData.value.originPrice < 0) {
-          batchData.value.originPrice = 0;
-        }
+        if (batchData.value.originPrice < 0) batchData.value.originPrice = 0;
         if (batchData.value.price && parseFloat(batchData.value.originPrice) < parseFloat(batchData.value.price)) {
           batchData.value.originPrice = batchData.value.price;
         }
-      }
-
+      };
       const validateBatchQuantity = () => {
-        if (batchData.value.quantity < 0) {
-          batchData.value.quantity = 0;
-        }
-      }
-
-      // SKU field validation methods
+        if (batchData.value.quantity < 0) batchData.value.quantity = 0;
+      };
       const validatePrice = (sku) => {
         let price = parseFloat(sku.price);
-        if (isNaN(price) || price < 0) {
-          sku.price = '0';
-        }
-        if (sku.origin_price && price > parseFloat(sku.origin_price)) {
-          sku.price = sku.origin_price;
-        }
-      }
-
+        if (isNaN(price) || price < 0) sku.price = '0';
+        if (sku.origin_price && price > parseFloat(sku.origin_price)) sku.price = sku.origin_price;
+      };
       const validateOriginPrice = (sku) => {
         let originPrice = parseFloat(sku.origin_price);
-        if (isNaN(originPrice) || originPrice < 0) {
-          sku.origin_price = '0';
-        }
-        if (sku.price && originPrice < parseFloat(sku.price)) {
-          sku.origin_price = sku.price;
-        }
-      }
-
+        if (isNaN(originPrice) || originPrice < 0) sku.origin_price = '0';
+        if (sku.price && originPrice < parseFloat(sku.price)) sku.origin_price = sku.price;
+      };
       const validateQuantity = (sku) => {
         let quantity = parseInt(sku.quantity);
-        if (isNaN(quantity) || quantity < 0) {
-          sku.quantity = '0';
-        }
-      }
+        if (isNaN(quantity) || quantity < 0) sku.quantity = '0';
+      };
 
-      // Batch fill SKU codes with prefix and sequential numbers
-      const batchFillSkuCode = () => {
-        if (!batchData.value.skuPrefix) {
-          layer.msg('Please enter SKU prefix', {icon: 2});
-          return;
-        }
-
-        skus.value.forEach((sku, index) => {
-          const suffix = String(index + 1).padStart(2, '0');
-          sku.code = `${batchData.value.skuPrefix}-${suffix}`;
+      // Batch selection helpers — selectedValueIds is a flat Set<value.id>.
+      const selectAllVariantValues = (variantId) => {
+        const variant = variants.value.find(v => v.id === variantId);
+        if (!variant) return;
+        variant.values.forEach(val => {
+          if (!batchData.value.selectedValueIds.includes(val.id)) {
+            batchData.value.selectedValueIds.push(val.id);
+          }
         });
-
-        layer.msg('SKU codes have been filled', {icon: 1});
+      };
+      const clearVariantSelection = (variantId) => {
+        const variant = variants.value.find(v => v.id === variantId);
+        if (!variant) return;
+        const ids = new Set(variant.values.map(v => v.id));
+        batchData.value.selectedValueIds = batchData.value.selectedValueIds.filter(id => !ids.has(id));
       };
 
-      // Batch fill values for a specific column
-      const batchFillColumn = (column) => {
-        if (!batchData.value[column]) {
-          layer.msg('Please enter a value to fill', {icon: 2});
-          return;
-        }
-
-        const columnMap = {
-          price: 'price',
-          originPrice: 'origin_price',
-          model: 'model',
-          quantity: 'quantity'
-        };
-
-        skus.value.forEach(sku => {
-          sku[columnMap[column]] = batchData.value[column];
-        });
-
-        layer.msg('Batch fill completed', {icon: 1});
-      };
-
-      // 初始化规格选择器数据结构
-      const initializeVariantSelectors = () => {
-        // 初始化批量设置的规格选择器
-        batchData.value.selectedVariants = variants.value.map(() => []);
-      };
-      
-      // 规格选择器相关方法
-      const selectAllVariantValues = (variantIndex) => {
-        if (!batchData.value.selectedVariants[variantIndex]) {
-          batchData.value.selectedVariants[variantIndex] = [];
-        }
-        const allValues = variants.value[variantIndex].values.map((_, index) => index);
-        batchData.value.selectedVariants[variantIndex] = [...allValues];
-      };
-      
-      const clearVariantSelection = (variantIndex) => {
-        if (batchData.value.selectedVariants[variantIndex]) {
-          batchData.value.selectedVariants[variantIndex] = [];
-        }
-      };
-      
-      // 检查SKU是否匹配选中的规格组合
       const isSkuMatchingSelection = (sku) => {
-        if (!batchData.value.selectedVariants.length) return true;
-        
-        return batchData.value.selectedVariants.every((selectedValues, variantIndex) => {
-          if (!selectedValues || selectedValues.length === 0) return true;
-          return selectedValues.includes(sku.variants[variantIndex]);
-        });
+        const selected = batchData.value.selectedValueIds;
+        if (!selected || selected.length === 0) return true;
+        return selected.every(id => sku.variant_value_ids.includes(id));
       };
-      
-      // 获取匹配选中规格的SKU列表
-      const getMatchingSKUs = () => {
-        return skus.value.filter(isSkuMatchingSelection);
-      };
-      
-      // 批量设置选中的SKU
+
       const batchApplySelected = () => {
-        const matchingSKUs = getMatchingSKUs();
-        let appliedCount = 0;
-        
-        if (matchingSKUs.length === 0) {
-          layer.msg('没有匹配的SKU，请检查规格选择', {icon: 2});
+        const matching = skus.value.filter(isSkuMatchingSelection);
+        if (matching.length === 0) {
+          layer.msg('{{ __("panel/product.no_matching_sku") }}', {icon: 2});
           return;
         }
-        
-        // 批量设置SKU编码
+        let applied = 0;
         if (batchData.value.skuPrefix) {
-          matchingSKUs.forEach((sku, index) => {
-            const suffix = String(index + 1).padStart(2, '0');
+          matching.forEach((sku, i) => {
+            const suffix = String(i + 1).padStart(2, '0');
             sku.code = `${batchData.value.skuPrefix}-${suffix}`;
           });
-          appliedCount++;
+          applied++;
         }
-        
-        // 批量设置价格
-        if (batchData.value.price) {
-          matchingSKUs.forEach(sku => {
-            sku.price = batchData.value.price;
-          });
-          appliedCount++;
-        }
-        
-        // 批量设置原价
-        if (batchData.value.originPrice) {
-          matchingSKUs.forEach(sku => {
-            sku.origin_price = batchData.value.originPrice;
-          });
-          appliedCount++;
-        }
-        
-        // 批量设置型号
-        if (batchData.value.model) {
-          matchingSKUs.forEach(sku => {
-            sku.model = batchData.value.model;
-          });
-          appliedCount++;
-        }
-        
-        // 批量设置数量
-        if (batchData.value.quantity) {
-          matchingSKUs.forEach(sku => {
-            sku.quantity = batchData.value.quantity;
-          });
-          appliedCount++;
-        }
+        if (batchData.value.price)     { matching.forEach(s => s.price = batchData.value.price); applied++; }
+        if (batchData.value.originPrice){ matching.forEach(s => s.origin_price = batchData.value.originPrice); applied++; }
+        if (batchData.value.model)     { matching.forEach(s => s.model = batchData.value.model); applied++; }
+        if (batchData.value.quantity)  { matching.forEach(s => s.quantity = batchData.value.quantity); applied++; }
+        if (batchData.value.weight)    { matching.forEach(s => s.weight = batchData.value.weight); applied++; }
+        if (batchData.value.image)     { matching.forEach(s => s.image = batchData.value.image); applied++; }
 
-        // 批量设置重量
-        if (batchData.value.weight) {
-          matchingSKUs.forEach(sku => {
-            sku.weight = batchData.value.weight;
-          });
-          appliedCount++;
-        }
-
-        // 批量设置图片
-        if (batchData.value.image) {
-          matchingSKUs.forEach(sku => {
-            sku.image = batchData.value.image;
-          });
-          appliedCount++;
-        }
-        
-        if (appliedCount === 0) {
-          layer.msg('请至少填写一个字段进行批量设置', {icon: 2});
+        if (applied === 0) {
+          layer.msg('{{ __("panel/product.batch_fill_required") }}', {icon: 2});
           return;
         }
-        
-        layer.msg(`批量设置完成，已应用 ${appliedCount} 个字段到 ${matchingSKUs.length} 个SKU`, {icon: 1});
+        layer.msg('{{ __("panel/product.batch_applied") }}'.replace(':count', matching.length).replace(':fields', applied), {icon: 1});
       };
-      
 
-      
-      // 选择批量设置图片
       const selectBatchImage = () => {
         inno.mediaIframe((file) => {
-          if (file.path) {
-            batchData.value.image = file.path;
-          }
-        }, {
-          type: 'image',
-          multiple: false
-        });
+          if (file.path) batchData.value.image = file.path;
+        }, { type: 'image', multiple: false });
       };
-      
-      // 清除批量设置图片
-      const clearBatchImage = () => {
-        batchData.value.image = '';
-      };
-      
+      const clearBatchImage = () => { batchData.value.image = ''; };
 
-      
+      // variant/value dialog. IDs are stable so we look up by id rather than
+      // passing indices around — robust against reordering.
+      const openVariantDialog = (variantId, valueId) => {
+        // Close any active inline edit so the modal and the inline input
+        // can't both be editing the same value at once.
+        cancelInlineEdit();
 
+        dialogVariables.value.variantId = variantId;
+        dialogVariables.value.valueId = valueId;
 
-      // Open variant/value edit dialog
-      const openVariantDialog = (variantIndex, valueIndex = null) => {
-        dialogVariables.value.variantIndex = variantIndex;
-        dialogVariables.value.variantValueIndex = valueIndex;
-        
         let name = {};
         let title = '';
-        
-        // Initialize form data and title based on what we're editing
-        if (variantIndex === -1) {
-          // Creating new variant
+        const NEW = '__NEW__';
+
+        if (variantId === NEW) {
           name = localesFill('');
           title = '{{ __('panel/product.add_variant') }}';
-        } else if (valueIndex === null) {
-          // Editing existing variant name
-          if (variants.value[variantIndex] && variants.value[variantIndex].name) {
-            name = variants.value[variantIndex].name;
-          } else {
-            name = localesFill('');
-          }
-          title = '{{ __('panel/product.edit_variant') }}';
-        } else if (valueIndex === -1) {
-          // Creating new variant value
-          name = localesFill('');
-          title = '{{ __('panel/product.add_variant_value') }}';
         } else {
-          // Editing existing variant value
-          if (variants.value[variantIndex] && variants.value[variantIndex].values[valueIndex] && variants.value[variantIndex].values[valueIndex].name) {
-            name = variants.value[variantIndex].values[valueIndex].name;
-          } else {
+          const variant = variants.value.find(v => v.id === variantId);
+          if (valueId === null) {
+            name = variant?.name || localesFill('');
+            title = '{{ __('panel/product.edit_variant') }}';
+          } else if (valueId === NEW) {
             name = localesFill('');
+            title = '{{ __('panel/product.add_variant_value') }}';
+          } else {
+            const value = variant?.values.find(val => val.id === valueId);
+            name = value?.name || localesFill('');
+            title = '{{ __('panel/product.edit_variant_value') }}';
           }
-          title = '{{ __('panel/product.edit_variant_value') }}';
         }
-        
+
         dialogVariables.value.form.name = JSON.parse(JSON.stringify(name));
         dialogVariables.value.title = title;
         dialogVariables.value.show = true;
-        
-        // Show Bootstrap modal
+
         nextTick(() => {
           const modal = new bootstrap.Modal(document.getElementById('variantEditModal'));
           modal.show();
         });
       };
 
-      // Close variant dialog
       const closeVariantDialog = () => {
         dialogVariables.value.show = false;
-        dialogVariables.value.variantIndex = null;
-        dialogVariables.value.variantValueIndex = null;
+        dialogVariables.value.variantId = null;
+        dialogVariables.value.valueId = null;
         dialogVariables.value.title = '';
         dialogVariables.value.form.name = {};
-        
-        // Hide Bootstrap modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('variantEditModal'));
-        if (modal) {
-          modal.hide();
-        }
+        if (modal) modal.hide();
       };
 
-      // Save variant dialog changes
       const saveVariantDialog = () => {
         const name = JSON.parse(JSON.stringify(dialogVariables.value.form.name));
-        const variantIndex = dialogVariables.value.variantIndex;
-        const valueIndex = dialogVariables.value.variantValueIndex;
-        
-        // Validate name is not empty
+        const { variantId, valueId } = dialogVariables.value;
+        const NEW = '__NEW__';
+
         if (isObjectValuesEmpty(name)) {
           layer.msg('{{ __('panel/common.verify_required') }}', {icon: 2});
           return;
         }
-        
-        if (valueIndex !== null) {
-          if (valueIndex === -1) {
-            // Creating new variant value
-            variants.value[variantIndex].values.push({name, image: ''});
+
+        if (valueId !== null) {
+          const variant = variants.value.find(v => v.id === variantId);
+          if (!variant) return;
+          if (valueId === NEW) {
+            variant.values.push({ id: newId('val'), name, image: '', error: false });
           } else {
-            // Update existing variant value
-            variants.value[variantIndex].values[valueIndex].name = name;
+            const value = variant.values.find(val => val.id === valueId);
+            if (value) value.name = name;
           }
         } else {
-          if (variantIndex === -1) {
-            // Creating new variant — include one empty value row so watchers / SKU gen never read values[0] on undefined
+          if (variantId === NEW) {
             variants.value.push({
+              id: newId('var'),
               name,
-              values: [{ name: localesFill(''), error: false, image: '' }],
+              values: [{ id: newId('val'), name: localesFill(''), error: false, image: '' }],
               isImage: false,
               error: false,
             });
           } else {
-            // Update existing variant
-            variants.value[variantIndex].name = name;
+            const variant = variants.value.find(v => v.id === variantId);
+            if (variant) variant.name = name;
           }
         }
-        
+
         closeVariantDialog();
         layer.msg('{{ __('common/base.saved_success') }}', {icon: 1});
       };
 
-      // Toggle variant image mode
-      const toggleVariantImage = (variantIndex) => {
-        const variant = variants.value[variantIndex];
-        if (!variant.isImage) {
-          // Clear all images when disabling image mode
-          variant.values.forEach(value => {
-            value.image = '';
-          });
-        } else {
-          // Initialize image property for all values
-          variant.values.forEach(value => {
-            if (!value.image) {
-              value.image = '';
-            }
-          });
-        }
+      const selectVariantValueImage = (variantId, valueId) => {
+        inno.mediaIframe((file) => {
+          if (!file.path) return;
+          const variant = variants.value.find(v => v.id === variantId);
+          const value = variant?.values.find(val => val.id === valueId);
+          if (value) value.image = file.path;
+        }, { type: 'image', multiple: false });
       };
 
-      // Select image for variant value
-      const selectVariantValueImage = (variantIndex, valueIndex) => {
-        inno.mediaIframe((file) => {
-          if (file.path) {
-            variants.value[variantIndex].values[valueIndex].image = file.path;
-          }
-        }, {
-          type: 'image',
-          multiple: false
+      // Inline edit handlers — single click on the value name swaps the span
+      // for an input preloaded with the default-locale text. Enter/blur
+      // commits, Esc aborts. Empty submission is allowed; form validation
+      // will catch truly empty values on save.
+      const startInlineEdit = (variantId, valueId) => {
+        const variant = variants.value.find(v => v.id === variantId);
+        const value = variant?.values.find(val => val.id === valueId);
+        if (!value) return;
+        inlineEdit.value = { variantId, valueId, draft: value.name[defaultLocale] || '' };
+        nextTick(() => {
+          const input = document.querySelector(`[data-inline-edit="${valueId}"]`);
+          input?.focus();
+          input?.select();
         });
       };
 
-      // Delete variant value
-      const deleteVariantValue = (variantIndex, valueIndex) => {
-        if (confirm('{{ __('panel/common.confirm_delete') }}')) {
-          variants.value[variantIndex].values.splice(valueIndex, 1);
-          layer.msg('{{ __('common/base.deleted_success') }}', {icon: 1});
+      const commitInlineEdit = () => {
+        const { variantId, valueId, draft } = inlineEdit.value;
+        if (!variantId || !valueId) return;
+        const variant = variants.value.find(v => v.id === variantId);
+        const value = variant?.values.find(val => val.id === valueId);
+        if (value) {
+          value.name[defaultLocale] = (draft || '').trim();
         }
+        inlineEdit.value = { variantId: null, valueId: null, draft: '' };
       };
 
-      // Open save template modal
+      const cancelInlineEdit = () => {
+        inlineEdit.value = { variantId: null, valueId: null, draft: '' };
+      };
+
+      const deleteVariantValue = (variantId, valueId) => {
+        if (!confirm('{{ __('panel/common.confirm_delete') }}')) return;
+        const variant = variants.value.find(v => v.id === variantId);
+        if (!variant) return;
+        const idx = variant.values.findIndex(val => val.id === valueId);
+        if (idx < 0) return;
+        variant.values.splice(idx, 1);
+        layer.msg('{{ __('common/base.deleted_success') }}', {icon: 1});
+      };
+
       const openSaveTemplateModal = () => {
         templateDialog.value.saveName = '';
         templateDialog.value.saveShow = true;
@@ -1214,17 +1021,12 @@
           modal.show();
         });
       };
-
-      // Close save template modal
       const closeSaveTemplateModal = () => {
         templateDialog.value.saveShow = false;
         const modal = bootstrap.Modal.getInstance(document.getElementById('saveTemplateModal'));
-        if (modal) {
-          modal.hide();
-        }
+        if (modal) modal.hide();
       };
 
-      // Persist current variants/SKUs as a template
       const saveTemplate = async () => {
         const name = templateDialog.value.saveName.trim();
         if (!name) {
@@ -1235,7 +1037,6 @@
           layer.msg('{{ __('panel/product.sku_validation_error') }}', {icon: 2});
           return;
         }
-
         templateDialog.value.loading = true;
         try {
           const response = await fetch(variantTemplateRoutes.store, {
@@ -1252,9 +1053,7 @@
             }),
           });
           const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.message || 'Save failed');
-          }
+          if (!response.ok) throw new Error(data.message || 'Save failed');
           layer.msg(data.message || '{{ __('panel/product.template_saved') }}', {icon: 1});
           closeSaveTemplateModal();
         } catch (error) {
@@ -1264,7 +1063,6 @@
         }
       };
 
-      // Open load template modal and fetch list
       const openLoadTemplateModal = async () => {
         templateDialog.value.loading = true;
         templateDialog.value.loadShow = true;
@@ -1279,41 +1077,29 @@
           templateDialog.value.loading = false;
         }
       };
-
-      // Close load template modal
       const closeLoadTemplateModal = () => {
         templateDialog.value.loadShow = false;
         const modal = bootstrap.Modal.getInstance(document.getElementById('loadTemplateModal'));
-        if (modal) {
-          modal.hide();
-        }
+        if (modal) modal.hide();
       };
 
-      // Fetch all variant templates
       const fetchTemplates = async () => {
         try {
           const response = await fetch(variantTemplateRoutes.index, {
             headers: { 'Accept': 'application/json' },
           });
           const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.message || 'Load failed');
-          }
+          if (!response.ok) throw new Error(data.message || 'Load failed');
           templateDialog.value.templates = data;
         } catch (error) {
           layer.msg(error.message, {icon: 2});
         }
       };
 
-      // Apply selected template to current product
       const applyTemplate = async () => {
         const id = templateDialog.value.selectedId;
-        if (!id) {
-          return;
-        }
-        if (!confirm('{{ __('panel/product.confirm_load_template') }}')) {
-          return;
-        }
+        if (!id) return;
+        if (!confirm('{{ __('panel/product.confirm_load_template') }}')) return;
 
         templateDialog.value.loading = true;
         try {
@@ -1321,24 +1107,20 @@
             headers: { 'Accept': 'application/json' },
           });
           const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.message || 'Load failed');
-          }
+          if (!response.ok) throw new Error(data.message || 'Load failed');
 
-          const newVariables = data.variables || [];
-          const newSkus = (data.sku_matrix || []).map((sku, index) => ({
+          // Template values may lack ids (legacy) — normalize to assign fresh
+          // client ids so SKU matching works after load.
+          const newVars = normalizeVariants(data.variables || []);
+          const newSkusRaw = (data.sku_matrix || []).map((sku, index) => ({
             ...sku,
             code: sku.code ? `${sku.code}-${String(Math.floor(Math.random() * 90000) + 10000)}` : sku.code,
             is_default: index === 0 ? 1 : (sku.is_default ? 1 : 0),
           }));
 
-          skus.value = newSkus;
-          variants.value = newVariables;
-          mainVariantKey.value = 0;
-
-          generateSku();
-          smallVariantsFormat();
-          initializeVariantSelectors();
+          variants.value = newVars;
+          skus.value = normalizeSkus(newSkusRaw, newVars);
+          regenerateSkus();
 
           closeLoadTemplateModal();
           layer.msg('{{ __('panel/product.template_loaded') }}', {icon: 1});
@@ -1349,11 +1131,8 @@
         }
       };
 
-      // Delete a template and refresh list
       const deleteTemplate = async (id) => {
-        if (!confirm('{{ __('panel/product.delete_template_confirm') }}')) {
-          return;
-        }
+        if (!confirm('{{ __('panel/product.delete_template_confirm') }}')) return;
         try {
           const response = await fetch(variantTemplateRoutes.destroy.replace('__ID__', id), {
             method: 'DELETE',
@@ -1363,107 +1142,39 @@
             },
           });
           const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.message || 'Delete failed');
-          }
+          if (!response.ok) throw new Error(data.message || 'Delete failed');
           await fetchTemplates();
         } catch (error) {
           layer.msg(error.message, {icon: 2});
         }
       };
 
-      // Expose methods and state to the template
       return {
-        skus,
-        variants,
+        skus, variants,
         deleteVariant,
-        locales,
-        defaultLocale,
-        mainVariantKey,
-        smallVariants,
-        modifySku,
-        upVariantImage,
-        dragVariantsEnd,
-        thumbnail,
-        setMasterSku,
-        showAllVariant,
-        allVariantEC,
+        locales, defaultLocale, otherLocales, defaultLocaleName,
+        thumbnail, setMasterSku,
         batchData,
-        batchFillSkuCode,
-        batchFillColumn,
         getFirstAvailableLocaleValue,
-        validateBatchPrice,
-        validateBatchOriginPrice,
-        validateBatchQuantity,
-        validatePrice,
-        validateOriginPrice,
-        validateQuantity,
-        // New dialog and image methods
-        dialogVariables,
-        openVariantDialog,
-        closeVariantDialog,
-        saveVariantDialog,
-        toggleVariantImage,
-        selectVariantValueImage,
-        deleteVariantValue,
-        // 批量设置相关方法
-        initializeVariantSelectors,
-        selectAllVariantValues,
-        clearVariantSelection,
-        batchApplySelected,
-        selectBatchImage,
-        clearBatchImage,
-        // Locale helpers
-        otherLocales,
-        defaultLocaleName,
-        translateVariantName,
-        fillEmptyLocales,
-        // Variant template methods
-        templateDialog,
-        openSaveTemplateModal,
-        closeSaveTemplateModal,
-        saveTemplate,
-        openLoadTemplateModal,
-        closeLoadTemplateModal,
-        applyTemplate,
-        deleteTemplate,
-      }
+        validateBatchPrice, validateBatchOriginPrice, validateBatchQuantity,
+        validatePrice, validateOriginPrice, validateQuantity,
+        dialogVariables, openVariantDialog, closeVariantDialog, saveVariantDialog,
+        selectVariantValueImage, deleteVariantValue,
+        inlineEdit, startInlineEdit, commitInlineEdit, cancelInlineEdit,
+        upVariantImage,
+        selectAllVariantValues, clearVariantSelection, batchApplySelected,
+        selectBatchImage, clearBatchImage,
+        translateVariantName, fillEmptyLocales,
+        templateDialog, openSaveTemplateModal, closeSaveTemplateModal,
+        saveTemplate, openLoadTemplateModal, closeLoadTemplateModal,
+        applyTemplate, deleteTemplate,
+      };
     }
   }).mount('#variants-box');
 
-  // Split an array into chunks of specified size
-  function chunkArray(array, chunkSize) {
-    let chunks = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      chunks.push(array.slice(i, i + chunkSize));
-    }
-    return chunks;
-  }
-
-  // Split an array into a specified number of groups
-  function splitArrayIntoGroups(array, groupCount) {
-    if (groupCount <= 0) {
-      throw new Error('Group count must be greater than 0');
-    }
-
-    const result = [];
-    const groupSize = Math.ceil(array.length / groupCount);
-
-    for (let i = 0; i < groupCount; i++) {
-      const start = i * groupSize;
-      const end = start + groupSize;
-      result.push(array.slice(start, end));
-    }
-
-    return result;
-  }
-
-  // Check if all values in an object are empty
   function isObjectValuesEmpty(obj) {
     for (let key in obj) {
-      if (obj[key] != '') {
-        return false;
-      }
+      if (obj[key] != '') return false;
     }
     return true;
   }

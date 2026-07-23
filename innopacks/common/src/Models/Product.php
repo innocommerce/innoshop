@@ -19,6 +19,8 @@ use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product\Attribute;
 use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
+use InnoShop\Common\Models\Product\Variant;
+use InnoShop\Common\Services\LegacyVariablesBuilder;
 use InnoShop\Common\Traits\HasPackageFactory;
 use InnoShop\Common\Traits\Replicate;
 use InnoShop\Common\Traits\Translatable;
@@ -34,7 +36,7 @@ class Product extends BaseModel
     const TYPE_BUNDLE = 'bundle';
 
     protected $fillable = [
-        'type', 'brand_id', 'images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
+        'type', 'brand_id', 'images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'position',
         'spu_code', 'active', 'weight', 'weight_class', 'sales', 'rating', 'reviews_count', 'viewed', 'minimum', 'created_at', 'updated_at', 'published_at',
     ];
 
@@ -43,7 +45,6 @@ class Product extends BaseModel
     // the authoritative per-variant weight lives on Product\Sku::weight.
 
     protected $casts = [
-        'variables'  => 'array',
         'images'     => 'array',
         'video'      => 'json',
         'active'     => 'boolean',
@@ -93,6 +94,17 @@ class Product extends BaseModel
     public function skus(): HasMany
     {
         return $this->hasMany(Sku::class, 'product_id');
+    }
+
+    /**
+     * Normalized variant dimensions (e.g. Color, Size) for this product.
+     * Replaces products.variables JSON in the normalized design.
+     *
+     * @return HasMany
+     */
+    public function variants(): HasMany
+    {
+        return $this->hasMany(Variant::class, 'product_id')->orderBy('position');
     }
 
     /**
@@ -267,6 +279,75 @@ class Product extends BaseModel
     public function isMultiple(): bool
     {
         return $this->variables || $this->skus->count() > 1;
+    }
+
+    /**
+     * Synthesize the legacy `variables` shape from the normalized tables.
+     *
+     * Source of truth: product_variants + product_variant_values (with
+     * translations). Returns an empty array when the product has no
+     * variant dimensions.
+     *
+     * @return array
+     */
+    public function getVariablesAttribute(): array
+    {
+        $this->loadMissing(['variants.translations', 'variants.values.translations']);
+        if ($this->variants->isEmpty()) {
+            return [];
+        }
+
+        return (new LegacyVariablesBuilder($this))->build();
+    }
+
+    /**
+     * Structured variant dimensions with stable DB ids on each value.
+     *
+     * This is the canonical shape consumed by the rewritten Panel Vue editor
+     * and the front-end blade. Unlike `variables` (which is kept for the
+     * Panel Vue's `old()` repopulation on validation error), this shape
+     * embeds the value id so SKUs can reference values by id without
+     * positional indexing.
+     *
+     * @return array
+     */
+    public function getVariantDimensionsAttribute(): array
+    {
+        $this->loadMissing(['variants.translations', 'variants.values.translations']);
+
+        $out = [];
+        foreach ($this->variants as $variant) {
+            $names = [];
+            foreach ($variant->translations as $t) {
+                if ($t->name !== null && $t->name !== '') {
+                    $names[$t->locale] = $t->name;
+                }
+            }
+
+            $values = [];
+            foreach ($variant->values as $value) {
+                $valueNames = [];
+                foreach ($value->translations as $vt) {
+                    if ($vt->name !== null && $vt->name !== '') {
+                        $valueNames[$vt->locale] = $vt->name;
+                    }
+                }
+                $values[] = [
+                    'id'    => (string) $value->id,
+                    'image' => $value->image ?? '',
+                    'name'  => $valueNames,
+                ];
+            }
+
+            $out[] = [
+                'id'       => (string) $variant->id,
+                'is_image' => (bool) $variant->is_image,
+                'name'     => $names,
+                'values'   => $values,
+            ];
+        }
+
+        return $out;
     }
 
     /**

@@ -16,7 +16,6 @@ use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Repositories\ReviewRepo;
-use InnoShop\Common\Resources\ProductVariable;
 use InnoShop\Common\Resources\SkuListItem;
 use InnoShop\Common\Services\EventTrackingService;
 use InnoShop\Common\Services\RequestFilterParser;
@@ -120,7 +119,15 @@ class ProductController extends Controller
 
         $reviews    = ReviewRepo::getInstance()->getListByProduct($product, 10);
         $customerID = current_customer_id();
-        $variables  = ProductVariable::collection($product->variables ?? [])->jsonSerialize();
+
+        // Structured variant dimensions carrying stable value IDs, consumed
+        // by the front-end blade for ID-based SKU matching.
+        $variantDimensions = $this->buildVariantDimensions($product);
+        $sku->loadMissing([
+            'variantValues.translation',
+            'variantValues.variant.translation',
+            'product.variants',
+        ]);
 
         $product->load([
             'productOptions' => function ($query) {
@@ -139,7 +146,7 @@ class ProductController extends Controller
             'product'             => $product,
             'sku'                 => (new SkuListItem($sku))->jsonSerialize(),
             'skus'                => SkuListItem::collection($product->skus)->jsonSerialize(),
-            'variants'            => $variables,
+            'variant_dimensions'  => $variantDimensions,
             'attributes'          => $product->groupedAttributes(),
             'reviews'             => $reviews,
             'reviewed'            => ReviewRepo::productReviewed($customerID, $product->id),
@@ -150,6 +157,50 @@ class ProductController extends Controller
         ];
 
         return inno_view('products.show', $data);
+    }
+
+    /**
+     * Build the structured variant_dimensions shape for the front-end blade.
+     * Each value carries a stable DB id used by JS for ID-based SKU matching,
+     * eliminating the positional `variables` index fragility.
+     */
+    private function buildVariantDimensions(Product $product): array
+    {
+        $product->loadMissing(['variants.translations', 'variants.values.translations']);
+
+        $out = [];
+        foreach ($product->variants as $variant) {
+            $names = [];
+            foreach ($variant->translations as $t) {
+                if ($t->name !== null && $t->name !== '') {
+                    $names[$t->locale] = $t->name;
+                }
+            }
+
+            $values = [];
+            foreach ($variant->values as $value) {
+                $valueNames = [];
+                foreach ($value->translations as $vt) {
+                    if ($vt->name !== null && $vt->name !== '') {
+                        $valueNames[$vt->locale] = $vt->name;
+                    }
+                }
+                $values[] = [
+                    'id'    => (string) $value->id,
+                    'image' => $value->image ?? '',
+                    'name'  => $valueNames,
+                ];
+            }
+
+            $out[] = [
+                'id'       => (string) $variant->id,
+                'is_image' => (bool) $variant->is_image,
+                'name'     => $names,
+                'values'   => $values,
+            ];
+        }
+
+        return $out;
     }
 
     /**

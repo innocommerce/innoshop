@@ -40,7 +40,6 @@ class SkuSimple extends JsonResource
             'display_name'        => $this->code.' - '.$productName,
             'image'               => $imagePath,
             'image_url'           => $imageUrl,
-            'variants'            => $this->variants,
             'variant_label'       => $this->variant_label,
             'model'               => $this->model,
             'code'                => $this->code,
