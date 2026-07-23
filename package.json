@@ -10,7 +10,7 @@
   "devDependencies": {
     "axios": "^1.18.0",
     "jquery": "^3.7.1",
-    "laravel-vite-plugin": "^1.0",
+    "laravel-vite-plugin": "^3.1",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.101.6",
     "sass-embedded": "^1.75.0",
