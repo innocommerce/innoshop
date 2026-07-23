@@ -190,6 +190,18 @@
                   </div>
                 </div>
               </div>
+              <div class="mb-3 form-check ps-0">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-check">
+                      <input type="hidden" name="demo_data" value="0">
+                      <input class="form-check-input" type="checkbox" id="demo_data" name="demo_data" value="1" checked>
+                      <label class="form-check-label" for="demo_data">{{ __('install/common.demo_data') }}</label>
+                      <small class="form-text text-muted d-block">{{ __('install/common.demo_data_hint') }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <button type="submit" class="d-none">{{ __('install/common.next_step') }}</button>
           </form>

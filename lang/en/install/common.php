@@ -11,6 +11,8 @@ return [
     'admin_account'          => 'Administrator Account',
     'admin_config'           => 'Administrator Configuration',
     'admin_password'         => 'Administrator Password',
+    'demo_data'              => 'Import demo data',
+    'demo_data_hint'         => 'Populates categories, products, brands, articles and tags so you can preview the storefront immediately. Uncheck for a clean install.',
     'check_env'              => 'Environment',
     'check_system'           => 'Please check the system environment',
     'completed'              => 'Completed',

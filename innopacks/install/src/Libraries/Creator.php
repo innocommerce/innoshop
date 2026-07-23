@@ -9,6 +9,7 @@
 
 namespace InnoShop\Install\Libraries;
 
+use Database\Seeders\DatabaseSeeder;
 use Exception;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\Artisan;
@@ -44,7 +45,7 @@ class Creator
     {
         $this->saveEnv($data);
         $this->migrate();
-        $this->seedData();
+        $this->seedData($data);
         $this->setAdmin($data);
         $this->touchLockFile();
 
@@ -110,11 +111,14 @@ class Creator
     }
 
     /**
+     * @param  $data
      * @return void
      * @throws Exception
      */
-    private function seedData(): void
+    private function seedData($data): void
     {
+        DatabaseSeeder::$withDemo = filter_var($data['demo_data'] ?? true, FILTER_VALIDATE_BOOLEAN);
+
         try {
             Artisan::call('db:seed', ['--force' => true], $this->outputLog);
         } catch (Exception $e) {

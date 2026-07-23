@@ -18,6 +18,13 @@ use Illuminate\Support\Facades\DB;
 class DatabaseSeeder extends Seeder
 {
     /**
+     * When false, only framework seeders run and demo content (categories,
+     * products, brands, articles, catalogs, tags) is skipped. Set by the
+     * installer when the user opts out of demo data.
+     */
+    public static bool $withDemo = true;
+
+    /**
      * Seed the application's database.
      */
     public function run(): void
@@ -29,22 +36,27 @@ class DatabaseSeeder extends Seeder
             WeightClassSeeder::class,
 
             AdminSeeder::class,
-            ArticleSeeder::class,
             AttributeSeeder::class,
-            BrandSeeder::class,
-            CatalogSeeder::class,
-            CategorySeeder::class,
             CountrySeeder::class,
             CustomerGroupSeeder::class,
             PageSeeder::class,
             OptionSeeder::class,
-            ProductSeeder::class,
             StateSeeder::class,
-            TagSeeder::class,
             RegionSeeder::class,
             TaxSeeder::class,
             PluginSeeder::class,
         ]);
+
+        if (self::$withDemo) {
+            $this->call([
+                ArticleSeeder::class,
+                BrandSeeder::class,
+                CatalogSeeder::class,
+                CategorySeeder::class,
+                ProductSeeder::class,
+                TagSeeder::class,
+            ]);
+        }
 
         touch(storage_path('installed'));
     }

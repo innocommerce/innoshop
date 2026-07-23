@@ -11,6 +11,8 @@ return [
     'admin_account'          => '管理员账号',
     'admin_config'           => '管理员配置',
     'admin_password'         => '管理员密码',
+    'demo_data'              => '导入演示数据',
+    'demo_data_hint'         => '导入分类、商品、品牌、文章和标签等示例内容，便于立即体验前台效果。如需空白安装请取消勾选。',
     'check_env'              => '环境检测',
     'check_system'           => '请检测系统环境',
     'completed'              => '安装完成',
