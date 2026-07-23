@@ -38,6 +38,10 @@ class Product extends BaseModel
         'spu_code', 'active', 'weight', 'weight_class', 'sales', 'rating', 'reviews_count', 'viewed', 'minimum', 'created_at', 'updated_at', 'published_at',
     ];
 
+    // `weight_class` is the unit shared by all SKUs of this product.
+    // `weight` is kept as the default value used to seed newly created SKUs;
+    // the authoritative per-variant weight lives on Product\Sku::weight.
+
     protected $casts = [
         'variables'  => 'array',
         'images'     => 'array',

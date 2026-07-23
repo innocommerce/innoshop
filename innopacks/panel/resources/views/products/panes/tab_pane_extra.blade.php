@@ -46,8 +46,9 @@
     <div class="col-12 col-md-6">
       <div class="row">
         <div class="col-md-6">
-          <x-common-form-input :title="__('panel/product.weight')" name="weight"
-                           :value="old('weight', $product->weight ?? '')" :placeholder="__('panel/product.weight')"/>
+          <x-common-form-input :title="__('panel/product.default_weight')" name="weight"
+                           :value="old('weight', $product->weight ?? '')" :placeholder="__('panel/product.default_weight')"/>
+          <small class="form-text text-muted">{{ __('panel/product.default_weight_hint') }}</small>
         </div>
         <div class="col-md-6">
           <x-common-form-select :title="__('panel/product.weight_class')" name="weight_class"

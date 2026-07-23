@@ -177,6 +177,8 @@ return [
     'viewed'                      => 'Viewed',
     'weight'                      => 'Weight',
     'weight_class'                => 'Weight Unit',
+    'default_weight'              => 'Default Weight',
+    'default_weight_hint'         => 'Used as the initial weight when creating new SKUs. Each SKU can override this value.',
     'weight_class_help'           => 'Select the unit of measurement for the weight of the commodity',
     'weight_help'                 => 'Product weight for shipping calculation',
     'minimum'                     => 'Minimum Quantity',

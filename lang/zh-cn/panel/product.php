@@ -177,6 +177,8 @@ return [
     'viewed'                      => '浏览量',
     'weight'                      => '重量',
     'weight_class'                => '重量单位',
+    'default_weight'              => '默认重量',
+    'default_weight_hint'         => '新建 SKU 时作为初始重量，每个 SKU 可单独覆盖此值。',
     'weight_class_help'           => '选择商品重量的计量单位',
     'weight_help'                 => '商品重量，用于计算运费',
     'minimum'                     => '最小起订量',
