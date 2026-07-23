@@ -87,8 +87,8 @@ The codebase is organized into modular packages under `/innopacks/`:
 ### Plugin System
 
 Plugins are located in `/plugins/` and are auto-discovered. Each plugin:
-- Has its own directory with `composer.json` (merged via wikimedia/composer-merge-plugin)
-- Uses the `Plugin\` namespace
+- Has its own directory with `config.json` for metadata (NOT `composer.json`)
+- Uses the `Plugin\` namespace (PSR-4 autoloaded by the root `composer.json`)
 - Can define routes, views, controllers, and service providers
 - Can be enabled/disabled through the admin panel
 
@@ -196,7 +196,7 @@ The system automatically detects the current locale and loads the appropriate RE
 ### 1. DO NOT use `composer.json` for plugins
 - **Wrong**: Creating `composer.json` in plugin root
 - **Correct**: Use `config.json` for plugin metadata
-- **Exception**: Only create `composer.json` if the plugin has external PHP dependencies
+- Plugins must not declare external PHP dependencies — there is no longer a merge-plugin to fold plugin `composer.json` into the root. If a plugin genuinely needs a third-party library, vendor it manually inside the plugin directory or propose adding the dependency to the root `composer.json` instead.
 
 ### 2. Directory naming conventions
 - **Wrong**: `routes/`, `database/migrations/`, `lang/`

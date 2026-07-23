@@ -40,14 +40,14 @@
         "srmklive/paypal": "^3.0",
         "stripe/stripe-php": "^15.10",
         "tormjens/eventy": "^0.9.5",
-        "w7corp/easywechat": "^6.7",
-        "wikimedia/composer-merge-plugin": "^2.1"
+        "w7corp/easywechat": "^6.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.3",
         "fakerphp/faker": "^1.23",
         "kitloong/laravel-migrations-generator": "^7.0",
         "knuckleswtf/scribe": "^5.9",
+        "larastan/larastan": "^3.5",
         "laravel/envoy": "^2.10",
         "laravel/pint": "^1.25",
         "laravel/sail": "^1.26",
@@ -104,7 +104,9 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
             "npm install --no-audit --no-fund",
-            "npm run build"
+            "npm run build",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
         ],
         "pint": [
             "./vendor/bin/pint --config=pint.json"
@@ -136,19 +138,6 @@
     "extra": {
         "laravel": {
             "dont-discover": []
-        },
-        "merge-plugin": {
-            "include": [
-                "plugins/*/composer.json"
-            ],
-            "recurse": true,
-            "replace": false,
-            "ignore-duplicates": false,
-            "merge-dev": true,
-            "merge-extra": false,
-            "merge-extra-deep": false,
-            "merge-replace": true,
-            "merge-scripts": false
         }
     },
     "config": {
@@ -157,8 +146,7 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true,
-            "wikimedia/composer-merge-plugin": true
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "stable",
