@@ -8,7 +8,7 @@
     "production": "node build.js"
   },
   "devDependencies": {
-    "axios": "^1.15.2",
+    "axios": "^1.18.0",
     "jquery": "^3.7.1",
     "laravel-vite-plugin": "^1.0",
     "resolve-url-loader": "^5.0.0",
@@ -22,7 +22,7 @@
     "codemirror": "^6.0.1"
   },
   "overrides": {
-    "axios": "^1.15.2",
+    "axios": "^1.18.0",
     "esbuild": "^0.25.0",
     "follow-redirects": "^1.16.0",
     "lodash": "^4.18.0",
