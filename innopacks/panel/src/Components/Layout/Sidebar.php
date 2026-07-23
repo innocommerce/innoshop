@@ -101,7 +101,7 @@ class Sidebar extends Component
             [
                 'title'    => __('panel/menu.top_content'),
                 'icon'     => 'bi-sticky',
-                'prefixes' => ['articles', 'catalogs', 'tags', 'pages', 'file_manager', 'announcements'],
+                'prefixes' => ['articles', 'catalogs', 'tags', 'pages', 'media', 'announcements'],
                 'children' => $this->getContentSubRoutes(),
             ],
             [
@@ -351,7 +351,7 @@ class Sidebar extends Component
             ['route' => 'tags.index', 'title' => __('panel/menu.tags')],
             ['route' => 'pages.index', 'title' => __('panel/menu.pages')],
             ['route' => 'announcements.index', 'title' => __('panel/menu.announcements')],
-            ['route' => 'file_manager.index', 'title' => __('panel/menu.file_manager')],
+            ['route' => 'media.index', 'title' => __('panel/menu.media')],
         ];
 
         return fire_hook_filter('panel.component.sidebar.content.routes', $routes);

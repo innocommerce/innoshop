@@ -29,7 +29,7 @@ return [
     'dashboard'              => 'Paparan Utama',
     'divider_operation'      => 'Pengurusan operasi',
     'divider_system'         => 'Pentadbiran sistem',
-    'file_manager'           => 'Pengurus fail',
+    'media'                  => 'Pengurus fail',
     'locale'                 => 'Pengurusan Bahasa',
     'locales'                => 'Tetapan Bahasa',
     'localization'           => 'Pengelokalan',

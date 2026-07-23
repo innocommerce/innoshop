@@ -29,7 +29,7 @@ return [
     'dashboard'              => 'ဒက်ရှ်ဘုတ်',
     'divider_operation'      => 'လုပ်ငန်းဆောင်တာ',
     'divider_system'         => 'စနစ်',
-    'file_manager'           => 'ဖိုင်စီမံခန့်ခွဲရေး',
+    'media'                  => 'ဖိုင်စီမံခန့်ခွဲရေး',
     'locale'                 => 'ဒေသိယဘာသာစကား',
     'locales'                => 'ဒေသိယဘာသာစကားများ',
     'localization'           => 'ဒေသခံပြုလုပ်ခြင်း',

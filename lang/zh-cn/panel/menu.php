@@ -31,7 +31,7 @@ return [
     'dashboard'              => '概览',
     'divider_operation'      => '运营管理',
     'divider_system'         => '系统管理',
-    'file_manager'           => '文件管理器',
+    'media'                  => '媒体库',
     'locale'                 => '语言管理',
     'locales'                => '语言设置',
     'localization'           => '本地化',

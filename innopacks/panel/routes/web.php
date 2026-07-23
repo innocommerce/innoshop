@@ -9,7 +9,7 @@
 
 use Illuminate\Support\Facades\Route;
 use InnoShop\Panel\Controllers;
-use InnoShop\RestAPI\PanelApiControllers\FileManagerController;
+use InnoShop\RestAPI\PanelApiControllers\MediaController;
 
 Route::get('login', [Controllers\LoginController::class, 'index'])->name('login.index');
 Route::post('login', [Controllers\LoginController::class, 'store'])->name('login.store');
@@ -190,6 +190,6 @@ Route::middleware(['admin_auth:admin'])
         Route::put('/newsletter-subscribers/{newsletter_subscriber}/unsubscribe', [Controllers\NewsletterSubscriberController::class, 'unsubscribe'])->name('newsletter_subscribers.unsubscribe');
         Route::put('/newsletter-subscribers/{newsletter_subscriber}/resubscribe', [Controllers\NewsletterSubscriberController::class, 'resubscribe'])->name('newsletter_subscribers.resubscribe');
 
-        Route::get('/file_manager', [FileManagerController::class, 'index'])->name('file_manager.index');
-        Route::get('/file_manager/iframe', [FileManagerController::class, 'iframe'])->name('file_manager.iframe');
+        Route::get('/media', [MediaController::class, 'index'])->name('media.index');
+        Route::get('/media/iframe', [MediaController::class, 'iframe'])->name('media.iframe');
     });

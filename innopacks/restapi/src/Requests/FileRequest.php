@@ -39,7 +39,7 @@ class FileRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => trans('panel/file_manager.name'),
+            'name' => trans('panel/media.name'),
         ];
     }
 

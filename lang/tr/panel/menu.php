@@ -29,7 +29,7 @@ return [
     'dashboard'              => 'Kontrol Paneli',
     'divider_operation'      => 'Operasyon yönetimi',
     'divider_system'         => 'Sistem yönetimi',
-    'file_manager'           => 'Dosya Yöneticisi',
+    'media'                  => 'Dosya Yöneticisi',
     'locale'                 => 'Dil',
     'locales'                => 'Diller',
     'localization'           => 'Yerelleştirme',

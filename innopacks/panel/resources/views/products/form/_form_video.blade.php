@@ -214,7 +214,7 @@
       addProductVideo() {
         const self = this;
         // Use the built-in file manager to select video files
-        inno.fileManagerIframe(function(file) {
+        inno.mediaIframe(function(file) {
           if (file) {
             // Get the original URL or path of the video file
             let videoPath = file.origin_url || file.url || file.path;

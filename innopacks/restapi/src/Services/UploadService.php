@@ -9,10 +9,12 @@
 
 namespace InnoShop\RestAPI\Services;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Common\Requests\UploadImageRequest;
 use InnoShop\Common\Services\FileSecurityValidator;
+use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
 use InnoShop\Front\Services\BaseService;
 
@@ -33,11 +35,27 @@ class UploadService extends BaseService
         $filePath   = $file->store("/{$type}", 'media');
         $storageKey = StorageService::storageKey($filePath);
 
+        $this->registerMediaFile($file, $storageKey);
+
         return [
             'url'        => storage_url($storageKey),
             'origin_url' => storage_url($storageKey),
             'value'      => $storageKey,
         ];
+    }
+
+    /**
+     * Write a media_files record for the uploaded file.
+     * Failures are logged but do not block the upload.
+     */
+    protected function registerMediaFile($file, string $storageKey): void
+    {
+        try {
+            $disk = system_setting('media_driver', 'local');
+            MediaUrlResolver::getInstance()->registerFromUploadedFile($file, $storageKey, $disk);
+        } catch (\Throwable $e) {
+            Log::warning('Media register failed: '.$e->getMessage(), ['storage_key' => $storageKey]);
+        }
     }
 
     /**

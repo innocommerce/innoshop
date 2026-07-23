@@ -1,6 +1,7 @@
 <template id="vue-image">
   <div class="set-product-img wh-70 image-upload-container" @click="updateImages">
-    <img v-if="modelValue" :src="thumbnail(modelValue)" class="img-fluid">
+    <img v-if="thumbnail(modelValue)" :src="thumbnail(modelValue)" class="img-fluid">
+    <i v-else-if="modelValue" class="bi bi-image fs-1 text-success" :title="modelValue"></i>
     <i v-else class="bi bi-plus fs-1 text-muted"></i>
   </div>
 </template>
@@ -20,16 +21,20 @@
 
     data: function () {
       return {
-        //
+        cachedThumb: ''
       }
     },
 
     methods: {
       updateImages() {
         const self = this;
-        inno.fileManagerIframe(function(file) {
+        inno.mediaIframe(function(file) {
           if (file) {
-            self.$emit('update:model-value', file.path);
+            // Prefer the media:// reference so future renames/moves stay in sync;
+            // fall back to raw path for legacy installs without a media_files row.
+            const ref = file.media_reference || file.path;
+            self.cachedThumb = file.thumb || file.url || '';
+            self.$emit('update:model-value', ref);
           }
         }, {
           type: "image",
@@ -37,8 +42,12 @@
         });
       },
       thumbnail(path) {
+        if (this.cachedThumb) return this.cachedThumb;
         if (!path) return '';
         if (path.startsWith('http')) return path;
+        // media://{id} references cannot be resolved client-side; show a checkmark
+        // placeholder via v-else-if and let the backend render the real <img> on the storefront.
+        if (path.startsWith('media://')) return '';
         const base = document.querySelector('meta[name="storage-base-url"]')?.content || '';
         return base ? base + '/' + path.replace(/^\/+/, '') : path;
       }

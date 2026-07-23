@@ -10,7 +10,7 @@
 use Illuminate\Support\Facades\Route;
 use InnoShop\RestAPI\Middleware\EnsureUserIsAdmin;
 use InnoShop\RestAPI\PanelApiControllers;
-use InnoShop\RestAPI\PanelApiControllers\FileManagerController;
+use InnoShop\RestAPI\PanelApiControllers\MediaController;
 
 Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('base.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
@@ -109,19 +109,23 @@ Route::middleware($middlewares)->group(function () {
     Route::patch('/customers/{customer}', [PanelApiControllers\CustomerController::class, 'patch'])->name('customers.patch');
     Route::delete('/customers/{customer}', [PanelApiControllers\CustomerController::class, 'destroy'])->name('customers.destroy');
 
-    Route::get('/file_manager/files', [FileManagerController::class, 'getFiles'])->name('file_manager.get_files');
-    Route::get('/file_manager/directories', [FileManagerController::class, 'getDirectories'])->name('file_manager.get_directories');
-    Route::post('/file_manager/directories', [FileManagerController::class, 'createDirectory'])->name('file_manager.create_directory');
-    Route::post('/file_manager/upload', [FileManagerController::class, 'uploadFiles'])->name('file_manager.upload');
-    Route::post('/file_manager/rename', [FileManagerController::class, 'rename'])->name('file_manager.rename');
-    Route::delete('/file_manager/files', [FileManagerController::class, 'destroyFiles'])->name('file_manager.delete_files');
-    Route::delete('/file_manager/directories', [FileManagerController::class, 'destroyDirectories'])->name('file_manager.delete_directories');
-    Route::post('/file_manager/move_directories', [FileManagerController::class, 'moveDirectories'])->name('file_manager.move_directories');
-    Route::post('/file_manager/move_files', [FileManagerController::class, 'moveFiles'])->name('file_manager.move_files');
-    Route::post('/file_manager/copy_files', [FileManagerController::class, 'copyFiles'])->name('file_manager.copy_files');
+    Route::get('/media/files', [MediaController::class, 'getFiles'])->name('media.get_files');
+    Route::get('/media/directories', [MediaController::class, 'getDirectories'])->name('media.get_directories');
+    Route::post('/media/directories', [MediaController::class, 'createDirectory'])->name('media.create_directory');
+    Route::post('/media/upload', [MediaController::class, 'uploadFiles'])->name('media.upload');
+    Route::post('/media/rename', [MediaController::class, 'rename'])->name('media.rename');
+    Route::delete('/media/files', [MediaController::class, 'destroyFiles'])->name('media.delete_files');
+    Route::delete('/media/directories', [MediaController::class, 'destroyDirectories'])->name('media.delete_directories');
+    Route::post('/media/move_directories', [MediaController::class, 'moveDirectories'])->name('media.move_directories');
+    Route::post('/media/move_files', [MediaController::class, 'moveFiles'])->name('media.move_files');
+    Route::post('/media/copy_files', [MediaController::class, 'copyFiles'])->name('media.copy_files');
 
-    Route::get('/file_manager/storage_config', [FileManagerController::class, 'getStorageConfig']);
-    Route::post('/file_manager/storage_config', [FileManagerController::class, 'saveStorageConfig']);
+    Route::get('/media/storage_config', [MediaController::class, 'getStorageConfig']);
+    Route::post('/media/storage_config', [MediaController::class, 'saveStorageConfig']);
+
+    Route::get('/media/media/{id}', [MediaController::class, 'getMediaDetail'])->name('media.media_detail');
+    Route::patch('/media/media/{id}', [MediaController::class, 'updateMedia'])->name('media.media_update');
+    Route::get('/media/stats', [MediaController::class, 'getMediaStats'])->name('media.stats');
 
     Route::post('/ai/generate_image', [PanelApiControllers\AIImageController::class, 'generate'])->name('ai.generate_image');
     Route::get('/ai/models_info', [PanelApiControllers\AIImageController::class, 'modelsInfo'])->name('ai.models_info');

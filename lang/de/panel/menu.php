@@ -29,7 +29,7 @@ return [
     'dashboard'              => 'Übersicht',
     'divider_operation'      => 'Das betriebsmanagement.',
     'divider_system'         => 'Hartes system',
-    'file_manager'           => 'Der dateimanager.',
+    'media'                  => 'Der dateimanager.',
     'locale'                 => 'Sprachverwaltung',
     'locales'                => 'Spracheinstellungen',
     'localization'           => 'Lokalisierung',

@@ -35,7 +35,7 @@
       panel_upload: '{{ panel_route('upload.images') }}',
       panel_ai: '{{ panel_route('content_ai.generate') }}',
       panel_ai_batch: '{{ panel_route('content_ai.generate_batch') }}',
-      file_manager_title: '{{ __("panel/menu.file_manager") }}',
+      media_title: '{{ __("panel/menu.media") }}',
     };
 
     const lang = {

@@ -29,7 +29,7 @@ return [
     'dashboard'              => 'tổng quan',
     'divider_operation'      => 'Quản lý hoạt động',
     'divider_system'         => 'Quản lý hệ thống',
-    'file_manager'           => 'Quản lý tập tin',
+    'media'                  => 'Quản lý tập tin',
     'locale'                 => 'quản lý ngôn ngữ',
     'locales'                => 'thiết lập ngôn ngữ',
     'localization'           => 'địa phương hóa',

@@ -27,4 +27,6 @@ return [
     'image_resize_mode_height_cover_desc' => '拉伸到目标高度，保持宽高比，宽度裁剪或填充以适配',
     'upload_max_file_size'                => '上传文件大小限制',
     'upload_max_file_size_desc'           => '普通用户上传文件的最大大小（单位：KB），默认 2048（2MB）。注意：实际上传还受限于 PHP 配置（upload_max_filesize: :upload_max_filesize, post_max_size: :post_max_size）',
+    'upload_rename_to_md5'                => '上传时自动重命名为哈希',
+    'upload_rename_to_md5_desc'           => '开启后，通过媒体库或编辑器上传的文件将自动使用 SHA-256 哈希作为文件名（如 8e2c4f1d...jpg），避免中文文件名乱码、重名覆盖等问题。',
 ];

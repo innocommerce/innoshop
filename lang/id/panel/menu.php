@@ -29,7 +29,7 @@ return [
     'dashboard'              => 'Ikhtisar',
     'divider_operation'      => 'Manajemen operasional',
     'divider_system'         => 'Manajemen sistem',
-    'file_manager'           => 'Manajer berkascomment',
+    'media'                  => 'Manajer berkascomment',
     'locale'                 => 'Manajemen Bahasa',
     'locales'                => 'Pengaturan Bahasa',
     'localization'           => 'Lokalisasi',

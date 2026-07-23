@@ -55,7 +55,7 @@
                       <div class="variant-value-delete-btn" @click="deleteVariantValue(index, valueIndex)">
                         <i class="bi bi-x-circle-fill"></i>
                       </div>
-                      <div v-if="variant.isImage" class="variant-image-container open-file-manager" 
+                      <div v-if="variant.isImage" class="variant-image-container open-media" 
                            @click="selectVariantValueImage(index, valueIndex)">
                         <img v-if="value.image" :src="thumbnail(value.image)" class="variant-value-image">
                         <i v-else class="bi bi-image variant-placeholder-icon"></i>
@@ -740,7 +740,7 @@
 
       // Open file manager to upload variant image
       const upVariantImage = (init_index, index) => {
-        inno.fileManagerIframe((file) => {
+        inno.mediaIframe((file) => {
           if (file.path) {
             skus.value[index].image = file.path;
           }
@@ -1048,7 +1048,7 @@
       
       // 选择批量设置图片
       const selectBatchImage = () => {
-        inno.fileManagerIframe((file) => {
+        inno.mediaIframe((file) => {
           if (file.path) {
             batchData.value.image = file.path;
           }
@@ -1187,7 +1187,7 @@
 
       // Select image for variant value
       const selectVariantValueImage = (variantIndex, valueIndex) => {
-        inno.fileManagerIframe((file) => {
+        inno.mediaIframe((file) => {
           if (file.path) {
             variants.value[variantIndex].values[valueIndex].image = file.path;
           }

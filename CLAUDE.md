@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commit Rules
 
 - Do NOT include "Co-Authored-By: Claude" or any similar co-author attribution in commit messages.
+- Commit messages must be in English (both subject and body), even though the team communicates in Chinese.
 
 ## Project Overview
 

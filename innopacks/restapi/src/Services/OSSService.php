@@ -13,9 +13,11 @@ use Aws\S3\S3Client;
 use Exception;
 use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Facades\Log;
+use InnoShop\Common\Models\MediaFile;
+use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
 
-class OSSService implements FileManagerInterface
+class OSSService implements MediaInterface
 {
     protected S3Client $s3Client;
 
@@ -87,7 +89,7 @@ class OSSService implements FileManagerInterface
      */
     protected function loadConfig(): void
     {
-        $driver = system_setting('file_manager_driver', 'local');
+        $driver = system_setting('media_driver', 'local');
         $prefix = "storage_{$driver}_";
 
         $this->config = [
@@ -144,7 +146,11 @@ class OSSService implements FileManagerInterface
     public function uploadFile($file, $savePath, $originName): string
     {
         try {
-            $key = $this->getObjectKey($savePath, $originName);
+            $resolver = MediaUrlResolver::getInstance();
+            $storeAs  = $resolver->shouldRenameToHash()
+                ? $resolver->resolveStoreFileName($file)
+                : $originName;
+            $key = $this->getObjectKey($savePath, $storeAs);
 
             $this->s3Client->putObject([
                 'Bucket'      => $this->bucket,
@@ -156,13 +162,21 @@ class OSSService implements FileManagerInterface
 
             $this->invalidateCDN([$key]);
 
-            return StorageService::storageKey($key);
+            $storageKey = StorageService::storageKey($key);
+
+            try {
+                $resolver->registerFromUploadedFile($file, $storageKey, $this->config['driver']);
+            } catch (\Throwable $e) {
+                Log::warning('Media register failed: '.$e->getMessage(), ['storage_key' => $storageKey]);
+            }
+
+            return $storageKey;
         } catch (Exception $e) {
             Log::error('OSS upload failed:', [
                 'error' => $e->getMessage(),
                 'file'  => $originName,
             ]);
-            throw new Exception(trans('panel/file_manager.upload_failed'));
+            throw new Exception(trans('panel/media.upload_failed'));
         }
     }
 
@@ -221,6 +235,30 @@ class OSSService implements FileManagerInterface
 
             // Filter nulls and merge
             $items = array_merge($directories, array_filter($files));
+
+            // Batch-resolve media_ids for all file items (avoid N+1).
+            $storageKeys = array_filter(array_map(fn ($i) => $i['path'] ?? null, $files));
+            $mediaIdMap  = [];
+            if (! empty($storageKeys)) {
+                $rows = MediaFile::query()
+                    ->whereIn('storage_key', array_unique(array_values($storageKeys)))
+                    ->pluck('id', 'storage_key');
+                foreach ($rows as $storageKey => $id) {
+                    $mediaIdMap[$storageKey] = (int) $id;
+                }
+            }
+            foreach ($items as &$item) {
+                if ($item['is_dir'] ?? false) {
+                    continue;
+                }
+                $mediaId = $mediaIdMap[$item['path']] ?? null;
+
+                $item['media_id']        = $mediaId;
+                $item['media_reference'] = $mediaId
+                    ? MediaUrlResolver::buildReference($mediaId)
+                    : null;
+            }
+            unset($item);
 
             // Apply search filter
             if ($keyword) {
@@ -451,7 +489,7 @@ class OSSService implements FileManagerInterface
                 'error' => $e->getMessage(),
                 'path'  => $path,
             ]);
-            throw new Exception(trans('panel/file_manager.create_fail'));
+            throw new Exception(trans('panel/media.create_fail'));
         }
     }
 
@@ -473,6 +511,8 @@ class OSSService implements FileManagerInterface
                     'Bucket' => $this->bucket,
                     'Key'    => ltrim($filePath, '/'),
                 ]);
+
+                $this->relocateMedia($filePath, $newKey);
             }
 
             $keys = array_map(fn ($f) => ltrim($f, '/'), $files);
@@ -485,7 +525,7 @@ class OSSService implements FileManagerInterface
                 'files'    => $files,
                 'destPath' => $destPath,
             ]);
-            throw new Exception(trans('panel/file_manager.move_fail'));
+            throw new Exception(trans('panel/media.move_fail'));
         }
     }
 
@@ -502,6 +542,16 @@ class OSSService implements FileManagerInterface
                     'Key'        => $newKey,
                     'ACL'        => 'public-read',
                 ]);
+
+                try {
+                    $newStorageKey = $this->normalizeMediaKey($newKey);
+                    MediaUrlResolver::getInstance()->registerCopy($newStorageKey, $this->config['driver'], [
+                        'original_name' => $fileName,
+                        'source'        => 'copy',
+                    ]);
+                } catch (\Throwable $e) {
+                    Log::warning('OSS media copy register failed: '.$e->getMessage(), ['key' => $newKey]);
+                }
             }
 
             $keys = array_map(fn ($f) => trim($destPath, '/').'/'.basename($f), $files);
@@ -514,7 +564,7 @@ class OSSService implements FileManagerInterface
                 'files'    => $files,
                 'destPath' => $destPath,
             ]);
-            throw new Exception(trans('panel/file_manager.copy_failed'));
+            throw new Exception(trans('panel/media.copy_failed'));
         }
     }
 
@@ -537,6 +587,8 @@ class OSSService implements FileManagerInterface
                     'Bucket' => $this->bucket,
                     'Key'    => $key.'/',
                 ]);
+
+                $this->removeMedia($key);
             }
 
             $this->invalidateCDN($keys);
@@ -547,7 +599,7 @@ class OSSService implements FileManagerInterface
                 'error' => $e->getMessage(),
                 'files' => $files,
             ]);
-            throw new Exception(trans('panel/file_manager.delete_failed'));
+            throw new Exception(trans('panel/media.delete_failed'));
         }
     }
 
@@ -591,6 +643,7 @@ class OSSService implements FileManagerInterface
             ]);
 
             $this->invalidateCDN($keys);
+            $this->removeMediaUnderPrefix($prefix);
 
             return true;
         } catch (Exception $e) {
@@ -598,7 +651,7 @@ class OSSService implements FileManagerInterface
                 'error' => $e->getMessage(),
                 'path'  => $path,
             ]);
-            throw new Exception(trans('panel/file_manager.delete_failed'));
+            throw new Exception(trans('panel/media.delete_failed'));
         }
     }
 
@@ -633,6 +686,7 @@ class OSSService implements FileManagerInterface
             }
 
             $this->invalidateCDN([trim($sourcePath, '/').'/']);
+            $this->relocateMediaUnderPrefix($sourcePath, $destPath);
 
             return true;
         } catch (Exception $e) {
@@ -641,7 +695,7 @@ class OSSService implements FileManagerInterface
                 'sourcePath' => $sourcePath,
                 'destPath'   => $destPath,
             ]);
-            throw new Exception(trans('panel/file_manager.move_fail'));
+            throw new Exception(trans('panel/media.move_fail'));
         }
     }
 
@@ -665,6 +719,7 @@ class OSSService implements FileManagerInterface
             ]);
 
             $this->invalidateCDN([ltrim($originPath, '/'), ltrim($newPath, '/')]);
+            $this->relocateMedia($originPath, $newPath);
 
             return true;
         } catch (Exception $e) {
@@ -673,7 +728,7 @@ class OSSService implements FileManagerInterface
                 'originPath' => $originPath,
                 'newPath'    => $newPath,
             ]);
-            throw new Exception(trans('panel/file_manager.rename_failed'));
+            throw new Exception(trans('panel/media.rename_failed'));
         }
     }
 
@@ -766,5 +821,78 @@ class OSSService implements FileManagerInterface
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
         return in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+    }
+
+    // ==================== Media Library Sync ====================
+
+    /**
+     * Normalize a key used in S3 operations to a storage_key (with static/media/ prefix).
+     * S3 keys may or may not include the prefix; storage_key in DB always has it.
+     */
+    protected function normalizeMediaKey(string $key): string
+    {
+        $key = ltrim($key, '/');
+
+        return StorageService::isStoragePath($key) ? $key : StorageService::storageKey($key);
+    }
+
+    /**
+     * Sync media_files after renaming / moving a single object.
+     */
+    protected function relocateMedia(string $oldKey, string $newKey): void
+    {
+        $oldFull = $this->normalizeMediaKey($oldKey);
+        $newFull = $this->normalizeMediaKey($newKey);
+        try {
+            MediaUrlResolver::getInstance()->relocateByKey($oldFull, $newFull, $this->config['driver']);
+        } catch (\Throwable $e) {
+            Log::warning('OSS media relocate failed: '.$e->getMessage(), ['old' => $oldFull, 'new' => $newFull]);
+        }
+    }
+
+    /**
+     * Soft delete a media record after deleting a single object.
+     */
+    protected function removeMedia(string $key): void
+    {
+        $fullKey = $this->normalizeMediaKey($key);
+        try {
+            MediaUrlResolver::getInstance()->removeByKey($fullKey);
+        } catch (\Throwable $e) {
+            Log::warning('OSS media remove failed: '.$e->getMessage(), ['key' => $fullKey]);
+        }
+    }
+
+    /**
+     * Soft delete all media records under a directory prefix.
+     */
+    protected function removeMediaUnderPrefix(string $prefix): void
+    {
+        $normalized = $this->normalizeMediaKey(rtrim($prefix, '/').'/');
+        try {
+            foreach (MediaFile::where('storage_key', 'like', $normalized.'%')->cursor() as $media) {
+                $media->delete();
+            }
+        } catch (\Throwable $e) {
+            Log::warning('OSS media remove under prefix failed: '.$e->getMessage(), ['prefix' => $normalized]);
+        }
+    }
+
+    /**
+     * Relocate all media records under a directory prefix (used by moveDirectory).
+     */
+    protected function relocateMediaUnderPrefix(string $oldPrefix, string $newPrefix): void
+    {
+        $oldFull = $this->normalizeMediaKey(rtrim($oldPrefix, '/').'/');
+        $newFull = $this->normalizeMediaKey(rtrim($newPrefix, '/').'/');
+        try {
+            $resolver = MediaUrlResolver::getInstance();
+            foreach (MediaFile::where('storage_key', 'like', $oldFull.'%')->cursor() as $media) {
+                $newKey = $newFull.substr($media->storage_key, strlen($oldFull));
+                $resolver->relocate($media->id, $newKey, $this->config['driver']);
+            }
+        } catch (\Throwable $e) {
+            Log::warning('OSS media relocate under prefix failed: '.$e->getMessage(), ['old' => $oldFull, 'new' => $newFull]);
+        }
     }
 }

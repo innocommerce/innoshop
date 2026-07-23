@@ -57,7 +57,7 @@
     return "/" + normalized;
   }
 
-  function storedPathFromFileManager(file) {
+  function storedPathFromMedia(file) {
     if (!file || typeof file !== "object") {
       return "";
     }
@@ -105,18 +105,18 @@
         emit("change", v);
       }
 
-      function openFileManager() {
-        if (typeof global.inno === "undefined" || typeof global.inno.fileManagerIframe !== "function") {
+      function openMedia() {
+        if (typeof global.inno === "undefined" || typeof global.inno.mediaIframe !== "function") {
           if (typeof layer !== "undefined") {
             layer.msg("File manager is not available on this page.");
           }
           return;
         }
-        global.inno.fileManagerIframe(function (file) {
+        global.inno.mediaIframe(function (file) {
           if (!file) {
             return;
           }
-          const path = storedPathFromFileManager(file);
+          const path = storedPathFromMedia(file);
           if (path) {
             emitPath(path);
           }
@@ -133,7 +133,7 @@
 
       return Object.assign({}, propRefs, {
         previewSrc,
-        openFileManager,
+        openMedia,
         clearImage,
         onManualInput,
       });
@@ -142,7 +142,7 @@
       '<div class="inno-panel-image-field" :class="{ \'inno-panel-image-field--compact\': compact }">' +
       '<div class="d-flex flex-wrap align-items-start gap-2">' +
       '<div class="flex-shrink-0">' +
-      '<div class="inno-panel-image-field__thumb position-relative rounded border bg-light overflow-hidden d-flex align-items-center justify-content-center cursor-pointer" :class="compact ? \'inno-panel-image-field__thumb--sm\' : \'wh-80\'" :style="compact ? \'min-width:56px;min-height:56px;width:56px;height:56px\' : \'min-width:80px;min-height:80px\'" @click="openFileManager" role="button" tabindex="0" @keydown.enter.prevent="openFileManager">' +
+      '<div class="inno-panel-image-field__thumb position-relative rounded border bg-light overflow-hidden d-flex align-items-center justify-content-center cursor-pointer" :class="compact ? \'inno-panel-image-field__thumb--sm\' : \'wh-80\'" :style="compact ? \'min-width:56px;min-height:56px;width:56px;height:56px\' : \'min-width:80px;min-height:80px\'" @click="openMedia" role="button" tabindex="0" @keydown.enter.prevent="openMedia">' +
       '<template v-if="previewSrc">' +
       '<img :src="previewSrc" class="img-fluid w-100 h-100" alt="" style="object-fit:cover" />' +
       "</template>" +
@@ -153,7 +153,7 @@
       "</div>" +
       '<div class="d-flex flex-column align-items-stretch gap-1 flex-grow-1 min-w-0">' +
       '<div class="d-flex flex-wrap gap-1">' +
-      '<el-button size="small" type="primary" plain @click="openFileManager">{{ browseLabel }}</el-button>' +
+      '<el-button size="small" type="primary" plain @click="openMedia">{{ browseLabel }}</el-button>' +
       '<el-button v-if="modelValue" size="small" type="danger" link @click="clearImage">{{ clearLabel }}</el-button>' +
       "</div>" +
       '<el-input v-if="showManualPath" class="mt-1" size="small" :model-value="modelValue" :placeholder="pathPlaceholder" @update:model-value="onManualInput" clearable />' +

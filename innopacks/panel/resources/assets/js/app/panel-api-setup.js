@@ -1,9 +1,9 @@
 /**
- * Panel API auth headers (axios + jQuery) and file-manager URL normalization.
+ * Panel API auth headers (axios + jQuery) and media URL normalization.
  */
 import { getPanelConfig } from './panel-config';
 
-export function processFileManagerUrl(file, config) {
+export function processMediaUrl(file, config) {
   const isOss = config?.driver === 'oss';
   if (file.url && file.url.startsWith('http')) {
     return file.url;

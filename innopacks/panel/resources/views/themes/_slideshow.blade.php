@@ -275,7 +275,7 @@
       if ($(e.target).closest('.delete-img, .show-img').length) return;
       e.stopPropagation();
       var _self = $(this);
-      inno.fileManagerIframe(function(file) {
+      inno.mediaIframe(function(file) {
         var val = file.path;
         var url = file.url;
         var originUrl = file.origin_url || file.url;

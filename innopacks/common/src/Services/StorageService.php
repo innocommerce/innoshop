@@ -9,6 +9,8 @@
 
 namespace InnoShop\Common\Services;
 
+use InnoShop\Common\Models\MediaFile;
+
 class StorageService
 {
     /**
@@ -72,6 +74,11 @@ class StorageService
             return $baseUrl;
         }
 
+        // "media://{id}" reference — resolve via MediaUrlResolver.
+        if (MediaUrlResolver::isMediaReference($path)) {
+            return MediaUrlResolver::getInstance()->resolve($path);
+        }
+
         if (str_starts_with($path, 'http')) {
             return $path;
         }
@@ -118,6 +125,15 @@ class StorageService
             return (new ImageService('images/placeholder.png'))->resize($width, $height, $mode);
         }
 
+        // "media://{id}" reference — resolve to storage_key first, then resize normally.
+        if (MediaUrlResolver::isMediaReference($image)) {
+            $resolved = $this->resolveMediaReferenceToKey($image);
+            if ($resolved === null) {
+                return (new ImageService('images/placeholder.png'))->resize($width, $height, $mode);
+            }
+            $image = $resolved;
+        }
+
         if (str_starts_with($image, 'http')) {
             $ossMode = $this->mapResizeMode($mode);
 
@@ -155,6 +171,23 @@ class StorageService
         return $url;
     }
 
+    /**
+     * Resolve a "media://{id}" reference back to a storage_key (legacy path),
+     * so resize/url helpers can treat it like any other stored asset.
+     * Returns null if the media record was deleted.
+     */
+    protected function resolveMediaReferenceToKey(string $mediaRef): ?string
+    {
+        $mediaId = MediaUrlResolver::extractMediaId($mediaRef);
+        if ($mediaId === null) {
+            return null;
+        }
+
+        $media = MediaFile::find($mediaId);
+
+        return $media?->storage_key;
+    }
+
     protected function mapResizeMode(?string $mode): string
     {
         return match ($mode) {
@@ -165,7 +198,7 @@ class StorageService
 
     protected function loadConfig(): array
     {
-        $driver    = system_setting('file_manager_driver', 'local');
+        $driver    = system_setting('media_driver', 'local');
         $s3Drivers = ['oss', 'cos', 'qiniu', 's3', 'obs', 'r2', 'minio'];
 
         if (in_array($driver, $s3Drivers)) {

@@ -406,7 +406,7 @@
 
       // --- Image handling ---
       const pickValueImage = () => {
-        window.inno.fileManagerIframe((file) => {
+        window.inno.mediaIframe((file) => {
           valueDialog.value.form.image = file.path;
           valueDialog.value.form.imageThumb = file.url || file.origin_url;
         }, { multiple: false, type: 'image' });

@@ -2,7 +2,7 @@
  * TinyMCE setup for panel (rich text + file manager image insertion).
  */
 import { getPanelConfig } from './panel-config';
-import fileManager from './panel-file-manager';
+import media from './panel-media';
 import aiModal from './ai-modal';
 
 function isVideoFile(file) {
@@ -116,7 +116,7 @@ function setupEditor(ed) {
   ed.ui.registry.addButton('toolbarImageButton', {
     icon: 'image',
     onAction: () => {
-      fileManager.init(
+      media.init(
         (files) => {
           if (Array.isArray(files)) {
             files.forEach((file) => {
@@ -153,7 +153,7 @@ function setupEditor(ed) {
       layer.load(2, { shade: [0.3, '#fff'] });
 
       axios
-        .post(`${urls.panel_api}/file_manager/upload`, formData)
+        .post(`${urls.panel_api}/media/upload`, formData)
         .then((response) => {
           if (response.data.url) {
             ed.insertContent(`<img src="${response.data.url}" class="img-fluid" />`);

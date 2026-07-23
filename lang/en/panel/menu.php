@@ -32,7 +32,7 @@ return [
     'dashboard'              => 'Dashboard',
     'divider_operation'      => 'Operation',
     'divider_system'         => 'System',
-    'file_manager'           => 'File Manager',
+    'media'                  => 'Media Library',
     'locale'                 => 'Locale',
     'locales'                => 'Locales',
     'localization'           => 'Localization',

@@ -20,8 +20,8 @@ use InnoShop\Panel\Console\Commands\ChangeRootPassword;
 use InnoShop\Panel\Middleware\AdminAuthenticate;
 use InnoShop\Panel\Middleware\GlobalPanelData;
 use InnoShop\Panel\Middleware\SetPanelLocale;
-use InnoShop\RestAPI\Services\FileManagerInterface;
-use InnoShop\RestAPI\Services\FileManagerService;
+use InnoShop\RestAPI\Services\MediaInterface;
+use InnoShop\RestAPI\Services\MediaService;
 use InnoShop\RestAPI\Services\OSSService;
 
 class PanelServiceProvider extends ServiceProvider
@@ -41,7 +41,7 @@ class PanelServiceProvider extends ServiceProvider
         $this->registerWebRoutes();
         $this->registerGuard();
         $this->registerUploadFileSystem();
-        $this->registerFileManagerService();
+        $this->registerMediaService();
         $this->registerCommands();
         $this->loadTranslations();
         $this->loadViewTemplates();
@@ -82,7 +82,7 @@ class PanelServiceProvider extends ServiceProvider
      */
     protected function registerUploadFileSystem(): void
     {
-        $driver    = system_setting('file_manager_driver', 'local');
+        $driver    = system_setting('media_driver', 'local');
         $s3Drivers = ['oss', 'cos', 'qiniu', 's3', 'obs', 'r2', 'minio'];
 
         if (in_array($driver, $s3Drivers)) {
@@ -123,20 +123,20 @@ class PanelServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bind FileManagerInterface to the appropriate implementation.
+     * Bind MediaInterface to the appropriate implementation.
      */
-    protected function registerFileManagerService(): void
+    protected function registerMediaService(): void
     {
-        $driver    = system_setting('file_manager_driver', 'local');
+        $driver    = system_setting('media_driver', 'local');
         $s3Drivers = ['oss', 'cos', 'qiniu', 's3', 'obs', 'r2', 'minio'];
 
         if (in_array($driver, $s3Drivers)) {
-            $this->app->singleton(FileManagerInterface::class, function () {
+            $this->app->singleton(MediaInterface::class, function () {
                 return new OSSService;
             });
         } else {
-            $this->app->singleton(FileManagerInterface::class, function () {
-                return new FileManagerService;
+            $this->app->singleton(MediaInterface::class, function () {
+                return new MediaService;
             });
         }
     }

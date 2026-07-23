@@ -47,9 +47,16 @@
 
     <!-- File Manager Crop -->
     <div class="mb-4">
-      <x-common-form-switch-radio title="{{ __('panel/setting.file_manager_enable_crop') }}" name="file_manager_enable_crop"
-                              value="{{ old('file_manager_enable_crop', system_setting('file_manager_enable_crop')) }}"/>
-      <div class="text-secondary"><small>{{ __('panel/setting.file_manager_enable_crop_desc') }}</small></div>
+      <x-common-form-switch-radio title="{{ __('panel/setting.media_enable_crop') }}" name="media_enable_crop"
+                              value="{{ old('media_enable_crop', system_setting('media_enable_crop')) }}"/>
+      <div class="text-secondary"><small>{{ __('panel/setting.media_enable_crop_desc') }}</small></div>
+    </div>
+
+    <!-- Auto Rename to Hash on Upload -->
+    <div class="mb-4">
+      <x-common-form-switch-radio title="{{ __('panel/setting_image.upload_rename_to_md5') }}" name="upload_rename_to_md5"
+                              value="{{ old('upload_rename_to_md5', system_setting('upload_rename_to_md5')) }}"/>
+      <div class="text-secondary"><small>{{ __('panel/setting_image.upload_rename_to_md5_desc') }}</small></div>
     </div>
 
     <!-- Resize Mode Description -->
@@ -97,13 +104,13 @@
   <div class="card-body">
     <!-- File Manager -->
     <div class="mb-4">
-      <h6 class="mb-3">{{ __('panel/setting.file_manager') }}</h6>
+      <h6 class="mb-3">{{ __('panel/setting.media') }}</h6>
       <div class="row">
         <div class="col-md-6">
           <div class="mb-4">
-            <x-common-form-switch-radio title="{{ __('panel/setting.file_manager_enable_crop') }}" name="file_manager_enable_crop"
-                                    value="{{ old('file_manager_enable_crop', system_setting('file_manager_enable_crop')) }}"/>
-            <div class="text-secondary"><small>{{ __('panel/setting.file_manager_enable_crop_desc') }}</small></div>
+            <x-common-form-switch-radio title="{{ __('panel/setting.media_enable_crop') }}" name="media_enable_crop"
+                                    value="{{ old('media_enable_crop', system_setting('media_enable_crop')) }}"/>
+            <div class="text-secondary"><small>{{ __('panel/setting.media_enable_crop_desc') }}</small></div>
           </div>
         </div>
       </div>

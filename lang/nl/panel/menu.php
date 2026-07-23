@@ -29,7 +29,7 @@ return [
     'dashboard'              => 'Dashboard',
     'divider_operation'      => 'Operationeel beheer',
     'divider_system'         => 'Systeembeheer',
-    'file_manager'           => 'Bestandsbeheer',
+    'media'                  => 'Bestandsbeheer',
     'locale'                 => 'Taalbeheer',
     'locales'                => 'Taalinstellingen',
     'localization'           => 'Lokalisatie',

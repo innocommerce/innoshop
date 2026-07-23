@@ -29,7 +29,7 @@ return [
     'dashboard'              => '대시보드',
     'divider_operation'      => '운영 관리',
     'divider_system'         => '시스템 관리',
-    'file_manager'           => '파일 관리자',
+    'media'                  => '파일 관리자',
     'locale'                 => '언어 관리',
     'locales'                => '언어 설정',
     'localization'           => '로컬라이제이션',

@@ -417,7 +417,7 @@
   $(document).on('click', '.is-up-file .img-upload-item', function () {
     const _self = $(this);
 
-    window.inno.fileManagerIframe((file) => {
+    window.inno.mediaIframe((file) => {
       let val = file.path;
       let url = file.url; // Thumbnail for display
       let originUrl = file.origin_url || file.url; // Original image for preview

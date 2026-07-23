@@ -8,7 +8,7 @@
  */
 
 return [
-    'title'               => 'RestAPI',
-    'file_manager_index'  => 'File Manager Index',
-    'file_manager_iframe' => 'File Manager Iframe',
+    'title'        => 'RestAPI',
+    'media_index'  => 'File Manager Index',
+    'media_iframe' => 'File Manager Iframe',
 ];

@@ -70,7 +70,7 @@
           placeholder="{{ __('panel/setting.storage_cdn_domain_placeholder') }}">
       </x-panel::form.row>
 
-      <x-panel::form.row :title="__('panel/setting.storage_enable_in_file_manager')">
+      <x-panel::form.row :title="__('panel/setting.storage_enable_in_media')">
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" role="switch"
             id="storage_driver_enabled"
@@ -78,7 +78,7 @@
         </div>
       </x-panel::form.row>
       <div class="text-secondary mb-3">
-        <small>{{ __('panel/setting.storage_enable_in_file_manager_desc') }}</small>
+        <small>{{ __('panel/setting.storage_enable_in_media_desc') }}</small>
       </div>
     </div>
   </div>

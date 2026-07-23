@@ -27,4 +27,6 @@ return [
     'image_resize_mode_height_cover_desc' => 'Stretch to target height while maintaining aspect ratio, crop or pad width to fit',
     'upload_max_file_size'                => 'Upload File Size Limit',
     'upload_max_file_size_desc'           => 'Maximum file size for regular user uploads (in KB), default 2048 (2MB). Note: actual upload is also limited by PHP settings (upload_max_filesize: :upload_max_filesize, post_max_size: :post_max_size)',
+    'upload_rename_to_md5'                => 'Auto Rename to Hash on Upload',
+    'upload_rename_to_md5_desc'           => 'When enabled, files uploaded via the media library or rich text editor will be renamed to a SHA-256 hash (e.g. 8e2c4f1d...jpg). Avoids non-ASCII filename issues and accidental overwrites.',
 ];

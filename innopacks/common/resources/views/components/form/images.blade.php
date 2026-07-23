@@ -85,7 +85,7 @@
         const imgMax = upFile.data('img-max');
         const currentCount = upFile.find('.img-upload-item').length - 1;
 
-        window.inno.fileManagerIframe((files) => {
+        window.inno.mediaIframe((files) => {
           const fileArray = Array.isArray(files) ? files : [files];
           fileArray.forEach((file, index) => {
             if (imgMax && (currentCount + index) >= imgMax) return;

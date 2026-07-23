@@ -30,7 +30,7 @@ return [
     'dashboard'              => '概覽',
     'divider_operation'      => '運營管理',
     'divider_system'         => '系統管理',
-    'file_manager'           => '文件管理器',
+    'media'                  => '媒体库',
     'locale'                 => '語言管理',
     'locales'                => '語言設置',
     'localization'           => '本地化',

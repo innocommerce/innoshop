@@ -7,7 +7,7 @@ import dominantColor from './panel-dominant-color';
 import ProductSelector from './panel-product-selector';
 import { setupApiHeaders } from './panel-api-setup';
 import { panelUI } from './panel-ui';
-import fileManager from './panel-file-manager';
+import media from './panel-media';
 import { initEditor } from './panel-editor';
 import localeField from './locale-field';
 import aiModal from './ai-modal';
@@ -18,7 +18,7 @@ export function initPanelInno() {
 
 export function bindPanelOnReady() {
   window.dominantColor = dominantColor;
-  window.inno.fileManagerIframe = fileManager.init;
+  window.inno.mediaIframe = media.init;
   window.inno.productSelectorIframe = ProductSelector.init;
 
   panelUI.initTooltips();

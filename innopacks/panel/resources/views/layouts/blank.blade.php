@@ -27,7 +27,7 @@
       panel_base: '{{ panel_route('home.index') }}',
       upload_images: '{{ panel_route('upload.images') }}',
       ai_generate: '{{ panel_route('content_ai.generate') }}',
-      file_manager_title: '{{ __("panel/menu.file_manager") }}',
+      media_title: '{{ __("panel/menu.media") }}',
     }
 
     const lang = {

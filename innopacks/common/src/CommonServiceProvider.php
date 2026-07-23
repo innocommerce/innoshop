@@ -135,6 +135,8 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\BackfillVisitGeo::class,
                 Commands\TagBots::class,
                 Commands\RecomputeProductRating::class,
+                Commands\MediaRegisterExisting::class,
+                Commands\MediaMigrateReferences::class,
             ]);
         }
     }
