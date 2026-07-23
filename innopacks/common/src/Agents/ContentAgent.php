@@ -9,6 +9,7 @@
 
 namespace InnoShop\Common\Agents;
 
+use Laravel\Ai\Approvals\Decisions;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
@@ -31,13 +32,13 @@ class ContentAgent implements Agent
      * before delegating to the trait implementation.
      */
     public function prompt(
-        string $prompt,
+        Decisions|string $prompt,
         array $attachments = [],
         Lab|array|string|null $provider = null,
         ?string $model = null,
         ?int $timeout = null,
     ): AgentResponse {
-        if ($this->locale !== '') {
+        if ($this->locale !== '' && is_string($prompt)) {
             $prompt = $this->localizePrompt($prompt);
         }
 

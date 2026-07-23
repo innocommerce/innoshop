@@ -19,7 +19,7 @@
         "ezyang/htmlpurifier": "^4.19",
         "geoip2/geoip2": "^3.2",
         "intervention/image": "^3.5",
-        "laravel/ai": "^0.8.1",
+        "laravel/ai": "^0.10.1",
         "laravel/framework": "^13.0",
         "laravel/horizon": "^5.46",
         "laravel/octane": "^2.8",
