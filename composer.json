@@ -18,7 +18,7 @@
         "devster/ubench": "^2.1",
         "ezyang/htmlpurifier": "^4.19",
         "geoip2/geoip2": "^3.2",
-        "intervention/image": "^3.5",
+        "intervention/image": "^4.2",
         "laravel/ai": "^0.10.1",
         "laravel/framework": "^13.0",
         "laravel/horizon": "^5.46",
