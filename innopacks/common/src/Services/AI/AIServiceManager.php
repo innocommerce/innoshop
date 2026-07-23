@@ -318,7 +318,7 @@ class AIServiceManager
      *
      * @throws \RuntimeException When provider is not configured or the HTTP request fails
      */
-    public function fetchAvailableModels(string $providerCode): array
+    public function fetchAvailableModels(string $providerCode, string $apiKey = '', string $baseUrl = ''): array
     {
         $providers = app(ProviderRegistry::class)->getProviders();
         $provider  = null;
@@ -329,21 +329,26 @@ class AIServiceManager
                 break;
             }
         }
-        if (! $provider) {
+
+        // Use request values as overrides (user may have entered new key/URL in form without saving yet)
+        $apiKey  = $apiKey ?: ($provider['api_key'] ?? '');
+        $baseUrl = $baseUrl ?: ($provider['base_url'] ?? '');
+
+        if (! $provider && ! $apiKey) {
             throw new \RuntimeException("Provider '{$providerCode}' is not configured.");
         }
-        if (empty($provider['api_key'])) {
+        if (empty($apiKey)) {
             throw new \RuntimeException("Provider '{$providerCode}' has no API key configured.");
         }
 
-        $baseUrl = rtrim((string) ($provider['base_url'] ?? ''), '/');
+        $baseUrl = rtrim((string) $baseUrl, '/');
         if ($baseUrl === '') {
             throw new \RuntimeException("Provider '{$providerCode}' has no base_url configured.");
         }
 
         $url = $baseUrl.'/models';
 
-        $response = Http::withToken($provider['api_key'])
+        $response = Http::withToken($apiKey)
             ->withHeaders(['Accept' => 'application/json'])
             ->timeout(15)
             ->connectTimeout(10)

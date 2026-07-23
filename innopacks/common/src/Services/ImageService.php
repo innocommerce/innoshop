@@ -66,10 +66,15 @@ class ImageService
      */
     public function setPluginDirName($dirName): static
     {
-        $originImage     = $this->originImage;
-        $this->imagePath = plugin_path("{$dirName}/Public").$originImage;
-        if (file_exists($this->imagePath)) {
-            $this->image = strtolower('plugins/'.$dirName.$originImage);
+        $originImage = $this->originImage;
+        $sourcePath  = plugin_path("{$dirName}/Public").$originImage;
+
+        if (file_exists($sourcePath)) {
+            $destPath        = strtolower("static/plugins/{$dirName}{$originImage}");
+            $this->imagePath = $sourcePath;
+            $this->image     = $destPath;
+
+            should_copy_static_file($sourcePath, public_path($destPath));
         } else {
             $this->image     = $this->placeholderImage;
             $this->imagePath = public_path($this->image);
@@ -314,7 +319,7 @@ class ImageService
         create_directories(dirname($outputPath));
 
         $manager = new ImageManager(new Driver);
-        $image   = $manager->read($this->imagePath);
+        $image   = $manager->decode($this->imagePath);
 
         $this->applyResizeMode($image, $mode, $width, $height, $originalWidth, $originalHeight);
 

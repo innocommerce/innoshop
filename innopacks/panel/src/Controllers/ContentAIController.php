@@ -195,13 +195,14 @@ class ContentAIController extends BaseController
     {
         try {
             $providerCode = (string) $request->get('provider_code', '');
-            Log::info('AI listModels request', ['provider_code' => $providerCode]);
+            $apiKey       = (string) $request->get('api_key', '');
+            $baseUrl      = (string) $request->get('base_url', '');
 
             if ($providerCode === '') {
                 throw new Exception('Missing provider_code');
             }
 
-            $models = AIServiceManager::getInstance()->fetchAvailableModels($providerCode);
+            $models = AIServiceManager::getInstance()->fetchAvailableModels($providerCode, $apiKey, $baseUrl);
 
             Log::info('AI listModels success', ['count' => count($models), 'sample' => array_slice($models, 0, 3)]);
 

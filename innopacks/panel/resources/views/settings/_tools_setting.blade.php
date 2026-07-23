@@ -344,6 +344,8 @@ function aiFetchModels(idx, type, btn) {
 
   axios.post('{{ panel_route("content_ai.list_models") }}', {
     provider_code: provider.code,
+    api_key: provider.api_key,
+    base_url: provider.base_url,
   }).then(res => {
     const models = res?.data?.models || [];
     if (models.length === 0) {
