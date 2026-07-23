@@ -318,6 +318,14 @@ if (! function_exists('has_install_lock')) {
      */
     function has_install_lock(): bool
     {
+        // The test env runs against a fully migrated database, so treat it as
+        // installed. Without this, FrontServiceProvider/PanelServiceProvider
+        // skip route registration and any feature test that hits a front/panel
+        // route 404s - even though the routes exist in the codebase.
+        if (app()->environment('testing')) {
+            return true;
+        }
+
         return file_exists(storage_path('installed'));
     }
 }
