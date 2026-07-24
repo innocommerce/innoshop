@@ -92,6 +92,8 @@ class VariantNormalizationTest extends TestCase
 
     public function test_get_locale_labels_reads_from_normalized_data(): void
     {
+        app()->setLocale('en');
+
         $product = $this->createProduct(['active' => true, 'brand_id' => 0, 'tax_class_id' => 0]);
         ProductRepo::getInstance()->update($product, $this->productWithVariantsPayload());
 
