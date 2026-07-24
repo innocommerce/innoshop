@@ -17,7 +17,8 @@ class FileSecurityValidator
      * List of dangerous file extensions
      */
     private const DANGEROUS_EXTENSIONS = [
-        'php', 'php3', 'php4', 'php5', 'phtml', 'php7', 'php8',
+        'php', 'php3', 'php4', 'php5', 'php7', 'php8',
+        'pht', 'phtm', 'phtml', 'phar', 'phps', 'shtml',
         'asp', 'aspx', 'jsp', 'pl', 'py', 'rb', 'sh', 'cgi',
         'exe', 'bat', 'cmd', 'com', 'scr', 'vbs', 'js', 'jar',
         'htaccess', 'htpasswd',
@@ -40,6 +41,13 @@ class FileSecurityValidator
     public static function validateFileExtension(string $fileName, bool $allowSvg = false): void
     {
         $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        // A file without an extension (e.g. uploaded as "index") must be rejected.
+        // Otherwise the empty extension is not present in either denylist below,
+        // allowing the upload to bypass all extension checks.
+        if ($extension === '') {
+            throw new Exception('File must have an extension');
+        }
 
         // Check absolutely dangerous extensions
         if (in_array($extension, self::DANGEROUS_EXTENSIONS)) {
