@@ -106,7 +106,6 @@ return [
     'geolite2_database_info'                  => 'Geote2 informationen an die geografen',
     'geolite2_download'                       => 'Download der datenbank.',
     'geolite2_download_desc'                  => 'Sie können die neuen geote2-datenbanken Von MaxMind herunterladen',
-    'geolite2_download_url_placeholder'       => 'https://example.com/geolite2.mmdb',
     'geolite2_setting'                        => 'Geote2 an geostigmata',
     'geolite2_setting_desc'                   => 'Geote2 - datenbank für die systematische erkennung der geodaten der nutzer',
     'get_api_key'                             => 'Dieser trottel paßt nicht zu dir',

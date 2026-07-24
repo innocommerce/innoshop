@@ -106,7 +106,6 @@ return [
     'geolite2_database_info'                  => 'معلومات قاعدة بيانات Geolite2.',
     'geolite2_download'                       => 'تحميل قاعدة البيانات',
     'geolite2_download_desc'                  => 'تحميل أحدث قاعدة بيانات Geolite2 من Maxmd',
-    'geolite2_download_url_placeholder'       => 'https://example.com/geolite2.mmdb',
     'geolite2_setting'                        => 'إعداد Geolite2.',
     'geolite2_setting_desc'                   => 'ضبط قاعدة بيانات Geolite2 للكشف التلقائي عن الموقع الجغرافي للمستعمل',
     'get_api_key'                             => 'احصل على مفتاح API.',

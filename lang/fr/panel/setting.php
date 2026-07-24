@@ -106,7 +106,6 @@ return [
     'geolite2_database_info'                  => 'GeoLite2 informations de base de données',
     'geolite2_download'                       => 'Télécharger la base',
     'geolite2_download_desc'                  => 'Téléchargez la dernière base de données GeoLite2 de MaxMind',
-    'geolite2_download_url_placeholder'       => 'https://example.com/geolite2.mmdb',
     'geolite2_setting'                        => 'Configuration de GeoLite2',
     'geolite2_setting_desc'                   => 'Configuration de la base de données GeoLite2 pour détecter automatiquement la géolocalisation des utilisateurs',
     'get_api_key'                             => 'Obtenir votre clé API',

@@ -18,11 +18,9 @@ use Illuminate\Support\Facades\Log;
 class GeoLite2Service
 {
     /**
-     * Default download URL
-     *
-     * @var string
+     * GeoLite2 database download URL
      */
-    private string $defaultDownloadUrl = 'https://res.innoshop.net/GeoLite2-City.mmdb';
+    private const DOWNLOAD_URL = 'https://res.innoshop.net/GeoLite2-City.mmdb';
 
     /**
      * Constructor — ensure the database directory exists.
@@ -38,20 +36,12 @@ class GeoLite2Service
     /**
      * Download GeoLite2 database
      *
-     * @param  string|null  $url
      * @return array
      */
-    public function downloadDatabase(?string $url = null): array
+    public function downloadDatabase(): array
     {
         try {
-            $url = $url ?: $this->defaultDownloadUrl;
-
-            if (empty($url)) {
-                return [
-                    'success' => false,
-                    'message' => __('panel/setting_geolite2.download_url_empty'),
-                ];
-            }
+            $url = self::DOWNLOAD_URL;
 
             // Download file
             $response = Http::timeout(300)->get($url);
@@ -154,8 +144,26 @@ class GeoLite2Service
             'modified'           => $modified,
             'modified_formatted' => $modified ? date('Y-m-d H:i:s', $modified) : '-',
             'version'            => $version,
-            'path'               => $path,
+            'path'               => $this->getDisplayPath($path),
+            'download_url'       => self::DOWNLOAD_URL,
         ];
+    }
+
+    /**
+     * Convert an absolute filesystem path to a site-root-relative display path.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    private function getDisplayPath(string $path): string
+    {
+        $basePath = base_path();
+
+        if (str_starts_with($path, $basePath)) {
+            return substr($path, strlen($basePath));
+        }
+
+        return $path;
     }
 
     /**

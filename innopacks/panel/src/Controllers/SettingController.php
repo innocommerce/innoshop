@@ -155,12 +155,11 @@ class SettingController
      * @param  Request  $request
      * @return mixed
      */
-    public function downloadGeoLite2(Request $request): mixed
+    public function downloadGeoLite2(): mixed
     {
         try {
-            $url             = $request->input('url');
             $geoLite2Service = new GeoLite2Service;
-            $result          = $geoLite2Service->downloadDatabase($url);
+            $result          = $geoLite2Service->downloadDatabase();
 
             return response()->json($result);
         } catch (Exception $e) {

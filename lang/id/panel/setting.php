@@ -106,7 +106,6 @@ return [
     'geolite2_database_info'                  => 'GeoLite2 database informasi',
     'geolite2_download'                       => 'Database download',
     'geolite2_download_desc'                  => 'Download database terbaru dari MaxMind',
-    'geolite2_download_url_placeholder'       => 'https://example.com/geolite2.mmdb',
     'geolite2_setting'                        => 'GeoLite2 siap',
     'geolite2_setting_desc'                   => 'GeoLite2 database mendeteksi secara otomatis lokasi geografis pengguna',
     'get_api_key'                             => 'Ambil kunci API',

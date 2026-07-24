@@ -125,35 +125,45 @@
               <div class="col-md-12">
                 <div class="card bg-light">
                   <div class="card-body">
-                    <h6 class="mb-3">{{ __('panel/setting_geolite2.geolite2_database_info') }}</h6>
-                    <div class="row mb-2">
-                      <div class="col-md-3">
-                        <strong>{{ __('panel/setting_geolite2.database_status') }}:</strong>
-                        <span id="geolite2-status" class="ms-2">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h6 class="mb-0">{{ __('panel/setting_geolite2.geolite2_database_info') }}</h6>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="refreshGeoLite2Info()">
+                        <i class="bi bi-arrow-clockwise"></i> {{ __('panel/setting_geolite2.refresh_info') }}
+                      </button>
+                    </div>
+                    <div class="row g-3 mb-3">
+                      <div class="col-md-3 col-sm-6">
+                        <div class="text-muted small mb-1">{{ __('panel/setting_geolite2.database_status') }}</div>
+                        <div id="geolite2-status">
                           @if($geolite2_info['exists'])
                             <span class="badge bg-success">{{ __('panel/setting_geolite2.database_exists') }}</span>
                           @else
                             <span class="badge bg-warning">{{ __('panel/setting_geolite2.database_not_exists') }}</span>
                           @endif
-                        </span>
+                        </div>
                       </div>
-                      <div class="col-md-3">
-                        <strong>{{ __('panel/setting_geolite2.database_size') }}:</strong>
-                        <span id="geolite2-size" class="ms-2">{{ $geolite2_info['size_formatted'] }}</span>
+                      <div class="col-md-3 col-sm-6">
+                        <div class="text-muted small mb-1">{{ __('panel/setting_geolite2.database_size') }}</div>
+                        <div id="geolite2-size" class="fw-medium">{{ $geolite2_info['size_formatted'] }}</div>
                       </div>
-                      <div class="col-md-3">
-                        <strong>{{ __('panel/setting_geolite2.database_updated') }}:</strong>
-                        <span id="geolite2-modified" class="ms-2">{{ $geolite2_info['modified_formatted'] }}</span>
+                      <div class="col-md-3 col-sm-6">
+                        <div class="text-muted small mb-1">{{ __('panel/setting_geolite2.database_updated') }}</div>
+                        <div id="geolite2-modified" class="fw-medium">{{ $geolite2_info['modified_formatted'] }}</div>
                       </div>
-                      <div class="col-md-3">
-                        <strong>{{ __('panel/setting_geolite2.database_version') }}:</strong>
-                        <span id="geolite2-version" class="ms-2">{{ $geolite2_info['version'] ?: '-' }}</span>
+                      <div class="col-md-3 col-sm-6">
+                        <div class="text-muted small mb-1">{{ __('panel/setting_geolite2.database_version') }}</div>
+                        <div id="geolite2-version" class="fw-medium">{{ $geolite2_info['version'] ?: '-' }}</div>
                       </div>
                     </div>
-                    <div class="row mt-3">
-                      <div class="col-md-12">
-                        <strong>{{ __('panel/setting_geolite2.database_path') }}:</strong>
-                        <code id="geolite2-path" class="ms-2 small d-block mt-1">{{ $geolite2_info['path'] }}</code>
+                    <hr class="my-3">
+                    <div class="row g-2 align-items-center">
+                      <div class="col-md-2 col-sm-3 text-muted small">{{ __('panel/setting_geolite2.database_path') }}</div>
+                      <div class="col-md-10 col-sm-9">
+                        <code id="geolite2-path" class="small">{{ $geolite2_info['path'] }}</code>
+                      </div>
+                      <div class="col-md-2 col-sm-3 text-muted small">{{ __('panel/setting_geolite2.download_url') }}</div>
+                      <div class="col-md-10 col-sm-9">
+                        <a id="geolite2-download-url" href="{{ $geolite2_info['download_url'] }}" target="_blank" class="small text-break">{{ $geolite2_info['download_url'] }}</a>
                       </div>
                     </div>
                   </div>
@@ -162,32 +172,14 @@
             </div>
 
             <!-- Download Section -->
-            <div class="row">
-              <div class="col-md-12">
-                <h6 class="mb-3">{{ __('panel/setting_geolite2.geolite2_download') }}</h6>
-                <div class="input-group mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="geolite2-download-url"
-                    value="https://res.innoshop.net/GeoLite2-City.mmdb"
-                    placeholder="{{ __('panel/setting_geolite2.geolite2_download_url_placeholder') }}"
-                  />
-                  <button type="button" class="btn btn-primary" id="download-geolite2-btn" onclick="downloadGeoLite2()">
-                    <i class="bi bi-download"></i> {{ __('panel/setting_geolite2.download_geolite2_database') }}
-                  </button>
-                </div>
-                <div class="text-secondary">
-                  <small>{{ __('panel/setting_geolite2.geolite2_download_desc') }}</small>
-                </div>
+            <div class="row align-items-center">
+              <div class="col">
+                <h6 class="mb-1">{{ __('panel/setting_geolite2.geolite2_download') }}</h6>
+                <p class="text-secondary small mb-0">{{ __('panel/setting_geolite2.geolite2_download_desc') }}</p>
               </div>
-            </div>
-
-            <!-- Refresh Button -->
-            <div class="row mt-3">
-              <div class="col-md-12">
-                <button type="button" class="btn btn-secondary" onclick="refreshGeoLite2Info()">
-                  <i class="bi bi-arrow-clockwise"></i> {{ __('panel/setting_geolite2.refresh_info') }}
+              <div class="col-auto">
+                <button type="button" class="btn btn-primary" id="download-geolite2-btn" onclick="downloadGeoLite2()">
+                  <i class="bi bi-download"></i> {{ __('panel/setting_geolite2.download_geolite2_database') }}
                 </button>
               </div>
             </div>
@@ -491,11 +483,7 @@ function downloadGeoLite2() {
   btn.disabled = true;
   btn.innerHTML = '<i class="bi bi-hourglass-split"></i> {{ __("panel/setting_geolite2.downloading") }}...';
 
-  const url = document.getElementById('geolite2-download-url').value;
-
-  axios.post('{{ panel_route("settings.download_geolite2") }}', {
-    url: url
-  })
+  axios.post('{{ panel_route("settings.download_geolite2") }}')
   .then(function(response) {
     if (response.data.success) {
       alert(response.data.message);
@@ -557,6 +545,12 @@ function refreshGeoLite2Info() {
       document.getElementById('geolite2-modified').textContent = info.modified_formatted;
       document.getElementById('geolite2-version').textContent = info.version || '-';
       document.getElementById('geolite2-path').textContent = info.path;
+
+      const downloadUrlEl = document.getElementById('geolite2-download-url');
+      if (downloadUrlEl) {
+        downloadUrlEl.href = info.download_url;
+        downloadUrlEl.textContent = info.download_url;
+      }
     }
   })
   .catch(function(error) {
