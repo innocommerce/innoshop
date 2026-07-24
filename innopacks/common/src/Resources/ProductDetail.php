@@ -105,9 +105,10 @@ class ProductDetail extends JsonResource
                     }
                 }
                 $values[] = [
-                    'id'    => (string) $value->id,
-                    'image' => $value->image ?? '',
-                    'name'  => $valueNames,
+                    'id'        => (string) $value->id,
+                    'image'     => $value->image ?? '',
+                    'image_url' => $value->image ? image_resize($value->image, 100, 100) : '',
+                    'name'      => $valueNames,
                 ];
             }
 

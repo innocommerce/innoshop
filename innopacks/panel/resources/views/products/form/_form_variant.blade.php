@@ -66,7 +66,7 @@
                         <div v-if="variant.isImage" class="value-image open-media"
                              @click.stop="selectVariantValueImage(variant.id, value.id)"
                              title="{{ __('panel/product.sku_image') }}">
-                          <img v-if="value.image" :src="thumbnail(value.image)">
+                          <img v-if="value.image" :src="thumbnail(value.image, value.image_url)">
                           <i v-else class="bi bi-image"></i>
                         </div>
                         <div v-if="inlineEdit.variantId === variant.id && inlineEdit.valueId === value.id"
@@ -240,7 +240,7 @@
               <td>
                 <div class="sku-image-name">
                   <div class="up-variant-image" @click="upVariantImage(index)">
-                    <img :src="thumbnail(sku.image, 50, 50)" v-if="sku.image" class="img-fluid">
+                    <img :src="thumbnail(sku.image, sku.image_url)" v-if="sku.image" class="img-fluid">
                     <i class="bi bi-folder-plus" v-else></i>
                   </div>
                   <div>
@@ -483,6 +483,7 @@
             id: val.id || newId('val'),
             name: val.name || localesFill(''),
             image: val.image || '',
+            image_url: val.image_url || '',
             error: false,
           })),
         }));
@@ -565,6 +566,7 @@
         quantity: '',
         weight: '',
         image: '',
+        image_url: '',
         selectedValueIds: [],   // Set<value.id> — replaces 2D selectedVariants index array
       });
 
@@ -746,11 +748,14 @@
 
       const upVariantImage = (skuIndex) => {
         inno.mediaIframe((file) => {
-          if (file.path) skus.value[skuIndex].image = file.path;
+          if (!file.path) return;
+          skus.value[skuIndex].image = file.path;
+          skus.value[skuIndex].image_url = file.url || file.original_path || '';
         }, { type: 'image', multiple: false });
       };
 
-      const thumbnail = (image) => {
+      const thumbnail = (image, imageUrl = null) => {
+        if (imageUrl && typeof imageUrl === 'string') return imageUrl;
         const asset = document.querySelector('meta[name="asset"]').content;
         if (!image) return 'image/placeholder.png';
         if (image.indexOf('http') === 0) return image;
@@ -857,7 +862,13 @@
         if (batchData.value.model)     { matching.forEach(s => s.model = batchData.value.model); applied++; }
         if (batchData.value.quantity)  { matching.forEach(s => s.quantity = batchData.value.quantity); applied++; }
         if (batchData.value.weight)    { matching.forEach(s => s.weight = batchData.value.weight); applied++; }
-        if (batchData.value.image)     { matching.forEach(s => s.image = batchData.value.image); applied++; }
+        if (batchData.value.image)     {
+          matching.forEach(s => {
+            s.image = batchData.value.image;
+            s.image_url = batchData.value.image_url;
+          });
+          applied++;
+        }
 
         if (applied === 0) {
           layer.msg('{{ __("panel/product.batch_fill_required") }}', {icon: 2});
@@ -868,10 +879,15 @@
 
       const selectBatchImage = () => {
         inno.mediaIframe((file) => {
-          if (file.path) batchData.value.image = file.path;
+          if (!file.path) return;
+          batchData.value.image = file.path;
+          batchData.value.image_url = file.url || file.original_path || '';
         }, { type: 'image', multiple: false });
       };
-      const clearBatchImage = () => { batchData.value.image = ''; };
+      const clearBatchImage = () => {
+        batchData.value.image = '';
+        batchData.value.image_url = '';
+      };
 
       // variant/value dialog. IDs are stable so we look up by id rather than
       // passing indices around — robust against reordering.
@@ -968,7 +984,10 @@
           if (!file.path) return;
           const variant = variants.value.find(v => v.id === variantId);
           const value = variant?.values.find(val => val.id === valueId);
-          if (value) value.image = file.path;
+          if (value) {
+            value.image = file.path;
+            value.image_url = file.url || file.original_path || '';
+          }
         }, { type: 'image', multiple: false });
       };
 

@@ -78,6 +78,35 @@ class ProductRepoTest extends TestCase
     }
 
     /**
+     * Test handleSkus maps client variant_value_ids through the client ID map.
+     */
+    public function test_handle_skus_maps_client_variant_value_ids(): void
+    {
+        $skus = [
+            [
+                'code'              => 'SKU001',
+                'price'             => 99.99,
+                'quantity'          => 10,
+                'image'             => 'test.jpg',
+                'variant_value_ids' => ['client-red', 'client-big'],
+            ],
+        ];
+
+        $clientIdMap = [
+            'client-red' => ['variant_id' => 10, 'value_id' => 100],
+            'client-big' => ['variant_id' => 20, 'value_id' => 200],
+        ];
+
+        $items = ProductRepo::getInstance()->handleSkus($skus, [], $clientIdMap);
+
+        $this->assertCount(1, $items);
+        $this->assertEquals([
+            ['variant_id' => 10, 'value_id' => 100],
+            ['variant_id' => 20, 'value_id' => 200],
+        ], $items[0]['_variant_value_ids']);
+    }
+
+    /**
      * Test handleProductData processes data correctly.
      */
     public function test_handle_product_data_processes_correctly(): void

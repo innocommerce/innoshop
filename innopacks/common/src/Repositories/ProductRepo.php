@@ -593,7 +593,15 @@ class ProductRepo extends BaseRepo
             return;
         }
         try {
-            $created = $product->skus()->createMany($skus);
+            // The internal `_variant_value_ids` key is used to attach pivot rows below;
+            // it is not a real column. Relation::createMany() bypasses $fillable and
+            // writes every array key, so strip it before persisting the SKUs.
+            $skusToCreate = [];
+            foreach ($skus as $index => $sku) {
+                unset($sku['_variant_value_ids']);
+                $skusToCreate[$index] = $sku;
+            }
+            $created = $product->skus()->createMany($skusToCreate);
 
             // Attach normalized variant_value mappings (replaces product_skus.variants JSON indexes).
             foreach ($created as $index => $sku) {
@@ -822,8 +830,6 @@ class ProductRepo extends BaseRepo
     /**
      * @param  $skus
      * @param  array  $defaults
-     * @param  array  $valueIdMap  Normalized position map: [variant_position => [value_position => value_id]]
-     * @param  array  $variantIdMap  [variant_position => variant_id]
      * @param  array  $clientIdMap  [client_value_id => ['variant_id'=>int,'value_id'=>int]] for new ID-based payload
      * @return array
      */
