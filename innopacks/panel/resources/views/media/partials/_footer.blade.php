@@ -674,15 +674,36 @@
           const tree = this.$refs.folderTree;
           if (!tree) return;
 
-          // Root only: just expand and highlight the root node
+          // Root only: re-fetch root children directly and patch the tree via
+          // updateKeyChildren. The old code skipped expand() when the root was
+          // already expanded, which meant refreshFolders()'s `loaded = false`
+          // never triggered a reload — leaving newly created root-level
+          // folders invisible until manual refresh.
           if (targetPath === '/') {
             const node = tree.getNode('/');
-            if (node) {
-              if (!node.expanded && typeof node.expand === 'function') {
-                node.expand();
-              }
-              tree.setCurrentKey('/');
+            if (!node) return;
+
+            try {
+              const res = await http.get('media/directories', { params: { base_folder: '/' } });
+              const raw = Array.isArray(res.data) ? res.data : [];
+              const mapItem = item => ({
+                id: item.id || item.path,
+                name: item.name,
+                path: item.path,
+                hasChildren: item.hasChildren || false,
+              });
+              const items = raw.length > 0 && raw[0].isRoot
+                ? (raw[0].children || []).map(mapItem)
+                : raw.map(mapItem);
+              this.folderCache['/'] = items;
+              tree.updateKeyChildren('/', items);
+              node.loaded = true;
+            } catch (e) { /* leave loaded=false; lazy loader will retry on expand */ }
+
+            if (!node.expanded && typeof node.expand === 'function') {
+              node.expand();
             }
+            tree.setCurrentKey('/');
             return;
           }
 
