@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'الدليل الجذر',
     'directory_not_empty'           => 'الدليل غير فارغ',
     'show_folders'                  => 'إظهار المجلدات',
+    'delete_failed'                 => 'فشل الحذف',
 ];

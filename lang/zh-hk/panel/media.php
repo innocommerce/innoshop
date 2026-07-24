@@ -64,4 +64,5 @@ return [
     'root_directory'                => '根目錄',
     'directory_not_empty'           => '目錄不為空',
     'show_folders'                  => '顯示資料夾',
+    'delete_failed'                 => '刪除失敗',
 ];

@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Diretório raiz',
     'directory_not_empty'           => 'O diretório não está vazio',
     'show_folders'                  => 'Mostrar pastas',
+    'delete_failed'                 => 'Falha ao excluir',
 ];

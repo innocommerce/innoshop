@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Directory principale',
     'directory_not_empty'           => 'La directory non è vuota',
     'show_folders'                  => 'Mostra cartelle',
+    'delete_failed'                 => 'Eliminazione fallita',
 ];

@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Hoofddirectory',
     'directory_not_empty'           => 'De map is niet leeg',
     'show_folders'                  => 'Mappen weergeven',
+    'delete_failed'                 => 'Verwijderen mislukt',
 ];

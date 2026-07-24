@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'ルートディレクトリ',
     'directory_not_empty'           => 'ディレクトリが空ではありません',
     'show_folders'                  => 'フォルダーを表示',
+    'delete_failed'                 => '削除に失敗しました',
 ];

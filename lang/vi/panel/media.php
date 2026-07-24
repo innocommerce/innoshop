@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Thư mục gốc',
     'directory_not_empty'           => 'Thư mục không trống',
     'show_folders'                  => 'Hiện thư mục',
+    'delete_failed'                 => 'Xóa thất bại',
 ];

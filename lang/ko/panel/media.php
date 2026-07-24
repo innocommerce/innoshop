@@ -64,4 +64,5 @@ return [
     'root_directory'                => '루트 디렉토리',
     'directory_not_empty'           => '디렉터리가 비어 있지 않습니다',
     'show_folders'                  => '폴더 표시',
+    'delete_failed'                 => '삭제 실패',
 ];

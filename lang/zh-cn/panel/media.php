@@ -165,4 +165,5 @@ return [
     'not_used_anywhere'     => '未被任何业务记录引用',
     'total_files'           => '总文件数',
     'total_size'            => '总大小',
+    'delete_failed'         => '删除失败',
 ];

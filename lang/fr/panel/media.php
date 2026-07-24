@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Répertoire racine',
     'directory_not_empty'           => 'Le répertoire n\'est pas vide',
     'show_folders'                  => 'Afficher les dossiers',
+    'delete_failed'                 => 'Échec de la suppression',
 ];

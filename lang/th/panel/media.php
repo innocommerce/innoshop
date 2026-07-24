@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'ไดเรกทอรีราก',
     'directory_not_empty'           => 'ไดเรกทอรีไม่ว่างเปล่า',
     'show_folders'                  => 'แสดงโฟลเดอร์',
+    'delete_failed'                 => 'ลบไม่สำเร็จ',
 ];

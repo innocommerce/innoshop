@@ -165,4 +165,5 @@ return [
     'not_used_anywhere'     => 'Not referenced by any business record',
     'total_files'           => 'Total Files',
     'total_size'            => 'Total Size',
+    'delete_failed'         => 'Delete failed',
 ];

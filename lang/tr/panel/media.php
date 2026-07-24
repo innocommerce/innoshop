@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Kök dizin',
     'directory_not_empty'           => 'Dizin boş değil',
     'show_folders'                  => 'Klasörleri göster',
+    'delete_failed'                 => 'Silme başarısız',
 ];

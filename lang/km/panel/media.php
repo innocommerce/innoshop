@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'ថតឫស',
     'directory_not_empty'           => 'ថតមិនទទេ',
     'show_folders'                  => 'បង្ហាញថត',
+    'delete_failed'                 => 'លុបបរាជ័យ',
 ];

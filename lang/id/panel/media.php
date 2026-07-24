@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Direktori utama',
     'directory_not_empty'           => 'Direktori tidak kosong',
     'show_folders'                  => 'Tampilkan folder',
+    'delete_failed'                 => 'Gagal menghapus',
 ];

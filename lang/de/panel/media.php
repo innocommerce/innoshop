@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Stammverzeichnis',
     'directory_not_empty'           => 'Das Verzeichnis ist nicht leer',
     'show_folders'                  => 'Ordner anzeigen',
+    'delete_failed'                 => 'Löschen fehlgeschlagen',
 ];

@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Direktori akar',
     'directory_not_empty'           => 'Direktori tidak kosong',
     'show_folders'                  => 'Papar folder',
+    'delete_failed'                 => 'Gagal memadam',
 ];

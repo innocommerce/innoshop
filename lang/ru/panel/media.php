@@ -64,4 +64,5 @@ return [
     'root_directory'                => 'Корневой каталог',
     'directory_not_empty'           => 'Каталог не пуст',
     'show_folders'                  => 'Показывать папки',
+    'delete_failed'                 => 'Ошибка удаления',
 ];
