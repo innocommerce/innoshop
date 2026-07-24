@@ -199,7 +199,7 @@
     <el-dialog title="{{ __('panel/media.new_folder_dialog') }}" v-model="folderDialog.visible" width="400px">
       <el-form :model="folderDialog.form" label-width="80px">
         <el-form-item label="{{ __('panel/media.folder_name') }}">
-          <el-input v-model="folderDialog.form.name" placeholder="{{ __('panel/media.prompt_enter_folder_name') }}"></el-input>
+          <el-input v-model="folderDialog.form.name" placeholder="{{ __('panel/media.prompt_enter_folder_name') }}" @keyup.enter="submitCreateFolder"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -227,7 +227,7 @@
     <el-dialog title="{{ __('panel/media.rename') }}" v-model="renameDialog.visible" custom-class="rename-dialog" width="500px">
       <el-form :model="renameDialog.form" label-width="100px">
         <el-form-item :label="'{{ __('panel/media.rename') }}'">
-          <el-input v-model="renameDialog.form.newName" :placeholder="'{{ __('panel/media.enter_new_name') }}'">
+          <el-input v-model="renameDialog.form.newName" :placeholder="'{{ __('panel/media.enter_new_name') }}'" @keyup.enter="submitRename">
             <template #append>.@{{ renameDialog.form.extension }}</template>
           </el-input>
         </el-form-item>
@@ -310,7 +310,7 @@
     <el-dialog title="{{ __('panel/media.rename_folder') }}" v-model="folderRenameDialog.visible" width="400px">
       <el-form :model="folderRenameDialog.form" label-width="80px">
         <el-form-item :label="'{{ __('panel/media.folder_name') }}'">
-          <el-input v-model="folderRenameDialog.form.newName" :placeholder="'{{ __('panel/media.enter_new_name') }}'"></el-input>
+          <el-input v-model="folderRenameDialog.form.newName" :placeholder="'{{ __('panel/media.enter_new_name') }}'" @keyup.enter="submitFolderRename"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
