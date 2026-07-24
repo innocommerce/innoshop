@@ -683,22 +683,11 @@
             const node = tree.getNode('/');
             if (!node) return;
 
-            try {
-              const res = await http.get('media/directories', { params: { base_folder: '/' } });
-              const raw = Array.isArray(res.data) ? res.data : [];
-              const mapItem = item => ({
-                id: item.id || item.path,
-                name: item.name,
-                path: item.path,
-                hasChildren: item.hasChildren || false,
-              });
-              const items = raw.length > 0 && raw[0].isRoot
-                ? (raw[0].children || []).map(mapItem)
-                : raw.map(mapItem);
-              this.folderCache['/'] = items;
-              tree.updateKeyChildren('/', items);
-              node.loaded = true;
-            } catch (e) { /* leave loaded=false; lazy loader will retry on expand */ }
+            // force=true bypasses cache so newly created root-level folders
+            // show up immediately.
+            const items = await this.fetchDirectories('/', true);
+            tree.updateKeyChildren('/', items);
+            node.loaded = true;
 
             if (!node.expanded && typeof node.expand === 'function') {
               node.expand();
@@ -726,29 +715,7 @@
             allPaths.push(hasSlash ? '/' + c : c);
           }
 
-          const mapItem = item => ({
-            id: item.id || item.path,
-            name: item.name,
-            path: item.path,
-            hasChildren: item.hasChildren || false,
-          });
-
-          await Promise.all(allPaths.map(async (p) => {
-            if (this.folderCache[p]) return;
-            try {
-              const res = await http.get('media/directories', { params: { base_folder: p } });
-              const raw = Array.isArray(res.data) ? res.data : [];
-              let items;
-              if ((p === '/' || p === '') && raw.length > 0 && raw[0].isRoot) {
-                items = (raw[0].children || []).map(mapItem);
-              } else {
-                items = raw.map(mapItem);
-              }
-              this.folderCache[p] = items;
-            } catch (e) {
-              this.folderCache[p] = [];
-            }
-          }));
+          await Promise.all(allPaths.map(p => this.fetchDirectories(p)));
 
           // 2. Expand level by level (cached data, instant resolve)
           let step = 0;
@@ -811,6 +778,45 @@
           });
         },
 
+        // Map one API directory item to the el-tree node shape.
+        mapDirItem(item) {
+          return {
+            id: item.id || item.path,
+            name: item.name,
+            path: item.path,
+            hasChildren: item.hasChildren || false,
+          };
+        },
+
+        // The directories API returns either a flat folder array (subpath),
+        // or a single wrapper {isRoot: true, children: [...]} at '/'. This
+        // normalizes both shapes to a flat array of tree-node items.
+        normalizeDirResponse(path, raw) {
+          const arr = Array.isArray(raw) ? raw : [];
+          if ((path === '/' || path === '') && arr.length > 0 && arr[0].isRoot) {
+            return (arr[0].children || []).map(i => this.mapDirItem(i));
+          }
+          return arr.map(i => this.mapDirItem(i));
+        },
+
+        // Fetch directories for a path, caching the result. Pass force=true
+        // to bypass the cache (used after create/rename/move/delete).
+        async fetchDirectories(path, force = false) {
+          path = path || '/';
+          if (!force && this.folderCache[path]) {
+            return this.folderCache[path];
+          }
+          try {
+            const res = await http.get('media/directories', { params: { base_folder: path } });
+            const items = this.normalizeDirResponse(path, res.data);
+            this.folderCache[path] = items;
+            return items;
+          } catch (e) {
+            this.folderCache[path] = [];
+            return [];
+          }
+        },
+
         // Shared lazy loader for main tree and dialog trees (cached)
         loadTreeNode(node, resolve) {
           // Virtual root call (no real data) — root node is in folders data, skip
@@ -819,27 +825,7 @@
             return;
           }
           const path = node.data.path || '/';
-          if (this.folderCache[path]) {
-            resolve(this.folderCache[path]);
-            return;
-          }
-          http.get('media/directories', { params: { base_folder: path } }).then(res => {
-            const raw = Array.isArray(res.data) ? res.data : [];
-            const mapItem = item => ({
-              id: item.id || item.path,
-              name: item.name,
-              path: item.path,
-              hasChildren: item.hasChildren || false,
-            });
-            let items;
-            if ((path === '/' || path === '') && raw.length > 0 && raw[0].isRoot) {
-              items = (raw[0].children || []).map(mapItem);
-            } else {
-              items = raw.map(mapItem);
-            }
-            this.folderCache[path] = items;
-            resolve(items);
-          }).catch(() => { resolve([]); });
+          this.fetchDirectories(path).then(items => resolve(items));
         },
 
         renameFile() {
