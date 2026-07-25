@@ -11,12 +11,14 @@ namespace InnoShop\MCP\Server;
 
 use InnoShop\AI\Contracts\ToolInterface;
 use InnoShop\AI\Services\ToolRegistry;
+use InnoShop\MCP\ShopIdentity;
 use InnoShop\MCP\Tools\RegistryToolAdapter;
 use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Version;
 use Laravel\Mcp\Server\Contracts\Transport;
+use Laravel\Mcp\Server\ServerContext;
 
 #[Name('InnoShop')]
 #[Version('1.0.0')]
@@ -29,7 +31,7 @@ class InnoShopMcpServer extends Server
         ],
     ];
 
-    public function __construct(Transport $transport, ToolRegistry $registry)
+    public function __construct(Transport $transport, ToolRegistry $registry, private readonly ShopIdentity $shopIdentity)
     {
         parent::__construct($transport);
 
@@ -37,5 +39,14 @@ class InnoShopMcpServer extends Server
             fn (ToolInterface $tool) => new RegistryToolAdapter($tool),
             array_values($registry->all())
         );
+    }
+
+    public function createContext(): ServerContext
+    {
+        $context = parent::createContext();
+
+        $context->instructions .= "\n\nServer: {$this->shopIdentity->host()}";
+
+        return $context;
     }
 }

@@ -10,8 +10,10 @@
 namespace InnoShop\MCP\Tools;
 
 use InnoShop\AI\Contracts\ToolInterface;
+use InnoShop\MCP\ShopIdentity;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 use stdClass;
 use Throwable;
@@ -31,7 +33,9 @@ class RegistryToolAdapter extends Tool
 
     public function description(): string
     {
-        return $this->tool->description();
+        $host = app(ShopIdentity::class)->host();
+
+        return $this->tool->description()." [server: {$host}]";
     }
 
     public function toArray(): array
@@ -44,22 +48,41 @@ class RegistryToolAdapter extends Tool
         ];
     }
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): Response|ResponseFactory
     {
         $permission = $this->tool->requiredPermission();
         if ($permission !== null) {
             $user = $request->user();
             if (! $user || ! $user->can($permission)) {
-                return Response::error("Permission denied: [{$permission}] is required.");
+                return $this->withShopMeta(
+                    Response::error("Permission denied: [{$permission}] is required.")
+                );
             }
         }
 
         try {
             $result = $this->tool->execute($request->all());
 
-            return is_string($result) ? Response::text($result) : Response::json($result);
+            // Inject shop identity into the payload itself. _meta on the
+            // JSON-RPC envelope is stripped by MCP harnesses; the only
+            // reliable channel to the LLM is the content body.
+            if (is_array($result)) {
+                $result['_shop'] = app(ShopIdentity::class)->toMeta()['shop'];
+            }
+
+            $response = is_string($result) ? Response::text($result) : Response::json($result);
+
+            return $this->withShopMeta($response);
         } catch (Throwable $e) {
-            return Response::error($e->getMessage());
+            return $this->withShopMeta(
+                Response::error($e->getMessage())
+            );
         }
+    }
+
+    private function withShopMeta(Response $response): ResponseFactory
+    {
+        return (new ResponseFactory($response))
+            ->withMeta(app(ShopIdentity::class)->toMeta());
     }
 }
