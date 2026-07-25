@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
+use InnoShop\RestAPI\Criteria\FileListCriteria;
+use Psr\Http\Message\StreamInterface;
 
 class OSSService implements MediaInterface
 {
@@ -140,6 +142,9 @@ class OSSService implements MediaInterface
             ],
             'endpoint'                => $this->config['endpoint'],
             'use_path_style_endpoint' => false,
+            // Tencent COS returns a non-standard Content-Encoding on GetObject;
+            // disabling Guzzle decoding avoids cURL error 61.
+            'http' => ['decode_content' => false],
         ]);
     }
 
@@ -185,10 +190,10 @@ class OSSService implements MediaInterface
      * For keyword search or non-name sort, falls back to full scan (required by S3 limitations).
      * Otherwise uses S3 MaxKeys for server-side limiting.
      */
-    public function getFiles(string $baseFolder, ?string $keyword = '', string $sort = 'name', string $order = 'asc', int $page = 1, int $perPage = 20): array
+    public function getFiles(FileListCriteria $c): array
     {
         try {
-            $prefix = trim($baseFolder, '/');
+            $prefix = trim($c->baseFolder, '/');
             $prefix = $prefix ? $prefix.'/' : '';
 
             $result = $this->s3Client->listObjectsV2([
@@ -198,20 +203,23 @@ class OSSService implements MediaInterface
             ]);
 
             // Format directories (always complete via CommonPrefixes)
-            $directories = array_map(function ($prefix) {
-                $name = basename(rtrim($prefix['Prefix'], '/'));
+            $directories = [];
+            if ($c->includeDirectories) {
+                $directories = array_map(function ($prefix) {
+                    $name = basename(rtrim($prefix['Prefix'], '/'));
 
-                return [
-                    'name'          => $name,
-                    'path'          => StorageService::storageKey(rtrim($prefix['Prefix'], '/')),
-                    'is_dir'        => true,
-                    'thumb'         => url('/images/icons/folder.png'),
-                    'url'           => '',
-                    'mime'          => 'directory',
-                    'size'          => 0,
-                    'last_modified' => null,
-                ];
-            }, $result['CommonPrefixes'] ?? []);
+                    return [
+                        'name'          => $name,
+                        'path'          => StorageService::storageKey(rtrim($prefix['Prefix'], '/')),
+                        'is_dir'        => true,
+                        'thumb'         => url('/images/icons/folder.png'),
+                        'url'           => '',
+                        'mime'          => 'directory',
+                        'size'          => 0,
+                        'last_modified' => null,
+                    ];
+                }, $result['CommonPrefixes'] ?? []);
+            }
 
             // Format files — use extension-based MIME (no headObject)
             $files = array_map(function ($object) {
@@ -261,15 +269,15 @@ class OSSService implements MediaInterface
             unset($item);
 
             // Apply search filter
-            if ($keyword) {
-                $items = array_filter($items, function ($item) use ($keyword) {
-                    return stripos($item['name'], $keyword) !== false;
+            if ($c->keyword) {
+                $items = array_filter($items, function ($item) use ($c) {
+                    return stripos($item['name'], $c->keyword) !== false;
                 });
                 $items = array_values($items);
             }
 
             // Sort: directories first, then by specified field
-            usort($items, function ($a, $b) use ($sort, $order) {
+            usort($items, function ($a, $b) use ($c) {
                 if ($a['is_dir'] && ! $b['is_dir']) {
                     return -1;
                 }
@@ -278,26 +286,26 @@ class OSSService implements MediaInterface
                 }
 
                 $cmp = 0;
-                if ($sort === 'name') {
+                if ($c->sort === 'name') {
                     $cmp = strcmp($a['name'], $b['name']);
-                } elseif ($sort === 'size') {
+                } elseif ($c->sort === 'size') {
                     $cmp = ($a['size'] ?? 0) <=> ($b['size'] ?? 0);
-                } elseif ($sort === 'created') {
+                } elseif ($c->sort === 'created') {
                     $cmp = ($a['last_modified'] ?? 0) <=> ($b['last_modified'] ?? 0);
                 }
 
-                return $order === 'desc' ? -$cmp : $cmp;
+                return $c->order === 'desc' ? -$cmp : $cmp;
             });
 
             $total  = count($items);
-            $offset = ($page - 1) * $perPage;
-            $items  = array_slice($items, $offset, $perPage);
+            $offset = ($c->page - 1) * $c->perPage;
+            $items  = array_slice($items, $offset, $c->perPage);
 
             return [
                 'items'    => $items,
                 'total'    => $total,
-                'page'     => $page,
-                'per_page' => $perPage,
+                'page'     => $c->page,
+                'per_page' => $c->perPage,
                 'success'  => true,
             ];
         } catch (Exception $e) {
@@ -779,6 +787,91 @@ class OSSService implements MediaInterface
             ]);
             throw $e;
         }
+    }
+
+    /**
+     * Cloud metadata for the media detail panel: bucket config plus a live
+     * headObject probe (etag / last modified / existence on the bucket).
+     */
+    public function getCloudMeta(string $rawKey): array
+    {
+        $meta = [
+            'driver'        => $this->config['driver'],
+            'bucket'        => $this->bucket,
+            'region'        => $this->config['region'],
+            'endpoint'      => $this->endpoint,
+            'cdn_domain'    => $this->cdnDomain ?: null,
+            'object_key'    => $rawKey,
+            'object_url'    => $this->getFileUrl($rawKey),
+            'exists'        => false,
+            'etag'          => null,
+            'last_modified' => null,
+            'cloud_size'    => null,
+            'content_type'  => null,
+        ];
+
+        try {
+            $result = $this->s3Client->headObject([
+                'Bucket' => $this->bucket,
+                'Key'    => ltrim($rawKey, '/'),
+            ]);
+
+            $meta['exists']        = true;
+            $meta['etag']          = trim((string) ($result['ETag'] ?? ''), '"') ?: null;
+            $meta['last_modified'] = isset($result['LastModified']) ? (string) $result['LastModified'] : null;
+            $meta['cloud_size']    = (int) ($result['ContentLength'] ?? 0);
+            $meta['content_type']  = $result['ContentType'] ?? null;
+        } catch (Exception $e) {
+            Log::warning('OSS headObject failed:', [
+                'key'   => $rawKey,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Yield every object in the bucket with continuation-token pagination.
+     * Used by maintenance commands (e.g. media:register-existing) needing a full inventory.
+     *
+     * @return \Generator<int, array{key: string, size: int, last_modified: mixed}>
+     */
+    public function listAllObjects(): \Generator
+    {
+        $token = null;
+        do {
+            $params = [
+                'Bucket'  => $this->bucket,
+                'MaxKeys' => 1000,
+            ];
+            if ($token) {
+                $params['ContinuationToken'] = $token;
+            }
+
+            $result = $this->s3Client->listObjectsV2($params);
+            foreach ($result['Contents'] ?? [] as $object) {
+                yield [
+                    'key'           => $object['Key'],
+                    'size'          => (int) ($object['Size'] ?? 0),
+                    'last_modified' => $object['LastModified'] ?? null,
+                ];
+            }
+            $token = $result['NextContinuationToken'] ?? null;
+        } while ($token);
+    }
+
+    /**
+     * Open a readable stream for an object's contents (caller must close).
+     *
+     * @return StreamInterface
+     */
+    public function getObjectStream(string $key)
+    {
+        return $this->s3Client->getObject([
+            'Bucket' => $this->bucket,
+            'Key'    => ltrim($key, '/'),
+        ])['Body'];
     }
 
     public function getFileInfo(string $path): array

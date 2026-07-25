@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'hiển thị phân loại',
     'categories_store'                   => 'lưu phân loại',
     'categories_update'                  => 'cập nhật phân loại',
-    'content_ai_generate'                => 'AI tạo nội dung',
     'countries_active'                   => 'kích hoạt quốc gia',
     'countries_create'                   => 'tạo quốc gia',
     'countries_destroy'                  => 'xóa quốc gia',

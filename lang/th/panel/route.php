@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'แสดงหมวดหมู่',
     'categories_store'                   => 'เก็บหมวดหมู่',
     'categories_update'                  => 'อัปเดตหมวดหมู่',
-    'content_ai_generate'                => 'การสร้างเนื้อหา',
     'countries_active'                   => 'เปิดใช้งานประเทศ',
     'countries_create'                   => 'สร้างประเทศ',
     'countries_destroy'                  => 'ทำลายประเทศ',

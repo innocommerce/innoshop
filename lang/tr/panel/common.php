@@ -12,7 +12,6 @@ return [
     'activate'                     => 'Aktivasyon',
     'active'                       => 'Aktif',
     'admin'                        => 'Yönetici',
-    'ai_generate'                  => 'AI generation',
     'asc'                          => 'artan düzen',
     'assign_sales_failed'          => 'Atama başarısız oldu',
     'assign_sales_success'         => 'Ödev başarılı oldu',

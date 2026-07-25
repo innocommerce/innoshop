@@ -12,7 +12,6 @@ return [
     'activate'                     => 'ការធ្វើឱ្យសកម្ម',
     'active'                       => 'សកម្ម',
     'admin'                        => 'អ្នកគ្រប់គ្រង',
-    'ai_generate'                  => 'បង្កើតដោយ AI',
     'asc'                          => 'លំដាប់ឡើង',
     'assign_sales_failed'          => 'ការចែករំលែកបរាជ័យ',
     'assign_sales_success'         => 'ការចែករំលែកជោគជ័យ',

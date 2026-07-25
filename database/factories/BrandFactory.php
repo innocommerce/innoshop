@@ -28,7 +28,7 @@ class BrandFactory extends Factory
             'name'     => $name,
             'slug'     => Str::slug($name).'-'.Str::random(5),
             'first'    => strtoupper(substr($name, 0, 1)),
-            'logo'     => null,
+            'logo'     => '',
             'position' => fake()->numberBetween(0, 100),
             'active'   => true,
         ];

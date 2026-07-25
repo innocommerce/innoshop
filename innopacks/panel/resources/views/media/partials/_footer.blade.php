@@ -193,27 +193,6 @@
             var enabled = window.mediaConfig.enabledDrivers || ['local'];
             return enabled.indexOf(opt.value) !== -1;
           }),
-          aiImageDialog: {
-            visible: false,
-            prompt: '',
-            size: '1:1',
-            quality: 'medium',
-            loading: false,
-            previewUrl: '',
-            resultPath: '',
-            modelInfo: '',
-            referenceImage: '',
-            referencePreviewUrl: '',
-          },
-          aiLabelPrompt: "{{ __('panel/media.ai_prompt') }}",
-          aiLabelPromptPlaceholder: "{{ __('panel/media.ai_prompt_placeholder') }}",
-          aiLabelSize: "{{ __('panel/media.ai_size') }}",
-          aiLabelQuality: "{{ __('panel/media.ai_quality') }}",
-          aiLabelLow: "{{ __('panel/media.ai_low') }}",
-          aiLabelMedium: "{{ __('panel/media.ai_medium') }}",
-          aiLabelHigh: "{{ __('panel/media.ai_high') }}",
-          aiLabelGenerate: "{{ __('panel/media.ai_generate') }}",
-          aiLabelGenerating: "{{ __('panel/media.ai_generating') }}",
         }
       },
       computed: {
@@ -611,14 +590,15 @@
           }
         },
 
-        // Save current path to localStorage
+        // Save current path to localStorage (scoped per storage driver —
+        // switching local/COS/OSS resets to root since trees differ)
         saveCurrentPath(path) {
-          try { localStorage.setItem('media_last_path', path || '/'); } catch(e) {}
+          try { localStorage.setItem('media_last_path_{{ system_setting("media_driver", "local") }}', path || '/'); } catch(e) {}
         },
 
         // Get last saved path
         getSavedPath() {
-          try { return localStorage.getItem('media_last_path') || '/'; } catch(e) { return '/'; }
+          try { return localStorage.getItem('media_last_path_{{ system_setting("media_driver", "local") }}') || '/'; } catch(e) { return '/'; }
         },
 
         // Recursively find node by path
@@ -1635,91 +1615,10 @@
           this.loadFiles();
         },
 
-        generateAIImage() {
-          var self = this;
-          if (!this.aiImageDialog.prompt.trim()) {
-            ElementPlus.ElMessage.warning('{{ __("panel/media.ai_enter_prompt") }}');
-            return;
-          }
-          this.aiImageDialog.loading = true;
-          this.aiImageDialog.previewUrl = '';
-          this.aiImageDialog.resultPath = '';
-          var savePath = this.currentFolder ? this.currentFolder.id.replace(/^\//, '') : '';
-          if (!savePath) savePath = 'ai-images';
-          var params = {
-            prompt: this.aiImageDialog.prompt,
-            size: this.aiImageDialog.size,
-            quality: this.aiImageDialog.quality,
-            save_path: savePath,
-          };
-          if (this.aiImageDialog.referenceImage) {
-            params.reference_image = this.aiImageDialog.referenceImage;
-          }
-          http.post('ai/generate_image', params).then(function(res) {
-            var data = res.data;
-            if (data.status === 'success' || data.data) {
-              var result = data.data || data;
-              self.aiImageDialog.previewUrl = result.url || result.origin_url;
-              self.aiImageDialog.resultPath = result.path;
-              ElementPlus.ElMessage.success('{{ __("panel/media.ai_success") }}');
-            } else {
-              ElementPlus.ElMessage.error(data.message || '{{ __("panel/media.ai_failed") }}');
-            }
-          }).catch(function(err) {
-            ElementPlus.ElMessage.error(err.response?.data?.message || '{{ __("panel/media.ai_failed") }}');
-          }).finally(function() {
-            self.aiImageDialog.loading = false;
-          });
-        },
-
-        useAIImage() {
-          if (this.aiImageDialog.previewUrl && this.aiImageDialog.resultPath) {
-            this.loadFiles(this.currentFolder ? this.currentFolder.id : '/');
-            this.aiImageDialog.visible = false;
-            this.aiImageDialog.prompt = '';
-            this.aiImageDialog.previewUrl = '';
-            this.aiImageDialog.resultPath = '';
-            this.aiImageDialog.referenceImage = '';
-            this.aiImageDialog.referencePreviewUrl = '';
-          }
-        },
-
         isImageFile(file) {
           if (!file || file.is_dir) return false;
           var ext = (file.name || '').split('.').pop().toLowerCase();
           return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].indexOf(ext) !== -1;
-        },
-
-        imageToImage(file) {
-          if (!file) return;
-          this.aiImageDialog.referenceImage = file.path || '';
-          this.aiImageDialog.referencePreviewUrl = file.origin_url || file.url || '';
-          this.aiImageDialog.prompt = '';
-          this.aiImageDialog.previewUrl = '';
-          this.aiImageDialog.resultPath = '';
-          this.aiImageDialog.visible = true;
-          this.hideContextMenu();
-          this.loadAIModelInfo();
-        },
-
-        loadAIModelInfo() {
-          var self = this;
-          http.get('ai/models_info').then(function(res) {
-            var data = res.data || res;
-            if (data && data.image_model) {
-              self.aiImageDialog.modelInfo = data.image_model;
-            }
-          }).catch(function() {});
-        },
-
-        openAIDialog() {
-          this.aiImageDialog.referenceImage = '';
-          this.aiImageDialog.referencePreviewUrl = '';
-          this.aiImageDialog.prompt = '';
-          this.aiImageDialog.previewUrl = '';
-          this.aiImageDialog.resultPath = '';
-          this.aiImageDialog.visible = true;
-          this.loadAIModelInfo();
         },
 
         // ===== Media Library: stats & detail panel =====
@@ -1800,6 +1699,11 @@
         document.removeEventListener('click', this.hideFolderContextMenu);
       },
     });
+
+    @if(ai_enabled())
+    @include('ai::media._ai-image-script')
+    @endif
+
     __fmApp.use(ElementPlus, window.ElementPlusLocaleZhCn ? { locale: ElementPlusLocaleZhCn } : {});
     // Register all icons globally (official approach from Element Plus docs)
     for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

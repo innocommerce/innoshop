@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'Показать категорию',
     'categories_store'                   => 'Сохранить категорию',
     'categories_update'                  => 'Обновить категорию',
-    'content_ai_generate'                => 'Генерация AI контента',
     'countries_active'                   => 'Активировать страну',
     'countries_create'                   => 'Создать страну',
     'countries_destroy'                  => 'Удалить страну',

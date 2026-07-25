@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'Mostrar categoría',
     'categories_store'                   => 'Almacenar categoría',
     'categories_update'                  => 'Actualizar categoría',
-    'content_ai_generate'                => 'Generación de contenido por IA',
     'countries_active'                   => 'Activar país',
     'countries_create'                   => 'Crear país',
     'countries_destroy'                  => 'Eliminar país',

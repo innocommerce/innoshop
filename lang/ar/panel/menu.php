@@ -76,7 +76,6 @@ return [
     'plugin_coordination'    => 'تنسيق الإضافات',
     'top_data'               => 'البيانات',
     'visits'                 => 'سجلات الزيارات',
-    'content_ai'             => 'AI Content',
     'payments'               => 'Payments',
     'plugin-market'          => 'Plugin Market',
     'plugins'                => 'Plugins',

@@ -81,7 +81,6 @@ return [
     'categories_show'                    => '카테고리 보기',
     'categories_store'                   => '카테고리 저장',
     'categories_update'                  => '카테고리 업데이트',
-    'content_ai_generate'                => 'AI 콘텐츠 생성',
     'countries_active'                   => '국가 활성화',
     'countries_create'                   => '국가 생성',
     'countries_destroy'                  => '국가 삭제',

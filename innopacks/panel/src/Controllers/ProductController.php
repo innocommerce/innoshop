@@ -12,7 +12,7 @@ namespace InnoShop\Panel\Controllers;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use InnoShop\Common\Jobs\GenerateProductContentJob;
+use InnoShop\AI\Jobs\GenerateProductContentJob;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Common\Repositories\BrandRepo;
@@ -300,6 +300,10 @@ class ProductController extends BaseController
      */
     public function bulkAIGenerate(Request $request): mixed
     {
+        if (! ai_enabled()) {
+            return json_fail('AI module is not enabled', null, 404);
+        }
+
         try {
             $ids = $request->input('ids', []);
             if (empty($ids)) {

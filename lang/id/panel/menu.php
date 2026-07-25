@@ -76,7 +76,6 @@ return [
     'plugin_coordination'    => 'Koordinasi Plugin',
     'top_data'               => 'Data',
     'visits'                 => 'Catatan Kunjungan',
-    'content_ai'             => 'AI Content',
     'payments'               => 'Payments',
     'plugin-market'          => 'Plugin Market',
     'plugins'                => 'Plugins',

@@ -12,7 +12,6 @@ return [
     'activate'                     => 'Kích hoạt',
     'active'                       => 'Kích hoạt',
     'admin'                        => 'Quản lý',
-    'ai_generate'                  => 'Tạo ra al',
     'asc'                          => 'ShengXu',
     'assign_sales_failed'          => 'Phân phối thất bại',
     'assign_sales_success'         => 'Phân phối thành công',

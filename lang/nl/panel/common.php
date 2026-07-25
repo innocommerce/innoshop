@@ -12,7 +12,6 @@ return [
     'activate'                     => 'Activate',
     'active'                       => 'Ingeschakeld',
     'admin'                        => 'Administrator',
-    'ai_generate'                  => 'AI Genereren',
     'asc'                          => 'Oplopend',
     'assign_sales_failed'          => 'Toewijzing mislukt',
     'assign_sales_success'         => 'Toewijzing geslaagd',

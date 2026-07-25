@@ -15,9 +15,11 @@
       <li><a class="dropdown-item" href="#" @click.prevent="bulkAction('quantity')">
         <i class="bi bi-box me-2"></i>{{ __('panel/product.quantity') }}</a></li>
       <li><hr class="dropdown-divider"></li>
+      @if(ai_enabled())
       <li><a class="dropdown-item" href="#" @click.prevent="bulkAIGenerate()">
         <i class="bi bi-stars me-2"></i>{{ __('panel/product.bulk_ai_generate') }}</a></li>
       <li><hr class="dropdown-divider"></li>
+      @endif
       <li><a class="dropdown-item" href="#" @click.prevent="bulkAction('publish')">
         <i class="bi bi-eye me-2"></i>{{ __('panel/product.publish') }}</a></li>
       <li><a class="dropdown-item" href="#" @click.prevent="bulkAction('unpublish')">

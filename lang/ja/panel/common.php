@@ -12,7 +12,6 @@ return [
     'activate'                     => '活性化します',
     'active'                       => '有効',
     'admin'                        => '管理人です',
-    'ai_generate'                  => 'AI生成です',
     'asc'                          => '昇順です',
     'assign_sales_failed'          => '分配に失敗します',
     'assign_sales_success'         => '分配成功です',

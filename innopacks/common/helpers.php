@@ -1517,6 +1517,20 @@ if (! function_exists('seller_enabled')) {
     }
 }
 
+if (! function_exists('ai_enabled')) {
+    /**
+     * Check if the AI innopack is installed and its views are registered.
+     *
+     * @return bool
+     */
+    function ai_enabled(): bool
+    {
+        static $enabled = null;
+
+        return $enabled ??= view()->exists('ai::settings._tools');
+    }
+}
+
 if (! function_exists('parsedown')) {
     /**
      * @param  string|null  $value

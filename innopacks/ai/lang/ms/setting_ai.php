@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'ai_content_generation'      => 'Penjanaan kandungan',
+    'ai_content_settings'        => 'Tetapan kandungan AI',
+    'ai_content_settings_desc'   => 'Konfigurasikan tetapan untuk kandungan yang dijana AI',
+    'ai_model'                   => 'Alat AI',
+    'ai_model_config'            => 'Konfigurasi model AI',
+    'ai_model_no_available'      => 'Model AI tidak tersedia',
+    'ai_model_no_available_desc' => 'Mulakan dengan mengkonfigurasi kunci API untuk sekurang-kurangnya satu model AI dalam tetapan AI anda',
+    'ai_setting'                 => 'Tetapan AI',
+    'anthropic_api_key'          => 'Kekunci API Antropik',
+    'anthropic_description'      => 'Anthropic Claude menyediakan perkhidmatan perbualan AI yang selamat, berguna dan tepat.',
+    'api_configuration'          => 'Konfigurasi API',
+    'deepseek_api_key'           => 'Kunci API DeepSeek',
+    'deepseek_description'       => 'DeepSeek pakar dalam model bahasa Cina, menawarkan keupayaan perbualan yang sangat baik.',
+    'doubao_api_key'             => 'Kekunci API Beanbag',
+    'doubao_description'         => 'Doubao ialah produk perbualan AI yang dilancarkan oleh ByteDance, menyediakan Soal Jawab pintar dan keupayaan kreatif.',
+    'doubao_title'               => 'Roti kacang',
+    'enable_model'               => 'Dayakan model',
+    'get_api_key'                => 'Dapatkan kunci API',
+    'hunyuan_api_key'            => 'Kekunci API campuran',
+    'hunyuan_description'        => 'Model hibrid Tencent menyediakan pemahaman Cina yang kukuh dan keupayaan penjanaan.',
+    'hunyuan_title'              => 'Unsur-unsur campuran',
+    'kimi_api_key'               => 'Kekunci API Kimi',
+    'kimi_description'           => 'Kimi ialah pembantu pintar yang dilancarkan oleh sisi gelap bulan yang menyokong pemahaman kontekstual ultra-panjang.',
+    'openai_api_key'             => 'Kunci API OpenAI',
+    'openai_description'         => 'OpenAI menawarkan model GPT yang berkuasa untuk penjanaan dan pemahaman teks.',
+    'openai_proxy_url'           => 'URL Ejen OpenAI',
+    'qianwen_api_key'            => 'Beribu-ribu soalan tentang kunci API',
+    'qianwen_description'        => 'Tongyi Qianwen ialah model bahasa besar yang dilancarkan oleh Akademi Dharma Alibaba, yang menyokong pelbagai senario aplikasi.',
+    'qianwen_title'              => 'Seribu soalan',
+];

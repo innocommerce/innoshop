@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'カテゴリーを表示',
     'categories_store'                   => 'カテゴリーを保存',
     'categories_update'                  => 'カテゴリーを更新',
-    'content_ai_generate'                => 'AIコンテンツ生成',
     'countries_active'                   => '国を有効化',
     'countries_create'                   => '国を作成',
     'countries_destroy'                  => '国を削除',

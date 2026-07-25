@@ -76,7 +76,6 @@ return [
     'plugin_coordination'    => 'ការត់កម្មវិញ',
     'top_data'               => 'ទិន្នន័យ',
     'visits'                 => 'កំណត់ថើមកំណត់',
-    'content_ai'             => 'AI Content',
     'payments'               => 'Payments',
     'plugin-market'          => 'Plugin Market',
     'plugins'                => 'Plugins',

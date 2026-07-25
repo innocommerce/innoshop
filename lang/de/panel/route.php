@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'Kategorie anzeigen',
     'categories_store'                   => 'Kategorie speichern',
     'categories_update'                  => 'Kategorie aktualisieren',
-    'content_ai_generate'                => 'AI-Inhalt generieren',
     'countries_active'                   => 'Land aktivieren',
     'countries_create'                   => 'Land erstellen',
     'countries_destroy'                  => 'Land löschen',

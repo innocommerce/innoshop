@@ -11,9 +11,11 @@
               <el-button size="small" @click="createFolder">
                 <el-icon><component :is="'FolderAdd'"></component></el-icon> {{ __('panel/media.create_folder') }}
               </el-button>
+              @if(ai_enabled())
               <el-button size="small" @click="openAIDialog()" type="success">
-                <el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('panel/media.ai_generate_image') }}
+                <el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('ai::media.ai_generate_image') }}
               </el-button>
+              @endif
             </el-button-group>
             <el-button-group v-if="isIframeMode">
               <el-button size="small" :type="isMultiSelectMode ? 'primary' : 'default'" @click="toggleMultiSelectMode">
@@ -141,11 +143,13 @@
                         </template>
                         <template v-else>
                             <template v-if="file.mime && file.mime.startsWith('image/')">
+                              @if(ai_enabled())
                               <div class="ai-button"
                                 @click.stop="imageToImage(file)">
                                 <el-icon><component :is="'MagicStick'"></component></el-icon>
                                 <span>AI</span>
                               </div>
+                              @endif
                               <div class="preview-button"
                                 @click.stop="showPreview(file)">
                                 <el-icon><component :is="'ZoomIn'"></component></el-icon>
@@ -259,7 +263,9 @@
     <div class="file-card-context-menu" v-show="contextMenu.visible" :style="contextMenu.style">
       <ul>
         <li v-if="contextMenu.file && contextMenu.file.media_id" @click="showMediaDetail(contextMenu.file)"><el-icon><component :is="'InfoFilled'"></component></el-icon> {{ __('panel/media.detail') }}</li>
-        <li v-if="isImageFile(contextMenu.file)" @click="imageToImage(contextMenu.file)"><el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('panel/media.ai_image_to_image') }}</li>
+        @if(ai_enabled())
+        <li v-if="isImageFile(contextMenu.file)" @click="imageToImage(contextMenu.file)"><el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('ai::media.ai_image_to_image') }}</li>
+        @endif
         <li @click="renameFile"><el-icon><component :is="'Edit'"></component></el-icon> {{ __('panel/media.rename') }}</li>
         <li @click="deleteFile"><el-icon><component :is="'Delete'"></component></el-icon> {{ __('panel/media.delete') }}</li>
         <li @click="moveFile"><el-icon><component :is="'Folder'"></component></el-icon> {{ __('panel/media.move_to') }}</li>
@@ -387,81 +393,9 @@
       </template>
     </el-dialog>
 
-    <!-- AI Image Generation Dialog -->
-    <el-dialog v-model="aiImageDialog.visible" width="640px" :close-on-click-modal="false" class="ai-image-dialog">
-      <template #header>
-        <div class="ai-dialog-header">
-          <div class="ai-dialog-title">
-            <span class="ai-dialog-icon"><el-icon><component :is="'MagicStick'"></component></el-icon></span>
-            <span>{{ __('panel/media.ai_image') }}</span>
-          </div>
-          <el-tag size="small" type="info" effect="plain">@{{ aiImageDialog.modelInfo }}</el-tag>
-        </div>
-      </template>
-      <div class="ai-dialog-body">
-        <!-- Reference Image -->
-        <div v-if="aiImageDialog.referenceImage" class="ai-ref-section">
-          <div class="ai-ref-label">{{ __('panel/media.ai_reference_image') }}</div>
-          <div class="ai-ref-card">
-            <el-image :src="aiImageDialog.referencePreviewUrl" class="ai-ref-thumb" fit="cover"></el-image>
-            <div class="ai-ref-info">
-              <span class="ai-ref-name">@{{ aiImageDialog.referenceImage?.name || '' }}</span>
-            </div>
-            <el-button class="ai-ref-remove" size="small" circle @click="aiImageDialog.referenceImage = ''; aiImageDialog.referencePreviewUrl = '';">
-              <el-icon><component :is="'Close'"></component></el-icon>
-            </el-button>
-          </div>
-        </div>
-
-        <!-- Prompt -->
-        <div class="ai-prompt-section">
-          <div class="ai-section-label">@{{ aiLabelPrompt }}</div>
-          <el-input v-model="aiImageDialog.prompt" type="textarea" :rows="5"
-            :placeholder="aiLabelPromptPlaceholder" resize="none"></el-input>
-        </div>
-
-        <!-- Options -->
-        <el-row :gutter="16" class="ai-options-row">
-          <el-col :span="12">
-            <div class="ai-section-label">@{{ aiLabelSize }}</div>
-            <el-select v-model="aiImageDialog.size" style="width:100%">
-              <el-option label="1:1 (1024x1024)" value="1:1"></el-option>
-              <el-option label="3:2 (Landscape)" value="3:2"></el-option>
-              <el-option label="2:3 (Portrait)" value="2:3"></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="12">
-            <div class="ai-section-label">@{{ aiLabelQuality }}</div>
-            <el-select v-model="aiImageDialog.quality" style="width:100%">
-              <el-option :label="aiLabelLow" value="low"></el-option>
-              <el-option :label="aiLabelMedium" value="medium"></el-option>
-              <el-option :label="aiLabelHigh" value="high"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
-
-        <!-- Preview -->
-        <div v-if="aiImageDialog.previewUrl" class="ai-preview-section">
-          <div class="ai-preview-card">
-            <el-image :src="aiImageDialog.previewUrl" fit="contain" class="ai-preview-image"></el-image>
-          </div>
-        </div>
-      </div>
-      <template #footer>
-        <div class="ai-dialog-footer">
-          <el-button @click="aiImageDialog.visible = false">{{ __('panel/media.cancel_btn') }}</el-button>
-          <div class="ai-dialog-footer-actions">
-            <el-button type="primary" @click="generateAIImage" :loading="aiImageDialog.loading">
-              <el-icon v-if="!aiImageDialog.loading"><component :is="'MagicStick'"></component></el-icon>
-              @{{ aiImageDialog.loading ? aiLabelGenerating : aiLabelGenerate }}
-            </el-button>
-            <el-button v-if="aiImageDialog.previewUrl" type="success" @click="useAIImage">
-              <el-icon><component :is="'Check'"></component></el-icon> {{ __('panel/media.ai_use') }}
-            </el-button>
-          </div>
-        </div>
-      </template>
-    </el-dialog>
+    @if(ai_enabled())
+    @include('ai::media._ai-image-dialog')
+    @endif
 
     <!-- Image Preview Viewer -->
     <el-image-viewer
@@ -514,6 +448,40 @@
               <span v-else class="text-muted small">{{ __('panel/media.not_used_anywhere') }}</span>
             </el-descriptions-item>
           </el-descriptions>
+
+          <template v-if="mediaDetail.data.cloud">
+            <div class="media-detail-section-title">
+              {{ __('panel/media.cloud_storage') }}
+              <el-tag v-if="mediaDetail.data.cloud.exists" size="small" type="success" style="margin-left: 6px;">{{ __('panel/media.cloud_synced') }}</el-tag>
+              <el-tag v-else size="small" type="danger" style="margin-left: 6px;">{{ __('panel/media.cloud_missing') }}</el-tag>
+            </div>
+            <el-descriptions :column="1" border size="small" class="media-detail-desc">
+              <el-descriptions-item label="{{ __('panel/media.cloud_object_key') }}">
+                <code class="media-detail-path">@{{ mediaDetail.data.cloud.object_key }}</code>
+              </el-descriptions-item>
+              <el-descriptions-item label="{{ __('panel/media.cloud_bucket') }}">
+                @{{ mediaDetail.data.cloud.bucket }}
+              </el-descriptions-item>
+              <el-descriptions-item label="{{ __('panel/media.cloud_region') }}">
+                @{{ mediaDetail.data.cloud.region || '-' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="{{ __('panel/media.cloud_endpoint') }}">
+                <code class="media-detail-path">@{{ mediaDetail.data.cloud.endpoint }}</code>
+              </el-descriptions-item>
+              <el-descriptions-item label="{{ __('panel/media.cloud_cdn_domain') }}" v-if="mediaDetail.data.cloud.cdn_domain">
+                <code class="media-detail-path">@{{ mediaDetail.data.cloud.cdn_domain }}</code>
+              </el-descriptions-item>
+              <el-descriptions-item label="{{ __('panel/media.cloud_etag') }}" v-if="mediaDetail.data.cloud.etag">
+                <code class="media-detail-checksum">@{{ mediaDetail.data.cloud.etag }}</code>
+              </el-descriptions-item>
+              <el-descriptions-item label="{{ __('panel/media.cloud_size') }}" v-if="mediaDetail.data.cloud.cloud_size !== null">
+                @{{ mediaDetail.data.cloud.cloud_size_readable }} <span class="text-muted small">(@{{ mediaDetail.data.cloud.cloud_size }} B)</span>
+              </el-descriptions-item>
+              <el-descriptions-item label="{{ __('panel/media.cloud_last_modified') }}" v-if="mediaDetail.data.cloud.last_modified">
+                @{{ mediaDetail.data.cloud.last_modified }}
+              </el-descriptions-item>
+            </el-descriptions>
+          </template>
 
           <div class="media-detail-alt-section">
             <div class="media-detail-section-title">{{ __('panel/media.alt_text') }}</div>

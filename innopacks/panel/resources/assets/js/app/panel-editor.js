@@ -3,7 +3,6 @@
  */
 import { getPanelConfig } from './panel-config';
 import media from './panel-media';
-import aiModal from './ai-modal';
 
 function isVideoFile(file) {
   const url = (file.origin_url || file.url || '').toLowerCase();
@@ -96,7 +95,7 @@ function setupEditor(ed) {
       const m = editorId.match(/^content-(.+)$/);
       const sourceLocale = m ? m[1] : '';
 
-      aiModal.openFromState({
+      window.aiModal?.openFromState({
         column,
         field: '',
         entityType: el.getAttribute('data-entity-type') || '',
@@ -109,7 +108,7 @@ function setupEditor(ed) {
     },
     onSetup: (api) => {
       const hasColumn = !!(ed.getElement() && ed.getElement().getAttribute('data-column'));
-      api.setDisabled(!hasColumn);
+      api.setDisabled(!hasColumn || !window.aiModal);
     },
   });
 

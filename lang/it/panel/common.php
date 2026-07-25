@@ -12,7 +12,6 @@ return [
     'activate'                     => 'attivazione',
     'active'                       => 'Attivato',
     'admin'                        => 'amministratore',
-    'ai_generate'                  => 'Creazione di posti di lavoro',
     'asc'                          => 'In ordine crescente',
     'assign_sales_failed'          => 'Mancata assegnazione',
     'assign_sales_success'         => 'Distribuzione successo',

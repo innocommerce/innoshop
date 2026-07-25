@@ -20,9 +20,9 @@
             </select>
           </div>
         @endif
-        @if ($generate ?? false)
+        @if (($generate ?? false) && ai_enabled())
           <div class="ms-3">
-            <a class="btn btn-outline-secondary btn-sm ai-generate" data-column="{{ $column ?? '' }}" data-lang="{{ $localeCode ?? '' }}" title="{{ __('panel/common.ai_generate') }}">
+            <a class="btn btn-outline-secondary btn-sm ai-generate" data-column="{{ $column ?? '' }}" data-lang="{{ $localeCode ?? '' }}" title="{{ __('ai::modal.ai_generate') }}">
               <i class="bi bi-stars"></i>
             </a>
           </div>

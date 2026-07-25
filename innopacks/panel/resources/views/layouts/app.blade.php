@@ -33,8 +33,6 @@
       panel_api: '{{ route('api.panel.base.index') }}',
       panel_base: '{{ panel_route('home.index') }}',
       panel_upload: '{{ panel_route('upload.images') }}',
-      panel_ai: '{{ panel_route('content_ai.generate') }}',
-      panel_ai_batch: '{{ panel_route('content_ai.generate_batch') }}',
       media_title: '{{ __("panel/menu.media") }}',
     };
 
@@ -116,7 +114,10 @@
 
   @include('panel::layouts.footer')
 
-  @include('panel::components.ai_generate_modal')
+  @if(ai_enabled())
+  @include('ai::components.ai_generate_modal')
+  @include('ai::components._ai-modal-script')
+  @endif
 
   @stack('footer')
 </body>

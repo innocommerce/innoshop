@@ -8,7 +8,7 @@
  */
 
 return [
-    'bank_transfer_success_title' => 'The order has been submitted. Please wait for the administrator\'s review',
+    'bank_transfer_success_title' => 'You have a pending order. Please complete the payment as soon as possible.',
     'cancel_desc'                 => 'You have cancelled the payment. If you have any questions, please contact support.',
     'cancel_title'                => 'You have cancelled the payment',
     'continue_shopping'           => 'Continue Shopping',

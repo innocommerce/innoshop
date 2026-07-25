@@ -76,7 +76,6 @@ return [
     'visits'                 => '訪問記錄',
     'weight_classes'         => '重量單位',
     'withdrawals'            => '客戶提現',
-    'content_ai'             => 'AI 內容',
     'payments'               => '付款管理',
     'plugin-market'          => '插件市場',
     'plugins'                => '插件管理',

@@ -12,7 +12,6 @@ return [
     'activate'                     => '激活',
     'active'                       => '啟用',
     'admin'                        => '管理員',
-    'ai_generate'                  => 'AI 生成',
     'asc'                          => '升序',
     'assign_sales_failed'          => '分配失敗',
     'assign_sales_success'         => '分配成功',

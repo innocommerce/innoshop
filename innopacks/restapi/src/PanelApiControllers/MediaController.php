@@ -519,6 +519,21 @@ class MediaController extends BaseController
 
             $usage = $media->usageCount();
 
+            $cloud = null;
+            if ($media->disk !== 'local') {
+                try {
+                    $cloud = (new OSSService)->getCloudMeta($media->getRawStorageKey());
+                    if ($cloud['cloud_size'] !== null) {
+                        $cloud['cloud_size_readable'] = $this->formatBytes((int) $cloud['cloud_size']);
+                    }
+                } catch (Exception $e) {
+                    Log::warning('Media detail cloud meta failed:', [
+                        'id'    => $id,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+
             return json_success(trans('panel/media.media_detail_loaded'), [
                 'id'            => $media->id,
                 'disk'          => $media->disk,
@@ -537,6 +552,7 @@ class MediaController extends BaseController
                 'url'           => $media->url(),
                 'usage'         => $usage,
                 'total_usage'   => array_sum($usage),
+                'cloud'         => $cloud,
             ]);
         } catch (Exception $e) {
             Log::error('Get media detail failed:', [
@@ -593,12 +609,15 @@ class MediaController extends BaseController
     public function getMediaStats(): mixed
     {
         try {
-            $baseQuery = MediaFile::query();
+            // Totals follow the active media driver so the file manager
+            // reflects what the user is actually browsing.
+            $driver    = system_setting('media_driver', 'local');
+            $baseQuery = MediaFile::query()->where('disk', $driver);
 
             $totalFiles = (clone $baseQuery)->count();
             $totalSize  = (clone $baseQuery)->sum('size');
 
-            $byDisk = (clone $baseQuery)
+            $byDisk = MediaFile::query()
                 ->select('disk', DB::raw('COUNT(*) as count'), DB::raw('COALESCE(SUM(size), 0) as size'))
                 ->groupBy('disk')
                 ->get()

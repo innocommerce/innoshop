@@ -8,11 +8,13 @@
              placeholder="{{ __('panel/common.slug') }}"
              maxlength="60"
              data-column="article_slug">
+      @if(ai_enabled())
       <button type="button" class="btn btn-outline-secondary ai-generate"
               data-column="article_slug"
-              title="{{ __('panel/common.ai_generate') }}">
+              title="{{ __('ai::modal.ai_generate') }}">
         <i class="bi bi-stars"></i>
       </button>
+      @endif
     </div>
     <div class="text-secondary mt-1"><small>{{ __('panel/common.slug_description') }}</small></div>
   </div>

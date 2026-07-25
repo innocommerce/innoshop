@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'Categorie weergeven',
     'categories_store'                   => 'Categorie opslaan',
     'categories_update'                  => 'Categorie bijwerken',
-    'content_ai_generate'                => 'AI Inhoud genereren',
     'countries_active'                   => 'Land inschakelen',
     'countries_create'                   => 'Land maken',
     'countries_destroy'                  => 'Land verwijderen',

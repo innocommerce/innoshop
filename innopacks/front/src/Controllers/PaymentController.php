@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
+use InnoShop\Common\Services\StateMachineService;
 
 class PaymentController extends Controller
 {
@@ -26,6 +27,17 @@ class PaymentController extends Controller
     public function success(Request $request)
     {
         $order = $this->resolveOrderFromRequest($request);
+
+        if ($order) {
+            $isPaid          = in_array($order->status, [StateMachineService::PAID, StateMachineService::SHIPPED, StateMachineService::COMPLETED]);
+            $isOfflineMethod = $order->billing_method_code === 'bank_transfer';
+
+            // Paid/shipped/completed, or offline bank transfer (awaiting admin review) → show success page.
+            // Online payment not yet paid → redirect to fail page to avoid showing "payment success" prematurely.
+            if (! $isPaid && ! $isOfflineMethod) {
+                return redirect(front_route('payment.fail', ['order_number' => $order->number]));
+            }
+        }
 
         return inno_view('payment.success', ['order' => $order]);
     }

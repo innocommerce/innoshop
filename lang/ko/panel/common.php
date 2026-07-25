@@ -12,7 +12,6 @@ return [
     'activate'                     => '활성화',
     'active'                       => '활성화',
     'admin'                        => '관리원',
-    'ai_generate'                  => 'ai 생성',
     'asc'                          => '오름 차순',
     'assign_sales_failed'          => '할당 실패',
     'assign_sales_success'         => '할당 성공',

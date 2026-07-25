@@ -12,7 +12,6 @@ return [
     'activate'                     => 'Pengaktifan',
     'active'                       => 'Aktif',
     'admin'                        => 'Pentadbir',
-    'ai_generate'                  => 'Dijana AI',
     'asc'                          => 'Susunan menaik',
     'assign_sales_failed'          => 'Tugasan gagal',
     'assign_sales_success'         => 'Tugasan itu berjaya',

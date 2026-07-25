@@ -78,7 +78,6 @@ return [
     'withdrawals'            => '客户提现',
     'top_data'               => '数据',
     'visits'                 => '访问记录',
-    'content_ai'             => 'AI 内容',
     'payments'               => '支付管理',
     'plugin-market'          => '插件市场',
     'plugins'                => '插件管理',

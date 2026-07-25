@@ -157,10 +157,6 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'index'])->name('plugin_coordination.index');
         Route::put('/plugin_coordination', [Controllers\PluginCoordinationController::class, 'update'])->name('plugin_coordination.update');
 
-        Route::post('/content-ai/generate', [Controllers\ContentAIController::class, 'generate'])->name('content_ai.generate');
-        Route::post('/content-ai/generate-batch', [Controllers\ContentAIController::class, 'generateBatch'])->name('content_ai.generate_batch');
-        Route::post('/content-ai/list-models', [Controllers\ContentAIController::class, 'listModels'])->name('content_ai.list_models');
-
         Route::resource('/admins', Controllers\AdminController::class);
         Route::put('/admins/{currency}/active', [Controllers\AdminController::class, 'active'])->name('admins.active');
 

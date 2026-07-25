@@ -12,7 +12,6 @@ return [
     'activate'                     => 'تفعيل',
     'active'                       => 'نشط',
     'admin'                        => 'مشرف',
-    'ai_generate'                  => 'المولد AI',
     'asc'                          => 'تصاعدي',
     'assign_sales_failed'          => 'فشل التوزيع',
     'assign_sales_success'         => 'تم التوزيع',

@@ -76,7 +76,6 @@ return [
     'plugin_coordination'    => 'Plugin coördinatie',
     'top_data'               => 'Gegevens',
     'visits'                 => 'Bezoekerslogboeken',
-    'content_ai'             => 'AI Content',
     'payments'               => 'Payments',
     'plugin-market'          => 'Plugin Market',
     'plugins'                => 'Plugins',

@@ -15,7 +15,6 @@ use Illuminate\Support\ServiceProvider;
 use InnoShop\Common\Components\Base;
 use InnoShop\Common\Components\Forms;
 use InnoShop\Common\Console\Commands;
-use InnoShop\Common\Services\AI\ProviderRegistry;
 use InnoShop\Common\Services\Notification\NotificationEventSubscriber;
 use InnoShop\Common\Services\StorageService;
 
@@ -34,7 +33,6 @@ class CommonServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom($this->basePath.'resources/views', 'common');
         $this->app->singleton(StorageService::class);
-        $this->app->singleton(ProviderRegistry::class);
     }
 
     /**
@@ -45,7 +43,6 @@ class CommonServiceProvider extends ServiceProvider
     public function boot(): void
     {
         load_settings();
-        $this->loadAiConfig();
         $this->registerConfig();
         $this->registerMigrations();
         $this->registerCommands();
@@ -78,18 +75,6 @@ class CommonServiceProvider extends ServiceProvider
     private function registerNotificationListeners(): void
     {
         NotificationEventSubscriber::register();
-    }
-
-    /**
-     * Load AI config from system_setting into config('ai.*')
-     */
-    private function loadAiConfig(): void
-    {
-        if (! installed()) {
-            return;
-        }
-
-        app(ProviderRegistry::class)->buildLaravelAiConfig();
     }
 
     /**

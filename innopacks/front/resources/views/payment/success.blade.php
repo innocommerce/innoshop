@@ -13,7 +13,7 @@
     <div class="checkout-success-box">
       @if($order)
         <div class="order-success-icon"><img src="{{ asset('/images/icons/payment-success.svg') }}" class="img-fluid"></div>
-        @if($order->payment_method_code == 'bank_transfer')
+        @if($order->billing_method_code == 'bank_transfer')
           <div class="checkout-success-title"><span>{{ trans('front/payment.bank_transfer_success_title') }}</span></div>
         @else
           <div class="checkout-success-title"><span>{{ trans('front/payment.success_title') }}</span></div>

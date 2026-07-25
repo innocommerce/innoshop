@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'Kategoriyi Göster',
     'categories_store'                   => 'Kategoriyi Kaydet',
     'categories_update'                  => 'Kategoriyi Güncelle',
-    'content_ai_generate'                => 'Yapay Zeka İçeriği Oluştur',
     'countries_active'                   => 'Ülkeyi Aktifleştir',
     'countries_create'                   => 'Ülke Oluştur',
     'countries_destroy'                  => 'Ülkeyi Sil',

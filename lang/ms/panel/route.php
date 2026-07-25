@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'Papar Kategori',
     'categories_store'                   => 'Simpan Kategori',
     'categories_update'                  => 'Kemaskini Kategori',
-    'content_ai_generate'                => 'Penghasilan Kandungan AI',
     'countries_active'                   => 'Aktifkan Negara',
     'countries_create'                   => 'Cipta Negara',
     'countries_destroy'                  => 'Padam Negara',

@@ -76,7 +76,6 @@ return [
     'plugin_coordination'    => 'プラグイン連携',
     'top_data'               => 'データ',
     'visits'                 => 'アクセス記録',
-    'content_ai'             => 'AI Content',
     'payments'               => 'Payments',
     'plugin-market'          => 'Plugin Market',
     'plugins'                => 'Plugins',

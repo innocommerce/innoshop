@@ -12,7 +12,6 @@ return [
     'activate'                     => 'aktifkan',
     'active'                       => 'Aktif',
     'admin'                        => 'administrator',
-    'ai_generate'                  => 'Generasi AI',
     'asc'                          => 'ShengXu',
     'assign_sales_failed'          => 'Kegagalan distribusi',
     'assign_sales_success'         => 'Sukses mendistribusikan',

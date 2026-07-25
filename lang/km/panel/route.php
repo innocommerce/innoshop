@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'Show Category',
     'categories_store'                   => 'Store Category',
     'categories_update'                  => 'Update Category',
-    'content_ai_generate'                => 'Generate AI Content',
     'countries_active'                   => 'Activate Country',
     'countries_create'                   => 'Create Country',
     'countries_destroy'                  => 'Destroy Country',

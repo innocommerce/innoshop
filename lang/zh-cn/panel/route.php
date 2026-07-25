@@ -81,7 +81,6 @@ return [
     'categories_show'                    => '显示分类',
     'categories_store'                   => '保存分类',
     'categories_update'                  => '更新分类',
-    'content_ai_generate'                => 'AI 内容生成',
     'countries_active'                   => '启用国家',
     'countries_create'                   => '创建国家',
     'countries_destroy'                  => '删除国家',

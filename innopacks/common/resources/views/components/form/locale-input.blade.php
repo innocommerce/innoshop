@@ -86,13 +86,13 @@ $modalId = 'locale-modal-' . $uid;
              @if($generate) data-column="{{ $column }}" @endif>
     @endif
 
-    @if($generate)
+    @if($generate && ai_enabled())
       <button type="button" class="btn btn-outline-secondary locale-ai-btn"
               data-column="{{ $column }}"
               data-field="{{ $name }}"
               data-entity-type="{{ $entityType }}"
               data-entity-id="{{ $entityId }}"
-              title="{{ __('panel/common.ai_generate') }}">
+              title="{{ __('ai::modal.ai_generate') }}">
         <i class="bi bi-stars"></i>
       </button>
     @endif

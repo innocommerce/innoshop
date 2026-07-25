@@ -12,7 +12,6 @@ return [
     'activate'                     => 'เปิดใช้งาน',
     'active'                       => 'ใช้งาน',
     'admin'                        => 'ผู้ดูแลระบบ',
-    'ai_generate'                  => 'กำลังสร้าง',
     'asc'                          => 'เรียงลำดับ',
     'assign_sales_failed'          => 'การกระจายล้มเหลว',
     'assign_sales_success'         => 'การกระจาย',

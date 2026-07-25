@@ -11,12 +11,15 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use InnoShop\Common\Services\Notification\NotificationEventSubscriber;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
@@ -27,7 +30,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Illuminate\Session\Middleware\AuthenticateSession::class,
         ];
         $middleware->group('front', $webMiddlewares);
         $middleware->group('panel', $webMiddlewares);
@@ -58,8 +60,17 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->dontReportDuplicates();
+        $exceptions->reportable(function (Throwable $e) {
+            if ($e instanceof NotFoundHttpException) {
+                return;
+            }
+            if ($e instanceof HttpException && $e->getStatusCode() < 500) {
+                return;
+            }
 
-        // Handle API exceptions
+            NotificationEventSubscriber::notifyException($e);
+        });
+
         $exceptions->render(function (Exception $e, Request $request) {
             if ($request->is('api/*')) {
                 return json_fail($e->getMessage());

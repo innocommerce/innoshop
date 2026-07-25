@@ -81,7 +81,6 @@ return [
     'categories_show'                    => 'عرض تصنيف',
     'categories_store'                   => 'حفظ تصنيف',
     'categories_update'                  => 'تحديث تصنيف',
-    'content_ai_generate'                => 'توليد المحتوى بواسطة الذكاء الاصطناعي',
     'countries_active'                   => 'تفعيل البلدان',
     'countries_create'                   => 'إنشاء بلد',
     'countries_destroy'                  => 'حذف بلد',

@@ -12,7 +12,6 @@ return [
     'activate'                     => 'l’activation',
     'active'                       => 'Actif',
     'admin'                        => 'administrateur',
-    'ai_generate'                  => 'Génération de ia',
     'asc'                          => 'Par ordre croissant',
     'assign_sales_failed'          => 'Échec de l’allocation',
     'assign_sales_success'         => 'Succès de distribution',

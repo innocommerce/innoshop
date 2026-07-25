@@ -8,7 +8,7 @@
  */
 
 return [
-    'bank_transfer_success_title' => '订单已提交，请等待管理员审核',
+    'bank_transfer_success_title' => '有待付款订单，尽快完成支付',
     'cancel_desc'                 => '您已取消支付，如有疑问请联系客服。',
     'cancel_title'                => '您已取消支付',
     'continue_shopping'           => '继续购物',

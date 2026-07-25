@@ -14,11 +14,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Services\StorageService;
+use Symfony\Component\Mime\MimeTypes;
 
 class MediaRegisterExisting extends Command
 {
     protected $signature = 'media:register-existing
-                            {--disk= : Storage disk to scan (defaults to "media", which is where the file manager stores files)}
+                            {--disk= : Storage disk to scan (defaults to "media"; use "oss" to scan the configured cloud bucket)}
                             {--limit=0 : Max files to register (0 = no limit)}
                             {--force : Re-register even if a record already exists for the storage_key}';
 
@@ -30,9 +31,16 @@ class MediaRegisterExisting extends Command
     public function handle(): int
     {
         $driver   = system_setting('media_driver', 'local');
-        $diskName = $this->option('disk') ?? 'media';
+        $diskName = $this->option('disk');
         $limit    = (int) $this->option('limit');
         $force    = (bool) $this->option('force');
+
+        // Cloud driver active and no explicit local disk requested: scan the bucket.
+        if ($diskName === 'oss' || ($diskName === null && $driver !== 'local')) {
+            return $this->handleOss($driver, $limit, $force);
+        }
+
+        $diskName = $diskName ?? 'media';
 
         $this->info("Scanning disk [{$diskName}] under prefix [".StorageService::STORAGE_PREFIX.']...');
 
@@ -105,6 +113,112 @@ class MediaRegisterExisting extends Command
         $this->info("Done. Registered: {$count}, skipped (already existed): {$skipped}, failed: {$failed}.");
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Scan the configured cloud bucket (COS/OSS/Qiniu/...) and register every object.
+     */
+    protected function handleOss(string $driver, int $limit, bool $force): int
+    {
+        $serviceClass = 'InnoShop\\RestAPI\\Services\\OSSService';
+        if (! class_exists($serviceClass)) {
+            $this->error('OSSService is unavailable (restapi pack not loaded).');
+
+            return self::FAILURE;
+        }
+
+        try {
+            $service = new $serviceClass;
+        } catch (\Throwable $e) {
+            $this->error('Failed to initialize cloud storage: '.$e->getMessage());
+
+            return self::FAILURE;
+        }
+
+        $this->info("Scanning cloud bucket for driver [{$driver}]...");
+
+        $count   = 0;
+        $skipped = 0;
+        $failed  = 0;
+
+        foreach ($service->listAllObjects() as $object) {
+            if ($limit > 0 && $count >= $limit) {
+                break;
+            }
+
+            $key = $object['key'];
+            if (str_ends_with($key, '/') || str_starts_with(basename($key), '.')) {
+                continue;
+            }
+
+            $storageKey = StorageService::storageKey($key);
+
+            if (! $force && MediaFile::findByStorageKey($storageKey)) {
+                $skipped++;
+
+                continue;
+            }
+
+            try {
+                $this->registerFromOss($service, $key, $storageKey, (int) $object['size'], $driver);
+                $count++;
+            } catch (\Throwable $e) {
+                $failed++;
+                Log::warning('media:register-existing failed', [
+                    'storage_key' => $storageKey,
+                    'error'       => $e->getMessage(),
+                ]);
+            }
+        }
+
+        $this->info("Done. Registered: {$count}, skipped (already existed): {$skipped}, failed: {$failed}.");
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Register a single cloud object: downloads to a temp file once for checksum + image dimensions.
+     */
+    protected function registerFromOss(object $service, string $key, string $storageKey, int $size, string $driver): void
+    {
+        $extension = strtolower(pathinfo($key, PATHINFO_EXTENSION));
+        $mime      = (new MimeTypes)->getMimeTypes($extension)[0] ?? 'application/octet-stream';
+
+        $tmp    = tempnam(sys_get_temp_dir(), 'media_');
+        $stream = $service->getObjectStream($key);
+        $out    = fopen($tmp, 'wb');
+        while (! $stream->eof()) {
+            fwrite($out, $stream->read(65536));
+        }
+        fclose($out);
+        $stream->close();
+
+        $checksum = hash_file('sha256', $tmp);
+
+        $width  = null;
+        $height = null;
+        if (str_starts_with($mime, 'image/')) {
+            $info = @getimagesize($tmp);
+            if ($info !== false) {
+                $width  = (int) $info[0];
+                $height = (int) $info[1];
+            }
+        }
+        @unlink($tmp);
+
+        MediaFile::updateOrCreate(
+            ['storage_key' => $storageKey],
+            [
+                'disk'          => $driver,
+                'original_name' => basename($key),
+                'checksum'      => $checksum,
+                'mime'          => $mime,
+                'size'          => $size,
+                'width'         => $width,
+                'height'        => $height,
+                'source'        => 'legacy',
+            ]
+        );
     }
 
     /**
