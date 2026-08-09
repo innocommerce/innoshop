@@ -87,4 +87,29 @@ class AccountControllerTest extends TestCase
 
         $this->assertArrayHasKey('admin', $data);
     }
+
+    #[Test]
+    public function test_regenerate_token_method_exists(): void
+    {
+        $this->assertTrue($this->reflection->hasMethod('regenerateToken'));
+        $method = $this->reflection->getMethod('regenerateToken');
+        $this->assertTrue($method->isPublic());
+    }
+
+    #[Test]
+    public function test_regenerate_token_method_has_no_parameters(): void
+    {
+        $method     = $this->reflection->getMethod('regenerateToken');
+        $parameters = $method->getParameters();
+        $this->assertCount(0, $parameters);
+    }
+
+    #[Test]
+    public function test_regenerate_token_method_returns_json_response(): void
+    {
+        $method     = $this->reflection->getMethod('regenerateToken');
+        $returnType = $method->getReturnType();
+        $this->assertNotNull($returnType);
+        $this->assertEquals('Illuminate\Http\JsonResponse', $returnType->getName());
+    }
 }

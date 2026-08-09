@@ -146,6 +146,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::get('/account', [Controllers\AccountController::class, 'index'])->name('account.index');
         Route::put('/account', [Controllers\AccountController::class, 'update'])->name('account.update');
+        Route::post('/account/regenerate-token', [Controllers\AccountController::class, 'regenerateToken'])->name('account.regenerate_token');
 
         Route::get('/settings', [Controllers\SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [Controllers\SettingController::class, 'update'])->name('settings.update');

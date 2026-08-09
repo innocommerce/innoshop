@@ -9,6 +9,7 @@
 
 namespace InnoShop\Panel\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\AdminRepo;
@@ -22,6 +23,7 @@ class AccountController extends BaseController
     {
         $data = [
             'admin' => current_admin(),
+            'token' => session('panel_api_token'),
         ];
 
         return inno_view('panel::account.index', $data);
@@ -45,6 +47,27 @@ class AccountController extends BaseController
             return redirect(panel_route('account.index'))
                 ->withErrors(['error' => $e->getMessage()])
                 ->withInput();
+        }
+    }
+
+    /**
+     * Invalidate the current admin API token and issue a new one.
+     * Forces all external clients (MCP, integrations) using the old token to re-authenticate.
+     *
+     * @return JsonResponse
+     */
+    public function regenerateToken(): JsonResponse
+    {
+        try {
+            $admin = current_admin();
+            $admin->tokens()->where('name', 'admin-token')->delete();
+
+            $newToken = $admin->createToken('admin-token')->plainTextToken;
+            session(['panel_api_token' => $newToken]);
+
+            return json_success(trans('panel/account.regenerated'), ['token' => $newToken]);
+        } catch (\Exception $e) {
+            return json_fail($e->getMessage());
         }
     }
 }

@@ -15,7 +15,7 @@ return [
     'write_hint'        => 'When off, external AI can only query. When on, write tools (create/update products, change order status, ship) are exposed.',
     'endpoint_url'      => 'Endpoint URL',
     'auth_header'       => 'Authentication',
-    'token_hint'        => 'Obtain a token via POST :url with an admin account, then pass it as a Bearer token.',
+    'token_hint'        => 'Open <a href=":url">Account → API Token</a> to copy your token, then pass it as a Bearer token.',
     'usage_title'       => 'How to use',
     'usage_cursor'      => 'Cursor: add this to ~/.cursor/mcp.json (or Settings → MCP → Add new server):',
     'usage_claude_code' => 'Claude Code: run this command:',

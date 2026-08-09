@@ -24,7 +24,9 @@
       <div class="col-md-6">
         <label class="form-label small text-muted mb-1">{{ __('mcp::setting.auth_header') }}</label>
         <code class="d-block small">Authorization: Bearer &lt;token&gt;</code>
-        <div class="text-muted small mt-1">{{ __('mcp::setting.token_hint', ['url' => url('/api/panel/login')]) }}</div>
+        <div class="text-muted small mt-1">
+          {!! __('mcp::setting.token_hint', ['url' => panel_route('account.index')]) !!}
+        </div>
       </div>
     </div>
 
