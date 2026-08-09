@@ -7,7 +7,7 @@
 <p align="center">
     <a href="https://www.innoshop.com"><img src="https://img.shields.io/badge/License-OSL%203.0-green.svg" alt="Total Downloads"></a>
     <a href="https://www.php.net"><img src="https://img.shields.io/badge/Language-PHP%208.2-blue.svg" alt="Total Downloads"></a>
-    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-12-orange" alt="Total Downloads"></a>
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-13-orange" alt="Total Downloads"></a>
 </p>
 
 
@@ -38,7 +38,7 @@
 # InnoShop
 InnoShop - Innovative Open Source E-commerce System.
 
-Innoshop is an Open Source eCommerce System based on Laravel 12, supporting multiple languages, multiple currencies, integrated with OpenAI, and featuring plugin mechanisms and theme template development for enhanced user experience and system extensibility.
+InnoShop is an Open Source eCommerce System based on Laravel 13, supporting multiple languages, multiple currencies, integrated with multiple AI models and native MCP (Model Context Protocol) for intelligent automation, and featuring plugin mechanisms and theme template development for enhanced user experience and system extensibility.
 
 ## Quick Start
 
@@ -95,7 +95,7 @@ php artisan serve
 ## Introduction
 - A globally oriented open source e-commerce system, a culmination of 15 years of continuous industry development.
 - User-friendly, intuitive interface, quick to get started, responsive design.
-- Based on the latest technology, deeply integrated with AI, supports multi-language and multi-currency features.
+- Based on the latest technology, deeply integrated with AI and native MCP (Model Context Protocol) support, multi-language and multi-currency features.
 - Highly cohesive, low coupling modular design, making it simple and convenient for rapid plugin development.
 
 ## Documentation
