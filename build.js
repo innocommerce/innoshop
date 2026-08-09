@@ -55,6 +55,22 @@ if (theme) {
         entries.push({ name: 'theme/js', input: `${themeDir}/assets/js/app.js`, outDir: `${themeOut}/js`, outputName: 'app' });
 }
 
+// Sync theme static assets (fonts, images, etc.) to public/static
+if (theme) {
+    const targetDir = `public/static/themes/${theme}`;
+    const distDir = `themes/${theme}/public`;
+    const skipDirs = new Set(['css', 'js']);
+    if (fs.existsSync(distDir)) {
+        fs.readdirSync(distDir).forEach(item => {
+            if (skipDirs.has(item)) return;
+            const src = `${distDir}/${item}`;
+            const dest = `${targetDir}/${item}`;
+            fs.cpSync(src, dest, { recursive: true, force: true });
+        });
+        console.log('  ✓ static assets synced');
+    }
+}
+
 if (entries.length === 0) {
     console.log('No entries to build.');
     process.exit(0);
@@ -64,7 +80,7 @@ let failed = 0;
 for (const entry of entries) {
     try {
         execSync(
-            `BUILD_INPUT="${entry.input}" BUILD_OUTDIR="${entry.outDir}" BUILD_OUTPUT_NAME="${entry.outputName}" npx vite build`,
+            `npx vite build`,
             { stdio: 'pipe', env: { ...process.env, BUILD_INPUT: entry.input, BUILD_OUTDIR: entry.outDir, BUILD_OUTPUT_NAME: entry.outputName } }
         );
         // Vite lib IIFE always outputs as index.js — rename to desired name
@@ -84,7 +100,7 @@ for (const entry of entries) {
     }
 }
 
-// Theme distribution
+// Theme distribution: copy built CSS/JS back to theme public dir (for git commit)
 if (theme) {
     const targetDir = `public/static/themes/${theme}`;
     const distDir = `themes/${theme}/public`;

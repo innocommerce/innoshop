@@ -28,6 +28,7 @@
 
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { pathToFileURL, fileURLToPath } from 'url';
 import fs from 'fs';
 
 const theme = process.env.THEME || 'scandihome';
@@ -44,18 +45,18 @@ function tildeImporter() {
                 const stripped = url.slice(1);
                 for (const [alias, target] of Object.entries(aliases)) {
                     if (stripped === alias || stripped.startsWith(alias + '/')) {
-                        return new URL(`file://${target}${stripped.slice(alias.length)}`);
+                        return pathToFileURL(target + stripped.slice(alias.length));
                     }
                 }
-                return new URL(`file://${resolve('node_modules', stripped)}`);
+                return pathToFileURL(resolve('node_modules', stripped));
             }
             if (url.startsWith('node_modules/')) {
-                return new URL(`file://${resolve(url)}`);
+                return pathToFileURL(resolve(url));
             }
             return null;
         },
         load(canonicalUrl) {
-            const filePath = decodeURIComponent(canonicalUrl.pathname);
+            const filePath = fileURLToPath(canonicalUrl);
             let resolved = filePath;
             if (!fs.existsSync(resolved)) {
                 for (const ext of ['.scss', '.sass', '.css']) {
@@ -107,6 +108,13 @@ export default defineConfig({
         },
     },
     resolve: {
+        // Themes under enterprise.test/themes/ are often symlinks to external
+        // git repos (e.g. D:/PublicSource/themes/*). By default Vite dereferences
+        // symlinks to their real path, which breaks Node module resolution for
+        // bare imports like `axios`/`jquery` (the real path has no node_modules
+        // ancestors). Preserving symlinks keeps the theme at its linked path so
+        // the host project's node_modules resolves correctly. No-op for real dirs.
+        preserveSymlinks: true,
         alias: {
             '@front': frontResources,
             '@theme': resolve(`themes/${theme}`),
