@@ -23,7 +23,7 @@ use Laravel\Mcp\Server\ServerContext;
 
 #[Name('InnoShop')]
 #[Version('1.0.0')]
-#[Instructions('InnoShop MCP server. Exposes store management tools registered in innopacks/ai. Read-only by default; write tools appear only when the merchant enabled them in the panel.')]
+#[Instructions('InnoShop MCP server. Exposes store management tools registered in innopacks/aicore. Read-only by default; write tools appear only when the merchant enabled them in the panel.')]
 class InnoShopMcpServer extends Server
 {
     protected array $capabilities = [

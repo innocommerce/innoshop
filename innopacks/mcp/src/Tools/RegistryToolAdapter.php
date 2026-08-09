@@ -20,7 +20,7 @@ use stdClass;
 use Throwable;
 
 /**
- * Adapts an innopacks/ai ToolInterface into a laravel/mcp Tool so every
+ * Adapts an innopacks/aicore ToolInterface into a laravel/mcp Tool so every
  * registered tool is automatically exposed over MCP.
  */
 class RegistryToolAdapter extends Tool
