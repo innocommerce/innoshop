@@ -14,11 +14,11 @@ return [
     // Package Service Providers...
     InnoShop\Install\InstallServiceProvider::class,
     InnoShop\Common\CommonServiceProvider::class,
-    InnoShop\AI\AIServiceProvider::class,
-    InnoShop\MCP\McpServiceProvider::class,
+    InnoShop\Aicore\AicoreServiceProvider::class,
+    InnoShop\Mcp\McpServiceProvider::class,
     InnoShop\Panel\PanelServiceProvider::class,
     InnoShop\Front\FrontServiceProvider::class,
-    InnoShop\RestAPI\RestAPIServiceProvider::class,
+    InnoShop\Restapi\RestapiServiceProvider::class,
     InnoShop\Plugin\PluginServiceProvider::class,
-    InnoShop\DevTools\DevToolsServiceProvider::class,
+    InnoShop\Devtools\DevtoolsServiceProvider::class,
 ];
