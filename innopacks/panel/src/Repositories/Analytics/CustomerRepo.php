@@ -211,7 +211,7 @@ class CustomerRepo extends BaseRepo
      */
     public function getTopCustomers(array $dateRange, int $limit = 10): array
     {
-        $query = Customer::withCount('orders')
+        $query = Customer::query()->withCount('orders')
             ->withSum('orders', 'total');
 
         if ($dateRange['start_date'] && $dateRange['end_date']) {

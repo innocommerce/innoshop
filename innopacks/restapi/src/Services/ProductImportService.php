@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Services;
+namespace InnoShop\Restapi\Services;
 
 use Exception;
 use InnoShop\Common\Repositories\Attribute\ValueRepo;

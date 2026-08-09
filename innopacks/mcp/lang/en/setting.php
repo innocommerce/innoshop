@@ -9,8 +9,10 @@
 
 return [
     'mcp_service'       => 'MCP Service',
-    'mcp_service_desc'  => 'Expose store data (products, orders, stock, sales stats) to MCP clients such as Claude and Cursor. Read-only, requires an admin token.',
+    'mcp_service_desc'  => 'Expose store data (products, orders, stock, sales stats) to MCP clients such as Claude and Cursor. Read-only by default, requires an admin token.',
     'enable_mcp'        => 'Enable MCP endpoint',
+    'enable_mcp_write'  => 'Allow write operations',
+    'write_hint'        => 'When off, external AI can only query. When on, write tools (create/update products, change order status, ship) are exposed.',
     'endpoint_url'      => 'Endpoint URL',
     'auth_header'       => 'Authentication',
     'token_hint'        => 'Obtain a token via POST :url with an admin account, then pass it as a Bearer token.',

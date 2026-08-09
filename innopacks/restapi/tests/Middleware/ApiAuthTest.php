@@ -7,10 +7,10 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Tests\Middleware;
+namespace InnoShop\Restapi\Tests\Middleware;
 
-use InnoShop\RestAPI\Middleware\SetAPICurrency;
-use InnoShop\RestAPI\Middleware\SetAPILocale;
+use InnoShop\Restapi\Middleware\SetAPICurrency;
+use InnoShop\Restapi\Middleware\SetAPILocale;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;

@@ -25,7 +25,7 @@ innopacks/restapi/
 │   │   └── SyncApifoxCommand.php  # Artisan command for Apifox sync
 │   ├── FrontApiControllers/   # Frontend API endpoints
 │   ├── PanelApiControllers/   # Admin panel API endpoints
-│   └── RestAPIServiceProvider.php
+│   └── RestapiServiceProvider.php
 └── routes/
     ├── front-api.php
     └── panel-api.php

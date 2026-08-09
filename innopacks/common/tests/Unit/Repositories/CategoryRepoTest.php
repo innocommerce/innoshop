@@ -18,14 +18,6 @@ class CategoryRepoTest extends TestCase
      */
     public function test_get_per_page_items_returns_array(): void
     {
-        // Mock system_setting function
-        if (! function_exists('system_setting')) {
-            function system_setting($key, $default = null)
-            {
-                return $default;
-            }
-        }
-
         // Since we can't easily test with database, we test the logic
         $configPerPage = 15;
         $perPages      = [];

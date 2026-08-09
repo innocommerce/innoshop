@@ -14,7 +14,7 @@
  * 41016: base64解密失败
  */
 
-namespace InnoShop\RestAPI\Libraries\MiniApp;
+namespace InnoShop\Restapi\Libraries\MiniApp;
 
 class ErrorCode
 {

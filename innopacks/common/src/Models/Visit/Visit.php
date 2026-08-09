@@ -99,7 +99,7 @@ class Visit extends BaseModel
                 ->count();
         }
 
-        return VisitEvent::where('session_id', $this->session_id)
+        return VisitEvent::query()->where('session_id', $this->session_id)
             ->where('event_type', VisitEvent::TYPE_PRODUCT_VIEW)
             ->count();
     }
@@ -118,7 +118,7 @@ class Visit extends BaseModel
 
         $events = $this->relationLoaded('visitEvents')
             ? $this->visitEvents
-            : VisitEvent::where('session_id', $this->session_id)->orderBy('created_at')->get();
+            : VisitEvent::query()->where('session_id', $this->session_id)->orderBy('created_at')->get();
 
         if ($events->count() < 2) {
             return 0;
@@ -147,7 +147,7 @@ class Visit extends BaseModel
         if ($this->relationLoaded('visitEvents')) {
             $events = $this->visitEvents->whereIn('event_type', array_keys($priority));
         } else {
-            $events = VisitEvent::where('session_id', $this->session_id)
+            $events = VisitEvent::query()->where('session_id', $this->session_id)
                 ->whereIn('event_type', array_keys($priority))
                 ->get();
         }

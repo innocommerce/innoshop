@@ -1,9 +1,9 @@
 <?php
 
-namespace InnoShop\RestAPI\Services;
+namespace InnoShop\Restapi\Services;
 
 use Illuminate\Http\UploadedFile;
-use InnoShop\RestAPI\Criteria\FileListCriteria;
+use InnoShop\Restapi\Criteria\FileListCriteria;
 
 interface MediaInterface
 {

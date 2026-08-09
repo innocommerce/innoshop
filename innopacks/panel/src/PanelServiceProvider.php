@@ -20,9 +20,9 @@ use InnoShop\Panel\Console\Commands\ChangeRootPassword;
 use InnoShop\Panel\Middleware\AdminAuthenticate;
 use InnoShop\Panel\Middleware\GlobalPanelData;
 use InnoShop\Panel\Middleware\SetPanelLocale;
-use InnoShop\RestAPI\Services\MediaInterface;
-use InnoShop\RestAPI\Services\MediaService;
-use InnoShop\RestAPI\Services\OSSService;
+use InnoShop\Restapi\Services\MediaInterface;
+use InnoShop\Restapi\Services\MediaService;
+use InnoShop\Restapi\Services\OSSService;
 
 class PanelServiceProvider extends ServiceProvider
 {

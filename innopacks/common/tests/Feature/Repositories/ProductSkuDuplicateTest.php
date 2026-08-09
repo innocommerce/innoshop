@@ -74,7 +74,7 @@ class ProductSkuDuplicateTest extends TestCase
 
     private function seedSku(Product $product, string $code): Sku
     {
-        return Sku::create([
+        return Sku::query()->create([
             'product_id'   => $product->id,
             'images'       => [],
             'variants'     => [],

@@ -73,7 +73,7 @@ class MediaUrlResolver
             }
         }
 
-        return MediaFile::create([
+        return MediaFile::query()->create([
             'disk'          => $attrs['disk'] ?? 'local',
             'storage_key'   => $attrs['storage_key'] ?? '',
             'original_name' => $attrs['original_name'] ?? null,
@@ -95,7 +95,7 @@ class MediaUrlResolver
      */
     public function registerCopy(string $storageKey, string $disk, array $attrs = []): MediaFile
     {
-        return MediaFile::create([
+        return MediaFile::query()->create([
             'disk'          => $disk,
             'storage_key'   => $storageKey,
             'original_name' => $attrs['original_name'] ?? null,
@@ -123,7 +123,7 @@ class MediaUrlResolver
 
         $mediaId = self::extractMediaId($value);
         if ($mediaId !== null) {
-            $media = MediaFile::find($mediaId);
+            $media = MediaFile::query()->find($mediaId);
             if ($media) {
                 return $media->url();
             }
@@ -140,7 +140,7 @@ class MediaUrlResolver
      */
     public function relocate(int $mediaId, string $newStorageKey, ?string $newDisk = null): bool
     {
-        $media = MediaFile::find($mediaId);
+        $media = MediaFile::query()->find($mediaId);
         if (! $media) {
             return false;
         }

@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\PanelApiControllers;
+namespace InnoShop\Restapi\PanelApiControllers;
 
 use Illuminate\Http\Request;
 use InnoShop\Common\Repositories\Attribute\ValueRepo;

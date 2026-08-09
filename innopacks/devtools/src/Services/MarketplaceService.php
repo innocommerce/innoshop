@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\DevTools\Services;
+namespace InnoShop\Devtools\Services;
 
 use Exception;
 use Illuminate\Http\Client\ConnectionException;

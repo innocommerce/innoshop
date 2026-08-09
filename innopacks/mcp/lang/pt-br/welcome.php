@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright (c) Since 2024 InnoShop - All Rights Reserved
+ *
+ * @link       https://www.innoshop.com
+ * @author     InnoShop <team@innoshop.com>
+ * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
+
+return [
+    'title'             => 'Serviço MCP',
+    'subtitle'          => ':name expõe consultas e operações dos dados da loja a agentes de IA externos via protocolo MCP.',
+    'active'            => 'Ativo',
+    'tools_available'   => 'ferramentas disponíveis',
+    'nav_overview'      => 'Visão geral',
+    'nav_architecture'  => 'Arquitetura',
+    'nav_connect'       => 'Guia de conexão',
+    'nav_auth'          => 'Autenticação',
+    'nav_tools'         => 'Todas as ferramentas',
+    'overview_title'    => 'Visão geral',
+    'overview_desc'     => 'Este endpoint implementa o <strong>Model Context Protocol</strong> (Streamable HTTP, JSON-RPC 2.0). Ferramentas de IA como Claude Code, Cursor ou Cline podem consultar com segurança os dados da loja após a autenticação de um administrador. Todas as ferramentas herdam o sistema de permissões do painel e são somente leitura por padrão.',
+    'write_mode_on'     => 'Gravação: ativada (a IA externa pode criar/alterar dados)',
+    'write_mode_off'    => 'Gravação: desativada (somente leitura)',
+    'endpoint_label'    => 'Endpoint:',
+    'arch_desc'         => 'MCP é a camada de adaptação de protocolo fornecida por innopacks/mcp; todas as ferramentas são definidas e mantidas em innopacks/ai. Ambas são desacopladas via contrato ToolInterface.',
+    'arch_ai'           => 'innopacks/ai',
+    'arch_tools'        => 'ferramentas de IA<br>(consulta/operação)',
+    'arch_mcp'          => 'innopacks/mcp',
+    'arch_protocol'     => 'Camada de adaptação<br>(JSON-RPC + autenticação)',
+    'arch_bridge'       => 'ToolInterface',
+    'arch_note_badge'   => 'Dica',
+    'arch_note'         => 'Para usar IA dentro do painel, instale o <strong>plugin ShopBot</strong> (assistente de IA). Ele usa o mesmo sistema de ferramentas de innopacks/ai, mas interage via interface web, sem o protocolo MCP.',
+    'connect_title'     => 'Guia de conexão',
+    'your_token'        => 'Seu token de administrador',
+    'no_token'          => 'Nenhum token de API detectado nesta página. Faça login no painel e acesse esta página via Sistema → IA → MCP para obter o token preenchido automaticamente.',
+    'auth_title'        => 'Autenticação',
+    'auth_desc'         => 'Obtenha um Bearer Token com sua conta de administrador:',
+    'auth_token_hint'   => 'Após obter o token, você pode gerenciá-lo em',
+    'system_settings'   => 'Sistema → Ferramentas → IA',
+    'auth_mcp_card'     => 'o cartão «Serviço MCP».',
+    'tools_title'       => 'Todas as ferramentas',
+    'tools_write_hint'  => 'Ferramentas marcadas como «gravação» não estão disponíveis agora. Ative «Permitir operações de gravação» em Sistema → Ferramentas → IA para habilitá-las.',
+    'tool_write_badge'  => 'gravação',
+    'tools_plugin_hint' => 'Plugins podem registrar ferramentas personalizadas via hook ai.tools; elas aparecem automaticamente nesta lista e no MCP:',
+    'cat_product'       => 'Produtos',
+    'cat_order'         => 'Pedidos / Devoluções',
+    'cat_customer'      => 'Clientes',
+    'cat_catalog'       => 'Categorias / Marcas',
+    'cat_content'       => 'Conteúdo (CMS)',
+    'cat_shipping'      => 'Envio',
+    'cat_analytics'     => 'Estatísticas / Relatórios',
+    'cat_config'        => 'Configuração / Sistema',
+    'cat_other'         => 'Outros',
+];

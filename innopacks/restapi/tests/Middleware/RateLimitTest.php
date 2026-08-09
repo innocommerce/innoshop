@@ -7,10 +7,10 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Tests\Middleware;
+namespace InnoShop\Restapi\Tests\Middleware;
 
-use InnoShop\RestAPI\Middleware\SetAPICurrency;
-use InnoShop\RestAPI\Middleware\SetAPILocale;
+use InnoShop\Restapi\Middleware\SetAPICurrency;
+use InnoShop\Restapi\Middleware\SetAPILocale;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -65,13 +65,13 @@ class RateLimitTest extends TestCase
     public function test_middleware_namespace_is_correct(): void
     {
         $reflection = new ReflectionClass(SetAPICurrency::class);
-        $this->assertEquals('InnoShop\RestAPI\Middleware', $reflection->getNamespaceName());
+        $this->assertEquals('InnoShop\Restapi\Middleware', $reflection->getNamespaceName());
     }
 
     #[Test]
     public function test_locale_middleware_namespace_is_correct(): void
     {
         $reflection = new ReflectionClass(SetAPILocale::class);
-        $this->assertEquals('InnoShop\RestAPI\Middleware', $reflection->getNamespaceName());
+        $this->assertEquals('InnoShop\Restapi\Middleware', $reflection->getNamespaceName());
     }
 }

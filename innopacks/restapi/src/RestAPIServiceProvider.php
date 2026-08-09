@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI;
+namespace InnoShop\Restapi;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -17,11 +17,11 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use InnoShop\Common\Middleware\ContentFilterHook;
 use InnoShop\Common\Middleware\EventActionHook;
-use InnoShop\RestAPI\Commands\SyncApifoxCommand;
-use InnoShop\RestAPI\Middleware\SetAPICurrency;
-use InnoShop\RestAPI\Middleware\SetAPILocale;
+use InnoShop\Restapi\Commands\SyncApifoxCommand;
+use InnoShop\Restapi\Middleware\SetAPICurrency;
+use InnoShop\Restapi\Middleware\SetAPILocale;
 
-class RestAPIServiceProvider extends ServiceProvider
+class RestapiServiceProvider extends ServiceProvider
 {
     protected array $commands = [
         SyncApifoxCommand::class,
@@ -66,7 +66,7 @@ class RestAPIServiceProvider extends ServiceProvider
 
         $this->commands($this->commands);
 
-        $this->loadTranslationsFrom(__DIR__.'/../Lang', 'RestAPI');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'restapi');
 
         $this->registerScribePanelDocumentationRoutes();
 

@@ -57,7 +57,7 @@ class EventTrackingService
             $ipAddress = $request ? $this->getClientIp($request) : null;
 
             // Create event record (visits and visit_events are independent, linked only by session_id)
-            $event = VisitEvent::create([
+            $event = VisitEvent::query()->create([
                 'session_id'  => $sessionId,
                 'event_type'  => $eventType,
                 'event_data'  => $eventData,

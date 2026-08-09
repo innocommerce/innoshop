@@ -7,13 +7,13 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\PanelApiControllers;
+namespace InnoShop\Restapi\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Services\ShippingTraceService;
-use InnoShop\RestAPI\Requests\ShipmentRequest;
+use InnoShop\Restapi\Requests\ShipmentRequest;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;

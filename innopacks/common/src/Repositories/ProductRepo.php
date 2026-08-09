@@ -296,7 +296,7 @@ class ProductRepo extends BaseRepo
 
         DB::beginTransaction();
         try {
-            $products = Product::whereIn('id', $ids)->get();
+            $products = Product::query()->whereIn('id', $ids)->get();
 
             foreach ($products as $product) {
                 switch ($action) {
@@ -434,7 +434,7 @@ class ProductRepo extends BaseRepo
 
         DB::beginTransaction();
         try {
-            $products = Product::whereIn('id', $ids)->get();
+            $products = Product::query()->whereIn('id', $ids)->get();
 
             foreach ($products as $product) {
                 $this->destroy($product);
@@ -1147,7 +1147,7 @@ class ProductRepo extends BaseRepo
     public static function getCategoryOptions(): array
     {
         // Load ALL active categories + translations in 3 queries, build tree in memory
-        $allCategories = Category::where('active', true)
+        $allCategories = Category::query()->where('active', true)
             ->with(['translation', 'translations'])
             ->orderBy('position')
             ->get();

@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\PanelApiControllers;
+namespace InnoShop\Restapi\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Resources\BrandName;
 use InnoShop\Common\Resources\BrandSimple;
-use InnoShop\RestAPI\FrontApiControllers\BaseController;
+use InnoShop\Restapi\FrontApiControllers\BaseController;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;

@@ -15,7 +15,7 @@ use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Review;
 use InnoShop\Common\Repositories\ReviewRepo;
-use InnoShop\RestAPI\FrontApiControllers\BaseController;
+use InnoShop\Restapi\FrontApiControllers\BaseController;
 use Throwable;
 
 class ReviewController extends BaseController

@@ -11,7 +11,7 @@ namespace InnoShop\Front\Controllers;
 
 use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Common\Requests\UploadImageRequest;
-use InnoShop\RestAPI\Services\UploadService;
+use InnoShop\Restapi\Services\UploadService;
 
 class UploadController
 {

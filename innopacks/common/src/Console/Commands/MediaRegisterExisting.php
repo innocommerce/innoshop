@@ -206,7 +206,7 @@ class MediaRegisterExisting extends Command
         }
         @unlink($tmp);
 
-        MediaFile::updateOrCreate(
+        MediaFile::query()->updateOrCreate(
             ['storage_key' => $storageKey],
             [
                 'disk'          => $driver,
@@ -242,7 +242,7 @@ class MediaRegisterExisting extends Command
 
         [$width, $height] = $this->readImageDimensions($disk, $diskName, $rawKey, $mime);
 
-        MediaFile::updateOrCreate(
+        MediaFile::query()->updateOrCreate(
             ['storage_key' => $storageKey],
             [
                 'disk'          => $driver,

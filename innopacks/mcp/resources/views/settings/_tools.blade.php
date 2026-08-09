@@ -10,6 +10,11 @@
         <x-common-form-switch-radio title="{{ __('mcp::setting.enable_mcp') }}" name="mcp_enabled"
                                     value="{{ old('mcp_enabled', system_setting('mcp_enabled', false)) }}"/>
       </div>
+      <div class="col-md-6">
+        <x-common-form-switch-radio title="{{ __('mcp::setting.enable_mcp_write') }}" name="mcp_write_enabled"
+                                    value="{{ old('mcp_write_enabled', system_setting('mcp_write_enabled', false)) }}"/>
+        <div class="text-muted small mt-1">{{ __('mcp::setting.write_hint') }}</div>
+      </div>
     </div>
     <div class="row mt-3">
       <div class="col-md-6">

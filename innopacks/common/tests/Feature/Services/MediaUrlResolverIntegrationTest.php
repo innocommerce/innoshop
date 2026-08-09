@@ -27,7 +27,7 @@ class MediaUrlResolverIntegrationTest extends TestCase
     #[Test]
     public function relocate_updates_storage_key_for_existing_media(): void
     {
-        $media = MediaFile::create([
+        $media = MediaFile::query()->create([
             'disk'        => 'local',
             'storage_key' => 'static/media/old/path.jpg',
             'source'      => 'upload',
@@ -49,7 +49,7 @@ class MediaUrlResolverIntegrationTest extends TestCase
     #[Test]
     public function relocate_by_key_finds_media_via_old_storage_key(): void
     {
-        $media = MediaFile::create([
+        $media = MediaFile::query()->create([
             'disk'        => 'local',
             'storage_key' => 'static/media/before.jpg',
             'source'      => 'upload',
@@ -65,7 +65,7 @@ class MediaUrlResolverIntegrationTest extends TestCase
     #[Test]
     public function remove_by_key_soft_deletes_media(): void
     {
-        $media = MediaFile::create([
+        $media = MediaFile::query()->create([
             'disk'        => 'local',
             'storage_key' => 'static/media/trash.jpg',
             'source'      => 'upload',
@@ -75,7 +75,7 @@ class MediaUrlResolverIntegrationTest extends TestCase
         $this->assertTrue($ok);
 
         // Soft-deleted: not found in default query, but still in DB with deleted_at set.
-        $this->assertNull(MediaFile::find($media->id));
+        $this->assertNull(MediaFile::query()->find($media->id));
         $this->assertNotNull(MediaFile::withTrashed()->find($media->id));
     }
 
@@ -119,7 +119,7 @@ class MediaUrlResolverIntegrationTest extends TestCase
     #[Test]
     public function usage_count_finds_media_reference_in_business_table(): void
     {
-        $media = MediaFile::create([
+        $media = MediaFile::query()->create([
             'disk'        => 'local',
             'storage_key' => 'static/media/used.jpg',
             'source'      => 'upload',

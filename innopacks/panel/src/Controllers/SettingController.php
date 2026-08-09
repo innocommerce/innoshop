@@ -11,7 +11,7 @@ namespace InnoShop\Panel\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use InnoShop\AI\Services\ProviderRegistry;
+use InnoShop\Aicore\Services\ProviderRegistry;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\CurrencyRepo;

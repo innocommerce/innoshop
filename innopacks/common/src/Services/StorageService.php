@@ -183,7 +183,7 @@ class StorageService
             return null;
         }
 
-        $media = MediaFile::find($mediaId);
+        $media = MediaFile::query()->find($mediaId);
 
         return $media?->storage_key;
     }

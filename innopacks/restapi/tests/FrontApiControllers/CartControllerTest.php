@@ -7,9 +7,9 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Tests\FrontApiControllers;
+namespace InnoShop\Restapi\Tests\FrontApiControllers;
 
-use InnoShop\RestAPI\FrontApiControllers\CartController;
+use InnoShop\Restapi\FrontApiControllers\CartController;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -41,7 +41,7 @@ class CartControllerTest extends TestCase
         $parentClass = $reflection->getParentClass();
 
         $this->assertNotFalse($parentClass);
-        $this->assertEquals('InnoShop\RestAPI\FrontApiControllers\BaseController', $parentClass->getName());
+        $this->assertEquals('InnoShop\Restapi\FrontApiControllers\BaseController', $parentClass->getName());
     }
 
     #[Test]

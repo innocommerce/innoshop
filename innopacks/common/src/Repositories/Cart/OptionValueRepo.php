@@ -60,7 +60,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getByCartItemId(int $cartItemId): Collection
     {
-        return OptionValue::where('cart_item_id', $cartItemId)
+        return OptionValue::query()->where('cart_item_id', $cartItemId)
             ->with(['option', 'optionValue'])
             ->orderBy('id')
             ->get();
@@ -72,10 +72,10 @@ class OptionValueRepo extends BaseRepo
     public function createCartOptionValues(int $cartItemId, array $optionValues): bool
     {
         // Delete existing option values first
-        OptionValue::where('cart_item_id', $cartItemId)->delete();
+        OptionValue::query()->where('cart_item_id', $cartItemId)->delete();
 
         foreach ($optionValues as $optionValue) {
-            OptionValue::create([
+            OptionValue::query()->create([
                 'cart_item_id'      => $cartItemId,
                 'option_id'         => $optionValue['option_id'],
                 'option_value_id'   => $optionValue['option_value_id'],
@@ -101,7 +101,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function deleteByCartItemId(int $cartItemId): bool
     {
-        return OptionValue::where('cart_item_id', $cartItemId)->delete();
+        return OptionValue::query()->where('cart_item_id', $cartItemId)->delete();
     }
 
     /**
@@ -109,7 +109,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function calculatePriceAdjustment(int $cartItemId): float
     {
-        return OptionValue::where('cart_item_id', $cartItemId)
+        return OptionValue::query()->where('cart_item_id', $cartItemId)
             ->sum('price_adjustment');
     }
 
@@ -118,7 +118,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getOptionCombination(int $cartItemId): array
     {
-        return OptionValue::where('cart_item_id', $cartItemId)
+        return OptionValue::query()->where('cart_item_id', $cartItemId)
             ->pluck('option_value_id')
             ->toArray();
     }
@@ -128,7 +128,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function formatForDisplay(int $cartItemId): array
     {
-        $optionValues = OptionValue::where('cart_item_id', $cartItemId)
+        $optionValues = OptionValue::query()->where('cart_item_id', $cartItemId)
             ->with(['option', 'optionValue'])
             ->get();
 

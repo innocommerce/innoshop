@@ -64,7 +64,7 @@ class OptionRepo extends BaseRepo
      */
     public function getByProductId(int $productId): Collection
     {
-        $query = Option::where('product_id', $productId)
+        $query = Option::query()->where('product_id', $productId)
             ->with(['option'])
             ->orderBy('sort_order');
 
@@ -76,7 +76,7 @@ class OptionRepo extends BaseRepo
      */
     public function getProductsByOptionId(int $optionId): Collection
     {
-        return Option::where('option_id', $optionId)
+        return Option::query()->where('option_id', $optionId)
             ->with(['product'])
             ->get();
     }
@@ -87,11 +87,11 @@ class OptionRepo extends BaseRepo
     public function createProductOptions(int $productId, array $options): bool
     {
         // 先删除现有选项
-        Option::where('product_id', $productId)->delete();
+        Option::query()->where('product_id', $productId)->delete();
 
         // 创建新选项
         foreach ($options as $option) {
-            Option::create([
+            Option::query()->create([
                 'product_id' => $productId,
                 'option_id'  => $option['option_id'],
                 'required'   => $option['required'] ?? false,
@@ -107,7 +107,7 @@ class OptionRepo extends BaseRepo
      */
     public function deleteByProductId(int $productId): bool
     {
-        Option::where('product_id', $productId)
+        Option::query()->where('product_id', $productId)
             ->delete();
 
         return true;
@@ -118,7 +118,7 @@ class OptionRepo extends BaseRepo
      */
     public function hasOptions(int $productId): bool
     {
-        return Option::where('product_id', $productId)
+        return Option::query()->where('product_id', $productId)
             ->exists();
     }
 }

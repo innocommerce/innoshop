@@ -27,6 +27,8 @@ class Customer extends AuthUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const AUTH_GUARD = 'customer';
+
     // From constants
     public const FROM_PC_WEB = 'pc_web';
 

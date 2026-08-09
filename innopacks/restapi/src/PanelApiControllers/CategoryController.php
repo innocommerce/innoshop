@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\PanelApiControllers;
+namespace InnoShop\Restapi\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +18,7 @@ use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Resources\CategoryName;
 use InnoShop\Common\Resources\CategorySimple;
 use InnoShop\Panel\Requests\CategoryRequest;
-use InnoShop\RestAPI\FrontApiControllers\BaseController;
+use InnoShop\Restapi\FrontApiControllers\BaseController;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
@@ -105,7 +105,7 @@ class CategoryController extends BaseController
     public function update(Request $request, int $id): JsonResponse
     {
         try {
-            $category = Category::findOrFail($id);
+            $category = Category::query()->findOrFail($id);
             $data     = $request->all();
             CategoryRepo::getInstance()->update($category, $data);
 
@@ -128,7 +128,7 @@ class CategoryController extends BaseController
     public function patch(CategoryRequest $request, int $id): JsonResponse
     {
         try {
-            $category = Category::findOrFail($id);
+            $category = Category::query()->findOrFail($id);
             $data     = $request->validated();
             CategoryRepo::getInstance()->patch($category, $data);
 
@@ -170,7 +170,7 @@ class CategoryController extends BaseController
     public function destroy(int $id): JsonResponse
     {
         try {
-            $category = Category::findOrFail($id);
+            $category = Category::query()->findOrFail($id);
 
             if ($category->children()->count()) {
                 return json_fail('Cannot delete category with children');

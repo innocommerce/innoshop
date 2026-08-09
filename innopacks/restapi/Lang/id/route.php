@@ -8,7 +8,7 @@
  */
 
 return [
-    'title'        => 'RestAPI',
+    'title'        => 'Restapi',
     'media_index'  => 'File Manager Index',
     'media_iframe' => 'File Manager Iframe',
 ];

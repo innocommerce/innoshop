@@ -77,7 +77,7 @@ class VisitEnrichService
     {
         $geoService = new GeoLocationService;
 
-        $visits = Visit::where(function ($q) {
+        $visits = Visit::query()->where(function ($q) {
             $q->whereNull('country_name')
                 ->orWhereNull('browser')
                 ->orWhereNull('os');

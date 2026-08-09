@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Services;
+namespace InnoShop\Restapi\Services;
 
 use Aws\S3\S3Client;
 use Exception;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
-use InnoShop\RestAPI\Criteria\FileListCriteria;
+use InnoShop\Restapi\Criteria\FileListCriteria;
 use Psr\Http\Message\StreamInterface;
 
 class OSSService implements MediaInterface
@@ -963,7 +963,7 @@ class OSSService implements MediaInterface
     {
         $normalized = $this->normalizeMediaKey(rtrim($prefix, '/').'/');
         try {
-            foreach (MediaFile::where('storage_key', 'like', $normalized.'%')->cursor() as $media) {
+            foreach (MediaFile::query()->where('storage_key', 'like', $normalized.'%')->cursor() as $media) {
                 $media->delete();
             }
         } catch (\Throwable $e) {
@@ -980,7 +980,7 @@ class OSSService implements MediaInterface
         $newFull = $this->normalizeMediaKey(rtrim($newPrefix, '/').'/');
         try {
             $resolver = MediaUrlResolver::getInstance();
-            foreach (MediaFile::where('storage_key', 'like', $oldFull.'%')->cursor() as $media) {
+            foreach (MediaFile::query()->where('storage_key', 'like', $oldFull.'%')->cursor() as $media) {
                 $newKey = $newFull.substr($media->storage_key, strlen($oldFull));
                 $resolver->relocate($media->id, $newKey, $this->config['driver']);
             }

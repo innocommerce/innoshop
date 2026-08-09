@@ -21,6 +21,8 @@
   </div>
   <div id="panel-menu-search" class="header-search d-none d-lg-flex align-items-center" data-search-url="{{ panel_route('search.menus') }}" data-placeholder="{{ __('panel/common.search_menu') }}"></div>
   <div class="d-flex justify-content-end right-tool">
+    @hookinsert('panel.header.toolbar.start')
+
     <!-- Market -->
     <div class="header-item dropdown d-none d-lg-flex align-items-center">
       <span class="dropdown-toggle" data-bs-toggle="dropdown">
@@ -98,5 +100,7 @@
         </li>
       </ul>
     </div>
+
+    @hookinsert('panel.header.toolbar.end')
   </div>
 </div>

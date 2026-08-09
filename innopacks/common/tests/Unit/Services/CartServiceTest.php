@@ -24,7 +24,7 @@ class CartServiceTest extends TestCase
 
         // Simulate mergeAuthId logic
         $data['customer_id'] = $customerID;
-        if (empty($customerID)) {
+        if (empty($customerID)) { // @phpstan-ignore empty.variable
             $data['guest_id'] = $guestID;
         }
 
@@ -43,7 +43,7 @@ class CartServiceTest extends TestCase
 
         // Simulate mergeAuthId logic
         $data['customer_id'] = $customerID;
-        if (empty($customerID)) {
+        if (empty($customerID)) { // @phpstan-ignore empty.variable
             $data['guest_id'] = $guestID;
         }
 

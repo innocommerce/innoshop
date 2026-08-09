@@ -1,6 +1,6 @@
-# InnoShop RestAPI Module Tests
+# InnoShop Restapi Module Tests
 
-This directory contains test cases for the InnoShop RestAPI module, which handles RESTful API endpoints for both frontend customers and admin panel users.
+This directory contains test cases for the InnoShop Restapi module, which handles RESTful API endpoints for both frontend customers and admin panel users.
 
 ## Directory Structure
 
@@ -208,7 +208,7 @@ tests/
 
 ## Running Tests
 
-### Run All RestAPI Tests
+### Run All Restapi Tests
 
 ```bash
 php artisan test innopacks/restapi/tests
@@ -259,7 +259,7 @@ php artisan test innopacks/restapi/tests/Feature/
 
 ## Important Notes
 
-1. All tests extend from InnoShop\RestAPI\Tests\TestCase
+1. All tests extend from InnoShop\Restapi\Tests\TestCase
 2. TestCase extends InnoShop\Common\Tests\TestCase
 3. Chinese translator is initialized by default
 4. Tests use Sanctum for API authentication
@@ -270,7 +270,7 @@ php artisan test innopacks/restapi/tests/Feature/
 
 ## Contributing Guidelines
 
-1. Extend from RestAPI TestCase when writing new tests
+1. Extend from Restapi TestCase when writing new tests
 2. Test method names should clearly express their purpose
 3. Each test method should test only one functionality
 4. Use Laravel's built-in testing helpers (get, post, put, delete, etc.)

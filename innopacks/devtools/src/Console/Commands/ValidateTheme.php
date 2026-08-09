@@ -7,10 +7,10 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\DevTools\Console\Commands;
+namespace InnoShop\Devtools\Console\Commands;
 
 use Illuminate\Console\Command;
-use InnoShop\DevTools\Services\ValidationService;
+use InnoShop\Devtools\Services\ValidationService;
 
 class ValidateTheme extends Command
 {

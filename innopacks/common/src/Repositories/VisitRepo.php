@@ -135,7 +135,7 @@ class VisitRepo extends BaseRepo
 
         // Ensure today's row exists (auto-aggregate on demand)
         if ($startDate->lessThanOrEqualTo(Carbon::today()) && $endDate->greaterThanOrEqualTo(Carbon::today())) {
-            if (! VisitCountryDaily::where('date', $today)->exists() && VisitEvent::exists()) {
+            if (! VisitCountryDaily::query()->where('date', $today)->exists() && VisitEvent::query()->exists()) {
                 try {
                     (new VisitStatisticsService)->aggregateCountryDaily(Carbon::today());
                 } catch (\Throwable $e) {
@@ -231,7 +231,7 @@ class VisitRepo extends BaseRepo
         $today     = Carbon::today()->toDateString();
 
         if ($startDate->lessThanOrEqualTo(Carbon::today()) && $endDate->greaterThanOrEqualTo(Carbon::today())) {
-            if (! VisitDeviceDaily::where('date', $today)->exists() && VisitEvent::exists()) {
+            if (! VisitDeviceDaily::query()->where('date', $today)->exists() && VisitEvent::query()->exists()) {
                 try {
                     (new VisitStatisticsService)->aggregateDeviceDaily(Carbon::today());
                 } catch (\Throwable $e) {
@@ -898,13 +898,9 @@ class VisitRepo extends BaseRepo
      */
     protected function ensureDailyAggregated(Carbon $startDate, Carbon $endDate): void
     {
-        // Quick check: if there are no visit_events at all, skip aggregation
-        if (VisitEvent::query()->doesntExist()) {
-            return;
-        }
-
-        $today = Carbon::today()->toDateString();
-
+        // Read path only backfills historical dates that are missing from visit_daily.
+        // Today's row is kept fresh by the scheduled `visits:aggregate --date=today` task
+        // (every 5 min) — never re-aggregate on read, it scans the full visit_events table.
         $existingDates = VisitDaily::query()
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->pluck('date')
@@ -913,16 +909,19 @@ class VisitRepo extends BaseRepo
 
         $datesToAggregate = [];
         $current          = $startDate->copy();
-        while ($current->lte($endDate)) {
+        while ($current->lt(Carbon::today())) {
             $dateStr = $current->toDateString();
-            // Aggregate if no record exists, or if it's today (data still growing)
-            if (! isset($existingDates[$dateStr]) || $dateStr === $today) {
+            if (! isset($existingDates[$dateStr])) {
                 $datesToAggregate[] = $current->copy();
             }
             $current->addDay();
         }
 
         if (empty($datesToAggregate)) {
+            return;
+        }
+
+        if (VisitEvent::query()->doesntExist()) {
             return;
         }
 
@@ -949,7 +948,7 @@ class VisitRepo extends BaseRepo
         $today     = Carbon::today()->toDateString();
 
         if ($startDate->lessThanOrEqualTo(Carbon::today()) && $endDate->greaterThanOrEqualTo(Carbon::today())) {
-            if (! VisitHourlyDaily::where('date', $today)->exists() && VisitEvent::exists()) {
+            if (! VisitHourlyDaily::query()->where('date', $today)->exists() && VisitEvent::query()->exists()) {
                 try {
                     (new VisitStatisticsService)->aggregateHourlyDaily(Carbon::today());
                 } catch (\Throwable $e) {

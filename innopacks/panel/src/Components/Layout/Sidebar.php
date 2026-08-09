@@ -33,14 +33,22 @@ class Sidebar extends Component
     {
         $this->adminUser = current_admin();
 
-        $routeNameWithPrefix = request()->route()->getName();
+        $route = request()->route();
+        if (! $route) {
+            $this->currentRoute  = '';
+            $this->currentPrefix = '';
+            $this->currentUri    = '';
+
+            return;
+        }
+
+        $routeNameWithPrefix = $route->getName();
         $this->currentRoute  = (string) str_replace('panel.', '', $routeNameWithPrefix);
 
-        $patterns = explode('.', $this->currentRoute);
-
+        $patterns            = explode('.', $this->currentRoute);
         $this->currentPrefix = $patterns[0];
 
-        $routeUriWithPrefix = request()->route()->uri();
+        $routeUriWithPrefix = $route->uri();
         $this->currentUri   = (string) str_replace(panel_name().'/', '', $routeUriWithPrefix);
     }
 

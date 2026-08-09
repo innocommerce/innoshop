@@ -46,7 +46,7 @@ class Currency
     private function getCurrencies()
     {
         $currencies = CurrencyRepo::getInstance()->enabledList();
-        if (empty($currencies)) {
+        if ($currencies->isEmpty()) {
             throw new Exception('Empty currencies!');
         }
 
@@ -63,7 +63,7 @@ class Currency
     public function format($price, $currency, float $rate = 0, bool $format = true): mixed
     {
         $currency = strtolower($currency);
-        if (empty($this->currencies)) {
+        if ($this->currencies->isEmpty()) {
             return $price;
         }
 

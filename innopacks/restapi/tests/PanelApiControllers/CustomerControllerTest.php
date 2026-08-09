@@ -7,9 +7,9 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Tests\PanelApiControllers;
+namespace InnoShop\Restapi\Tests\PanelApiControllers;
 
-use InnoShop\RestAPI\PanelApiControllers\CustomerController;
+use InnoShop\Restapi\PanelApiControllers\CustomerController;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -41,7 +41,7 @@ class CustomerControllerTest extends TestCase
         $parentClass = $reflection->getParentClass();
 
         $this->assertNotFalse($parentClass);
-        $this->assertEquals('InnoShop\RestAPI\PanelApiControllers\BaseController', $parentClass->getName());
+        $this->assertEquals('InnoShop\Restapi\PanelApiControllers\BaseController', $parentClass->getName());
     }
 
     #[Test]

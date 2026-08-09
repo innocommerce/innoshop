@@ -7,12 +7,13 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\MCP\Server;
+namespace InnoShop\Mcp\Server;
 
-use InnoShop\AI\Contracts\ToolInterface;
-use InnoShop\AI\Services\ToolRegistry;
-use InnoShop\MCP\ShopIdentity;
-use InnoShop\MCP\Tools\RegistryToolAdapter;
+use InnoShop\Aicore\Contracts\ToolInterface;
+use InnoShop\Aicore\Services\ToolRegistry;
+use InnoShop\Mcp\McpAccess;
+use InnoShop\Mcp\ShopIdentity;
+use InnoShop\Mcp\Tools\RegistryToolAdapter;
 use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
 use Laravel\Mcp\Server\Attributes\Name;
@@ -22,7 +23,7 @@ use Laravel\Mcp\Server\ServerContext;
 
 #[Name('InnoShop')]
 #[Version('1.0.0')]
-#[Instructions('InnoShop MCP server. Exposes store management tools registered in innopacks/ai. All tools are read-only adapters over existing repositories.')]
+#[Instructions('InnoShop MCP server. Exposes store management tools registered in innopacks/ai. Read-only by default; write tools appear only when the merchant enabled them in the panel.')]
 class InnoShopMcpServer extends Server
 {
     protected array $capabilities = [
@@ -31,13 +32,17 @@ class InnoShopMcpServer extends Server
         ],
     ];
 
+    public int $defaultPaginationLength = 100;
+
+    public int $maxPaginationLength = 200;
+
     public function __construct(Transport $transport, ToolRegistry $registry, private readonly ShopIdentity $shopIdentity)
     {
         parent::__construct($transport);
 
         $this->tools = array_map(
             fn (ToolInterface $tool) => new RegistryToolAdapter($tool),
-            array_values($registry->all())
+            array_values(McpAccess::filterTools($registry->all()))
         );
     }
 

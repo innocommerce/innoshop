@@ -36,8 +36,8 @@ class DashboardRepo extends BaseRepo
         $todayOrders     = $this->getOrderCount($today);
         $yesterdayOrders = $this->getOrderCount($yesterday);
 
-        $todayCustomers     = Customer::whereDate('created_at', $today)->count();
-        $yesterdayCustomers = Customer::whereDate('created_at', $yesterday)->count();
+        $todayCustomers     = Customer::query()->whereDate('created_at', $today)->count();
+        $yesterdayCustomers = Customer::query()->whereDate('created_at', $yesterday)->count();
 
         $todayVisits     = VisitRepo::getInstance()->getStatistics(['start_date' => $today->toDateString(), 'end_date' => $today->toDateString()])['unique_visitors'];
         $yesterdayVisits = VisitRepo::getInstance()->getStatistics(['start_date' => $yesterday->toDateString(), 'end_date' => $yesterday->toDateString()])['unique_visitors'];
@@ -114,8 +114,8 @@ class DashboardRepo extends BaseRepo
         $orders     = $this->getOrderCount($date);
         $prevOrders = $this->getOrderCount($prevDate);
 
-        $customers     = Customer::whereDate('created_at', $date)->count();
-        $prevCustomers = Customer::whereDate('created_at', $prevDate)->count();
+        $customers     = Customer::query()->whereDate('created_at', $date)->count();
+        $prevCustomers = Customer::query()->whereDate('created_at', $prevDate)->count();
 
         $visits     = VisitRepo::getInstance()->getStatistics(['start_date' => $date->toDateString(), 'end_date' => $date->toDateString()])['unique_visitors'];
         $prevVisits = VisitRepo::getInstance()->getStatistics(['start_date' => $prevDate->toDateString(), 'end_date' => $prevDate->toDateString()])['unique_visitors'];

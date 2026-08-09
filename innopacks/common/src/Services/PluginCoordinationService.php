@@ -54,7 +54,7 @@ class PluginCoordinationService
         $cacheKey = $this->getCacheKey($type);
 
         return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($type) {
-            return PluginCoordination::where('type', $type)->first();
+            return PluginCoordination::query()->where('type', $type)->first();
         });
     }
 
@@ -129,7 +129,7 @@ class PluginCoordinationService
             Cache::forget($this->getCacheKey($type));
         } else {
             // Clear all plugin coordination caches
-            $types = PluginCoordination::pluck('type')->toArray();
+            $types = PluginCoordination::query()->pluck('type')->toArray();
             foreach ($types as $type) {
                 Cache::forget($this->getCacheKey($type));
             }
@@ -169,7 +169,7 @@ class PluginCoordinationService
      */
     public function updateConfig(string $type, array $data): PluginCoordination
     {
-        $config = PluginCoordination::updateOrCreate(
+        $config = PluginCoordination::query()->updateOrCreate(
             ['type' => $type],
             [
                 'sort_order'      => $data['sort_order'] ?? [],
@@ -191,7 +191,7 @@ class PluginCoordinationService
      */
     public function deleteConfig(string $type): bool
     {
-        $deleted = PluginCoordination::where('type', $type)->delete();
+        $deleted = PluginCoordination::query()->where('type', $type)->delete();
 
         if ($deleted) {
             $this->clearCache($type);

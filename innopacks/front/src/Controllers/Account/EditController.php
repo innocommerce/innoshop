@@ -81,7 +81,7 @@ class EditController extends Controller
                 $telephone = preg_replace('/[^0-9]/', '', $telephone);
 
                 // Ensure calling_code has + prefix if not empty
-                if (! empty($callingCode) && ! str_starts_with($callingCode, '+')) {
+                if (! str_starts_with($callingCode, '+')) {
                     $callingCode = '+'.ltrim($callingCode, '+');
                 }
 
@@ -116,12 +116,8 @@ class EditController extends Controller
                     $smsService->deleteCode($callingCode, $telephone);
                 } else {
                     // Phone number is not changed, keep existing values (no verification needed)
-                    if (! empty($currentCallingCode)) {
-                        $data['calling_code'] = $currentCallingCode;
-                    }
-                    if (! empty($currentTelephone)) {
-                        $data['telephone'] = $currentTelephone;
-                    }
+                    $data['calling_code'] = $currentCallingCode;
+                    $data['telephone']    = $currentTelephone;
                 }
             } else {
                 // Phone fields are empty, clear them if they exist

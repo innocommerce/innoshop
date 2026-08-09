@@ -92,7 +92,7 @@ $modalId = 'locale-modal-' . $uid;
               data-field="{{ $name }}"
               data-entity-type="{{ $entityType }}"
               data-entity-id="{{ $entityId }}"
-              title="{{ __('ai::modal.ai_generate') }}">
+              title="{{ __('aicore::modal.ai_generate') }}">
         <i class="bi bi-stars"></i>
       </button>
     @endif

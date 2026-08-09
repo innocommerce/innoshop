@@ -151,7 +151,7 @@ class VisitStatisticsService
         }
 
         // Upsert daily statistics
-        VisitDaily::updateOrCreate(
+        VisitDaily::query()->updateOrCreate(
             ['date' => $date->toDateString()],
             [
                 'pv'           => $pvData->pv ?? 0,
@@ -218,7 +218,7 @@ class VisitStatisticsService
             : 0;
 
         // Upsert daily conversion statistics
-        ConversionDaily::updateOrCreate(
+        ConversionDaily::query()->updateOrCreate(
             ['date' => $date->toDateString()],
             [
                 'home_views'              => $homeViews,
@@ -430,8 +430,8 @@ class VisitStatisticsService
      */
     public function getDayStatistics(Carbon $date): array
     {
-        $stats      = VisitDaily::where('date', $date->toDateString())->first();
-        $conversion = ConversionDaily::where('date', $date->toDateString())->first();
+        $stats      = VisitDaily::query()->where('date', $date->toDateString())->first();
+        $conversion = ConversionDaily::query()->where('date', $date->toDateString())->first();
 
         return [
             'visit'      => $stats ? $this->formatVisitStats($stats) : $this->emptyVisitStats(),
@@ -490,7 +490,7 @@ class VisitStatisticsService
      */
     protected function getRangeStatistics(Carbon $start, Carbon $end): array
     {
-        $visitSum = VisitDaily::whereBetween('date', [$start->toDateString(), $end->toDateString()])
+        $visitSum = VisitDaily::query()->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->selectRaw('
                 SUM(pv) as pv,
                 SUM(uv) as uv,
@@ -504,7 +504,7 @@ class VisitStatisticsService
             ')
             ->first();
 
-        $conversionSum = ConversionDaily::whereBetween('date', [$start->toDateString(), $end->toDateString()])
+        $conversionSum = ConversionDaily::query()->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->selectRaw('
                 SUM(product_views) as product_views,
                 SUM(add_to_carts) as add_to_carts,

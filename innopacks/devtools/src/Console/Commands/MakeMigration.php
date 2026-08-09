@@ -7,11 +7,11 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\DevTools\Console\Commands;
+namespace InnoShop\Devtools\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use InnoShop\DevTools\Services\ScaffoldService;
+use InnoShop\Devtools\Services\ScaffoldService;
 
 class MakeMigration extends Command
 {

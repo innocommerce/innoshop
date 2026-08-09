@@ -115,9 +115,11 @@
   @include('panel::layouts.footer')
 
   @if(ai_enabled())
-  @include('ai::components.ai_generate_modal')
-  @include('ai::components._ai-modal-script')
+  @include('aicore::components.ai_generate_modal')
+  @include('aicore::components._ai-modal-script')
   @endif
+
+  @hookinsert('panel.footer.widgets')
 
   @stack('footer')
 </body>

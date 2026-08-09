@@ -327,7 +327,7 @@ class AnalyticsController extends BaseController
         switch ($dateFilter) {
             case '':
                 // "全部" — 从 visits 表最早的 first_visited_at 到今天
-                $earliest  = Visit::min('first_visited_at');
+                $earliest  = Visit::query()->min('first_visited_at');
                 $startDate = $earliest
                     ? Carbon::parse($earliest)->startOfDay()->format('Y-m-d')
                     : Carbon::now()->subDays(29)->format('Y-m-d');

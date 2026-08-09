@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Tests\Unit\Models;
 
 use InnoShop\Common\Models\Category;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -212,20 +213,17 @@ class CategoryTest extends TestCase
     }
 
     #[Test]
-    public function test_url_with_slug(): void
+    #[DataProvider('slugProvider')]
+    public function test_url_slug(string $slug, bool $expected): void
     {
-        $slug    = 'electronics';
-        $hasSlug = ! empty($slug);
-
-        $this->assertTrue($hasSlug);
+        $this->assertSame($expected, ! empty($slug));
     }
 
-    #[Test]
-    public function test_url_without_slug(): void
+    public static function slugProvider(): array
     {
-        $slug    = '';
-        $hasSlug = ! empty($slug);
-
-        $this->assertFalse($hasSlug);
+        return [
+            'with slug'  => ['electronics', true],
+            'empty slug' => ['',             false],
+        ];
     }
 }

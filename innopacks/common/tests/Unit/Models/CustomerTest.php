@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Tests\Unit\Models;
 
 use InnoShop\Common\Models\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -266,29 +267,18 @@ class CustomerTest extends TestCase
     }
 
     #[Test]
-    public function test_has_password_logic_with_password(): void
+    #[DataProvider('passwordProvider')]
+    public function test_has_password_logic(?string $password, bool $expected): void
     {
-        $password    = 'hashed_password';
-        $hasPassword = ! empty($password);
-
-        $this->assertTrue($hasPassword);
+        $this->assertSame($expected, ! empty($password));
     }
 
-    #[Test]
-    public function test_has_password_logic_without_password(): void
+    public static function passwordProvider(): array
     {
-        $password    = '';
-        $hasPassword = ! empty($password);
-
-        $this->assertFalse($hasPassword);
-    }
-
-    #[Test]
-    public function test_has_password_logic_with_null(): void
-    {
-        $password    = null;
-        $hasPassword = ! empty($password);
-
-        $this->assertFalse($hasPassword);
+        return [
+            'with password' => ['hashed_password', true],
+            'empty string'  => ['',                false],
+            'null'          => [null,              false],
+        ];
     }
 }

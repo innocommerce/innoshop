@@ -28,7 +28,7 @@ class RelationRepo extends BaseRepo
         $product->relations()->delete();
 
         // Clear reverse relations
-        Relation::where('relation_id', $product->id)->delete();
+        Relation::query()->where('relation_id', $product->id)->delete();
 
         if (empty($relationIDs)) {
             return;
@@ -68,7 +68,7 @@ class RelationRepo extends BaseRepo
         }
 
         // Save relations using model
-        Relation::insert($forwardRelations);
-        Relation::insert($reverseRelations);
+        Relation::query()->insert($forwardRelations);
+        Relation::query()->insert($reverseRelations);
     }
 }

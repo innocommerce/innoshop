@@ -44,7 +44,7 @@ class TagBots extends Command
         $includeSuspicious = (bool) $this->option('include-suspicious');
 
         // 1. UA 关键字匹配 (lower(ua) like %pattern%)
-        $query = Visit::where('is_bot', false)
+        $query = Visit::query()->where('is_bot', false)
             ->where(function ($q) {
                 $q->whereNull('user_agent')
                     ->orWhere('user_agent', '');
@@ -74,8 +74,8 @@ class TagBots extends Command
             $this->tagSuspiciousSessions($dryRun);
         }
 
-        $total = Visit::count();
-        $bots  = Visit::where('is_bot', true)->count();
+        $total = Visit::query()->count();
+        $bots  = Visit::query()->where('is_bot', true)->count();
         $this->newLine();
         $this->info("总记录: {$total} · 爬虫: {$bots} (".($total > 0 ? round($bots / $total * 100, 1) : 0).'%)');
 
@@ -92,7 +92,7 @@ class TagBots extends Command
         $this->info('扫描可疑 session (visits 存在但无任何 page_view 事件)...');
 
         $eventsTable = 'visit_events';
-        $candidates  = Visit::where('is_bot', false)
+        $candidates  = Visit::query()->where('is_bot', false)
             ->whereNotExists(function ($q) use ($eventsTable) {
                 $q->select(DB::raw(1))
                     ->from($eventsTable)
@@ -114,7 +114,7 @@ class TagBots extends Command
 
         // Conservative: only mark those whose UA also looks non-browser-ish (no Chrome/Safari/Firefox/Edge),
         // to avoid killing legit sessions that just hit non-page endpoints.
-        $updated = Visit::where('is_bot', false)
+        $updated = Visit::query()->where('is_bot', false)
             ->whereNotExists(function ($q) use ($eventsTable) {
                 $q->select(DB::raw(1))
                     ->from($eventsTable)
@@ -135,7 +135,7 @@ class TagBots extends Command
 
     private function previewMatched(int $limit): void
     {
-        $rows = Visit::where('is_bot', false)
+        $rows = Visit::query()->where('is_bot', false)
             ->where(function ($q) {
                 $q->whereNull('user_agent')->orWhere('user_agent', '');
                 foreach ($this->botPatterns as $p) {

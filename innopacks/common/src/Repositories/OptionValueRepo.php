@@ -170,7 +170,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getOptionValuesByOption(int $optionId, bool $activeOnly = true): Collection
     {
-        $query = OptionValue::where('option_id', $optionId);
+        $query = OptionValue::query()->where('option_id', $optionId);
 
         if ($activeOnly) {
             $query->active();
@@ -189,7 +189,7 @@ class OptionValueRepo extends BaseRepo
     {
         try {
             foreach ($sortData as $item) {
-                OptionValue::where('id', $item['id'])
+                OptionValue::query()->where('id', $item['id'])
                     ->update(['position' => $item['position']]);
             }
 
@@ -231,8 +231,8 @@ class OptionValueRepo extends BaseRepo
      */
     public function getOptionValueStats(int $optionId): array
     {
-        $totalValues  = OptionValue::where('option_id', $optionId)->count();
-        $activeValues = OptionValue::where('option_id', $optionId)->active()->count();
+        $totalValues  = OptionValue::query()->where('option_id', $optionId)->count();
+        $activeValues = OptionValue::query()->where('option_id', $optionId)->active()->count();
 
         return [
             'total_values'  => $totalValues,

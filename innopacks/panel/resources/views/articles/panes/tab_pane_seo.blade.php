@@ -11,7 +11,7 @@
       @if(ai_enabled())
       <button type="button" class="btn btn-outline-secondary ai-generate"
               data-column="article_slug"
-              title="{{ __('ai::modal.ai_generate') }}">
+              title="{{ __('aicore::modal.ai_generate') }}">
         <i class="bi bi-stars"></i>
       </button>
       @endif

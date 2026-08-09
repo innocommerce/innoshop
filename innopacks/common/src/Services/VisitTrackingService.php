@@ -64,7 +64,7 @@ class VisitTrackingService
             $location = $this->geoLocationService->getLocation($ip);
 
             // Get or create visit record (single table design: one record per session)
-            $visit = Visit::where('session_id', $sessionId)->first();
+            $visit = Visit::query()->where('session_id', $sessionId)->first();
 
             $isBot     = $this->isBotUserAgent($request->userAgent());
             $deviceTyp = $isBot ? 'bot' : $this->getDeviceType();
@@ -91,7 +91,7 @@ class VisitTrackingService
                 $visit->update($updateData);
             } else {
                 // Create new visit record (first visit of the session)
-                $visit = Visit::create([
+                $visit = Visit::query()->create([
                     'session_id'       => $sessionId,
                     'customer_id'      => $customerId,
                     'ip_address'       => $ip,

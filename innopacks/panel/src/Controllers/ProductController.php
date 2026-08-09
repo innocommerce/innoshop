@@ -12,7 +12,7 @@ namespace InnoShop\Panel\Controllers;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use InnoShop\AI\Jobs\GenerateProductContentJob;
+use InnoShop\Aicore\Jobs\GenerateProductContentJob;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Common\Repositories\BrandRepo;

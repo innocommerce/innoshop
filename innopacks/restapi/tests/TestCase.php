@@ -7,12 +7,12 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Tests;
+namespace InnoShop\Restapi\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 /**
- * Base TestCase for RestAPI tests.
+ * Base TestCase for Restapi tests.
  * Uses pure PHPUnit without Laravel dependencies.
  */
 abstract class TestCase extends PHPUnitTestCase

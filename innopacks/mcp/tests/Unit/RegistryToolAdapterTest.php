@@ -7,10 +7,10 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\MCP\Tests\Unit;
+namespace InnoShop\Mcp\Tests\Unit;
 
-use InnoShop\AI\Contracts\ToolInterface;
-use InnoShop\MCP\Tools\RegistryToolAdapter;
+use InnoShop\Aicore\Contracts\ToolInterface;
+use InnoShop\Mcp\Tools\RegistryToolAdapter;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +37,11 @@ class FakeEchoTool implements ToolInterface
     public function requiredPermission(): ?string
     {
         return null;
+    }
+
+    public function isWrite(): bool
+    {
+        return false;
     }
 
     public function execute(array $arguments): mixed

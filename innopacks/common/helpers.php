@@ -25,6 +25,7 @@ use InnoShop\Common\Repositories\LocaleRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Services\GeoLocationService;
 use InnoShop\Common\Services\ImageService;
+use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
 use InnoShop\Common\Support\EntityLinkEnricher;
 use InnoShop\Common\Support\EntityLinkPayload;
@@ -669,16 +670,17 @@ if (! function_exists('debug_view')) {
 if (! function_exists('create_json_success')) {
     /**
      * @param  null  $data
+     * @param  string|null  $message
      * @return mixed
      */
-    function create_json_success($data = null): mixed
+    function create_json_success($data = null, ?string $message = null): mixed
     {
         $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
         if ($hook) {
             $data = fire_hook_filter($hook, $data);
         }
 
-        return json_success(common_trans('base.saved_success'), $data);
+        return json_success($message ?? common_trans('base.saved_success'), $data);
     }
 }
 
@@ -701,16 +703,17 @@ if (! function_exists('read_json_success')) {
 if (! function_exists('update_json_success')) {
     /**
      * @param  null  $data
+     * @param  string|null  $message
      * @return mixed
      */
-    function update_json_success($data = null): mixed
+    function update_json_success($data = null, ?string $message = null): mixed
     {
         $hook = ApiHook::getInstance()->getHookName(debug_backtrace());
         if ($hook) {
             $data = fire_hook_filter($hook, $data);
         }
 
-        return json_success(common_trans('base.updated_success'), $data);
+        return json_success($message ?? common_trans('base.updated_success'), $data);
     }
 }
 
@@ -839,6 +842,17 @@ if (! function_exists('image_origin')) {
     function image_origin($image)
     {
         if (empty($image)) {
+            return asset('images/placeholder.png');
+        }
+
+        // "media://{id}" references and absolute URLs are not local filesystem
+        // paths, so the file_exists() guard below would always fail and clobber
+        // them with the placeholder. Resolve them directly via storage_url().
+        if (MediaUrlResolver::isMediaReference($image) || str_starts_with($image, 'http')) {
+            return storage_url($image);
+        }
+
+        if (! file_exists(public_path($image))) {
             return asset('images/placeholder.png');
         }
 
@@ -1527,7 +1541,7 @@ if (! function_exists('ai_enabled')) {
     {
         static $enabled = null;
 
-        return $enabled ??= view()->exists('ai::settings._tools');
+        return $enabled ??= view()->exists('aicore::settings._tools');
     }
 }
 

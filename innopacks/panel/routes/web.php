@@ -9,7 +9,7 @@
 
 use Illuminate\Support\Facades\Route;
 use InnoShop\Panel\Controllers;
-use InnoShop\RestAPI\PanelApiControllers\MediaController;
+use InnoShop\Restapi\PanelApiControllers\MediaController;
 
 Route::get('login', [Controllers\LoginController::class, 'index'])->name('login.index');
 Route::post('login', [Controllers\LoginController::class, 'store'])->name('login.store');

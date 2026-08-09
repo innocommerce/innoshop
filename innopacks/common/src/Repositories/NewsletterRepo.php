@@ -145,7 +145,7 @@ class NewsletterRepo extends BaseRepo
      */
     public function findByEmail(string $email): ?NewsletterSubscriber
     {
-        return NewsletterSubscriber::where('email', $email)->first();
+        return NewsletterSubscriber::query()->where('email', $email)->first();
     }
 
     /**
@@ -176,7 +176,7 @@ class NewsletterRepo extends BaseRepo
             }
         } else {
             // Create new subscriber
-            $subscriber = NewsletterSubscriber::create([
+            $subscriber = NewsletterSubscriber::query()->create([
                 'email'         => $data['email'],
                 'name'          => $data['name'] ?? null,
                 'customer_id'   => $data['customer_id'] ?? null,
@@ -215,7 +215,7 @@ class NewsletterRepo extends BaseRepo
      */
     public function getActiveCount(): int
     {
-        return NewsletterSubscriber::where('status', NewsletterSubscriber::STATUS_ACTIVE)->count();
+        return NewsletterSubscriber::query()->where('status', NewsletterSubscriber::STATUS_ACTIVE)->count();
     }
 
     /**
@@ -226,6 +226,6 @@ class NewsletterRepo extends BaseRepo
      */
     public function getByStatus(string $status)
     {
-        return NewsletterSubscriber::where('status', $status)->get();
+        return NewsletterSubscriber::query()->where('status', $status)->get();
     }
 }

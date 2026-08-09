@@ -8,7 +8,7 @@
         <button class="nav-link active" id="ai-tools-tab"
                 type="button" role="tab" aria-controls="ai-tools" aria-selected="true"
                 data-target="#ai-tools">
-          {{ __('ai::setting_ai.ai_setting') }}
+          {{ __('aicore::setting_ai.ai_setting') }}
         </button>
       </li>
       @endif
@@ -25,7 +25,7 @@
     <div class="tab-content" id="toolsSettingsTabContent">
       @if(ai_enabled())
       <!-- AI Tools Tab -->
-      @include('ai::settings._tools')
+      @include('aicore::settings._tools')
       @endif
 
       <!-- GeoLite2 Tools Tab -->

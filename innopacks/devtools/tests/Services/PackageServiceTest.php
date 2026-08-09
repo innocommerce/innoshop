@@ -7,9 +7,9 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\DevTools\Tests\Services;
+namespace InnoShop\Devtools\Tests\Services;
 
-use InnoShop\DevTools\Services\PackageService;
+use InnoShop\Devtools\Services\PackageService;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

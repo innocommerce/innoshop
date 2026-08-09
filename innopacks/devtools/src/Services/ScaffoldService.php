@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\DevTools\Services;
+namespace InnoShop\Devtools\Services;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;

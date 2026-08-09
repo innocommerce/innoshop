@@ -13,7 +13,7 @@
               </el-button>
               @if(ai_enabled())
               <el-button size="small" @click="openAIDialog()" type="success">
-                <el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('ai::media.ai_generate_image') }}
+                <el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('aicore::media.ai_generate_image') }}
               </el-button>
               @endif
             </el-button-group>
@@ -264,7 +264,7 @@
       <ul>
         <li v-if="contextMenu.file && contextMenu.file.media_id" @click="showMediaDetail(contextMenu.file)"><el-icon><component :is="'InfoFilled'"></component></el-icon> {{ __('panel/media.detail') }}</li>
         @if(ai_enabled())
-        <li v-if="isImageFile(contextMenu.file)" @click="imageToImage(contextMenu.file)"><el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('ai::media.ai_image_to_image') }}</li>
+        <li v-if="isImageFile(contextMenu.file)" @click="imageToImage(contextMenu.file)"><el-icon><component :is="'MagicStick'"></component></el-icon> {{ __('aicore::media.ai_image_to_image') }}</li>
         @endif
         <li @click="renameFile"><el-icon><component :is="'Edit'"></component></el-icon> {{ __('panel/media.rename') }}</li>
         <li @click="deleteFile"><el-icon><component :is="'Delete'"></component></el-icon> {{ __('panel/media.delete') }}</li>
@@ -394,7 +394,7 @@
     </el-dialog>
 
     @if(ai_enabled())
-    @include('ai::media._ai-image-dialog')
+    @include('aicore::media._ai-image-dialog')
     @endif
 
     <!-- Image Preview Viewer -->
@@ -502,45 +502,3 @@
   </div>
 @endsection
 
-<style>
-  .media-stats-tag {
-    margin-left: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .media-detail-body {
-    padding: 0 20px 20px;
-  }
-  .media-detail-preview {
-    background: #f5f7fa;
-    border-radius: 6px;
-    padding: 12px;
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .media-detail-preview img {
-    max-width: 100%;
-    max-height: 320px;
-    object-fit: contain;
-    border-radius: 4px;
-  }
-  .media-detail-desc {
-    margin-bottom: 20px;
-  }
-  .media-detail-checksum,
-  .media-detail-path {
-    word-break: break-all;
-    font-size: 11px;
-    color: #666;
-  }
-  .media-detail-section-title {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #303133;
-  }
-  .media-detail-alt-actions {
-    margin-top: 12px;
-    text-align: right;
-  }
-</style>

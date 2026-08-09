@@ -108,7 +108,7 @@ class OrderRepoTest extends TestCase
         ];
 
         $number = $data['number'] ?? '';
-        if (empty($number)) {
+        if (empty($number)) { // @phpstan-ignore empty.variable
             // Simulate order number generation logic
             $number = date('Ymd').rand(10000, 99999);
         }
@@ -128,7 +128,7 @@ class OrderRepoTest extends TestCase
         ];
 
         $number = $data['number'] ?? '';
-        if (empty($number)) {
+        if (empty($number)) { // @phpstan-ignore empty.variable
             $number = OrderRepo::generateOrderNumber();
         }
 

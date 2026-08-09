@@ -8,7 +8,7 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use InnoShop\RestAPI\FrontApiControllers;
+use InnoShop\Restapi\FrontApiControllers;
 
 Route::get('/', [FrontApiControllers\HomeController::class, 'base'])->name('home.base');
 Route::get('/settings', [FrontApiControllers\SettingController::class, 'index'])->name('settings.index');

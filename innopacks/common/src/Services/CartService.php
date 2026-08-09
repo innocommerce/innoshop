@@ -125,7 +125,7 @@ class CartService
         }
 
         // Validate minimum quantity
-        $productSku = Sku::find($data['sku_id']);
+        $productSku = Sku::query()->find($data['sku_id']);
         if ($productSku && $productSku->product) {
             $minimum  = $productSku->product->minimum ?? 1;
             $quantity = $data['quantity'] ?? 1;
@@ -136,7 +136,7 @@ class CartService
 
         // 验证产品选项
         if (! empty($data['options'])) {
-            $productSku = Sku::find($data['sku_id']);
+            $productSku = Sku::query()->find($data['sku_id']);
             if ($productSku && $productSku->product) {
                 $optionService = ProductOptionService::getInstance($productSku->product);
                 $validation    = $optionService->validateOptions($data['options']);
@@ -347,7 +347,7 @@ class CartService
     private function saveCartItemOptions(CartItem $cartItem, array $options): void
     {
         // 先删除已有的选项值
-        \InnoShop\Common\Models\Cart\OptionValue::where('cart_item_id', $cartItem->id)->delete();
+        \InnoShop\Common\Models\Cart\OptionValue::query()->where('cart_item_id', $cartItem->id)->delete();
 
         // 保存新的选项值
         foreach ($options as $optionId => $optionValueIds) {
@@ -357,15 +357,15 @@ class CartService
 
             foreach ($optionValueIds as $optionValueId) {
                 // 获取选项和选项值信息
-                $option      = Option::find($optionId);
-                $optionValue = OptionValue::find($optionValueId);
+                $option      = Option::query()->find($optionId);
+                $optionValue = OptionValue::query()->find($optionValueId);
 
                 if (! $option || ! $optionValue) {
                     continue;
                 }
 
                 // 获取产品选项值配置中的价格调整
-                $productOptionValue = \InnoShop\Common\Models\Product\OptionValue::where([
+                $productOptionValue = \InnoShop\Common\Models\Product\OptionValue::query()->where([
                     'product_id'      => $cartItem->product_id,
                     'option_id'       => $optionId,
                     'option_value_id' => $optionValueId,
@@ -374,7 +374,7 @@ class CartService
                 $priceAdjustment = $productOptionValue ? $productOptionValue->price_adjustment : 0;
 
                 // 创建购物车选项值记录
-                \InnoShop\Common\Models\Cart\OptionValue::create([
+                \InnoShop\Common\Models\Cart\OptionValue::query()->create([
                     'cart_item_id'      => $cartItem->id,
                     'option_id'         => $optionId,
                     'option_value_id'   => $optionValueId,

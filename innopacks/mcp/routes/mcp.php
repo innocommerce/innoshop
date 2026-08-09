@@ -8,11 +8,12 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use InnoShop\MCP\Http\Controllers\McpController;
-use InnoShop\MCP\Http\Middleware\EnsureMcpEnabled;
-use InnoShop\MCP\Http\Middleware\ValidateMcpOrigin;
-use InnoShop\MCP\Server\InnoShopMcpServer;
-use InnoShop\RestAPI\Middleware\EnsureUserIsAdmin;
+use InnoShop\Mcp\Http\Controllers\McpController;
+use InnoShop\Mcp\Http\Middleware\EnsureMcpEnabled;
+use InnoShop\Mcp\Http\Middleware\SetMcpLocale;
+use InnoShop\Mcp\Http\Middleware\ValidateMcpOrigin;
+use InnoShop\Mcp\Server\InnoShopMcpServer;
+use InnoShop\Restapi\Middleware\EnsureUserIsAdmin;
 use Laravel\Mcp\Facades\Mcp;
 
 Mcp::web('/mcp', InnoShopMcpServer::class)
@@ -23,5 +24,11 @@ Mcp::web('/mcp', InnoShopMcpServer::class)
         EnsureUserIsAdmin::class,
     ]);
 
+// 'web' provides the session the locale choice is persisted in; SetMcpLocale
+// negotiates the language against the MCP language packs.
 Route::get('/mcp', [McpController::class, 'welcome'])
-    ->middleware([EnsureMcpEnabled::class]);
+    ->middleware(['web', EnsureMcpEnabled::class, SetMcpLocale::class]);
+
+Route::get('/mcp/locale/{code}', [McpController::class, 'switchLocale'])
+    ->name('mcp.locale.switch')
+    ->middleware(['web']);

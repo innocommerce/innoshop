@@ -50,7 +50,7 @@ class ProductOptionService
      */
     public function getOptionGroups(): Collection
     {
-        return ProductOption::where('product_id', $this->product->id)
+        return ProductOption::query()->where('product_id', $this->product->id)
             ->with(['option' => function ($query) {
                 $query->active()->ordered()->with(['optionValues' => function ($subQuery) {
                     $subQuery->active()->ordered();
@@ -113,7 +113,7 @@ class ProductOptionService
                     }
 
                     // 检查选项值库存
-                    $productOptionValue = OptionValue::where('product_id', $this->product->id)
+                    $productOptionValue = OptionValue::query()->where('product_id', $this->product->id)
                         ->where('option_id', $group->id)
                         ->where('option_value_id', $optionId)
                         ->first();
@@ -158,7 +158,7 @@ class ProductOptionService
         }
 
         // 获取所有选中的选项
-        $options = Option::whereIn('id', $optionIds)->active()->get();
+        $options = Option::query()->whereIn('id', $optionIds)->active()->get();
 
         // 计算总价格
         foreach ($options as $option) {
@@ -252,7 +252,7 @@ class ProductOptionService
 
         foreach ($details as $groupDetail) {
             foreach ($groupDetail['options'] as $optionDetail) {
-                $option      = Option::find($optionDetail['option_id']);
+                $option      = Option::query()->find($optionDetail['option_id']);
                 $optionPrice = $option ? $option->calculatePrice($basePrice) : 0;
 
                 $orderItemOptions[] = [

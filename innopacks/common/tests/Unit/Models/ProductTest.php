@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Tests\Unit\Models;
 
 use InnoShop\Common\Models\Product;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -370,20 +371,17 @@ class ProductTest extends TestCase
     }
 
     #[Test]
-    public function test_has_hover_image_logic_with_image(): void
+    #[DataProvider('hoverImageProvider')]
+    public function test_has_hover_image_logic(string $hoverImage, bool $expected): void
     {
-        $hoverImage    = 'hover.jpg';
-        $hasHoverImage = ! empty($hoverImage);
-
-        $this->assertTrue($hasHoverImage);
+        $this->assertSame($expected, ! empty($hoverImage));
     }
 
-    #[Test]
-    public function test_has_hover_image_logic_without_image(): void
+    public static function hoverImageProvider(): array
     {
-        $hoverImage    = '';
-        $hasHoverImage = ! empty($hoverImage);
-
-        $this->assertFalse($hasHoverImage);
+        return [
+            'with image'   => ['hover.jpg', true],
+            'empty string' => ['',           false],
+        ];
     }
 }

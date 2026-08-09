@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\MCP\Http\Middleware;
+namespace InnoShop\Mcp\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

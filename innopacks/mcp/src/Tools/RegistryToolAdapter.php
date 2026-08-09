@@ -7,10 +7,11 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\MCP\Tools;
+namespace InnoShop\Mcp\Tools;
 
-use InnoShop\AI\Contracts\ToolInterface;
-use InnoShop\MCP\ShopIdentity;
+use InnoShop\Aicore\Contracts\ToolInterface;
+use InnoShop\Mcp\McpAccess;
+use InnoShop\Mcp\ShopIdentity;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\ResponseFactory;
@@ -31,18 +32,31 @@ class RegistryToolAdapter extends Tool
         return $this->tool->name();
     }
 
+    private function localizedDescription(): string
+    {
+        return method_exists($this->tool, 'localizedDescription')
+            ? $this->tool->localizedDescription()
+            : $this->tool->description();
+    }
+
     public function description(): string
     {
-        $host = app(ShopIdentity::class)->host();
+        $base = $this->localizedDescription();
 
-        return $this->tool->description()." [server: {$host}]";
+        try {
+            $host = app(ShopIdentity::class)->host();
+        } catch (Throwable) {
+            return $base;
+        }
+
+        return $host === '' ? $base : "{$base} [server: {$host}]";
     }
 
     public function toArray(): array
     {
         return [
             'name'        => $this->tool->name(),
-            'description' => $this->tool->description(),
+            'description' => $this->localizedDescription(),
             'inputSchema' => $this->tool->inputSchema() ?: ['type' => 'object', 'properties' => new stdClass],
             'annotations' => new stdClass,
         ];
@@ -50,6 +64,12 @@ class RegistryToolAdapter extends Tool
 
     public function handle(Request $request): Response|ResponseFactory
     {
+        if ($this->tool->isWrite() && ! McpAccess::writeEnabled()) {
+            return $this->withShopMeta(
+                Response::error('Write operations are disabled. Enable them in panel: Settings > Tools > AI > MCP.')
+            );
+        }
+
         $permission = $this->tool->requiredPermission();
         if ($permission !== null) {
             $user = $request->user();

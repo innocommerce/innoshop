@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\MCP\Tests\Feature;
+namespace InnoShop\Mcp\Tests\Feature;
 
 use InnoShop\Common\Repositories\SettingRepo;
 use PHPUnit\Framework\Attributes\Test;

@@ -456,6 +456,7 @@ class CategoryRepo extends BaseRepo
      */
     public function getCategoryOptions(): array
     {
+        $options    = [];
         $categories = $this->getActiveCategories();
         foreach ($categories as $category) {
             $options[] = [

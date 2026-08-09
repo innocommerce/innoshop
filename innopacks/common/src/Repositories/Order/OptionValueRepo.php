@@ -68,7 +68,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getByOrderItemId(int $orderItemId): Collection
     {
-        return OptionValue::where('order_item_id', $orderItemId)
+        return OptionValue::query()->where('order_item_id', $orderItemId)
             ->with(['option', 'optionValue'])
             ->orderBy('id')
             ->get();
@@ -85,7 +85,7 @@ class OptionValueRepo extends BaseRepo
     public function createOrderOptionValues(int $orderItemId, array $optionValues): bool
     {
         foreach ($optionValues as $optionValue) {
-            OptionValue::create([
+            OptionValue::query()->create([
                 'order_item_id'     => $orderItemId,
                 'option_id'         => $optionValue['option_id'],
                 'option_value_id'   => $optionValue['option_value_id'],
@@ -134,7 +134,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function deleteByOrderItem(int $orderItemId): bool
     {
-        return OptionValue::where('order_item_id', $orderItemId)->delete();
+        return OptionValue::query()->where('order_item_id', $orderItemId)->delete();
     }
 
     /**
@@ -145,7 +145,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getTotalPriceAdjustment(int $orderItemId): float
     {
-        return OptionValue::where('order_item_id', $orderItemId)
+        return OptionValue::query()->where('order_item_id', $orderItemId)
             ->sum('price_adjustment');
     }
 
@@ -157,7 +157,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getOptionValueCombination(int $orderItemId): array
     {
-        $optionValues = OptionValue::where('order_item_id', $orderItemId)
+        $optionValues = OptionValue::query()->where('order_item_id', $orderItemId)
             ->select('option_id', 'option_value_id', 'option_name', 'option_value_name')
             ->get();
 

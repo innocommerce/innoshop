@@ -81,7 +81,7 @@ class ProductPriceServiceTest extends TestCase
         $customerGroup = null;
 
         // When no customer group, return original price
-        $result = empty($customerGroup) ? $skuPrice : 0;
+        $result = empty($customerGroup) ? $skuPrice : 0; // @phpstan-ignore empty.variable
 
         $this->assertEquals(150.00, $result);
     }

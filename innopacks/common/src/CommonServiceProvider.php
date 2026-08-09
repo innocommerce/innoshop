@@ -142,6 +142,14 @@ class CommonServiceProvider extends ServiceProvider
             ->name('visits:aggregate-yesterday')
             ->description('Aggregate yesterday\'s visit data into daily summary tables');
 
+        // Keep today's rollup fresh so the panel dashboard never needs to aggregate on read.
+        // visit_events is large; aggregating on every pageview wasted ~400ms per request.
+        Schedule::command('visits:aggregate --date=today')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()
+            ->name('visits:aggregate-today')
+            ->description('Refresh today\'s visit data into daily summary tables');
+
         // Re-scan for crawlers/scanners weekly (new UA patterns emerge over time).
         Schedule::command('visits:tag-bots --include-suspicious')
             ->weeklyOn(1, '03:00')

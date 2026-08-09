@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\PanelApiControllers;
+namespace InnoShop\Restapi\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ use InnoShop\Common\Repositories\Product\SkuRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 use InnoShop\Common\Resources\ProductSimple;
 use InnoShop\Common\Resources\SkuSimple;
-use InnoShop\RestAPI\Services\ProductImportService;
+use InnoShop\Restapi\Services\ProductImportService;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;

@@ -7,10 +7,11 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\MCP\Http\Middleware;
+namespace InnoShop\Mcp\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use InnoShop\Mcp\McpAccess;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -20,7 +21,7 @@ class EnsureMcpEnabled
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! system_setting('mcp_enabled')) {
+        if (! McpAccess::enabled()) {
             abort(404);
         }
 

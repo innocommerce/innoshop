@@ -36,7 +36,7 @@ class Category extends BaseModel
             // Check for circular references
             if ($category->parent_id && $category->parent_id > 0) {
                 $visited       = [$category->id];
-                $currentParent = self::find($category->parent_id);
+                $currentParent = self::query()->find($category->parent_id);
 
                 while ($currentParent) {
                     if (in_array($currentParent->id, $visited)) {

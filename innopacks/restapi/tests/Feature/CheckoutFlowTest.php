@@ -7,11 +7,11 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Tests\Feature;
+namespace InnoShop\Restapi\Tests\Feature;
 
-use InnoShop\RestAPI\FrontApiControllers\CartController;
-use InnoShop\RestAPI\FrontApiControllers\CheckoutController;
-use InnoShop\RestAPI\FrontApiControllers\OrderController;
+use InnoShop\Restapi\FrontApiControllers\CartController;
+use InnoShop\Restapi\FrontApiControllers\CheckoutController;
+use InnoShop\Restapi\FrontApiControllers\OrderController;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -76,7 +76,7 @@ class CheckoutFlowTest extends TestCase
 
             $this->assertNotFalse($parentClass, "$controllerClass should have a parent class");
             $this->assertEquals(
-                'InnoShop\RestAPI\FrontApiControllers\BaseController',
+                'InnoShop\Restapi\FrontApiControllers\BaseController',
                 $parentClass->getName(),
                 "$controllerClass should extend BaseController"
             );
@@ -161,7 +161,7 @@ class CheckoutFlowTest extends TestCase
         foreach ($controllers as $controllerClass) {
             $reflection = new ReflectionClass($controllerClass);
             $this->assertEquals(
-                'InnoShop\RestAPI\FrontApiControllers',
+                'InnoShop\Restapi\FrontApiControllers',
                 $reflection->getNamespaceName(),
                 "$controllerClass should be in FrontApiControllers namespace"
             );

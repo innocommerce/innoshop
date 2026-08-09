@@ -12,4 +12,6 @@ return [
     '403_description' => 'Sorry, you do not have permission to access this page. Please contact the administrator.',
     '403_back'        => 'Back',
     '403_home'        => 'Home',
+    '404_title'       => 'Page Not Found',
+    '404_description' => 'The page you are looking for does not exist or has been removed.',
 ];

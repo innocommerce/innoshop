@@ -492,6 +492,6 @@ class CustomerRepo extends BaseRepo
             'transactions' => $transactions,
         ];
 
-        return fire_hook_filter('repo.customer.detail_data', $data, $customer);
+        return fire_hook_filter('repo.customer.detail_data', $data);
     }
 }

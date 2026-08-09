@@ -7,10 +7,10 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\DevTools\Tests\Console;
+namespace InnoShop\Devtools\Tests\Console;
 
 use Illuminate\Console\Command;
-use InnoShop\DevTools\Console\Commands\ValidateTheme;
+use InnoShop\Devtools\Console\Commands\ValidateTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

@@ -51,7 +51,7 @@ class WeightClassRepo extends BaseRepo
     public function all(array $filters = []): Collection
     {
         return $this->remember('all', function () {
-            return WeightClass::orderBy('position')->get();
+            return WeightClass::query()->orderBy('position')->get();
         });
     }
 
@@ -76,7 +76,7 @@ class WeightClassRepo extends BaseRepo
     public function findByCode(string $code)
     {
         return $this->remember("code_$code", function () use ($code) {
-            return WeightClass::where('code', $code)->first();
+            return WeightClass::query()->where('code', $code)->first();
         });
     }
 

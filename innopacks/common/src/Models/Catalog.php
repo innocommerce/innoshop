@@ -35,7 +35,7 @@ class Catalog extends BaseModel
             // Check for circular references
             if ($catalog->parent_id && $catalog->parent_id > 0) {
                 $visited       = [$catalog->id];
-                $currentParent = self::find($catalog->parent_id);
+                $currentParent = self::query()->find($catalog->parent_id);
 
                 while ($currentParent) {
                     if (in_array($currentParent->id, $visited)) {

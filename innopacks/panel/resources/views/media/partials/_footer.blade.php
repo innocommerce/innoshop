@@ -1701,7 +1701,7 @@
     });
 
     @if(ai_enabled())
-    @include('ai::media._ai-image-script')
+    @include('aicore::media._ai-image-script')
     @endif
 
     __fmApp.use(ElementPlus, window.ElementPlusLocaleZhCn ? { locale: ElementPlusLocaleZhCn } : {});

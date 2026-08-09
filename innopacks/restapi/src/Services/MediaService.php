@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\Services;
+namespace InnoShop\Restapi\Services;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -17,7 +17,7 @@ use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Services\FileSecurityValidator;
 use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
-use InnoShop\RestAPI\Criteria\FileListCriteria;
+use InnoShop\Restapi\Criteria\FileListCriteria;
 
 class MediaService implements MediaInterface
 {
@@ -1181,7 +1181,7 @@ class MediaService implements MediaInterface
     {
         $prefix = StorageService::storageKey(ltrim($relDirPath, '/').'/');
         try {
-            foreach (MediaFile::where('storage_key', 'like', $prefix.'%')->cursor() as $media) {
+            foreach (MediaFile::query()->where('storage_key', 'like', $prefix.'%')->cursor() as $media) {
                 $media->delete();
             }
         } catch (\Throwable $e) {
@@ -1198,7 +1198,7 @@ class MediaService implements MediaInterface
         $newPrefix = StorageService::storageKey(ltrim($newRelDirPath, '/').'/');
         try {
             $resolver = MediaUrlResolver::getInstance();
-            foreach (MediaFile::where('storage_key', 'like', $oldPrefix.'%')->cursor() as $media) {
+            foreach (MediaFile::query()->where('storage_key', 'like', $oldPrefix.'%')->cursor() as $media) {
                 $newKey = $newPrefix.substr($media->storage_key, strlen($oldPrefix));
                 $resolver->relocate($media->id, $newKey);
             }

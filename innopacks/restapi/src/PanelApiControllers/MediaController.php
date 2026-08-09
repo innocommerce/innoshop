@@ -7,7 +7,7 @@
  * @license    https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace InnoShop\RestAPI\PanelApiControllers;
+namespace InnoShop\Restapi\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
@@ -18,14 +18,14 @@ use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Requests\UploadFileRequest;
 use InnoShop\Panel\Controllers\BaseController;
-use InnoShop\RestAPI\Criteria\FileListCriteria;
-use InnoShop\RestAPI\Requests\DeleteFilesRequest;
-use InnoShop\RestAPI\Requests\FileRequest;
-use InnoShop\RestAPI\Requests\MoveFilesRequest;
-use InnoShop\RestAPI\Requests\RenameFileRequest;
-use InnoShop\RestAPI\Services\MediaInterface;
-use InnoShop\RestAPI\Services\MediaService;
-use InnoShop\RestAPI\Services\OSSService;
+use InnoShop\Restapi\Criteria\FileListCriteria;
+use InnoShop\Restapi\Requests\DeleteFilesRequest;
+use InnoShop\Restapi\Requests\FileRequest;
+use InnoShop\Restapi\Requests\MoveFilesRequest;
+use InnoShop\Restapi\Requests\RenameFileRequest;
+use InnoShop\Restapi\Services\MediaInterface;
+use InnoShop\Restapi\Services\MediaService;
+use InnoShop\Restapi\Services\OSSService;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Endpoint;
 use Knuckles\Scribe\Attributes\Group;
@@ -510,7 +510,7 @@ class MediaController extends BaseController
     public function getMediaDetail(int $id): mixed
     {
         try {
-            $media = MediaFile::find($id);
+            $media = MediaFile::query()->find($id);
             if (! $media) {
                 Log::warning('Media detail requested but not found', ['id' => $id]);
 
@@ -576,7 +576,7 @@ class MediaController extends BaseController
     public function updateMedia(int $id, Request $request): mixed
     {
         try {
-            $media = MediaFile::find($id);
+            $media = MediaFile::query()->find($id);
             if (! $media) {
                 return json_fail(trans('panel/media.media_not_found'));
             }

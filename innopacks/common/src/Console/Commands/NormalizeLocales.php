@@ -84,7 +84,7 @@ class NormalizeLocales extends Command
     private function updateAdminLocales(): void
     {
         $this->info('Updating admin locales...');
-        $admins = Admin::whereIn('locale', array_keys($this->localeMap))->get();
+        $admins = Admin::query()->whereIn('locale', array_keys($this->localeMap))->get();
         foreach ($admins as $admin) {
             $oldLocale     = $admin->locale;
             $admin->locale = $this->localeMap[$oldLocale] ?? $oldLocale;
@@ -101,7 +101,7 @@ class NormalizeLocales extends Command
     private function updateFrontLocaleSetting(): void
     {
         $this->info('Updating front_locale setting...');
-        $frontLocaleSetting = Setting::where('name', 'front_locale')
+        $frontLocaleSetting = Setting::query()->where('name', 'front_locale')
             ->whereIn('value', array_keys($this->localeMap))
             ->first();
         if ($frontLocaleSetting) {
@@ -120,7 +120,7 @@ class NormalizeLocales extends Command
     private function updateLocalesCodes(): void
     {
         $this->info('Updating locales table...');
-        $locales = Locale::whereIn('code', array_keys($this->localeMap))->get();
+        $locales = Locale::query()->whereIn('code', array_keys($this->localeMap))->get();
         foreach ($locales as $locale) {
             $oldCode = $locale->code;
             $newCode = $this->localeMap[$oldCode] ?? $oldCode;

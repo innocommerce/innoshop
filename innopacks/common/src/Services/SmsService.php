@@ -223,7 +223,7 @@ class SmsService
             throw new Exception($errorMessage);
         } catch (GatewayErrorException $e) {
             // Handle gateway-specific errors
-            $errorMessage = $this->extractDetailedError($e, $gateway ?? 'unknown');
+            $errorMessage = $this->extractDetailedError($e, $gateway);
             Log::error("SMS gateway error: {$errorMessage}", ['exception' => $e]);
             throw new Exception($errorMessage);
         } catch (Exception $e) {

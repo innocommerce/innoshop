@@ -98,7 +98,7 @@ class ItemRepo extends BaseRepo
     {
         // Handle cart option data format, save option information directly
         foreach ($options as $option) {
-            OrderItemOption::create([
+            OrderItemOption::query()->create([
                 'order_item_id'     => $orderItem->id,
                 'option_id'         => $option['option_id'],
                 'option_value_id'   => $option['option_value_id'],

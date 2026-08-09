@@ -11,7 +11,7 @@ namespace InnoShop\Front\Controllers\Account;
 
 use InnoShop\Common\Repositories\Customer\TransactionRepo;
 use InnoShop\Common\Repositories\Customer\WithdrawalRepo;
-use InnoShop\RestAPI\FrontApiControllers\BaseController;
+use InnoShop\Restapi\FrontApiControllers\BaseController;
 
 class TransactionController extends BaseController
 {

@@ -21,7 +21,7 @@
   <script src="{{ asset('build/front/js/app.js') }}"></script>
   <script>
     const urls = {
-      front_api: '{{ route('api.home.base') }}',
+      front_api: '{{ Route::has('api.home.base') ? route('api.home.base') : '' }}',
       front_base: '{{ front_route('home.index') }}',
       front_upload: '{{ front_root_route('upload.images') }}',
       front_cart_add: '{{ front_route('carts.store') }}',

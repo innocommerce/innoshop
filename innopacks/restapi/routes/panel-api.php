@@ -8,9 +8,9 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use InnoShop\RestAPI\Middleware\EnsureUserIsAdmin;
-use InnoShop\RestAPI\PanelApiControllers;
-use InnoShop\RestAPI\PanelApiControllers\MediaController;
+use InnoShop\Restapi\Middleware\EnsureUserIsAdmin;
+use InnoShop\Restapi\PanelApiControllers;
+use InnoShop\Restapi\PanelApiControllers\MediaController;
 
 Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('base.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');

@@ -69,7 +69,7 @@ class OrderReturnController extends BaseController
             $data['customer_id'] = current_customer_id();
 
             $orderItemID = $data['order_item_id'];
-            $orderItem   = Item::findOrFail($orderItemID);
+            $orderItem   = Item::query()->findOrFail($orderItemID);
 
             $alreadyReturned = OrderReturn::query()
                 ->where('order_item_id', $orderItemID)

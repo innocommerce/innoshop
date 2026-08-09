@@ -76,7 +76,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getOptionValuesByProduct(int $productId): Collection
     {
-        return OptionValue::where('product_id', $productId)
+        return OptionValue::query()->where('product_id', $productId)
             ->with(['option', 'optionValue'])
             ->get();
     }
@@ -90,7 +90,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getOptionValuesByProductAndOption(int $productId, int $optionId): Collection
     {
-        return OptionValue::where('product_id', $productId)
+        return OptionValue::query()->where('product_id', $productId)
             ->where('option_id', $optionId)
             ->with(['optionValue'])
             ->get();
@@ -120,10 +120,10 @@ class OptionValueRepo extends BaseRepo
         }
 
         // Delete existing configurations first
-        OptionValue::where('product_id', $productId)->delete();
+        OptionValue::query()->where('product_id', $productId)->delete();
 
         // Also delete product option records
-        \InnoShop\Common\Models\Product\Option::where('product_id', $productId)->delete();
+        \InnoShop\Common\Models\Product\Option::query()->where('product_id', $productId)->delete();
 
         // Create new configurations - adapt to frontend data structure
         foreach ($optionValues as $optionConfig) {
@@ -135,11 +135,11 @@ class OptionValueRepo extends BaseRepo
             }
 
             // Get option required status from options table
-            $option   = Option::find($optionId);
+            $option   = Option::query()->find($optionId);
             $required = $option ? $option->required : false;
 
             // Create product option record (match table columns)
-            \InnoShop\Common\Models\Product\Option::create([
+            \InnoShop\Common\Models\Product\Option::query()->create([
                 'product_id' => $productId,
                 'option_id'  => $optionId,
                 'position'   => 0,
@@ -155,7 +155,7 @@ class OptionValueRepo extends BaseRepo
                     continue;
                 }
 
-                OptionValue::create([
+                OptionValue::query()->create([
                     'product_id'       => $productId,
                     'option_id'        => $optionId,
                     'option_value_id'  => $optionValueId,
@@ -178,7 +178,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function updateQuantity(int $id, int $quantity): bool
     {
-        return OptionValue::where('id', $id)
+        return OptionValue::query()->where('id', $id)
             ->update(['quantity' => $quantity]);
     }
 
@@ -193,7 +193,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function decreaseStock(int $productId, int $optionId, int $optionValueId, int $quantity): bool
     {
-        $productOptionValue = OptionValue::where('product_id', $productId)
+        $productOptionValue = OptionValue::query()->where('product_id', $productId)
             ->where('option_id', $optionId)
             ->where('option_value_id', $optionValueId)
             ->first();
@@ -216,7 +216,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function hasEnoughStock(int $productId, int $optionId, int $optionValueId, int $quantity): bool
     {
-        $productOptionValue = OptionValue::where('product_id', $productId)
+        $productOptionValue = OptionValue::query()->where('product_id', $productId)
             ->where('option_id', $optionId)
             ->where('option_value_id', $optionValueId)
             ->first();
@@ -238,7 +238,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getPriceAdjustment(int $productId, int $optionId, int $optionValueId): float
     {
-        $productOptionValue = OptionValue::where('product_id', $productId)
+        $productOptionValue = OptionValue::query()->where('product_id', $productId)
             ->where('option_id', $optionId)
             ->where('option_value_id', $optionValueId)
             ->first();
@@ -251,7 +251,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function deleteByProductId(int $productId): bool
     {
-        return OptionValue::where('product_id', $productId)->delete();
+        return OptionValue::query()->where('product_id', $productId)->delete();
     }
 
     /**
@@ -259,7 +259,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function increaseStock(int $productId, array $optionIds, int $quantity): bool
     {
-        $optionValue = OptionValue::where('product_id', $productId)
+        $optionValue = OptionValue::query()->where('product_id', $productId)
             ->whereIn('option_id', $optionIds)
             ->first();
 
@@ -279,7 +279,7 @@ class OptionValueRepo extends BaseRepo
             return true;
         }
 
-        $optionValue = OptionValue::where('product_id', $productId)
+        $optionValue = OptionValue::query()->where('product_id', $productId)
             ->whereIn('option_id', $optionIds)
             ->first();
 

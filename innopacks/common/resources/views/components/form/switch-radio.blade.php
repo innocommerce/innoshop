@@ -1,7 +1,7 @@
 <x-panel::form.row :title="$title">
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" name="{{ $name }}" @if($value) checked @endif >
-    <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+    <input type="hidden" name="{{ $name }}" value="{{ $value ? 1 : 0 }}">
   </div>
   @if ($description ?? '')
   <div class="mt-2 text-muted small">

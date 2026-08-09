@@ -9,8 +9,10 @@
 
 return [
     'mcp_service'       => 'MCP 服務',
-    'mcp_service_desc'  => '將店鋪資料（商品、訂單、庫存、銷售統計）透過 MCP 協議開放給 Claude、Cursor 等客戶端。唯讀，需管理員 Token。',
+    'mcp_service_desc'  => '將店鋪資料（商品、訂單、庫存、銷售統計）透過 MCP 協議開放給 Claude、Cursor 等客戶端。預設唯讀，需管理員 Token。',
     'enable_mcp'        => '啟用 MCP 端點',
+    'enable_mcp_write'  => '開放寫操作',
+    'write_hint'        => '關閉時外部 AI 只能查詢；開啟後才允許建立/修改商品、訂單改狀態、發貨等寫工具。',
     'endpoint_url'      => '端點地址',
     'auth_header'       => '認證方式',
     'token_hint'        => '使用管理員帳號 POST :url 取得 Token，以 Bearer 方式攜帶。',

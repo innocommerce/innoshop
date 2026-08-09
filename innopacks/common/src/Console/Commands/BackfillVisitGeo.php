@@ -45,12 +45,12 @@ class BackfillVisitGeo extends Command
         $skipPrune = (bool) $this->option('skip-prune');
         $skipReset = (bool) $this->option('skip-reset');
 
-        $totalBefore = Visit::count();
+        $totalBefore = Visit::query()->count();
         $this->info("数据库总记录: {$totalBefore}");
 
         if (! $skipPrune) {
             $localQuery = function () {
-                return Visit::where(function ($q) {
+                return Visit::query()->where(function ($q) {
                     $q->whereNull('ip_address')
                         ->orWhere('ip_address', '')
                         ->orWhere('ip_address', '127.0.0.1')
@@ -71,10 +71,10 @@ class BackfillVisitGeo extends Command
 
         if (! $skipReset) {
             $emptyCounts = [
-                'country_code' => Visit::where('country_code', '')->count(),
-                'country_name' => Visit::where('country_name', '')->count(),
-                'browser'      => Visit::where('browser', '')->count(),
-                'os'           => Visit::where('os', '')->count(),
+                'country_code' => Visit::query()->where('country_code', '')->count(),
+                'country_name' => Visit::query()->where('country_name', '')->count(),
+                'browser'      => Visit::query()->where('browser', '')->count(),
+                'os'           => Visit::query()->where('os', '')->count(),
             ];
             $emptyTotal = array_sum($emptyCounts);
             $this->info("空字符串字段总计: {$emptyTotal} 个 ".json_encode($emptyCounts, JSON_UNESCAPED_UNICODE));
@@ -82,7 +82,7 @@ class BackfillVisitGeo extends Command
                 $this->warn('  DRY RUN: 不重置');
             } elseif ($emptyTotal > 0) {
                 foreach (array_keys($emptyCounts) as $field) {
-                    Visit::where($field, '')->update([$field => null]);
+                    Visit::query()->where($field, '')->update([$field => null]);
                 }
                 $this->info("  已重置: {$emptyTotal} 个字段 → NULL");
             }
@@ -90,7 +90,7 @@ class BackfillVisitGeo extends Command
         $this->newLine();
 
         $pendingQuery = function () {
-            return Visit::where(function ($q) {
+            return Visit::query()->where(function ($q) {
                 $q->whereNull('country_name')
                     ->orWhereNull('browser')
                     ->orWhereNull('os');
@@ -154,7 +154,7 @@ class BackfillVisitGeo extends Command
             $this->info('所有记录地理信息已补全。');
         }
 
-        $totalAfter = Visit::count();
+        $totalAfter = Visit::query()->count();
         $this->info("最终数据库记录: {$totalAfter} (".($totalBefore - $totalAfter).' 条已删除)');
 
         return self::SUCCESS;
