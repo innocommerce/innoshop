@@ -47,6 +47,7 @@ class ArticleRequest extends FormRequest
             'position'   => 'integer',
             'viewed'     => 'integer',
             'image'      => 'nullable|string|max:500',
+            'active'     => 'boolean',
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.title"   => 'required',
