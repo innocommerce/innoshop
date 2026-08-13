@@ -50,7 +50,7 @@ class Boot extends BaseBoot
     {
         $subtotal      = $entity->getSubtotal();
         $shippingType  = plugin_setting('fixed_shipping', 'type', 'fixed');
-        $shippingValue = plugin_setting('fixed_shipping', 'value', 0);
+        $shippingValue = (float) plugin_setting('fixed_shipping', 'value', 0);
         if ($shippingType == 'fixed') {
             return $shippingValue;
         } elseif ($shippingType == 'percent') {

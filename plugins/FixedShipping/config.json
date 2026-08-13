@@ -1,18 +1,18 @@
 {
-  "code": "fixed_shipping",
-  "name": {
-    "zh-cn": "固定运费",
-    "en": "Fixed Shipping"
-  },
-  "description": {
-    "zh-cn": "固定运费",
-    "en": "Fixed Shipping"
-  },
-  "type": "shipping",
-  "version": "v1.0.0",
-  "icon": "/images/logo.png",
-  "author": {
-    "name": "InnoShop",
-    "email": "edward@innoshop.com"
-  }
+    "code": "fixed_shipping",
+    "name": {
+        "zh-cn": "固定运费",
+        "en": "Fixed Shipping"
+    },
+    "description": {
+        "zh-cn": "固定运费方案，支持按订单或按件收取固定费用，适用于标准化物流场景",
+        "en": "Flat-rate shipping by order or per item, suitable for standardized logistics scenarios"
+    },
+    "type": "shipping",
+    "version": "v1.0.0",
+    "icon": "/images/logo.png",
+    "author": {
+        "name": "InnoShop",
+        "email": "edward@innoshop.com"
+    }
 }
