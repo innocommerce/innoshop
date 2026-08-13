@@ -34,6 +34,12 @@ class ReceiptController extends BaseController
                 return json_fail(__('front/order.not_found'), null, 404);
             }
 
+            // Verify ownership: logged-in user must own the order; guest orders (customer_id=0) are allowed
+            $customerId = current_customer_id();
+            if ($customerId > 0 && $order->customer_id !== $customerId) {
+                return json_fail(__('front/order.unauthorized_access'), null, 403);
+            }
+
             // Verify order uses bank transfer payment method
             if ($order->billing_method_code != 'bank_transfer') {
                 return json_fail(__('front/order.invalid_payment_method'), null, 400);
