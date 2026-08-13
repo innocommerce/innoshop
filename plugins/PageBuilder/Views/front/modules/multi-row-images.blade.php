@@ -28,7 +28,13 @@
                 <div class="col">
                   <div class="ratio ratio-1x1 position-relative">
                     @if (!empty($row['images'][$i]))
-                      <a href="{{ $row['images'][$i]['link']['value'] ?? 'javascript:void(0)' }}"
+                      @php
+                        $mrLinkCfg = $row['images'][$i]['link'] ?? [];
+                        $mrLinkUrl = (!empty($mrLinkCfg['type']) && !empty($mrLinkCfg['value']))
+                          ? \InnoShop\Common\Libraries\Link::getInstance()->link($mrLinkCfg['type'], $mrLinkCfg['value'])
+                          : '';
+                      @endphp
+                      <a href="{{ $mrLinkUrl !== '' ? $mrLinkUrl : 'javascript:void(0)' }}"
                         class="d-block h-100 w-100">
                         <img src="{{ image_resize($row['images'][$i]['image'] ?? '') }}"
                           class="w-100 h-100 object-fit-cover rounded" alt="">

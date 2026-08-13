@@ -24,8 +24,8 @@
             @foreach($content['imageTextItems'] as $item)
               <div class="image-text-item">
                 <div class="item-image-wrapper">
-                  @if(!empty($item['link']['value']))
-                    <a href="{{ $item['link']['value'] }}" class="item-link" target="_blank" rel="noopener">
+                  @if(!empty($item['url']))
+                    <a href="{{ $item['url'] }}" class="item-link" target="_blank" rel="noopener">
                   @endif
                   
                   <img 
@@ -35,7 +35,7 @@
                     loading="lazy"
                   >
                   
-                  @if(!empty($item['link']['value']))
+                  @if(!empty($item['url']))
                     </a>
                   @endif
                 </div>

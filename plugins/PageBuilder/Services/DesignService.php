@@ -159,7 +159,7 @@ class DesignService
             return (string) $value;
         }
 
-        return $value ?? '';
+        return $value;
     }
 
     /**

@@ -210,7 +210,7 @@ return [
     'video_title'             => '视频标题',
     'video_description'       => '视频描述',
     'video_controls'          => '视频控制',
-    'autoplay'                => '自动播放',
+    'video_autoplay'          => '自动播放',
     'loop'                    => '循环播放',
     'muted'                   => '静音',
     'show_controls'           => '显示控制条',
@@ -223,7 +223,6 @@ return [
     'enter_description'     => '请输入描述内容',
     'text_alignment'        => '文字对齐方式',
     'button_text'           => '按钮文字',
-    'enter_button_text'     => '请输入按钮文字',
 
     // Multi row images
     'row'                        => '行',
@@ -314,7 +313,6 @@ return [
     // Image text list - additional
     'autoplay_interval_time'      => '轮播间隔时间',
     'show_title'                  => '显示标题',
-    'image_height_tip'            => '单位：像素，建议设置 80-200',
     'padding_tip_image_text'      => '单位：像素，0为无内边距，控制图片和文字与卡片边缘的间距',
     'image_text_item_management'  => '图文项管理',
     'no_image_text_items'         => '暂无图文项',
@@ -324,6 +322,7 @@ return [
     'item_title'                  => '标题',
     'enter_item_title'            => '请输入标题',
     'item_image'                  => '图片',
+    'image_height_tip_text_list'  => '单位：像素，建议设置 80-200',
     'recommended_size_200_100'    => '建议尺寸: 200 x 100 (2:1比例)',
     'item_link_optional'          => '链接 (可选)',
 

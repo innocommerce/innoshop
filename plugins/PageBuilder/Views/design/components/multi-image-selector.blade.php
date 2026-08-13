@@ -127,7 +127,7 @@
             console.log("File selected:", file);
 
             // 修复URL
-            let fileUrl = file.url || file.path;
+            let fileUrl = file.origin_url || file.url || file.path;
             if (fileUrl && !fileUrl.match(/^https?:\/\//)) {
               if (!fileUrl.startsWith("/")) {
                 fileUrl = "/" + fileUrl;

@@ -210,7 +210,6 @@ return [
     'video_title'             => 'Video Title',
     'video_description'       => 'Video Description',
     'video_controls'          => 'Video Controls',
-    'autoplay'                => 'Autoplay',
     'loop'                    => 'Loop',
     'muted'                   => 'Muted',
     'show_controls'           => 'Show Controls',
@@ -223,7 +222,6 @@ return [
     'enter_description'     => 'Enter description content',
     'text_alignment'        => 'Text Alignment',
     'button_text'           => 'Button Text',
-    'enter_button_text'     => 'Enter button text',
 
     // Multi row images
     'row'                        => 'Row',
@@ -314,7 +312,6 @@ return [
     // Image text list - additional
     'autoplay_interval_time'      => 'Autoplay Interval',
     'show_title'                  => 'Show Title',
-    'image_height_tip'            => 'Unit: pixels, recommended 80-200',
     'padding_tip_image_text'      => 'Unit: pixels, 0 means no padding, controls spacing between image/text and card edge',
     'image_text_item_management'  => 'Image Text Item Management',
     'no_image_text_items'         => 'No image-text items',
@@ -326,6 +323,7 @@ return [
     'item_image'                  => 'Image',
     'recommended_size_200_100'    => 'Recommended size: 200 x 100 (2:1 ratio)',
     'item_link_optional'          => 'Link (Optional)',
+    'image_height_tip_text_list'  => 'Unit: pixels, recommended 80-200',
 
     // Four image plus - additional
     'max_4_images_warning' => 'Maximum 4 images allowed',

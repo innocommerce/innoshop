@@ -157,7 +157,7 @@
         <div class="control-settings">
           {{-- 自动播放 --}}
           <div class="setting-item">
-            <div class="setting-label">@{{ lang.autoplay }}</div>
+            <div class="setting-label">@{{ lang.video_autoplay }}</div>
             <div class="setting-control">
               <el-switch 
                 v-model="module.autoplay" 

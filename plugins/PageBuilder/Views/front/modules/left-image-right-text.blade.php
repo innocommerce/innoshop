@@ -1,7 +1,7 @@
 @php
   $imagePosition = $content['image_position'] ?? 'left';
-  $btnLink = $content['link']['value'] ?? 'javascript:void(0)';
-  $btnLinkType = $content['link']['type'] ?? 'custom';
+  $btnLinkType = $content['link']['type'] ?? '';
+  $btnLinkValue = $content['link']['value'] ?? '';
   $btnNewWindow = $content['link']['new_window'] ?? false;
   $target = $btnNewWindow ? '_blank' : '_self';
   $textAlign = $content['text_align'] ?? 'left';
@@ -16,10 +16,13 @@
   $imagePaddingY = $content['image_padding_y'] ?? 0;
   $hasImage = !empty($content['image']);
 
-  // Handle link based on type
-  if ($btnLinkType !== 'custom' && $btnLink) {
-      $btnLink = '/' . $btnLinkType . '/' . $btnLink;
-  }
+  // Resolve the button link through the core Link library so it points to the
+  // real front routes (/products/{id}, /categories/{id}, /product-{slug}, ...)
+  // instead of a naive "/{type}/{id}" that 404s.
+  $btnLink = ($btnLinkType && $btnLinkValue)
+      ? \InnoShop\Common\Libraries\Link::getInstance()->link($btnLinkType, $btnLinkValue)
+      : '';
+  $btnLink = $btnLink !== '' ? $btnLink : 'javascript:void(0)';
 @endphp
 
 @if($hasImage || request('design'))

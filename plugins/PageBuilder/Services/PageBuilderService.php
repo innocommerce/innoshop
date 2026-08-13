@@ -192,12 +192,12 @@ class PageBuilderService
     public function findPage(string $page): ?Page
     {
         if (is_numeric($page)) {
-            $pageModel = Page::find($page);
+            $pageModel = Page::query()->find($page);
             if ($pageModel) {
                 return $pageModel;
             }
         }
 
-        return Page::where('slug', $page)->first();
+        return Page::query()->where('slug', $page)->first();
     }
 }

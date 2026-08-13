@@ -146,7 +146,7 @@
           ></el-input-number>
           <div class="setting-tip">
             <i class="el-icon-info"></i>
-            @{{ lang.image_height_tip }}
+            @{{ lang.image_height_tip_text_list }}
           </div>
         </div>
 
