@@ -1,5 +1,5 @@
 {
-  "code": "BankTransfer",
+  "code": "bank_transfer",
   "name": {
     "zh-cn": "银行转账",
     "en": "Bank Transfer"

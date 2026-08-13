@@ -25,7 +25,7 @@ class Boot
     {
         listen_hook_filter('service.payment.mobile_pay.data', function ($data) {
             $order = $data['order'];
-            if ($order->payment_method_code != 'pay_pal') {
+            if ($order->billing_method_code != 'pay_pal') {
                 return $data;
             }
 
