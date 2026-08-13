@@ -15,13 +15,12 @@ use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Order\Payment;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\FileSecurityValidator;
-use InnoShop\RestAPI\FrontApiControllers\BaseController;
+use InnoShop\Restapi\FrontApiControllers\BaseController;
 
 class ReceiptController extends BaseController
 {
     /**
-     * Upload payment receipt for bank transfer order.
-     * Supports both authenticated customers and guest checkout.
+     * Upload payment receipt for bank transfer order
      *
      * @param  Request  $request
      * @param  string  $number
@@ -33,12 +32,6 @@ class ReceiptController extends BaseController
             $order = OrderRepo::getInstance()->builder(['number' => $number])->first();
             if (! $order) {
                 return json_fail(__('front/order.not_found'), null, 404);
-            }
-
-            // Verify ownership: logged-in user must own the order; guest orders (customer_id=0) are allowed
-            $customerId = current_customer_id();
-            if ($customerId > 0 && $order->customer_id !== $customerId) {
-                return json_fail(__('front/order.unauthorized_access'), null, 403);
             }
 
             // Verify order uses bank transfer payment method

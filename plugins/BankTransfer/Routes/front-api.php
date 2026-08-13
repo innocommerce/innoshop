@@ -10,4 +10,5 @@
 use Illuminate\Support\Facades\Route;
 use Plugin\BankTransfer\Controllers\ReceiptController;
 
-Route::post('/bank-transfer/orders/{number}/receipt', [ReceiptController::class, 'upload'])->name('bank_transfer.receipt_upload');
+// Bank transfer receipt upload endpoint
+Route::post('/orders/{number}/receipt', [ReceiptController::class, 'upload'])->name('orders.receipt_upload');
