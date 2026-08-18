@@ -586,7 +586,7 @@ return new class extends Migration
             $table->string('locale')->comment('Locale Code');
             $table->string('title')->comment('Title');
             $table->longText('content')->nullable()->comment('Content');
-            $table->text('template')->nullable()->comment('Content');
+            $table->text('template')->nullable()->comment('Full-page raw HTML template, never compiled');
             $table->string('meta_title', 500)->nullable()->comment('Meta Title');
             $table->string('meta_description', 1000)->nullable()->comment('Meta description');
             $table->string('meta_keywords', 500)->nullable()->comment('Meta keywords');

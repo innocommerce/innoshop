@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Blade;
 use InnoShop\Common\Models\Page;
 use InnoShop\Common\Repositories\PageRepo;
 
@@ -84,15 +83,15 @@ class PageController extends Controller
             return inno_view("pages.$slug", ['page' => $page]);
         }
 
-        // Fallback: backend template field (Blade code) or content (rich text)
+        // Fallback: backend template field (raw full-page HTML) or content (rich text)
         $data = [
             'slug' => $slug,
             'page' => $page,
         ];
         $template = $page->translation->template ?? '';
         if ($template) {
-            $result         = Blade::render($template, $data);
-            $data['result'] = $result;
+            // Security invariant: DB content is echoed raw and must never be compiled through Blade.
+            $data['result'] = $template;
         }
 
         return inno_view('pages.show', $data);
