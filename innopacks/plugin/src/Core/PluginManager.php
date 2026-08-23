@@ -319,7 +319,13 @@ class PluginManager
             if ($subdir === '.' || $subdir === '..') {
                 continue;
             }
-            $configPath = $pluginsDir.DIRECTORY_SEPARATOR.$subdir.DIRECTORY_SEPARATOR.'config.json';
+            $subdirPath = $pluginsDir.DIRECTORY_SEPARATOR.$subdir;
+            // Skip non-directory entries (e.g. .gitignore): is_file() on a
+            // non-existent path throws a warning under open_basedir.
+            if (! is_dir($subdirPath)) {
+                continue;
+            }
+            $configPath = $subdirPath.DIRECTORY_SEPARATOR.'config.json';
             if (! is_file($configPath)) {
                 continue;
             }
