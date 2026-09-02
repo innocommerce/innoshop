@@ -20,23 +20,12 @@ class ThemeDemoService extends BaseService
 {
     /**
      * Resolve the PHP file used for demo import.
-     * Lookup order: setup/seeder.php → demo/seeder.php → demo/Seeder.php (legacy).
      */
     public function resolveDemoSeederPath(string $dir): ?string
     {
-        $candidates = [
-            $dir.'/setup/seeder.php',
-            $dir.'/demo/seeder.php',
-            $dir.'/demo/Seeder.php',
-        ];
+        $seeder = $dir.'/setup/seeder.php';
 
-        foreach ($candidates as $path) {
-            if (is_file($path)) {
-                return $path;
-            }
-        }
-
-        return null;
+        return is_file($seeder) ? $seeder : null;
     }
 
     /**
