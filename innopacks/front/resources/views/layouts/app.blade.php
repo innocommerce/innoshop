@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="{{ front_route('home.index') }}">
-  <title>@yield('title', system_setting_locale('meta_title', 'InnoShop - 创新的开源电商系统 | 开源独立站系统 | Laravel 12，多语言和多货币支持'))</title>
-  <meta name="description" content="@yield('description', system_setting_locale('meta_description', 'innoshop是一款创新的开源电子商务平台，基于Laravel 12开发，具有多语言和多货币支持的特性。它采用了基于Hook的强大而灵活的插件架构，为用户提供了丰富的定制和扩展功能。欢迎体验innoshop，打造属于您自己的电子商务平台！'))">
-  <meta name="keywords" content="@yield('keywords', system_setting_locale('meta_keywords', 'innoshop, 创新, 开源, 电商, 跨境电商, 开源独立站, Laravel 12, 多语言, 多货币, Hook, 插件架构, 灵活, 强大'))">
+  <title>@yield('title', system_setting_locale('meta_title', 'InnoShop - 创新的开源电商系统 | 开源独立站系统 | Laravel 13，多语言和多货币支持'))</title>
+  <meta name="description" content="@yield('description', system_setting_locale('meta_description', 'innoshop是一款创新的开源电子商务平台，基于Laravel 13开发，具有多语言和多货币支持的特性。它采用了基于Hook的强大而灵活的插件架构，为用户提供了丰富的定制和扩展功能。欢迎体验innoshop，打造属于您自己的电子商务平台！'))">
+  <meta name="keywords" content="@yield('keywords', system_setting_locale('meta_keywords', 'innoshop, 创新, 开源, 电商, 跨境电商, 开源独立站, Laravel 13, 多语言, 多货币, Hook, 插件架构, 灵活, 强大'))">
   <meta name="generator" content="InnoShop {{ innoshop_version() }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="api-token" content="{{ session('front_api_token') }}">
