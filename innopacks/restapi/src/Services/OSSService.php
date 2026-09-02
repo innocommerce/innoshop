@@ -449,6 +449,9 @@ class OSSService implements MediaInterface
     /**
      * Check multiple directories in parallel for sub-directory existence.
      * Uses async S3 calls via Guzzle promises — N checks take ~1 round-trip.
+     * MaxKeys must not be 1: S3 interleaves files and prefixes in lexicographic
+     * order, so a file sorting before any sub-directory would hide CommonPrefixes
+     * and wrongly mark the directory as a leaf.
      *
      * @return array<string, bool> Map of path => hasChildren
      */
@@ -461,7 +464,7 @@ class OSSService implements MediaInterface
                 'Bucket'    => $this->bucket,
                 'Prefix'    => $prefix,
                 'Delimiter' => '/',
-                'MaxKeys'   => 1,
+                'MaxKeys'   => 1000,
             ]);
         }
 
@@ -469,10 +472,37 @@ class OSSService implements MediaInterface
 
         $map = [];
         foreach ($results as $path => $result) {
-            if ($result['state'] === 'fulfilled') {
-                $map[$path] = ! empty($result['value']['CommonPrefixes']);
-            } else {
+            if ($result['state'] !== 'fulfilled') {
                 $map[$path] = false;
+
+                continue;
+            }
+
+            $response = $result['value'];
+            if (! empty($response['CommonPrefixes'])) {
+                $map[$path] = true;
+
+                continue;
+            }
+
+            // Page through the remaining keys: sub-directories may still sort
+            // after up to 1000 file keys under the same prefix.
+            $map[$path]        = false;
+            $continuationToken = $response['NextContinuationToken'] ?? null;
+            while ($continuationToken) {
+                $next = $this->s3Client->listObjectsV2([
+                    'Bucket'            => $this->bucket,
+                    'Prefix'            => rtrim($path, '/').'/',
+                    'Delimiter'         => '/',
+                    'MaxKeys'           => 1000,
+                    'ContinuationToken' => $continuationToken,
+                ]);
+                if (! empty($next['CommonPrefixes'])) {
+                    $map[$path] = true;
+
+                    break;
+                }
+                $continuationToken = $next['NextContinuationToken'] ?? null;
             }
         }
 
