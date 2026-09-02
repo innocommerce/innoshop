@@ -25,12 +25,12 @@
   @if(isset($tags) && $tags)
     <div class="sidebar-item">
       <div class="sidebar-title">{{__("front/article.news_tag")}}</div>
-      <div class="sidebar-list">
-        <ul>
+      <div class="newes-tags">
+        <div class="d-flex flex-wrap">
           @foreach($tags as $tag)
-            <li><a href="{{ $tag->url }}">{{ $tag->translation?->name ?? '' }}</a></li>
+            <a href="{{ $tag->url }}">{{ $tag->fallbackName() }}</a>
           @endforeach
-        </ul>
+        </div>
       </div>
     </div>
   @endif
