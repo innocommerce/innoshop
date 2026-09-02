@@ -119,7 +119,9 @@ class TranslationHandler
             }
         }
 
-        // If default language is not found, use the first available translation
-        return $translations[0];
+        // If default language is not found, use the first available translation.
+        // Translations may be keyed by locale (repo patch merge), so reset()
+        // instead of index 0.
+        return reset($translations);
     }
 }
