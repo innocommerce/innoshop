@@ -1,83 +1,390 @@
+// ============================================================
+// Auth pages — login / register
+// Centered single-card. Tight, professional typography & rhythm.
+// Reference: GitHub / Vercel / Stripe sign-in pages.
+// ============================================================
+
 body.page-login {
   margin-bottom: 0 !important;
+  background: $color-bg-tertiary;
 }
 
-.login-register-box {
-  max-width: 540px;
-  background-color: #F3F3F3;
-  margin: 30px auto;
-  padding: 16px;
+.page-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - #{$header-height});
+  padding: $space-7 $space-5;
 
-  @media (min-width: 992px) {
-    padding: 36px;
-    margin: 70px auto;
+  // Hide breadcrumb — noise on auth pages.
+  .breadcrumb,
+  nav.breadcrumb {
+    display: none;
+  }
+
+  // Container override: full-bleed instead of constrained.
+  > .container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
   }
 
   &.iframe {
-    margin: 10px 0 0;
+    min-height: auto;
+    padding: $space-3 0 0;
+  }
+}
+
+// ---------- Centered auth card ----------
+.auth-panel {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.auth-panel-inner {
+  width: 100%;
+  background: $color-bg-primary;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-lg;
+  padding: 36px 36px 32px;
+  box-shadow: $shadow-sm;
+
+  @media (max-width: $bp-sm) {
+    padding: $space-6 $space-5 $space-5;
   }
 
+  // iframe variant — strip chrome.
+  .page-auth.iframe & {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    background: transparent;
+    max-width: 460px;
+  }
+}
+
+.login-register-box {
+  width: 100%;
+
+  &.iframe {
+    margin: 0;
+  }
+
+  // ---------- Headline ----------
   .login-title {
-    text-align: center;
     font-size: 24px;
-    margin-bottom: 20px;
+    font-weight: $fw-bold;
+    color: $color-text-primary;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 8px;
   }
 
   .login-sub-title {
-    text-align: center;
-    font-size: 16px;
-    color: #666666;
-    margin-bottom: 30px;
+    font-size: 15px;
+    color: $color-text-secondary;
+    line-height: $lh-normal;
+    margin-bottom: 28px;
   }
 
-  .form-group {
-    input {
-      border: none;
-      height: 44px;
-      font-size: 15px;
-      border-radius: 0;
-    }
-  }
-
-  .btn-submit {
-    margin-top: 30px;
-
-    @media (min-width: 400px) {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .form-submit {
-      width: 50%;
-      display: block;
-    }
-
-    a {
-      color: #222;
-      display: block;
-      font-weight: bold;
-    }
-  }
-
-  // Auth method switch styles
+  // ---------- Segmented control (email / phone) ----------
   .auth-method-switch {
-    .btn-outline-primary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 4px;
+    background: $color-bg-subtle;
+    border: 1px solid $color-border-subtle;
+    border-radius: $radius-md;
+    margin-bottom: 20px;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: $fw-medium;
+      color: $color-text-secondary;
+      background: transparent;
+      border: none;
+      border-radius: $radius-sm;
+      cursor: pointer;
+      transition: all $transition-fast;
+
+      svg { width: 14px; height: 14px; }
+
+      &:hover { color: $color-text-primary; }
+
       &.active {
-        background-color: $primary;
-        border-color: $primary;
-        color: #fff !important;
+        background: $color-bg-primary;
+        color: $color-text-primary;
+        box-shadow: $shadow-xs;
+      }
+    }
+  }
+
+  // ---------- Form fields ----------
+  .form-group {
+    margin-bottom: 16px;
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: $fw-medium;
+      color: $color-text-primary;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .input-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        color: $color-text-tertiary;
+        pointer-events: none;
       }
 
-      &:not(.active) {
-        color: $primary;
-        background-color: #fff;
+      .form-control {
+        width: 100%;
+        padding: 12px 14px 12px 42px;
+        font-size: 15px;
+        font-family: inherit;
+        color: $color-text-primary;
+        background: $color-bg-primary;
+        border: 1px solid $color-border-default;
+        border-radius: $radius-md;
+        transition: all $transition-fast;
+        height: 46px;
 
-        &:hover {
-          background-color: #fff;
-          color: $primary;
+        &::placeholder { color: $color-text-tertiary; }
+
+        &:hover:not(:focus) {
+          border-color: $color-border-strong;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: $color-accent;
+          box-shadow: $shadow-focus;
+        }
+
+        &.is-invalid {
+          border-color: $color-danger;
+
+          &:focus {
+            box-shadow: 0 0 0 3px rgba(222, 54, 24, 0.18);
+          }
         }
       }
+
+      .input-trailing {
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: $color-text-tertiary;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: $radius-sm;
+        transition: color $transition-fast;
+
+        &:hover { color: $color-text-primary; }
+        svg { width: 16px; height: 16px; display: block; }
+      }
+    }
+
+    // Phone row: country code + number
+    .phone-row {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 8px;
+
+      .input-wrapper {
+        .form-control { padding-left: 14px; }
+      }
+    }
+
+    // SMS code + send button
+    .sms-row {
+      .input-wrapper {
+        .form-control { padding-right: 100px; }
+      }
+
+      .sms-send-btn {
+        padding: 6px 14px;
+        font-size: 14px;
+        font-weight: $fw-medium;
+        color: $color-accent;
+        background: $color-accent-soft;
+        border: none;
+        border-radius: $radius-sm;
+        cursor: pointer;
+        transition: all $transition-fast;
+        white-space: nowrap;
+
+        &:hover:not(:disabled) {
+          background: darken($color-accent-soft, 4%);
+        }
+
+        &:disabled {
+          color: $color-text-tertiary;
+          background: $color-bg-subtle;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .invalid-feedback {
+      display: none;
+      margin-top: 6px;
+      font-size: 12px;
+      color: $color-danger;
+    }
+
+    // Show only after submit attempt or when input is explicitly invalid.
+    .was-validated .form-group .invalid-feedback,
+    .form-group .form-control.is-invalid ~ .invalid-feedback,
+    .form-group .form-control.is-invalid {
+      display: block;
+    }
+
+    .form-group .form-control.is-invalid ~ .invalid-feedback {
+      display: block;
+    }
+  }
+
+  // Remember + forgot row — sibling of .form-group, descendant of .login-register-box.
+  .form-meta {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: -4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+
+    .form-check {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 8px;
+      color: $color-text-secondary;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+      min-height: auto;
+
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: $color-accent;
+        cursor: pointer;
+        float: none;
+        margin: 0;
+      }
+    }
+
+    .forgot-link {
+      flex: 0 0 auto;
+      color: $color-accent;
+      font-weight: $fw-medium;
+      text-decoration: none;
+      white-space: nowrap;
+
+      &:hover { text-decoration: underline; }
+    }
+  }
+
+  // ---------- Submit button ----------
+  .btn-submit {
+    margin-top: 20px;
+
+    .form-submit {
+      width: 100%;
+      padding: 13px 20px;
+      font-size: 15px;
+      font-weight: $fw-semibold;
+      color: #fff;
+      background: $color-accent;
+      border: 1px solid $color-accent;
+      border-radius: $radius-md;
+      cursor: pointer;
+      transition: all $transition-fast;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 46px;
+
+      &:hover:not(:disabled) {
+        background: $color-accent-hover;
+        border-color: $color-accent-hover;
+      }
+
+      &:active { transform: translateY(0); }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      svg { width: 16px; height: 16px; }
+    }
+
+    .switch-prompt {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: baseline;
+      gap: 4px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: $color-text-secondary;
+
+      a {
+        color: $color-accent;
+        font-weight: $fw-semibold;
+        text-decoration: none;
+
+        &:hover { text-decoration: underline; }
+      }
+    }
+  }
+
+  // ---------- Terms note ----------
+  .auth-terms {
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: $lh-relaxed;
+    color: $color-text-tertiary;
+    text-align: center;
+
+    a {
+      color: $color-text-secondary;
+      text-decoration: underline;
+
+      &:hover { color: $color-text-primary; }
     }
   }
 }

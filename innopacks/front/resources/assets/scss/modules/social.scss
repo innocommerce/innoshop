@@ -1,21 +1,88 @@
-.line {
-    width: 50%;
+// ============================================================
+// Social login — providers block under auth forms
+// ============================================================
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  margin: $space-6 0 $space-4;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
     height: 1px;
-    background:  #c3c1c1;
+    background: $color-border-subtle;
+  }
+
+  .auth-divider-text {
+    font-size: $fs-xs;
+    font-weight: $fw-medium;
+    color: $color-text-tertiary;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
 }
-.word {
-    color: #c3c1c1;
-}
-.social-button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: $primary;
-    display: flex;
+
+.social-login {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: $space-2;
+
+  // Provider brand buttons
+  .social-button {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: $fs-sm;
+    font-weight: $fw-medium;
+    color: $color-text-primary;
+    background: $color-bg-primary;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-md;
     text-decoration: none;
-    color: white;
-    font-size: 1.5rem;
-    border: none;
+    transition: all $transition-fast;
+    cursor: pointer;
+
+    .social-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+
+      svg { width: 18px; height: 18px; display: block; }
+      img { width: 18px; height: 18px; display: block; }
+    }
+
+    .social-label {
+      white-space: nowrap;
+    }
+
+    &:hover {
+      border-color: $color-border-strong;
+      background: $color-bg-secondary;
+      transform: translateY(-1px);
+      box-shadow: $shadow-xs;
+    }
+
+    &:active { transform: translateY(0); }
+
+    // Provider-specific accent (subtle)
+    &[data-provider="github"]:hover { border-color: #24292e; }
+    &[data-provider="google"]:hover { border-color: #4285F4; }
+    &[data-provider="facebook"]:hover { border-color: #1877F2; }
+    &[data-provider="twitter"]:hover,
+    &[data-provider="x"]:hover { border-color: #000000; }
+    &[data-provider="linkedin"]:hover { border-color: #0A66C2; }
+    &[data-provider="apple"]:hover { border-color: #000000; }
+  }
+
+  // Single-column when many providers stack vertically on narrow widths
+  @media (max-width: 360px) {
+    grid-template-columns: 1fr;
+  }
 }

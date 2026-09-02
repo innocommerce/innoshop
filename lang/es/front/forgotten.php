@@ -8,18 +8,26 @@
  */
 
 return [
+    'back_to_login'          => 'Volver al inicio de sesión',
+    'code_required'          => 'Introduce el código de verificación',
     'confirm_password'       => 'Confirmar contraseña',
     'email'                  => 'Correo electrónico',
     'email_address'          => 'Dirección de correo electrónico',
+    'email_required'         => 'Introduce tu correo electrónico',
     'hint'                   => 'Sugerencia',
     'new_password'           => 'Nueva contraseña',
     'password'               => 'Contraseña',
+    'password_match'         => 'Las contraseñas no coinciden',
+    'password_required'      => 'Introduce una nueva contraseña',
     'password_updated'       => 'Confirmar contraseña',
+    'remembered'             => '¿Recordaste tu contraseña?',
     'send_code'              => 'Enviar código de verificación',
+    'send_failed'            => 'Error al enviar, inténtalo de nuevo',
     'submit'                 => 'Enviar',
     'subtitle_confirm'       => 'Por favor, ingrese el código de verificación y establezca una nueva contraseña',
     'subtitle_send'          => 'Por favor, ingrese el correo electrónico registrado para enviar el código de verificación',
     'title'                  => 'Por favor, siga las indicaciones para recuperar su contraseña.',
+    'title_confirm'          => 'Establecer una nueva contraseña',
     'verification_code'      => 'Código de verificación',
     'verification_code_sent' => 'El código de verificación ha sido enviado a su correo electrónico. Por favor, ingrese el código.',
 ];

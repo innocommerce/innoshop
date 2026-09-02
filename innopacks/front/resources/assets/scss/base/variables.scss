@@ -1,3 +1,69 @@
+// ============================================================
+// Default design tokens for the InnoShop core (front/panel/install).
+// Themes can override any of these by redefining them before
+// `@import '@front/assets/scss/app'` in their own app.scss.
+// ============================================================
+
 $primary: #E91E63 !default;
 $price: #E53E3E !default;
 $default: #8446e0 !default;
+
+// ---- Color Palette ----------------------------------------
+$color-bg-primary:     #FFFFFF !default;
+$color-bg-secondary:   #FAFAFA !default;
+$color-bg-tertiary:    #F6F9FC !default;
+$color-bg-inverse:     #0A2540 !default;
+$color-bg-subtle:      #F4F4F5 !default;
+
+$color-text-primary:   #0A2540 !default;
+$color-text-secondary: #425466 !default;
+$color-text-tertiary:  #8898AA !default;
+$color-text-inverse:   #FFFFFF !default;
+
+$color-border-default: #E3E8EE !default;
+$color-border-strong:  #C1C9D2 !default;
+$color-border-subtle:  #F0F2F5 !default;
+
+$color-accent:         #635BFF !default;
+$color-accent-hover:   #5851EE !default;
+$color-accent-soft:    #EEECFB !default;
+
+$color-danger:         #DE3618 !default;
+
+// ---- Typography -------------------------------------------
+$fw-medium:   500 !default;
+$fw-semibold: 600 !default;
+$fw-bold:     700 !default;
+
+$fs-xs:    0.75rem !default;
+$fs-sm:    0.875rem !default;
+
+$lh-normal:  1.5 !default;
+$lh-relaxed: 1.7 !default;
+
+// ---- Spacing Scale (4px base) -----------------------------
+$space-2: 0.5rem !default;
+$space-3: 0.75rem !default;
+$space-4: 1rem !default;
+$space-5: 1.5rem !default;
+$space-6: 2rem !default;
+$space-7: 2.5rem !default;
+
+// ---- Radius ------------------------------------------------
+$radius-sm: 4px !default;
+$radius-md: 8px !default;
+$radius-lg: 12px !default;
+
+// ---- Shadow (subtle) --------------------------------------
+$shadow-xs:    0 1px 2px rgba(10, 37, 64, 0.04) !default;
+$shadow-sm:    0 2px 4px rgba(10, 37, 64, 0.06), 0 1px 2px rgba(10, 37, 64, 0.04) !default;
+$shadow-focus: 0 0 0 3px rgba(99, 91, 255, 0.30) !default;
+
+// ---- Transitions ------------------------------------------
+$transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1) !default;
+
+// ---- Layout -----------------------------------------------
+$header-height: 64px !default;
+
+// ---- Breakpoints ------------------------------------------
+$bp-sm: 640px !default;
