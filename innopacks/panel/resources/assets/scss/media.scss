@@ -1099,17 +1099,44 @@ $fm-text-secondary: #909399;
 
 /* ========== AI Image Dialog ========== */
 .ai-image-dialog {
+  // Override Element Plus primary color to green so that every input,
+  // select, checkbox, focus ring and loading spinner inside the dialog
+  // inherits a unified theme consistent with the rest of the media library.
+  --el-color-primary: #67c23a;
+  --el-color-primary-light-3: #95d475;
+  --el-color-primary-light-5: #b3e19d;
+  --el-color-primary-light-7: #d1edc4;
+  --el-color-primary-light-9: #e1f3d8;
+  --el-color-primary-dark-2: #529b2e;
+
+  // Constrain the dialog itself so it always fits the viewport with breathing room,
+  // instead of overflowing the top half when its content grows.
+  .el-dialog {
+    margin-top: 4vh !important;
+    margin-bottom: 4vh !important;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
   .el-dialog__header {
-    padding: 20px 24px 0;
+    padding: 22px 24px 0;
     margin-right: 0;
+    flex-shrink: 0;
   }
 
   .el-dialog__body {
-    padding: 20px 24px;
+    padding: 20px 24px 24px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
   }
 
   .el-dialog__footer {
-    padding: 12px 24px 20px;
+    padding: 14px 24px 20px;
+    border-top: 1px solid #f1f3f5;
+    flex-shrink: 0;
   }
 }
 
@@ -1117,6 +1144,57 @@ $fm-text-secondary: #909399;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.ai-model-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 4px 4px 10px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  text-decoration: none;
+  font-family: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #475569;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+  max-width: 280px;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #67c23a;
+    color: #4db34e;
+    background: #f7fdf2;
+    box-shadow: 0 2px 8px rgba(103, 194, 58, 0.12);
+  }
+}
+
+.ai-model-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+  line-height: 1;
+}
+
+.ai-model-divider {
+  width: 1px;
+  height: 12px;
+  background: #e2e8f0;
+  margin: 0 7px;
+}
+
+.ai-model-icon {
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex-shrink: 0;
 }
 
 .ai-dialog-title {
@@ -1132,25 +1210,53 @@ $fm-text-secondary: #909399;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   background: linear-gradient(135deg, #67c23a 0%, #4db34e 100%);
   color: #fff;
   font-size: 17px;
+  box-shadow: 0 4px 10px rgba(103, 194, 58, 0.25);
 }
 
 .ai-dialog-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.ai-pane-left {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
+  min-width: 0;
+}
+
+.ai-pane-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .ai-section-label {
-  font-size: 13px;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
   color: $fm-text;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  letter-spacing: 0.2px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 12px;
+    background: linear-gradient(180deg, #67c23a, #4db34e);
+    border-radius: 2px;
+  }
 }
 
 /* Reference image card */
@@ -1198,18 +1304,179 @@ $fm-text-secondary: #909399;
 .ai-ref-remove {
   flex-shrink: 0;
   margin-left: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #6b7280;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+  .ai-ref-remove-icon {
+    width: 10px;
+    height: 10px;
+    display: block;
+    position: relative;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 12px;
+      height: 1.5px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    &::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
+
+  &:hover {
+    background: #fef2f2;
+    color: #dc2626;
+    border-color: #fecaca;
+  }
 }
 
 /* Prompt */
 .ai-prompt-section {
   .el-textarea__inner {
-    border-radius: 8px;
-    border-color: #ddd;
-    &:focus {
-      border-color: #67c23a;
-      box-shadow: 0 0 0 2px rgba(103, 194, 58, 0.12);
+    border-radius: 10px;
+    border-color: #e5e7eb;
+    font-size: 13.5px;
+    line-height: 1.6;
+    padding: 12px 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+}
+
+/* Template / Negative prompt share textarea styling */
+.ai-template-section,
+.ai-negative-section {
+  .el-textarea__inner,
+  .el-select__wrapper {
+    border-radius: 10px;
+  }
+}
+
+.ai-negative-section {
+  .el-textarea__inner {
+    border-color: #e5e7eb;
+    background: #fafbfc;
+    font-size: 12.5px;
+  }
+}
+
+.ai-options-row {
+  .el-select__wrapper {
+    border-radius: 10px;
+    padding: 4px 12px;
+    min-height: 38px;
+  }
+}
+
+.ai-preview-card {
+  background: linear-gradient(135deg, #f7fdf2 0%, #ecf8e3 100%);
+  border: 1px solid #d4f0c0;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(103, 194, 58, 0.06);
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-preview-card.is-loading {
+  background: linear-gradient(135deg, #f7fdf2 0%, #e1f3d8 100%);
+}
+
+.ai-preview-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #67c23a;
+
+  .ai-preview-loading-text {
+    font-size: 13px;
+    color: #4db34e;
+    letter-spacing: 0.3px;
+  }
+
+  .el-icon {
+    font-size: 36px;
+
+    &.is-loading {
+      animation: rotating 1.5s linear infinite;
     }
   }
+}
+
+.ai-preview-result {
+  width: 100%;
+}
+
+.ai-preview-image {
+  width: 100%;
+  border-radius: 8px;
+  background: #fff;
+  max-height: 480px;
+  object-fit: contain;
+}
+
+.ai-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.ai-placeholder-icon {
+  font-size: 56px;
+  color: #a3d977;
+  margin-bottom: 4px;
+}
+
+.ai-placeholder-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.ai-placeholder-hint {
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.5;
+  max-width: 240px;
+}
+
+.ai-dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-dialog-footer-actions {
+  display: flex;
+  gap: 8px;
 }
 
 /* Options row */
@@ -1462,4 +1729,21 @@ $fm-text-secondary: #909399;
 .media-detail-alt-actions {
   margin-top: 12px;
   text-align: right;
+}
+
+
+/* Select dropdown (teleported to body, can't inherit scoped CSS vars) */
+.ai-select-popper.el-select-dropdown {
+  .el-select-dropdown__item.is-hovering,
+  .el-select-dropdown__item:hover {
+    background-color: rgba(103, 194, 58, 0.08) !important;
+  }
+  .el-select-dropdown__item.selected {
+    color: #67c23a;
+    font-weight: 600;
+  }
+  .el-select-dropdown__item.is-selected {
+    color: #67c23a;
+    font-weight: 600;
+  }
 }

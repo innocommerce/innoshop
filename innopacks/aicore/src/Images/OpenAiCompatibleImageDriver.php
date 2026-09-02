@@ -54,10 +54,11 @@ class OpenAiCompatibleImageDriver
             throw new RuntimeException("AI provider [{$providerName}] has no image model configured.");
         }
 
+        $n       = max(1, (int) ($options['n'] ?? 1));
         $payload = array_filter([
             'model'   => $model,
             'prompt'  => $prompt,
-            'n'       => 1,
+            'n'       => $n,
             'size'    => $this->normalizeSize($options['size'] ?? null),
             'quality' => $options['quality'] ?? null,
         ]);
@@ -100,12 +101,18 @@ class OpenAiCompatibleImageDriver
 
         $storageKey = StorageService::storageKey($fullPath);
 
-        return [
+        $result = [
             'name'       => $filename,
             'path'       => $storageKey,
             'url'        => storage_url($storageKey),
             'origin_url' => $imageUrl ?: storage_url($storageKey),
         ];
+
+        if ($n > 1) {
+            $result['notice'] = __('aicore::media.ai_more_images_notice');
+        }
+
+        return $result;
     }
 
     /**

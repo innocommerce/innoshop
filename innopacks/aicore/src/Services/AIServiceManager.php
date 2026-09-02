@@ -258,6 +258,11 @@ class AIServiceManager
 
             $prompt = fire_hook_filter('ai.image_prompt', $prompt);
 
+            if (! empty($options['negative_prompt'])) {
+                $prompt .= '. Do not include: '.$options['negative_prompt'];
+                unset($options['negative_prompt']);
+            }
+
             $model   = $options['model'] ?? config("ai.providers.{$provider}.models.image.default");
             $size    = $options['size'] ?? null;
             $quality = $options['quality'] ?? null;
@@ -302,8 +307,41 @@ class AIServiceManager
                 throw new \RuntimeException("AI provider [{$providerName}] does not support image generation. Configure an image-capable provider (OpenAI, Gemini, etc.) in AI settings.");
             }
 
+            if ($this->isModelRelatedError($e->getMessage())) {
+                $providerName = config("ai.providers.{$provider}.name", $provider);
+                $imageModel   = $options['model'] ?? config("ai.providers.{$provider}.models.image.default", '');
+                throw new \RuntimeException("图片模型「{$imageModel}」不存在或不支持生图，请到 后台 → 设置 → AI 检查 {$providerName} 的图片模型（MiniMax 填 image-01，OpenAI 填 gpt-image-1）。");
+            }
+
+            if ($this->isContentPolicyError($e->getMessage())) {
+                throw new \RuntimeException('内容审核未通过：提示词或参考图可能包含敏感内容，请修改后重试（MiniMax 的审核较严，可考虑换 OpenAI gpt-image-1 等较宽松的服务商，或调整提示词）。');
+            }
+
             throw new \RuntimeException('AI image generation failed: '.$e->getMessage());
         }
+    }
+
+    /**
+     * Detect provider errors caused by a wrong or unsupported image model name.
+     */
+    private function isModelRelatedError(string $message): bool
+    {
+        return (bool) preg_match(
+            '/unsupported model|invalid model|unknown model|model not found|no such model|model.+does not exist/i',
+            $message
+        );
+    }
+
+    /**
+     * Detect content-policy / safety-filter rejections from providers
+     * (e.g. MiniMax returns `input new_sensitive` or `output text_sensitive`).
+     */
+    private function isContentPolicyError(string $message): bool
+    {
+        return (bool) preg_match(
+            '/_sensitive\b|敏感|content safety|safety filter|content policy|unsafe content|输入敏感|输出敏感/i',
+            $message
+        );
     }
 
     /**
