@@ -19,6 +19,7 @@
             <directory>innopacks/plugin/tests</directory>
             <directory>innopacks/devtools/tests</directory>
             <directory>innopacks/install/tests</directory>
+            <directory>innopacks/aicore/tests</directory>
         </testsuite>
     </testsuites>
     <source>
