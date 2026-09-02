@@ -25,6 +25,7 @@ use InnoShop\Common\Models\Article;
 use InnoShop\Common\Models\Brand;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Models\Tag;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -301,6 +302,70 @@ class ContentSeoToolsTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         (new ArticleUpdateTool)->execute(['id' => $article->id]);
+    }
+
+    #[Test]
+    public function test_article_update_sets_tags_by_name_creating_missing_ones(): void
+    {
+        $article  = $this->createArticle();
+        $existing = Tag::query()->create(['slug' => 'mcp', 'active' => true]);
+        $existing->translations()->create(['locale' => 'en', 'name' => 'MCP']);
+        $existing->translations()->create(['locale' => 'zh-cn', 'name' => 'MCP 中文']);
+
+        $result = (new ArticleUpdateTool)->execute([
+            'id'   => $article->id,
+            'tags' => ['MCP', 'ShopBot'],
+        ]);
+
+        $names = collect($result['tags'])->keyBy('name');
+        $this->assertTrue($names->has('MCP'), 'Existing tag matched by name across locales');
+        $this->assertTrue($names->has('ShopBot'), 'Missing tag created automatically');
+        $this->assertSame($existing->id, $names['MCP']['id']);
+
+        $tagIds = $article->tags()->pluck('tag_id')->all();
+        $this->assertEqualsCanonicalizing([$existing->id, $names['ShopBot']['id']], $tagIds);
+
+        $created = Tag::query()->find($names['ShopBot']['id']);
+        $this->assertSame('ShopBot', $created->translations()->where('locale', 'en')->first()->name);
+        $this->assertNotSame('mcp', $created->slug, 'Slug must be unique per tag');
+
+        foreach (enabled_locale_codes() as $code) {
+            $this->assertNotNull(
+                $created->translations()->where('locale', $code)->first(),
+                "Newly created tag must have a translation for every enabled locale [{$code}]"
+            );
+        }
+    }
+
+    #[Test]
+    public function test_article_update_merges_tag_ids_with_names(): void
+    {
+        $article = $this->createArticle();
+        $tagA    = Tag::query()->create(['slug' => 'tag-a'.Str::lower(Str::random(4)), 'active' => true]);
+        $tagA->translations()->create(['locale' => 'en', 'name' => 'Tag A']);
+
+        (new ArticleUpdateTool)->execute([
+            'id'      => $article->id,
+            'tag_ids' => [$tagA->id],
+            'tags'    => ['Tag B'],
+        ]);
+
+        $tagIds = $article->tags()->pluck('tag_id')->all();
+        $this->assertCount(2, $tagIds, 'tag_ids and tags are merged');
+        $this->assertContains($tagA->id, $tagIds);
+    }
+
+    #[Test]
+    public function test_article_update_clears_tags_with_empty_array(): void
+    {
+        $article = $this->createArticle();
+        (new ArticleUpdateTool)->execute(['id' => $article->id, 'tags' => ['Temp Tag']]);
+        $this->assertCount(1, $article->tags()->get());
+
+        $result = (new ArticleUpdateTool)->execute(['id' => $article->id, 'tags' => []]);
+
+        $this->assertSame([], $result['tags']);
+        $this->assertCount(0, $article->tags()->get());
     }
 
     #[Test]

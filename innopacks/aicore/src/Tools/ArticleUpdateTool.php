@@ -9,8 +9,11 @@
 
 namespace InnoShop\Aicore\Tools;
 
+use Illuminate\Support\Str;
 use InnoShop\Common\Models\Article;
+use InnoShop\Common\Models\Tag;
 use InnoShop\Common\Repositories\ArticleRepo;
+use InnoShop\Common\Repositories\TagRepo;
 use InvalidArgumentException;
 
 class ArticleUpdateTool extends BaseTool
@@ -24,7 +27,7 @@ class ArticleUpdateTool extends BaseTool
 
     public function description(): string
     {
-        return '⚠️ WRITE: Update an existing blog article using PATCH semantics. Supports title, summary, content, SEO meta fields (meta_title/meta_description/meta_keywords), catalog, image, and per-locale translations.';
+        return '⚠️ WRITE: Update an existing blog article using PATCH semantics. Supports title, summary, content, SEO meta fields (meta_title/meta_description/meta_keywords), catalog, image, tags, and per-locale translations.';
     }
 
     public function inputSchema(): array
@@ -45,7 +48,17 @@ class ArticleUpdateTool extends BaseTool
                 'author'           => ['type' => 'string', 'description' => 'Author name'],
                 'position'         => ['type' => 'integer', 'description' => 'Display position'],
                 'active'           => ['type' => 'boolean', 'description' => 'Active status'],
-                'translations'     => self::translationsSchema([
+                'tags'             => [
+                    'type'        => 'array',
+                    'items'       => ['type' => 'string'],
+                    'description' => 'Tag names to attach. Existing tags are matched by exact name (any locale); missing names are created automatically. Passing [] removes all tags. Merged with tag_ids when both are given.',
+                ],
+                'tag_ids' => [
+                    'type'        => 'array',
+                    'items'       => ['type' => 'integer'],
+                    'description' => 'Tag IDs to attach (see tag_list). Passing [] removes all tags. Merged with tags when both are given.',
+                ],
+                'translations' => self::translationsSchema([
                     'title'            => 'Article title in this locale. Required when adding a new locale.',
                     'summary'          => 'Short summary in this locale',
                     'content'          => 'Full content HTML in this locale',
@@ -107,13 +120,17 @@ class ArticleUpdateTool extends BaseTool
             $data['translations'] = $translations;
         }
 
+        if (array_key_exists('tags', $arguments) || array_key_exists('tag_ids', $arguments)) {
+            $data['tag_ids'] = $this->resolveTagIds($arguments);
+        }
+
         if (empty($data)) {
             throw new InvalidArgumentException('No fields to update.');
         }
 
         ArticleRepo::getInstance()->patch($article, $data);
 
-        $article->refresh()->load(['translation', 'translations', 'catalog.translation', 'tags']);
+        $article->refresh()->load(['translation', 'translations', 'catalog.translation', 'tags.translations']);
 
         $t = $article->translation;
 
@@ -139,8 +156,60 @@ class ArticleUpdateTool extends BaseTool
                 'meta_description' => $item->meta_description ?? '',
                 'meta_keywords'    => $item->meta_keywords ?? '',
             ])->values()->all(),
-            'tags'       => $article->tags->map(fn ($tag) => $tag->name)->values()->all(),
+            'tags'       => $article->tags->map(fn ($tag) => ['id' => $tag->id, 'name' => $tag->fallbackName()])->values()->all(),
             'updated_at' => (string) $article->updated_at,
         ];
+    }
+
+    /**
+     * Merge tag_ids + tag names into a deduplicated ID list. Names are matched
+     * exactly against tag translations (any locale) and unknown names are
+     * created so callers can work with plain names.
+     *
+     * @param  array  $arguments
+     * @return int[]
+     */
+    private function resolveTagIds(array $arguments): array
+    {
+        $ids = array_values(array_filter(array_map('intval', (array) ($arguments['tag_ids'] ?? []))));
+
+        foreach ((array) ($arguments['tags'] ?? []) as $name) {
+            $name = trim((string) $name);
+            if ($name === '') {
+                continue;
+            }
+
+            $tag = Tag::query()->whereHas('translations', function ($query) use ($name) {
+                $query->where('name', $name);
+            })->first();
+
+            if (! $tag) {
+                $translations = [];
+                foreach (enabled_locale_codes() as $code) {
+                    $translations[$code] = ['locale' => $code, 'name' => $name];
+                }
+                $tag = TagRepo::getInstance()->create([
+                    'slug'         => $this->uniqueTagSlug($name),
+                    'active'       => true,
+                    'translations' => $translations,
+                ]);
+            }
+
+            $ids[] = (int) $tag->id;
+        }
+
+        return array_values(array_unique($ids));
+    }
+
+    private function uniqueTagSlug(string $name): string
+    {
+        $base = Str::slug($name) ?: Str::random(8);
+        $slug = $base;
+        $i    = 2;
+        while (Tag::query()->where('slug', $slug)->exists()) {
+            $slug = $base.'-'.$i++;
+        }
+
+        return $slug;
     }
 }
