@@ -47,7 +47,7 @@
                 @csrf
 
                 <div class="form-floating mb-4">
-                  <input type="text" name="email" class="form-control" id="email-input" value="{{ old('email', $admin_email ?? '') }}" placeholder="{{ __('common.email') }}">
+                  <input type="text" name="email" class="form-control" id="email-input" value="{{ old('email', $admin_email ?? '') }}" placeholder="{{ __('common/base.email') }}">
                   <label for="email-input">{{ __('panel/login.email') }}</label>
                   @error('email')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="form-floating mb-5">
-                  <input type="password" name="password" class="form-control" id="password-input" value="{{ old('password', $admin_password ?? '') }}" placeholder="{{ __('shop/login.password') }}">
+                  <input type="password" name="password" class="form-control" id="password-input" value="{{ old('password', $admin_password ?? '') }}" placeholder="{{ __('panel/login.password') }}">
                   <label for="password-input">{{ __('panel/login.password') }}</label>
                   @error('password')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
