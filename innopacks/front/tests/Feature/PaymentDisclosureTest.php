@@ -226,7 +226,7 @@ class PaymentDisclosureTest extends TestCase
 
     private function createOrder(?Customer $customer, string $number): Order
     {
-        return Order::create([
+        return Order::query()->create([
             'customer_id'            => $customer?->id ?? 0,
             'customer_group_id'      => 1,
             'number'                 => $number,

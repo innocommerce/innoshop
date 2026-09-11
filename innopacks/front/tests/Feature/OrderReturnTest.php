@@ -156,7 +156,7 @@ class OrderReturnTest extends TestCase
 
     private function createOrder(Customer $customer, string $number, float $total): Order
     {
-        return Order::create([
+        return Order::query()->create([
             'customer_id'            => $customer->id,
             'customer_group_id'      => 1,
             'number'                 => $number,
@@ -204,7 +204,7 @@ class OrderReturnTest extends TestCase
 
     private function createItem(Order $order, string $sku, string $name, int $qty, float $price): Item
     {
-        return Item::create([
+        return Item::query()->create([
             'order_id'      => $order->id,
             'order_number'  => $order->number,
             'product_id'    => 1,
