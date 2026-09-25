@@ -12,6 +12,7 @@ namespace Plugin\PayPal\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Repositories\Order\PaymentRepo;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\StateMachineService;
@@ -109,7 +110,7 @@ class PayPalController
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            log_error('PayPal capture failed: '.$e->getMessage(), ['order' => $orderNumber, 'exception' => $e]);
+            Log::error('PayPal capture failed: '.$e->getMessage(), ['order' => $orderNumber, 'exception' => $e]);
 
             return response()->json(['error' => ['message' => 'Payment processing failed']], 500);
         }
