@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://www.innoshop.com"><img src="https://www.innoshop.com/images/logo.png" alt="Total Downloads"></a>
+    <a href="https://www.innoshop.com"><img src="https://www.innoshop.com/static/logos/innoshop-logo.png" alt="Total Downloads"></a>
 </p>
 
 ---
