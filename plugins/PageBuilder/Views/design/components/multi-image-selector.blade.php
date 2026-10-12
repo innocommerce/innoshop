@@ -122,8 +122,8 @@
       },
       selectButtonClicked() {
         // 使用InnoShop核心的文件管理器
-        if (window.inno && window.inno.fileManagerIframe) {
-          window.inno.fileManagerIframe((file) => {
+        if (window.inno && window.inno.mediaIframe) {
+          window.inno.mediaIframe((file) => {
             console.log("File selected:", file);
 
             // 修复URL

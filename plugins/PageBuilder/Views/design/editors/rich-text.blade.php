@@ -218,8 +218,8 @@
             editor.ui.registry.addButton("toolbarImageButton", {
               icon: "image",
               onAction: () => {
-                if (window.inno && window.inno.fileManagerIframe) {
-                  window.inno.fileManagerIframe(
+                if (window.inno && window.inno.mediaIframe) {
+                  window.inno.mediaIframe(
                     (file) => {
                       const imageUrl = file.origin_url || file.url;
                       if (imageUrl) {
@@ -237,8 +237,8 @@
             editor.ui.registry.addButton("toolbarImageUrlButton", {
               icon: "image",
               onAction: () => {
-                if (window.inno && window.inno.fileManagerIframe) {
-                  window.inno.fileManagerIframe(
+                if (window.inno && window.inno.mediaIframe) {
+                  window.inno.mediaIframe(
                     (file) => {
                       const imageUrl = file.origin_url || file.url;
                       if (imageUrl) {
