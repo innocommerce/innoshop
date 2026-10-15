@@ -261,8 +261,12 @@ class FrontServiceProvider extends ServiceProvider
     }
 
     /**
-     * Load theme boot file (setup/boot.php) for runtime hook registration.
+     * Load theme boot file (boot.php) for runtime hook registration.
      * Follows the same require → callable → call pattern as demo seeder.
+     *
+     * The canonical entry is themes/{theme}/boot.php, at the theme root and
+     * aligned with the Boot.php convention of plugins. setup/boot.php is
+     * kept as a deprecated fallback and will be removed in a future release.
      */
     protected function bootTheme(): void
     {
@@ -271,15 +275,28 @@ class FrontServiceProvider extends ServiceProvider
             return;
         }
 
-        $bootFile = base_path("themes/{$currentTheme}/setup/boot.php");
+        $bootFile = base_path("themes/{$currentTheme}/boot.php");
+
         if (! is_file($bootFile)) {
-            return;
+            $legacyFile = base_path("themes/{$currentTheme}/setup/boot.php");
+            if (! is_file($legacyFile)) {
+                return;
+            }
+
+            logger()->warning('Theme boot: legacy setup/boot.php is deprecated, move it to the theme root as boot.php.', ['theme' => $currentTheme]);
+            $bootFile = $legacyFile;
         }
 
         $boot = require $bootFile;
-        if (is_callable($boot)) {
-            $boot();
+        if (! is_callable($boot)) {
+            if ($boot !== null) {
+                logger()->warning('Theme boot: boot.php must return a callable (or nothing), '.gettype($boot).' returned.', ['theme' => $currentTheme]);
+            }
+
+            return;
         }
+
+        $boot();
     }
 
     /**
