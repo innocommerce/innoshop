@@ -24,6 +24,8 @@
     <php>
         <ini name="memory_limit" value="512M"/>
         <env name="APP_ENV" value="testing"/>
+        <env name="APP_LOCALE" value="en"/>
+        <env name="APP_FAKER_LOCALE" value="en_US"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_STORE" value="array"/>
