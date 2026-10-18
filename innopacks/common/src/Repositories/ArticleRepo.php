@@ -253,14 +253,45 @@ class ArticleRepo extends BaseRepo
                 if (! is_array($fields)) {
                     continue;
                 }
+                $isNewLocale = ! isset($merged['translations'][$locale]);
+                if ($isNewLocale && $fields === []) {
+                    // Patching nothing for an unknown locale must not clone a full fallback row.
+                    continue;
+                }
                 $merged['translations'][$locale] = array_merge(
                     $merged['translations'][$locale] ?? ['locale' => $locale],
                     $fields
                 );
+                // A brand-new locale row must carry title (the only NOT NULL
+                // column): prefer the title being written in this same request,
+                // then the stored fallback, so a meta-only patch stays valid
+                // instead of violating the article_translations.title
+                // constraint. empty() deliberately treats '' / '0' as missing.
+                if ($isNewLocale && empty($merged['translations'][$locale]['title'])) {
+                    $merged['translations'][$locale]['title'] = $this->newLocaleTitle($merged['translations'], $article);
+                }
             }
         }
 
         return $this->update($article, $merged);
+    }
+
+    /**
+     * Resolve the title for a brand-new locale row: prefer the title being
+     * written in the same request (default locale), then the stored fallback.
+     *
+     * @param  array  $translations  Merged translations keyed by locale
+     * @param  Article  $article
+     * @return string
+     */
+    private function newLocaleTitle(array $translations, Article $article): string
+    {
+        $defaultTitle = $translations[setting_locale_code()]['title'] ?? null;
+        if (! empty($defaultTitle)) {
+            return $defaultTitle;
+        }
+
+        return $article->fallbackName('title');
     }
 
     /**

@@ -722,6 +722,15 @@ class ProductRepo extends BaseRepo
                     if ($existTranslation) {
                         $existTranslation->update($translation);
                     } else {
+                        // A brand-new locale row must carry name (the only NOT NULL
+                        // column): prefer the name being written in this same
+                        // request, then the stored fallback, so a meta-only patch
+                        // stays valid instead of violating the
+                        // product_translations.name constraint. empty()
+                        // deliberately treats '' / '0' as missing.
+                        if (empty($translation['name'])) {
+                            $translation['name'] = $this->newLocaleName($translations, $product);
+                        }
                         $product->translations()->create($translation);
                     }
                 }
@@ -762,6 +771,26 @@ class ProductRepo extends BaseRepo
             DB::rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Resolve the name for a brand-new locale row: prefer the name being
+     * written in the same request (default locale), then the stored fallback.
+     *
+     * @param  array  $translations  Normalized translation rows (list format)
+     * @param  Product  $product
+     * @return string
+     */
+    private function newLocaleName(array $translations, Product $product): string
+    {
+        $localeCode = setting_locale_code();
+        foreach ($translations as $row) {
+            if (($row['locale'] ?? '') === $localeCode && ! empty($row['name'])) {
+                return $row['name'];
+            }
+        }
+
+        return $product->fallbackName('name');
     }
 
     /**
