@@ -24,7 +24,7 @@
   "overrides": {
     "axios": "^1.18.0",
     "esbuild": "^0.25.0",
-    "follow-redirects": "^1.16.0",
+    "follow-redirects": "^1.16.1",
     "lodash": "^4.18.0",
     "node-forge": "^1.4.0",
     "qs": "^6.14.2",
