@@ -22,7 +22,7 @@
         "laravel/ai": "^0.10.1",
         "laravel/framework": "^13.0",
         "laravel/horizon": "^5.46",
-        "laravel/mcp": "^0.9.1",
+        "laravel/mcp": "^1.1",
         "laravel/octane": "^2.8",
         "laravel/reverb": "^1.10",
         "laravel/sanctum": "^4.0",
