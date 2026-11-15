@@ -48,6 +48,9 @@
             </td>
             <td>
               @if ($item['id'])
+              <a href="{{ panel_route('locales.edit', [$item['id']]) }}">
+                <el-button size="small" plain type="primary">{{ __('common/base.edit') }}</el-button>
+              </a>
               <el-button size="small" plain type="danger" type="button" @click="open('{{ $item['code'] }}')">
                 {{ __('panel/common.uninstall') }}
               </el-button>
