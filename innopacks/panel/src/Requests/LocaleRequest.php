@@ -10,6 +10,7 @@
 namespace InnoShop\Panel\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use InnoShop\Common\Models\Locale;
 
 class LocaleRequest extends FormRequest
 {
@@ -30,8 +31,13 @@ class LocaleRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->locale) {
-            $codeRule = 'required|alpha_dash|unique:locales,code,'.$this->locale->id;
+        // The {locale} route parameter may arrive as a bound Locale model or
+        // as the raw string — both must resolve to the id being ignored by
+        // the unique rule, and neither may fatal on ->id.
+        $locale   = $this->route('locale');
+        $localeId = $locale instanceof Locale ? $locale->id : $locale;
+        if ($localeId) {
+            $codeRule = 'required|alpha_dash|unique:locales,code,'.$localeId;
         } else {
             $codeRule = 'required|alpha_dash|unique:locales,code';
         }
