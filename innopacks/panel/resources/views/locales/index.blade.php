@@ -48,12 +48,14 @@
             </td>
             <td>
               @if ($item['id'])
-              <a href="{{ panel_route('locales.edit', [$item['id']]) }}">
-                <el-button size="small" plain type="primary">{{ __('common/base.edit') }}</el-button>
-              </a>
-              <el-button size="small" plain type="danger" type="button" @click="open('{{ $item['code'] }}')">
-                {{ __('panel/common.uninstall') }}
-              </el-button>
+              <div class="d-flex gap-1">
+                <a href="{{ panel_route('locales.edit', [$item['id']]) }}">
+                  <el-button size="small" plain type="primary">{{ __('common/base.edit') }}</el-button>
+                </a>
+                <el-button size="small" plain type="danger" type="button" @click="open('{{ $item['code'] }}')">
+                  {{ __('panel/common.uninstall') }}
+                </el-button>
+              </div>
               @else
               <button style="min-width: 47.48px; height: 23.99px; line-height: 12px;" type="button"
                 class="btn btn-sm btn-outline-primary locale-install" data-code="{{ $item['code'] }}">{{
