@@ -61,6 +61,18 @@ class CartService
     }
 
     /**
+     * Whether the cart item belongs to the current customer or guest session.
+     */
+    public function checkOwnership(CartItem $cart): bool
+    {
+        if ($this->customerID > 0) {
+            return (int) $cart->customer_id === $this->customerID;
+        }
+
+        return $cart->guest_id !== '' && hash_equals((string) $cart->guest_id, $this->guestID);
+    }
+
+    /**
      * @param  array  $filters
      * @return Builder
      */

@@ -12,8 +12,8 @@ namespace InnoShop\Aicore\Http\Controllers\PanelApi;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use InnoShop\Aicore\Services\AIServiceManager;
+use InnoShop\Aicore\Services\MediaImageResolver;
 use InnoShop\Aicore\Services\ProviderRegistry;
 use InnoShop\Panel\Controllers\BaseController;
 
@@ -38,46 +38,6 @@ class AIImageController extends BaseController
         } catch (Exception $e) {
             return json_success('success', ['image_model' => '']);
         }
-    }
-
-    /**
-     * Resolve only files inside the public media disk. Local paths and symlinks
-     * must never become an arbitrary-file attachment for an AI provider.
-     */
-    protected function resolveLocalImagePath(string $reference): ?string
-    {
-        if ($reference === '' || str_contains($reference, "\0")) {
-            return null;
-        }
-
-        $candidates = [$reference];
-        if (preg_match('#^https?://#i', $reference)) {
-            $path = parse_url($reference, PHP_URL_PATH);
-            if (is_string($path)) {
-                $candidates[] = urldecode($path);
-            }
-        }
-
-        $mediaDisk = Storage::disk('media');
-        $mediaRoot = realpath($mediaDisk->path(''));
-        if ($mediaRoot === false) {
-            return null;
-        }
-
-        foreach (array_unique($candidates) as $candidate) {
-            $key = preg_replace('#^/?static/media/#', '', $candidate);
-            $key = ltrim($key, '/');
-            if ($key === '' || str_contains($key, '\\') || preg_match('#(^|/)\.\.?(/|$)#', $key)) {
-                continue;
-            }
-            $path = realpath($mediaDisk->path($key));
-
-            if ($path !== false && is_file($path) && str_starts_with($path, $mediaRoot.DIRECTORY_SEPARATOR)) {
-                return $path;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -117,7 +77,7 @@ class AIImageController extends BaseController
 
             $referenceImage = $request->input('reference_image');
             if ($referenceImage) {
-                $options['reference_image'] = $this->resolveLocalImagePath((string) $referenceImage);
+                $options['reference_image'] = MediaImageResolver::getInstance()->resolveLocalImagePath((string) $referenceImage);
                 if ($options['reference_image'] === null) {
                     throw new Exception('Invalid reference image');
                 }

@@ -12,7 +12,7 @@ namespace InnoShop\Aicore\Tests\Feature;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use InnoShop\Aicore\AicoreServiceProvider;
-use InnoShop\Aicore\Http\Controllers\PanelApi\AIImageController;
+use InnoShop\Aicore\Services\MediaImageResolver;
 use InnoShop\Restapi\Middleware\EnsurePanelPermission;
 use InnoShop\Restapi\Middleware\EnsureUserIsAdmin;
 use ReflectionMethod;
@@ -42,23 +42,17 @@ class AIImageSecurityTest extends TestCase
         Storage::fake('media');
         Storage::disk('media')->put('references/example.png', 'image-data');
 
-        $controller = new class extends AIImageController
-        {
-            public function resolve(string $reference): ?string
-            {
-                return $this->resolveLocalImagePath($reference);
-            }
-        };
+        $resolver = MediaImageResolver::getInstance();
 
         $expected = realpath(Storage::disk('media')->path('references/example.png'));
-        $this->assertSame($expected, $controller->resolve('references/example.png'));
-        $this->assertSame($expected, $controller->resolve('static/media/references/example.png'));
-        $this->assertSame($expected, $controller->resolve('https://shop.test/static/media/references/example.png'));
+        $this->assertSame($expected, $resolver->resolveLocalImagePath('references/example.png'));
+        $this->assertSame($expected, $resolver->resolveLocalImagePath('static/media/references/example.png'));
+        $this->assertSame($expected, $resolver->resolveLocalImagePath('https://shop.test/static/media/references/example.png'));
 
-        $this->assertNull($controller->resolve(__FILE__));
-        $this->assertNull($controller->resolve('/etc/passwd'));
-        $this->assertNull($controller->resolve('../outside.txt'));
-        $this->assertNull($controller->resolve('references/missing.png'));
+        $this->assertNull($resolver->resolveLocalImagePath(__FILE__));
+        $this->assertNull($resolver->resolveLocalImagePath('/etc/passwd'));
+        $this->assertNull($resolver->resolveLocalImagePath('../outside.txt'));
+        $this->assertNull($resolver->resolveLocalImagePath('references/missing.png'));
     }
 
     public function test_media_symlinks_cannot_escape_to_a_local_file(): void
@@ -71,14 +65,6 @@ class AIImageSecurityTest extends TestCase
             $this->markTestSkipped('Symlinks are unavailable in this environment.');
         }
 
-        $controller = new class extends AIImageController
-        {
-            public function resolve(string $reference): ?string
-            {
-                return $this->resolveLocalImagePath($reference);
-            }
-        };
-
-        $this->assertNull($controller->resolve('escape.png'));
+        $this->assertNull(MediaImageResolver::getInstance()->resolveLocalImagePath('escape.png'));
     }
 }
