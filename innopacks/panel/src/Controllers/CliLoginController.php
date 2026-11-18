@@ -54,6 +54,10 @@ class CliLoginController extends BaseController
     public function store(LoginRequest $request): mixed
     {
         $callback = session('cli_login_callback', '');
+        if ($callback && ! $this->isValidCallbackUrl($callback)) {
+            session()->forget('cli_login_callback');
+            abort(400, 'Invalid callback URL. Only local addresses are allowed.');
+        }
 
         if (! Auth::guard('admin')->attempt($request->validated())) {
             throw ValidationException::withMessages([
@@ -82,6 +86,10 @@ class CliLoginController extends BaseController
      */
     private function redirectWithToken(Admin $admin, string $callback): mixed
     {
+        if ($callback && ! $this->isValidCallbackUrl($callback)) {
+            abort(400, 'Invalid callback URL. Only local addresses are allowed.');
+        }
+
         $token = $admin->createToken('admin-token')->plainTextToken;
 
         if (! $callback) {
@@ -104,14 +112,18 @@ class CliLoginController extends BaseController
     private function isValidCallbackUrl(string $url): bool
     {
         $parsed = parse_url($url);
-        if (! isset($parsed['host'])) {
+        if ($parsed === false || ! isset($parsed['scheme'], $parsed['host'])) {
+            return false;
+        }
+        if (! in_array(strtolower($parsed['scheme']), ['http', 'https'], true)) {
+            return false;
+        }
+        if (isset($parsed['user']) || isset($parsed['pass'])) {
             return false;
         }
 
-        $host = $parsed['host'];
-
-        // Allow localhost / 127.0.0.1 / [::1]
-        return in_array($host, ['localhost', '127.0.0.1', '[::1]'])
-            || filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false;
+        // Never resolve or redirect to arbitrary/private hosts: this URL carries
+        // an admin API token, so only an explicit loopback callback is safe.
+        return in_array(strtolower($parsed['host']), ['localhost', '127.0.0.1', '[::1]'], true);
     }
 }

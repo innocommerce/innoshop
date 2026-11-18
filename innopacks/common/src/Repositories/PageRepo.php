@@ -306,15 +306,12 @@ class PageRepo extends BaseRepo
         if (empty($PageIDs)) {
             return [];
         }
-        if (is_string($PageIDs)) {
-            $PageIDs = explode(',', $PageIDs);
-        }
+        $PageIDs = $this->normalizeIdList($PageIDs);
 
-        return Page::query()
-            ->with('translation')
-            ->whereIn('id', $PageIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $PageIDs).')')
-            ->get();
+        return $this->sortByIdList(
+            Page::query()->with('translation')->whereIn('id', $PageIDs)->get(),
+            $PageIDs
+        );
     }
 
     /**

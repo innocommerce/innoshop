@@ -74,6 +74,8 @@ class CartController extends Controller
      */
     public function update(CartRequest $request, CartItem $cart): mixed
     {
+        $this->assertCartOwnership($cart);
+
         try {
             $cartData = CartService::getInstance()->updateCart($cart, $request->all());
 
@@ -121,6 +123,8 @@ class CartController extends Controller
      */
     public function destroy(CartItem $cart): mixed
     {
+        $this->assertCartOwnership($cart);
+
         try {
             $cartData = CartService::getInstance()->delete($cart);
 
@@ -128,5 +132,18 @@ class CartController extends Controller
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
+    }
+
+    /**
+     * Only the cart's customer or guest session may mutate an item.
+     */
+    private function assertCartOwnership(CartItem $cart): void
+    {
+        $customerId = current_customer_id();
+        $owned      = $customerId > 0
+            ? (int) $cart->customer_id === $customerId
+            : $cart->guest_id !== '' && hash_equals((string) $cart->guest_id, current_guest_id());
+
+        abort_unless($owned, 403);
     }
 }

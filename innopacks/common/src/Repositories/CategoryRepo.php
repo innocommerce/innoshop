@@ -408,15 +408,12 @@ class CategoryRepo extends BaseRepo
         if (empty($categoryIDs)) {
             return [];
         }
-        if (is_string($categoryIDs)) {
-            $categoryIDs = explode(',', $categoryIDs);
-        }
+        $categoryIDs = $this->normalizeIdList($categoryIDs);
 
-        return Category::query()
-            ->with(['translation'])
-            ->whereIn('id', $categoryIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $categoryIDs).')')
-            ->get();
+        return $this->sortByIdList(
+            Category::query()->with(['translation'])->whereIn('id', $categoryIDs)->get(),
+            $categoryIDs
+        );
     }
 
     /**

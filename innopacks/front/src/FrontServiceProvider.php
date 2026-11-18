@@ -10,7 +10,10 @@
 namespace InnoShop\Front;
 
 use Exception;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\FileViewFinder;
@@ -33,6 +36,8 @@ class FrontServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureRateLimiting();
+
         if (! has_install_lock()) {
             return;
         }
@@ -62,6 +67,23 @@ class FrontServiceProvider extends ServiceProvider
     public function register(): void
     {
         app('router')->aliasMiddleware('customer_auth', CustomerAuthentication::class);
+    }
+
+    /**
+     * Limit password-reset requests by both source IP and target account.
+     */
+    protected function configureRateLimiting(): void
+    {
+        foreach (['forgotten-code' => 5, 'forgotten-password' => 10] as $name => $attempts) {
+            RateLimiter::for($name, function (Request $request) use ($name, $attempts) {
+                $account = strtolower(trim((string) $request->input('email')));
+
+                return [
+                    Limit::perMinute($attempts)->by($name.'|ip|'.$request->ip()),
+                    Limit::perMinute($attempts)->by($name.'|account|'.$account),
+                ];
+            });
+        }
     }
 
     /**

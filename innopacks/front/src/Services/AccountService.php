@@ -11,6 +11,8 @@ namespace InnoShop\Front\Services;
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\VerifyCode;
 use InnoShop\Common\Repositories\CustomerRepo;
@@ -202,7 +204,7 @@ class AccountService extends BaseService
      */
     public function sendVerifyCode($email): void
     {
-        $code = mt_rand(100000, 999999);
+        $code = random_int(100000, 999999);
 
         // Delete old verification codes of the same type
         VerifyCode::query()
@@ -211,9 +213,10 @@ class AccountService extends BaseService
             ->delete();
 
         VerifyCode::query()->create([
-            'account' => $email,
-            'code'    => $code,
-            'type'    => 'reset',
+            'account'  => $email,
+            'code'     => Hash::make((string) $code),
+            'type'     => 'reset',
+            'attempts' => 0,
         ]);
 
         $customer = CustomerRepo::getInstance()->builder()->where('email', $email)->first();
@@ -247,29 +250,60 @@ class AccountService extends BaseService
      */
     public function verifyUpdatePassword($code, $account, $password): void
     {
-        $verifyCode = VerifyCode::query()
-            ->where('account', $account)
-            ->where('code', $code)
-            ->where('type', 'reset')
-            ->first();
+        $result = DB::transaction(function () use ($code, $account, $password) {
+            $verifyCode = VerifyCode::query()
+                ->where('account', $account)
+                ->where('type', 'reset')
+                ->latest('id')
+                ->lockForUpdate()
+                ->first();
 
-        if (! $verifyCode) {
-            throw new Exception(front_trans('account.verify_code_error'));
-        }
+            if (! $verifyCode) {
+                return 'invalid';
+            }
 
-        if ($verifyCode->created_at->addMinutes(10) < Carbon::now()) {
-            $verifyCode->delete();
+            if ($verifyCode->created_at->copy()->addMinutes(10) < Carbon::now()) {
+                $verifyCode->delete();
 
+                return 'expired';
+            }
+
+            // Legacy six-digit rows remain valid until they expire; all new codes
+            // are hashed so a settings/database disclosure cannot reveal them.
+            $isLegacyCode = strlen($verifyCode->code) === 6 && ctype_digit($verifyCode->code);
+            $codeMatches  = $isLegacyCode
+                ? hash_equals($verifyCode->code, (string) $code)
+                : Hash::check((string) $code, $verifyCode->code);
+
+            if (! $codeMatches) {
+                $verifyCode->increment('attempts');
+                if ($verifyCode->attempts >= 5) {
+                    $verifyCode->delete();
+                }
+
+                return 'invalid';
+            }
+
+            $customer = CustomerRepo::getInstance()->findByEmail($account);
+            if (! $customer) {
+                return 'missing';
+            }
+
+            CustomerRepo::getInstance()->forceUpdatePassword($customer, $password);
+            VerifyCode::query()->where('account', $account)->where('type', 'reset')->delete();
+
+            return 'success';
+        }, 3);
+
+        if ($result === 'expired') {
             throw new Exception(front_trans('account.verify_code_expired'));
         }
-
-        $customer = CustomerRepo::getInstance()->findByEmail($account);
-        if (! $customer) {
+        if ($result === 'missing') {
             throw new Exception(front_trans('account.account_not_exist'));
         }
-
-        CustomerRepo::getInstance()->forceUpdatePassword($customer, $password);
-        $verifyCode->delete();
+        if ($result !== 'success') {
+            throw new Exception(front_trans('account.verify_code_error'));
+        }
     }
 
     /**

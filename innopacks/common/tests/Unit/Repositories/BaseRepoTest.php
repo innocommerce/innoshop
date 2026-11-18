@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Tests\Unit\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use InnoShop\Common\Repositories\BaseRepo;
 use PHPUnit\Framework\TestCase;
 
@@ -94,5 +95,38 @@ class BaseRepoTest extends TestCase
         // Test merging additional relations
         $repo->withRelations(['tags']);
         $this->assertEquals(['category', 'brand', 'tags'], $repo->getRelations());
+    }
+
+    public function test_id_lists_accept_only_integer_ids_and_preserve_request_order(): void
+    {
+        $repo = new class extends BaseRepo
+        {
+            protected string $model = Model::class;
+
+            public function __construct() {}
+
+            public function normalize(mixed $ids): array
+            {
+                return $this->normalizeIdList($ids);
+            }
+
+            public function sort(iterable $items, array $ids): Collection
+            {
+                return $this->sortByIdList(collect($items), $ids);
+            }
+        };
+
+        $ids = $repo->normalize('3,1,2,(SELECT SLEEP(3)),0,-1,1.5,3');
+        $this->assertSame([3, 1, 2], $ids);
+        $this->assertSame([], $repo->normalize([['id' => 1], null, '1 or 1=1']));
+
+        $models = array_map(function (int $id): Model {
+            $model     = new class extends Model {};
+            $model->id = $id;
+
+            return $model;
+        }, [1, 2, 3]);
+
+        $this->assertSame([3, 1, 2], $repo->sort($models, $ids)->pluck('id')->all());
     }
 }

@@ -459,14 +459,12 @@ class CustomerRepo extends BaseRepo
         if (empty($customerIDs)) {
             return [];
         }
-        if (is_string($customerIDs)) {
-            $customerIDs = explode(',', $customerIDs);
-        }
+        $customerIDs = $this->normalizeIdList($customerIDs);
 
-        return Customer::query()
-            ->whereIn('id', $customerIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $customerIDs).')')
-            ->get();
+        return $this->sortByIdList(
+            Customer::query()->whereIn('id', $customerIDs)->get(),
+            $customerIDs
+        );
     }
 
     /**

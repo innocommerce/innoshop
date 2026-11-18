@@ -351,15 +351,12 @@ class CatalogRepo extends BaseRepo
         if (empty($CatalogIDs)) {
             return [];
         }
-        if (is_string($CatalogIDs)) {
-            $CatalogIDs = explode(',', $CatalogIDs);
-        }
+        $CatalogIDs = $this->normalizeIdList($CatalogIDs);
 
-        return Catalog::query()
-            ->with('translation')
-            ->whereIn('id', $CatalogIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $CatalogIDs).')')
-            ->get();
+        return $this->sortByIdList(
+            Catalog::query()->with('translation')->whereIn('id', $CatalogIDs)->get(),
+            $CatalogIDs
+        );
     }
 
     /**

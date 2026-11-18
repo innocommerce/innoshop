@@ -101,8 +101,10 @@ Route::post('/register', [Account\RegisterController::class, 'store'])->name('re
 Route::post('/register/sms-code', [Account\RegisterController::class, 'sendSmsCode'])->name('register.sms-code');
 
 Route::get('/forgotten', [Account\ForgottenController::class, 'index'])->name('forgotten.index');
-Route::post('/forgotten/verify_code', [Account\ForgottenController::class, 'sendVerifyCode'])->name('forgotten.verify_code');
-Route::post('/forgotten/password', [Account\ForgottenController::class, 'changePassword'])->name('forgotten.password');
+Route::post('/forgotten/verify_code', [Account\ForgottenController::class, 'sendVerifyCode'])
+    ->middleware('throttle:forgotten-code')->name('forgotten.verify_code');
+Route::post('/forgotten/password', [Account\ForgottenController::class, 'changePassword'])
+    ->middleware('throttle:forgotten-password')->name('forgotten.password');
 
 // Orders
 Route::get('/orders/{number}/pay', [Controllers\OrderController::class, 'pay'])->name('orders.pay');

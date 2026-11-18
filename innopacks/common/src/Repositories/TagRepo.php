@@ -104,14 +104,12 @@ class TagRepo extends BaseRepo
         if (empty($TagIDs)) {
             return [];
         }
-        if (is_string($TagIDs)) {
-            $TagIDs = explode(',', $TagIDs);
-        }
+        $TagIDs = $this->normalizeIdList($TagIDs);
 
-        return Tag::query()->with('translations')
-            ->whereIn('id', $TagIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $TagIDs).')')
-            ->get();
+        return $this->sortByIdList(
+            Tag::query()->with('translations')->whereIn('id', $TagIDs)->get(),
+            $TagIDs
+        );
     }
 
     /**

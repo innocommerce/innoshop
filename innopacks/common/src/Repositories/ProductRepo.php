@@ -1304,15 +1304,15 @@ class ProductRepo extends BaseRepo
         if (empty($productIDs)) {
             return collect();
         }
-        if (is_string($productIDs)) {
-            $productIDs = explode(',', $productIDs);
-        }
+        $productIDs = $this->normalizeIdList($productIDs);
 
-        return Product::query()
-            ->with(['translation', 'masterSku'])
-            ->whereIn('id', $productIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $productIDs).')')
-            ->get();
+        return $this->sortByIdList(
+            Product::query()
+                ->with(['translation', 'masterSku'])
+                ->whereIn('id', $productIDs)
+                ->get(),
+            $productIDs
+        );
     }
 
     /**

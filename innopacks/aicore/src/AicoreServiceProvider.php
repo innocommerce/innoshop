@@ -70,6 +70,8 @@ use InnoShop\Aicore\Tools\StockReportTool;
 use InnoShop\Aicore\Tools\TagListTool;
 use InnoShop\Aicore\Tools\TaxClassListTool;
 use InnoShop\Aicore\Tools\TaxRateListTool;
+use InnoShop\Restapi\Middleware\EnsurePanelPermission;
+use InnoShop\Restapi\Middleware\EnsureUserIsAdmin;
 
 class AicoreServiceProvider extends ServiceProvider
 {
@@ -226,7 +228,7 @@ class AicoreServiceProvider extends ServiceProvider
     private function registerPanelApiRoutes(): void
     {
         Route::prefix('api/panel')
-            ->middleware('panel_api')
+            ->middleware(['panel_api', 'auth:sanctum', EnsureUserIsAdmin::class, EnsurePanelPermission::class, 'throttle:30,1'])
             ->name('api.panel.')
             ->group(function () {
                 $path = $this->basePath.'routes/panel-api.php';

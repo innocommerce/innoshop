@@ -128,6 +128,31 @@ class StockService extends BaseService
     }
 
     /**
+     * Atomically deduct stock without allowing a stale model or a concurrent
+     * payment callback to drive inventory below zero.
+     *
+     * @throws \Exception
+     */
+    public function deduct(Sku $sku, int $quantity): void
+    {
+        if ($quantity <= 0) {
+            throw new \Exception('Invalid stock quantity');
+        }
+
+        $query = Sku::query()->whereKey($sku->id);
+        if (! system_setting('allow_out_of_stock', false)) {
+            $query->where('quantity', '>=', $quantity);
+        }
+
+        if ($query->decrement('quantity', $quantity) !== 1) {
+            throw new \Exception(trans('front/common.stock_not_enough'));
+        }
+
+        $sku->quantity = $sku->quantity - $quantity;
+        $this->clearCache($sku->code);
+    }
+
+    /**
      * Clear SKU related cache
      *
      * @param  string  $skuCode  SKU code

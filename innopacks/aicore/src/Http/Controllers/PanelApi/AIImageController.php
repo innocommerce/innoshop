@@ -41,39 +41,39 @@ class AIImageController extends BaseController
     }
 
     /**
-     * Resolve a storage key, local path, or URL to a local file path.
-     * Returns null if the file cannot be resolved.
+     * Resolve only files inside the public media disk. Local paths and symlinks
+     * must never become an arbitrary-file attachment for an AI provider.
      */
     protected function resolveLocalImagePath(string $reference): ?string
     {
+        if ($reference === '' || str_contains($reference, "\0")) {
+            return null;
+        }
+
+        $candidates = [$reference];
+        if (preg_match('#^https?://#i', $reference)) {
+            $path = parse_url($reference, PHP_URL_PATH);
+            if (is_string($path)) {
+                $candidates[] = urldecode($path);
+            }
+        }
+
         $mediaDisk = Storage::disk('media');
-
-        // Already a local file path
-        if (file_exists($reference)) {
-            return $reference;
+        $mediaRoot = realpath($mediaDisk->path(''));
+        if ($mediaRoot === false) {
+            return null;
         }
 
-        // Storage key like "static/media/logos/xxx.png" or "logos/xxx.png"
-        if ($mediaDisk->exists($reference)) {
-            return $mediaDisk->path($reference);
-        }
+        foreach (array_unique($candidates) as $candidate) {
+            $key = preg_replace('#^/?static/media/#', '', $candidate);
+            $key = ltrim($key, '/');
+            if ($key === '' || str_contains($key, '\\') || preg_match('#(^|/)\.\.?(/|$)#', $key)) {
+                continue;
+            }
+            $path = realpath($mediaDisk->path($key));
 
-        // Strip common prefix if present
-        $stripped = preg_replace('#^static/media/#', '', $reference);
-        if ($stripped !== $reference && $mediaDisk->exists($stripped)) {
-            return $mediaDisk->path($stripped);
-        }
-
-        // Fallback: URL → extract path
-        if (str_starts_with($reference, 'http')) {
-            $decoded = urldecode($reference);
-            $path    = preg_replace('#^https?://[^/]+#', '', $decoded);
-            if ($path) {
-                $key = preg_replace('#^/static/media/#', '', $path);
-                $key = ltrim($key, '/');
-                if ($mediaDisk->exists($key)) {
-                    return $mediaDisk->path($key);
-                }
+            if ($path !== false && is_file($path) && str_starts_with($path, $mediaRoot.DIRECTORY_SEPARATOR)) {
+                return $path;
             }
         }
 
@@ -90,26 +90,37 @@ class AIImageController extends BaseController
     {
         set_time_limit(300);
         try {
-            $prompt = $request->input('prompt', '');
-            if (empty($prompt)) {
-                throw new Exception('Empty prompt');
+            $prompt = trim((string) $request->input('prompt', ''));
+            if ($prompt === '' || mb_strlen($prompt) > 4000) {
+                throw new Exception('Prompt must contain between 1 and 4000 characters');
+            }
+
+            $savePath = trim((string) $request->input('save_path', 'ai-images'), '/');
+            if ($savePath === '' || preg_match('#(^|/)\.\.(/|$)#', $savePath) || str_contains($savePath, "\0")) {
+                throw new Exception('Invalid image save path');
             }
 
             $options = [
                 'size'      => $request->input('size'),
                 'quality'   => $request->input('quality'),
-                'n'         => max(1, (int) $request->input('count', 1)),
-                'save_path' => $request->input('save_path', ''),
+                'n'         => min(4, max(1, (int) $request->input('count', 1))),
+                'save_path' => $savePath,
             ];
 
             $negativePrompt = trim((string) $request->input('negative_prompt', ''));
+            if (mb_strlen($negativePrompt) > 1000) {
+                throw new Exception('Negative prompt must not exceed 1000 characters');
+            }
             if ($negativePrompt !== '') {
                 $options['negative_prompt'] = $negativePrompt;
             }
 
             $referenceImage = $request->input('reference_image');
             if ($referenceImage) {
-                $options['reference_image'] = $this->resolveLocalImagePath($referenceImage);
+                $options['reference_image'] = $this->resolveLocalImagePath((string) $referenceImage);
+                if ($options['reference_image'] === null) {
+                    throw new Exception('Invalid reference image');
+                }
             }
 
             $provider = $request->input('provider');

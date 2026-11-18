@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Tests\Feature\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Product\Sku;
@@ -32,10 +33,12 @@ class OrderStateMachineTest extends TestCase
         StateMachineService::getInstance($order)->changeStatus(StateMachineService::PAID);
         $this->assertSame(6, (int) $sku->fresh()->quantity);
 
+        Cache::put("sku:{$sku->code}", $sku->fresh(), 300);
         StateMachineService::getInstance($order)->changeStatus(StateMachineService::CANCELLED);
 
         $this->assertSame('cancelled', $order->fresh()->status);
         $this->assertSame(10, (int) $sku->fresh()->quantity, 'paid -> cancelled must restore stock');
+        $this->assertFalse(Cache::has("sku:{$sku->code}"));
     }
 
     public function test_paid_order_can_be_refunded(): void
@@ -65,10 +68,80 @@ class OrderStateMachineTest extends TestCase
         );
     }
 
+    public function test_insufficient_stock_rolls_back_the_paid_transition(): void
+    {
+        [$order, $sku] = $this->setupOrder(initialStock: 1, orderQty: 2);
+
+        try {
+            StateMachineService::getInstance($order)->changeStatus(StateMachineService::PAID);
+            $this->fail('Payment succeeded with insufficient stock.');
+        } catch (\Exception $e) {
+            $this->assertSame(trans('front/common.stock_not_enough'), $e->getMessage());
+        }
+
+        $this->assertSame(StateMachineService::UNPAID, $order->fresh()->status);
+        $this->assertSame(1, (int) $sku->fresh()->quantity);
+        $this->assertSame(0, Order\History::query()->where('order_id', $order->id)->where('status', StateMachineService::PAID)->count());
+    }
+
+    public function test_two_orders_cannot_consume_the_same_last_unit(): void
+    {
+        [$firstOrder, $sku] = $this->setupOrder(initialStock: 1, orderQty: 1);
+        [$secondOrder]      = $this->setupOrder(initialStock: 1, orderQty: 1, sku: $sku);
+
+        StateMachineService::getInstance($firstOrder)->changeStatus(StateMachineService::PAID);
+
+        $this->expectException(\Exception::class);
+        try {
+            StateMachineService::getInstance($secondOrder)->changeStatus(StateMachineService::PAID);
+        } finally {
+            $this->assertSame(StateMachineService::UNPAID, $secondOrder->fresh()->status);
+            $this->assertSame(0, (int) $sku->fresh()->quantity);
+        }
+    }
+
+    public function test_stale_duplicate_paid_transitions_deduct_stock_once(): void
+    {
+        [$order, $sku] = $this->setupOrder(initialStock: 5, orderQty: 1);
+        $first         = StateMachineService::getInstance($order->fresh());
+        $duplicate     = StateMachineService::getInstance($order->fresh());
+
+        $first->changeStatus(StateMachineService::PAID);
+        $duplicate->changeStatus(StateMachineService::PAID);
+
+        $this->assertSame(4, (int) $sku->fresh()->quantity);
+        $this->assertSame(1, Order\History::query()->where('order_id', $order->id)->where('status', StateMachineService::PAID)->count());
+    }
+
+    public function test_stale_duplicate_cancellations_restore_stock_once(): void
+    {
+        [$order, $sku] = $this->setupOrder(initialStock: 5, orderQty: 2);
+        StateMachineService::getInstance($order)->changeStatus(StateMachineService::PAID);
+
+        $first     = StateMachineService::getInstance($order->fresh());
+        $duplicate = StateMachineService::getInstance($order->fresh());
+        $first->changeStatus(StateMachineService::CANCELLED);
+        $duplicate->changeStatus(StateMachineService::CANCELLED);
+
+        $this->assertSame(5, (int) $sku->fresh()->quantity);
+        $this->assertSame(1, Order\History::query()->where('order_id', $order->id)->where('status', StateMachineService::CANCELLED)->count());
+    }
+
+    public function test_configured_backorders_can_still_deduct_below_zero(): void
+    {
+        config()->set('inno.system.allow_out_of_stock', true);
+        [$order, $sku] = $this->setupOrder(initialStock: 0, orderQty: 1);
+
+        StateMachineService::getInstance($order)->changeStatus(StateMachineService::PAID);
+
+        $this->assertSame(-1, (int) $sku->fresh()->quantity);
+        $this->assertSame(StateMachineService::PAID, $order->fresh()->status);
+    }
+
     /**
      * @return array{0: Order, 1: Sku}
      */
-    private function setupOrder(int $initialStock, int $orderQty): array
+    private function setupOrder(int $initialStock, int $orderQty, ?Sku $sku = null): array
     {
         $customer = Customer::query()->create([
             'email'             => 'sm_'.$orderQty.'_'.uniqid().'@example.com',
@@ -78,7 +151,7 @@ class OrderStateMachineTest extends TestCase
             'active'            => true,
         ]);
 
-        $sku = Sku::query()->create([
+        $sku ??= Sku::query()->create([
             'product_id' => 1,
             'code'       => 'SM-SKU-'.uniqid(),
             'price'      => 10.0,

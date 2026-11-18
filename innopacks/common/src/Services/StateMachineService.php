@@ -16,6 +16,7 @@ use InnoShop\Common\Models\Customer\Transaction;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Order\Shipment;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Repositories\Customer\TransactionRepo;
 use InnoShop\Common\Repositories\Order\PaymentRepo;
 use Throwable;
@@ -266,15 +267,23 @@ class StateMachineService
      */
     public function changeStatus($status, ?string $comment = '', bool $notify = false): void
     {
-        $order         = $this->order;
-        $oldStatusCode = $order->status;
-        $newStatusCode = $status;
-
         $this->setComment($comment)->setNotify($notify);
-        $this->validStatusCode($status);
 
-        DB::beginTransaction();
-        try {
+        DB::transaction(function () use ($status, $comment, $notify) {
+            // Serialize transitions for one order and refresh stale instances so
+            // duplicate gateway callbacks cannot execute payment actions twice.
+            Order::query()->whereKey($this->orderId)->lockForUpdate()->firstOrFail();
+            $this->order->refresh();
+            $order = $this->order;
+
+            if ($order->status === $status) {
+                return;
+            }
+
+            $oldStatusCode = $order->status;
+            $newStatusCode = $status;
+            $this->validStatusCode($status);
+
             $functions = $this->getFunctions($oldStatusCode, $newStatusCode);
             if ($functions) {
                 foreach ($functions as $function) {
@@ -318,11 +327,7 @@ class StateMachineService
             if (! $order->shipping_method_code && $status == self::PAID) {
                 $this->changeStatus(self::COMPLETED, $comment, $notify);
             }
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        }, 3);
     }
 
     /**
@@ -443,7 +448,7 @@ class StateMachineService
             if (empty($productSku)) {
                 continue;
             }
-            $productSku->decrement('quantity', $orderItem->quantity);
+            StockService::getInstance()->deduct($productSku, (int) $orderItem->quantity);
         }
     }
 
@@ -469,7 +474,9 @@ class StateMachineService
             if (empty($productSku)) {
                 continue;
             }
-            $productSku->increment('quantity', $orderItem->quantity);
+            Sku::query()->whereKey($productSku->id)->increment('quantity', $orderItem->quantity);
+            $productSku->quantity += $orderItem->quantity;
+            StockService::getInstance()->clearCache($productSku->code);
         }
     }
 

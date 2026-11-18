@@ -156,6 +156,43 @@ class BaseRepo implements RepoInterface
     }
 
     /**
+     * Normalize request-provided IDs before they reach a query.
+     *
+     * @return array<int, int>
+     */
+    protected function normalizeIdList(mixed $ids): array
+    {
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+        if (! is_array($ids)) {
+            $ids = [$ids];
+        }
+
+        $normalized = [];
+        foreach ($ids as $id) {
+            if (is_int($id) || (is_string($id) && ctype_digit($id))) {
+                $id = (int) $id;
+                if ($id > 0) {
+                    $normalized[$id] = $id;
+                }
+            }
+        }
+
+        return array_values($normalized);
+    }
+
+    /**
+     * Restore the requested ID order without interpolating IDs into SQL.
+     */
+    protected function sortByIdList(Collection $items, array $ids): Collection
+    {
+        $rank = array_flip($ids);
+
+        return $items->sortBy(fn ($item) => $rank[$item->id] ?? PHP_INT_MAX)->values();
+    }
+
+    /**
      * @return Builder
      */
     protected function modelQuery(): Builder

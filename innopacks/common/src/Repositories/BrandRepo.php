@@ -246,14 +246,12 @@ class BrandRepo extends BaseRepo
         if (empty($BrandIDs)) {
             return [];
         }
-        if (is_string($BrandIDs)) {
-            $BrandIDs = explode(',', $BrandIDs);
-        }
+        $BrandIDs = $this->normalizeIdList($BrandIDs);
 
-        return Brand::query()
-            ->whereIn('id', $BrandIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $BrandIDs).')')
-            ->get();
+        return $this->sortByIdList(
+            Brand::query()->whereIn('id', $BrandIDs)->get(),
+            $BrandIDs
+        );
     }
 
     /**

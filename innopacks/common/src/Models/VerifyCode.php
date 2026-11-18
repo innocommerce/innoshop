@@ -14,6 +14,10 @@ class VerifyCode extends BaseModel
     protected $table = 'verify_codes';
 
     protected $fillable = [
-        'account', 'code', 'type', 'deleted_at',
+        'account', 'code', 'type', 'attempts', 'deleted_at',
+    ];
+
+    protected $casts = [
+        'attempts' => 'integer',
     ];
 }

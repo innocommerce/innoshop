@@ -8,6 +8,7 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use InnoShop\Restapi\Middleware\EnsurePanelPermission;
 use InnoShop\Restapi\Middleware\EnsureUserIsAdmin;
 use InnoShop\Restapi\PanelApiControllers;
 use InnoShop\Restapi\PanelApiControllers\MediaController;
@@ -15,7 +16,7 @@ use InnoShop\Restapi\PanelApiControllers\MediaController;
 Route::get('/', [PanelApiControllers\IntroductionController::class, 'index'])->name('base.index');
 Route::post('/login', [PanelApiControllers\AuthController::class, 'login'])->name('auth.login');
 
-$middlewares = ['auth:sanctum', EnsureUserIsAdmin::class];
+$middlewares = ['auth:sanctum', EnsureUserIsAdmin::class, EnsurePanelPermission::class];
 Route::middleware($middlewares)->group(function () {
 
     Route::get('/admin', [PanelApiControllers\AuthController::class, 'admin'])->name('auth.admin');
@@ -120,8 +121,8 @@ Route::middleware($middlewares)->group(function () {
     Route::post('/media/move_files', [MediaController::class, 'moveFiles'])->name('media.move_files');
     Route::post('/media/copy_files', [MediaController::class, 'copyFiles'])->name('media.copy_files');
 
-    Route::get('/media/storage_config', [MediaController::class, 'getStorageConfig']);
-    Route::post('/media/storage_config', [MediaController::class, 'saveStorageConfig']);
+    Route::get('/media/storage_config', [MediaController::class, 'getStorageConfig'])->name('media.get_storage_config');
+    Route::post('/media/storage_config', [MediaController::class, 'saveStorageConfig'])->name('media.save_storage_config');
 
     Route::get('/media/media/{id}', [MediaController::class, 'getMediaDetail'])->name('media.media_detail');
     Route::patch('/media/media/{id}', [MediaController::class, 'updateMedia'])->name('media.media_update');
