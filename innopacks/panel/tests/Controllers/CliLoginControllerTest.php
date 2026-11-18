@@ -9,19 +9,16 @@
 
 namespace InnoShop\Panel\Tests\Controllers;
 
-use InnoShop\Panel\Controllers\CliLoginController;
+use InnoShop\Panel\Services\CliLoginService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 class CliLoginControllerTest extends TestCase
 {
     #[DataProvider('callbackProvider')]
     public function test_callback_only_accepts_explicit_loopback_urls(string $url, bool $expected): void
     {
-        $method = new ReflectionMethod(CliLoginController::class, 'isValidCallbackUrl');
-
-        $this->assertSame($expected, $method->invoke(new CliLoginController, $url));
+        $this->assertSame($expected, CliLoginService::getInstance()->isValidCallbackUrl($url));
     }
 
     public static function callbackProvider(): array

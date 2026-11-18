@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use InnoShop\Common\Models\Admin;
 use InnoShop\Panel\Requests\LoginRequest;
+use InnoShop\Panel\Services\CliLoginService;
 
 class CliLoginController extends BaseController
 {
@@ -28,7 +29,7 @@ class CliLoginController extends BaseController
         $callback = $request->query('callback', '');
 
         // Validate callback URL: must be a local address for security
-        if ($callback && ! $this->isValidCallbackUrl($callback)) {
+        if ($callback && ! CliLoginService::getInstance()->isValidCallbackUrl($callback)) {
             abort(400, 'Invalid callback URL. Only local addresses are allowed.');
         }
 
@@ -54,7 +55,7 @@ class CliLoginController extends BaseController
     public function store(LoginRequest $request): mixed
     {
         $callback = session('cli_login_callback', '');
-        if ($callback && ! $this->isValidCallbackUrl($callback)) {
+        if ($callback && ! CliLoginService::getInstance()->isValidCallbackUrl($callback)) {
             session()->forget('cli_login_callback');
             abort(400, 'Invalid callback URL. Only local addresses are allowed.');
         }
@@ -86,7 +87,7 @@ class CliLoginController extends BaseController
      */
     private function redirectWithToken(Admin $admin, string $callback): mixed
     {
-        if ($callback && ! $this->isValidCallbackUrl($callback)) {
+        if ($callback && ! CliLoginService::getInstance()->isValidCallbackUrl($callback)) {
             abort(400, 'Invalid callback URL. Only local addresses are allowed.');
         }
 
@@ -101,29 +102,5 @@ class CliLoginController extends BaseController
         $separator = str_contains($callback, '?') ? '&' : '?';
 
         return redirect()->away($callback.$separator.'token='.urlencode($token));
-    }
-
-    /**
-     * Validate that the callback URL points to a local address.
-     *
-     * @param  string  $url
-     * @return bool
-     */
-    private function isValidCallbackUrl(string $url): bool
-    {
-        $parsed = parse_url($url);
-        if ($parsed === false || ! isset($parsed['scheme'], $parsed['host'])) {
-            return false;
-        }
-        if (! in_array(strtolower($parsed['scheme']), ['http', 'https'], true)) {
-            return false;
-        }
-        if (isset($parsed['user']) || isset($parsed['pass'])) {
-            return false;
-        }
-
-        // Never resolve or redirect to arbitrary/private hosts: this URL carries
-        // an admin API token, so only an explicit loopback callback is safe.
-        return in_array(strtolower($parsed['host']), ['localhost', '127.0.0.1', '[::1]'], true);
     }
 }
