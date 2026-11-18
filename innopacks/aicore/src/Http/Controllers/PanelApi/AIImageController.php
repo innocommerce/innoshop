@@ -48,7 +48,7 @@ class AIImageController extends BaseController
      */
     public function generate(Request $request): mixed
     {
-        set_time_limit(300);
+        set_time_limit(660);
         try {
             $prompt = trim((string) $request->input('prompt', ''));
             if ($prompt === '' || mb_strlen($prompt) > 4000) {

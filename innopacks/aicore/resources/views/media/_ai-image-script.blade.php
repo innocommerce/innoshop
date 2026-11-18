@@ -58,7 +58,7 @@ const aiImageMixin = {
         size: this.aiImageDialog.size,
         quality: this.aiImageDialog.quality,
         count: this.aiImageDialog.count,
-        save_path: savePath,
+        save_path: savePath || undefined,
       };
       if (this.aiImageDialog.negativePrompt.trim()) {
         params.negative_prompt = this.aiImageDialog.negativePrompt.trim();
@@ -66,7 +66,7 @@ const aiImageMixin = {
       if (this.aiImageDialog.referenceImage) {
         params.reference_image = this.aiImageDialog.referenceImage;
       }
-      http.post('ai/generate_image', params).then(function(res) {
+      http.post('ai/generate_image', params, {timeout: 660000}).then(function(res) {
         var body = res || {};
         if (body.success || body.data) {
           var result = body.data || body;
