@@ -727,16 +727,18 @@ class DesignService
         $ids = [];
         if (is_array($items)) {
             foreach ($items as $item) {
-                if (is_array($item) && isset($item['id'])) {
-                    $ids[] = $item['id'];
-                } elseif (is_numeric($item)) {
-                    $ids[] = $item;
+                $id = is_array($item) ? ($item['id'] ?? null) : $item;
+                if (is_int($id) || (is_string($id) && ctype_digit($id))) {
+                    $id = (int) $id;
+                    if ($id > 0) {
+                        $ids[] = $id;
+                    }
                 }
             }
-        } elseif (is_numeric($items)) {
-            $ids = [$items];
+        } elseif (is_int($items) || (is_string($items) && ctype_digit($items))) {
+            $ids = [(int) $items];
         }
 
-        return $ids;
+        return array_values(array_unique($ids));
     }
 }

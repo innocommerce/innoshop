@@ -17,6 +17,7 @@ use InnoShop\Common\Repositories\Order\PaymentRepo;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Services\StateMachineService;
 use Plugin\Stripe\Services\StripeService;
+use Stripe\Webhook;
 
 class StripeController extends Controller
 {
@@ -30,7 +31,10 @@ class StripeController extends Controller
     public function capture(Request $request): JsonResponse
     {
         try {
-            $creditCardData = $request->all();
+            $creditCardData = $request->validate([
+                'order_number' => 'required|string',
+                'token'        => 'required|string',
+            ]);
 
             $filters = [
                 'number'      => $request->get('order_number'),
@@ -38,8 +42,11 @@ class StripeController extends Controller
             ];
 
             $order = OrderRepo::getInstance()->builder($filters)->first();
+            if (! $order) {
+                return json_fail(trans('Stripe::common.order_not_found'));
+            }
 
-            $paymentData = ['amount' => $order->total, 'paid' => false, 'reference' => $creditCardData];
+            $paymentData = ['amount' => $order->total, 'paid' => false];
             PaymentRepo::getInstance()->createOrUpdatePayment($order->id, $paymentData);
 
             $result = (new StripeService($order))->capture($creditCardData);
@@ -72,17 +79,46 @@ class StripeController extends Controller
         Log::info('====== Start Stripe Callback ======');
 
         try {
-            $requestData = $request->all();
-            Log::info('Request data: '.json_encode($requestData));
+            $webhookSecret = plugin_setting('stripe.webhook_secret');
+            if (! is_string($webhookSecret) || $webhookSecret === '') {
+                Log::warning('Stripe webhook rejected: webhook secret is not configured.');
 
-            $type        = $requestData['type'];
-            $orderNumber = $request['data']['object']['metadata']['order_number'] ?? '';
+                return json_fail('Webhook signature verification is not configured', null, 503);
+            }
+
+            try {
+                $event = Webhook::constructEvent(
+                    $request->getContent(),
+                    (string) $request->header('Stripe-Signature'),
+                    $webhookSecret
+                );
+            } catch (\Throwable $e) {
+                Log::warning('Stripe webhook signature verification failed.');
+
+                return json_fail('Invalid signature', null, 400);
+            }
+
+            $type        = $event->type;
+            $charge      = $event->data->object;
+            $orderNumber = $charge->metadata->order_number ?? '';
             $order       = OrderRepo::getInstance()->getOrderByNumber($orderNumber);
 
-            Log::info('Request type: '.$type);
-            Log::info('Request number: '.$orderNumber);
+            Log::info('Stripe webhook received', ['id' => $event->id, 'type' => $type]);
 
             if ($type == 'charge.succeeded' && $order) {
+                $expectedAmount = StripeService::getChargeAmount($order);
+                $validPayment   = ($charge->paid ?? false)
+                    && ($charge->captured ?? false)
+                    && ($charge->status ?? '') === 'succeeded'
+                    && (int) ($charge->amount ?? 0) === $expectedAmount
+                    && strtoupper((string) ($charge->currency ?? '')) === strtoupper($order->currency_code);
+
+                if (! $validPayment) {
+                    Log::warning('Stripe webhook payment verification failed', ['order_number' => $orderNumber]);
+
+                    return json_fail('Payment verification failed');
+                }
+
                 StateMachineService::getInstance($order)->setShipment()->changeStatus(StateMachineService::PAID);
 
                 return json_success(trans('Stripe::common.capture_success'));
@@ -91,9 +127,9 @@ class StripeController extends Controller
             return json_success(trans('Stripe::common.capture_fail'));
 
         } catch (\Exception $e) {
-            Log::info('Stripe error: '.$e->getMessage());
+            Log::error('Stripe webhook processing failed: '.$e->getMessage());
 
-            return json_success($e->getMessage());
+            return json_fail($e->getMessage());
         }
     }
 
@@ -107,8 +143,12 @@ class StripeController extends Controller
     public function createCheckoutSession(Request $request): JsonResponse
     {
         try {
+            $data = $request->validate([
+                'order_number' => 'required|string',
+            ]);
+
             $filters = [
-                'number'      => $request->get('order_number'),
+                'number'      => $data['order_number'],
                 'customer_id' => current_customer_id(),
             ];
 

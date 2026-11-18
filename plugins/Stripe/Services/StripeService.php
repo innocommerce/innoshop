@@ -67,13 +67,7 @@ class StripeService extends PaymentService
         }
 
         $currency = $this->order->currency_code;
-        $total    = Currency::getInstance()->convertByRate($this->order->total, $this->order->currency_value);
-
-        if (! in_array($currency, self::ZERO_DECIMAL)) {
-            $total = round($total, 2) * 100;
-        } else {
-            $total = floor($total);
-        }
+        $total    = self::getChargeAmount($this->order);
 
         $stripeCustomer = $this->createCustomer($tokenId);
 
@@ -191,6 +185,19 @@ class StripeService extends PaymentService
     }
 
     /**
+     * Return the expected Stripe amount in the currency's smallest unit.
+     */
+    public static function getChargeAmount($order): int
+    {
+        $currency = strtoupper($order->currency_code);
+        $total    = Currency::getInstance()->convertByRate($order->total, $order->currency_value, $currency);
+
+        return in_array($currency, self::ZERO_DECIMAL, true)
+            ? (int) floor($total)
+            : (int) round($total * 100);
+    }
+
+    /**
      * Create payment intent
      * @param  $stripeCustomer
      * @return PaymentIntent
@@ -199,11 +206,7 @@ class StripeService extends PaymentService
     public function createPaymentIntent($stripeCustomer): PaymentIntent
     {
         $currency = $this->order->currency_code;
-        if (! in_array($currency, self::ZERO_DECIMAL)) {
-            $total = round($this->order->total, 2) * 100;
-        } else {
-            $total = floor($this->order->total);
-        }
+        $total    = self::getChargeAmount($this->order);
 
         return $this->stripeClient->paymentIntents->create([
             'amount'                    => $total,
@@ -229,11 +232,7 @@ class StripeService extends PaymentService
     public function createCheckoutSession(array $options = []): Session
     {
         $currency = $this->order->currency_code;
-        if (! in_array($currency, self::ZERO_DECIMAL)) {
-            $total = round($this->order->total, 2) * 100;
-        } else {
-            $total = floor($this->order->total);
-        }
+        $total    = self::getChargeAmount($this->order);
 
         $defaultOptions = [
             'payment_method_types' => self::PAYMENT_METHODS,
