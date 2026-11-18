@@ -25,7 +25,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '18'
+          # Vite 8 requires node ^20.19.0 || >=22.12.0 — on Node 18 the build
+          # fails with "node:util does not provide an export named styleText"
+          # and the package would ship without any compiled CSS/JS.
+          node-version: '22'
 
       - name: Verify code version matches tag
         run: |
@@ -42,6 +45,7 @@ jobs:
       - name: Prepare .env (production-safe defaults)
         run: |
           cp .env.example .env
+          sed -i 's/^APP_NAME=Laravel/APP_NAME=InnoShop/' .env
           sed -i 's/^APP_DEBUG=true/APP_DEBUG=false/' .env
           sed -i 's|^APP_URL=http://localhost|APP_URL=http://localhost:8000|' .env
 

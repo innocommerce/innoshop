@@ -122,3 +122,9 @@ if (process.platform === 'linux' && fs.existsSync('public')) {
 
 const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
 console.log(`\nDone in ${elapsed}s${failed ? ` (${failed} failed)` : ''}`);
+
+// A failed entry means the bundle is incomplete — exit non-zero so the
+// release workflow does not publish a package without compiled assets.
+if (failed > 0) {
+    process.exit(1);
+}
