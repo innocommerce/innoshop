@@ -61,14 +61,15 @@ class ProductDetail extends JsonResource
             'sku'                 => (new SkuListItem($sku))->jsonSerialize(),
             'skus'                => SkuListItem::collection($this->skus)->jsonSerialize(),
             // Structured variant dimensions for front-end ID-based matching.
-            'variant_dimensions' => $this->structuredVariantDimensions(),
-            'attributes'         => $this->groupedAttributes(),
-            'sales'              => $this->sales,
-            'viewed'             => $this->viewed,
-            'rating'             => (float) $this->rating,
-            'reviews_count'      => (int) $this->reviews_count,
-            'category_id'        => $this->categories()->first()?->id,
-            'related'            => ProductSimple::collection($this->relationProducts),
+            'variant_dimensions'   => $this->structuredVariantDimensions(),
+            'attributes'           => $this->groupedAttributes(),
+            'long_text_attributes' => $this->visibleLongTextAttributes(),
+            'sales'                => $this->sales,
+            'viewed'               => $this->viewed,
+            'rating'               => (float) $this->rating,
+            'reviews_count'        => (int) $this->reviews_count,
+            'category_id'          => $this->categories()->first()?->id,
+            'related'              => ProductSimple::collection($this->relationProducts),
         ];
 
         return fire_hook_filter('resource.product.detail', $data);

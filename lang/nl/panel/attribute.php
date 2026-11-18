@@ -13,4 +13,6 @@ return [
     'name'            => 'Attribute name',
     'set_attribute'   => 'Set Attribute',
     'group'           => 'Attribute Group',
+    'show_on_detail'  => 'Tonen op detailpagina',
+    'type_richtext'   => 'Rich text',
 ];

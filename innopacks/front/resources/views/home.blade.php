@@ -78,7 +78,23 @@
                 <a href="{{ $cat['url'] }}" class="home-cat-card text-decoration-none">
                   <div class="home-cat-card__media">
                     @if (!empty($cat['image']))
-                      <img src="{{ $cat['image'] }}" alt="{{ $cat['name'] }}" loading="lazy">
+                      @if (!empty($cat['is_video']))
+                        @if (!empty($cat['poster_image']))
+                          {{-- Show the extracted poster frame; the video only plays on the category page. --}}
+                          <div class="front-video-cover">
+                            <img src="{{ $cat['poster_image'] }}" alt="{{ $cat['name'] }}" loading="lazy">
+                            <i class="bi bi-play-circle-fill front-video-cover__badge" aria-hidden="true"></i>
+                          </div>
+                        @else
+                          <div class="front-video-cover">
+                            <video src="{{ $cat['image'] }}" autoplay muted loop playsinline
+                                   alt="{{ $cat['name'] }}" loading="lazy"></video>
+                            <i class="bi bi-play-circle-fill front-video-cover__badge" aria-hidden="true"></i>
+                          </div>
+                        @endif
+                      @else
+                        <img src="{{ $cat['image'] }}" alt="{{ $cat['name'] }}" loading="lazy">
+                      @endif
                     @endif
                   </div>
                   <div class="home-cat-card__name">{{ $cat['name'] }}</div>

@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'រូបភាព SKU',
     'sku_validation_error'        => 'Please fully fill in at least the single specification information or the information for products with multiple specifications',
     'specification_attribute'     => 'Specification',
+    'content_attributes'          => 'គុណលក្ខណៈមាតិកា',
     'spu_code'                    => 'SPU coding',
     'status_settings'             => 'Status Settings',
     'stock_quantity'              => 'បរិមាណសារពើភ័ណ្ឌ',

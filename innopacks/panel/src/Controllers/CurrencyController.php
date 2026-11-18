@@ -46,17 +46,6 @@ class CurrencyController extends BaseController
     }
 
     /**
-     * Currency creation page.
-     *
-     * @return mixed
-     * @throws Exception
-     */
-    public function create(): mixed
-    {
-        return $this->form(new Currency);
-    }
-
-    /**
      * @param  CurrencyRequest  $request
      * @return mixed
      * @throws Throwable
@@ -71,30 +60,6 @@ class CurrencyController extends BaseController
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }
-    }
-
-    /**
-     * @param  Currency  $currency
-     * @return mixed
-     * @throws Exception
-     */
-    public function edit(Currency $currency): mixed
-    {
-        return $this->form($currency);
-    }
-
-    /**
-     * @param  $currency
-     * @return mixed
-     * @throws Exception
-     */
-    public function form($currency): mixed
-    {
-        $data = [
-            'currency' => $currency,
-        ];
-
-        return inno_view('panel::currencies.form', $data);
     }
 
     /**

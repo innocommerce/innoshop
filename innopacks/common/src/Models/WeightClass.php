@@ -11,12 +11,9 @@ namespace InnoShop\Common\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Libraries\Weight;
-use InnoShop\Common\Traits\HasPackageFactory;
 
 class WeightClass extends BaseModel
 {
-    use HasPackageFactory;
-
     protected $table = 'weight_classes';
 
     /**

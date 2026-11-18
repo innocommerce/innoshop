@@ -46,3 +46,15 @@
 .locale-smart-fill-btn {
   font-size: 0.875rem;
 }
+
+// Rich-text locale tabs — full-width scrollable tab strip so 10+ languages
+// with full locale names don't wrap/crowd out the editor (common pack
+// components/form/rich-text.blade.php).
+.locale-rich-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  .nav-link {
+    white-space: nowrap;
+  }
+}

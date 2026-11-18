@@ -28,4 +28,27 @@ class SitemapController
             return $e->getMessage();
         }
     }
+
+    /**
+     * Child sitemap: /{locale}/sitemap_{type}_{page}.xml
+     *
+     * @param  Request  $request
+     * @param  string  $type
+     * @param  int  $page
+     * @return mixed
+     * @throws Exception
+     */
+    public function show(Request $request, string $type, int $page): mixed
+    {
+        $types = fire_hook_filter('sitemap.types', SitemapService::TYPES);
+        if (! in_array($type, $types, true) || $page < 1) {
+            abort(404);
+        }
+
+        try {
+            return SitemapService::getInstance()->typeResponse($request, $type, $page);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

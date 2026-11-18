@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'Jumlah pembelian minimum adalah :min',
     'news'                            => 'Berita',
     'no_search_results'               => 'Tak ada hasil yang relevan yang ditemukan',
+    'or_continue_with'                => 'Atau lanjutkan dengan',
     'out_of_stock'                    => 'Stok Habis',
     'page_not_found'                  => 'Halaman tidak ditemukan',
     'page_not_found_description'      => 'Maaf, halaman yang anda kunjungi tidak ada atau telah dihapus.',

@@ -11,6 +11,8 @@ namespace InnoShop\Common\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Category;
 use InnoShop\Common\Repositories\CategoryRepo;
 
@@ -164,7 +166,75 @@ class ProductQueryBuilder
             });
         }
 
+        // Number range filters (format: attribute_ranges=12:5.5,6.5|15:1,
+        // min/max are both optional: 12:,6.5 means <= 6.5, 12:5.5, means >= 5.5)
+        $attributeRanges = $filters['attribute_ranges'] ?? '';
+        if ($attributeRanges) {
+            foreach ($this->parseRangeFilters($attributeRanges) as [$attributeId, $min, $max]) {
+                $builder->whereHas('productAttributes', function (Builder $query) use ($attributeId, $min, $max) {
+                    $query->where('attribute_id', $attributeId);
+                    if ($min !== null) {
+                        $query->where('value_number', '>=', $min);
+                    }
+                    if ($max !== null) {
+                        $query->where('value_number', '<=', $max);
+                    }
+                });
+            }
+        }
+
+        // Variant value filters (format: variant_values=1,9|4,8)
+        // Each group carries the variant value ids of ONE logical dimension
+        // (e.g. Size) aggregated across products, since variant rows are
+        // per-product. Groups are AND-ed, values within a group OR-ed: the
+        // product qualifies when any of its SKUs carries a group value.
+        $variantGroups = $filters['variant_values'] ?? '';
+        if ($variantGroups) {
+            foreach (explode('|', $variantGroups) as $group) {
+                $valueIds = parse_int_filters($group);
+                if (empty($valueIds)) {
+                    continue;
+                }
+                $builder->whereHas('skus', function (Builder $query) use ($valueIds) {
+                    $query->whereHas('variantValues', function (Builder $valueQuery) use ($valueIds) {
+                        $valueQuery->whereIn('product_variant_values.id', $valueIds);
+                    });
+                });
+            }
+        }
+
         return $builder;
+    }
+
+    /**
+     * Parse number range filter segments into [attributeId, min, max] triples.
+     * Malformed segments are skipped instead of throwing, so a bad URL
+     * degrades to fewer filters rather than a broken listing page.
+     *
+     * @param  string  $ranges
+     * @return array
+     */
+    private function parseRangeFilters(string $ranges): array
+    {
+        $out = [];
+        foreach (explode('|', $ranges) as $segment) {
+            $parts = explode(':', $segment);
+            if (count($parts) !== 2) {
+                continue;
+            }
+            $attributeId = (int) $parts[0];
+            if ($attributeId <= 0) {
+                continue;
+            }
+            [$min, $max] = array_pad(explode(',', $parts[1]), 2, '');
+            $out[]       = [
+                $attributeId,
+                ($min !== '' && is_numeric($min)) ? $min : null,
+                ($max !== '' && is_numeric($max)) ? $max : null,
+            ];
+        }
+
+        return $out;
     }
 
     /**
@@ -255,30 +325,116 @@ class ProductQueryBuilder
         $keyword     = $filters['keyword'] ?? $filters['search'] ?? '';
         $searchField = $filters['search_field'] ?? '';
 
-        if ($keyword) {
-            if ($searchField === 'name') {
-                $builder->whereHas('translations', function (Builder $query) use ($keyword) {
-                    $query->where('name', 'like', "%$keyword%");
-                });
-            } elseif ($searchField === 'sku_code') {
-                $builder->whereHas('skus', function (Builder $query) use ($keyword) {
-                    $query->where('code', 'like', "%$keyword%");
-                });
-            } elseif ($searchField === 'spu_code') {
-                $builder->where('spu_code', 'like', "%$keyword%");
-            } else {
-                // Search all fields
-                $builder->where(function ($query) use ($keyword) {
-                    $query->whereHas('translations', function (Builder $q) use ($keyword) {
-                        $q->where('name', 'like', "%$keyword%");
-                    })->orWhereHas('skus', function (Builder $q) use ($keyword) {
-                        $q->where('code', 'like', "%$keyword%");
-                    })->orWhere('spu_code', 'like', "%$keyword%");
-                });
-            }
+        if (! $keyword) {
+            return $builder;
+        }
+
+        if ($searchField === 'name') {
+            $builder->whereHas('translations', fn (Builder $query) => self::applyTranslationNameMatch($query, $keyword));
+        } elseif ($searchField === 'sku_code') {
+            $builder->whereHas('skus', function (Builder $query) use ($keyword) {
+                $query->where('code', 'like', "%$keyword%");
+            });
+        } elseif ($searchField === 'spu_code') {
+            $builder->where('spu_code', 'like', "%$keyword%");
+        } else {
+            // Search all fields. The name leg resolves through the cached
+            // FULLTEXT id list when available; the small sku/spu tables stay
+            // on LIKE.
+            $nameProductIds = $this->cachedNameMatchProductIds($keyword);
+            $builder->where(function ($query) use ($keyword, $nameProductIds) {
+                if ($nameProductIds !== null) {
+                    $query->whereIn('products.id', $nameProductIds);
+                } else {
+                    $query->whereHas('translations', fn (Builder $q) => self::applyTranslationNameMatch($q, $keyword));
+                }
+                $query->orWhereHas('skus', function (Builder $q) use ($keyword) {
+                    $q->where('code', 'like', "%$keyword%");
+                })->orWhere('spu_code', 'like', "%$keyword%");
+            });
         }
 
         return $builder;
+    }
+
+    /**
+     * Match keyword(s) against product_translations.name inside a whereHas
+     * closure. Uses the ngram FULLTEXT index (ft_pt_name) in phrase mode —
+     * quoted phrases OR-combine, matching a LIKE '%kw%' OR chain — and falls
+     * back to LIKE when the driver lacks ngram (SQLite test connections) or
+     * no keyword forms an ngram token. Keywords shorter than 2 chars cannot
+     * be tokenized and are dropped when other keywords qualify (ngram has no
+     * prefix search); callers that need them route them through a separate
+     * LIKE pass (see BeltFrontService::matchedProductIds).
+     *
+     * @param  Builder  $query
+     * @param  array|string  $keywords
+     * @return void
+     */
+    public static function applyTranslationNameMatch(Builder $query, array|string $keywords): void
+    {
+        $keywords = array_values((array) $keywords);
+
+        $phrases = [];
+        foreach ($keywords as $keyword) {
+            $term = self::fullTextTerm($keyword);
+            if (mb_strlen($term) >= 2) {
+                $phrases[] = '"'.$term.'"';
+            }
+        }
+
+        if ($phrases !== [] && $query->getModel()->getConnection()->getDriverName() === 'mysql') {
+            $query->whereRaw('MATCH (name) AGAINST (? IN BOOLEAN MODE)', [implode(' ', $phrases)]);
+
+            return;
+        }
+
+        $query->where(function (Builder $q) use ($keywords) {
+            foreach ($keywords as $keyword) {
+                $q->orWhere('name', 'like', "%{$keyword}%");
+            }
+        });
+    }
+
+    /**
+     * Cached product IDs whose translated name matches the keyword, for the
+     * front "search all fields" branch. The fulltext lookup is cheap, but
+     * repeat searches resolve free instead of re-probing 136K translation
+     * rows. TTL bounds staleness: renamed products become searchable within
+     * an hour. An empty result means "nothing matches" (whereIn([])
+     * short-circuits) — distinct from the caller's null = "no fulltext"
+     * fallback.
+     *
+     * @param  string  $keyword
+     * @return array|null Null when the keyword cannot use FULLTEXT — caller falls back to LIKE
+     */
+    private function cachedNameMatchProductIds(string $keyword): ?array
+    {
+        $term = self::fullTextTerm($keyword);
+        if (mb_strlen($term) < 2 || DB::connection()->getDriverName() !== 'mysql') {
+            return null;
+        }
+
+        return Cache::remember('product_search_name_'.md5($term), 3600, function () use ($term) {
+            return DB::table('product_translations')
+                ->whereRaw('MATCH (name) AGAINST (? IN BOOLEAN MODE)', ['"'.$term.'"'])
+                ->pluck('product_id')
+                ->all();
+        });
+    }
+
+    /**
+     * Sanitize a keyword for BOOLEAN MODE: operators like - ~ * + would flip
+     * or widen the match, and double quotes are reserved for the phrase
+     * wrapping. Whitespace survives — phrase search keeps multi-word
+     * semantics, matching the old LIKE '%kw%' substring behavior.
+     *
+     * @param  string  $keyword
+     * @return string
+     */
+    public static function fullTextTerm(string $keyword): string
+    {
+        return trim((string) preg_replace('/[+\-<>()~*"@]/u', ' ', $keyword));
     }
 
     /**

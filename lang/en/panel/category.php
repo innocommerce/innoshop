@@ -14,7 +14,7 @@ return [
     'extra_tab'           => 'Extra Information',
     'has_children'        => 'Category has children, cannot be destroyed',
     'image'               => 'Category Image',
-    'image_description'   => 'Main category image for display purposes',
+    'image_description'   => 'Category cover — image or short video. Used to represent the category on the storefront.',
     'name'                => 'Name',
     'name_required'       => 'is required',
     'parent'              => 'Parent',

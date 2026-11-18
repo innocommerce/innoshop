@@ -21,9 +21,32 @@
           <div class="card h-100 border-0 shadow-sm">
             @if($category->image)
               <a href="{{ $category->url }}">
-                <img src="{{ image_resize($category->image, 300, 200) }}" 
-                     class="card-img-top" 
-                     alt="{{ $category->fallbackName() }}">
+                @php $cover = $category->coverUrl(300, 200); @endphp
+                @if($cover)
+                  {{-- Extracted poster frame (video) or resized image keeps the card static;
+                       the video itself plays on the category page. --}}
+                  <div class="front-video-cover">
+                    <img src="{{ $cover }}"
+                         class="card-img-top"
+                         alt="{{ $category->fallbackName() }}">
+                    @if($category->is_video)
+                      <i class="bi bi-play-circle-fill front-video-cover__badge" aria-hidden="true"></i>
+                    @endif
+                  </div>
+                @elseif($category->is_video)
+                  {{-- Poster extraction unavailable: keep the live <video> card. --}}
+                  <div class="front-video-cover">
+                    <video src="{{ image_origin($category->image) }}"
+                           autoplay muted loop playsinline
+                           class="card-img-top"
+                           alt="{{ $category->fallbackName() }}"></video>
+                    <i class="bi bi-play-circle-fill front-video-cover__badge" aria-hidden="true"></i>
+                  </div>
+                @else
+                  <img src="{{ image_resize($category->image, 300, 200) }}"
+                       class="card-img-top"
+                       alt="{{ $category->fallbackName() }}">
+                @endif
               </a>
             @endif
             <div class="card-body text-center">
@@ -32,9 +55,10 @@
                   {{ $category->fallbackName() }}
                 </a>
               </h5>
-              @if($category->translation && $category->translation->description)
+              @php $categoryDescription = trim(strip_tags($category->fallbackName('content'))); @endphp
+              @if($categoryDescription !== '')
                 <p class="card-text text-muted small">
-                  {{ mb_substr(strip_tags($category->translation->description), 0, 100) }}...
+                  {{ mb_substr($categoryDescription, 0, 100) }}...
                 </p>
               @endif
               <a href="{{ $category->url }}" class="btn btn-sm btn-outline-primary">

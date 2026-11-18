@@ -21,6 +21,16 @@ class Option extends Model
 {
     use HasFactory;
 
+    const TYPE_SELECT = 'select';
+
+    const TYPE_RADIO = 'radio';
+
+    const TYPE_CHECKBOX = 'checkbox';
+
+    const TYPE_INPUT = 'input';
+
+    const TYPE_TEXTAREA = 'textarea';
+
     protected $fillable = [
         'name',
         'description',
@@ -161,7 +171,7 @@ class Option extends Model
      */
     public function isSingleType(): bool
     {
-        return in_array($this->type, ['select', 'radio']);
+        return in_array($this->type, [self::TYPE_SELECT, self::TYPE_RADIO]);
     }
 
     /**
@@ -171,6 +181,16 @@ class Option extends Model
      */
     public function isMultipleType(): bool
     {
-        return $this->type === 'checkbox';
+        return $this->type === self::TYPE_CHECKBOX;
+    }
+
+    /**
+     * 检查是否为自由文本类型（客户填写，无预设选项值、不参与加价）
+     *
+     * @return bool
+     */
+    public function isTextEntry(): bool
+    {
+        return in_array($this->type, [self::TYPE_INPUT, self::TYPE_TEXTAREA]);
     }
 }

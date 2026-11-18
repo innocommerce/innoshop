@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'Das Verzeichnis ist nicht leer',
     'show_folders'                  => 'Ordner anzeigen',
     'delete_failed'                 => 'Löschen fehlgeschlagen',
+    'capture_load_failed'           => 'Video konnte nicht geladen werden, Cover-Auswahl nicht möglich',
+    'capture_cross_origin'          => 'Dieses Video unterliegt der Cross-Origin-Richtlinie, ein Frame kann im Browser nicht erfasst werden. Bitte laden Sie direkt ein Bild als Cover hoch.',
 ];

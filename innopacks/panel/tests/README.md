@@ -9,6 +9,7 @@ tests/
 ├── Controllers/       # Controller tests
 ├── Middleware/        # Middleware tests
 ├── Feature/           # Feature/Integration tests
+├── js/                # Browser-side JS unit tests (Node built-in runner)
 ├── TestCase.php       # Base test class (extends Common)
 └── README.md
 ```
@@ -156,6 +157,21 @@ tests/
   - Admin can reset customer password
 
 ## Running Tests
+
+### Run JS Unit Tests
+
+Browser-side logic is extracted into framework-free ES modules under
+`resources/assets/js/app/` and unit-tested with Node's built-in test runner
+(no dependencies needed, Node >= 18):
+
+```bash
+node --test "tests/js/*.test.js"
+```
+
+Current coverage:
+
+- **panel-video-codec.test.js**: MP4 codec signature scanner used by the
+  media library to warn on H.265/HEVC uploads that browsers cannot play.
 
 ### Run All Panel Tests
 

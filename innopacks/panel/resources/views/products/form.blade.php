@@ -41,6 +41,14 @@
                   aria-controls="specification-tab-pane"
                   aria-selected="false">{{ __('panel/product.specification_attribute') }}</button>
               </li>
+              @if(!empty($longtext_attributes))
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="longtext-attributes-tab" data-bs-toggle="tab"
+                    data-bs-target="#longtext-attributes-tab-pane" type="button" role="tab"
+                    aria-controls="longtext-attributes-tab-pane"
+                    aria-selected="false">{{ __('panel/product.content_attributes') }}</button>
+                </li>
+              @endif
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="options-tab" data-bs-toggle="tab" data-bs-target="#options-tab-pane"
                   type="button" role="tab" aria-controls="options-tab-pane"
@@ -72,6 +80,10 @@
               @include('panel::products.panes.tab_pane_content', $product)
 
               @include('panel::products.panes.tab_pane_specification', $product)
+
+              @if(!empty($longtext_attributes))
+                @include('panel::products.panes.tab_pane_longtext_attributes', $product)
+              @endif
 
               @include('panel::products.panes.tab_pane_options', $product)
 

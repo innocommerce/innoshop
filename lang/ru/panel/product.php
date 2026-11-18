@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'Скип.',
     'sku_validation_error'        => 'Пожалуйста, полностью заполните информацию об одном варианте или информацию о товаре с несколькими вариантами',
     'specification_attribute'     => 'Атрибуты варианта',
+    'content_attributes'          => 'Атрибуты контента',
     'spu_code'                    => 'Код SPU',
     'status_settings'             => 'Режим.',
     'stock_quantity'              => 'Количество запасов',

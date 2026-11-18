@@ -49,13 +49,16 @@
         @endforeach
       </ul>
 
-      <div class="row">
+      <div class="row" id="plugin-grid" data-type="{{ $type }}">
         @if (count($plugins))
         @foreach ($plugins as $plugin)
           <div class="col-6 col-md-3 mb-4">
             <div class="plugin-item" data-code="{{ $plugin['code'] }}"
                  data-installed="{{ $plugin['installed'] ? 1 : 0 }}">
               <div class="image-wrap">
+                @if($type)
+                  <i class="bi bi-grip-vertical drag-handle text-muted" title="{{ __('panel/common.drag_sort_hint') }}"></i>
+                @endif
                 <div class="image"><img src="{{ $plugin['icon'] }}" alt="{{ $plugin['name'] }}" class="img-fluid"></div>
                 <div class="title-wrap">
                   <div class="title">{{ $plugin['name'] }}</div>
@@ -108,6 +111,7 @@
 @endsection
 
 @push('footer')
+  <script src="{{ asset('vendor/vuedraggable/sortable.min.js') }}"></script>
   <script>
     var pluginLabels = {
       use: '{{ __("common/base.use") }}',
@@ -209,5 +213,43 @@
         layer.msg((data && data.message) || '{{ __("common/base.error") }}', { icon: 2 });
       });
     }
+
+    // Card order on a single-type tab IS the storefront order of that type.
+    // The "all" tab mixes types, so it stays read-only.
+    function initPluginSortable() {
+      if (typeof Sortable === 'undefined') return;
+      var grid = document.getElementById('plugin-grid');
+      if (!grid) return;
+      var type = grid.dataset.type;
+      if (!type || grid.dataset.sortableInit) return;
+      grid.dataset.sortableInit = '1';
+
+      new Sortable(grid, {
+        handle: '.drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        onEnd: function () {
+          var codes = Array.prototype.map.call(
+            grid.querySelectorAll('.plugin-item[data-code]'),
+            function (el) { return el.getAttribute('data-code'); }
+          ).filter(function (code) { return !!code; });
+          if (!codes.length) return;
+
+          axios.post(@json(panel_route('plugins.reorder')), { type: type, codes: codes })
+            .then(function (res) {
+              if (res && res.success) {
+                layer.msg(res.message, { icon: 1 });
+              } else {
+                inno.alert((res && res.message) || '{{ __("common/base.error") }}');
+              }
+            })
+            .catch(function (error) {
+              var data = error.response && error.response.data;
+              layer.msg((data && data.message) || '{{ __("common/base.error") }}', { icon: 2 });
+            });
+        }
+      });
+    }
+    initPluginSortable();
   </script>
 @endpush

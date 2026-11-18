@@ -21,6 +21,7 @@
           <div class="row">
             @foreach ($favorites as $product)
             @php($product = $product->product)
+            @php($sku = $product?->masterSku)
             <div class="col-6 col-md-3">
               <div class="product-grid-item">
                 <div class="image">
@@ -30,17 +31,17 @@
                   </a>
                 </div>
                 <div class="product-item-info">
-                  <div class="product-name"><a href="{{ $product->url }}">{{ $product->translation->name }}</a></div>
+                  <div class="product-name"><a href="{{ $product->url }}">{{ $product->fallbackName() }}</a></div>
                   <div class="product-bottom">
                     <div class="product-bottom-btns">
                       <div class="btn-add-cart cursor-pointer" data-id="{{ $product->id }}"
-                        data-sku-id="{{ $product->masterSku->id }}">{{ __('front/product.add_to_cart') }}</div>
+                        data-sku-id="{{ $sku?->id }}">{{ __('front/product.add_to_cart') }}</div>
                     </div>
                     <div class="product-price">
-                      @if ($product->masterSku->origin_price)
-                      <div class="price-old">{{ $product->masterSku->origin_price_format }}</div>
+                      @if ($sku?->origin_price)
+                      <div class="price-old">{{ $sku->origin_price_format }}</div>
                       @endif
-                      <div class="price-new">{{ $product->masterSku->price_format }}</div>
+                      <div class="price-new">{{ $sku?->price_format }}</div>
                     </div>
                   </div>
                 </div>

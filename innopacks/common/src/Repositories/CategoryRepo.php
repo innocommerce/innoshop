@@ -12,6 +12,7 @@ namespace InnoShop\Common\Repositories;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
 use InnoShop\Common\Models\Category;
@@ -33,24 +34,43 @@ class CategoryRepo extends BaseRepo
      */
     public function getTwoLevelCategories(?array $categoryIDs = []): array
     {
-        $query = Category::query()
-            ->with([
-                'translation',
-                'children.translation',
-                'children.children.translation',
-            ])
-            ->where(function (Builder $q) {
-                $q->where('parent_id', 0)->orWhereNull('parent_id');
-            })
-            ->where('active', 1);
+        // Locale must be part of the key: CategoryFrontend serializes
+        // fallbackName() in the REQUEST's locale, so a locale-less key lets
+        // whichever language warm the cache first poison all others for the
+        // TTL (e.g. zh-cn first → /en renders Chinese category names).
+        $cacheKey = 'category:two_level:'.locale_code().':'.md5(json_encode($categoryIDs ?? []));
 
-        if ($categoryIDs) {
-            $query->whereIn('id', $categoryIDs);
-        }
+        return Cache::remember($cacheKey, 3600, function () use ($categoryIDs) {
+            $query = Category::query()
+                ->with([
+                    'translation',
+                    'children.translation',
+                    'children.children.translation',
+                ])
+                ->where(function (Builder $q) {
+                    $q->where('parent_id', 0)->orWhereNull('parent_id');
+                })
+                ->where('active', 1);
 
-        $catalogs = $query->orderBy('position')->get();
+            if ($categoryIDs) {
+                $query->whereIn('id', $categoryIDs);
+            }
 
-        return CategoryFrontend::collection($catalogs)->jsonSerialize();
+            $catalogs = $query->orderBy('position')->get();
+
+            // The frontend tree is L1-L3 only. Without this, CategoryFrontend
+            // serializes each L3 node and lazy-loads its (unused) children,
+            // producing ~1 SQL per L3 node (~440 queries on a typical catalog).
+            $catalogs->each(function (Category $l1) {
+                $l1->children->each(function (Category $l2) {
+                    $l2->children->each(function (Category $l3) {
+                        $l3->setRelation('children', collect());
+                    });
+                });
+            });
+
+            return CategoryFrontend::collection($catalogs)->jsonSerialize();
+        });
     }
 
     /**

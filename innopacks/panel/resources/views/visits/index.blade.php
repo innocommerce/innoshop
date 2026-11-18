@@ -47,7 +47,7 @@
                   <span class="ms-1">{{ $visit->city }}</span>
                 @endif
               @else
-                <span class="text-muted">-</span>
+                <span class="badge bg-secondary">{{ __('panel/visit.unknown') }}</span>
               @endif
               @unless($visit->country_code && $visit->city)
               <a href="javascript:void(0)" class="text-secondary text-decoration-none btn-refresh-geo ms-1" title="刷新位置"><i class="bi bi-arrow-repeat"></i></a>

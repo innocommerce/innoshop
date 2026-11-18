@@ -19,7 +19,7 @@ class VisitDeviceDaily extends BaseModel
 
     protected $fillable = [
         'date', 'device_type',
-        'visits', 'ip_count', 'page_views',
+        'visits', 'ip_count', 'page_views', 'event_sessions',
     ];
 
     protected $casts = [

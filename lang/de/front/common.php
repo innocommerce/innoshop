@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'Die Mindestbestellmenge beträgt :min',
     'news'                            => 'Neuigkeiten',
     'no_search_results'               => 'Zu den resultaten konnte nichts gefunden werden',
+    'or_continue_with'                => 'Oder fortfahren mit',
     'out_of_stock'                    => 'Nicht vorrätig',
     'page_not_found'                  => 'Keine seite gefunden',
     'page_not_found_description'      => 'Es tut mir leid, dass die seiten, auf die sie gegangen sind, nicht existieren Oder gelöscht sind',

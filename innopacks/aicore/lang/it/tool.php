@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => 'Elenca i tag degli articoli con ricerca per parola chiave. Volume ridotto, restituito integralmente.',
     'desc_customer_autocomplete' => 'Ricerca rapida clienti per nome o email. Restituisce una lista compatta id+nome+email.',
     'desc_category_autocomplete' => 'Ricerca rapida categorie per nome. Restituisce una lista compatta id+nome+parent_id.',
+    'desc_setting_detail'        => 'Ottieni le impostazioni SEO a livello di sistema (titolo, descrizione, parole chiave), raggruppate per lingua. È il fallback TDK globale; le pagine senza SEO proprio (es. homepage) lo usano.',
+    'desc_setting_update'        => '⚠️ Operazione di scrittura: aggiorna le impostazioni SEO a livello di sistema (meta_title/meta_description/meta_keywords) con semantica PATCH, per lingua.',
 ];

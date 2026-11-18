@@ -61,7 +61,7 @@
                   <div class="form-meta">
                     <label class="form-check">
                       <input type="checkbox" name="remember" value="1" {{ old('remember') ? 'checked' : '' }}>
-                      <span>{{ theme_trans('front.auth_remember_me') }}</span>
+                      <span>{{ __('front/login.remember_me') }}</span>
                     </label>
                     <a href="{{ front_route('forgotten.index') }}" class="forgot-link">{{ __('front/login.forget_password') }}</a>
                   </div>
@@ -112,7 +112,7 @@
               </button>
               <span class="switch-prompt">
                 {{ __('front/login.no_account') }}
-                <a href="{{ front_route('register.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{ theme_trans('front.auth_create_account') }}</a>
+                <a href="{{ front_route('register.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{ __('front/login.create_account') }}</a>
               </span>
             </div>
           </form>

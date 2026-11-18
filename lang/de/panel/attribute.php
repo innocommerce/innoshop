@@ -13,4 +13,6 @@ return [
     'name'            => 'eigenschaft',
     'set_attribute'   => 'Attribut festlegen',
     'group'           => 'Attributgruppe',
+    'show_on_detail'  => 'Auf Detailseite anzeigen',
+    'type_richtext'   => 'Rich Text',
 ];

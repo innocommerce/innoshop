@@ -31,11 +31,7 @@ InnoShop 开发者工具包是一个强大的命令行工具集，用于快速�
 
 ## 🚀 安装
 
-DevTools 已集成到 InnoShop 系统中，无需额外安装。如果作为独立 Composer 包使用：
-
-```bash
-composer require innoshop/devtools
-```
+DevTools 已集成到 InnoShop 系统（Factory / Enterprise / Bundle 仓库自带），无需额外安装。代码位于 `innopacks/devtools/`，由根 `composer.json` 的 PSR-4 自动加载，并由 `InnoShop\Devtools\DevtoolsServiceProvider` 自动注册 `dev:*` / `devtools:*` 命令。
 
 ## 📖 快速开始
 

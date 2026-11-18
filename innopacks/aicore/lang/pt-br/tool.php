@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => 'Lista tags de artigos com busca por palavra-chave. Volume geralmente pequeno, retornado integralmente.',
     'desc_customer_autocomplete' => 'Busca rápida de clientes por nome ou email. Retorna lista compacta id+nome+email.',
     'desc_category_autocomplete' => 'Busca rápida de categorias por nome. Retorna lista compacta id+nome+parent_id.',
+    'desc_setting_detail'        => 'Obter as configurações SEO em nível de sistema (título, descrição, palavras-chave), agrupadas por idioma. É o fallback global de TDK; páginas sem SEO próprio (ex.: página inicial) o utilizam.',
+    'desc_setting_update'        => '⚠️ Operação de escrita: atualizar as configurações SEO em nível de sistema (meta_title/meta_description/meta_keywords) com semântica PATCH, por idioma.',
 ];

@@ -53,34 +53,10 @@ class CurrencyControllerTest extends TestCase
     }
 
     #[Test]
-    public function test_create_method_exists(): void
-    {
-        $this->assertTrue($this->reflection->hasMethod('create'));
-        $method = $this->reflection->getMethod('create');
-        $this->assertTrue($method->isPublic());
-    }
-
-    #[Test]
     public function test_store_method_exists(): void
     {
         $this->assertTrue($this->reflection->hasMethod('store'));
         $method = $this->reflection->getMethod('store');
-        $this->assertTrue($method->isPublic());
-    }
-
-    #[Test]
-    public function test_edit_method_exists(): void
-    {
-        $this->assertTrue($this->reflection->hasMethod('edit'));
-        $method = $this->reflection->getMethod('edit');
-        $this->assertTrue($method->isPublic());
-    }
-
-    #[Test]
-    public function test_form_method_exists(): void
-    {
-        $this->assertTrue($this->reflection->hasMethod('form'));
-        $method = $this->reflection->getMethod('form');
         $this->assertTrue($method->isPublic());
     }
 
@@ -127,29 +103,12 @@ class CurrencyControllerTest extends TestCase
     }
 
     #[Test]
-    public function test_create_method_has_no_parameters(): void
-    {
-        $method     = $this->reflection->getMethod('create');
-        $parameters = $method->getParameters();
-        $this->assertCount(0, $parameters);
-    }
-
-    #[Test]
     public function test_store_method_accepts_currency_request(): void
     {
         $method     = $this->reflection->getMethod('store');
         $parameters = $method->getParameters();
         $this->assertCount(1, $parameters);
         $this->assertEquals('request', $parameters[0]->getName());
-    }
-
-    #[Test]
-    public function test_edit_method_accepts_currency_parameter(): void
-    {
-        $method     = $this->reflection->getMethod('edit');
-        $parameters = $method->getParameters();
-        $this->assertCount(1, $parameters);
-        $this->assertEquals('currency', $parameters[0]->getName());
     }
 
     #[Test]
@@ -188,16 +147,6 @@ class CurrencyControllerTest extends TestCase
         $returnType = $method->getReturnType();
         $this->assertNotNull($returnType);
         $this->assertEquals('InnoShop\Common\Models\Currency', $returnType->getName());
-    }
-
-    #[Test]
-    public function test_form_data_structure(): void
-    {
-        $data = [
-            'currency' => null,
-        ];
-
-        $this->assertArrayHasKey('currency', $data);
     }
 
     #[Test]

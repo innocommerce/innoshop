@@ -54,7 +54,7 @@
                                    elID="content-{{ $locale->code }}"
                                    :value="old('translations.' . $locale->code . '.content', $article->translate($locale->code, 'content'))"
                                    :required="is_setting_locale($locale->code)"
-                                   maxlength="20000"
+                                   maxlength="150000"
                                    :generate="true"
                                    column="article_content"
                                    entity-type="article"
@@ -64,7 +64,8 @@
         <div class="mb-3">
           <label class="form-label">{{ __('panel/article.locale_image') }}</label>
           <x-common-form-image name="translations[{{ $locale->code }}][image]"
-            value="{{ old('translations.' . $locale->code . '.image', $article->translate($locale->code, 'image')) }}" />
+            value="{{ old('translations.' . $locale->code . '.image', $article->translate($locale->code, 'image')) }}"
+            type="file" />
           <div class="form-text">{{ __('panel/article.locale_image_description') }}</div>
         </div>
 

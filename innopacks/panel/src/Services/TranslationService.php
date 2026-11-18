@@ -9,8 +9,11 @@
 
 namespace InnoShop\Panel\Services;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use InnoShop\Common\Repositories\LocaleRepo;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Throwable;
 
 class TranslationService extends BaseService
 {
@@ -22,27 +25,54 @@ class TranslationService extends BaseService
     /**
      * @param  $data
      * @return mixed
+     * @throws Throwable
      */
     public function createLocale($data): mixed
     {
-        $language      = LocaleRepo::getInstance()->create($data);
-        $defaultLocale = setting_locale_code();
-        foreach ($this->getDescriptionModels() as $className) {
-            $items = $className::query()->where('locale', $defaultLocale)->get()->toArray();
-            foreach ($items as &$item) {
-                if (isset($item['created_at'])) {
-                    $item['created_at'] = now();
-                }
-                if (isset($item['updated_at'])) {
-                    $item['updated_at'] = now();
-                }
-                unset($item['id']);
-                $item['locale'] = $language->code;
-            }
-            $className::query()->insert($items);
-        }
+        return DB::transaction(function () use ($data) {
+            $language = LocaleRepo::getInstance()->create($data);
 
-        return $language;
+            // Honour the "Autofill language" switch (panel settings, unchecked by
+            // default): only copy default-locale content when it is enabled.
+            if (system_setting('auto_fill_lang', false)) {
+                $this->copyTranslations(setting_locale_code(), $language->code);
+            }
+
+            return $language;
+        });
+    }
+
+    /**
+     * Copy all description rows of one locale into another via a single
+     * server-side INSERT ... SELECT per translation table, avoiding loading
+     * every row (e.g. 12k+ product translations) into PHP memory.
+     *
+     * @param  string  $fromLocale
+     * @param  string  $toLocale
+     * @return void
+     */
+    public function copyTranslations(string $fromLocale, string $toLocale): void
+    {
+        $connection = DB::connection();
+
+        foreach ($this->getDescriptionModels() as $className) {
+            $model = new $className;
+            $table = $model->getTable();
+
+            $columns  = array_values(array_diff(Schema::getColumnListing($table), ['id', 'locale', 'created_at', 'updated_at']));
+            $select   = $columns;
+            $select[] = DB::raw($connection->getPdo()->quote($toLocale).' as locale');
+
+            $insertColumns = array_merge($columns, ['locale']);
+            foreach (['created_at', 'updated_at'] as $timeColumn) {
+                if (Schema::hasColumn($table, $timeColumn)) {
+                    $insertColumns[] = $timeColumn;
+                    $select[]        = DB::raw("CURRENT_TIMESTAMP as {$timeColumn}");
+                }
+            }
+
+            DB::table($table)->insertUsing($insertColumns, DB::table($table)->select($select)->where('locale', $fromLocale));
+        }
     }
 
     /**

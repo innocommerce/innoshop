@@ -266,7 +266,7 @@
         <h6 class="mb-0">{{ __('panel/visit.by_country_map') }}</h6>
         <div class="d-flex align-items-center gap-2">
           @if($world_map_total > 0)
-            <span class="text-muted small">{{ number_format($world_map_total) }} {{ __('panel/visit.visits') }} · {{ count($world_map_data) }} {{ __('panel/visit.countries') }}</span>
+            <span class="text-muted small" id="worldMapSummary">{{ number_format($world_map_total) }} {{ __('panel/visit.visits') }} · {{ count($world_map_data) }} {{ __('panel/visit.countries') }}</span>
           @endif
           <button type="button" class="btn btn-sm btn-outline-secondary" id="worldMapLockBtn" title="{{ __('panel/visit.map_unlock_zoom') }}">
             <i class="bi bi-lock-fill"></i>
@@ -275,6 +275,16 @@
       </div>
       <div class="card-body">
         @if(! empty($world_map_data))
+          @if(! empty($top_countries))
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="worldMapFilters">
+              @foreach($top_countries as $topCountry)
+                <label class="d-inline-flex align-items-center gap-1 mb-0 text-nowrap user-select-none" title="{{ __('panel/visit.map_exclude_hint') }}">
+                  <input type="checkbox" class="form-check-input m-0 world-map-country-check" data-code="{{ $topCountry['country_code'] }}" checked>
+                  <span class="small">{{ $topCountry['country_name'] ?: $topCountry['country_code'] }} <span class="text-muted">({{ number_format($topCountry['visits']) }})</span></span>
+                </label>
+              @endforeach
+            </div>
+          @endif
           <div id="worldMap" style="height: 480px;"></div>
         @else
           <div class="text-center py-5">
@@ -480,9 +490,10 @@ function reaggregate() {
 }
 
 const worldMapData = {!! json_encode($world_map_data ?? []) !!};
-const worldMapTotal = {{ (int) ($world_map_total ?? 0) }};
+let worldMapCurrentTotal = {{ (int) ($world_map_total ?? 0) }};
 let worldMapChart = null;
 let worldMapZoomUnlocked = false;
+let worldMapFilterAbort = null;
 
 function renderWorldMap() {
   const el = document.getElementById('worldMap');
@@ -501,7 +512,7 @@ function renderWorldMap() {
           trigger: 'item',
           formatter: function(p) {
             const v = p.data ? p.data.value : 0;
-            const pct = worldMapTotal > 0 ? (v / worldMapTotal * 100).toFixed(1) : '0.0';
+            const pct = worldMapCurrentTotal > 0 ? (v / worldMapCurrentTotal * 100).toFixed(1) : '0.0';
             return p.name + ': <b>' + Number(v).toLocaleString() + '</b> ' +
               '({{ __("panel/visit.visits") }}) <span class="text-muted">' + pct + '%</span>';
           }
@@ -541,6 +552,49 @@ function renderWorldMap() {
     });
 }
 
+function applyWorldMapFilter() {
+  if (!worldMapChart) return;
+
+  const excluded = Array.from(document.querySelectorAll('.world-map-country-check'))
+    .filter(cb => !cb.checked)
+    .map(cb => cb.dataset.code);
+
+  if (worldMapFilterAbort) worldMapFilterAbort.abort();
+  worldMapFilterAbort = new AbortController();
+
+  const params = new URLSearchParams(window.location.search);
+  params.set('exclude', excluded.join(','));
+
+  fetch('{{ url(panel_name()) }}/analytics/visit/world-map?' + params.toString(), {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      signal: worldMapFilterAbort.signal
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (!res.success) throw new Error(res.message || 'error');
+      updateWorldMapData(res.data.items || [], (res.data.total || 0));
+    })
+    .catch(err => {
+      if (err.name === 'AbortError') return;
+      console.error('World map filter failed:', err);
+      inno.msg('{{ __("common/base.error") }}');
+    });
+}
+
+function updateWorldMapData(items, total) {
+  worldMapCurrentTotal = total;
+  worldMapChart.setOption({
+    visualMap: { max: Math.max(1, ...items.map(d => d.value)) },
+    series: [{ data: items }]
+  });
+
+  const summary = document.getElementById('worldMapSummary');
+  if (summary) {
+    summary.textContent = Number(total).toLocaleString() + ' {{ __("panel/visit.visits") }} · ' +
+      items.length + ' {{ __("panel/visit.countries") }}';
+  }
+}
+
 function toggleWorldMapLock() {
   if (!worldMapChart) return;
   worldMapZoomUnlocked = !worldMapZoomUnlocked;
@@ -562,6 +616,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // 24小时分布柱状图 tooltip
   document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
     if (window.bootstrap) new bootstrap.Tooltip(el);
+  });
+
+  // 世界地图国家过滤勾选
+  document.querySelectorAll('.world-map-country-check').forEach(function(cb) {
+    cb.addEventListener('change', applyWorldMapFilter);
   });
 
   // 每日趋势图

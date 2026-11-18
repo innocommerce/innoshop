@@ -1,0 +1,32 @@
+/*
+ * Video cover — wraps an article/category cover image and overlays a
+ * centered play badge when the source is a video. Used by front/shared
+ * article list cards, front/home cat-card, front/categories index cards,
+ * and the related-articles sidebar.
+ *
+ * Mirrors the panel image component (panel form/image.blade.php): the
+ * wrapper is a flex container sized by its inner <img>, the badge is
+ * absolutely centered on the wrapper. No explicit height — letting the
+ * image drive the box keeps the badge centered even when the parent
+ * (<a>, <div>, etc.) doesn't have an explicit size.
+ */
+
+.front-video-cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.front-video-cover__badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 2.5rem;
+  pointer-events: none;
+  line-height: 1;
+}
+

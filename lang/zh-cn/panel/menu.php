@@ -51,6 +51,7 @@ return [
     'reviews'                => '评论管理',
     'roles'                  => '后台角色',
     'settings'               => '系统设置',
+    'system_tasks'           => '系统任务',
     'sns'                    => '三方登录',
     'socials'                => '三方登录',
     'states'                 => '省份或州',

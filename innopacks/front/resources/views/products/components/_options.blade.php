@@ -11,7 +11,7 @@
         $isRequired = $option->required ?? false;
       @endphp
       
-      @if($option && $productOptionValues->count() > 0)
+      @if($option && ($productOptionValues->count() > 0 || $option->isTextEntry()))
         <div class="option-group mb-3" data-option-id="{{ $option->id }}" data-option-type="{{ $optionType }}" data-required="{{ $isRequired ? 'true' : 'false' }}">
           <label class="option-label">
             {{ $option->currentName }}
@@ -105,10 +105,10 @@
                       <img src="{{ image_resize($optionValue->image) }}" alt="{{ $optionValue->currentName }}" class="img-thumbnail">
                     </div>
                   @endif
-                  
-                  <input class="form-check-input" 
-                         type="checkbox" 
-                         name="option_{{ $option->id }}[]" 
+
+                  <input class="form-check-input"
+                         type="checkbox"
+                         name="option_{{ $option->id }}[]"
                          id="option_{{ $option->id }}_{{ $optionValue->id }}"
                          value="{{ $optionValue->id }}"
                          data-option-id="{{ $option->id }}"
@@ -129,6 +129,21 @@
                 </div>
               @endforeach
             </div>
+
+          @elseif($optionType === 'input' || $optionType === 'textarea')
+            {{-- 自由文本输入（C2B 定制要求等，无预设值、零加价） --}}
+            @if($optionType === 'textarea')
+              <textarea class="form-control option-text-input mt-2" rows="3"
+                        name="option_{{ $option->id }}"
+                        placeholder="{{ __('front/product.enter_customization') }}"
+                        data-option-id="{{ $option->id }}">{{ old('option_'.$option->id) }}</textarea>
+            @else
+              <input type="text" class="form-control option-text-input mt-2"
+                     name="option_{{ $option->id }}"
+                     placeholder="{{ __('front/product.enter_customization') }}"
+                     value="{{ old('option_'.$option->id) }}"
+                     data-option-id="{{ $option->id }}">
+            @endif
           @endif
           
           {{-- 选项描述放在选项值列表下方 --}}
@@ -394,6 +409,22 @@
           `);
         });
         
+        // 显示文本输入选项
+        $('.option-text-input').each(function() {
+          const $input = $(this);
+          const textValue = $.trim($input.val());
+          if (textValue) {
+            hasSelections = true;
+            const optionName = $input.closest('.option-group').find('.option-label').text().trim().replace('*', '');
+            $selectionList.append(`
+              <div class="selected-option-item mb-2">
+                <span class="badge bg-light text-dark me-2">${optionName}</span>
+                <span class="option-value">${textValue}</span>
+              </div>
+            `);
+          }
+        });
+
         // 显示或隐藏选择摘要卡片
         if (hasSelections) {
           $summaryCard.show();
@@ -431,6 +462,8 @@
             } else if (optionType === 'checkbox') {
               const checkedBoxes = $group.find('input[type="checkbox"]:checked');
               hasSelection = checkedBoxes.length > 0;
+            } else if (optionType === 'input' || optionType === 'textarea') {
+              hasSelection = $.trim($group.find('.option-text-input').val()) !== '';
             }
             
             if (!hasSelection) {

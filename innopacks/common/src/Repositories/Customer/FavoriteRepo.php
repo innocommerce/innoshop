@@ -65,7 +65,7 @@ class FavoriteRepo extends BaseRepo
     {
         $builder = Favorite::query()->with([
             'customer',
-            'product.translation',
+            'product.translations',
         ]);
 
         $customerID = $filters['customer_id'] ?? 0;

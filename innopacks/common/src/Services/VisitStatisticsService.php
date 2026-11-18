@@ -11,6 +11,7 @@ namespace InnoShop\Common\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\Visit\ConversionDaily;
 use InnoShop\Common\Models\Visit\Visit;
 use InnoShop\Common\Models\Visit\VisitCountryDaily;
@@ -36,11 +37,49 @@ class VisitStatisticsService
             $date = Carbon::yesterday();
         }
 
+        // Guard: a past day with zero detail rows but existing aggregate rows
+        // must never be re-aggregated — the detail was pruned or migrated
+        // (visits:prune / visits:migrate-bots) and recomputing would zero out
+        // good history. Days with no detail AND no aggregates fall through:
+        // they aggregate to a zero row once, which also stops
+        // ensureDailyAggregated from re-dispatching them forever.
+        if ($date->lt(Carbon::today())
+            && VisitDaily::query()->where('date', $date->toDateString())->exists()
+            && ! $this->dayHasDetailRows($date)) {
+            Log::warning('VisitStatisticsService: skipped re-aggregating past day whose detail rows are gone', [
+                'date' => $date->toDateString(),
+            ]);
+
+            return;
+        }
+
         $this->aggregateVisitDaily($date);
         $this->aggregateConversionDaily($date);
         $this->aggregateCountryDaily($date);
         $this->aggregateHourlyDaily($date);
         $this->aggregateDeviceDaily($date);
+    }
+
+    /**
+     * Whether visits or visit_events still hold detail rows for the given
+     * day. Used by the re-aggregation guard in aggregateDaily().
+     */
+    protected function dayHasDetailRows(Carbon $date): bool
+    {
+        $dateStart = $date->copy()->startOfDay();
+        $dateEnd   = $date->copy()->endOfDay();
+
+        $hasVisits = DB::table((new Visit)->getTable())
+            ->whereBetween('first_visited_at', [$dateStart, $dateEnd])
+            ->exists();
+
+        if ($hasVisits) {
+            return true;
+        }
+
+        return DB::table((new VisitEvent)->getTable())
+            ->whereBetween('created_at', [$dateStart, $dateEnd])
+            ->exists();
     }
 
     /**
@@ -60,7 +99,7 @@ class VisitStatisticsService
         $eventsTable = $prefix.$eventsTableName;
         $visitsTable = $prefix.$visitsTableName;
 
-        // All page-view-class events count as PV (浏览页面行为):
+        // All page-view-class events count as PV:
         // page_view / home_view / category_view / product_view / cart_view
         $pageViewTypes = [
             VisitEvent::TYPE_PAGE_VIEW,
@@ -70,20 +109,23 @@ class VisitStatisticsService
             VisitEvent::TYPE_CART_VIEW,
         ];
 
-        // Bot session ids to exclude (from visits.is_bot). Pre-fetched for performance:
-        // single query instead of JOIN on every aggregation.
-        $botSessionIds = DB::table($visitsTableName)
-            ->where('is_bot', true)
-            ->pluck('session_id')
-            ->toArray();
+        // Bot sessions to exclude (from visits.is_bot). Expressed as a SQL
+        // subquery instead of an in-memory id list: the bot set reaches tens
+        // of thousands of sessions, and plucking them all into PHP exhausted
+        // the 128M CLI memory limit on production.
+        $excludeBotSessions = function ($query) use ($visitsTableName) {
+            $query->whereNotIn('session_id', function ($sub) use ($visitsTableName) {
+                $sub->select('session_id')
+                    ->from($visitsTableName)
+                    ->where('is_bot', true);
+            });
+        };
 
         // Get page views (PV/UV/IP) — exclude bot sessions
         $pvQuery = DB::table($eventsTableName)
             ->whereIn('event_type', $pageViewTypes)
             ->whereBetween('created_at', [$dateStart, $dateEnd]);
-        if (! empty($botSessionIds)) {
-            $pvQuery->whereNotIn('session_id', $botSessionIds);
-        }
+        $excludeBotSessions($pvQuery);
         $pvData = $pvQuery->select(
             DB::raw('COUNT(*) as pv'),
             DB::raw('COUNT(DISTINCT session_id) as uv'),
@@ -121,21 +163,20 @@ class VisitStatisticsService
             ->select('session_id', DB::raw('COUNT(*) as event_count'))
             ->whereIn('event_type', $pageViewTypes)
             ->whereBetween('created_at', [$dateStart, $dateEnd]);
-        if (! empty($botSessionIds)) {
-            $bounceQuery->whereNotIn('session_id', $botSessionIds);
-        }
+        $excludeBotSessions($bounceQuery);
+
         $bounces = $bounceQuery->groupBy('session_id')
             ->having('event_count', '=', 1)
             ->get()
             ->count();
 
-        // Calculate average session duration
-        // For each session, calculate time difference between first and last event
-        $sessionDurations = DB::table($eventsTableName)
+        // Calculate average session duration — exclude bot sessions (crawlers
+        // fire quick successive fetches that would drag the average down)
+        $durationQuery = DB::table($eventsTableName)
             ->select('session_id', DB::raw('MIN(created_at) as first_time'), DB::raw('MAX(created_at) as last_time'))
-            ->whereBetween('created_at', [$dateStart, $dateEnd])
-            ->groupBy('session_id')
-            ->get();
+            ->whereBetween('created_at', [$dateStart, $dateEnd]);
+        $excludeBotSessions($durationQuery);
+        $sessionDurations = $durationQuery->groupBy('session_id')->get();
 
         $avgDuration = 0;
         if ($sessionDurations->isNotEmpty()) {
@@ -178,11 +219,22 @@ class VisitStatisticsService
         $dateStart       = $date->copy()->startOfDay();
         $dateEnd         = $date->copy()->endOfDay();
         $eventsTableName = (new VisitEvent)->getTable();
+        $visitsTableName = (new Visit)->getTable();
+
+        // Exclude bot sessions so crawler page/product views don't dilute
+        // the funnel's conversion rates. SQL subquery instead of an in-memory
+        // id list — see aggregateVisitDaily() for the memory rationale.
+        $eventQuery = DB::table($eventsTableName)
+            ->whereBetween('created_at', [$dateStart, $dateEnd]);
+        $eventQuery->whereNotIn('session_id', function ($sub) use ($visitsTableName) {
+            $sub->select('session_id')
+                ->from($visitsTableName)
+                ->where('is_bot', true);
+        });
 
         // Count events by type (unique sessions)
-        $eventCounts = DB::table($eventsTableName)
+        $eventCounts = $eventQuery
             ->select('event_type', DB::raw('COUNT(DISTINCT session_id) as count'))
-            ->whereBetween('created_at', [$dateStart, $dateEnd])
             ->groupBy('event_type')
             ->pluck('count', 'event_type');
 
@@ -252,13 +304,16 @@ class VisitStatisticsService
         $table       = (new VisitCountryDaily)->getTable();
 
         $rows = DB::table($visitsTable)
-            ->select('country_code', 'country_name')
+            ->selectRaw('country_code, MAX(country_name) as country_name')
             ->selectRaw('COUNT(*) as visits, COUNT(DISTINCT ip_address) as ip_count')
             ->whereBetween('first_visited_at', [$dateStart, $dateEnd])
             ->where('is_bot', false)
             ->whereNotNull('country_code')
             ->where('country_code', '!=', '')
-            ->groupBy('country_code', 'country_name')
+            // Group by code only: country_name is locale-dependent (the same
+            // code can appear as both "Argentina" and its Chinese name), which would
+            // violate the (date, country_code) primary key.
+            ->groupBy('country_code')
             ->get();
 
         DB::table($table)->where('date', $date->toDateString())->delete();
@@ -332,6 +387,7 @@ class VisitStatisticsService
     {
         $dateStart   = $date->copy()->startOfDay();
         $dateEnd     = $date->copy()->endOfDay();
+        $prefix      = DB::getTablePrefix();
         $eventsTable = (new VisitEvent)->getTable();
         $visitsTable = (new Visit)->getTable();
         $table       = (new VisitDeviceDaily)->getTable();
@@ -349,9 +405,10 @@ class VisitStatisticsService
             ->whereIn('ve.event_type', $pageViewTypes)
             ->whereBetween('ve.created_at', [$dateStart, $dateEnd])
             ->where('v.is_bot', false)
-            ->select('v.device_type', DB::raw('COUNT(*) as pv'))
+            ->select('v.device_type', DB::raw('COUNT(*) as pv'), DB::raw('COUNT(DISTINCT '.$prefix.'ve.session_id) as event_sessions'))
             ->groupBy('v.device_type')
-            ->pluck('pv', 'device_type');
+            ->get()
+            ->keyBy('device_type');
 
         $visitRows = DB::table($visitsTable)
             ->select('device_type')
@@ -361,26 +418,61 @@ class VisitStatisticsService
             ->groupBy('device_type')
             ->get();
 
-        DB::table($table)->where('date', $date->toDateString())->delete();
+        // Bot row keyed off is_bot (not device_type) so it matches the panel
+        // bot analytics semantics even when is_bot tagging lags behind UA parsing.
+        $botVisit = DB::table($visitsTable)
+            ->selectRaw('COUNT(*) as visits, COUNT(DISTINCT ip_address) as ip_count')
+            ->whereBetween('first_visited_at', [$dateStart, $dateEnd])
+            ->where('is_bot', true)
+            ->first();
 
-        if ($visitRows->isEmpty()) {
-            return;
-        }
+        $botPv = DB::table("{$eventsTable} as ve")
+            ->join("{$visitsTable} as v", 've.session_id', '=', 'v.session_id')
+            ->whereIn('ve.event_type', $pageViewTypes)
+            ->whereBetween('ve.created_at', [$dateStart, $dateEnd])
+            ->where('v.is_bot', true)
+            ->selectRaw('COUNT(*) as pv, COUNT(DISTINCT '.$prefix.'ve.session_id) as event_sessions')
+            ->first();
+
+        DB::table($table)->where('date', $date->toDateString())->delete();
 
         $insertRows = [];
         $now        = now();
         foreach ($visitRows as $row) {
-            $deviceType   = $row->device_type ?: 'unknown';
+            $deviceType = $row->device_type ?: 'unknown';
+            // 'bot' rows come exclusively from the is_bot query below.
+            if ($deviceType === 'bot') {
+                continue;
+            }
             $insertRows[] = [
-                'date'        => $date->toDateString(),
-                'device_type' => $deviceType,
-                'visits'      => $row->visits,
-                'ip_count'    => $row->ip_count,
-                'page_views'  => $pvRows[$deviceType] ?? 0,
-                'created_at'  => $now,
-                'updated_at'  => $now,
+                'date'           => $date->toDateString(),
+                'device_type'    => $deviceType,
+                'visits'         => $row->visits,
+                'ip_count'       => $row->ip_count,
+                'page_views'     => (int) ($pvRows[$deviceType]->pv ?? 0),
+                'event_sessions' => (int) ($pvRows[$deviceType]->event_sessions ?? 0),
+                'created_at'     => $now,
+                'updated_at'     => $now,
             ];
         }
+
+        if ($botVisit && $botVisit->visits > 0) {
+            $insertRows[] = [
+                'date'           => $date->toDateString(),
+                'device_type'    => 'bot',
+                'visits'         => $botVisit->visits,
+                'ip_count'       => $botVisit->ip_count,
+                'page_views'     => (int) ($botPv->pv ?? 0),
+                'event_sessions' => (int) ($botPv->event_sessions ?? 0),
+                'created_at'     => $now,
+                'updated_at'     => $now,
+            ];
+        }
+
+        if (empty($insertRows)) {
+            return;
+        }
+
         DB::table($table)->insert($insertRows);
     }
 

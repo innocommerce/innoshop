@@ -106,6 +106,7 @@
           <el-col :span="12">
             <el-form-item label="{{ __('panel/currency.value') }}" prop="value">
               <el-input size="large" v-model="form.value" placeholder="{{ __('panel/currency.value') }}"></el-input>
+              <div class="text-secondary w-100"><small>{{ __('panel/currency.default_currency_rate') }}</small></div>
             </el-form-item>
           </el-col>
           <el-col :span="12">

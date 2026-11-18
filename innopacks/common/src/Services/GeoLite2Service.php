@@ -23,6 +23,12 @@ class GeoLite2Service
     private const DOWNLOAD_URL = 'https://res.innoshop.net/GeoLite2-City.mmdb';
 
     /**
+     * A genuine GeoLite2-City database is tens of MB; anything smaller is
+     * a stub or a truncated download (e.g. an HTML error page).
+     */
+    private const MIN_FILE_BYTES = 1048576;
+
+    /**
      * Constructor — ensure the database directory exists.
      */
     public function __construct()
@@ -41,10 +47,8 @@ class GeoLite2Service
     public function downloadDatabase(): array
     {
         try {
-            $url = self::DOWNLOAD_URL;
-
             // Download file
-            $response = Http::timeout(300)->get($url);
+            $response = Http::timeout(300)->get(self::DOWNLOAD_URL);
 
             if (! $response->successful()) {
                 return [
@@ -55,45 +59,10 @@ class GeoLite2Service
                 ];
             }
 
-            $content = $response->body();
-
-            if (empty($content)) {
-                return [
-                    'success' => false,
-                    'message' => __('panel/setting_geolite2.download_failed', [
-                        'error' => __('panel/setting_geolite2.download_empty'),
-                    ]),
-                ];
-            }
-
-            // Save file
-            $path = $this->getDatabasePath();
-            File::put($path, $content);
-
-            // Verify database file
-            try {
-                $reader = new Reader($path);
-                $reader->city('8.8.8.8'); // Test query
-                $reader = null;
-            } catch (Exception $e) {
-                File::delete($path);
-
-                return [
-                    'success' => false,
-                    'message' => __('panel/setting_geolite2.download_failed', [
-                        'error' => __('panel/setting_geolite2.verify_failed', ['error' => $e->getMessage()]),
-                    ]),
-                ];
-            }
-
-            return [
-                'success' => true,
-                'message' => __('panel/setting_geolite2.download_success'),
-                'path'    => $path,
-            ];
+            return $this->installFromContent($response->body());
         } catch (Exception $e) {
             Log::error('GeoLite2Service: Failed to download database', [
-                'url'   => $url,
+                'url'   => self::DOWNLOAD_URL,
                 'error' => $e->getMessage(),
             ]);
 
@@ -104,6 +73,89 @@ class GeoLite2Service
                 ]),
             ];
         }
+    }
+
+    /**
+     * Install downloaded database content atomically: validate a temp copy
+     * first, then swap it in. The live database is never touched unless the
+     * new file passes verification, so a broken download cannot destroy it.
+     *
+     * @param  string  $content
+     * @return array
+     */
+    private function installFromContent(string $content): array
+    {
+        if ($content === '') {
+            return [
+                'success' => false,
+                'message' => __('panel/setting_geolite2.download_failed', [
+                    'error' => __('panel/setting_geolite2.download_empty'),
+                ]),
+            ];
+        }
+
+        if (strlen($content) < self::MIN_FILE_BYTES) {
+            return [
+                'success' => false,
+                'message' => __('panel/setting_geolite2.download_failed', [
+                    'error' => __('panel/setting_geolite2.download_too_small'),
+                ]),
+            ];
+        }
+
+        $path    = $this->getDatabasePath();
+        $tmpPath = $path.'.tmp';
+
+        try {
+            File::put($tmpPath, $content);
+
+            $reader = new Reader($tmpPath);
+            $reader->city('8.8.8.8'); // Test query
+            $reader = null;
+        } catch (Exception $e) {
+            File::delete($tmpPath);
+
+            return [
+                'success' => false,
+                'message' => __('panel/setting_geolite2.download_failed', [
+                    'error' => __('panel/setting_geolite2.verify_failed', ['error' => $e->getMessage()]),
+                ]),
+            ];
+        }
+
+        // Windows rename() cannot overwrite an existing file, so the old
+        // database is removed before moving the verified copy in. Both steps
+        // are checked: a held file handle (concurrent lookup) must not end up
+        // reported as a fake success with .tmp left behind.
+        if (File::exists($path) && ! File::delete($path)) {
+            File::delete($tmpPath);
+            Log::error('GeoLite2Service: Failed to remove old database before swap', ['path' => $path]);
+
+            return [
+                'success' => false,
+                'message' => __('panel/setting_geolite2.download_failed', [
+                    'error' => __('panel/setting_geolite2.swap_failed'),
+                ]),
+            ];
+        }
+
+        if (! File::move($tmpPath, $path)) {
+            File::delete($tmpPath);
+            Log::error('GeoLite2Service: Failed to move verified database into place', ['path' => $path]);
+
+            return [
+                'success' => false,
+                'message' => __('panel/setting_geolite2.download_failed', [
+                    'error' => __('panel/setting_geolite2.swap_failed'),
+                ]),
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => __('panel/setting_geolite2.download_success'),
+            'path'    => $path,
+        ];
     }
 
     /**

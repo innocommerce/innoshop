@@ -267,10 +267,22 @@ class AttributeRepo extends BaseRepo
      */
     private function handleData($requestData): array
     {
+        $type = $requestData['type'] ?? Attribute::TYPE_SELECT;
+        if (! in_array($type, [Attribute::TYPE_SELECT, Attribute::TYPE_INPUT, Attribute::TYPE_NUMBER, Attribute::TYPE_TEXTAREA, Attribute::TYPE_RICHTEXT, Attribute::TYPE_DATE], true)) {
+            $type = Attribute::TYPE_SELECT;
+        }
+
+        // Long-text content can never act as a storefront filter facet
+        $isFilterable = in_array($type, Attribute::longTextTypes(), true)
+            ? false
+            : (bool) ($requestData['is_filterable'] ?? false);
+
         return [
             'category_id'        => $requestData['category_id'] ?? 0,
             'attribute_group_id' => $requestData['attribute_group_id'] ?? 0,
             'position'           => $requestData['position'] ?? 0,
+            'type'               => $type,
+            'is_filterable'      => $isFilterable,
         ];
     }
 
@@ -299,9 +311,10 @@ class AttributeRepo extends BaseRepo
      * Get attributes and their values in current language
      *
      * @param  string|null  $locale
+     * @param  bool  $filterableOnly  Only attributes flagged as storefront filterable
      * @return array
      */
-    public function getAttributesWithValues(?string $locale = null): array
+    public function getAttributesWithValues(?string $locale = null, bool $filterableOnly = false): array
     {
         if (! $locale) {
             $locale = locale_code();
@@ -309,6 +322,7 @@ class AttributeRepo extends BaseRepo
 
         // Get all attributes with their translations and values
         $attributes = Attribute::query()
+            ->when($filterableOnly, fn ($query) => $query->filterable())
             ->with([
                 'translation' => function ($query) use ($locale) {
                     $query->where('locale', $locale);
@@ -325,9 +339,11 @@ class AttributeRepo extends BaseRepo
         $result = [];
         foreach ($attributes as $attribute) {
             $attributeData = [
-                'id'     => $attribute->id,
-                'name'   => $attribute->translation->name ?? '',
-                'values' => [],
+                'id'            => $attribute->id,
+                'name'          => $attribute->translation->name ?? '',
+                'type'          => $attribute->type,
+                'is_filterable' => $attribute->is_filterable,
+                'values'        => [],
             ];
 
             // Add attribute values

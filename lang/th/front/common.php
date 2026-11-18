@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'จำนวนการซื้อขั้นต่ำคือ :min',
     'news'                            => 'ข่าวสาร',
     'no_search_results'               => 'ไม่พบผลลัพธ์ ที่เกี่ยวข้อง',
+    'or_continue_with'                => 'หรือดำเนินการต่อด้วย',
     'out_of_stock'                    => 'สินค้าหมด',
     'page_not_found'                  => 'ไม่พบหน้าเว็บ',
     'page_not_found_description'      => 'ขออภัยหน้า ที่เข้าชมยังไม่มีอยู่ หรือถูกลบไปแล้ว',

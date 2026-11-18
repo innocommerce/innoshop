@@ -37,7 +37,7 @@ class McpController
 
     /**
      * Session-only locale switch for the welcome page: no locale code ever
-     * appears in the /mcp URL itself.
+     * appears in the /mcp/welcome URL itself.
      */
     public function switchLocale(string $code): RedirectResponse
     {
@@ -45,6 +45,6 @@ class McpController
             session(['locale' => $code]);
         }
 
-        return redirect('/mcp');
+        return redirect('/mcp/welcome');
     }
 }

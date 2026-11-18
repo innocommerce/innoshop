@@ -35,7 +35,8 @@ class CategoryFrontend extends JsonResource
             'locale'   => $this->translation->locale ?? '',
             'name'     => $this->fallbackName(),
             'url'      => $this->url,
-            'image'    => image_resize($this->image, 300, 300),
+            'image'    => $this->image_url,
+            'is_video' => $this->is_video,
             'active'   => (bool) $this->active,
             'children' => self::collection($activeChildren)->jsonSerialize(),
         ];

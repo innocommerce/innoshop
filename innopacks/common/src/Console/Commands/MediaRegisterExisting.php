@@ -13,6 +13,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use InnoShop\Common\Models\MediaFile;
+use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
 use Symfony\Component\Mime\MimeTypes;
 
@@ -120,7 +121,7 @@ class MediaRegisterExisting extends Command
      */
     protected function handleOss(string $driver, int $limit, bool $force): int
     {
-        $serviceClass = 'InnoShop\\RestAPI\\Services\\OSSService';
+        $serviceClass = 'InnoShop\\Restapi\\Services\\OSSService';
         if (! class_exists($serviceClass)) {
             $this->error('OSSService is unavailable (restapi pack not loaded).');
 
@@ -206,19 +207,16 @@ class MediaRegisterExisting extends Command
         }
         @unlink($tmp);
 
-        MediaFile::query()->updateOrCreate(
-            ['storage_key' => $storageKey],
-            [
-                'disk'          => $driver,
-                'original_name' => basename($key),
-                'checksum'      => $checksum,
-                'mime'          => $mime,
-                'size'          => $size,
-                'width'         => $width,
-                'height'        => $height,
-                'source'        => 'legacy',
-            ]
-        );
+        MediaUrlResolver::getInstance()->registerOrRefresh($storageKey, [
+            'disk'          => $driver,
+            'original_name' => basename($key),
+            'checksum'      => $checksum,
+            'mime'          => $mime,
+            'size'          => $size,
+            'width'         => $width,
+            'height'        => $height,
+            'source'        => 'legacy',
+        ]);
     }
 
     /**
@@ -242,19 +240,16 @@ class MediaRegisterExisting extends Command
 
         [$width, $height] = $this->readImageDimensions($disk, $diskName, $rawKey, $mime);
 
-        MediaFile::query()->updateOrCreate(
-            ['storage_key' => $storageKey],
-            [
-                'disk'          => $driver,
-                'original_name' => basename($rawKey),
-                'checksum'      => $checksum,
-                'mime'          => $mime,
-                'size'          => $size,
-                'width'         => $width,
-                'height'        => $height,
-                'source'        => 'legacy',
-            ]
-        );
+        MediaUrlResolver::getInstance()->registerOrRefresh($storageKey, [
+            'disk'          => $driver,
+            'original_name' => basename($rawKey),
+            'checksum'      => $checksum,
+            'mime'          => $mime,
+            'size'          => $size,
+            'width'         => $width,
+            'height'        => $height,
+            'source'        => 'legacy',
+        ]);
     }
 
     /**

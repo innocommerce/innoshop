@@ -266,6 +266,14 @@ class PluginTest extends TestCase
     }
 
     #[Test]
+    public function test_has_get_developer_doc_html_method(): void
+    {
+        $this->assertTrue(method_exists(Plugin::class, 'getDeveloperDocHtml'));
+        $this->assertTrue(method_exists(Plugin::class, 'getDeveloperDoc'));
+        $this->assertTrue(method_exists(Plugin::class, 'getDeveloperDocPath'));
+    }
+
+    #[Test]
     public function test_has_get_menu_url_method(): void
     {
         $this->assertTrue(method_exists(Plugin::class, 'getMenuUrl'));

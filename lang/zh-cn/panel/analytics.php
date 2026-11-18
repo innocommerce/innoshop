@@ -51,4 +51,5 @@ return [
     'new_products'          => '新产品',
     'reaggregate'           => '重新聚合',
     'reaggregate_success'   => '重新聚合完成',
+    'reaggregate_queued'    => '聚合任务已提交，数据稍后将自动就绪',
 ];

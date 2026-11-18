@@ -82,14 +82,83 @@ export default {
         })
         .then(function (res) {
           res.data.forEach((item) => {
-            const inputs = $(`input[data-locale="${item.locale}"]`);
-            inputs.each(function () {
-              const rich_text_editor = tinymce.get(`content-${item.locale}`);
+            const targetTextarea = $(
+              `textarea[name="translations[${item.locale}][content]"]`
+            );
+            if (!targetTextarea.length) return;
 
-              if (rich_text_editor) {
-                rich_text_editor.setContent(item.result);
+            const targetEditor = tinymce.get(targetTextarea.attr("id"));
+            if (targetEditor) {
+              targetEditor.setContent(item.result);
+              tinymce.triggerSave();
+            } else {
+              // TinyMCE not bound yet (target tab was display:none at init time);
+              // fall back to writing the raw value so content survives until the
+              // user switches tabs and TinyMCE re-reads the textarea.
+              targetTextarea.val(item.result);
+            }
+          });
+        })
+        .catch(function (err) {
+          inno.alert({
+            msg: err.response?.data?.message || err.message,
+            type: "danger",
+          });
+        });
+    });
+
+    /**
+     * Translate button for each long-text attribute (textarea / richtext).
+     * Mirrors the product-description translator above but scopes by
+     * data-attr-id so multiple attributes in the same form don't collide.
+     */
+    $(".long-attr-translate-html").on("click", function () {
+      const attrId = $(this).data("attr-id");
+      const source = $(`.long-attr-source-tab[data-attr-id="${attrId}"]`).val();
+      const target = $(`.long-attr-target-tab[data-attr-id="${attrId}"]`).val();
+
+      const textarea = $(
+        `textarea[name="long_attributes[${attrId}][value_text][${source}]"]`
+      );
+      if (!textarea.length) {
+        inno.alert({ msg: "Source editor not found", type: "danger" });
+        return;
+      }
+
+      const isRich = textarea.hasClass("tinymce");
+      const editorId = textarea.attr("id");
+      const editor = isRich ? tinymce.get(editorId) : null;
+
+      if (editor) tinymce.triggerSave();
+      const content = editor ? editor.getContent() : textarea.val();
+
+      const endpoint = isRich
+        ? `${getPanelBaseUrl()}/translations/translate-html`
+        : `${getPanelBaseUrl()}/translations/translate-text`;
+
+      axios
+        .post(endpoint, { source, target, text: content })
+        .then(function (res) {
+          res.data.forEach(function (item) {
+            const targetTextarea = $(
+              `textarea[name="long_attributes[${attrId}][value_text][${item.locale}]"]`
+            );
+            if (!targetTextarea.length) return;
+
+            if (targetTextarea.hasClass("tinymce")) {
+              const targetEditor = tinymce.get(targetTextarea.attr("id"));
+              if (targetEditor) {
+                targetEditor.setContent(item.result);
+                tinymce.triggerSave();
+              } else {
+                // TinyMCE not bound yet (target tab was display:none at init
+                // time); fall back to writing the raw value so content
+                // survives until the user switches tabs and TinyMCE reads it.
+                targetTextarea.val(item.result);
               }
-            });
+            } else {
+              targetTextarea.val(item.result);
+            }
           });
         })
         .catch(function (err) {

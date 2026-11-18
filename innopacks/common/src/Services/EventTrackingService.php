@@ -18,6 +18,21 @@ use InnoShop\Common\Models\Visit\VisitEvent;
 class EventTrackingService
 {
     /**
+     * Behavioural bot classifier instance
+     *
+     * @var BotBehaviorClassifier
+     */
+    private BotBehaviorClassifier $behaviorClassifier;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->behaviorClassifier = new BotBehaviorClassifier;
+    }
+
+    /**
      * Track an event
      *
      * @param  string  $eventType
@@ -31,6 +46,27 @@ class EventTrackingService
     {
         try {
             $request = $request ?? request();
+
+            // Bots never produce events: their requests are counted in
+            // bot_daily by VisitTrackingService instead.
+            if ($request && BotClassifier::isBot($request->userAgent())) {
+                return null;
+            }
+
+            // Same for behaviour-detected bots (real browser UA + burst
+            // pattern). Without this the visit row is suppressed but the
+            // page-view event still lands in visit_events, and the panel
+            // keeps counting the crawler's pages as PV.
+            if ($request && $this->behaviorClassifier->classify($request) !== null) {
+                return null;
+            }
+
+            // Loopback traffic is skipped on the visit side — keep events
+            // consistent so no event references a session that was never
+            // recorded.
+            if ($request && in_array($request->ip(), ['127.0.0.1', '::1'], true)) {
+                return null;
+            }
 
             // Detect source if not provided
             if ($source === null && $request) {

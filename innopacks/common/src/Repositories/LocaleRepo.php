@@ -80,16 +80,16 @@ class LocaleRepo extends BaseRepo
         return [
             'ar'  => 'Arabic',
             'arc' => 'Aramaic',
-            'dv	' => 'Divehi',
-            'fa	' => 'Persian',
-            'ha	' => 'Hausa',
-            'he	' => 'Hebrew',
+            'dv'  => 'Divehi',
+            'fa'  => 'Persian',
+            'ha'  => 'Hausa',
+            'he'  => 'Hebrew',
             'khw' => 'Khowar',
-            'ks	' => 'Kashmiri',
-            'ku	' => 'Kurdish',
-            'ps	' => 'Pashto',
-            'ur	' => 'Urdu',
-            'yi	' => 'Yiddish',
+            'ks'  => 'Kashmiri',
+            'ku'  => 'Kurdish',
+            'ps'  => 'Pashto',
+            'ur'  => 'Urdu',
+            'yi'  => 'Yiddish',
         ];
     }
 

@@ -25,8 +25,8 @@
             @foreach ($items as $brand)
               <li>
                 <a href="{{ $brand->url }}" class="text-secondary">
-                  <div class="img"><img src="{{ image_resize($brand->logo, 200, 200) }}" class="img-fluid" alt="{{ $brand->name }}" /></div>
-                  <span>{{ $brand->name }} </span>
+                  <div class="img"><img src="{{ image_resize($brand->logo, 200, 200) }}" class="img-fluid" alt="{{ $brand->fallbackName() }}" /></div>
+                  <span>{{ $brand->fallbackName() }} </span>
                 </a>
               </li>
             @endforeach

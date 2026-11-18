@@ -14,9 +14,12 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Handlers\TranslationHandler;
+use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Models\Category;
+use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Repositories\Product\BundleRepo;
@@ -28,6 +31,17 @@ use Throwable;
 
 class ProductRepo extends BaseRepo
 {
+    /**
+     * How long the front page product blocks stay cached (seconds).
+     */
+    const BESTSELLER_CACHE_TTL = 600;
+
+    /**
+     * How many products are taken from the sales ranking before the
+     * active / translation filters are applied.
+     */
+    const BESTSELLER_CANDIDATE_LIMIT = 100;
+
     const AVAILABLE_SORT_FIELDS = [
         'position',
         'rating',
@@ -203,7 +217,7 @@ class ProductRepo extends BaseRepo
     private function applySorting(Builder $builder, array $filters): void
     {
         $sort  = $filters['sort'] ?? system_setting('product_default_sort', 'created_at');
-        $order = $filters['order'] ?? 'desc';
+        $order = $filters['order'] ?? system_setting('product_default_order', 'desc');
 
         if ($sort == 'pt.name') {
             $builder->select(['products.*', 'pt.name', 'pt.content']);
@@ -230,6 +244,10 @@ class ProductRepo extends BaseRepo
         if ($sort && $order) {
             $builder->orderBy($sort, $order);
         }
+
+        // Stable tie-breaker: same sort value (e.g. position=0) leaves row order to MySQL,
+        // which differs across servers / versions. Pin to id DESC for predictable output.
+        $builder->orderBy('id', 'desc');
     }
 
     /**
@@ -536,7 +554,6 @@ class ProductRepo extends BaseRepo
             $clientIdMap = $this->buildClientIdMap($variableDefs, $variantMaps);
 
             if ($isUpdating) {
-                $product->skus()->delete();
                 $product->translations()->delete();
                 $product->productAttributes()->delete();
                 $product->relations()->delete();
@@ -547,7 +564,9 @@ class ProductRepo extends BaseRepo
                 $product->translations()->createMany($translations);
             }
 
-            $product->productAttributes()->createMany($this->handleAttributes($data['attributes'] ?? []));
+            $product->productAttributes()->createMany($this->handleAttributes(
+                $this->mergeLongTextAttributes($data['attributes'] ?? [], $data['long_attributes'] ?? [])
+            ));
             RelationRepo::getInstance()->handleBidirectionalRelations($product, $data['related_ids'] ?? []);
             $product->categories()->sync($data['categories'] ?? []);
 
@@ -566,7 +585,25 @@ class ProductRepo extends BaseRepo
                 VariantRepo::getInstance()->clearProductNormalizedData($product->id);
                 $skus = [$skus[0]];
             }
-            $this->createProductSkus($product, $skus);
+
+            if (! empty($skus)) {
+                // Replace the SKU set. The old rows are dropped here (not
+                // earlier) so a payload without SKUs keeps them untouched.
+                $product->skus()->delete();
+                $this->createProductSkus($product, $skus);
+            } elseif ($isUpdating && ! array_key_exists('skus', $data)) {
+                // Update without a SKU payload: keep the existing SKUs, the
+                // caller only changed other attributes (price/quantity are
+                // carried by the SKU, so they are not touched either).
+                $product->unsetRelation('skus');
+                $product->unsetRelation('masterSku');
+            } else {
+                // A product must keep at least one SKU: every storefront path
+                // (price, cart, order item) resolves it through the master
+                // SKU. Reject the write instead of leaving a SKU-less product
+                // behind — the caller rolls the transaction back.
+                throw new Exception('A product must have at least one SKU.');
+            }
 
             DB::commit();
 
@@ -736,9 +773,11 @@ class ProductRepo extends BaseRepo
                 }
             }
 
-            if (isset($data['attributes'])) {
+            if (isset($data['attributes']) || isset($data['long_attributes'])) {
                 $product->productAttributes()->delete();
-                $product->productAttributes()->createMany($this->handleAttributes($data['attributes']));
+                $product->productAttributes()->createMany($this->handleAttributes(
+                    $this->mergeLongTextAttributes($data['attributes'] ?? [], $data['long_attributes'] ?? [])
+                ));
             }
 
             if (isset($data['related_ids'])) {
@@ -750,9 +789,15 @@ class ProductRepo extends BaseRepo
             }
 
             if (isset($data['skus'])) {
-                $product->skus()->delete();
                 $defaults = ['weight' => $data['weight'] ?? $product->weight];
-                $this->createProductSkus($product, $this->handleSkus($data['skus'], $defaults, $clientIdMap));
+                $skus     = $this->handleSkus($data['skus'], $defaults, $clientIdMap);
+                // An empty SKU list would delete every SKU of the product and
+                // leave it unsellable; reject the patch instead of wiping it.
+                if (empty($skus)) {
+                    throw new Exception('A product must have at least one SKU.');
+                }
+                $product->skus()->delete();
+                $this->createProductSkus($product, $skus);
             }
 
             if (isset($data['bundles'])) {
@@ -774,6 +819,10 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * @param  $data
+     * @return string[]
+     */
+    /**
      * Resolve the name for a brand-new locale row: prefer the name being
      * written in the same request (default locale), then the stored fallback.
      *
@@ -793,10 +842,6 @@ class ProductRepo extends BaseRepo
         return $product->fallbackName('name');
     }
 
-    /**
-     * @param  $data
-     * @return string[]
-     */
     /**
      * Pull the variant definitions from the payload, accepting either the
      * canonical `variables` key or the legacy `variants` key the Panel Vue
@@ -836,7 +881,7 @@ class ProductRepo extends BaseRepo
             $spuCode = null;
         }
 
-        return [
+        $data = [
             'type'         => $data['type'] ?? Product::TYPE_NORMAL,
             'spu_code'     => $spuCode,
             'slug'         => $slug,
@@ -854,6 +899,10 @@ class ProductRepo extends BaseRepo
             'published_at' => $data['published_at'] ?? now(),
             'active'       => (bool) ($data['active'] ?? false),
         ];
+
+        $data = fire_hook_filter('common.product.handle_data', $data);
+
+        return $data;
     }
 
     /**
@@ -866,6 +915,9 @@ class ProductRepo extends BaseRepo
     {
         if (is_string($skus)) {
             $skus = json_decode($skus, true);
+        }
+        if (! is_array($skus)) {
+            $skus = [];
         }
         $onlyOneSku = count($skus) == 1;
 
@@ -983,6 +1035,43 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * Merge the dedicated long-text tab payload (`long_attributes[id][...]`,
+     * keyed by attribute id) into the flat attribute row list, so both entry
+     * points share the same normalization in handleAttributes().
+     *
+     * @param  $attributes
+     * @param  $longAttributes
+     * @return array
+     */
+    private function mergeLongTextAttributes($attributes, $longAttributes): array
+    {
+        if (is_string($attributes)) {
+            $attributes = json_decode($attributes, true) ?: [];
+        }
+        if (! is_array($attributes)) {
+            $attributes = [];
+        }
+
+        foreach ((array) $longAttributes as $attributeId => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            $attributes[] = [
+                'attribute_id' => (int) $attributeId,
+                'value_text'   => $row['value_text'] ?? '',
+                'is_visible'   => (bool) ($row['is_visible'] ?? false),
+            ];
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Normalize submitted attribute rows by the attribute type:
+     * select rows keep the preset attribute_value_id, free-input rows
+     * carry value_text / value_number instead. Flat wide-table design,
+     * one row per product x attribute.
+     *
      * @param  $attributes
      * @return array
      */
@@ -992,12 +1081,74 @@ class ProductRepo extends BaseRepo
             $attributes = json_decode($attributes, true);
         }
 
+        $attributeTypes = Attribute::query()->pluck('type', 'id');
+
         $items = [];
         foreach ($attributes as $attribute) {
-            if (empty($attribute['attribute_id'] ?? []) || empty($attribute['attribute_value_id'] ?? [])) {
+            $attributeId = $attribute['attribute_id'] ?? 0;
+            if (empty($attributeId)) {
                 continue;
             }
-            $items[] = $attribute;
+
+            $type = $attributeTypes[$attributeId] ?? Attribute::TYPE_SELECT;
+            $row  = ['attribute_id' => $attributeId];
+
+            if ($type === Attribute::TYPE_NUMBER) {
+                $raw = $attribute['value_number'] ?? $attribute['value_text'] ?? null;
+                if ($raw === null || trim((string) $raw) === '') {
+                    continue;
+                }
+                $cleaned = preg_replace('/[^0-9.\-]/', '', (string) $raw);
+                if ($cleaned === '' || ! is_numeric($cleaned)) {
+                    continue;
+                }
+                $row['value_number']       = (float) $cleaned;
+                $row['value_text']         = null;
+                $row['attribute_value_id'] = null;
+            } elseif (in_array($type, Attribute::longTextTypes(), true)) {
+                $raw = $attribute['value_text'] ?? null;
+                if (is_array($raw)) {
+                    // Panel submits locale=>content map; keep non-empty locales only
+                    $map = [];
+                    foreach ($raw as $locale => $text) {
+                        $text = trim((string) $text);
+                        if ($text !== '') {
+                            $map[$locale] = $text;
+                        }
+                    }
+                    if (empty($map)) {
+                        continue;
+                    }
+                    $row['value_text'] = json_encode($map, JSON_UNESCAPED_UNICODE);
+                } else {
+                    if ($raw === null || trim((string) $raw) === '') {
+                        continue;
+                    }
+                    $row['value_text'] = trim((string) $raw);
+                }
+                $row['value_number']       = null;
+                $row['attribute_value_id'] = null;
+                $row['is_visible']         = (bool) ($attribute['is_visible'] ?? true);
+            } elseif (in_array($type, [Attribute::TYPE_INPUT, Attribute::TYPE_DATE], true)) {
+                $raw = $attribute['value_text'] ?? null;
+                if ($raw === null || trim((string) $raw) === '') {
+                    continue;
+                }
+                $raw                       = trim((string) $raw);
+                $row['value_text']         = $raw;
+                $row['value_number']       = null;
+                $row['attribute_value_id'] = null;
+            } else {
+                $valueId = $attribute['attribute_value_id'] ?? null;
+                if (empty($valueId)) {
+                    continue;
+                }
+                $row['attribute_value_id'] = (int) $valueId;
+                $row['value_text']         = null;
+                $row['value_number']       = null;
+            }
+
+            $items[] = $row;
         }
 
         return $items;
@@ -1051,18 +1202,82 @@ class ProductRepo extends BaseRepo
     }
 
     /**
+     * Best selling products, cached per locale.
+     *
      * @param  int  $limit
      * @return mixed
      * @throws Exception
      */
     public function getBestSellerProducts(int $limit = 8): mixed
     {
-        return $this->withActive()->builder()
-            ->whereHas('translation')
-            ->withCount('orderItems')
-            ->orderByDesc('order_items_count')
-            ->limit($limit)
-            ->get();
+        $limit = max(1, $limit);
+
+        return Cache::remember(
+            'product_bestseller_'.locale_code().'_'.$limit,
+            self::BESTSELLER_CACHE_TTL,
+            fn () => $this->queryBestSellerProducts($limit)
+        );
+    }
+
+    /**
+     * Rank products by their order item count.
+     *
+     * Ranking the whole catalogue in SQL makes MySQL scan every product row
+     * and sort it in a temporary table (12K rows on this site): 19ms while
+     * idle, but 3~5s once a dozen crawler workers request the page at the
+     * same time — that is what made the front page TTFB swing between 0.3s
+     * and 1.9s.
+     *
+     * The ranking now starts from the (tiny) order_items table, so only a
+     * handful of product rows are touched. Products without sales fill the
+     * remaining slots, exactly like the old query did, and every returned
+     * model carries the `order_items_count` attribute the panel charts read.
+     *
+     * @param  int  $limit
+     * @return Collection
+     * @throws Exception
+     */
+    protected function queryBestSellerProducts(int $limit): Collection
+    {
+        $sales = DB::table((new Item)->getTable())
+            ->select('product_id', DB::raw('COUNT(*) AS sales_count'))
+            ->groupBy('product_id')
+            ->orderByDesc('sales_count')
+            ->get()
+            ->pluck('sales_count', 'product_id');
+
+        $ranked = collect();
+
+        if ($sales->isNotEmpty()) {
+            $candidateIds = $sales->keys()->take(self::BESTSELLER_CANDIDATE_LIMIT)->all();
+
+            $ranked = $this->withActive()->builder()
+                ->whereHas('translation')
+                ->whereIn('id', $candidateIds)
+                ->withCount('orderItems')
+                ->orderByDesc('order_items_count')
+                ->limit($limit)
+                ->get();
+        }
+
+        if ($ranked->count() < $limit) {
+            $exclude = $ranked->pluck('id')->all();
+
+            $filler = $this->withActive()->builder()
+                ->whereHas('translation')
+                ->when($exclude, fn ($query) => $query->whereNotIn('id', $exclude))
+                ->orderBy('id')
+                ->limit($limit - $ranked->count())
+                ->get();
+
+            foreach ($filler as $product) {
+                $product->setAttribute('order_items_count', (int) $sales->get($product->id, 0));
+            }
+
+            $ranked = $ranked->concat($filler);
+        }
+
+        return $ranked;
     }
 
     /**

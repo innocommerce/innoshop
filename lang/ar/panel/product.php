@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'صور سكو',
     'sku_validation_error'        => 'يرجى تعبئة معلومات المتغير الواحد أو معلومات المنتج ذو المتغيرات المتعددة بشكل كامل',
     'specification_attribute'     => 'خصائص المتغير',
+    'content_attributes'          => 'سمات المحتوى',
     'spu_code'                    => 'رمز SPU',
     'status_settings'             => 'إعدادات الحالة',
     'stock_quantity'              => 'حجم المخزون',

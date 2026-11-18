@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'sku 이미지',
     'sku_validation_error'        => '단일 옵션 정보 또는 다중 옵션 상품 정보를 완전히 입력해 주세요',
     'specification_attribute'     => '옵션 속성',
+    'content_attributes'          => '콘텐츠 속성',
     'spu_code'                    => 'SPU 코드',
     'status_settings'             => '상태 설정',
     'stock_quantity'              => '재고 수량',

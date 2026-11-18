@@ -12,9 +12,12 @@ namespace InnoShop\Plugin\Controllers;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use InnoShop\Plugin\Core\Plugin;
+use InnoShop\Plugin\Repositories\PluginRepo;
+use InnoShop\Plugin\Repositories\PluginTypeRepo;
 use InnoShop\Plugin\Repositories\SettingRepo;
 use InnoShop\Plugin\Resources\PluginResource;
 use InnoShop\Plugin\Services\PluginService;
@@ -33,16 +36,21 @@ class PluginController
         $allPlugins = app('plugin')->getPlugins();
         $type       = $request->get('type');
 
+        // The blade renders the drag handle for any truthy $type, and the
+        // reorder endpoint rejects unknown types, so an unknown or malformed
+        // type must fall back to the "all" tab instead of showing a handle
+        // that could never save.
+        if (! is_string($type) || ! PluginTypeRepo::getInstance()->isValidType($type)) {
+            $type = null;
+        }
+
         $typeCounts = [];
         foreach (Plugin::TYPES as $pluginType) {
             $typeCounts[$pluginType] = $allPlugins->where('type', $pluginType)->count();
         }
         $typeCounts['all'] = $allPlugins->count();
 
-        $plugins = $allPlugins;
-        if ($type && in_array($type, Plugin::TYPES)) {
-            $plugins = $plugins->where('type', $type);
-        }
+        $plugins = $this->sortPlugins($allPlugins, $type);
 
         $data = [
             'types'      => Plugin::TYPES,
@@ -52,6 +60,75 @@ class PluginController
         ];
 
         return inno_view('plugin::plugins.index', $data);
+    }
+
+    /**
+     * Persist the display order of one plugin type tab.
+     *
+     * The posted list is the new order of every card currently visible on that
+     * tab. Codes already stored but absent from the payload stay at the tail so
+     * that a plugin whose directory disappears comes back at the end of the
+     * list instead of being dropped.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function reorder(Request $request): mixed
+    {
+        $type  = (string) $request->get('type', '');
+        $codes = $request->get('codes');
+
+        if (! PluginTypeRepo::getInstance()->isValidType($type)) {
+            return json_fail(__('common/base.error'));
+        }
+
+        if (! is_array($codes)) {
+            return json_fail(__('common/base.error'));
+        }
+
+        try {
+            PluginRepo::getInstance()->saveTypeOrder($type, $codes);
+
+            return json_success(common_trans('base.updated_success'));
+        } catch (Throwable $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Order the plugin list for display.
+     *
+     * A single type tab is sorted by the operator's stored order. The "all" tab
+     * groups by Plugin::TYPES and applies each type's own order inside its group,
+     * so both tabs always agree with each other.
+     *
+     * @param  Collection<int, Plugin>  $allPlugins
+     * @return Collection<int, Plugin>
+     */
+    private function sortPlugins(Collection $allPlugins, mixed $type): Collection
+    {
+        $repo   = PluginRepo::getInstance();
+        $orders = $repo->getAllTypeOrders();
+
+        if ($type && in_array($type, Plugin::TYPES, true)) {
+            return PluginRepo::applyOrder(
+                $allPlugins->where('type', $type)->values(),
+                $orders[$type] ?? []
+            );
+        }
+
+        $plugins = collect();
+        foreach (Plugin::TYPES as $pluginType) {
+            $plugins = $plugins->concat(
+                PluginRepo::applyOrder(
+                    $allPlugins->where('type', $pluginType)->values(),
+                    $orders[$pluginType] ?? []
+                )
+            );
+        }
+
+        // Types outside the canonical list are rare but must not be dropped.
+        return $plugins->concat($allPlugins->whereNotIn('type', Plugin::TYPES)->values());
     }
 
     /**

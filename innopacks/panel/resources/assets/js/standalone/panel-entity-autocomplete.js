@@ -7,14 +7,19 @@
 (function (global) {
   "use strict";
 
-  const PATHS = {
-    product: "/products/autocomplete",
-    category: "/categories/autocomplete",
-    brand: "/brands/autocomplete",
-    page: "/pages/autocomplete",
-    article: "/articles/autocomplete",
-    catalog: "/catalogs/autocomplete",
-  };
+  // Entity type → autocomplete API path. Packs can register extra entities
+  // via `window.panelEntityAutocompletePaths` without touching this file.
+  const PATHS = Object.assign(
+    {
+      product: "/products/autocomplete",
+      category: "/categories/autocomplete",
+      brand: "/brands/autocomplete",
+      page: "/pages/autocomplete",
+      article: "/articles/autocomplete",
+      catalog: "/catalogs/autocomplete",
+    },
+    global.panelEntityAutocompletePaths || {},
+  );
 
   function getPanelBaseUrl() {
     return typeof urls !== "undefined" && urls.panel_api ? urls.panel_api : "";
@@ -146,6 +151,8 @@
         value: name,
         url: url,
         image: pickImage(item),
+        image_origin: item.image_origin || null,
+        is_video: !!item.is_video,
         price_label: pickPriceLabel(item),
         subtitle: subtitle,
         sku_code: skuCode,

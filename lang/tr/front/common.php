@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'Minimum sipariş miktarı :min',
     'news'                            => 'Makaleler',
     'no_search_results'               => 'İlgili sonuç bulunamadı.',
+    'or_continue_with'                => 'Veya şununla devam et',
     'out_of_stock'                    => 'Stokta Yok',
     'page_not_found'                  => 'sayfa bulunmadı',
     'page_not_found_description'      => 'Üzgünüm, ziyaret ettiğiniz sayfa ya da silinmiş durumda.',

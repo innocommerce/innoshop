@@ -31,7 +31,8 @@ class UploadFileRequest extends FormRequest
     public function rules(): array
     {
         // Unified security policy - no dangerous file types including SVG
-        $allowedMimes = 'jpg,png,jpeg,gif,webp,zip,doc,docx,xls,xlsx,ppt,pptx,pdf,mp4';
+        // Includes video formats (mp4/webm/ogg) for slideshow, category cover, etc.
+        $allowedMimes = 'jpg,png,jpeg,gif,webp,zip,doc,docx,xls,xlsx,ppt,pptx,pdf,mp4,webm,ogg';
 
         // Dynamic file size limits based on context
         if (request()->is('panel/*') || request()->is('api/panel/*') || is_admin()) {
@@ -68,7 +69,7 @@ class UploadFileRequest extends FormRequest
     {
         return [
             'file' => [
-                'description' => 'File upload (multipart). Allowed types include images, zip, office docs, pdf, mp4.',
+                'description' => 'File upload (multipart). Allowed types include images, zip, office docs, pdf, mp4, webm, ogg.',
                 'example'     => null,
             ],
             'type' => [

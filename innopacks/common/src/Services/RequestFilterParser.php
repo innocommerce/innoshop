@@ -29,7 +29,7 @@ class RequestFilterParser
         $filters = array_merge($defaultFilters, [
             'keyword'  => $request->get('keyword'),
             'sort'     => $request->get('sort', system_setting('product_default_sort', 'created_at')),
-            'order'    => $request->get('order', 'desc'),
+            'order'    => $request->get('order', system_setting('product_default_order', 'desc')),
             'per_page' => $request->get('per_page', system_setting('product_per_page', 12)),
         ]);
 
@@ -111,6 +111,30 @@ class RequestFilterParser
             if (! empty($attrFilters)) {
                 $filters['attr'] = implode('|', $attrFilters);
             }
+        }
+
+        // Number range filters: attribute_ranges[12]=5.5,6.5 (min,max; either side optional)
+        $ranges = $request->get('attribute_ranges');
+        if ($ranges && is_array($ranges)) {
+            $rangeFilters = [];
+            foreach ($ranges as $attributeId => $range) {
+                $parts = is_string($range) ? explode(',', $range) : $range;
+                $min   = trim((string) ($parts[0] ?? ''));
+                $max   = trim((string) ($parts[1] ?? ''));
+                if ($min === '' && $max === '') {
+                    continue;
+                }
+                $rangeFilters[] = $attributeId.':'.$min.','.$max;
+            }
+            if (! empty($rangeFilters)) {
+                $filters['attribute_ranges'] = implode('|', $rangeFilters);
+            }
+        }
+
+        // Variant value groups: variant_values=1,9|4,8 (value id groups per dimension)
+        $variantValues = trim((string) $request->get('variant_values', ''));
+        if ($variantValues !== '') {
+            $filters['variant_values'] = $variantValues;
         }
 
         return $filters;

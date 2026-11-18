@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'La cantidad mínima de compra es :min',
     'news'                            => 'Artículos',
     'no_search_results'               => 'No se encontraron resultados relacionados',
+    'or_continue_with'                => 'O continuar con',
     'out_of_stock'                    => 'agotado',
     'page_not_found'                  => 'Página no encontrada',
     'page_not_found_description'      => 'Lo sentimos, la página que ha visitado no existe o ha sido eliminada.',

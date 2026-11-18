@@ -86,6 +86,13 @@ Route::get('/pages', [Controllers\PageController::class, 'index'])->name('pages.
 Route::get('/pages/{page}', [Controllers\PageController::class, 'show'])->name('pages.show');
 Route::get('/page-{slug}', [Controllers\PageController::class, 'slugShow'])->name('pages.slug_show');
 
+// Sitemap - Shopify-style split: /{locale}/sitemap_products_1.xml
+// Type is format-checked here; the valid-type whitelist (extendable via the
+// sitemap.types hook) lives in SitemapController@show.
+Route::get('/sitemap_{type}_{page}.xml', [Controllers\SitemapController::class, 'show'])
+    ->where(['type' => '[a-z]+', 'page' => '[0-9]+'])
+    ->name('sitemap.type');
+
 Route::get('/login', [Account\LoginController::class, 'index'])->name('login.index');
 Route::post('/login', [Account\LoginController::class, 'store'])->name('login.store');
 Route::post('/login/sms-code', [Account\LoginController::class, 'sendSmsCode'])->name('login.sms-code');

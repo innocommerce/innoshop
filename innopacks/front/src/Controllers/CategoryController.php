@@ -44,6 +44,7 @@ class CategoryController extends Controller
 
             $categories = CategoryRepo::getInstance()
                 ->builder($filters)
+                ->withCount('products')
                 ->orderBy('position')
                 ->paginate(12);
 
@@ -169,7 +170,7 @@ class CategoryController extends Controller
         }
 
         // Use Trait method to get filter sidebar data
-        $filterData = $this->getFilterSidebarData($request);
+        $filterData = $this->getFilterSidebarData($request, $category->id);
 
         $data = [
             'slug'           => $category->slug ?? '',

@@ -13,4 +13,6 @@ return [
     'name'            => 'اسم الملكية',
     'set_attribute'   => 'تعيين السمة',
     'group'           => 'مجموعة السمات',
+    'show_on_detail'  => 'إظهار في صفحة التفاصيل',
+    'type_richtext'   => 'نص منسق',
 ];

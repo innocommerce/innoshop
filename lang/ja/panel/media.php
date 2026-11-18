@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'ディレクトリが空ではありません',
     'show_folders'                  => 'フォルダーを表示',
     'delete_failed'                 => '削除に失敗しました',
+    'capture_load_failed'           => '動画の読み込みに失敗したため、カバーを選択できません',
+    'capture_cross_origin'          => 'この動画はクロスオリジンポリシーで保護されているため、ブラウザでフレームを取得できません。画像をアップロードしてカバーにしてください。',
 ];

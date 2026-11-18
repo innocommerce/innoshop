@@ -145,4 +145,6 @@ return [
     'cloud_size'                    => '云端大小',
     'cloud_synced'                  => '已同步',
     'cloud_missing'                 => '云端不存在',
+    'capture_load_failed'           => '视频加载失败，无法选取封面',
+    'capture_cross_origin'          => '该视频受跨域安全策略限制，无法在浏览器抓取画面，请直接上传图片作为封面',
 ];

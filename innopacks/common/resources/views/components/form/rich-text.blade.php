@@ -18,11 +18,11 @@
       data-is-rich-text="true">{{ $value }}</textarea>
     {{ $slot }}
   @else
-    <ul class="nav nav-tabs w-max-1000 mb-2" id="myTab" role="tablist">
+    <ul class="nav nav-tabs locale-rich-tabs mb-2" id="myTab" role="tablist">
       @foreach (locales() as $locale)
         <li class="nav-item" role="presentation">
           <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $name }}-{{ $locale['code'] }}-tab" data-bs-toggle="tab"
-            data-bs-target="#{{ $name }}-{{ $locale['code'] }}-pane" type="button">
+            data-bs-target="#{{ $name }}-{{ $locale['code'] }}-pane" type="button" title="{{ $locale['name'] }}">
             <img src="{{ asset('images/flags/' . $locale['code'] . '.svg') }}" class="me-2" style="width: 20px;">
             {{ $locale['name'] }}
           </button>
@@ -30,7 +30,7 @@
       @endforeach
     </ul>
 
-    <div class="tab-content w-max-1000" id="">
+    <div class="tab-content" id="">
       @foreach (locales() as $locale)
         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
           id="{{ $name }}-{{ $locale['code'] }}-pane" role="tabpanel"

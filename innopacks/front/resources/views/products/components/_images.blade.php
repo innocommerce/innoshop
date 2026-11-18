@@ -1,4 +1,4 @@
-@if(is_array($product->images) || $product->video)
+@if((is_array($product->images) && count($product->images) > 1) || $product->video)
   <!-- Desktop thumbnails -->
   <div class="sub-product-img d-none d-lg-block">
     <div class="swiper" id="sub-product-img-swiper">
@@ -57,7 +57,7 @@
 </div>
 
 <!-- Mobile slideshow -->
-@if(is_array($product->images) || $product->video)
+@if((is_array($product->images) && count($product->images) > 1) || $product->video)
   <div class="mobile-product-slideshow d-lg-none position-relative w-100 overflow-hidden bg-light" style="aspect-ratio: 1/1;">
     <div class="swiper" id="mobile-product-swiper">
       <div class="swiper-wrapper">

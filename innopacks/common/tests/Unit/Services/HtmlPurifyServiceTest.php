@@ -109,12 +109,12 @@ class HtmlPurifyServiceTest extends TestCase
     }
 
     #[Test]
-    public function it_removes_style_tags(): void
+    public function it_preserves_style_tags(): void
     {
         $html   = '<style>body{display:none}</style><p>Text</p>';
         $result = HtmlPurifyService::clean($html);
 
-        $this->assertStringNotContainsString('<style', $result);
+        $this->assertStringContainsString('<style>body{display:none}</style>', $result);
         $this->assertStringContainsString('<p>Text</p>', $result);
     }
 
@@ -203,5 +203,49 @@ class HtmlPurifyServiceTest extends TestCase
 
         $this->assertStringContainsString('class="container"', $result);
         $this->assertStringContainsString('id="main"', $result);
+    }
+
+    #[Test]
+    public function it_preserves_video_tags(): void
+    {
+        $html   = '<video controls src="https://example.com/clips/demo.mp4" width="640" height="360"></video>';
+        $result = HtmlPurifyService::clean($html);
+
+        $this->assertStringContainsString('<video', $result);
+        $this->assertStringContainsString('src="https://example.com/clips/demo.mp4"', $result);
+        $this->assertStringContainsString('controls', $result);
+        $this->assertStringContainsString('</video>', $result);
+    }
+
+    #[Test]
+    public function it_preserves_video_source_children(): void
+    {
+        $html   = '<video controls><source src="https://example.com/clips/demo.mp4" type="video/mp4"></video>';
+        $result = HtmlPurifyService::clean($html);
+
+        $this->assertStringContainsString('<video', $result);
+        $this->assertStringContainsString('<source', $result);
+        $this->assertStringContainsString('src="https://example.com/clips/demo.mp4"', $result);
+        $this->assertStringContainsString('type="video/mp4"', $result);
+    }
+
+    #[Test]
+    public function it_removes_event_handlers_on_video(): void
+    {
+        $html   = '<video src="https://example.com/clips/demo.mp4" onerror="alert(\'xss\')"></video>';
+        $result = HtmlPurifyService::clean($html);
+
+        $this->assertStringNotContainsString('onerror', $result);
+        $this->assertStringContainsString('<video', $result);
+        $this->assertStringContainsString('src="https://example.com/clips/demo.mp4"', $result);
+    }
+
+    #[Test]
+    public function it_removes_javascript_uri_in_video_src(): void
+    {
+        $html   = '<video src="javascript:alert(1)"></video>';
+        $result = HtmlPurifyService::clean($html);
+
+        $this->assertStringNotContainsString('javascript:', $result);
     }
 }

@@ -10,12 +10,11 @@
 namespace InnoShop\Common\Models;
 
 use Exception;
-use InnoShop\Common\Traits\HasPackageFactory;
 use InnoShop\Common\Traits\Translatable;
 
 class Brand extends BaseModel
 {
-    use HasPackageFactory, Translatable;
+    use Translatable;
 
     protected $table = 'brands';
 

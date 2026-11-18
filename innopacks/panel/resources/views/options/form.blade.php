@@ -59,6 +59,8 @@
                   <option value="select" {{ old('type', $option->type ?? 'select') === 'select' ? 'selected' : '' }}>{{ panel_trans('options.dropdown_select') }}</option>
                   <option value="radio" {{ old('type', $option->type ?? '') === 'radio' ? 'selected' : '' }}>{{ panel_trans('options.radio_button') }}</option>
                   <option value="checkbox" {{ old('type', $option->type ?? '') === 'checkbox' ? 'selected' : '' }}>{{ panel_trans('options.checkbox') }}</option>
+                  <option value="input" {{ old('type', $option->type ?? '') === 'input' ? 'selected' : '' }}>{{ panel_trans('options.text_input') }}</option>
+                  <option value="textarea" {{ old('type', $option->type ?? '') === 'textarea' ? 'selected' : '' }}>{{ panel_trans('options.textarea') }}</option>
                 </select>
               </div>
 

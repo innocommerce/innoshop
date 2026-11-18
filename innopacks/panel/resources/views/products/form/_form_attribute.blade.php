@@ -22,7 +22,17 @@
           </select>
         </td>
         <td class="col-5">
-          <select class="form-control" v-model="attr.attribute_value_id">
+          <select class="form-control" v-if="getAttributeType(attr.attribute_id) === 'select'" v-model="attr.attribute_value_id">
+            <option value="">{{ __('common/base.please_choose') }}</option>
+            <option v-for="value in getAttributeValues(attr.attribute_id)" :key="value.id" :value="value.id">@{{ value.name }}</option>
+          </select>
+          <input v-else-if="getAttributeType(attr.attribute_id) === 'number'" type="text" class="form-control"
+                 v-model="attr.value_number" :placeholder="'56.23'">
+          <input v-else-if="getAttributeType(attr.attribute_id) === 'date'" type="date" class="form-control"
+                 v-model="attr.value_text">
+          <input v-else-if="getAttributeType(attr.attribute_id) === 'input'" type="text" class="form-control"
+                 v-model="attr.value_text">
+          <select v-else class="form-control" v-model="attr.attribute_value_id">
             <option value="">{{ __('common/base.please_choose') }}</option>
             <option v-for="value in getAttributeValues(attr.attribute_id)" :key="value.id" :value="value.id">@{{ value.name }}</option>
           </select>
@@ -45,7 +55,7 @@
 
 @push('footer')
 <script>
-// Use data directly from backend
+// Spec-table attributes only; long-text types are edited in their own tab.
 const attributesData = @json($all_attributes);
 
 const attributesApp = createApp({
@@ -62,10 +72,14 @@ const attributesApp = createApp({
           rawData = [];
         }
       }
-      return rawData.map(attr => ({
-        attribute_id: attr.attribute_id || '',
-        attribute_value_id: attr.attribute_value_id || ''
-      }));
+      return rawData
+        .filter(attr => attributesData.some(item => item.id == attr.attribute_id))
+        .map(attr => ({
+          attribute_id: attr.attribute_id || '',
+          attribute_value_id: attr.attribute_value_id || '',
+          value_text: attr.value_text || '',
+          value_number: attr.value_number || ''
+        }));
     })());
 
     // All available attributes
@@ -75,7 +89,9 @@ const attributesApp = createApp({
     const addAttribute = () => {
       attributes.value.push({
         attribute_id: '',
-        attribute_value_id: ''
+        attribute_value_id: '',
+        value_text: '',
+        value_number: ''
       });
     };
 
@@ -93,19 +109,18 @@ const attributesApp = createApp({
       return attribute ? attribute.values : [];
     };
 
-    // Reset attribute value when attribute changes
+    // Value input type of the selected attribute (select by default)
+    const getAttributeType = (attributeId) => {
+      const attribute = allAttributes.value.find(attr => attr.id == attributeId);
+      return attribute ? (attribute.type || 'select') : 'select';
+    };
+
+    // Reset all value fields when attribute changes
     const onAttributeChange = (index) => {
       const attr = attributes.value[index];
-      if (!attr.attribute_id) {
-        attr.attribute_value_id = '';
-        return;
-      }
-
-      // Reset selection if current value is not in available values list
-      const availableValues = getAttributeValues(attr.attribute_id);
-      if (!availableValues.find(v => v.id == attr.attribute_value_id)) {
-        attr.attribute_value_id = '';
-      }
+      attr.attribute_value_id = '';
+      attr.value_text = '';
+      attr.value_number = '';
     };
 
     return {
@@ -115,6 +130,7 @@ const attributesApp = createApp({
       addAttribute,
       deleteAttribute,
       getAttributeValues,
+      getAttributeType,
       onAttributeChange
     };
   }

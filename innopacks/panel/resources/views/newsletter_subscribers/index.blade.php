@@ -61,8 +61,8 @@
                     @endif
                   </td>
                   <td>
-                    @if($subscriber->source)
-                      <span class="badge bg-info">{{ __('panel/newsletter.source_' . $subscriber->source) }}</span>
+                    @if($subscriber->source_label)
+                      <span class="badge bg-info">{{ $subscriber->source_label }}</span>
                     @else
                       -
                     @endif
@@ -130,7 +130,7 @@
             deleteForm.value.submit();
           })
           .catch(() => {
-            // 取消删除
+            // Deletion cancelled
           });
         };
 

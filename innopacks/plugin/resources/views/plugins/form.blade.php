@@ -41,6 +41,7 @@
 
     @php
       $readmeHtml = $plugin->getReadmeHtml();
+      $developerDocHtml = $plugin->getDeveloperDocHtml();
     @endphp
 
     @if(!$plugin->checkInstalled())
@@ -61,6 +62,13 @@
       <li class="nav-item">
         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#readme-tab" role="tab">
           <i class="bi bi-book"></i> {{ trans('panel/plugin.usage_documentation') }}
+        </button>
+      </li>
+      @endif
+      @if(!empty($developerDocHtml) && trim($developerDocHtml) !== '')
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#dev-doc-tab" role="tab">
+          <i class="bi bi-file-earmark-code"></i> {{ trans('panel/plugin.developer_documentation') }}
         </button>
       </li>
       @endif
@@ -106,6 +114,13 @@
       <div class="tab-pane fade" id="readme-tab" role="tabpanel">
         <div class="markdown-body">
           {!! $readmeHtml !!}
+        </div>
+      </div>
+      @endif
+      @if(!empty($developerDocHtml) && trim($developerDocHtml) !== '')
+      <div class="tab-pane fade" id="dev-doc-tab" role="tabpanel">
+        <div class="markdown-body">
+          {!! $developerDocHtml !!}
         </div>
       </div>
       @endif
@@ -214,7 +229,10 @@
 @push('footer')
   <script>
     $(function () {
-      new bootstrap.Tooltip(document.querySelector('.btn-success[data-bs-toggle="tooltip"]'));
+      var useBtn = document.querySelector('.btn-success[data-bs-toggle="tooltip"]');
+      if (useBtn) {
+        new bootstrap.Tooltip(useBtn);
+      }
       $('.plugin-action-btn').each(function () {
         new bootstrap.Tooltip(this);
       }).on('click', function () {

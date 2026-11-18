@@ -118,6 +118,20 @@ class HtmlPurifyService
         $config->set('Cache.SerializerPath', $cachePath);
         $config->set('Cache.SerializerPermissions', 0755);
 
+        // HTML5 <video>/<source> and <style> support. Must run AFTER every $config->set()
+        // call: requesting the definition finalizes the config, and any set()
+        // that follows throws "Cannot set directive after finalization".
+        // maybeGetRawHTMLDefinition() is the official cache-safe entry point
+        // (returns null when a cached definition already exists). HTMLPurifier
+        // 4.x ships an HTML4 doctype with no native definition for these tags,
+        // so register them as custom elements (also listed in AllowedElements /
+        // AllowedAttributes above).
+        $config->set('HTML.DefinitionID', 'innoshop_richtext_html5');
+        $config->set('HTML.DefinitionRev', 2);
+        if ($def = $config->maybeGetRawHTMLDefinition()) {
+            self::registerCustomElements($def);
+        }
+
         self::$purifier = new HTMLPurifier($config);
 
         return self::$purifier;
@@ -142,6 +156,10 @@ class HtmlPurifyService
             'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col',
             // Media
             'img',
+            // HTML5 media (站内视频)
+            'video', 'source',
+            // 页内样式（后台可信用户，与 TinyMCE custom_elements 保持一致）
+            'style',
         ]);
     }
 
@@ -157,6 +175,11 @@ class HtmlPurifyService
             'a.href', 'a.target', 'a.rel', 'a.name',
             // Images
             'img.src', 'img.alt', 'img.width', 'img.height',
+            // HTML5 video (站内视频)
+            'video.src', 'video.type', 'video.width', 'video.height', 'video.poster',
+            'video.preload', 'video.controls', 'video.muted', 'video.loop', 'video.autoplay', 'video.playsinline',
+            // <source> child of <video>
+            'source.src', 'source.type',
             // Table
             'table.border', 'table.cellpadding', 'table.cellspacing', 'table.width',
             'th.colspan', 'th.rowspan', 'th.scope', 'th.width',
@@ -165,6 +188,42 @@ class HtmlPurifyService
             // Details
             // Abbr
             'abbr.title',
+        ]);
+    }
+
+    /**
+     * Register HTML5 <video>/<source>/<style> element definitions.
+     * HTMLPurifier 4.x only knows HTML4 tags natively, so without this the
+     * tags are stripped during purification even if listed in AllowedElements.
+     */
+    private static function registerCustomElements(\HTMLPurifier_HTMLDefinition $def): void
+    {
+        // <video>: block-level, may wrap <source> children and fallback text.
+        $def->addElement('video', 'Block', 'Flow', 'Common', [
+            'src'         => 'URI',
+            'type'        => 'Text',
+            'width'       => 'Length',
+            'height'      => 'Length',
+            'poster'      => 'URI',
+            'preload'     => 'Enum#auto,metadata,none',
+            'controls'    => 'Bool',
+            'muted'       => 'Bool',
+            'loop'        => 'Bool',
+            'autoplay'    => 'Bool',
+            'playsinline' => 'Bool',
+        ]);
+
+        // <source>: empty element, valid inside <video>/<audio>.
+        $def->addElement('source', 'Block', 'Empty', 'Common', [
+            'src'  => 'URI',
+            'type' => 'Text',
+        ]);
+
+        // <style>: raw-text element (same #PCDATA model HTMLPurifier uses for
+        // <script> in its Scripting module). Only reached by trusted panel
+        // users; front-end rendering is a deliberate theme choice.
+        $def->addElement('style', 'Block', 'Optional: #PCDATA', 'Common', [
+            'type' => 'Enum#text/css',
         ]);
     }
 }

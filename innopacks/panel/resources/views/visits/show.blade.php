@@ -104,13 +104,13 @@
                   @if($visit->country_code)
                     <span class="badge bg-info">{{ $visit->country_code }}</span>
                   @else
-                    <span class="text-muted">-</span>
+                    <span class="badge bg-secondary">{{ __('panel/visit.unknown') }}</span>
                   @endif
                 </td>
               </tr>
               <tr>
                 <th>{{ __('panel/visit.country_name') }}:</th>
-                <td>{{ $visit->country_name ?: '-' }}</td>
+                <td>{{ $visit->country_name ?: __('panel/visit.unknown') }}</td>
               </tr>
               <tr>
                 <th>{{ __('panel/visit.city') }}:</th>

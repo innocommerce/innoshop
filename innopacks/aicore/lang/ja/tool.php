@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => '記事タグを一覧表示。キーワード検索に対応。データ量が小さいため全量返却。',
     'desc_customer_autocomplete' => '顧客名またはメールのクイック検索（オートコンプリート）。顧客 ID を探すための id+name+email リストを返却。',
     'desc_category_autocomplete' => 'カテゴリ名のクイック検索（オートコンプリート）。カテゴリ ID を探すための id+name+parent_id リストを返却。',
+    'desc_setting_detail'        => 'システム全体の SEO 設定（タイトル/説明/キーワード）を取得し、言語別に返します。これは全站フォールバック TDK 設定で、個別 SEO を持たないページ（ホーム等）がこれを使用します。',
+    'desc_setting_update'        => '⚠️ 書き込み操作：システム全体の SEO 設定（meta_title/meta_description/meta_keywords）を PATCH セマンティクスで言語別に更新します。全站フォールバック TDK 設定。',
 ];

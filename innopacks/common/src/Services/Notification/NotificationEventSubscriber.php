@@ -30,6 +30,14 @@ class NotificationEventSubscriber
                 $attempts  = $event->job->attempts();
                 $exception = $event->exception;
 
+                // Jobs may declare SuppressesFailureNotification when their
+                // failures are already surfaced elsewhere (e.g. a per-item
+                // ledger with a panel view and retry action); otherwise a bulk
+                // job would push one channel message per failed unit.
+                if (is_a($jobName, SuppressesFailureNotification::class, true)) {
+                    return;
+                }
+
                 $content = "> **Job:** {$jobName}\n"
                          ."> **Queue:** {$queue}\n"
                          ."> **Attempts:** {$attempts}\n"
@@ -67,6 +75,18 @@ class NotificationEventSubscriber
         }
         if ($e instanceof HttpException && $e->getStatusCode() < 500) {
             return;
+        }
+
+        // Queue job attempts are reported once per retry by the worker; the
+        // single authoritative alert for a job is the Queue::failing event
+        // fired after the last attempt. Without this guard every transient
+        // retry would push its own message to the notification channels.
+        foreach ($e->getTrace() as $frame) {
+            $class = $frame['class'] ?? '';
+            if (str_starts_with($class, 'Illuminate\Queue\\')
+                || str_starts_with($class, 'Illuminate\Bus\\')) {
+                return;
+            }
         }
 
         try {

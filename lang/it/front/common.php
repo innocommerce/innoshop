@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'La quantità minima d\'ordine è :min',
     'news'                            => 'Notizie',
     'no_search_results'               => 'Non sono stati ottenuti risultati significativi',
+    'or_continue_with'                => 'Oppure continua con',
     'out_of_stock'                    => 'Esaurito',
     'page_not_found'                  => 'Pagine non reperite',
     'page_not_found_description'      => 'Scusate, la pagina che avete visitato non esisteva o era stata cancellata.',

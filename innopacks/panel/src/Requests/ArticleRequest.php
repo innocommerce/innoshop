@@ -51,8 +51,12 @@ class ArticleRequest extends FormRequest
 
             "translations.$defaultLocale.locale"  => 'required',
             "translations.$defaultLocale.title"   => 'required',
-            "translations.$defaultLocale.content" => ['required', 'string', rich_text_max_rule(20000)],
+            "translations.$defaultLocale.content" => ['required', 'string', rich_text_max_rule(150000)],
 
+            // Wildcard rules ensure validated() keeps title/content for non-default locales on PATCH
+            'translations.*.locale'           => 'nullable',
+            'translations.*.title'            => 'nullable|string',
+            'translations.*.content'          => ['nullable', 'string', rich_text_max_rule(150000)],
             'translations.*.summary'          => 'max:320',
             'translations.*.meta_title'       => 'max:500',
             'translations.*.meta_keywords'    => 'max:500',
@@ -130,7 +134,7 @@ class ArticleRequest extends FormRequest
                 'example'     => 'Summer sale announcement',
             ],
             "translations.$locale.content" => [
-                'description' => 'Article body HTML or text (max 20000).',
+                'description' => 'Article body HTML or text (max 150000).',
                 'example'     => '<p>Content here</p>',
             ],
             'translations.*.summary' => [

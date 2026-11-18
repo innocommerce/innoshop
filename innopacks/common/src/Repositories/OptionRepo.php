@@ -215,6 +215,13 @@ class OptionRepo extends BaseRepo
     public function destroy(mixed $item): void
     {
         $option = $item;
+
+        // Cascade: remove product bindings and option values before deleting the option,
+        // otherwise orphaned rows in product_options/product_option_values break the panel product form.
+        $option->productOptionValues()->delete();
+        $option->products()->detach();
+        $option->optionValues()->delete();
+
         $option->delete();
     }
 

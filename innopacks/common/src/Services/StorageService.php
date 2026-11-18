@@ -36,6 +36,16 @@ class StorageService
     }
 
     /**
+     * Whether the current driver is an S3-family cloud storage (COS/OSS/S3/...).
+     * In that mode the bucket/CDN is the source of truth and local copies of
+     * uploaded files are optional.
+     */
+    public function isCloudDriver(): bool
+    {
+        return (bool) ($this->config['is_s3'] ?? false);
+    }
+
+    /**
      * Prepend the storage prefix to a bare storage key.
      */
     public static function storageKey(string $key): string
@@ -95,6 +105,14 @@ class StorageService
             return asset(self::STORAGE_PREFIX.$key);
         }
 
+        // Dev-only fallback: when CDN is configured but the file is only
+        // on local disk (CDN sync not yet run in this dev env), serve it
+        // directly. In production (APP_ENV != local), local files are
+        // expected to be transient and the CDN is the source of truth.
+        if (app()->environment('local') && is_file(public_path(self::STORAGE_PREFIX.$key))) {
+            return asset(self::STORAGE_PREFIX.$key);
+        }
+
         return $this->signUrl($baseUrl.'/'.$key);
     }
 
@@ -122,14 +140,18 @@ class StorageService
     public function resize(?string $image, int $width = 100, int $height = 100, ?string $mode = null): string
     {
         if (empty($image)) {
-            return (new ImageService('images/placeholder.png'))->resize($width, $height, $mode);
+            // Pass empty string so ImageService falls back to its own
+            // placeholderImage (driven by system_setting('placeholder')).
+            // Hardcoding 'images/placeholder.png' here would bypass the
+            // backend-configured placeholder.
+            return (new ImageService(''))->resize($width, $height, $mode);
         }
 
         // "media://{id}" reference — resolve to storage_key first, then resize normally.
         if (MediaUrlResolver::isMediaReference($image)) {
             $resolved = $this->resolveMediaReferenceToKey($image);
             if ($resolved === null) {
-                return (new ImageService('images/placeholder.png'))->resize($width, $height, $mode);
+                return (new ImageService(''))->resize($width, $height, $mode);
             }
             $image = $resolved;
         }
@@ -149,6 +171,13 @@ class StorageService
         $key = substr($cleanPath, strlen(self::STORAGE_PREFIX));
 
         if (! $this->config['is_s3']) {
+            return (new ImageService(self::STORAGE_PREFIX.$key))->resize($width, $height, $mode);
+        }
+
+        // Dev-only fallback (see url() above): when CDN is configured but
+        // the file is only on local disk, resize locally through the
+        // ImageService. Production uses the CDN URL unchanged.
+        if (app()->environment('local') && is_file(public_path(self::STORAGE_PREFIX.$key))) {
             return (new ImageService(self::STORAGE_PREFIX.$key))->resize($width, $height, $mode);
         }
 

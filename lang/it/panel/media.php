@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'La directory non è vuota',
     'show_folders'                  => 'Mostra cartelle',
     'delete_failed'                 => 'Eliminazione fallita',
+    'capture_load_failed'           => 'Impossibile caricare il video, non è possibile scegliere una copertina',
+    'capture_cross_origin'          => 'Questo video è protetto dalla policy cross-origin, non è possibile acquisire un fotogramma nel browser. Caricare un\'immagine come copertina.',
 ];

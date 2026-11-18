@@ -196,7 +196,7 @@ class ImageService
      */
     private function validateImageDimensions(int $width, int $height): bool
     {
-        $maxDimension = 5000;
+        $maxDimension = (int) fire_hook_filter('common.image.max_dimension', 5000);
         if ($width > $maxDimension || $height > $maxDimension) {
             Log::warning('Image too large to process', [
                 'path'   => $this->imagePath,

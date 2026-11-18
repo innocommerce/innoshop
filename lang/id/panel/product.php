@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'Foto SKU',
     'sku_validation_error'        => 'Harap isi setidaknya informasi spesifikasi tunggal atau informasi produk dengan beberapa spesifikasi',
     'specification_attribute'     => 'Atribut Varian',
+    'content_attributes'          => 'Atribut konten',
     'spu_code'                    => 'Kode SPU',
     'status_settings'             => 'Pengaturan negara',
     'stock_quantity'              => 'Jumlah persediaan',

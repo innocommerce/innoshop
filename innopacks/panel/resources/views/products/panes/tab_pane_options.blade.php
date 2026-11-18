@@ -137,12 +137,17 @@
                                     </td>
                                     <td>
                                       <div class="input-group input-group-sm">
-                                        <input type="number" step="0.01" 
-                                               class="form-control" 
+                                        @if (default_currency_unit_position() === 'left')
+                                          <span class="input-group-text">{{ default_currency_unit() }}</span>
+                                        @endif
+                                        <input type="number" step="0.01"
+                                               class="form-control"
                                                v-model="value.price_adjustment"
                                                placeholder="0.00"
                                                :disabled="!value.selected">
-                                        <span class="input-group-text">{{ system_setting('base.currency', 'USD') }}</span>
+                                        @if (default_currency_unit_position() !== 'left')
+                                          <span class="input-group-text">{{ default_currency_unit() }}</span>
+                                        @endif
                                       </div>
                                     </td>
                                     <td>

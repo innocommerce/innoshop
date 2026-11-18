@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'Imagens para SKU',
     'sku_validation_error'        => 'Por favor, preencha completamente pelo menos as informações de especificação única ou múltiplas especificações do produto',
     'specification_attribute'     => 'Atributo de especificação',
+    'content_attributes'          => 'Atributos de conteúdo',
     'spu_code'                    => 'Código SPU',
     'status_settings'             => 'Configurações de status',
     'stock_quantity'              => 'Quantidade em estoque',

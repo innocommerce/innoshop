@@ -744,6 +744,14 @@ class OSSService implements MediaInterface
                 return $this->moveDirectory($originPath, $newPath);
             }
 
+            // Renaming onto an existing name must not clobber the object that
+            // already lives there: the local driver picks a free name through
+            // getUniqueFileName(), the cloud driver had no such guard — the
+            // destination object was overwritten and the media_files row that
+            // owned it was left pointing at the clobbered key, which the
+            // unique index on storage_key then rejected.
+            $newPath = $this->uniqueDestinationPath($newPath);
+
             $this->s3Client->copyObject([
                 'Bucket'     => $this->bucket,
                 'CopySource' => $this->bucket.'/'.ltrim($originPath, '/'),
@@ -768,6 +776,77 @@ class OSSService implements MediaInterface
             ]);
             throw new Exception(trans('panel/media.rename_failed'));
         }
+    }
+
+    /**
+     * Rewrite a destination path so its file name is free in the bucket.
+     *
+     * @param  string  $newPath  Requested destination path, relative to the media root.
+     * @return string Destination path actually used.
+     */
+    protected function uniqueDestinationPath(string $newPath): string
+    {
+        $dir      = trim(dirname(ltrim($newPath, '/')), '/');
+        $fileName = basename($newPath);
+
+        if ($dir === '.') {
+            $dir = '';
+        }
+
+        $free = $this->getUniqueObjectName($dir, $fileName);
+        if ($free === $fileName) {
+            return ltrim($newPath, '/');
+        }
+
+        return $dir === '' ? $free : $dir.'/'.$free;
+    }
+
+    /**
+     * Pick a file name no bucket object occupies yet, appending "(1)", "(2)"
+     * … like the local driver's getUniqueFileName().
+     */
+    protected function getUniqueObjectName(string $dir, string $fileName): string
+    {
+        for ($i = 0; $i < 100; $i++) {
+            if (! $this->objectExists($this->getObjectKey($dir, $fileName))) {
+                return $fileName;
+            }
+            $fileName = $this->getNewFileName($fileName);
+        }
+
+        return $fileName;
+    }
+
+    /**
+     * Whether the bucket already holds an object under this key.
+     */
+    protected function objectExists(string $key): bool
+    {
+        try {
+            return (bool) $this->s3Client->doesObjectExist($this->bucket, $key);
+        } catch (\Throwable $e) {
+            // A failed probe must not block the rename — the copy below will
+            // report the real problem.
+            return false;
+        }
+    }
+
+    /**
+     * Same naming rule as the local driver: "4.jpg" → "4(1).jpg" → "4(2).jpg".
+     */
+    protected function getNewFileName(string $originName): string
+    {
+        $extension = pathinfo($originName, PATHINFO_EXTENSION);
+        $name      = pathinfo($originName, PATHINFO_FILENAME);
+
+        if (preg_match('/(.+?)\((\d+)\)$/', $name, $matches)) {
+            $index = (int) $matches[2] + 1;
+            $name  = "{$matches[1]}({$index})";
+        } else {
+            $name .= '(1)';
+        }
+
+        return "{$name}.{$extension}";
     }
 
     public function search(string $keyword, string $type = 'all'): array

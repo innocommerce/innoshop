@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => 'Artikeltags mit Stichwortsuche auflisten. Kleine Datenmenge, vollständig zurückgegeben.',
     'desc_customer_autocomplete' => 'Schnelle Kundensuche nach Name oder E-Mail. Gibt kompakte id+name+email-Liste zurück.',
     'desc_category_autocomplete' => 'Schnelle Kategoriesuche nach Name. Gibt kompakte id+name+parent_id-Liste zurück.',
+    'desc_setting_detail'        => 'Systemweite SEO-Einstellungen (Titel, Beschreibung, Keywords) abrufen, gruppiert nach Sprache. Globale TDK-Fallback-Konfiguration; Seiten ohne eigene SEO-Meta (z. B. Startseite) verwenden diese Werte.',
+    'desc_setting_update'        => '⚠️ Schreiboperation: Systemweite SEO-Einstellungen (meta_title/meta_description/meta_keywords) per PATCH-Semantik aktualisieren, mit Sprachunterstützung. Globale TDK-Fallback-Konfiguration.',
 ];

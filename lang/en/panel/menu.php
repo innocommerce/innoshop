@@ -50,6 +50,7 @@ return [
     'reviews'                => 'Reviews',
     'roles'                  => 'Roles',
     'settings'               => 'Settings',
+    'system_tasks'           => 'System Tasks',
     'sns'                    => 'Third-party Login',
     'socials'                => 'Social Logins',
     'states'                 => 'States',

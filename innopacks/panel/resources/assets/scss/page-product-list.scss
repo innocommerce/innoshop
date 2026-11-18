@@ -1,0 +1,19 @@
+/*
+ * Products list page
+ */
+
+// 列表缩略图：固定 50x50 框。供应商产品图尺寸不一（如 217x471 竖长图），
+// img-fluid 只限宽不限高，会把行高撑破导致表格错位。contain 保证产品图
+// 完整显示、居中留白，不裁切。
+.product-thumb {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

@@ -197,7 +197,7 @@ $modalId = 'locale-modal-' . $uid;
             @endforeach
           </div>
           <div class="modal-footer d-flex justify-content-between">
-            @php($hasTranslator = has_translator())
+            @php($hasTranslator = has_translator() && $translate)
             <button type="button" class="btn btn-outline-secondary locale-smart-fill-btn"
                     data-has-translator="{{ $hasTranslator ? 'true' : 'false' }}"
                     data-primary-locale="{{ $primaryCode }}"

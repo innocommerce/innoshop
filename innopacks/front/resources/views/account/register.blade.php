@@ -104,15 +104,15 @@
             </button>
             <span class="switch-prompt">
               {{ __('front/register.have_account') }}
-              <a href="{{ front_route('login.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{ theme_trans('front.auth_sign_in_link') }}</a>
+              <a href="{{ front_route('login.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{ __('front/register.sign_in_link') }}</a>
             </span>
           </div>
 
           <p class="auth-terms">
-            {{ theme_trans('front.auth_terms_prefix') }}
-            <a href="{{ front_route('pages.slug_show', ['slug' => 'terms']) }}">{{ theme_trans('front.auth_terms_of_service') }}</a>
-            {{ theme_trans('front.auth_terms_and') }}
-            <a href="{{ front_route('pages.slug_show', ['slug' => 'privacy']) }}">{{ theme_trans('front.auth_privacy_policy') }}</a>.
+            {{ __('front/register.terms_prefix') }}
+            <a href="{{ front_route('pages.slug_show', ['slug' => 'terms']) }}">{{ __('front/register.terms_of_service') }}</a>
+            {{ __('front/register.terms_and') }}
+            <a href="{{ front_route('pages.slug_show', ['slug' => 'privacy']) }}">{{ __('front/register.privacy_policy') }}</a>.
           </p>
 
           @include('account/_social')

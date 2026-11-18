@@ -65,6 +65,14 @@
             <ul class="product-param">
               <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span
                   class="value">{{ $sku['code'] }}</span></li>
+              @if($product->sales > 0)
+                <li class="sales"><span class="title">{{ __('front/product.sales') }}:</span> <span
+                    class="value">{{ $product->sales }}</span></li>
+              @endif
+              @if($product->viewed > 0)
+                <li class="viewed"><span class="title">{{ __('front/product.viewed') }}:</span> <span
+                    class="value">{{ $product->viewed }}</span></li>
+              @endif
               <li class="model {{ !($sku['model'] ?? false) ? 'd-none' : '' }}"><span class="title">{{ __('front/product.model') }}:</span>
                 <span class="value">{{ $sku['model'] }}</span></li>
               @if ($product->categories->count())
@@ -133,12 +141,19 @@
                   data-bs-target="#product-description-description"
                   type="button">{{ __('front/product.description') }}</button>
         </li>
-        @if($attributes)
+        @if($attributes || !empty($has_dimensions))
           <li class="nav-item">
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-description-attribute"
                     type="button">{{ __('front/product.attribute') }}</button>
           </li>
         @endif
+        @foreach($long_text_attributes as $longTextIndex => $longTextAttribute)
+          <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab"
+                    data-bs-target="#product-description-longtext-{{ $longTextIndex }}"
+                    type="button">{{ $longTextAttribute['name'] }}</button>
+          </li>
+        @endforeach
         <li class="nav-item">
           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-review"
                   type="button">{{ __('front/product.review') }}</button>
@@ -162,8 +177,22 @@
           </div>
         </div>
 
-        @if($attributes)
+        @if($attributes || !empty($has_dimensions))
           <div class="tab-pane fade" id="product-description-attribute" role="tabpanel">
+            @if(!empty($has_dimensions))
+              <table class="table table-bordered attribute-table">
+                <tbody>
+                <tr>
+                  <td>{{ __('front/product.dimensions') }}</td>
+                  <td>
+                    @if($product->length > 0){{ __('front/product.length') }}: {{ $product->length }}{{ $product->length_class }}@endif
+                    @if($product->width > 0){{ $product->length > 0 ? ' × ' : '' }}{{ __('front/product.width') }}: {{ $product->width }}{{ $product->length_class }}@endif
+                    @if($product->height > 0){{ ($product->length > 0 || $product->width > 0) ? ' × ' : '' }}{{ __('front/product.height') }}: {{ $product->height }}{{ $product->length_class }}@endif
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            @endif
             <table class="table table-bordered attribute-table">
               @foreach ($attributes as $group)
                 <thead class="table-light">
@@ -183,6 +212,18 @@
             </table>
           </div>
         @endif
+
+        @foreach($long_text_attributes as $longTextIndex => $longTextAttribute)
+          <div class="tab-pane fade" id="product-description-longtext-{{ $longTextIndex }}" role="tabpanel">
+            <div class="product-description-content">
+              @if($longTextAttribute['type'] === 'richtext')
+                {!! $longTextAttribute['value'] !!}
+              @else
+                {!! nl2br(e($longTextAttribute['value'])) !!}
+              @endif
+            </div>
+          </div>
+        @endforeach
 
         <div class="tab-pane fade" id="product-review" role="tabpanel">
           @include('products.components._review_section')
@@ -260,7 +301,16 @@
           productOptions[optionId] = [selectedValue];
         }
       });
-      
+
+      // 收集自由文本选项（input/textarea，值为字符串）
+      $('.option-text-input').each(function() {
+        const optionId = $(this).data('option-id');
+        const textValue = $.trim($(this).val());
+        if (textValue) {
+          productOptions[optionId] = textValue;
+        }
+      });
+
       // 收集单选按钮的选项
       $('.option-radio-item input[type="radio"]:checked').each(function() {
         const optionId = $(this).data('option-id');

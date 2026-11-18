@@ -63,11 +63,12 @@ class ArticleControllerTest extends TestCase
     }
 
     #[Test]
-    public function test_index_method_has_no_parameters(): void
+    public function test_index_method_accepts_request(): void
     {
         $method     = $this->reflection->getMethod('index');
         $parameters = $method->getParameters();
-        $this->assertCount(0, $parameters);
+        $this->assertCount(1, $parameters);
+        $this->assertEquals('request', $parameters[0]->getName());
     }
 
     #[Test]

@@ -20,11 +20,13 @@ use InnoShop\Common\Libraries\ApiHook;
 use InnoShop\Common\Libraries\Currency;
 use InnoShop\Common\Libraries\ViewHook;
 use InnoShop\Common\Libraries\Weight;
+use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Repositories\CurrencyRepo;
 use InnoShop\Common\Repositories\LocaleRepo;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Services\GeoLocationService;
 use InnoShop\Common\Services\ImageService;
+use InnoShop\Common\Services\MediaLookupRegistry;
 use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
 use InnoShop\Common\Support\EntityLinkEnricher;
@@ -335,15 +337,18 @@ if (! function_exists('installed')) {
     /**
      * Check installed by DB connection.
      *
-     * Result is memoized per-request to avoid repeated information_schema lookups.
+     * Only a positive result is memoized: installed can only flip from false
+     * to true (schema created), never back. Caching a premature false — e.g.
+     * when providers boot before the test harness runs migrations — would
+     * stick for the whole process and permanently skip route registration.
      *
      * @return bool
      */
     function installed(): bool
     {
-        static $cache = null;
-        if ($cache !== null) {
-            return $cache;
+        static $cache = false;
+        if ($cache) {
+            return true;
         }
 
         try {
@@ -541,7 +546,14 @@ if (! function_exists('current_locale')) {
      */
     function current_locale(): mixed
     {
-        return LocaleRepo::getInstance()->builder(['code' => front_locale_code()])->first();
+        // Per-request static cache: current_locale() is called many times
+        // per request (helpers, hooks, view composers) and each call would
+        // otherwise issue a SELECT against inno_locales. Locale is fixed
+        // for the lifetime of a request, so memoising is safe.
+        static $cache = [];
+        $code         = front_locale_code();
+
+        return $cache[$code] ??= LocaleRepo::getInstance()->builder(['code' => $code])->first();
     }
 }
 
@@ -852,11 +864,149 @@ if (! function_exists('image_origin')) {
             return storage_url($image);
         }
 
-        if (! file_exists(public_path($image))) {
+        // Cloud drivers (COS/OSS/S3/...): the bucket is the source of truth and
+        // local copies are optional — let storage_url() decide (it still prefers
+        // a local file in local environments). The placeholder fallback only
+        // applies to local-driver installs, where the file is all there is.
+        if (! StorageService::getInstance()->isCloudDriver() && ! file_exists(public_path($image))) {
             return asset('images/placeholder.png');
         }
 
         return storage_url($image);
+    }
+}
+
+if (! function_exists('media_cover_preload')) {
+    /**
+     * Batch-warm the per-request media lookup for a list of models (or raw
+     * cover values) so media_is_video()/media_poster_url() resolve without
+     * per-row queries — a 20-row list of distinct video covers would
+     * otherwise pay up to 3 PK queries per row. Call right after a list
+     * query; pages that skip it fall back to the lazy lookup transparently.
+     *
+     * @param  iterable  $models  Models exposing getRawOriginal('image'), or plain cover-value strings.
+     */
+    function media_cover_preload(iterable $models): void
+    {
+        $ids = [];
+        foreach ($models as $model) {
+            foreach (media_cover_candidate_values($model) as $value) {
+                $mediaId = MediaUrlResolver::extractMediaId((string) $value);
+                if ($mediaId !== null) {
+                    $ids[$mediaId] = true;
+                }
+            }
+        }
+
+        if ($ids === []) {
+            return;
+        }
+
+        app(MediaLookupRegistry::class)->preload(array_keys($ids));
+    }
+}
+
+if (! function_exists('media_cover_candidate_values')) {
+    /**
+     * Cover values a model may render with: the raw main image column plus
+     * every already-loaded translation image. Only loaded relations are read
+     * so preloading never triggers lazy queries of its own. Plain strings
+     * pass through as-is.
+     *
+     * @param  mixed  $model
+     * @return array
+     */
+    function media_cover_candidate_values($model): array
+    {
+        if (! is_object($model)) {
+            return [(string) $model];
+        }
+
+        if (! method_exists($model, 'getRawOriginal')) {
+            return [];
+        }
+
+        $values = [(string) $model->getRawOriginal('image')];
+        if ($model->relationLoaded('translations')) {
+            foreach ($model->translations as $translation) {
+                $values[] = (string) ($translation->image ?? '');
+            }
+        } elseif ($model->relationLoaded('translation')) {
+            $values[] = (string) ($model->translation?->image ?? '');
+        }
+
+        return $values;
+    }
+}
+
+if (! function_exists('media_lookup_model')) {
+    /**
+     * Shared per-request MediaFile lookup for the cover helpers: consult the
+     * batched preload (media_cover_preload) first, fall back to a single PK
+     * query memoized into the same registry — so media_is_video and
+     * media_poster_url share one lookup per media id per request.
+     *
+     * @param  int  $mediaId
+     * @return MediaFile|null
+     */
+    function media_lookup_model(int $mediaId): ?MediaFile
+    {
+        return app(MediaLookupRegistry::class)->get($mediaId);
+    }
+}
+
+if (! function_exists('media_is_video')) {
+    /**
+     * Whether a stored media value (raw path/URL or "media://{id}" reference)
+     * points to a video file (mp4/webm/ogg).
+     *
+     * Shared by Article/Category cover detection: "media://{id}" references are
+     * resolved through MediaFile (MIME first, storage-key extension as
+     * fallback); everything else is checked by extension.
+     *
+     * @param  ?string  $value
+     * @return bool
+     */
+    function media_is_video(?string $value): bool
+    {
+        $value = (string) $value;
+        if ($value === '') {
+            return false;
+        }
+
+        if (MediaUrlResolver::isMediaReference($value)) {
+            $mediaId = MediaUrlResolver::extractMediaId($value);
+            if ($mediaId === null) {
+                return false;
+            }
+
+            return app(MediaLookupRegistry::class)->isVideo($mediaId);
+        }
+
+        return (bool) preg_match('/\.(mp4|webm|ogg)(\?|$)/i', $value);
+    }
+}
+
+if (! function_exists('media_poster_url')) {
+    /**
+     * Resized still-image poster URL for a video media reference, or '' when
+     * unavailable (not a "media://{id}" reference / no poster was extracted).
+     * Posters only exist for media-referenced videos, so raw-path legacy
+     * videos return '' and callers should render a play-icon placeholder.
+     *
+     * @param  ?string  $value
+     * @param  int  $width
+     * @param  int  $height
+     * @return string
+     */
+    function media_poster_url(?string $value, int $width = 800, int $height = 600): string
+    {
+        $mediaId = MediaUrlResolver::extractMediaId((string) $value);
+        if ($mediaId === null) {
+            return '';
+        }
+
+        return app(MediaLookupRegistry::class)->posterUrl($mediaId, $width, $height);
     }
 }
 
@@ -1244,11 +1394,11 @@ if (! function_exists('currency_format')) {
     /**
      * @param  $price
      * @param  string  $currency
-     * @param  float  $rate
+     * @param  float|int|string|null  $rate
      * @param  bool  $format
      * @return string
      */
-    function currency_format($price, string $currency = '', float $rate = 0, bool $format = true): string
+    function currency_format($price, string $currency = '', float|int|string|null $rate = 0, bool $format = true): string
     {
         if (! $currency) {
             $currency = is_admin() ? system_setting('currency') : current_currency_code();
@@ -1265,6 +1415,50 @@ if (! function_exists('default_currency')) {
     function default_currency(): mixed
     {
         return currencies()->where('code', system_setting('currency'))->first();
+    }
+}
+
+if (! function_exists('default_currency_unit')) {
+    /**
+     * Get the display unit of the default currency: prefer the symbol
+     * (e.g. '$', '￥'), fall back to the currency code (e.g. 'USD').
+     */
+    function default_currency_unit(): string
+    {
+        $currency = default_currency();
+
+        $symbol = trim((string) ($currency->symbol_left ?? ''));
+        if ($symbol !== '') {
+            return $symbol;
+        }
+
+        $symbol = trim((string) ($currency->symbol_right ?? ''));
+        if ($symbol !== '') {
+            return $symbol;
+        }
+
+        return strtoupper((string) ($currency->code ?? ''));
+    }
+}
+
+if (! function_exists('default_currency_unit_position')) {
+    /**
+     * Position of the default currency's display unit in the input group.
+     * 'left'  → render as a prefix (e.g. $ 100, € 50)
+     * 'right' → render as a suffix (e.g. 100 元)
+     *
+     * Driven by which of symbol_left / symbol_right is populated in the
+     * currencies table. symbol_left takes precedence.
+     */
+    function default_currency_unit_position(): string
+    {
+        $currency = default_currency();
+
+        if (trim((string) ($currency->symbol_left ?? '')) !== '') {
+            return 'left';
+        }
+
+        return 'right';
     }
 }
 
@@ -1527,7 +1721,12 @@ if (! function_exists('seller_enabled')) {
      */
     function seller_enabled(): bool
     {
-        return class_exists('\InnoShop\Seller\SellerServiceProvider') && env('SELLER_ENABLED', true);
+        // Filter hook lets a pack override the semantics (e.g. the supplier
+        // pack answers with its own provider check instead of the seller one).
+        return fire_hook_filter(
+            'common.seller.enabled',
+            class_exists('\InnoShop\Seller\SellerServiceProvider') && env('SELLER_ENABLED', true),
+        );
     }
 }
 

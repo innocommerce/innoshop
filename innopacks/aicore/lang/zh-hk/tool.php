@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => '列出文章標籤，支援關鍵詞搜尋，資料量通常較小，全量回傳。',
     'desc_customer_autocomplete' => '客戶姓名或郵箱快速搜尋（自動補全），回傳緊湊的 id+name+email 清單，用於查找客戶 ID。',
     'desc_category_autocomplete' => '分類名稱快速搜尋（自動補全），回傳緊湊的 id+name+parent_id 清單，用於查找分類 ID。',
+    'desc_setting_detail'        => '取得系統級 SEO 設定（標題/描述/關鍵字），按語言返回。這是全站兜底 TDK，未單獨設置 SEO 的頁面（如首頁）會使用它。',
+    'desc_setting_update'        => '⚠️ 寫操作：按 PATCH 語意更新系統級 SEO 設定（meta_title/meta_description/meta_keywords），支援按語言更新。這是全站兜底 TDK。',
 ];

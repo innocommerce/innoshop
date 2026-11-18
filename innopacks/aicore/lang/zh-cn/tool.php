@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => '列出文章标签，支持关键词搜索，数据量通常较小，全量返回。',
     'desc_customer_autocomplete' => '客户姓名或邮箱快速搜索（自动补全），返回紧凑的 id+name+email 列表，用于查找客户 ID。',
     'desc_category_autocomplete' => '分类名称快速搜索（自动补全），返回紧凑的 id+name+parent_id 列表，用于查找分类 ID。',
+    'desc_setting_detail'        => '获取系统级 SEO 设置（标题/描述/关键词），按语言返回。这是全站兜底 TDK，未单独设置 SEO 的页面（如首页）会使用它。',
+    'desc_setting_update'        => '⚠️ 写操作：按 PATCH 语义更新系统级 SEO 设置（meta_title/meta_description/meta_keywords），支持按语言更新。这是全站兜底 TDK，未单独设置 SEO 的页面（如首页）会使用它。',
 ];

@@ -8,11 +8,13 @@
  */
 
 return [
-    'have_account'        => '已有账号？点击登录',
+    'have_account'        => '已有账号？',
+    'privacy_policy'      => '隐私政策',
     'register_submit'     => '立即注册',
     'register_success'    => '注册成功',
     'register'            => '注册',
     'register_text'       => '请在下面表单中填写注册信息',
+    'sign_in_link'        => '立即登录',
     'sms_code_sent'       => '短信验证码已发送',
     'calling_code'        => '电话区号',
     'telephone'           => '电话号码',
@@ -26,4 +28,7 @@ return [
     'email_required'      => '请使用邮箱注册',
     'phone_required'      => '请使用手机号注册',
     'select_calling_code' => '选择区号',
+    'terms_and'           => '和',
+    'terms_of_service'    => '服务条款',
+    'terms_prefix'        => '创建账号即表示你同意我们的',
 ];

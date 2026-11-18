@@ -87,6 +87,13 @@
             <div class="text-secondary"><small>{{ __('panel/setting.hide_url_locale_desc') }}</small></div>
           </div>
         </div>
+        <div class="col-md-6">
+          <div class="mb-4">
+            <x-common-form-switch-radio title="{{ __('panel::setting.auto_detect_locale_by_ip') }}" name="auto_detect_locale_by_ip"
+                                    value="{{ old('auto_detect_locale_by_ip', system_setting('auto_detect_locale_by_ip', false)) }}"/>
+            <div class="text-secondary"><small>{{ __('panel::setting.auto_detect_locale_by_ip_desc') }}</small></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -13,7 +13,7 @@ return [
     'description_tab'     => '分类描述',
     'extra_tab'           => '扩展信息',
     'image'               => '分类图片',
-    'image_description'   => '分类主图片，用于展示分类的代表性图片',
+    'image_description'   => '分类主图，用于在店铺前台作为分类的代表性展示。可上传图片或短视频。',
     'name'                => '分类名',
     'name_required'       => '为必填项',
     'parent'              => '上级分类',

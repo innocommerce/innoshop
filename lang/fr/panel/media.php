@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'Le répertoire n\'est pas vide',
     'show_folders'                  => 'Afficher les dossiers',
     'delete_failed'                 => 'Échec de la suppression',
+    'capture_load_failed'           => 'Échec du chargement de la vidéo, impossible de choisir une couverture',
+    'capture_cross_origin'          => 'Cette vidéo est protégée par la politique cross-origin, impossible de capturer une image dans le navigateur. Veuillez téléverser une image comme couverture.',
 ];

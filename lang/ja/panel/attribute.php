@@ -13,4 +13,6 @@ return [
     'name'            => '属性名です',
     'set_attribute'   => '属性の設定',
     'group'           => '属性グループ',
+    'show_on_detail'  => '詳細ページに表示',
+    'type_richtext'   => 'リッチテキスト',
 ];

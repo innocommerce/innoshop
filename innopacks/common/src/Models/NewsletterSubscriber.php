@@ -11,6 +11,7 @@ namespace InnoShop\Common\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Lang;
 
 class NewsletterSubscriber extends Model
 {
@@ -102,5 +103,23 @@ class NewsletterSubscriber extends Model
         $this->status          = self::STATUS_UNSUBSCRIBED;
         $this->unsubscribed_at = now();
         $this->save();
+    }
+
+    /**
+     * Get human-readable source label with fallback for unknown values.
+     *
+     * @return string|null
+     */
+    public function getSourceLabelAttribute(): ?string
+    {
+        if (empty($this->source)) {
+            return null;
+        }
+        $key = 'panel/newsletter.source_'.$this->source;
+        if (Lang::has($key)) {
+            return trans($key);
+        }
+
+        return ucwords(str_replace('_', ' ', $this->source));
     }
 }

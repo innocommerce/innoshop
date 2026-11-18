@@ -71,6 +71,28 @@
   font-size: 12px;
 }
 
+// 图片/视频预览弹层(#modal-show-img)内的媒体约束,图片与视频分支共用
+.preview-media {
+  max-width: 100%;
+  max-height: 70vh;
+  height: auto;
+  border-radius: 4px;
+}
+
+// 视频选封面弹层(#modal-pick-cover,#291):源视频与抓帧预览 canvas
+.pick-cover-video {
+  max-height: 50vh;
+  border-radius: 4px;
+  background-color: #000;
+}
+
+.pick-cover-canvas {
+  width: 100%;
+  height: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
 img {
   max-height: 100%;
 }
@@ -1093,4 +1115,34 @@ body {
 @keyframes mini-popover-in {
   from { opacity: 0; transform: translateX(-4px); }
   to   { opacity: 1; transform: translateX(0); }
+}
+
+// 表单分组隔断块：组与组之间用带边框的圆角小节区分（与商家后台一致）
+.form-section {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem 0.25rem;
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  > .form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--bs-secondary-color, #6c757d);
+    margin-bottom: 1rem;
+
+    &::before {
+      content: '';
+      width: 3px;
+      height: 14px;
+      border-radius: 2px;
+      background: var(--bs-primary, #0d6efd);
+    }
+  }
 }

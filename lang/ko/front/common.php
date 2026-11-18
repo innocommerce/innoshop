@@ -25,6 +25,7 @@ return [
     'minimum_required'                => '최소 주문 수량은 :min입니다',
     'news'                            => '뉴스',
     'no_search_results'               => '결과를 찾을 수 없습니다',
+    'or_continue_with'                => '또는 다음으로 계속',
     'out_of_stock'                    => '품절',
     'page_not_found'                  => '페이지를 찾을 수 없음',
     'page_not_found_description'      => '죄송합니다. 방문하신 페이지가 존재하지 않거나 삭제되어 있습니다.',

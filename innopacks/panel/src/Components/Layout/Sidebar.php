@@ -140,7 +140,7 @@ class Sidebar extends Component
             [
                 'title'    => __('panel/menu.top_setting'),
                 'icon'     => 'bi-gear',
-                'prefixes' => ['settings', 'plugin_coordination', 'account', 'admins', 'roles', 'countries', 'states', 'regions', 'locales', 'currencies', 'tax_rates', 'tax_classes', 'weight_classes'],
+                'prefixes' => ['settings', 'system_tasks', 'plugin_coordination', 'account', 'admins', 'roles', 'countries', 'states', 'regions', 'locales', 'currencies', 'tax_rates', 'tax_classes', 'weight_classes'],
                 'children' => $this->getSettingSubRoutes(),
             ],
         ];
@@ -435,6 +435,7 @@ class Sidebar extends Component
     {
         $routes = [
             ['route' => 'settings.index', 'title' => __('panel/menu.settings')],
+            ['route' => 'system_tasks.index', 'title' => __('panel/menu.system_tasks')],
             ['route' => 'plugin_coordination.index', 'title' => __('panel/menu.plugin_coordination')],
             ['route' => 'account.index', 'title' => __('panel/menu.account')],
             ['route' => 'admins.index', 'title' => __('panel/menu.admins')],

@@ -13,4 +13,6 @@ return [
     'name'            => 'Nome da propriedade',
     'set_attribute'   => 'Configurar Atributos',
     'group'           => 'Grupo de atributos',
+    'show_on_detail'  => 'Exibir na página de detalhes',
+    'type_richtext'   => 'Texto rico',
 ];

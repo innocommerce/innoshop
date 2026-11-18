@@ -6,6 +6,7 @@
 import './app/panel-http';
 import './app/panel-form-validation';
 import './app/panel-autocomplete';
+import './app/panel-video-codec';
 import { initPanelInno, bindPanelOnReady } from './app/panel-init';
 import { setupApiHeaders } from './app/panel-api-setup';
 import './standalone/panel-entity-autocomplete';

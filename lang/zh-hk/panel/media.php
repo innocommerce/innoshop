@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => '目錄不為空',
     'show_folders'                  => '顯示資料夾',
     'delete_failed'                 => '刪除失敗',
+    'capture_load_failed'           => '影片載入失敗，無法選取封面',
+    'capture_cross_origin'          => '該影片受跨域安全策略限制，無法在瀏覽器擷取畫面，請直接上傳圖片作為封面',
 ];

@@ -436,6 +436,33 @@ $fm-text-secondary: #909399;
   transition: all 0.3s;
 }
 
+/* Codec compatibility badge — marks H.265/HEVC files browsers cannot play */
+.video-thumb {
+  position: relative;
+}
+
+.codec-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  right: auto;
+  max-width: calc(100% - 12px);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: auto;
+}
+
+.codec-badge-bad {
+  background: #fef0f0;
+  color: #f56c6c;
+  border: 1px solid #fde2e2;
+}
+
 .video-dialog .el-dialog__header {
   position: absolute;
   top: 0;

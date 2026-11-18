@@ -90,6 +90,17 @@ class ProductOptionService
                 continue;
             }
 
+            // 自由文本类型：校验非空即可，无选项值、无加价
+            if ($group->isTextEntry() && isset($selectedOptions[$group->id])) {
+                $textValue = is_string($selectedOptions[$group->id]) ? trim($selectedOptions[$group->id]) : '';
+
+                if ($textValue === '' && $group->isRequired()) {
+                    $errors[] = "选项组 '{$group->current_name}' 是必选的";
+                }
+
+                continue;
+            }
+
             // 如果选择了该组的选项，验证选项是否有效
             if (isset($selectedOptions[$group->id])) {
                 $selectedOptionIds = is_array($selectedOptions[$group->id])

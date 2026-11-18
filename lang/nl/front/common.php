@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'Minimum bestelhoeveelheid is :min',
     'news'                            => 'Nieuws',
     'no_search_results'               => 'No relevant results were found',
+    'or_continue_with'                => 'Of doorgaan met',
     'out_of_stock'                    => 'Uitverkocht',
     'page_not_found'                  => 'The page was not found.',
     'page_not_found_description'      => 'Sorry, the page you visited does not exist or has been deleted.',

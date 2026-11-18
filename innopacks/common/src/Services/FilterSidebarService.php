@@ -53,7 +53,9 @@ class FilterSidebarService
         foreach ($brands as $brand) {
             try {
                 $brandId   = is_object($brand) ? $brand->id : $brand['id'] ?? null;
-                $brandName = is_object($brand) ? $brand->name : $brand['name'] ?? '';
+                $brandName = is_object($brand) && method_exists($brand, 'fallbackName')
+                    ? $brand->fallbackName()
+                    : (is_object($brand) ? $brand->name : $brand['name'] ?? '');
 
                 if ($brandId && $brandName) {
                     $processedBrands[] = [
@@ -71,7 +73,8 @@ class FilterSidebarService
     }
 
     /**
-     * Process attribute data
+     * Process attribute data. Select-type attributes render as value
+     * checkboxes, number-type attributes render as a min/max range facet.
      *
      * @param  mixed  $attributes
      * @param  Request  $request
@@ -85,13 +88,31 @@ class FilterSidebarService
 
         $processedAttributes = [];
         $allAttributes       = $request->get('attributes', []);
+        $allRanges           = $request->get('attribute_ranges', []);
         foreach ($attributes as $attribute) {
             try {
                 $attributeId     = is_object($attribute) ? $attribute->id : $attribute['id'] ?? null;
                 $attributeName   = is_object($attribute) ? $attribute->name : $attribute['name'] ?? '';
+                $attributeType   = is_object($attribute) ? ($attribute->type ?? 'select') : ($attribute['type'] ?? 'select');
                 $attributeValues = is_object($attribute) ? $attribute->values : $attribute['values'] ?? [];
 
                 if (! $attributeId || ! $attributeName) {
+                    continue;
+                }
+
+                if ($attributeType === 'number') {
+                    $range       = (string) ($allRanges[$attributeId] ?? '');
+                    [$min, $max] = array_pad(explode(',', $range), 2, '');
+
+                    $processedAttributes[] = [
+                        'id'     => $attributeId,
+                        'name'   => $attributeName,
+                        'type'   => 'number',
+                        'min'    => $min,
+                        'max'    => $max,
+                        'values' => [],
+                    ];
+
                     continue;
                 }
 
@@ -119,6 +140,7 @@ class FilterSidebarService
                     $processedAttributes[] = [
                         'id'     => $attributeId,
                         'name'   => $attributeName,
+                        'type'   => 'select',
                         'values' => $processedValues,
                     ];
                 }
@@ -128,6 +150,75 @@ class FilterSidebarService
         }
 
         return $processedAttributes;
+    }
+
+    /**
+     * Build the variant dimension facet. Variant rows and values are
+     * per-product, so the same display name (e.g. "Size = 8") aggregates
+     * every matching value id across products; selecting a value filters by
+     * the full id group via the variant_values URL parameter.
+     *
+     * @param  mixed  $variants  Variants of the category products, with translations loaded
+     * @param  Request  $request
+     * @return array
+     */
+    public function processVariants($variants, Request $request): array
+    {
+        if (! isset($variants) || ! is_countable($variants) || count($variants) === 0) {
+            return [];
+        }
+
+        $selectedIds = [];
+        foreach (explode('|', (string) $request->get('variant_values', '')) as $group) {
+            // Each group is a comma-separated list of value ids; reuse
+            // parse_int_filters (which splits on '|') by translating commas.
+            foreach (parse_int_filters(str_replace(',', '|', $group)) as $id) {
+                $selectedIds[$id] = true;
+            }
+        }
+
+        $dimensions = [];
+        foreach ($variants as $variant) {
+            $dimName = $variant->translation->name ?? '';
+            if ($dimName === '') {
+                continue;
+            }
+            if (! isset($dimensions[$dimName])) {
+                $dimensions[$dimName] = [];
+            }
+
+            foreach ($variant->values as $value) {
+                $valueName = $value->translation->name ?? '';
+                if ($valueName === '') {
+                    continue;
+                }
+                if (! isset($dimensions[$dimName][$valueName])) {
+                    $dimensions[$dimName][$valueName] = ['ids' => [], 'selected' => false];
+                }
+                $dimensions[$dimName][$valueName]['ids'][] = $value->id;
+                if (! empty($selectedIds[$value->id])) {
+                    $dimensions[$dimName][$valueName]['selected'] = true;
+                }
+            }
+        }
+
+        $out = [];
+        foreach ($dimensions as $dimName => $values) {
+            $valuesOut = [];
+            foreach ($values as $valueName => $info) {
+                $valuesOut[] = [
+                    'name'      => $valueName,
+                    'value_ids' => implode(',', array_unique($info['ids'])),
+                    'selected'  => $info['selected'],
+                ];
+            }
+            $out[] = [
+                'name'   => $dimName,
+                'values' => $valuesOut,
+            ];
+        }
+
+        return $out;
     }
 
     /**

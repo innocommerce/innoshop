@@ -30,6 +30,14 @@
           </div>
           <div class="col-md-6">
             <div class="mb-4">
+              <x-common-form-select title="{{ __('panel/setting.product_default_order') }}" name="product_default_order"
+                                :options="$product_order_options" key="value" label="label" :emptyOption="false"
+                                value="{{ old('product_default_order', system_setting('product_default_order', 'desc')) }}" />
+              <div class="text-secondary"><small>{{ __('panel/setting.product_default_order_desc') }}</small></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-4">
               <x-common-form-input title="{{ __('panel/setting.supplier_per_page') }}" name="supplier_per_page"
                                type="number"
                                value="{{ old('supplier_per_page', system_setting('supplier_per_page', 12)) }}"

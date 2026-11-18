@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'El directorio no está vacío',
     'show_folders'                  => 'Mostrar carpetas',
     'delete_failed'                 => 'Error al eliminar',
+    'capture_load_failed'           => 'No se pudo cargar el video, no se puede elegir una portada',
+    'capture_cross_origin'          => 'Este video está protegido por la política de origen cruzado, no se puede capturar un fotograma en el navegador. Suba una imagen como portada.',
 ];

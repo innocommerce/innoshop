@@ -9,7 +9,25 @@
             @if($relatedArticle->image)
               <div class="related-article-image">
                 <a href="{{ $relatedArticle->url }}">
-                  <img src="{{ image_resize($relatedArticle->image, 60, 60) }}" alt="{{ $relatedArticle->title }}" class="img-fluid rounded">
+                  @php $cover = $relatedArticle->coverUrl(60, 60); @endphp
+                  @if($cover)
+                    {{-- Video covers show the extracted poster frame plus a tiny play
+                         badge so the thumbnail distinguishes itself from images. --}}
+                    <div class="front-video-cover">
+                      <img src="{{ $cover }}" alt="{{ $relatedArticle->title }}" class="img-fluid rounded">
+                      @if($relatedArticle->is_video)
+                        <i class="bi bi-play-circle-fill front-video-cover__badge" aria-hidden="true"></i>
+                      @endif
+                    </div>
+                  @elseif($relatedArticle->is_video)
+                    {{-- Video without an extracted poster: avoid <img src=video> which
+                         browsers render as a broken icon at 60px. --}}
+                    <span class="d-flex align-items-center justify-content-center bg-light rounded h-100 w-100">
+                      <i class="bi bi-play-circle text-primary"></i>
+                    </span>
+                  @else
+                    <img src="{{ image_resize($relatedArticle->image, 60, 60) }}" alt="{{ $relatedArticle->title }}" class="img-fluid rounded">
+                  @endif
                 </a>
               </div>
             @endif
@@ -72,6 +90,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.related-article-image .front-video-cover__badge {
+  font-size: 1.25rem;
 }
 
 .related-article-content {

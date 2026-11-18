@@ -25,6 +25,8 @@ return [
     'minimum_required'                => 'الحد الأدنى للطلب هو :min',
     'news'                            => 'الأخبار',
     'no_search_results'               => 'لم يتم العثور على نتائج ذات صلة',
+    'or_continue_with'                => 'أو المتابعة باستخدام',
+    'or_continue_with'                => 'أو المتابعة باستخدام',
     'out_of_stock'                    => 'غير متوفر',
     'page_not_found'                  => 'الصفحة غير موجودة',
     'page_not_found_description'      => 'عذرًا، الصفحة التي قمت بزيارتها غير موجودة أو تم حذفها.',

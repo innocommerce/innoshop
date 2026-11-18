@@ -13,4 +13,6 @@ return [
     'name'            => '屬性名',
     'set_attribute'   => '設置屬性',
     'group'           => '屬性組',
+    'show_on_detail'  => '顯示到詳情頁',
+    'type_richtext'   => '富文本',
 ];

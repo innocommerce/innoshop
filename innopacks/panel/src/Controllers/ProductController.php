@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Aicore\Jobs\GenerateProductContentJob;
+use InnoShop\Common\Models\Attribute;
 use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Common\Repositories\BrandRepo;
@@ -103,6 +104,10 @@ class ProductController extends BaseController
             // Prepare existing product option data - use correct relationships
             if ($product->productOptions && $product->productOptions->count() > 0) {
                 foreach ($product->productOptions as $productOption) {
+                    // Skip orphaned bindings whose option has been deleted
+                    if (! $productOption->option) {
+                        continue;
+                    }
                     $existingProductOptions[] = [
                         'option_id'           => $productOption->option_id,
                         'name'                => $productOption->option->getLocalizedName(),
@@ -154,6 +159,40 @@ class ProductController extends BaseController
 
         $attributeData = AttributeRepo::getInstance()->getAttributesWithValues();
 
+        // Long-text attributes (textarea/richtext) are edited in a dedicated
+        // tab with full editors, not inside the specification table.
+        $specAttributes    = [];
+        $longtextRows      = $product->productAttributes->keyBy('attribute_id');
+        $longtextAttribute = [];
+        $specCount         = 0;
+        foreach ($attributeData as $attributeItem) {
+            if (in_array($attributeItem['type'], Attribute::longTextTypes(), true)) {
+                $existing  = $longtextRows->get($attributeItem['id']);
+                $valuesMap = $existing ? $existing->valueTextMap() : [];
+                // Legacy plain-string values predate multi-language: surface
+                // them in the system default locale's editor.
+                if ($existing && empty($valuesMap) && trim((string) $existing->value_text) !== '') {
+                    $valuesMap = [setting_locale_code() => (string) $existing->value_text];
+                }
+                $oldValues = old("long_attributes.{$attributeItem['id']}.value_text");
+                if (is_array($oldValues)) {
+                    $valuesMap = $oldValues;
+                }
+                $longtextAttribute[] = [
+                    'id'         => $attributeItem['id'],
+                    'name'       => $attributeItem['name'],
+                    'type'       => $attributeItem['type'],
+                    'values'     => $valuesMap,
+                    'is_visible' => (bool) old("long_attributes.{$attributeItem['id']}.is_visible", $existing->is_visible ?? true),
+                ];
+            } else {
+                $specAttributes[] = $attributeItem;
+                if ($longtextRows->has($attributeItem['id'])) {
+                    $specCount++;
+                }
+            }
+        }
+
         $categories = ProductRepo::getCategoryOptions();
 
         // Process complete data for selected related products
@@ -174,8 +213,9 @@ class ProductController extends BaseController
             'brands'                  => BrandRepo::getInstance()->all()->toArray(),
             'tax_classes'             => TaxClassRepo::getInstance()->all()->toArray(),
             'weightClasses'           => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
-            'attribute_count'         => $product->productAttributes->count(),
-            'all_attributes'          => $attributeData,
+            'attribute_count'         => $specCount,
+            'all_attributes'          => $specAttributes,
+            'longtext_attributes'     => $longtextAttribute,
             'selectedRelatedProducts' => $selectedRelatedProducts,
             'existingProductOptions'  => $productOptionsData['existingProductOptions'],
             'existingOptionValues'    => $productOptionsData['existingOptionValues'],

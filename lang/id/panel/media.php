@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'Direktori tidak kosong',
     'show_folders'                  => 'Tampilkan folder',
     'delete_failed'                 => 'Gagal menghapus',
+    'capture_load_failed'           => 'Gagal memuat video, tidak dapat memilih sampul',
+    'capture_cross_origin'          => 'Video ini dilindungi kebijakan cross-origin, bingkai tidak dapat diambil di browser. Silakan unggah gambar sebagai sampul.',
 ];

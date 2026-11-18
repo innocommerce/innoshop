@@ -15,12 +15,12 @@
     </div>
   </div>
 
+  {{-- 主图：支持图片或视频，视频上传后自动抽取稳定一帧作为封面（共享组件 type="file"） --}}
   <div class="mb-3 col-12 col-md-8">
     <x-common-form-image title="{{ __('panel/article.main_image') }}" name="image"
-                        value="{{ old('image', $article->image ?? '') }}"/>
-    <div class="mt-2 text-muted small">
-      <i class="bi bi-info-circle me-1"></i>{{ __('panel/article.main_image_description') }}
-    </div>
+                         value="{{ old('image', $article->getRawOriginal('image') ?? '') }}"
+                         type="file"
+                         :description="__('panel/article.main_image_description')"/>
   </div>
 
   <x-common-form-switch-radio :title="__('panel/common.whether_enable')" name="active"

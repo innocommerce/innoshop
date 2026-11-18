@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'Quantité minimum de commande :min',
     'news'                            => 'Articles',
     'no_search_results'               => 'Aucun résultat trouvé',
+    'or_continue_with'                => 'Ou continuer avec',
     'out_of_stock'                    => 'Rupture de stock',
     'page_not_found'                  => 'Page non trouvée',
     'page_not_found_description'      => 'Désolé, la page que vous avez consultée n’existe pas ou a été supprimée.',

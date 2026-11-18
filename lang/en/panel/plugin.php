@@ -84,6 +84,7 @@ return [
     'views'                         => 'Views',
     'config_settings'               => 'Configuration Settings',
     'usage_documentation'           => 'Usage Documentation',
+    'developer_documentation'       => 'Developer Documentation',
     'buy_now'                       => 'Buy Now',
     'download_now'                  => 'Download Now',
     'plugin_introduction'           => 'Plugin Introduction',

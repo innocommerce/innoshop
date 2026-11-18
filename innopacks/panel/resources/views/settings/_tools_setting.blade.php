@@ -108,51 +108,54 @@
 
 @push('footer')
 <script>
+function showGeoLite2Alert(type, message, showHint) {
+  const alertDiv = document.createElement('div');
+  alertDiv.className = 'alert alert-' + type;
+  alertDiv.style.position = 'fixed';
+  alertDiv.style.top = '20px';
+  alertDiv.style.right = '20px';
+  alertDiv.style.zIndex = '9999';
+  alertDiv.style.minWidth = '400px';
+  alertDiv.style.maxWidth = '600px';
+  alertDiv.style.cursor = 'pointer';
+  alertDiv.title = '{{ __("panel/setting.click_to_close") }}';
+  let html = message;
+  if (showHint) {
+    html += '<hr class="my-2"><span class="small">{{ __("panel/setting_geolite2.download_failed_hint") }}</span>';
+  }
+  alertDiv.innerHTML = html;
+  alertDiv.addEventListener('click', function() {
+    alertDiv.remove();
+  });
+  document.body.appendChild(alertDiv);
+  if (type !== 'danger') {
+    setTimeout(function() {
+      alertDiv.remove();
+    }, 5000);
+  }
+}
+
 function downloadGeoLite2() {
   const btn = document.getElementById('download-geolite2-btn');
   const originalText = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> {{ __("panel/setting_geolite2.downloading") }}...';
+  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> {{ __("panel/setting_geolite2.downloading") }}';
+
+  const fallbackError = '{{ __("panel/setting_geolite2.download_failed", ["error" => __("panel/setting_geolite2.download_empty")]) }}';
 
   axios.post('{{ panel_route("settings.download_geolite2") }}')
   .then(function(response) {
-    if (response.data.success) {
-      alert(response.data.message);
+    const data = response.data || {};
+    if (data.success) {
+      showGeoLite2Alert('success', data.message || '{{ __("panel/setting_geolite2.download_success") }}', false);
       refreshGeoLite2Info();
     } else {
-      const errorMsg = response.data.message || '{{ __("panel/setting_geolite2.download_failed") }}';
-      const message = errorMsg.replace(/\n/g, '<br>');
-      const alertDiv = document.createElement('div');
-      alertDiv.className = 'alert alert-danger';
-      alertDiv.innerHTML = '<strong>{{ __("panel/setting_geolite2.download_failed") }}</strong><br>' + message;
-      alertDiv.style.position = 'fixed';
-      alertDiv.style.top = '20px';
-      alertDiv.style.right = '20px';
-      alertDiv.style.zIndex = '9999';
-      alertDiv.style.minWidth = '400px';
-      alertDiv.style.maxWidth = '600px';
-      document.body.appendChild(alertDiv);
-      setTimeout(function() {
-        alertDiv.remove();
-      }, 10000);
+      showGeoLite2Alert('danger', data.message || fallbackError, true);
     }
   })
   .catch(function(error) {
-    const errorMsg = error.response?.data?.message || error.message;
-    const message = errorMsg.replace(/\n/g, '<br>');
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert alert-danger';
-    alertDiv.innerHTML = '<strong>{{ __("panel/setting_geolite2.download_failed") }}</strong><br>' + message;
-    alertDiv.style.position = 'fixed';
-    alertDiv.style.top = '20px';
-    alertDiv.style.right = '20px';
-    alertDiv.style.zIndex = '9999';
-    alertDiv.style.minWidth = '400px';
-    alertDiv.style.maxWidth = '600px';
-    document.body.appendChild(alertDiv);
-    setTimeout(function() {
-      alertDiv.remove();
-    }, 10000);
+    const msg = (error.response && error.response.data && error.response.data.message) || error.message || fallbackError;
+    showGeoLite2Alert('danger', msg, true);
   })
   .finally(function() {
     btn.disabled = false;
@@ -167,8 +170,9 @@ function refreshGeoLite2Info() {
     }
   })
   .then(function(response) {
-    if (response.data.success) {
-      const info = response.data.data;
+    const data = response.data || {};
+    if (data.success) {
+      const info = data.data || {};
       document.getElementById('geolite2-status').innerHTML = info.exists
         ? '<span class="badge bg-success">{{ __("panel/setting_geolite2.database_exists") }}</span>'
         : '<span class="badge bg-warning">{{ __("panel/setting_geolite2.database_not_exists") }}</span>';

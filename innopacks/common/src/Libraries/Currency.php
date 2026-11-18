@@ -56,11 +56,11 @@ class Currency
     /**
      * @param  $price
      * @param  $currency
-     * @param  float  $rate
+     * @param  float|int|string|null  $rate
      * @param  bool  $format
      * @return float|mixed|string
      */
-    public function format($price, $currency, float $rate = 0, bool $format = true): mixed
+    public function format($price, $currency, float|int|string|null $rate = 0, bool $format = true): mixed
     {
         $currency = strtolower($currency);
         if ($this->currencies->isEmpty()) {
@@ -76,6 +76,10 @@ class Currency
         $symbol_left  = $currencyRow->symbol_left;
         $symbol_right = $currencyRow->symbol_right;
         $decimal      = (int) $currencyRow->decimal_place;
+
+        // Rate may come from a database string column (empty, null or non-numeric),
+        // normalize it to float to avoid type errors on invalid values.
+        $rate = is_numeric($rate) ? (float) $rate : 0.0;
 
         if (! $rate) {
             $rate = $currencyRow->value;

@@ -64,21 +64,7 @@
     </div>
   </div>
 
-  <div class="col-6 col-md-3">
-    <div class="card h-100">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <div class="fs-3 fw-bold text-warning">{{ number_format($statistics['event_sessions'] ?? 0) }}</div>
-            <div class="text-muted small">{{ __('panel/visit.bot_event_sessions') }}</div>
-          </div>
-          <div class="text-warning opacity-50">
-            <i class="bi bi-lightning-charge-fill fs-1"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  {{-- event_sessions card retired: bots no longer produce visit_events --}}
 </div>
 
 {{-- 每日趋势 --}}

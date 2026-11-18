@@ -111,6 +111,13 @@ class ProductController extends Controller
             $sku = $product->masterSku;
         }
 
+        // A product without any SKU row has no master SKU, so it cannot be
+        // priced, added to the cart, or ordered. Such rows exist in legacy
+        // / imported data; answer 404 instead of crashing on a null SKU.
+        if (empty($sku)) {
+            abort(404);
+        }
+
         $product->increment('viewed');
 
         // Track product view event
@@ -143,17 +150,19 @@ class ProductController extends Controller
         $productOptionValues = $product->productOptionValues;
 
         $data = [
-            'product'             => $product,
-            'sku'                 => (new SkuListItem($sku))->jsonSerialize(),
-            'skus'                => SkuListItem::collection($product->skus)->jsonSerialize(),
-            'variant_dimensions'  => $variantDimensions,
-            'attributes'          => $product->groupedAttributes(),
-            'reviews'             => $reviews,
-            'reviewed'            => ReviewRepo::productReviewed($customerID, $product->id),
-            'related'             => $product->relationProducts,
-            'bundle_items'        => ProductRepo::getInstance()->getBundleItems($product),
-            'productOptions'      => $productOptions,
-            'productOptionValues' => $productOptionValues,
+            'product'              => $product,
+            'sku'                  => (new SkuListItem($sku))->jsonSerialize(),
+            'skus'                 => SkuListItem::collection($product->skus)->jsonSerialize(),
+            'variant_dimensions'   => $variantDimensions,
+            'attributes'           => $product->groupedAttributes(),
+            'long_text_attributes' => $product->visibleLongTextAttributes(),
+            'has_dimensions'       => $product->length > 0 || $product->width > 0 || $product->height > 0,
+            'reviews'              => $reviews,
+            'reviewed'             => ReviewRepo::productReviewed($customerID, $product->id),
+            'related'              => $product->relationProducts,
+            'bundle_items'         => ProductRepo::getInstance()->getBundleItems($product),
+            'productOptions'       => $productOptions,
+            'productOptionValues'  => $productOptionValues,
         ];
 
         return inno_view('products.show', $data);

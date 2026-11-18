@@ -26,7 +26,7 @@ class CartItemFactory extends Factory
     {
         return [
             'customer_id' => null,
-            'product_id'  => Product::factory(),
+            'product_id'  => ProductFactory::new(),
             'sku_code'    => 'SKU-'.strtoupper(Str::random(8)),
             'guest_id'    => null,
             'selected'    => true,

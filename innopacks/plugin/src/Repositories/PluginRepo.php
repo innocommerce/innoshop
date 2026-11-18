@@ -11,11 +11,20 @@ namespace InnoShop\Plugin\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use InnoShop\Plugin\Models\Plugin;
+use InnoShop\Plugin\Models\Setting;
 
 class PluginRepo
 {
     public static ?Collection $installedPlugins = null;
+
+    /**
+     * Settings row holding the display order of every plugin type.
+     *
+     * Value shape: {"payment": ["pay_pal", "bank_transfer"], "shipping": []}
+     */
+    public const TYPE_ORDER_SETTING = 'plugin_type_order';
 
     /**
      * @return self
@@ -130,30 +139,168 @@ class PluginRepo
     }
 
     /**
-     * Get all shipping methods.
+     * Sort plugins by a stored code order.
+     *
+     * Pure function: no settings read, no DB access. Codes missing from $order
+     * keep their original relative position at the tail, so a newly installed
+     * plugin never disturbs an order the operator has already set up.
+     *
+     * @param  SupportCollection<int, Plugin>  $plugins
+     * @param  array<int, string>  $order
+     * @return SupportCollection<int, Plugin>
+     */
+    public static function applyOrder(SupportCollection $plugins, array $order): SupportCollection
+    {
+        if ($plugins->isEmpty() || empty($order)) {
+            return $plugins;
+        }
+
+        // Laravel's sortBy is a stable asort(), so equal keys keep input order.
+        return $plugins
+            ->sortBy(function ($plugin) use ($order) {
+                $position = array_search((string) $plugin->code, $order, true);
+
+                return $position === false ? PHP_INT_MAX : $position;
+            })
+            ->values();
+    }
+
+    /**
+     * Stored display order for one plugin type.
+     *
+     * Reads the settings row directly instead of going through system_setting():
+     * the latter resolves from the boot-time config snapshot, which stays stale
+     * for the rest of the request right after a write.
+     *
+     * @return array<int, string>
+     */
+    public function getTypeOrder(string $type): array
+    {
+        return $this->getAllTypeOrders()[$type] ?? [];
+    }
+
+    /**
+     * Persist the display order for one plugin type.
+     *
+     * Codes already stored but absent from $codes are kept at the tail, so a
+     * plugin whose directory temporarily disappears comes back at the end of
+     * the list instead of being dropped.
+     *
+     * @param  array<int, string>  $codes
+     */
+    public function saveTypeOrder(string $type, array $codes): void
+    {
+        $normalized = [];
+        foreach ($codes as $code) {
+            // A nested array would raise "Array to string conversion" and
+            // abort the whole reorder, so unusable entries are dropped.
+            if (! is_string($code) && ! is_numeric($code)) {
+                continue;
+            }
+
+            $code = trim((string) $code);
+            if ($code !== '' && ! in_array($code, $normalized, true)) {
+                $normalized[] = $code;
+            }
+        }
+
+        foreach ($this->getTypeOrder($type) as $code) {
+            if (! in_array($code, $normalized, true)) {
+                $normalized[] = $code;
+            }
+        }
+
+        $all        = $this->getAllTypeOrders();
+        $all[$type] = $normalized;
+
+        SettingRepo::getInstance()->updateValues([self::TYPE_ORDER_SETTING => $all], 'system');
+
+        // updateValues() nulls the whole `inno` settings snapshot; restore it
+        // from the database so any later setting() read in this request does
+        // not silently fall back to its default.
+        config(['inno' => SettingRepo::getInstance()->groupedSettings()]);
+    }
+
+    /**
+     * @param  SupportCollection<int, Plugin>  $plugins
+     * @return SupportCollection<int, Plugin>
+     */
+    public function sortByTypeOrder(SupportCollection $plugins, string $type): SupportCollection
+    {
+        return self::applyOrder($plugins, $this->getTypeOrder($type));
+    }
+
+    /**
+     * Every stored plugin-type order, keyed by plugin type.
+     *
+     * Deliberately un-memoised: a memo would have to live on the process-wide
+     * PluginRepo singleton, where it goes stale as soon as anything writes the
+     * setting outside saveTypeOrder() (queue workers, tests). The settings table
+     * is a few dozen rows, so one lookup per call is cheaper than the footgun.
+     *
+     * @return array<string, array<int, string>>
+     */
+    public function getAllTypeOrders(): array
+    {
+        $setting = Setting::query()
+            ->where('space', 'system')
+            ->where('name', self::TYPE_ORDER_SETTING)
+            ->first();
+
+        if (empty($setting)) {
+            return [];
+        }
+
+        $orders = json_decode((string) $setting->value, true);
+        if (! is_array($orders)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($orders as $type => $codes) {
+            if (! is_array($codes)) {
+                continue;
+            }
+            $result[(string) $type] = array_values(array_filter(
+                array_map(fn ($code) => (string) $code, $codes),
+                fn (string $code) => $code !== ''
+            ));
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get all shipping methods, ordered as the operator arranged them in the
+     * panel (插件管理 → 配送). Falls back to install order when no order has
+     * been stored yet.
      */
     public function getShippingMethods(): Collection
     {
         $allPlugins = $this->allPlugins();
 
-        return $allPlugins->where('type', 'shipping')->filter(function ($item) {
+        $methods = $allPlugins->where('type', 'shipping')->filter(function ($item) {
             $plugin = plugin($item->code);
             if ($plugin) {
                 $item->plugin = $plugin;
             }
 
             return $plugin && $plugin->getEnabled();
-        });
+        })->values();
+
+        return $this->sortByTypeOrder($methods, 'shipping');
     }
 
     /**
-     * Get all billing methods.
+     * Get all billing methods, ordered as the operator arranged them in the
+     * panel (插件管理 → 支付). Falls back to install order when no order has
+     * been stored yet.
      */
     public function getBillingMethods(): Collection
     {
         $allPlugins = $this->allPlugins();
 
-        return $allPlugins->where('type', 'payment')->filter(function ($item) {
+        $methods = $allPlugins->where('type', 'payment')->filter(function ($item) {
             $plugin = plugin($item->code);
             if ($plugin) {
                 $item->plugin = $plugin;
@@ -173,7 +320,9 @@ class PluginRepo
             }
 
             return $plugin && $plugin->getEnabled() && $flag;
-        });
+        })->values();
+
+        return $this->sortByTypeOrder($methods, 'payment');
     }
 
     /**

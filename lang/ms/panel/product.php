@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'Imej SKU',
     'sku_validation_error'        => 'Sila isi sekurang-kurangnya maklumat spesifikasi tunggal atau maklumat produk dengan pelbagai spesifikasi',
     'specification_attribute'     => 'Ciri-ciri Varian',
+    'content_attributes'          => 'Atribut kandungan',
     'spu_code'                    => 'Kod SPU',
     'status_settings'             => 'Tetapan status',
     'stock_quantity'              => 'Kuantiti inventori',

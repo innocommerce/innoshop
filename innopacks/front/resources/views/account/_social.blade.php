@@ -1,6 +1,6 @@
 @if(collect(system_setting('social'))->where('active', true)->count())
   <div class="auth-divider">
-    <span class="auth-divider-text">{{ theme_trans('front.auth_or_continue_with') }}</span>
+    <span class="auth-divider-text">{{ __('front/common.or_continue_with') }}</span>
   </div>
 
   <div class="social-login">

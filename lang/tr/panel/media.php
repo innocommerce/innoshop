@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'Dizin boş değil',
     'show_folders'                  => 'Klasörleri göster',
     'delete_failed'                 => 'Silme başarısız',
+    'capture_load_failed'           => 'Video yüklenemedi, kapak seçilemiyor',
+    'capture_cross_origin'          => 'Bu video cross-origin politikasıyla korunuyor, tarayıcıda kare yakalanamıyor. Kapak olarak bir resim yükleyin.',
 ];

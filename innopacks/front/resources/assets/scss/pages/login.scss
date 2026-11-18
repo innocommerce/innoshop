@@ -218,13 +218,13 @@ body.page-login {
       grid-template-columns: 96px 1fr;
       gap: 8px;
 
-      .input-wrapper {
+      .input-wrapper:first-child {
         .form-control { padding-left: 14px; }
       }
     }
 
-    // SMS code + send button
-    .sms-row {
+    // SMS code + send button (blade uses `form-group sms-row` on one element)
+    &.sms-row {
       .input-wrapper {
         .form-control { padding-right: 100px; }
       }

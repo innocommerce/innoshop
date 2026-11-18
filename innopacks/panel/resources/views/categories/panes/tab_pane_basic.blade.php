@@ -15,13 +15,12 @@
     </div>
   </div>
 
-  {{-- 主图片（统一，不区分语言） --}}
+  {{-- 主图：支持图片或视频，视频上传后自动抽取稳定一帧作为封面（共享组件 type="file"） --}}
   <div class="mb-3 col-12 col-md-6">
     <x-common-form-image title="{{ panel_trans('category.image') }}" name="image"
-                        value="{{ old('image', $category->image ?? '') }}"/>
-    <div class="mt-2 text-muted small">
-      <i class="bi bi-info-circle me-1"></i>{{ panel_trans('category.image_description') }}
-    </div>
+                         value="{{ old('image', $category->image ?? '') }}"
+                         type="file"
+                         :description="panel_trans('category.image_description')"/>
   </div>
 
   {{-- 启用状态 --}}

@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'O diretório não está vazio',
     'show_folders'                  => 'Mostrar pastas',
     'delete_failed'                 => 'Falha ao eliminar',
+    'capture_load_failed'           => 'Falha ao carregar o vídeo, não é possível escolher uma capa',
+    'capture_cross_origin'          => 'Este vídeo está protegido pela política de origem cruzada, não é possível capturar uma imagem no navegador. Carregue uma imagem como capa.',
 ];

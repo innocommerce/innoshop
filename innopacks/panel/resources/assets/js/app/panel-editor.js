@@ -25,6 +25,79 @@ function insertMediaFile(ed, file) {
   }
 }
 
+// Windows Excel puts presentation styles in a <style> block referenced by dead class
+// attributes (class=xl152677), unlike Mac Excel/LibreOffice which inline per-cell styles.
+// Resolve those rules inline ourselves so the result doesn't depend on the browser's
+// paste-time style computation; WPS ships bare tables and gets a minimal border fallback.
+function inlineStyleBlocks(doc) {
+  doc.querySelectorAll('style').forEach((styleEl) => {
+    const cssText = styleEl.textContent.replace(/<!--|-->/g, '');
+    cssText.split('}').forEach((rule) => {
+      const open = rule.indexOf('{');
+      if (open === -1) return;
+      const selector = rule.slice(0, open).trim();
+      const declarations = rule.slice(open + 1).trim();
+      if (!selector || !declarations) return;
+      if (!/^(\.[A-Za-z0-9_-]+|table|thead|tbody|tr|td|th|col)$/i.test(selector)) return;
+      doc.querySelectorAll(selector).forEach((el) => {
+        el.style.cssText = declarations + ';' + el.style.cssText;
+      });
+    });
+    styleEl.remove();
+  });
+}
+
+function cleanOfficeArtifacts(body) {
+  Array.from(body.querySelectorAll('*')).forEach((el) => {
+    // Office namespaces: o:/v:/w:/x:/st1: cover Word VML shapes ("red X"), Excel metadata, WPS tags
+    if (/^(o|v|w|x|st1):/i.test(el.tagName) || /^(xml|meta|link)$/i.test(el.tagName)) {
+      el.remove();
+      return;
+    }
+    Array.from(el.attributes).forEach((attr) => {
+      if (/^(x:|mso|lang$|dir$)/i.test(attr.name)) el.removeAttribute(attr.name);
+    });
+    el.removeAttribute('class');
+    // Re-serialize through CSSOM so mso-* and other non-standard properties are dropped
+    if (el.hasAttribute('style')) {
+      const clean = el.style.cssText.trim();
+      if (clean) el.setAttribute('style', clean);
+      else el.removeAttribute('style');
+    }
+  });
+}
+
+function applyFallbackTableStyles(doc) {
+  const table = doc.querySelector('table');
+  if (!table) return;
+  const cells = Array.from(doc.querySelectorAll('td, th'));
+  if (!cells.length) return;
+  // WPS/LibreOffice give every borderless cell an explicit "no border" declaration
+  // (border:none, which browsers may serialize as "medium none currentcolor"), so the
+  // table would paste invisible. Fill defaults only when NO cell has a real border
+  // style anywhere; any real border means a designed layout and is left untouched.
+  const hasRealBorder = (cell) =>
+    ['Top', 'Right', 'Bottom', 'Left'].some((side) => {
+      const style = cell.style['border' + side + 'Style'];
+      return style && style !== 'none';
+    });
+  if (cells.some(hasRealBorder)) return;
+  table.style.cssText = 'border-collapse:collapse;' + table.style.cssText;
+  cells.forEach((cell) => {
+    // Append so the default border overrides any existing border:none
+    cell.style.cssText = cell.style.cssText + ';border:1px solid #bfbfbf;padding:4px 8px';
+  });
+}
+
+function normalizeTableHtml(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  if (!doc.querySelector('table')) return html;
+  inlineStyleBlocks(doc);
+  cleanOfficeArtifacts(doc.body);
+  applyFallbackTableStyles(doc);
+  return doc.body.innerHTML;
+}
+
 function addCharCounter(ed) {
   ed.on('init', function() {
     var original = ed.getElement();
@@ -130,9 +203,35 @@ function setupEditor(ed) {
     },
   });
 
+  ed.ui.registry.addButton('toolbarVideoButton', {
+    icon: 'embed',
+    tooltip: 'Insert video',
+    onAction: () => {
+      media.init(
+        (files) => {
+          if (Array.isArray(files)) {
+            files.forEach((file) => insertMediaFile(ed, file));
+          } else {
+            insertMediaFile(ed, files);
+          }
+        },
+        { type: 'video', multiple: true },
+      );
+    },
+  });
+
   ed.on('paste', (e) => {
     const clipboardData = e.clipboardData;
     if (!clipboardData || !clipboardData.items) {
+      return;
+    }
+
+    // Excel/Sheets puts both an HTML table and an image snapshot on the clipboard.
+    // Prefer the HTML so tables stay native; only intercept image-only pastes (screenshots).
+    const html = clipboardData.getData('text/html');
+    if (html && html.toLowerCase().includes('<table')) {
+      e.preventDefault();
+      ed.insertContent(normalizeTableHtml(html));
       return;
     }
 
@@ -193,10 +292,13 @@ export function initEditor() {
     convert_urls: false,
     inline: false,
     relative_urls: false,
-    plugins: 'link lists fullscreen table hr wordcount image imagetools code',
+    custom_elements: 'style',
+    extended_valid_elements: 'style[*]',
+    valid_children: '+body[style]',
+    plugins: 'link lists fullscreen table hr wordcount image imagetools media code',
     menubar: '',
     toolbar:
-      'undo redo | toolbarImageButton | lineheight | bold italic underline strikethrough | forecolor backcolor | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify numlist bullist formatpainter removeformat charmap emoticons | preview template link anchor table toolbarImageUrlButton fullscreen code | aiGenerateButton',
+      'undo redo | toolbarImageButton toolbarVideoButton | lineheight | bold italic underline strikethrough | forecolor backcolor | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify numlist bullist formatpainter removeformat charmap emoticons | preview template link anchor table toolbarImageUrlButton fullscreen media code | aiGenerateButton',
     toolbar_items_size: 'small',
     image_caption: true,
     imagetools_toolbar: '',

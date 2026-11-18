@@ -729,6 +729,59 @@ final class Plugin implements Arrayable, ArrayAccess
     }
 
     /**
+     * Resolve the developer documentation path (dev.md with locale fallback).
+     * Plugins ship README.*.md for end users; dev.md / dev.zh-cn.md is the
+     * optional developer reference shown on a second panel tab.
+     *
+     * @return string
+     */
+    public function getDeveloperDocPath(): string
+    {
+        $localeCode = plugin_locale_code();
+
+        if ($localeCode) {
+            $localized = $this->getPath().DIRECTORY_SEPARATOR.'dev.'.$localeCode.'.md';
+            if (file_exists($localized)) {
+                return $localized;
+            }
+        }
+
+        return $this->getPath().DIRECTORY_SEPARATOR.'dev.md';
+    }
+
+    /**
+     * Read the developer documentation markdown for this plugin.
+     *
+     * @return string
+     */
+    public function getDeveloperDoc(): string
+    {
+        $path = $this->getDeveloperDocPath();
+        if (file_exists($path)) {
+            return file_get_contents($path);
+        }
+
+        return '';
+    }
+
+    /**
+     * Render the developer documentation as HTML for the panel second tab.
+     * Returns an empty string when the plugin has no dev.md.
+     *
+     * @return string
+     */
+    public function getDeveloperDocHtml(): string
+    {
+        $doc = $this->getDeveloperDoc();
+
+        if (empty($doc)) {
+            return '';
+        }
+
+        return parsedown($doc, false);
+    }
+
+    /**
      * Get plugin README.md content
      *
      * @return string

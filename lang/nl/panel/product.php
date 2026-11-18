@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'SKU image',
     'sku_validation_error'        => 'Vul ten minste de informatie in voor een enkele variant of een product met meerdere varianten',
     'specification_attribute'     => 'Specificatie attribuut',
+    'content_attributes'          => 'Inhoudsattributen',
     'spu_code'                    => 'SPU-code',
     'status_settings'             => 'Status instellingen',
     'stock_quantity'              => 'Inventory quantity',

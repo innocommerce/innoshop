@@ -37,17 +37,21 @@ class SettingController
     public function index(): mixed
     {
         $data = [
-            'locales'              => locales()->toArray(),
-            'currencies'           => CurrencyRepo::getInstance()->enabledList()->toArray(),
-            'weight_classes'       => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
-            'categories'           => CategoryRepo::getInstance()->getTwoLevelCategories(),
-            'catalogs'             => CatalogRepo::getInstance()->getTopCatalogs(),
-            'pages'                => PageRepo::getInstance()->withActive()->builder()->get(),
-            'mail_engines'         => MailRepo::getInstance()->getEngines(),
-            'sms_gateways'         => SmsRepo::getInstance()->getGateways(),
-            'sms_repo'             => SmsRepo::getInstance(),
-            'geolite2_info'        => (new GeoLite2Service)->getDatabaseInfo(),
-            'product_sort_options' => collect(ProductRepo::getSortOptions())->map(fn ($label, $value) => ['value' => $value, 'label' => $label])->values()->toArray(),
+            'locales'               => locales()->toArray(),
+            'currencies'            => CurrencyRepo::getInstance()->enabledList()->toArray(),
+            'weight_classes'        => WeightClassRepo::getInstance()->withActive()->all()->toArray(),
+            'categories'            => CategoryRepo::getInstance()->getTwoLevelCategories(),
+            'catalogs'              => CatalogRepo::getInstance()->getTopCatalogs(),
+            'pages'                 => PageRepo::getInstance()->withActive()->builder()->get(),
+            'mail_engines'          => MailRepo::getInstance()->getEngines(),
+            'sms_gateways'          => SmsRepo::getInstance()->getGateways(),
+            'sms_repo'              => SmsRepo::getInstance(),
+            'geolite2_info'         => (new GeoLite2Service)->getDatabaseInfo(),
+            'product_sort_options'  => collect(ProductRepo::getSortOptions())->map(fn ($label, $value) => ['value' => $value, 'label' => $label])->values()->toArray(),
+            'product_order_options' => [
+                ['value' => 'asc', 'label' => panel_trans('setting.sort_asc')],
+                ['value' => 'desc', 'label' => panel_trans('setting.sort_desc')],
+            ],
         ];
 
         if (ai_enabled()) {

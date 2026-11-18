@@ -28,6 +28,7 @@ return [
     'minimum_required'                => '最小购买数量为 :min',
     'news'                            => '新闻',
     'no_search_results'               => '没有找到相关结果',
+    'or_continue_with'                => '或使用以下方式继续',
     'out_of_stock'                    => '缺货',
     'page_not_found'                  => '页面未找到',
     'page_not_found_description'      => '抱歉，您访问的页面不存在或已被删除。',

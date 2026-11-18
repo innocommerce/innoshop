@@ -2,11 +2,28 @@
   <div class="blog-item">
     <div class="image">
       <a href="{{ $item->url }}">
-        @if ($item->image)
-          <img src="{{ image_resize($item->image, 300, 300) }}" class="img-fluid" alt="{{ $item->title }}" width="300" height="300">
+        @php $cover = $item->coverUrl(300, 300); @endphp
+        @if ($cover)
+          <div class="front-video-cover">
+            <img src="{{ $cover }}"
+                 class="img-fluid"
+                 alt="{{ $item->title }}"
+                 width="300" height="300">
+            @if ($item->is_video)
+              <i class="bi bi-play-circle-fill front-video-cover__badge" aria-hidden="true"></i>
+            @endif
+          </div>
+        @elseif ($item->is_video)
+          <div class="ratio ratio-3x2 bg-light">
+            <div class="d-flex align-items-center justify-content-center">
+              <i class="bi bi-play-circle text-primary fs-1"></i>
+            </div>
+          </div>
         @else
-          <div class="bg-light d-flex align-items-center justify-content-center" style="aspect-ratio: 3/2;">
-            <i class="bi bi-image text-muted" style="font-size: 48px;"></i>
+          <div class="ratio ratio-3x2 bg-light">
+            <div class="d-flex align-items-center justify-content-center">
+              <i class="bi bi-image text-muted fs-1"></i>
+            </div>
           </div>
         @endif
       </a>

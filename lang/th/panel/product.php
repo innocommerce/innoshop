@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'รูปภาพด้วย SKU',
     'sku_validation_error'        => 'กรุณากรอกข้อมูลสเปคเดียวอย่างน้อยหนึ่งรายการ หรือข้อมูลสินค้าที่มีหลายสเปคให้ครบถ้วน',
     'specification_attribute'     => 'คุณสมบัติของรูปแบบ',
+    'content_attributes'          => 'คุณลักษณะเนื้อหา',
     'spu_code'                    => 'รหัส SPU',
     'status_settings'             => 'ตั้งค่าสถานะ',
     'stock_quantity'              => 'จำนวนสินค้า',

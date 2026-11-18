@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => '글 태그를 나열합니다. 키워드 검색을 지원합니다. 데이터량이 적어 전체 반환됩니다.',
     'desc_customer_autocomplete' => '고객명 또는 이메일 빠른 검색(자동완성). 고객 ID를 찾기 위한 id+name+email 목록을 반환합니다.',
     'desc_category_autocomplete' => '카테고리명 빠른 검색(자동완성). 카테고리 ID를 찾기 위한 id+name+parent_id 목록을 반환합니다.',
+    'desc_setting_detail'        => '시스템 전체 SEO 설정(제목/설명/키워드)을 언어별로 조회합니다. 자체 SEO 메타가 없는 페이지(예: 홈)가 사용하는 전역 폴백 TDK 설정입니다.',
+    'desc_setting_update'        => '⚠️ 쓰기 작업: 시스템 전체 SEO 설정(meta_title/meta_description/meta_keywords)을 PATCH 의미론으로 언어별로 업데이트합니다. 전역 폴백 TDK 설정.',
 ];

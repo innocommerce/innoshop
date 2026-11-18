@@ -59,6 +59,8 @@ use InnoShop\Aicore\Tools\RegionListTool;
 use InnoShop\Aicore\Tools\ReviewDetailTool;
 use InnoShop\Aicore\Tools\ReviewListTool;
 use InnoShop\Aicore\Tools\SalesStatsTool;
+use InnoShop\Aicore\Tools\SettingDetailTool;
+use InnoShop\Aicore\Tools\SettingUpdateTool;
 use InnoShop\Aicore\Tools\ShipmentCreateTool;
 use InnoShop\Aicore\Tools\ShipmentDetailTool;
 use InnoShop\Aicore\Tools\ShipmentListTool;
@@ -173,6 +175,8 @@ class AicoreServiceProvider extends ServiceProvider
             CustomerUpdateTool::class,
             ShipmentCreateTool::class,
             FileUploadTool::class,
+            SettingDetailTool::class,
+            SettingUpdateTool::class,
             ArticleListTool::class,
             ArticleDetailTool::class,
             ArticleUpdateTool::class,

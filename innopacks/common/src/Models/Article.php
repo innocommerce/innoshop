@@ -13,10 +13,12 @@ use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use InnoShop\Common\Traits\MediaCover;
 use InnoShop\Common\Traits\Translatable;
 
 class Article extends BaseModel
 {
+    use MediaCover;
     use Translatable;
 
     protected $fillable = [
@@ -113,7 +115,12 @@ class Article extends BaseModel
 
     /**
      * Get article image with fallback logic.
-     * Priority: current locale translation image -> main image
+     * Priority: current locale translation image -> main image.
+     *
+     * This accessor is display-only. Write paths must never seed from it:
+     * ArticleRepo::patch() and the panel form both read the RAW column via
+     * getRawOriginal('image') — seeding from this accessor would feed a
+     * per-locale cover back into the main column on every save.
      *
      * @return string
      */

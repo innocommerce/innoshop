@@ -11,18 +11,22 @@ namespace InnoShop\Restapi\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Requests\UploadFileRequest;
+use InnoShop\Common\Services\MediaUrlResolver;
+use InnoShop\Common\Services\VideoPosterService;
 use InnoShop\Panel\Controllers\BaseController;
 use InnoShop\Restapi\Criteria\FileListCriteria;
 use InnoShop\Restapi\Requests\DeleteFilesRequest;
 use InnoShop\Restapi\Requests\FileRequest;
 use InnoShop\Restapi\Requests\MoveFilesRequest;
 use InnoShop\Restapi\Requests\RenameFileRequest;
+use InnoShop\Restapi\Requests\SetVideoPosterRequest;
 use InnoShop\Restapi\Services\MediaInterface;
 use InnoShop\Restapi\Services\MediaService;
 use InnoShop\Restapi\Services\OSSService;
@@ -359,9 +363,117 @@ class MediaController extends BaseController
             'path'       => $storageKey,
             'url'        => storage_url($storageKey),
             'origin_url' => storage_url($storageKey),
+            'mime'       => $file->getMimeType(),
         ];
 
+        // The media id lets the browser post a canvas-captured poster frame
+        // back to media.set_poster right after the upload (#291). Poster if
+        // one is already linked (client-side capture may have run in the same
+        // request cycle) — freshly picked videos render their placeholder.
+        $media            = MediaFile::query()->where('storage_key', $storageKey)->first();
+        $data['media_id'] = $media?->id;
+        if ($media && $media->poster_media_id) {
+            $data['poster_url'] = media_poster_url(MediaUrlResolver::buildReference($media->id));
+        }
+
         return json_success('success', $data);
+    }
+
+    /**
+     * Link a browser-captured poster frame to a video (#291). The panel form
+     * component captures a frame via canvas — no ffmpeg involved — and posts
+     * it here; the frame is stored, registered and linked as the video's
+     * poster. `video` accepts a media id or a raw storage key: legacy files
+     * without a media_files row are adopted into one, so old raw-path covers
+     * gain a poster plus a media:// reference in the same round-trip.
+     *
+     * @param  SetVideoPosterRequest  $request
+     * @return mixed
+     */
+    #[Endpoint('Set video poster frame')]
+    #[BodyParam('video', type: 'string', required: true, description: 'Target video: media id or storage key')]
+    #[BodyParam('poster', type: 'file', required: true, description: 'Poster frame image captured from the video')]
+    public function setVideoPoster(SetVideoPosterRequest $request): mixed
+    {
+        $service    = new VideoPosterService;
+        $videoInput = $request->input('video');
+        // Legacy storage keys are posted base64-encoded: clear-text media paths
+        // in the body trip local WAF layers into replaying the POST as a GET
+        // probe (#291). Numbers (media ids) pass through untouched.
+        if ($request->boolean('video_encoded')) {
+            $decoded    = base64_decode((string) $videoInput, true);
+            $videoInput = ($decoded === false || trim($decoded) === '') ? null : $decoded;
+            if ($videoInput === null) {
+                return json_fail('Invalid encoded video reference', null, 422);
+            }
+        }
+
+        $video = $service->resolveVideoMedia($videoInput);
+        if (! $video) {
+            return json_fail('Video not found or not a video', null, 404);
+        }
+
+        $posterFile = $request->file('poster');
+        $tmpFrame   = null;
+        if (! $posterFile && $request->filled('poster_base64')) {
+            $posterFile = $this->uploadedFileFromDataUrl($request->input('poster_base64'));
+            if (! $posterFile) {
+                return json_fail('Invalid poster image data', null, 422);
+            }
+            // The data-URL copy is a tempnam() file nobody else owns —
+            // linkPosterFromUpload streams it via putFileAs without moving,
+            // so it must be removed once the link attempt is done.
+            $tmpFrame = $posterFile->getRealPath();
+        }
+        if (! $posterFile) {
+            return json_fail('Poster frame is required', null, 422);
+        }
+
+        try {
+            $poster = $service->linkPosterFromUpload($video, $posterFile);
+        } finally {
+            if ($tmpFrame !== null) {
+                @unlink($tmpFrame);
+            }
+        }
+
+        if (! $poster) {
+            return json_fail('Failed to store poster frame', null, 500);
+        }
+
+        return json_success('success', [
+            'poster_id'       => $poster->id,
+            'poster_url'      => media_poster_url(MediaUrlResolver::buildReference($video->id)),
+            'media_reference' => MediaUrlResolver::buildReference($video->id),
+        ]);
+    }
+
+    /**
+     * Materialize a canvas data URL (data:image/...;base64,...) into a test-friendly
+     * UploadedFile so the base64 variant shares the multipart storage pipeline.
+     *
+     * @return UploadedFile|null null when the payload is not a decodable image.
+     */
+    private function uploadedFileFromDataUrl(string $dataUrl): ?UploadedFile
+    {
+        if (! preg_match('#^data:image/(jpeg|jpg|png|webp);base64,(.+)$#s', trim($dataUrl), $m)) {
+            return null;
+        }
+
+        $binary = base64_decode($m[2], true);
+        if ($binary === false || ! @getimagesizefromstring($binary)) {
+            return null;
+        }
+
+        // tempnam() CREATES the base file — on Windows as posXXXX.tmp. Only
+        // its name is wanted here; the frame lives in the suffixed copy,
+        // so unlink the base or it leaks one file per call.
+        $tmpBase = tempnam(sys_get_temp_dir(), 'poster_');
+        $path    = $tmpBase.'.'.($m[1] === 'jpeg' ? 'jpg' : $m[1]);
+        @unlink($tmpBase);
+        file_put_contents($path, $binary);
+
+        return new UploadedFile($path, 'poster.'.($m[1] === 'jpeg' ? 'jpg' : $m[1]), 'image/'.$m[1], null, true);
     }
 
     /**

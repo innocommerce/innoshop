@@ -13,6 +13,7 @@ import localeField from './locale-field';
 
 export function initPanelInno() {
   window.inno = inno;
+  window.panelUI = panelUI;
 }
 
 export function bindPanelOnReady() {

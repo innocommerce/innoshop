@@ -56,7 +56,7 @@ class McpEndpointTest extends TestCase
     {
         $this->enableMcp();
 
-        $response = $this->get('/mcp');
+        $response = $this->get('/mcp/welcome');
 
         $response->assertOk();
         $response->assertSee('class="sidebar"', false);
@@ -66,11 +66,24 @@ class McpEndpointTest extends TestCase
     }
 
     #[Test]
+    public function test_get_mcp_answers_405_for_protocol_clients(): void
+    {
+        // Spec-mandated: the streamable transport answers GET /mcp with
+        // 405 (Allow: POST) — "no server-initiated streams". Shadowing it
+        // with the welcome page made clients reconnect in a hot loop (the
+        // 2026-10-15 load alert); the welcome page now lives at
+        // /mcp/welcome and /mcp stays protocol-only.
+        $this->enableMcp();
+
+        $this->get('/mcp')->assertStatus(405)->assertHeader('Allow', 'POST');
+    }
+
+    #[Test]
     public function test_welcome_page_404_when_mcp_disabled(): void
     {
         config(['inno.system.mcp_enabled' => false]);
 
-        $this->get('/mcp')->assertNotFound();
+        $this->get('/mcp/welcome')->assertNotFound();
     }
 
     #[Test]
@@ -79,8 +92,8 @@ class McpEndpointTest extends TestCase
         $this->enableMcp();
 
         $zhOverview = __('mcp::welcome.nav_overview', [], 'zh-cn');
-        $this->get('/mcp?lang=zh-cn')->assertOk()->assertSee($zhOverview, false);
-        $this->get('/mcp')->assertOk()->assertSee($zhOverview, false);
+        $this->get('/mcp/welcome?lang=zh-cn')->assertOk()->assertSee($zhOverview, false);
+        $this->get('/mcp/welcome')->assertOk()->assertSee($zhOverview, false);
     }
 
     #[Test]
@@ -88,7 +101,7 @@ class McpEndpointTest extends TestCase
     {
         $this->enableMcp();
 
-        $this->get('/mcp?lang=xx')->assertOk();
+        $this->get('/mcp/welcome?lang=xx')->assertOk();
     }
 
     #[Test]
@@ -98,7 +111,7 @@ class McpEndpointTest extends TestCase
 
         // ja is available as a language pack but not enabled in the backend —
         // the MCP welcome page still renders it, unlike the frontend.
-        $this->get('/mcp?lang=ja')->assertOk()
+        $this->get('/mcp/welcome?lang=ja')->assertOk()
             ->assertSee(__('mcp::welcome.nav_overview', [], 'ja'), false);
     }
 
@@ -107,9 +120,9 @@ class McpEndpointTest extends TestCase
     {
         $this->enableMcp();
 
-        $this->get('/mcp/locale/zh-cn')->assertRedirect('/mcp');
+        $this->get('/mcp/locale/zh-cn')->assertRedirect('/mcp/welcome');
 
-        $this->get('/mcp')->assertOk()
+        $this->get('/mcp/welcome')->assertOk()
             ->assertSee(__('mcp::welcome.nav_overview', [], 'zh-cn'), false);
     }
 
@@ -244,7 +257,26 @@ class McpEndpointTest extends TestCase
         $this->enableMcp();
         $this->actingAsAdminApi();
 
-        $this->assertStringContainsString('not found', $this->callToolContent('order_update_status'));
+        // With writes disabled the write tool is not registered: tools/list
+        // hides it and tools/call answers JSON-RPC -32602 "Tool not found"
+        // (the same policy on both sides).
+        //
+        // 断言 JSON-RPC 错误本身，不锁 HTTP 状态码：laravel/mcp v1.x 才把
+        // error 响应映射成 HTTP 400，v0.9.x 一律回 200 + error body。
+        // 两种版本的语义一致 —— 工具没注册，调用失败。
+        $response = $this->postJson('/mcp', [
+            'jsonrpc' => '2.0',
+            'id'      => 3,
+            'method'  => 'tools/call',
+            'params'  => ['name' => 'order_update_status', 'arguments' => []],
+        ], $this->mcpHeaders);
+
+        $response->assertJson([
+            'jsonrpc' => '2.0',
+            'id'      => 3,
+            'error'   => ['code' => -32602],
+        ]);
+        $this->assertStringContainsString('not found', $response->getContent());
     }
 
     #[Test]

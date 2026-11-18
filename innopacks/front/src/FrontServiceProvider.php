@@ -48,6 +48,12 @@ class FrontServiceProvider extends ServiceProvider
         $this->loadThemeTranslations();
         $this->loadThemeRoutes();
         $this->bootTheme();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Commands\GenerateSiteTxtCommand::class,
+            ]);
+        }
     }
 
     /**

@@ -10,6 +10,7 @@
 namespace InnoShop\Plugin;
 
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -47,8 +48,34 @@ class PluginServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(inno_path('plugin/resources/views'), 'plugin');
 
+        $this->registerPluginTranslationsEarly();
+
         if ($this->app->runningInConsole()) {
             $this->registerPluginCommands();
+        }
+    }
+
+    /**
+     * Register plugin translation namespaces in the register phase.
+     *
+     * Plugin fields.php files may call trans() at file scope, and plugin
+     * metadata is resolved on the first app('plugin')->getPlugins() call,
+     * which any service provider boot() can trigger before this provider's
+     * boot() runs. Registering here guarantees the namespaces exist before
+     * those lookups, otherwise the translator caches the lines as missing.
+     */
+    private function registerPluginTranslationsEarly(): void
+    {
+        $pluginBasePath = base_path('plugins');
+        if (! is_dir($pluginBasePath)) {
+            return;
+        }
+
+        $pluginPaths = glob($pluginBasePath.'/*', GLOB_ONLYDIR) ?: [];
+        foreach ($pluginPaths as $pluginPath) {
+            if (is_dir($pluginPath.'/Lang')) {
+                $this->loadTranslationsFrom($pluginPath.'/Lang', basename($pluginPath));
+            }
         }
     }
 
@@ -72,11 +99,15 @@ class PluginServiceProvider extends ServiceProvider
     }
 
     /**
-     * Flag to prevent duplicate boot execution (important for Laravel Octane)
+     * App instance whose boot() already ran. Tracked by identity, not a bool:
+     * `route:cache` boots a second application inside the same process, and a
+     * bool guard would silently skip plugin route/view registration there,
+     * dropping every plugin route from the cache. Same-instance duplicate
+     * boots (Laravel Octane) are still deduplicated.
      *
-     * @var bool
+     * @var Application|null
      */
-    private static bool $booted = false;
+    private static ?Application $bootedApp = null;
 
     /**
      * Boot Plugin Service Provider
@@ -85,11 +116,10 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Prevent duplicate boot execution (especially important for Laravel Octane)
-        if (self::$booted) {
+        if (self::$bootedApp === $this->app) {
             return;
         }
-        self::$booted = true;
+        self::$bootedApp = $this->app;
 
         $this->registerMigrations();
 

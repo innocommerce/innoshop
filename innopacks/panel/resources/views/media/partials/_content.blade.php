@@ -66,9 +66,11 @@
             <el-button size="small" @click="refreshAll" :title="'{{ __("panel/media.refresh") }}'">
               <el-icon><component :is="'Refresh'"></component></el-icon>
             </el-button>
+            @if($can_configure_storage ?? true)
             <el-button size="small" @click="storageConfigDialog.visible = true">
               <el-icon><component :is="'Setting'"></component></el-icon>
             </el-button>
+            @endif
           </el-col>
         </el-row>
       </div>
@@ -164,6 +166,8 @@
                               </div>
                               <div class="video-thumb">
                                 <i :class="file.icon || 'bi bi-file-earmark-play'"></i>
+                                <span v-if="videoCodecBadges[fileKey(file)] === 'bad'" class="codec-badge codec-badge-bad"
+                                  :title="'{{ __('panel::media.codec_badge_tooltip') }}'">{{ __('panel::media.codec_badge_unplayable') }}</span>
                               </div>
                             </template>
                             <template v-else>

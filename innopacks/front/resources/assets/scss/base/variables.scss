@@ -24,9 +24,9 @@ $color-border-default: #E3E8EE !default;
 $color-border-strong:  #C1C9D2 !default;
 $color-border-subtle:  #F0F2F5 !default;
 
-$color-accent:         #635BFF !default;
-$color-accent-hover:   #5851EE !default;
-$color-accent-soft:    #EEECFB !default;
+$color-accent:         $primary !default;
+$color-accent-hover:   darken($primary, 8%) !default;
+$color-accent-soft:    rgba($primary, 0.08) !default;
 
 $color-danger:         #DE3618 !default;
 
@@ -57,7 +57,7 @@ $radius-lg: 12px !default;
 // ---- Shadow (subtle) --------------------------------------
 $shadow-xs:    0 1px 2px rgba(10, 37, 64, 0.04) !default;
 $shadow-sm:    0 2px 4px rgba(10, 37, 64, 0.06), 0 1px 2px rgba(10, 37, 64, 0.04) !default;
-$shadow-focus: 0 0 0 3px rgba(99, 91, 255, 0.30) !default;
+$shadow-focus: 0 0 0 3px rgba($color-accent, 0.30) !default;
 
 // ---- Transitions ------------------------------------------
 $transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1) !default;

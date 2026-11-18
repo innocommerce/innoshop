@@ -13,4 +13,6 @@ return [
     'name'            => '속성 이름',
     'set_attribute'   => '속성 설정',
     'group'           => '속성 그룹',
+    'show_on_detail'  => '상세 페이지에 표시',
+    'type_richtext'   => '리치 텍스트',
 ];

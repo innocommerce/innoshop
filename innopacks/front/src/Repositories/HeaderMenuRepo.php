@@ -10,6 +10,9 @@
 namespace InnoShop\Front\Repositories;
 
 use Exception;
+use InnoShop\Common\Models\Catalog;
+use InnoShop\Common\Models\Category;
+use InnoShop\Common\Models\Page;
 use InnoShop\Common\Repositories\CatalogRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\PageRepo;
@@ -30,18 +33,46 @@ class HeaderMenuRepo
     /**
      * Generate header menus for frontend.
      *
+     * The menu tree costs ~90 queries (two-level categories, each with
+     * translations, plus catalogs and pages) on EVERY page render, so the
+     * assembled array is cached. The cache key fingerprints the menu
+     * settings and the max updated_at of the three source tables, so
+     * admin edits (re-assignments AND renames) invalidate immediately;
+     * the TTL is only a backstop.
+     *
      * @return array
      * @throws Exception
      */
     public function getMenus(): array
     {
-        $specials   = $this->getSpecials(system_setting('menu_header_specials'));
-        $categories = $this->getCategories(system_setting('menu_header_categories'));
-        $catalogs   = $this->getCatalogs(system_setting('menu_header_catalogs'));
-        $pages      = $this->getPages(system_setting('menu_header_pages'));
-        $menus      = array_merge($specials, $categories, $catalogs, $pages);
+        $settings = [
+            system_setting('menu_header_specials'),
+            system_setting('menu_header_categories'),
+            system_setting('menu_header_catalogs'),
+            system_setting('menu_header_pages'),
+        ];
 
-        return fire_hook_filter('global.header.menus', $menus);
+        $stamp = (string) Category::query()->max('updated_at')
+            .(string) Catalog::query()->max('updated_at')
+            .(string) Page::query()->max('updated_at');
+        $cacheKey = 'header_menus:'.app()->getLocale().':'.md5(json_encode($settings)).':'.md5($stamp);
+
+        $menus = cache()->get($cacheKey);
+        if (is_array($menus)) {
+            return $menus;
+        }
+
+        $menus = array_merge(
+            $this->getSpecials($settings[0]),
+            $this->getCategories($settings[1]),
+            $this->getCatalogs($settings[2]),
+            $this->getPages($settings[3]),
+        );
+
+        $menus = fire_hook_filter('global.header.menus', $menus);
+        cache()->put($cacheKey, $menus, now()->addDay());
+
+        return $menus;
     }
 
     /**

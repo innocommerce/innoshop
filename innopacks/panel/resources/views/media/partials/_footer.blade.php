@@ -1,12 +1,21 @@
 @push('footer')
   <script>
+    // ---- video cover capture (#291) — shared partial includes the three
+    // browser-side helpers (innoCaptureVideoFrame, innoDrawContain,
+    // innoSetVideoPoster). After a video upload the browser grabs an early
+    // frame and posts it to media.set-poster, so manager uploads end up
+    // with posters too. Failures are silent — posters are nice-to-have. ----
+    @include('common::partials.inno_cover_capture_js')
+
     const __fmApp = Vue.createApp({
       created() {},
       mounted() {
         try { this.showFolders = localStorage.getItem('media_show_folders') === '1'; } catch (e) {}
         this.loadFolders();
 
+        @if($can_configure_storage ?? true)
         this.getStorageConfig();
+        @endif
 
         this.loadMediaStats();
       },
@@ -41,6 +50,7 @@
           },
           loading: false,
           previewImageUrl: '',
+          videoCodecBadges: {},
           mediaStats: {
             total_files: 0,
             total_size: 0,
@@ -59,7 +69,7 @@
           uploadDialog: {
             visible: false
           },
-          uploadUrl: '/api/panel/media/upload',
+          uploadUrl: '{{ $apiPrefix ?? '/api/panel/' }}media/upload',
           uploadHeaders: {
             'Authorization': 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content')
           },
@@ -392,6 +402,7 @@
 
               this.pagination.total = res.total;
               this.pagination.page = res.page;
+              this.scanVideoCodecs();
             })
             .catch(err => {
               this.$message.error(err.message);
@@ -399,6 +410,83 @@
             .finally(() => {
               this.loading = false;
             });
+        },
+
+        fileKey(file) {
+          return file.id || file.path;
+        },
+
+        // ---- codec badge scan --------------------------------------------
+        // The grid must tell bad codecs apart from playable ones at a glance,
+        // not one play-click at a time. Badges come from a localStorage cache
+        // (videos are immutable, path is a stable key) and are filled in for
+        // uncached files by probing each video's URL with small Range
+        // requests, serially so a full page never bursts. Probe failures
+        // (cloud storage CORS, offline) stay silent and uncached — never a
+        // false badge.
+        readCodecCache() {
+          try {
+            const raw = JSON.parse(localStorage.getItem('media_codec_cache_v1') || '{}');
+            const out = {};
+            Object.keys(raw).forEach((key) => {
+              out[key] = raw[key] && raw[key].s ? raw[key].s : null;
+            });
+            return out;
+          } catch (e) {
+            return {};
+          }
+        },
+
+        writeCodecCache(key, status) {
+          try {
+            const raw = JSON.parse(localStorage.getItem('media_codec_cache_v1') || '{}');
+            raw[key] = { s: status, t: Date.now() };
+            const keys = Object.keys(raw);
+            if (keys.length > 800) {
+              keys.sort((a, b) => (raw[a].t || 0) - (raw[b].t || 0))
+                .slice(0, keys.length - 800)
+                .forEach((k) => delete raw[k]);
+            }
+            localStorage.setItem('media_codec_cache_v1', JSON.stringify(raw));
+          } catch (e) {}
+        },
+
+        async scanVideoCodecs() {
+          const cache = this.readCodecCache();
+          const badges = {};
+          const pending = [];
+          this.files.forEach((file) => {
+            if (file.is_dir || !file.mime || !file.mime.startsWith('video/mp4')) {
+              return;
+            }
+            // Video list rows carry no thumbnail `url` — only `origin_url`
+            // (same source autoCaptureVideoPoster uses).
+            const url = file.origin_url || file.url;
+            if (!url) {
+              return;
+            }
+            const key = this.fileKey(file);
+            const hit = cache[key];
+            if (hit === 'bad') {
+              badges[key] = 'bad';
+            } else if (hit === 'ok') {
+              badges[key] = 'ok';
+            } else {
+              pending.push(file);
+            }
+          });
+          this.videoCodecBadges = badges;
+          for (const file of pending) {
+            const url = file.origin_url || file.url;
+            const result = await window.innoProbeVideoCodecUrl(url).catch(() => null);
+            if (!result || result.unknown) {
+              continue;
+            }
+            const key = this.fileKey(file);
+            const status = result.incompatible ? 'bad' : 'ok';
+            this.videoCodecBadges[key] = status;
+            this.writeCodecCache(key, status);
+          }
         },
 
         handleCurrentChange(page) {
@@ -410,6 +498,21 @@
           this.pagination.per_page = size;
           this.pagination.page = 1;
           this.loadFiles();
+        },
+
+        // Auto-capture a default cover right after a video upload (#291),
+        // same contract as the form component: the browser grabs an early
+        // frame and posts it; any failure keeps the play-icon placeholder.
+        autoCaptureVideoPoster(file) {
+          const mediaId = file && file.media_id ? String(parseInt(file.media_id, 10)) : '';
+          const src = (file && (file.origin_url || file.url)) || '';
+          const isVideo = /^video\//i.test((file && file.mime) || '') || /\.(mp4|webm|ogg)(\?|$)/i.test(src);
+          if (!mediaId || !src || !isVideo) {
+            return;
+          }
+          window.innoCaptureVideoFrame(src, 1)
+            .then((dataUrl) => window.innoSetVideoPoster(mediaId, dataUrl))
+            .catch(() => {});
         },
 
         uploadFileToServer(file, path, type) {
@@ -430,6 +533,7 @@
                 this.uploadDialog.visible = false;
                 this.pagination.page = 1;
                 this.loadFiles();
+                this.autoCaptureVideoPoster(res.data || {});
               } else {
                 this.$message.error(res.message || '{{ __("panel/media.upload_failed") }}');
               }
@@ -486,6 +590,23 @@
             this.$message.error(`{{ __("panel/media.file_too_large") }} ${maxSizeMB}MB!`);
             return false;
           }
+
+          // Layer-1 codec guard: warn (never block) when an MP4 carries a
+          // codec most browsers cannot decode, e.g. phones defaulting to
+          // H.265/HEVC. A centered modal alert because this needs a decision;
+          // fire-and-forget so it cannot delay the upload, and the badge scan
+          // after the list reload will mark the file in the grid as well.
+          if (isVideo && file.type === 'video/mp4' && window.innoProbeVideoCodec) {
+            window.innoProbeVideoCodec(file).then((result) => {
+              if (result && result.incompatible) {
+                this.$alert('{{ __("panel::media.hevc_codec_warning") }}', '{{ __("panel::media.codec_warning_title") }}', {
+                  confirmButtonText: '{{ __("panel::media.codec_warning_confirm") }}',
+                  type: 'warning',
+                });
+              }
+            }).catch(() => {});
+          }
+
           if (isVideo || isDoc) {
             const type = isVideo ? 'videos' : 'application';
             this.uploadFileToServer(file, this.uploadData.path, type);

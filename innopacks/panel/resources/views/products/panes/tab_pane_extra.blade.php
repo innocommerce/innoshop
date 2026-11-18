@@ -1,89 +1,133 @@
 <div class="tab-pane fade mt-3" id="extra-tab-pane" role="tabpanel" aria-labelledby="extra-tab"
      tabindex="3">
-  <div class="row">
-    <div class="col-12 col-md-6" id="product-category">
-      {{-- 分类选择 --}}
-      <x-panel::form.row title="{{ __('panel/product.category') }}">
-        <div class="category-select">
-          <el-cascader
-            :options="source.categories"
-            size="medium"
-            ref="refCascader"
-            placeholder="请选择/搜索分类"
-            :props="{ label: 'label', value: 'value', children: 'children', checkStrictly: true}"
-            @change="categoriesChange"
-            filterable
-            class="category-cascader"
-            :class="!categoryFormat.length ? 'no-data' : ''"
-            style="width: 100%;">
-          </el-cascader>
+  {{-- 分类与品牌 --}}
+  <div class="form-section">
+    <div class="form-section-title">{{ __('panel/product.section_category_brand') }}</div>
+    <div class="row">
+      <div class="col-12 col-md-6" id="product-category">
+        {{-- 分类选择 --}}
+        <x-panel::form.row title="{{ __('panel/product.category') }}">
+          <div class="category-select">
+            <el-cascader
+              :options="source.categories"
+              size="medium"
+              ref="refCascader"
+              placeholder="请选择/搜索分类"
+              :props="{ label: 'label', value: 'value', children: 'children', checkStrictly: true}"
+              @change="categoriesChange"
+              filterable
+              class="category-cascader"
+              :class="!categoryFormat.length ? 'no-data' : ''"
+              style="width: 100%;">
+            </el-cascader>
 
-          <div class="category-data" v-if="categoryFormat.length">
-            <div class="d-flex flex-wrap gap-2 mt-2">
-              <span v-for="item, index in categoryFormat" :key="index" 
-                    class="badge bg-light text-dark border d-flex align-items-center px-2 py-1" 
-                    style="font-size: 0.875rem; border-radius: 6px; font-weight: normal;">
-                <span class="me-2">@{{ item.fullPath }}</span>
-                <i class="bi bi-x cursor-pointer" 
-                   @click="removeCategory(index)" 
-                   style="font-size: 0.75rem; opacity: 0.7;"
-                   @mouseover="$event.target.style.opacity='1'" 
-                   @mouseout="$event.target.style.opacity='0.7'"></i>
-                <input type="hidden" name="categories[]" :value="item.value">
-              </span>
+            <div class="category-data" v-if="categoryFormat.length">
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <span v-for="item, index in categoryFormat" :key="index"
+                      class="badge bg-light text-dark border d-flex align-items-center px-2 py-1"
+                      style="font-size: 0.875rem; border-radius: 6px; font-weight: normal;">
+                  <span class="me-2">@{{ item.fullPath }}</span>
+                  <i class="bi bi-x cursor-pointer"
+                     @click="removeCategory(index)"
+                     style="font-size: 0.75rem; opacity: 0.7;"
+                     @mouseover="$event.target.style.opacity='1'"
+                     @mouseout="$event.target.style.opacity='0.7'"></i>
+                  <input type="hidden" name="categories[]" :value="item.value">
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </x-panel::form.row>
-    </div>
-    <div class="col-12 col-md-6">
-      <x-common-form-select :title="__('panel/product.brand')" name="brand_id"
-                            :value="old('brand_id', $product->brand_id ?? 0)" :options="$brands"
-                            key="id" label="name"/>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-6">
-      <div class="row">
-        <div class="col-md-6">
-          <x-common-form-input :title="__('panel/product.default_weight')" name="weight"
-                           :value="old('weight', $product->weight ?? '')" :placeholder="__('panel/product.default_weight')"/>
-          <small class="form-text text-muted">{{ __('panel/product.default_weight_hint') }}</small>
-        </div>
-        <div class="col-md-6">
-          <x-common-form-select :title="__('panel/product.weight_class')" name="weight_class"
-                             :value="old('weight_class', $product->weight_class ?? '')" :options="$weightClasses"
-                             key="code" label="name" />
-        </div>
+        </x-panel::form.row>
       </div>
-      <x-common-form-select :title="__('panel/product.tax_class')" name="tax_class_id"
-                            :value="old('tax_class_id', $product->tax_class_id ?? 0)" :options="$tax_classes"
-                            key="id" label="name"/>
-    </div>
-    <div class="col-12 col-md-6">
-      <x-common-form-input :title="__('panel/product.spu_code')" name="spu_code"
-                           :value="old('spu_code', $product->spu_code ?? '')"
-                           :placeholder="__('panel/product.spu_code')"/>
-      <x-common-form-input :title="__('common/base.position')" name="position"
-                           :value="old('position', $product->position ?? '')"
-                           :placeholder="__('common/base.position')"/>
+      <div class="col-12 col-md-6">
+        <x-common-form-select :title="__('panel/product.brand')" name="brand_id"
+                              :value="old('brand_id', $product->brand_id ?? 0)" :options="$brands"
+                              key="id" label="name"/>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 col-md-6">
-      <x-common-form-input :title="__('panel/product.sales')" name="sales" :value="old('sales', $product->sales ?? '')"
-                           :placeholder="__('panel/product.sales')"/>
-      <x-common-form-input :title="__('panel/product.viewed')" name="viewed"
-                           :value="old('viewed', $product->viewed ?? '')" :placeholder="__('panel/product.viewed')"/>
-    </div>
-    <div class="col-12 col-md-6">
-      <x-common-form-input :title="__('panel/product.minimum')" name="minimum" type="number"
-                           :value="old('minimum', $product->minimum ?? 1)"
-                           :placeholder="__('panel/product.minimum')"/>
-      <x-common-form-switch-radio :title="__('panel/product.is_virtual')" name="is_virtual"
-                              :value="old('is_virtual', $product->is_virtual ?? false)"/>
+
+  {{-- 规格与称重 --}}
+  <div class="form-section">
+    <div class="form-section-title">{{ __('panel/product.section_spec_weight') }}</div>
+    <div class="row">
+      <div class="col-6 col-md-2">
+        <x-common-form-input :title="__('panel/product.default_weight')" name="weight"
+                         :value="old('weight', $product->weight ?? '')" :placeholder="__('panel/product.default_weight')"/>
+      </div>
+      <div class="col-6 col-md-2">
+        <x-common-form-select :title="__('panel/product.weight_class')" name="weight_class"
+                         :value="old('weight_class', $product->weight_class ?? '')" :options="$weightClasses"
+                         key="code" label="name" />
+      </div>
+      <div class="col-6 col-md-2">
+        <x-common-form-select :title="__('panel/product.length_class')" name="length_class"
+                         :value="old('length_class', $product->length_class ?? 'cm')"
+                         :options="[['code' => 'mm', 'name' => 'mm'], ['code' => 'cm', 'name' => 'cm'], ['code' => 'm', 'name' => 'm'], ['code' => 'in', 'name' => 'in']]"
+                         key="code" label="name" />
+      </div>
+      <div class="col-6 col-md-2">
+        <x-common-form-input :title="__('panel/product.length')" name="length"
+                         :value="old('length', $product->length ?? '')" :placeholder="__('panel/product.length')"/>
+      </div>
+      <div class="col-6 col-md-2">
+        <x-common-form-input :title="__('panel/product.width')" name="width"
+                         :value="old('width', $product->width ?? '')" :placeholder="__('panel/product.width')"/>
+      </div>
+      <div class="col-6 col-md-2">
+        <x-common-form-input :title="__('panel/product.height')" name="height"
+                         :value="old('height', $product->height ?? '')" :placeholder="__('panel/product.height')"/>
+      </div>
     </div>
   </div>
+
+  {{-- 商务属性 --}}
+  <div class="form-section">
+    <div class="form-section-title">{{ __('panel/product.section_commerce') }}</div>
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <x-common-form-select :title="__('panel/product.tax_class')" name="tax_class_id"
+                              :value="old('tax_class_id', $product->tax_class_id ?? 0)" :options="$tax_classes"
+                              key="id" label="name"/>
+      </div>
+      <div class="col-12 col-md-4">
+        <x-common-form-input :title="__('panel/product.minimum')" name="minimum" type="number"
+                             :value="old('minimum', $product->minimum ?? 1)"
+                             :placeholder="__('panel/product.minimum')"/>
+      </div>
+      <div class="col-12 col-md-4">
+        <x-common-form-switch-radio :title="__('panel/product.is_virtual')" name="is_virtual"
+                                :value="old('is_virtual', $product->is_virtual ?? false)"/>
+      </div>
+    </div>
+  </div>
+
+  {{-- 编码与统计 --}}
+  <div class="form-section">
+    <div class="form-section-title">{{ __('panel/product.section_code_stats') }}</div>
+    <div class="row">
+      <div class="col-6 col-md-3">
+        <x-common-form-input :title="__('panel/product.spu_code')" name="spu_code"
+                             :value="old('spu_code', $product->spu_code ?? '')"
+                             :placeholder="__('panel/product.spu_code')"/>
+      </div>
+      <div class="col-6 col-md-3">
+        <x-common-form-input :title="__('common/base.position')" name="position"
+                             :value="old('position', $product->position ?? '')"
+                             :placeholder="__('common/base.position')"/>
+      </div>
+      <div class="col-6 col-md-3">
+        <x-common-form-input :title="__('panel/product.sales')" name="sales" :value="old('sales', $product->sales ?? '')"
+                             :placeholder="__('panel/product.sales')"/>
+      </div>
+      <div class="col-6 col-md-3">
+        <x-common-form-input :title="__('panel/product.viewed')" name="viewed"
+                             :value="old('viewed', $product->viewed ?? '')" :placeholder="__('panel/product.viewed')"/>
+      </div>
+    </div>
+  </div>
+  {{-- Extension point for packs to append extra field groups (e.g. supplier external-source fields). --}}
+  @hookinsert('panel.product.edit.extra.after')
 </div>
 
 @push('footer')

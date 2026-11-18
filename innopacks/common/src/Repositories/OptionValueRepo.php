@@ -155,6 +155,9 @@ class OptionValueRepo extends BaseRepo
     public function deleteOptionValue(OptionValue $optionValue): bool
     {
         try {
+            // Cascade: remove product option value bindings referencing this value first.
+            $optionValue->productOptionValues()->delete();
+
             return $optionValue->delete();
         } catch (Exception $e) {
             throw new Exception('删除选项值失败: '.$e->getMessage());

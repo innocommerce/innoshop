@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'De map is niet leeg',
     'show_folders'                  => 'Mappen weergeven',
     'delete_failed'                 => 'Verwijderen mislukt',
+    'capture_load_failed'           => 'Video kon niet worden geladen, kan geen cover kiezen',
+    'capture_cross_origin'          => 'Deze video valt onder het cross-origin-beleid, er kan geen frame in de browser worden vastgelegd. Upload een afbeelding als cover.',
 ];

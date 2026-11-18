@@ -9,7 +9,11 @@
 
 namespace InnoShop\Common\Models;
 
+use Database\Factories\ProductFactory;
 use Exception;
+use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,13 +25,22 @@ use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
 use InnoShop\Common\Models\Product\Variant;
 use InnoShop\Common\Services\LegacyVariablesBuilder;
-use InnoShop\Common\Traits\HasPackageFactory;
 use InnoShop\Common\Traits\Replicate;
 use InnoShop\Common\Traits\Translatable;
 
 class Product extends BaseModel
 {
-    use HasPackageFactory, Replicate, Translatable;
+    use HasFactory, Replicate, Translatable;
+
+    /**
+     * Product lives outside App\Models, so HasFactory's default guess
+     * (Database\Factories\InnoShop\...) misses; point it at the app-side
+     * factory that the test suite and ProductSkuFactory share.
+     */
+    protected static function newFactory(): Factory
+    {
+        return ProductFactory::new();
+    }
 
     public $timestamps = true;
 
@@ -37,7 +50,7 @@ class Product extends BaseModel
 
     protected $fillable = [
         'type', 'brand_id', 'images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'position',
-        'spu_code', 'active', 'weight', 'weight_class', 'sales', 'rating', 'reviews_count', 'viewed', 'minimum', 'created_at', 'updated_at', 'published_at',
+        'spu_code', 'active', 'weight', 'weight_class', 'length', 'width', 'height', 'length_class', 'sales', 'rating', 'reviews_count', 'viewed', 'minimum', 'created_at', 'updated_at', 'published_at',
     ];
 
     // `weight_class` is the unit shared by all SKUs of this product.
@@ -52,6 +65,25 @@ class Product extends BaseModel
     ];
 
     protected $appends = ['image'];
+
+    /**
+     * Packs can extend the fillable fields dynamically through the
+     * 'common.product.fillable' hook, without patching this core model.
+     *
+     * @return array
+     */
+    public function getFillable(): array
+    {
+        // fire_hook_filter needs the app container (eventy); stay inert in
+        // container-less unit tests and during early bootstrap.
+        $container = Container::getInstance();
+
+        if (! $container || ! $container->bound('eventy')) {
+            return $this->fillable;
+        }
+
+        return fire_hook_filter('common.product.fillable', $this->fillable);
+    }
 
     /**
      * @return BelongsTo
@@ -181,7 +213,7 @@ class Product extends BaseModel
     }
 
     /**
-     * 获取产品的选项关联
+     * Option relations attached to this product.
      */
     public function productOptions(): HasMany
     {
@@ -189,7 +221,7 @@ class Product extends BaseModel
     }
 
     /**
-     * 获取产品的选项值配置
+     * Per-product option value configurations.
      */
     public function productOptionValues(): HasMany
     {
@@ -197,7 +229,7 @@ class Product extends BaseModel
     }
 
     /**
-     * 获取产品关联的所有选项（通过产品选项值配置）
+     * All options linked to this product through its option value configs.
      */
     public function options(): BelongsToMany
     {
@@ -257,18 +289,82 @@ class Product extends BaseModel
         $attributes = [];
         foreach ($productAttributes as $productAttribute) {
             $attribute = $productAttribute->attribute;
-            $groupID   = $attribute->attribute_group_id;
+            // Skip orphaned rows (attribute deleted) and long-text content,
+            // which renders as standalone detail tabs, not table rows
+            if (! $attribute || $attribute->isLongText()) {
+                continue;
+            }
+            $groupID = $attribute->attribute_group_id;
             if (! isset($attributes[$groupID]['attribute_group_name'])) {
                 $attributes[$groupID]['attribute_group_name'] = $attribute->group->translation->name ?? 'default';
             }
 
             $attributes[$groupID]['attributes'][] = [
                 'attribute'       => $attribute->translation->name ?? '',
-                'attribute_value' => $productAttribute->attributeValue->translation->name ?? '',
+                'attribute_value' => $this->resolveAttributeDisplayValue($productAttribute),
             ];
         }
 
         return $attributes;
+    }
+
+    /**
+     * Long-text attribute values (textarea/richtext) flagged visible, each
+     * rendered as a standalone tab on the storefront detail page.
+     *
+     * @return array
+     */
+    public function visibleLongTextAttributes(): array
+    {
+        $this->loadMissing([
+            'productAttributes.attribute.translation',
+        ]);
+
+        $items = [];
+        foreach ($this->productAttributes as $productAttribute) {
+            $attribute = $productAttribute->attribute;
+            if (! $attribute || ! $attribute->isLongText() || ! $productAttribute->is_visible) {
+                continue;
+            }
+
+            $value = $productAttribute->localizedValueText();
+            if (trim(strip_tags($value)) === '') {
+                continue;
+            }
+
+            $items[] = [
+                'name'   => $attribute->translation->name ?? '',
+                'type'   => $attribute->type,
+                'value'  => $value,
+                'values' => $productAttribute->valueTextMap(),
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * Display value of a product attribute row: preset value name for
+     * select attributes, raw value_text/value_number for free-input types.
+     *
+     * @param  Attribute  $productAttribute
+     * @return string
+     */
+    private function resolveAttributeDisplayValue(Attribute $productAttribute): string
+    {
+        if ($productAttribute->attributeValue?->translation?->name) {
+            return $productAttribute->attributeValue->translation->name;
+        }
+
+        if ($productAttribute->value_text !== null && $productAttribute->value_text !== '') {
+            return (string) $productAttribute->value_text;
+        }
+
+        if ($productAttribute->value_number !== null) {
+            return rtrim(rtrim((string) $productAttribute->value_number, '0'), '.');
+        }
+
+        return '';
     }
 
     /**
@@ -425,13 +521,13 @@ class Product extends BaseModel
     }
 
     /**
-     * @param  int  $with
+     * @param  int  $width
      * @param  int  $height
      * @return string
      * @throws Exception
      */
-    public function getImageUrl(int $with = 600, int $height = 600): string
+    public function getImageUrl(int $width = 600, int $height = 600): string
     {
-        return image_resize($this->image ?? '', $with, $height);
+        return image_resize($this->image ?? '', $width, $height);
     }
 }

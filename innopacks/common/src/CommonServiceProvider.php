@@ -15,8 +15,12 @@ use Illuminate\Support\ServiceProvider;
 use InnoShop\Common\Components\Base;
 use InnoShop\Common\Components\Forms;
 use InnoShop\Common\Console\Commands;
+use InnoShop\Common\Jobs\QueueHeartbeatJob;
+use InnoShop\Common\Repositories\SystemTaskRepo;
+use InnoShop\Common\Services\MediaLookupRegistry;
 use InnoShop\Common\Services\Notification\NotificationEventSubscriber;
 use InnoShop\Common\Services\StorageService;
+use InnoShop\Common\Services\UrlRedirectService;
 
 class CommonServiceProvider extends ServiceProvider
 {
@@ -33,6 +37,14 @@ class CommonServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom($this->basePath.'resources/views', 'common');
         $this->app->singleton(StorageService::class);
+
+        // Scoped, not singleton — array-style cache of MediaFile rows that
+        // media_is_video / media_poster_url read on every cover render.
+        // Scoped binding is reset per request under Octane and re-built per
+        // FPM request, so a poster replacement becomes visible to the very
+        // next page render instead of staying hidden for the array store's
+        // TTL (#291).
+        $this->app->scoped(MediaLookupRegistry::class);
     }
 
     /**
@@ -52,6 +64,17 @@ class CommonServiceProvider extends ServiceProvider
         $this->loadViewTemplates();
         $this->registerTopbarAnnouncements();
         $this->registerNotificationListeners();
+        $this->registerUrlRedirects();
+    }
+
+    /**
+     * SEO redirect mechanism (#157): record slug renames into url_redirects
+     * and 301 front-side 404s that hit a rule. Management UI lives in a
+     * future plugin; `redirects:add` is the manual stopgap.
+     */
+    private function registerUrlRedirects(): void
+    {
+        UrlRedirectService::register();
     }
 
     /**
@@ -119,10 +142,16 @@ class CommonServiceProvider extends ServiceProvider
                 Commands\AggregateVisitStatistics::class,
                 Commands\BackfillVisitGeo::class,
                 Commands\TagBots::class,
+                Commands\UpdateGeoLite2::class,
                 Commands\RecomputeProductRating::class,
                 Commands\MediaRegisterExisting::class,
                 Commands\MediaMigrateReferences::class,
+                Commands\GenerateVideoPosters::class,
+                Commands\PruneVideoPosters::class,
                 Commands\VerifyVariants::class,
+                Commands\MigrateBotsToDaily::class,
+                Commands\PruneVisits::class,
+                Commands\AddUrlRedirect::class,
             ]);
         }
     }
@@ -135,11 +164,26 @@ class CommonServiceProvider extends ServiceProvider
      */
     private function registerSchedules(): void
     {
+        // Scheduler liveness heartbeat, persisted in DB so the panel system
+        // task page can detect a dead scheduler even with CACHE_STORE=array.
+        Schedule::call(fn () => SystemTaskRepo::touch('scheduler'))
+            ->everyFiveMinutes()
+            ->name('scheduler-heartbeat')
+            ->description('Write scheduler liveness heartbeat');
+
+        // Queue liveness probe: heartbeat is written by the worker when it
+        // executes, so a fresh record proves the whole pipeline is alive.
+        Schedule::job(new QueueHeartbeatJob)
+            ->everyFiveMinutes()
+            ->name('queue-heartbeat')
+            ->description('Queue liveness probe writing heartbeat on execution');
+
         // Aggregate yesterday's visit stats (pv/uv/conversion/country/hour/device) shortly after midnight.
         Schedule::command('visits:aggregate --date=yesterday')
             ->dailyAt('00:05')
             ->withoutOverlapping()
             ->name('visits:aggregate-yesterday')
+            ->onSuccess(fn () => SystemTaskRepo::touch('visits-aggregate-yesterday'))
             ->description('Aggregate yesterday\'s visit data into daily summary tables');
 
         // Keep today's rollup fresh so the panel dashboard never needs to aggregate on read.
@@ -148,12 +192,23 @@ class CommonServiceProvider extends ServiceProvider
             ->everyFiveMinutes()
             ->withoutOverlapping()
             ->name('visits:aggregate-today')
+            ->onSuccess(fn () => SystemTaskRepo::touch('visits-aggregate-today'))
             ->description('Refresh today\'s visit data into daily summary tables');
 
         // Re-scan for crawlers/scanners weekly (new UA patterns emerge over time).
+        // withoutOverlapping(120) = 2h cache lock: weekly cadence has a 7-day buffer,
+        // but if a previous run ever stalls we still serialize cleanly.
+        // onFailure logs to the daily laravel log channel so exit-code-255 crashes
+        // leave a trail beyond the SystemTaskHeartbeat (which only tracks success).
         Schedule::command('visits:tag-bots --include-suspicious')
             ->weeklyOn(1, '03:00')
+            ->withoutOverlapping(120)
             ->name('visits:tag-bots-weekly')
+            ->onSuccess(fn () => SystemTaskRepo::touch('visits-tag-bots-weekly'))
+            ->onFailure(fn (\Throwable $e) => logger()->error(
+                'visits:tag-bots failed: '.$e->getMessage(),
+                ['trace' => $e->getTraceAsString()]
+            ))
             ->description('Tag bots/crawlers/scanners via User-Agent and behavior');
 
         // Backfill missing geo data nightly in small chunks.
@@ -161,7 +216,27 @@ class CommonServiceProvider extends ServiceProvider
             ->dailyAt('03:30')
             ->withoutOverlapping()
             ->name('visits:backfill-geo-nightly')
+            ->onSuccess(fn () => SystemTaskRepo::touch('visits-backfill-geo-nightly'))
             ->description('Backfill country/browser/os for visits missing geo data');
+
+        // Rolling retention: real-visitor detail 180d, bot IP dedup 30d.
+        // Runs well after the 00:05 aggregate so expiring days are already
+        // rolled up; the aggregate guard also refuses detail-less days.
+        Schedule::command('visits:prune')
+            ->dailyAt('00:40')
+            ->withoutOverlapping()
+            ->name('visits:prune-nightly')
+            ->onSuccess(fn () => SystemTaskRepo::touch('visits-prune-nightly'))
+            ->description('Delete visit detail rows past the retention window');
+
+        // Refresh the GeoLite2 mmdb weekly so newly added/renamed regions
+        // keep resolving; scheduled after the nightly geo backfill cluster.
+        Schedule::command('geolite2:download')
+            ->weeklyOn(0, '04:00')
+            ->withoutOverlapping()
+            ->name('geolite2-download-weekly')
+            ->onSuccess(fn () => SystemTaskRepo::touch('geolite2-download-weekly'))
+            ->description('Refresh the GeoLite2 country database');
     }
 
     /**

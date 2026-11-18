@@ -29,7 +29,7 @@ class BrandController extends Controller
     public function index(): mixed
     {
         $data = [
-            'brands' => BrandRepo::getInstance()->withActive()->all()->groupBy('first'),
+            'brands' => BrandRepo::getInstance()->withActive()->all()->load('translations')->groupBy('first'),
         ];
 
         return inno_view('brands.index', $data);

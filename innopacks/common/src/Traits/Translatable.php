@@ -68,6 +68,10 @@ trait Translatable
      */
     public function translatedName(string $field = 'name'): string
     {
+        if ($this->relationLoaded('translations')) {
+            return $this->translations->firstWhere('locale', locale_code())?->{$field} ?? '';
+        }
+
         return $this->translation?->{$field} ?? '';
     }
 

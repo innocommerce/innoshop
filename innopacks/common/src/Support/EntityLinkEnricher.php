@@ -66,7 +66,9 @@ final class EntityLinkEnricher
                     if ($category instanceof Category) {
                         $row['entity_label'] = $category->fallbackName();
                         if ($needImage && $category->image) {
-                            $row['entity_image'] = (string) image_resize($category->image, 100, 100);
+                            // Video covers render the extracted poster frame; '' when no
+                            // poster exists — callers render a placeholder (coverUrl contract).
+                            $row['entity_image'] = $category->coverUrl(100, 100);
                         }
                     }
                     break;
@@ -93,7 +95,7 @@ final class EntityLinkEnricher
                     if ($article instanceof Article) {
                         $row['entity_label'] = $article->fallbackName('title');
                         if ($needImage && $article->image) {
-                            $row['entity_image'] = (string) image_resize($article->image, 100, 100);
+                            $row['entity_image'] = $article->coverUrl(100, 100);
                         }
                     }
                     break;

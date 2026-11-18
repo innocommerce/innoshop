@@ -77,7 +77,10 @@ class ArticleRepo extends BaseRepo
      */
     public function list(array $filters = []): LengthAwarePaginator
     {
-        return $this->builder($filters)->orderByDesc('id')->paginate();
+        $paginator = $this->builder($filters)->orderByDesc('id')->paginate();
+        media_cover_preload($paginator->getCollection());
+
+        return $paginator;
     }
 
     /**
@@ -86,7 +89,10 @@ class ArticleRepo extends BaseRepo
      */
     public function getLatestArticles(int $limit = 4): mixed
     {
-        return $this->withActive()->builder()->orderByDesc('id')->limit($limit)->get();
+        $articles = $this->withActive()->builder()->orderByDesc('id')->limit($limit)->get();
+        media_cover_preload($articles);
+
+        return $articles;
     }
 
     /**
@@ -215,12 +221,16 @@ class ArticleRepo extends BaseRepo
         $article->loadMissing(['translations', 'tags', 'relatedArticles', 'products']);
 
         $merged = [
-            'catalog_id'          => $article->catalog_id,
-            'slug'                => $article->slug,
-            'position'            => $article->position,
-            'viewed'              => $article->viewed,
-            'author'              => $article->author,
-            'image'               => $article->image,
+            'catalog_id' => $article->catalog_id,
+            'slug'       => $article->slug,
+            'position'   => $article->position,
+            'viewed'     => $article->viewed,
+            'author'     => $article->author,
+            // RAW column value: $article->image is the localized accessor
+            // (current locale's translation cover, falling back to main) —
+            // seeding the merge with it would silently rewrite the main
+            // column to a per-locale cover on image-less PATCHes.
+            'image'               => $article->getRawOriginal('image'),
             'active'              => $article->active,
             'tag_ids'             => $article->tags->pluck('id')->all(),
             'related_article_ids' => $article->relatedArticles->pluck('relation_id')->filter()->all(),
@@ -305,11 +315,25 @@ class ArticleRepo extends BaseRepo
         DB::beginTransaction();
 
         try {
+            // Capture the pre-save main image BEFORE fill()/saveOrFail() —
+            // after a successful save the raw original is synced to the new
+            // value, and handleTranslations() needs the old one to tell
+            // "following the main image" from "explicitly per-locale". The
+            // per-locale prior images serve the same purpose when the main
+            // was CLEARED (no prior main to echo against).
+            $priorMainImage    = (string) ($article->getRawOriginal('image') ?? '');
+            $priorLocaleImages = $article->translations()->pluck('image', 'locale')->all();
+
             $articleData = $this->handleData($data);
             $article->fill($articleData);
             $article->saveOrFail();
 
-            $translations = $this->handleTranslations($data['translations'] ?? []);
+            $translations = $this->handleTranslations(
+                $data['translations'] ?? [],
+                $articleData['image'],
+                $priorMainImage,
+                $priorLocaleImages
+            );
             if ($translations) {
                 $article->translations()->delete();
                 $article->translations()->createMany($translations);
@@ -406,14 +430,59 @@ class ArticleRepo extends BaseRepo
     }
 
     /**
+     * Merge per-locale translation fields, then apply the image propagation
+     * rule: when the save carries a non-empty main image, a translation whose
+     * submitted image is absent/null/empty — or still byte-equal to the PRIOR
+     * main image — is "following" and adopts the new main image; any other
+     * value counts as an explicit per-locale retarget and is kept.
+     *
+     * Comparing against the prior main image (rather than the per-locale DB
+     * value) is what keeps PATCH and panel resaves safe: patch() seeds merged
+     * translations from the DB and the panel form resubmits every locale's
+     * image field on each save, so "submitted == DB value" holds for every
+     * untouched field and carries no intent — a long-standing custom cover
+     * would be indistinguishable from a following one and silently wiped.
+     *
      * @param  $translations
+     * @param  string  $mainImage  Resolved main articles.image value for this save.
+     * @param  string  $priorMainImage  articles.image value before this save ('' on create).
+     * @param  array  $priorLocaleImages  Per-locale image values before this save (locale => image).
      * @return array
      * @throws Exception
      */
-    private function handleTranslations($translations): array
+    private function handleTranslations($translations, string $mainImage = '', string $priorMainImage = '', array $priorLocaleImages = []): array
     {
         if (empty($translations)) {
             return [];
+        }
+
+        if ($mainImage !== '') {
+            foreach ($translations as $locale => $fields) {
+                if (! is_array($fields)) {
+                    continue;
+                }
+
+                $submitted = $fields['image'] ?? null;
+
+                // "Following" = no key, null, empty string, or still equal to
+                // the main image as it was BEFORE this save. In every case the
+                // editor did not retarget a per-locale cover, so the new main
+                // image wins. When the main was CLEARED there is no prior main
+                // to echo against — "untouched" then falls back to the row's
+                // OWN prior value: a stale panel echo must follow the new main
+                // instead of pinning the dead cover forever, while a genuinely
+                // retyped value still counts as explicit.
+                $following = ($submitted === null)
+                    || $submitted === ''
+                    || ($priorMainImage !== '' && $submitted === $priorMainImage)
+                    || ($priorMainImage === ''
+                        && array_key_exists($locale, $priorLocaleImages)
+                        && $submitted === (string) ($priorLocaleImages[$locale] ?? ''));
+
+                if ($following) {
+                    $translations[$locale]['image'] = $mainImage;
+                }
+            }
         }
 
         // Define field mapping for title to other fields
@@ -458,11 +527,24 @@ class ArticleRepo extends BaseRepo
             $ArticleIDs = explode(',', $ArticleIDs);
         }
 
-        return Article::query()
+        // Callers hand over raw request strings ("?ids=1,2,3") — int-cast
+        // every id before it can reach SQL.
+        $ArticleIDs = array_map('intval', (array) $ArticleIDs);
+
+        $articles = Article::query()
             ->with('translation')
             ->whereIn('id', $ArticleIDs)
-            ->orderByRaw('FIELD(id, '.implode(',', $ArticleIDs).')')
             ->get();
+
+        // Restore the caller's order in PHP: FIELD() is MySQL-only (breaks
+        // SQLite tests and other drivers), and a raw id list has no place in
+        // ORDER BY anyway.
+        $rank = array_flip($ArticleIDs);
+
+        $ordered = $articles->sortBy(fn (Article $article) => $rank[$article->id] ?? PHP_INT_MAX)->values();
+        media_cover_preload($ordered);
+
+        return $ordered;
     }
 
     /**
@@ -495,6 +577,7 @@ class ArticleRepo extends BaseRepo
 
             $relatedArticles = $relatedArticles->merge($additionalArticles);
         }
+        media_cover_preload($relatedArticles);
 
         return $relatedArticles;
     }

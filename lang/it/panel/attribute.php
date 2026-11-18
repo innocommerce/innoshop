@@ -13,4 +13,6 @@ return [
     'name'            => 'Nome degli attributi',
     'set_attribute'   => 'Imposta attributi',
     'group'           => 'Gruppo di attributi',
+    'show_on_detail'  => 'Mostra nella pagina di dettaglio',
+    'type_richtext'   => 'Testo formattato',
 ];

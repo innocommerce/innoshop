@@ -134,6 +134,7 @@ return [
     'auth_order_created'            => '订单已创建',
     'type'                          => '类型',
     'usage_documentation'           => '使用说明',
+    'developer_documentation'       => '开发者文档',
     'version'                       => '版本',
     'view_token'                    => '查看Token',
     'views'                         => '查看次数',

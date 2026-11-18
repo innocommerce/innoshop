@@ -62,8 +62,8 @@
       <div id="single_price_box" class="{{ $product->isMultiple() ? 'd-none' : '' }}">
         <div class="row">
           <div class="col-12 col-md-3">
-            <x-common-form-input :title="__('panel/product.price')" name="skus[0][price]"
-                               value="{{ old('skus.0.price', $product->masterSku->price ?? '') }}" required/>
+            <x-panel-form-price-input :title="__('panel/product.price')" name="skus[0][price]"
+                                      value="{{ old('skus.0.price', $product->masterSku->price ?? '') }}" required/>
           </div>
           <div class="col-12 col-md-3">
             <x-common-form-input :title="__('panel/product.quantity')" name="skus[0][quantity]"
@@ -74,8 +74,8 @@
                                value="{{ old('skus.0.code', $product->masterSku->code ?? '') }}" required/>
           </div>
           <div class="col-12 col-md-3">
-            <x-common-form-input :title="__('panel/product.origin_price')" name="skus[0][origin_price]"
-                               value="{{ old('skus.0.origin_price', $product->masterSku->origin_price ?? '') }}"/>
+            <x-panel-form-price-input :title="__('panel/product.origin_price')" name="skus[0][origin_price]"
+                                      value="{{ old('skus.0.origin_price', $product->masterSku->origin_price ?? '') }}"/>
           </div>
           <input type="hidden" name="skus[0][model]" value="">
           <input type="hidden" name="skus[0][is_default]" value="1">

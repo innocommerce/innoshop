@@ -1,3 +1,12 @@
+@php
+    // Server-side hydration: cart data rides along the main HTML response
+    // instead of costing an extra HTTP round trip (cart/mini) on every page.
+    try {
+        $miniCartBoot = \InnoShop\Common\Services\CartService::getInstance()->handleResponse();
+    } catch (\Throwable $e) {
+        $miniCartBoot = null;
+    }
+@endphp
 <!-- Mini Cart Component -->
 <div class="offcanvas offcanvas-end" style="width: 400px;" tabindex="-1" id="miniCart" aria-labelledby="miniCartLabel">
   <div class="offcanvas-header border-bottom">
@@ -108,6 +117,8 @@
 if (!window.cartApp) {
   const { createApp, ref, computed, onMounted } = Vue
 
+  window.__MINI_CART_BOOT__ = @json($miniCartBoot);
+
   window.cartApp = createApp({
     setup() {
       // Reactive states
@@ -122,13 +133,17 @@ if (!window.cartApp) {
       })
 
       // Methods
+      const applyCart = (data) => {
+        cartItems.value = data.list || []
+        totalAmount.value = data.amount_format
+        updateCartIconQuantity(data.total_format)
+      }
+
       const loadCart = async () => {
         try {
           const response = await axios.get(urls.front_cart_mini)
           if (response.success) {
-            cartItems.value = response.data.list || []
-            totalAmount.value = response.data.amount_format
-            updateCartIconQuantity(response.data.total_format)
+            applyCart(response.data)
           }
         } catch (error) {
           inno.msg('Failed to load cart', 'error')
@@ -222,7 +237,15 @@ if (!window.cartApp) {
 
       // Lifecycle hooks
       onMounted(() => {
-        loadCart()
+        // Server-side hydration avoids the cart/mini round trip on initial
+        // page load; fall back to AJAX when boot data is absent. Offcanvas
+        // open still refreshes via loadCart() below.
+        if (window.__MINI_CART_BOOT__) {
+          applyCart(window.__MINI_CART_BOOT__)
+          window.__MINI_CART_BOOT__ = null
+        } else {
+          loadCart()
+        }
         
         // Listen for cart show event
         const miniCart = document.getElementById('miniCart')

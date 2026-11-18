@@ -13,4 +13,6 @@ return [
     'name'            => 'Mülkün adı',
     'set_attribute'   => 'Öznitelik Ayarla',
     'group'           => 'Öznitelik Grubu',
+    'show_on_detail'  => 'Detay sayfasında göster',
+    'type_richtext'   => 'Zengin metin',
 ];

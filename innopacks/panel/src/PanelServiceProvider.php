@@ -12,6 +12,7 @@ namespace InnoShop\Panel;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use InnoShop\Aicore\Services\AIServiceManager;
 use InnoShop\Common\Middleware\ContentFilterHook;
 use InnoShop\Common\Middleware\EventActionHook;
 use InnoShop\Common\Models\Admin;
@@ -20,6 +21,7 @@ use InnoShop\Panel\Console\Commands\ChangeRootPassword;
 use InnoShop\Panel\Middleware\AdminAuthenticate;
 use InnoShop\Panel\Middleware\GlobalPanelData;
 use InnoShop\Panel\Middleware\SetPanelLocale;
+use InnoShop\Panel\Services\Translators\AiTranslator;
 use InnoShop\Restapi\Services\MediaInterface;
 use InnoShop\Restapi\Services\MediaService;
 use InnoShop\Restapi\Services\OSSService;
@@ -43,6 +45,7 @@ class PanelServiceProvider extends ServiceProvider
         $this->registerUploadFileSystem();
         $this->registerMediaService();
         $this->registerCommands();
+        $this->registerAiTranslator();
         $this->loadTranslations();
         $this->loadViewTemplates();
         $this->loadViewComponents();
@@ -142,6 +145,24 @@ class PanelServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the AI translator as a low-priority fallback on the
+     * `panel.service.translator` hook. Translator plugins (Google, Youdao,
+     * OpenAI, ...) register with a higher priority and keep winning; when no
+     * translator plugin is enabled, translations go through the text model
+     * already configured in 后台 → 设置 → AI.
+     */
+    private function registerAiTranslator(): void
+    {
+        if (! AIServiceManager::getInstance()->getEnabledModels()) {
+            return;
+        }
+
+        app('eventy')->addFilter('panel.service.translator', function ($translator) {
+            return $translator ?: AiTranslator::class;
+        }, -100, 1);
+    }
+
+    /**
      * @return void
      */
     private function registerCommands(): void
@@ -211,6 +232,7 @@ class PanelServiceProvider extends ServiceProvider
             'chart-pie'              => Components\Charts\Pie::class,
             'form-codemirror'        => Components\Forms\Codemirror::class,
             'form-autocomplete-list' => Components\Forms\AutocompleteList::class,
+            'form-price-input'       => Components\Forms\PriceInput::class,
         ]);
     }
 

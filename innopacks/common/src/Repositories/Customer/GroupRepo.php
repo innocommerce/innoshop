@@ -131,7 +131,7 @@ class GroupRepo extends BaseRepo
         return [
             'level'         => (int) $requestData['level'],
             'mini_cost'     => (float) $requestData['mini_cost'],
-            'discount_rate' => (int) $requestData['discount_rate'],
+            'discount_rate' => (float) $requestData['discount_rate'],
         ];
     }
 

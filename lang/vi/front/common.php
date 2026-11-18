@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'Số lượng mua tối thiểu là :min',
     'news'                            => 'Tin tức',
     'no_search_results'               => 'Không tìm thấy kết quả',
+    'or_continue_with'                => 'Hoặc tiếp tục với',
     'out_of_stock'                    => 'Hết hàng',
     'page_not_found'                  => 'Trang không được tìm thấy',
     'page_not_found_description'      => 'Xin lỗi, trang bạn truy cập không tồn tại hoặc đã bị xóa.',

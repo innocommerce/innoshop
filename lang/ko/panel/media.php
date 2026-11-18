@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => '디렉터리가 비어 있지 않습니다',
     'show_folders'                  => '폴더 표시',
     'delete_failed'                 => '삭제 실패',
+    'capture_load_failed'           => '동영상을 불러오지 못해 커버를 선택할 수 없습니다',
+    'capture_cross_origin'          => '이 동영상은 교차 출처 정책으로 보호되어 브라우저에서 프레임을 캡처할 수 없습니다. 이미지를 업로드하여 커버로 사용해 주세요.',
 ];

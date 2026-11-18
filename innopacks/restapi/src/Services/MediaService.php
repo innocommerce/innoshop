@@ -17,6 +17,7 @@ use InnoShop\Common\Models\MediaFile;
 use InnoShop\Common\Services\FileSecurityValidator;
 use InnoShop\Common\Services\MediaUrlResolver;
 use InnoShop\Common\Services\StorageService;
+use InnoShop\Common\Services\VideoPosterService;
 use InnoShop\Restapi\Criteria\FileListCriteria;
 
 class MediaService implements MediaInterface
@@ -401,13 +402,50 @@ class MediaService implements MediaInterface
         $filePath   = Storage::disk('media')->putFileAs($savePath, $file, $storeAs, $options);
         $storageKey = StorageService::storageKey($filePath);
 
+        $mediaFile = null;
         try {
-            $resolver->registerFromUploadedFile($file, $storageKey, 'local');
+            $mediaFile = $resolver->registerFromUploadedFile($file, $storageKey, 'local');
         } catch (\Throwable $e) {
             Log::warning('Media register failed: '.$e->getMessage(), ['storage_key' => $storageKey]);
         }
 
+        // Server-side fallback for non-browser ingest paths (#291): panel
+        // media manager uploads already get a poster via the client-side
+        // capture (canvas → media.set_poster), but REST / CLI / front
+        // UploadController traffic does not — fall back to ffmpeg here so
+        // those callers still get a poster without manual intervention.
+        // Best-effort: ffmpeg is opt-in; failures stay logged and never block
+        // the upload.
+        if ($mediaFile && self::isVideoUpload($file)) {
+            try {
+                app(VideoPosterService::class)->ensurePoster($mediaFile);
+            } catch (\Throwable $e) {
+                Log::warning('Video poster fallback failed: '.$e->getMessage(), [
+                    'storage_key' => $storageKey,
+                ]);
+            }
+        }
+
         return $storageKey;
+    }
+
+    /**
+     * Whether the upload looks like a video (used to gate the poster
+     * fallback). Mirrors VideoPosterService::isVideoMedia(): positive video
+     * MIME first, extension fallback for the cases where Symfony/finfo
+     * reports `application/mp4` instead of `video/mp4`.
+     */
+    private static function isVideoUpload(UploadedFile $file): bool
+    {
+        $mime = (string) ($file->getMimeType() ?: '');
+        if (str_starts_with($mime, 'video/')) {
+            return true;
+        }
+
+        return (bool) preg_match(
+            '/\.(mp4|webm|ogg)$/i',
+            (string) $file->getClientOriginalName()
+        );
     }
 
     /**
@@ -803,11 +841,27 @@ class MediaService implements MediaInterface
             $item['media_reference'] = $mediaId
                 ? MediaUrlResolver::buildReference($mediaId)
                 : null;
+            $item['poster_url'] = $this->videoPosterUrl($isVideo, $mediaId);
 
             unset($item['_realPath'], $item['created_time']);
 
             return $item;
         }, $items);
+    }
+
+    /**
+     * Resolved poster-frame URL for a video file row in the media picker, so
+     * callers (article cover etc.) can render the still image plus a play
+     * overlay immediately after selection. Empty string for images or videos
+     * without an extracted poster.
+     */
+    protected function videoPosterUrl(bool $isVideo, ?int $mediaId): string
+    {
+        if (! $isVideo || $mediaId === null) {
+            return '';
+        }
+
+        return media_poster_url(MediaUrlResolver::buildReference($mediaId));
     }
 
     /**

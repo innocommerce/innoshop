@@ -13,12 +13,13 @@ use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use InnoShop\Common\Traits\HasPackageFactory;
+use InnoShop\Common\Traits\MediaCover;
 use InnoShop\Common\Traits\Translatable;
 
 class Category extends BaseModel
 {
-    use HasPackageFactory, Translatable;
+    use MediaCover;
+    use Translatable;
 
     protected $fillable = ['parent_id', 'slug', 'position', 'image', 'active'];
 
@@ -112,28 +113,6 @@ class Category extends BaseModel
     public function getEditUrlAttribute(): string
     {
         return panel_route('categories.edit', $this);
-    }
-
-    /**
-     * Get URL
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function getImageUrlAttribute(): string
-    {
-        return $this->getImageUrl();
-    }
-
-    /**
-     * @param  int  $with
-     * @param  int  $height
-     * @return string
-     * @throws Exception
-     */
-    public function getImageUrl(int $with = 600, int $height = 600): string
-    {
-        return image_resize($this->image ?? '', $with, $height);
     }
 
     /**

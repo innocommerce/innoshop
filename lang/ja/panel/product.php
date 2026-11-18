@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'SKU画像です',
     'sku_validation_error'        => '単一規格情報または複数規格商品情報を完全に入力してください',
     'specification_attribute'     => '規格属性',
+    'content_attributes'          => 'コンテンツ属性',
     'spu_code'                    => 'SPUコード',
     'status_settings'             => 'ステータス設定です',
     'stock_quantity'              => '在庫数量です',

@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use InnoShop\Common\Jobs\AggregateVisitDailyJob;
 use InnoShop\Common\Models\Visit\Visit;
 use InnoShop\Common\Repositories\VisitRepo;
 use InnoShop\Common\Services\VisitStatisticsService;
@@ -249,9 +250,18 @@ class AnalyticsController extends BaseController
 
             [$worldMapData, $worldMapTotal] = VisitRepo::buildWorldMapData($countryStats);
 
+            // Top 10 countries for the map filter chips. Rows without a
+            // country_code cannot be excluded by code, so skip them.
+            $topCountries = collect($countryStats)
+                ->filter(fn ($row) => trim((string) ($row['country_code'] ?? '')) !== '')
+                ->take(10)
+                ->values()
+                ->all();
+
             return [
                 'statistics'         => $statistics,
                 'visits_by_country'  => $countryStats,
+                'top_countries'      => $topCountries,
                 'world_map_data'     => $worldMapData,
                 'world_map_total'    => $worldMapTotal,
                 'visits_by_device'   => $deviceStats,
@@ -269,8 +279,50 @@ class AnalyticsController extends BaseController
     }
 
     /**
-     * Bot / crawler analytics page. Mirrors visit() but every query hits
-     * visits(is_bot=true). Daily series, summary cards, brand breakdown.
+     * World map data endpoint for the visit page. Excluded country codes
+     * (the top-10 filter chips) are removed before the map buckets are
+     * rebuilt, so collapsed regions (e.g. Hong Kong → China) shrink
+     * correctly instead of disappearing as a whole.
+     *
+     * @param  Request  $request
+     * @return mixed
+     */
+    public function worldMap(Request $request): mixed
+    {
+        [$startDate, $endDate] = $this->parseDateRangeFromRequest($request);
+
+        $filters = [];
+        if ($startDate && $endDate) {
+            $filters['start_date'] = Carbon::parse($startDate)->startOfDay();
+            $filters['end_date']   = Carbon::parse($endDate)->endOfDay();
+        }
+
+        $exclude = collect(explode(',', (string) $request->query('exclude', '')))
+            ->map(fn ($code) => strtoupper(trim($code)))
+            ->filter(fn ($code) => preg_match('/^[A-Z]{2}$/', $code))
+            ->unique()
+            ->take(100)
+            ->values();
+
+        $cacheKey = 'analytics_visit_worldmap:'.($startDate ?: 'null').':'.($endDate ?: 'null').':'.$exclude->implode(',');
+        $data     = Cache::remember($cacheKey, 60, function () use ($filters, $exclude) {
+            $rows = collect((new VisitRepo)->getVisitsByCountry($filters))
+                ->reject(fn ($row) => $exclude->contains(strtoupper(trim((string) ($row['country_code'] ?? '')))))
+                ->values()
+                ->all();
+
+            [$worldMapData, $worldMapTotal] = VisitRepo::buildWorldMapData($rows);
+
+            return ['items' => $worldMapData, 'total' => $worldMapTotal];
+        });
+
+        return response()->json(['success' => true, 'data' => $data]);
+    }
+
+    /**
+     * Bot / crawler analytics page. Cards and daily series read the
+     * pre-aggregated visit_device_daily rows (device_type='bot'); only the
+     * cross-day unique-IP distinct and the UA brand classification stay live.
      *
      * @param  Request  $request
      * @return mixed
@@ -289,18 +341,28 @@ class AnalyticsController extends BaseController
         }
 
         $cacheKey = 'analytics_bot:'.($startDate ?: 'null').':'.($endDate ?: 'null');
-        $data     = Cache::remember($cacheKey, 60, function () use ($repo, $filters, $startDate, $endDate, $dateFilter) {
-            $daily = $repo->getBotDailyStatistics($filters);
+        $data     = Cache::remember($cacheKey, 300, function () use ($repo, $filters, $startDate, $endDate, $dateFilter) {
+            // Bot data comes straight from the bot_daily aggregate — no
+            // visit_daily backfill needed on this page anymore.
+            $stats     = $repo->getBotStatistics($filters);
+            $agg       = $repo->getBotAggregates($filters);
+            $breakdown = $repo->getBotBreakdown($filters, 20);
+            $daily     = $agg['daily'];
 
             return [
-                'statistics'           => $repo->getBotStatistics($filters),
+                'statistics' => [
+                    'sessions'        => $stats['sessions'],
+                    'unique_visitors' => $stats['unique_visitors'],
+                    'page_views'      => $agg['page_views'],
+                    'event_sessions'  => $agg['event_sessions'],
+                ],
                 'daily_statistics'     => $daily,
                 'chart_labels'         => array_column($daily, 'date'),
                 'chart_sessions'       => array_column($daily, 'sessions'),
                 'chart_unique_ips'     => array_column($daily, 'unique_ips'),
                 'chart_page_views'     => array_column($daily, 'page_views'),
-                'bot_by_brand'         => $repo->getBotByType($filters, 20),
-                'bot_category_summary' => $repo->getBotCategorySummary($filters),
+                'bot_by_brand'         => $breakdown['brands'],
+                'bot_category_summary' => $breakdown['categories'],
                 'start_date'           => $startDate,
                 'end_date'             => $endDate,
                 'date_filter'          => $dateFilter,
@@ -372,6 +434,8 @@ class AnalyticsController extends BaseController
 
     /**
      * Re-aggregate visit statistics for a date range.
+     * Dispatches one queue job per day and returns immediately — a 30-day
+     * range can take tens of seconds synchronously and would block the request.
      *
      * @param  Request  $request
      * @return array
@@ -385,10 +449,13 @@ class AnalyticsController extends BaseController
             $startDate = $startInput ? Carbon::parse($startInput) : Carbon::now()->subDays(29);
             $endDate   = $endInput ? Carbon::parse($endInput) : Carbon::now();
 
-            $service = new VisitStatisticsService;
-            $service->aggregateRange($startDate, $endDate);
+            $current = $startDate->copy()->startOfDay();
+            while ($current->lte($endDate)) {
+                AggregateVisitDailyJob::dispatch($current->toDateString());
+                $current->addDay();
+            }
 
-            return json_success(trans('panel/analytics.reaggregate_success'));
+            return json_success(trans('panel/analytics.reaggregate_queued'));
         } catch (\Throwable $e) {
             return json_fail($e->getMessage());
         }

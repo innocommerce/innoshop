@@ -26,7 +26,7 @@ class ProductSkuFactory extends Factory
         $price = fake()->randomFloat(2, 10, 1000);
 
         return [
-            'product_id'   => Product::factory(),
+            'product_id'   => ProductFactory::new(),
             'images'       => [],
             'model'        => 'MODEL-'.strtoupper(Str::random(6)),
             'code'         => 'SKU-'.strtoupper(Str::random(8)),

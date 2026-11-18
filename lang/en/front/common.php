@@ -28,6 +28,7 @@ return [
     'minimum_required'                => 'Minimum purchase quantity is :min',
     'news'                            => 'News',
     'no_search_results'               => 'No results found',
+    'or_continue_with'                => 'Or continue with',
     'out_of_stock'                    => 'Out of Stock',
     'page_not_found'                  => 'Page Not Found',
     'page_not_found_description'      => 'Sorry, the page you are looking for does not exist or has been removed.',

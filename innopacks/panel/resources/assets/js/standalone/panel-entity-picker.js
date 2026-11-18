@@ -14,6 +14,10 @@
 
   const SEARCH_DEBOUNCE_MS = 300;
 
+  function isVideoPath(url) {
+    return /\.(mp4|webm|ogg)(\?|$)/i.test(url || "");
+  }
+
   const PanelEntityPickerDialog = defineComponent({
     name: "PanelEntityPickerDialog",
     props: {
@@ -100,6 +104,8 @@
           value: item.value,
           url: item.url != null ? item.url : null,
           image: item.image != null ? item.image : null,
+          image_origin: item.image_origin || null,
+          is_video: !!item.is_video,
           price_label: item.price_label != null ? item.price_label : null,
           subtitle: item.subtitle != null ? item.subtitle : null,
           sku_code: item.sku_code != null && item.sku_code !== "" ? item.sku_code : null,
@@ -170,6 +176,29 @@
           "No matching items. Try another keyword.";
 
         function rowThumb(item) {
+          var origin = item.image_origin || item.image || "";
+          var isVideo = !!item.is_video || isVideoPath(origin);
+          if (isVideo && origin) {
+            return h(
+              "div",
+              {
+                class:
+                  "rounded border flex-shrink-0 position-relative overflow-hidden panel-entity-picker-row__thumb panel-entity-picker-row__thumb--video",
+              },
+              [
+                h("video", {
+                  src: origin + "#t=0.5",
+                  preload: "metadata",
+                  muted: true,
+                  playsinline: true,
+                  title: String(item.name || ""),
+                }),
+                h("span", { class: "panel-entity-picker-row__play" }, [
+                  h("i", { class: "bi bi-play-circle-fill" }),
+                ]),
+              ],
+            );
+          }
           return item.image
             ? h("img", {
                 src: item.image,

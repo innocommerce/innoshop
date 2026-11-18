@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'SKU resmi',
     'sku_validation_error'        => 'Lütfen en az tekli spesifikasyon bilgisini veya çoklu spesifikasyonu olan ürün bilgilerini tam doldurun',
     'specification_attribute'     => 'Varyant Özelliği',
+    'content_attributes'          => 'İçerik özellikleri',
     'spu_code'                    => 'SPU Kodu',
     'status_settings'             => 'Durum ayarları',
     'stock_quantity'              => 'Stok miktarı',

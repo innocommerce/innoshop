@@ -13,4 +13,6 @@ return [
     'name'            => 'Nama harta tanah',
     'set_attribute'   => 'Tetapkan atribut',
     'group'           => 'Kumpulan Atribut',
+    'show_on_detail'  => 'Papar di halaman butiran',
+    'type_richtext'   => 'Teks kaya',
 ];

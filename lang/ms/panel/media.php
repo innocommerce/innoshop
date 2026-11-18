@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'Direktori tidak kosong',
     'show_folders'                  => 'Papar folder',
     'delete_failed'                 => 'Gagal memadam',
+    'capture_load_failed'           => 'Gagal memuatkan video, tidak dapat memilih muka hadapan',
+    'capture_cross_origin'          => 'Video ini dilindungi oleh dasar cross-origin, bingkai tidak boleh ditangkap dalam pelayar. Sila muat naik imej sebagai muka hadapan.',
 ];

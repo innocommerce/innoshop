@@ -126,6 +126,7 @@ return [
     'sku_image'                   => 'SKU圖片',
     'sku_validation_error'        => '請至少完整填寫單規格資訊或多規格商品資訊',
     'specification_attribute'     => '規格屬性',
+    'content_attributes'          => '內容屬性',
     'spu_code'                    => 'SPU編碼',
     'status_settings'             => '狀態設置',
     'stock_quantity'              => '庫存數量',

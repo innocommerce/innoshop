@@ -25,6 +25,7 @@ return [
     'minimum_required'                => '最小購入数量は :min です',
     'news'                            => 'ニュース',
     'no_search_results'               => '関連する結果は見つかりませんでした',
+    'or_continue_with'                => 'または次の方法で続行',
     'out_of_stock'                    => '在庫切れ',
     'page_not_found'                  => 'ページが見つかりません。',
     'page_not_found_description'      => '申し訳ありませんが、あなたがアクセスしたページは存在しないか削除されています。',

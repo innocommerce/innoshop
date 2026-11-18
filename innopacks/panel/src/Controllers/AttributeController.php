@@ -97,12 +97,39 @@ class AttributeController extends BaseController
         })->values()->toArray();
 
         $data = [
-            'attribute'             => $attribute,
-            'attribute_values_json' => $valuesJson,
-            'attribute_groups'      => GroupRepo::getInstance()->getOptions(),
+            'attribute'              => $attribute,
+            'attribute_values_json'  => $valuesJson,
+            'attribute_groups'       => GroupRepo::getInstance()->getOptions(),
+            'attribute_type_options' => $this->getTypeOptions(),
         ];
 
         return inno_view('panel::attributes.form', $data);
+    }
+
+    /**
+     * Value type options for the attribute form, labels translated for the
+     * panel locale. Built here because block @php directives are unreliable
+     * inside pushed blade sections.
+     *
+     * @return array
+     */
+    private function getTypeOptions(): array
+    {
+        $types = [
+            Attribute::TYPE_SELECT   => 'attribute.type_select',
+            Attribute::TYPE_INPUT    => 'attribute.type_input',
+            Attribute::TYPE_NUMBER   => 'attribute.type_number',
+            Attribute::TYPE_TEXTAREA => 'attribute.type_textarea',
+            Attribute::TYPE_RICHTEXT => 'attribute.type_richtext',
+            Attribute::TYPE_DATE     => 'attribute.type_date',
+        ];
+
+        $options = [];
+        foreach ($types as $value => $key) {
+            $options[] = ['value' => $value, 'label' => panel_trans($key)];
+        }
+
+        return $options;
     }
 
     /**

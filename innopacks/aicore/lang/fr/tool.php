@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => 'Liste les tags d\'articles avec recherche par mot-clé. Volume réduit, renvoyé en intégralité.',
     'desc_customer_autocomplete' => 'Recherche rapide de clients par nom ou email. Renvoie une liste id+nom+email compacte.',
     'desc_category_autocomplete' => 'Recherche rapide de catégories par nom. Renvoie une liste id+nom+parent_id compacte.',
+    'desc_setting_detail'        => 'Obtenir les paramètres SEO au niveau du système (titre, description, mots-clés), regroupés par langue. Configuration TDK globale de repli pour les pages sans SEO propre (ex. accueil).',
+    'desc_setting_update'        => '⚠️ Opération d\'écriture : mettre à jour les paramètres SEO au niveau du système (meta_title/meta_description/meta_keywords) en sémantique PATCH, par langue.',
 ];

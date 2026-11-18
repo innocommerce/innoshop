@@ -13,4 +13,6 @@ return [
     'name'            => 'Attribute name',
     'set_attribute'   => 'Set attributes',
     'group'           => 'Attribute Group',
+    'show_on_detail'  => 'បង្ហាញនៅលើទំព័រលម្អិត',
+    'type_richtext'   => 'អត្ថបទសម្បុររូប',
 ];

@@ -13,4 +13,6 @@ return [
     'name'            => 'Thuộc tính tên',
     'set_attribute'   => 'Thiết lập thuộc tính',
     'group'           => 'Nhóm thuộc tính',
+    'show_on_detail'  => 'Hiển thị trên trang chi tiết',
+    'type_richtext'   => 'Văn bản định dạng',
 ];

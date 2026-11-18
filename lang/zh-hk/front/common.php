@@ -25,6 +25,7 @@ return [
     'minimum_required'                => '最小購買數量為 :min',
     'news'                            => '文章',
     'no_search_results'               => '沒有找到相關結果',
+    'or_continue_with'                => '或使用以下方式繼續',
     'out_of_stock'                    => '缺貨',
     'page_not_found'                  => '頁面未找到',
     'page_not_found_description'      => '抱歉，您訪問的頁面不存在或已被刪除。',

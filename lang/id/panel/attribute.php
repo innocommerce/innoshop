@@ -13,4 +13,6 @@ return [
     'name'            => 'Nama properti',
     'set_attribute'   => 'Setel Atribut',
     'group'           => 'Grup Atribut',
+    'show_on_detail'  => 'Tampilkan di halaman detail',
+    'type_richtext'   => 'Teks kaya',
 ];

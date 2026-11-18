@@ -6,6 +6,7 @@
 
 <div class="card variants-box mb-3" id="variants-box">
   @php($weightUnit = $product->weight_class ?: system_setting('weight_class', 'kg'))
+  @php($currencyPosLeft = default_currency_unit_position() === 'left')
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="card-title mb-0">{{ __('panel/product.variant') }}</h5>
     <div>
@@ -180,14 +181,30 @@
 
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.price') }}</label>
-                <input type="number" class="form-control form-control-sm" v-model="batchData.price"
-                       placeholder="{{ __('panel/product.bulk_fill_price') }}" min="0" @change="validateBatchPrice" style="height: 31px;">
+                <div class="input-group input-group-sm">
+                  @if ($currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                  <input type="number" class="form-control form-control-sm" v-model="batchData.price"
+                         placeholder="{{ __('panel/product.bulk_fill_price') }}" min="0" @change="validateBatchPrice" style="height: 31px;">
+                  @if (! $currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                </div>
               </div>
 
               <div class="col">
                 <label class="form-label small mb-1">{{ __('panel/product.origin_price') }}</label>
-                <input type="number" class="form-control form-control-sm" v-model="batchData.originPrice"
-                       placeholder="{{ __('panel/product.bulk_fill_origin_price') }}" min="0" @change="validateBatchOriginPrice" style="height: 31px;">
+                <div class="input-group input-group-sm">
+                  @if ($currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                  <input type="number" class="form-control form-control-sm" v-model="batchData.originPrice"
+                         placeholder="{{ __('panel/product.bulk_fill_origin_price') }}" min="0" @change="validateBatchOriginPrice" style="height: 31px;">
+                  @if (! $currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                </div>
               </div>
 
               <div class="col">
@@ -262,15 +279,31 @@
                 <div class="invalid-feedback">{{ __('panel/product.error_sku_repeat') }}</div>
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm"
-                  v-model="sku.price" placeholder="{{ __('panel/product.price') }}"
-                  @change="validatePrice(sku)">
+                <div class="input-group input-group-sm">
+                  @if ($currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                  <input type="text" class="form-control form-control-sm"
+                    v-model="sku.price" placeholder="{{ __('panel/product.price') }}"
+                    @change="validatePrice(sku)">
+                  @if (! $currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                </div>
                 @hookinsert('panel.product.edit.sku.input.item.price.after')
               </td>
               <td>
-                <input type="text" class="form-control form-control-sm"
-                  v-model="sku.origin_price" placeholder="{{ __('panel/product.origin_price') }}"
-                  @change="validateOriginPrice(sku)">
+                <div class="input-group input-group-sm">
+                  @if ($currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                  <input type="text" class="form-control form-control-sm"
+                    v-model="sku.origin_price" placeholder="{{ __('panel/product.origin_price') }}"
+                    @change="validateOriginPrice(sku)">
+                  @if (! $currencyPosLeft)
+                    <span class="input-group-text">{{ default_currency_unit() }}</span>
+                  @endif
+                </div>
               </td>
               <td>
                 <input type="text" class="form-control form-control-sm"

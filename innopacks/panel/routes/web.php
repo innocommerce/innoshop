@@ -123,8 +123,12 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/analytics/product', [Controllers\AnalyticsController::class, 'product'])->name('analytics_product');
         Route::get('/analytics/customer', [Controllers\AnalyticsController::class, 'customer'])->name('analytics_customer');
         Route::get('/analytics/visit', [Controllers\AnalyticsController::class, 'visit'])->name('analytics_visit');
+        Route::get('/analytics/visit/world-map', [Controllers\AnalyticsController::class, 'worldMap'])->name('analytics_visit_world_map');
         Route::get('/analytics/bot', [Controllers\AnalyticsController::class, 'bot'])->name('analytics_bot');
         Route::post('/analytics/reaggregate', [Controllers\AnalyticsController::class, 'reaggregate'])->name('analytics.reaggregate');
+
+        Route::get('/system-tasks', [Controllers\SystemTaskController::class, 'index'])->name('system_tasks.index');
+        Route::post('/system-tasks/aggregate', [Controllers\SystemTaskController::class, 'aggregate'])->name('system_tasks.aggregate');
 
         Route::resource('/visits', Controllers\VisitController::class)->only(['index', 'show']);
         Route::post('/visits/batch-locate', [Controllers\VisitController::class, 'batchLocate'])->name('visits.batch_locate');
@@ -163,7 +167,7 @@ Route::middleware(['admin_auth:admin'])
 
         Route::resource('/roles', Controllers\RoleController::class);
 
-        Route::resource('/currencies', Controllers\CurrencyController::class);
+        Route::resource('/currencies', Controllers\CurrencyController::class)->except(['create', 'edit']);
         Route::put('/currencies/{currency}/active', [Controllers\CurrencyController::class, 'active'])->name('currencies.active');
 
         Route::resource('/countries', Controllers\CountryController::class);

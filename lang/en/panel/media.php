@@ -145,4 +145,6 @@ return [
     'cloud_size'                    => 'Cloud Size',
     'cloud_synced'                  => 'Synced',
     'cloud_missing'                 => 'Missing on cloud',
+    'capture_load_failed'           => 'Failed to load the video, cannot pick a cover',
+    'capture_cross_origin'          => 'This video is protected by the cross-origin policy, frames cannot be captured in the browser. Please upload an image as the cover instead.',
 ];

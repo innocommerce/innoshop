@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'Hình ảnh SKU',
     'sku_validation_error'        => 'Vui lòng điền đầy đủ ít nhất thông tin quy cách đơn hoặc thông tin sản phẩm có nhiều quy cách',
     'specification_attribute'     => 'Thuộc tính biến thể',
+    'content_attributes'          => 'Thuộc tính nội dung',
     'spu_code'                    => 'Mã SPU',
     'status_settings'             => 'Thiết lập trạng thái',
     'stock_quantity'              => 'Số lượng hàng tồn kho',

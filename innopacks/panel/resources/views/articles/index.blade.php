@@ -37,7 +37,26 @@
             @foreach($articles as $item)
               <tr>
                 <td>{{ $item->id }}</td>
-                <td><img src="{{ image_resize($item->image, 30, 30) }}" class="wh-30"></td>
+                <td>
+                  @php $cover = $item->coverUrl(30, 30); @endphp
+                  @if ($cover)
+                    {{-- Image cover, or video cover with an extracted poster frame.
+                         Video rows get a small play overlay to tell them apart at a glance. --}}
+                    <div class="position-relative wh-30">
+                      <img src="{{ $cover }}" class="wh-30" alt="">
+                      @if ($item->is_video)
+                        <i class="bi bi-play-circle-fill position-absolute top-50 start-50 translate-middle text-white"></i>
+                      @endif
+                    </div>
+                  @elseif ($item->is_video)
+                    {{-- Video whose poster extraction failed: play icon stands in. --}}
+                    <div class="wh-30 d-flex align-items-center justify-content-center bg-light rounded">
+                      <i class="bi bi-play-circle text-primary"></i>
+                    </div>
+                  @else
+                    <img src="{{ image_resize($item->image, 30, 30) }}" class="wh-30">
+                  @endif
+                </td>
                 <td>
                   <a href="{{ $item->url }}" target="_blank" class="text-decoration-none" data-bs-toggle="tooltip" title="{{ $item->fallbackName('title') }}">
                     {{ sub_string($item->fallbackName('title'), 32) }}

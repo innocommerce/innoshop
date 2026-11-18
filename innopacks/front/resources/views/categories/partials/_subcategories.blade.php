@@ -13,16 +13,17 @@
             <div class="col-6 col-md-4 col-lg-3">
               <a href="{{ $subcategory->url }}" class="text-decoration-none">
                 <div class="subcategory-card h-100 border rounded-2 p-2 hover-shadow transition-all d-flex align-items-center">
-                  @if($subcategory->image)
+                  {{-- Subcategory thumbnails stay image-only — videos are pointless at 48px. --}}
+                  @if($subcategory->image && !$subcategory->is_video)
                     <div class="subcategory-image me-3 flex-shrink-0">
-                      <img src="{{ image_resize($subcategory->image, 48, 48) }}" 
+                      <img src="{{ image_resize($subcategory->image, 48, 48) }}"
                            alt="{{ $subcategory->fallbackName('name') }}"
-                           class="img-fluid rounded-2" 
+                           class="img-fluid rounded-2"
                            style="width: 48px; height: 48px; object-fit: cover;">
                     </div>
                   @endif
-                  
-                  <div class="subcategory-content flex-grow-1 {{ $subcategory->image ? 'text-start' : 'text-center' }}">
+
+                  <div class="subcategory-content flex-grow-1 {{ ($subcategory->image && !$subcategory->is_video) ? 'text-start' : 'text-center' }}">
                     <div class="subcategory-name">
                       <span class="fw-medium text-dark" style="font-size: 0.85rem; line-height: 1.3;">{{ $subcategory->fallbackName('name') }}</span>
                     </div>

@@ -200,6 +200,7 @@ class HomeRepo
                 ->withCount('products')
                 ->orderBy('position')
                 ->get();
+            media_cover_preload($categories);
 
             $formatted = [];
             foreach ($categories as $category) {
@@ -208,7 +209,9 @@ class HomeRepo
                     'name'          => $category->fallbackName(),
                     'slug'          => $category->slug,
                     'url'           => $category->url,
-                    'image'         => $category->image ? image_resize($category->image, 300, 300) : '',
+                    'image'         => $category->image ? $category->image_url : '',
+                    'poster_image'  => $category->coverUrl(600, 600),
+                    'is_video'      => $category->is_video,
                     'description'   => $category->translation->description ?? '',
                     'product_count' => $category->products_count,
                 ];

@@ -62,4 +62,6 @@ return [
     'desc_tag_list'              => 'Lista etiquetas de artículos con búsqueda por palabra clave. Volumen pequeño, se devuelve completo.',
     'desc_customer_autocomplete' => 'Búsqueda rápida de clientes por nombre o email. Devuelve lista id+nombre+email compacta.',
     'desc_category_autocomplete' => 'Búsqueda rápida de categorías por nombre. Devuelve lista id+nombre+parent_id compacta.',
+    'desc_setting_detail'        => 'Obtener la configuración SEO a nivel de sistema (título, descripción, palabras clave), agrupada por idioma. Es la configuración TDK global; las páginas sin SEO propio (p. ej. inicio) la usan.',
+    'desc_setting_update'        => '⚠️ Operación de escritura: actualizar la configuración SEO a nivel de sistema (meta_title/meta_description/meta_keywords) con semántica PATCH, por idioma.',
 ];

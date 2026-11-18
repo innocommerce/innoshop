@@ -13,7 +13,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Lang;
+use InnoShop\Common\Jobs\AggregateVisitDailyJob;
 use InnoShop\Common\Models\Visit\ConversionDaily;
 use InnoShop\Common\Models\Visit\Visit;
 use InnoShop\Common\Models\Visit\VisitCountryDaily;
@@ -21,6 +21,7 @@ use InnoShop\Common\Models\Visit\VisitDaily;
 use InnoShop\Common\Models\Visit\VisitDeviceDaily;
 use InnoShop\Common\Models\Visit\VisitEvent;
 use InnoShop\Common\Models\Visit\VisitHourlyDaily;
+use InnoShop\Common\Services\BotClassifier;
 use InnoShop\Common\Services\VisitStatisticsService;
 
 class VisitRepo extends BaseRepo
@@ -274,382 +275,191 @@ class VisitRepo extends BaseRepo
         $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
         $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        $visitsTable = (new Visit)->getTable();
+        $range = [$startDate->toDateString(), $endDate->toDateString()];
 
-        // Sessions + unique IPs directly from visits (is_bot=true)
-        $sessionStats = DB::table($visitsTable)
-            ->where('is_bot', true)
-            ->whereBetween('first_visited_at', [$startDate, $endDate])
-            ->selectRaw('COUNT(*) as sessions, COUNT(DISTINCT ip_address) as unique_ips')
-            ->first();
-
-        // Page views fired by bot sessions (usually small, since most crawlers
-        // don't execute the JS event tracking). Use prefixed alias in raw SQL
-        // because Laravel's grammar also prefixes the alias token.
-        $pageViewTypes = [
-            VisitEvent::TYPE_PAGE_VIEW,
-            VisitEvent::TYPE_HOME_VIEW,
-            VisitEvent::TYPE_CATEGORY_VIEW,
-            VisitEvent::TYPE_PRODUCT_VIEW,
-            VisitEvent::TYPE_CART_VIEW,
-        ];
-        $prefix      = DB::getTablePrefix();
-        $eventsTable = (new VisitEvent)->getTable();
-        $eventStats  = DB::table("{$eventsTable} as ve")
-            ->join("{$visitsTable} as v", 've.session_id', '=', 'v.session_id')
-            ->whereIn('ve.event_type', $pageViewTypes)
-            ->whereBetween('ve.created_at', [$startDate, $endDate])
-            ->where('v.is_bot', true)
-            ->selectRaw('COUNT(*) as pv, COUNT(DISTINCT '.$prefix.'ve.session_id) as event_sessions')
-            ->first();
+        // Sessions from the bot_daily aggregate; unique IPs stay a live
+        // cross-day distinct over the rolling bot_daily_ips window.
+        // QueryBuilder adds the connection prefix itself — never hand-prepend it.
+        $sessions  = (int) DB::table('bot_daily')->whereBetween('date', $range)->sum('visits');
+        $uniqueIps = (int) DB::table('bot_daily_ips')->whereBetween('date', $range)->distinct()->count('ip');
 
         return [
-            'sessions'        => (int) ($sessionStats->sessions ?? 0),
-            'unique_visitors' => (int) ($sessionStats->unique_ips ?? 0),
-            'page_views'      => (int) ($eventStats->pv ?? 0),
-            'event_sessions'  => (int) ($eventStats->event_sessions ?? 0),
+            'sessions'        => $sessions,
+            'unique_visitors' => $uniqueIps,
         ];
     }
 
     /**
-     * Map bot user-agent strings to known brand buckets and return Top N.
-     * Brand classification is done in PHP (not SQL) because brand detection
-     * depends on multiple substring patterns per brand.
+     * Classify bot sessions by UA brand and aggregate both the Top-N brand
+     * table and the 4-bucket category summary (seo/geo/other/suspicious) in
+     * a single scan. Brand classification is done in PHP (not SQL) because
+     * brand detection depends on multiple substring patterns per brand.
      *
      * @param  array  $filters
      * @param  int  $limit
-     * @return array
+     * @return array{brands: array, categories: array}
      */
-    public function getBotByType(array $filters = [], int $limit = 10): array
+    public function getBotBreakdown(array $filters = [], int $limit = 10): array
     {
         $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
         $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        $rows = DB::table((new Visit)->getTable())
-            ->where('is_bot', true)
-            ->whereBetween('first_visited_at', [$startDate, $endDate])
-            ->select('user_agent', 'ip_address')
-            ->get();
+        $range = [$startDate->toDateString(), $endDate->toDateString()];
 
-        if ($rows->isEmpty()) {
-            return [];
+        // Sessions per brand come pre-classified from bot_daily — no more
+        // pulling every raw bot row and re-parsing UAs per request.
+        $brandSessions = DB::table('bot_daily')
+            ->whereBetween('date', $range)
+            ->select('bot_brand', DB::raw('SUM(visits) as sessions'))
+            ->groupBy('bot_brand')
+            ->pluck('sessions', 'bot_brand');
+
+        // Distinct IPs per brand from the rolling 30d window; category IPs
+        // are the union of their member brands' sets.
+        $ipsByBrand = DB::table('bot_daily_ips')
+            ->whereBetween('date', $range)
+            ->select('brand', 'ip')
+            ->get()
+            ->groupBy('brand')
+            ->map(fn ($group) => $group->pluck('ip')->unique()->values());
+
+        $brandCounts = [];
+        $brandIps    = [];
+        foreach ($brandSessions as $brand => $sessions) {
+            $brand               = (string) $brand;
+            $brandCounts[$brand] = (int) $sessions;
+            $brandIps[$brand]    = $ipsByBrand->get($brand, collect());
         }
 
-        $brandPatterns = self::botBrandPatterns();
-        $categoryMap   = self::botBrandCategoryMap();
+        arsort($brandCounts);
 
-        $counts = [];
-        $ips    = [];
-        foreach ($rows as $row) {
-            $ua      = strtolower((string) $row->user_agent);
-            $matched = null;
-            foreach ($brandPatterns as $brand => $patterns) {
-                foreach ($patterns as $p) {
-                    if (str_contains($ua, $p)) {
-                        $matched = $brand;
-                        break 2;
-                    }
-                }
-            }
-            $brand          = $matched ?? 'unknown';
-            $counts[$brand] = ($counts[$brand] ?? 0) + 1;
-            $ips[$brand][]  = $row->ip_address;
-        }
+        $totalSessions = array_sum($brandCounts);
 
-        arsort($counts);
-
-        $totalSessions = array_sum($counts);
-
-        $result = [];
-        $i      = 0;
-        foreach ($counts as $brand => $count) {
+        $brandRows = [];
+        $i         = 0;
+        foreach ($brandCounts as $brand => $count) {
             if ($i++ >= $limit) {
                 break;
             }
-            $category = $categoryMap[$brand] ?? 'suspicious';
-            $result[] = [
+            $category    = BotClassifier::categoryOf($brand);
+            $brandRows[] = [
                 'brand'          => $brand,
-                'brand_label'    => self::brandLabel($brand),
+                'brand_label'    => BotClassifier::brandLabel($brand),
                 'category'       => $category,
-                'category_label' => self::categoryLabel($category),
-                'category_tip'   => self::categoryTip($category),
-                'category_color' => self::categoryColor($category),
+                'category_label' => BotClassifier::categoryLabel($category),
+                'category_tip'   => BotClassifier::categoryTip($category),
+                'category_color' => BotClassifier::categoryColor($category),
                 'sessions'       => $count,
-                'unique_ips'     => count(array_unique($ips[$brand])),
+                'unique_ips'     => $brandIps[$brand]->count(),
                 'share'          => $totalSessions > 0 ? ($count / $totalSessions * 100) : 0,
             ];
         }
 
-        return $result;
-    }
-
-    /**
-     * Aggregate ALL bot sessions across every brand into the 4-bucket
-     * taxonomy (seo/geo/other/suspicious). Unlike getBotByType this is not
-     * limited — the panel uses it to render the summary bar above the
-     * brand table so admins see the SEO/GEO/suspicious split at a glance.
-     *
-     * @param  array  $filters
-     * @return array<string, array{category: string, sessions: int, unique_ips: int}>
-     */
-    public function getBotCategorySummary(array $filters = []): array
-    {
-        $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
-        $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
-
-        $rows = DB::table((new Visit)->getTable())
-            ->where('is_bot', true)
-            ->whereBetween('first_visited_at', [$startDate, $endDate])
-            ->select('user_agent', 'ip_address')
-            ->get();
-
-        $brandPatterns = self::botBrandPatterns();
-        $categoryMap   = self::botBrandCategoryMap();
-
-        $agg = [
-            'seo'        => ['sessions' => 0, 'ips' => []],
-            'geo'        => ['sessions' => 0, 'ips' => []],
-            'other'      => ['sessions' => 0, 'ips' => []],
-            'suspicious' => ['sessions' => 0, 'ips' => []],
-        ];
-
-        foreach ($rows as $row) {
-            $ua      = strtolower((string) $row->user_agent);
-            $matched = null;
-            foreach ($brandPatterns as $brand => $patterns) {
-                foreach ($patterns as $p) {
-                    if (str_contains($ua, $p)) {
-                        $matched = $brand;
-                        break 2;
-                    }
-                }
-            }
-            $brand    = $matched ?? 'unknown';
-            $category = $categoryMap[$brand] ?? 'suspicious';
-            if (! isset($agg[$category])) {
-                $category = 'suspicious';
-            }
-            $agg[$category]['sessions']++;
-            $agg[$category]['ips'][] = $row->ip_address;
-        }
-
-        $totalSessions = array_sum(array_column($agg, 'sessions'));
-
-        $result = [];
+        $categoryRows = [];
         foreach (['seo', 'geo', 'other', 'suspicious'] as $cat) {
-            $sessions     = $agg[$cat]['sessions'];
-            $result[$cat] = [
+            $catBrands = array_keys(array_filter(BotClassifier::categoryMap(), fn ($c) => $c === $cat));
+            $catIps    = collect($catBrands)
+                ->flatMap(fn ($brand) => $brandIps[$brand] ?? collect())
+                ->unique()
+                ->values();
+            $sessions = (int) collect($brandCounts)
+                ->filter(fn ($sessions, $brand) => in_array($brand, $catBrands, true))
+                ->sum();
+
+            $categoryRows[$cat] = [
                 'category'       => $cat,
-                'category_label' => self::categoryLabel($cat),
-                'category_tip'   => self::categoryTip($cat),
-                'category_color' => self::categoryColor($cat),
+                'category_label' => BotClassifier::categoryLabel($cat),
+                'category_tip'   => BotClassifier::categoryTip($cat),
+                'category_color' => BotClassifier::categoryColor($cat),
                 'sessions'       => $sessions,
-                'unique_ips'     => count(array_unique($agg[$cat]['ips'])),
+                'unique_ips'     => $catIps->count(),
                 'share'          => $totalSessions > 0 ? ($sessions / $totalSessions * 100) : 0,
             ];
         }
 
-        return $result;
+        return ['brands' => $brandRows, 'categories' => $categoryRows];
     }
 
     /**
-     * Group bot brands by intent. Four buckets, chosen so the panel can
-     * answer "is this bot SEO-relevant or GEO-relevant?" at a glance:
-     *
-     *   seo         — search engine crawlers (being indexed drives SEO)
-     *   geo         — AI / LLM training & AI search (being cited drives GEO)
-     *   other       — friendly bots: SEO tools, monitors, social, archive
-     *   suspicious  — scanners, generic libs, unknowns (usually hostile)
-     *
-     * @return array<string, string> brand_code => category_code
-     */
-    public static function botBrandCategoryMap(): array
-    {
-        return [
-            // Search engines — being indexed here drives SEO ranking
-            'google'     => 'seo',
-            'bing'       => 'seo',
-            'baidu'      => 'seo',
-            'sogou'      => 'seo',
-            'shenma'     => 'seo',
-            'bytespider' => 'seo',
-            'petalbot'   => 'seo',
-            'duckduckgo' => 'seo',
-            'yandex'     => 'seo',
-            '360'        => 'seo',
-            'coccoc'     => 'seo',
-            'slurp'      => 'seo',
-
-            // AI / LLM training & AI search — being cited here drives GEO
-            'openai'     => 'geo',
-            'anthropic'  => 'geo',
-            'perplexity' => 'geo',
-            'ccbot'      => 'geo',
-            'meta'       => 'geo',
-            'you'        => 'geo',
-            'amazon'     => 'geo',
-            'applebot'   => 'geo',
-            'ai_index'   => 'geo',
-
-            // Friendly bots: SEO tools, monitors, social previews, archive
-            'ahrefs'               => 'other',
-            'semrush'              => 'other',
-            'mj12'                 => 'other',
-            'dotbot'               => 'other',
-            'exabot'               => 'other',
-            'serpstat'             => 'other',
-            'seranking'            => 'other',
-            'dataforseo'           => 'other',
-            'brokenlinks'          => 'other',
-            'velen'                => 'other',
-            'webtrackr'            => 'other',
-            'surdotly'             => 'other',
-            'serpminer'            => 'other',
-            'agentdata'            => 'other',
-            'netcraft'             => 'other',
-            'bitsight'             => 'other',
-            'recorded_future'      => 'other',
-            'internet_measurement' => 'other',
-            'pandalytics'          => 'other',
-            'pingdom'              => 'other',
-            'uptimerobot'          => 'other',
-            'statuscake'           => 'other',
-            'site24x7'             => 'other',
-            'newrelic'             => 'other',
-            'twitter'              => 'other',
-            'linkedin'             => 'other',
-            'telegram'             => 'other',
-            'whatsapp'             => 'other',
-            'skype'                => 'other',
-            'archive'              => 'other',
-
-            // Suspicious: scanners + generic frameworks + unknown
-            'scanner'     => 'suspicious',
-            'wpbot'       => 'suspicious',
-            'cms_checker' => 'suspicious',
-            'scrapy'      => 'suspicious',
-            'python'      => 'suspicious',
-            'curl'        => 'suspicious',
-            'wget'        => 'suspicious',
-            'java'        => 'suspicious',
-            'go'          => 'suspicious',
-            'nodejs'      => 'suspicious',
-            'web_fetch'   => 'suspicious',
-            'httpclient'  => 'suspicious',
-            'unknown'     => 'suspicious',
-        ];
-    }
-
-    /**
-     * Inline CSS for each bot category badge. Bootstrap 5 has no purple, so
-     * we ship a raw background-color per category.
+     * Inline CSS for each bot category badge. Thin wrapper over BotClassifier.
      *
      * @return array<string, string>
      */
     public static function categoryStyleMap(): array
     {
-        return [
-            'seo'        => 'background:#0d6efd;',
-            'geo'        => 'background:#6f42c1;',
-            'other'      => 'background:#6c757d;',
-            'suspicious' => 'background:#dc3545;',
-        ];
+        return BotClassifier::categoryStyleMap();
     }
 
     public static function categoryColor(string $category): string
     {
-        return self::categoryStyleMap()[$category] ?? 'background:#6c757d;';
+        return BotClassifier::categoryColor($category);
     }
 
     /**
-     * Resolve a category label with translation fallback. Returns the raw
-     * code if no translation key exists.
+     * Resolve a category label with translation fallback. Thin wrapper over
+     * BotClassifier.
      */
     public static function categoryLabel(string $category): string
     {
-        $key = 'panel/visit.bot_category_'.$category;
-
-        return Lang::has($key) ? trans($key) : $category;
+        return BotClassifier::categoryLabel($category);
     }
 
     public static function categoryTip(string $category): string
     {
-        $key = 'panel/visit.bot_category_'.$category.'_tip';
-
-        return Lang::has($key) ? trans($key) : '';
+        return BotClassifier::categoryTip($category);
     }
 
     /**
-     * Resolve a brand label with translation fallback. Returns the raw
-     * brand code if no translation key exists.
+     * Resolve a brand label with translation fallback. Thin wrapper over
+     * BotClassifier.
      */
     public static function brandLabel(string $brand): string
     {
-        $key = 'panel/visit.bot_brand_'.$brand;
-
-        return Lang::has($key) ? trans($key) : $brand;
+        return BotClassifier::brandLabel($brand);
     }
 
     /**
-     * Daily bot session/IP/PV series for the bot analytics trend chart.
-     * PV is counted from visit_events JOIN visits(is_bot=true); most crawlers
-     * don't fire JS events, so the PV column is usually small relative to
-     * session count.
+     * Daily bot series for the bot analytics trend chart, read from the
+     * bot_daily aggregate (bots stopped hitting the visits table). Range
+     * totals are day-sums; range-level unique_ips comes from the live
+     * cross-day distinct over bot_daily_ips (see getBotStatistics).
+     *
+     * event_sessions is retained in the shape for backward compatibility
+     * but is always 0: bots no longer produce visit_events.
      *
      * @param  array  $filters
-     * @return array<int, array{date: string, sessions: int, unique_ips: int, page_views: int}>
+     * @return array{daily: array<int, array{date: string, sessions: int, unique_ips: int, page_views: int}>, page_views: int, event_sessions: int}
      */
-    public function getBotDailyStatistics(array $filters = []): array
+    public function getBotAggregates(array $filters = []): array
     {
         $startDate = Carbon::parse($filters['start_date'] ?? Carbon::now()->subDays(30))->startOfDay();
         $endDate   = Carbon::parse($filters['end_date'] ?? Carbon::now())->endOfDay();
 
-        $visitsTable = (new Visit)->getTable();
-
-        // Sessions + unique IPs grouped by day, straight from visits table.
-        $sessionRows = DB::table($visitsTable)
-            ->where('is_bot', true)
-            ->whereBetween('first_visited_at', [$startDate, $endDate])
-            ->selectRaw('DATE(first_visited_at) as date, COUNT(*) as sessions, COUNT(DISTINCT ip_address) as unique_ips')
+        $rows = DB::table('bot_daily')
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->select('date', DB::raw('SUM(visits) as sessions'), DB::raw('SUM(page_views) as page_views'))
             ->groupBy('date')
             ->get()
-            ->keyBy('date');
+            ->keyBy(fn ($row) => (string) $row->date);
 
-        // Page views from visit_events JOIN visits(is_bot=true), grouped by day.
-        $pageViewTypes = [
-            VisitEvent::TYPE_PAGE_VIEW,
-            VisitEvent::TYPE_HOME_VIEW,
-            VisitEvent::TYPE_CATEGORY_VIEW,
-            VisitEvent::TYPE_PRODUCT_VIEW,
-            VisitEvent::TYPE_CART_VIEW,
-        ];
-        $prefix      = DB::getTablePrefix();
-        $eventsTable = (new VisitEvent)->getTable();
-        $pvRows      = DB::table("{$eventsTable} as ve")
-            ->join("{$visitsTable} as v", 've.session_id', '=', 'v.session_id')
-            ->whereIn('ve.event_type', $pageViewTypes)
-            ->whereBetween('ve.created_at', [$startDate, $endDate])
-            ->where('v.is_bot', true)
-            ->selectRaw('DATE('.$prefix.'ve.created_at) as date, COUNT(*) as pv')
-            ->groupBy('date')
-            ->pluck('pv', 'date');
-
-        // Fill the full date range, including days with zero bots.
         $results = [];
+        $totalPv = 0;
         $current = $startDate->copy();
         while ($current->lte($endDate)) {
-            $dateStr   = $current->toDateString();
-            $row       = $sessionRows->get($dateStr);
+            $dateStr = $current->toDateString();
+            $row     = $rows->get($dateStr);
+            $dayPv   = (int) ($row?->page_views ?? 0);
+            $totalPv += $dayPv;
             $results[] = [
                 'date'       => $dateStr,
                 'sessions'   => (int) ($row?->sessions ?? 0),
-                'unique_ips' => (int) ($row?->unique_ips ?? 0),
-                'page_views' => (int) ($pvRows[$dateStr] ?? 0),
+                'unique_ips' => 0, // per-day distinct IPs are not tracked; the page uses the range-level count
+                'page_views' => $dayPv,
             ];
             $current->addDay();
         }
 
-        return $results;
+        return ['daily' => $results, 'page_views' => $totalPv, 'event_sessions' => 0];
     }
 
     /**
@@ -688,11 +498,256 @@ class VisitRepo extends BaseRepo
     }
 
     /**
+     * Map ISO 3166-1 alpha-2 codes to ECharts world map names. The
+     * country_name column is locale-dependent (GeoLocationService resolves
+     * names in the app locale of whichever process enriched the visit), so
+     * the world map must be keyed off the locale-independent country_code.
+     * Aligned with the region names in public/vendor/echarts/world.json.
+     *
+     * @return array<string, string>
+     */
+    public static function iso2Map(): array
+    {
+        return [
+            'AD' => 'Andorra',
+            'AE' => 'United Arab Emirates',
+            'AF' => 'Afghanistan',
+            'AG' => 'Antigua and Barb.',
+            'AL' => 'Albania',
+            'AM' => 'Armenia',
+            'AO' => 'Angola',
+            'AR' => 'Argentina',
+            'AS' => 'American Samoa',
+            'AT' => 'Austria',
+            'AU' => 'Australia',
+            'AX' => 'Aland',
+            'AZ' => 'Azerbaijan',
+            'BA' => 'Bosnia and Herz.',
+            'BB' => 'Barbados',
+            'BD' => 'Bangladesh',
+            'BE' => 'Belgium',
+            'BF' => 'Burkina Faso',
+            'BG' => 'Bulgaria',
+            'BH' => 'Bahrain',
+            'BI' => 'Burundi',
+            'BJ' => 'Benin',
+            'BM' => 'Bermuda',
+            'BN' => 'Brunei',
+            'BO' => 'Bolivia',
+            'BR' => 'Brazil',
+            'BS' => 'Bahamas',
+            'BT' => 'Bhutan',
+            'BW' => 'Botswana',
+            'BY' => 'Belarus',
+            'BZ' => 'Belize',
+            'CA' => 'Canada',
+            'CD' => 'Dem. Rep. Congo',
+            'CF' => 'Central African Rep.',
+            'CG' => 'Congo',
+            'CH' => 'Switzerland',
+            'CI' => "Côte d'Ivoire",
+            'CL' => 'Chile',
+            'CM' => 'Cameroon',
+            'CN' => 'China',
+            'CO' => 'Colombia',
+            'CR' => 'Costa Rica',
+            'CU' => 'Cuba',
+            'CV' => 'Cape Verde',
+            'CW' => 'Curaçao',
+            'CY' => 'Cyprus',
+            'CZ' => 'Czech Rep.',
+            'DE' => 'Germany',
+            'DJ' => 'Djibouti',
+            'DK' => 'Denmark',
+            'DM' => 'Dominica',
+            'DO' => 'Dominican Rep.',
+            'DZ' => 'Algeria',
+            'EC' => 'Ecuador',
+            'EE' => 'Estonia',
+            'EG' => 'Egypt',
+            'EH' => 'W. Sahara',
+            'ER' => 'Eritrea',
+            'ES' => 'Spain',
+            'ET' => 'Ethiopia',
+            'FI' => 'Finland',
+            'FJ' => 'Fiji',
+            'FK' => 'Falkland Is.',
+            'FM' => 'Micronesia',
+            'FO' => 'Faeroe Is.',
+            'FR' => 'France',
+            'GA' => 'Gabon',
+            'GB' => 'United Kingdom',
+            'GD' => 'Grenada',
+            'GE' => 'Georgia',
+            'GF' => 'Fr. Guiana',
+            'GH' => 'Ghana',
+            'GL' => 'Greenland',
+            'GM' => 'Gambia',
+            'GN' => 'Guinea',
+            'GP' => 'Guadeloupe',
+            'GQ' => 'Eq. Guinea',
+            'GR' => 'Greece',
+            'GS' => 'S. Geo. and S. Sandw. Is.',
+            'GT' => 'Guatemala',
+            'GU' => 'Guam',
+            'GW' => 'Guinea-Bissau',
+            'GY' => 'Guyana',
+            'HK' => 'China',
+            'HM' => 'Heard I. and McDonald Is.',
+            'HN' => 'Honduras',
+            'HR' => 'Croatia',
+            'HT' => 'Haiti',
+            'HU' => 'Hungary',
+            'ID' => 'Indonesia',
+            'IE' => 'Ireland',
+            'IL' => 'Israel',
+            'IM' => 'Isle of Man',
+            'IN' => 'India',
+            'IO' => 'Br. Indian Ocean Ter.',
+            'IQ' => 'Iraq',
+            'IR' => 'Iran',
+            'IS' => 'Iceland',
+            'IT' => 'Italy',
+            'JE' => 'Jersey',
+            'JM' => 'Jamaica',
+            'JO' => 'Jordan',
+            'JP' => 'Japan',
+            'KE' => 'Kenya',
+            'KG' => 'Kyrgyzstan',
+            'KH' => 'Cambodia',
+            'KI' => 'Kiribati',
+            'KM' => 'Comoros',
+            'KN' => 'St. Kitts and Nevis',
+            'KP' => 'Dem. Rep. Korea',
+            'KR' => 'Korea',
+            'KW' => 'Kuwait',
+            'KY' => 'Cayman Is.',
+            'KZ' => 'Kazakhstan',
+            'LA' => 'Lao PDR',
+            'LB' => 'Lebanon',
+            'LC' => 'Saint Lucia',
+            'LI' => 'Liechtenstein',
+            'LK' => 'Sri Lanka',
+            'LR' => 'Liberia',
+            'LS' => 'Lesotho',
+            'LT' => 'Lithuania',
+            'LU' => 'Luxembourg',
+            'LV' => 'Latvia',
+            'LY' => 'Libya',
+            'MA' => 'Morocco',
+            'MC' => 'Monaco',
+            'MD' => 'Moldova',
+            'ME' => 'Montenegro',
+            'MG' => 'Madagascar',
+            'MK' => 'Macedonia',
+            'ML' => 'Mali',
+            'MM' => 'Myanmar',
+            'MN' => 'Mongolia',
+            'MO' => 'China',
+            'MP' => 'N. Mariana Is.',
+            'MQ' => 'Martinique',
+            'MR' => 'Mauritania',
+            'MS' => 'Montserrat',
+            'MT' => 'Malta',
+            'MU' => 'Mauritius',
+            'MV' => 'Maldives',
+            'MW' => 'Malawi',
+            'MX' => 'Mexico',
+            'MY' => 'Malaysia',
+            'MZ' => 'Mozambique',
+            'NA' => 'Namibia',
+            'NC' => 'New Caledonia',
+            'NE' => 'Niger',
+            'NG' => 'Nigeria',
+            'NI' => 'Nicaragua',
+            'NL' => 'Netherlands',
+            'NO' => 'Norway',
+            'NP' => 'Nepal',
+            'NR' => 'Nauru',
+            'NU' => 'Niue',
+            'NZ' => 'New Zealand',
+            'OM' => 'Oman',
+            'PA' => 'Panama',
+            'PE' => 'Peru',
+            'PF' => 'Fr. Polynesia',
+            'PG' => 'Papua New Guinea',
+            'PH' => 'Philippines',
+            'PK' => 'Pakistan',
+            'PL' => 'Poland',
+            'PM' => 'St. Pierre and Miquelon',
+            'PR' => 'Puerto Rico',
+            'PS' => 'Palestine',
+            'PT' => 'Portugal',
+            'PW' => 'Palau',
+            'PY' => 'Paraguay',
+            'QA' => 'Qatar',
+            'RE' => 'Réunion',
+            'RO' => 'Romania',
+            'RS' => 'Serbia',
+            'RU' => 'Russia',
+            'RW' => 'Rwanda',
+            'SA' => 'Saudi Arabia',
+            'SB' => 'Solomon Is.',
+            'SC' => 'Seychelles',
+            'SD' => 'Sudan',
+            'SE' => 'Sweden',
+            'SG' => 'Singapore',
+            'SH' => 'Saint Helena',
+            'SI' => 'Slovenia',
+            'SK' => 'Slovakia',
+            'SL' => 'Sierra Leone',
+            'SM' => 'San Marino',
+            'SN' => 'Senegal',
+            'SO' => 'Somalia',
+            'SR' => 'Suriname',
+            'SS' => 'S. Sudan',
+            'ST' => 'São Tomé and Principe',
+            'SV' => 'El Salvador',
+            'SY' => 'Syria',
+            'SZ' => 'Swaziland',
+            'TC' => 'Turks and Caicos Is.',
+            'TD' => 'Chad',
+            'TF' => 'Fr. S. Antarctic Lands',
+            'TG' => 'Togo',
+            'TH' => 'Thailand',
+            'TJ' => 'Tajikistan',
+            'TL' => 'Timor-Leste',
+            'TM' => 'Turkmenistan',
+            'TN' => 'Tunisia',
+            'TO' => 'Tonga',
+            'TR' => 'Turkey',
+            'TT' => 'Trinidad and Tobago',
+            'TV' => 'Tuvalu',
+            'TW' => 'China',
+            'TZ' => 'Tanzania',
+            'UA' => 'Ukraine',
+            'UG' => 'Uganda',
+            'US' => 'United States',
+            'UY' => 'Uruguay',
+            'UZ' => 'Uzbekistan',
+            'VA' => 'Vatican',
+            'VC' => 'St. Vin. and Gren.',
+            'VE' => 'Venezuela',
+            'VG' => 'British Virgin Is.',
+            'VI' => 'U.S. Virgin Is.',
+            'VN' => 'Vietnam',
+            'VU' => 'Vanuatu',
+            'WS' => 'Samoa',
+            'XK' => 'Kosovo',
+            'YE' => 'Yemen',
+            'ZA' => 'South Africa',
+            'ZM' => 'Zambia',
+            'ZW' => 'Zimbabwe',
+        ];
+    }
+
+    /**
      * Convert raw visits_by_country rows (from getVisitsByCountry) into the
      * shape ECharts world map expects: [{name, value}, ...] plus the total
-     * visit count. Country names are normalised via worldMapNameMap();
-     * values are summed when multiple raw names collapse onto the same map
-     * name (e.g. Hong Kong + Macao + Taiwan → China).
+     * visit count. Rows are resolved by country_code first (locale
+     * independent); country names are only used as fallback via
+     * worldMapNameMap(). Values are summed when multiple rows collapse onto
+     * the same map name (e.g. Hong Kong + Macao + Taiwan → China).
      *
      * @param  array  $visitsByCountry
      * @return array{0: array<int, array{name: string, value: int}>, 1: int}
@@ -700,12 +755,17 @@ class VisitRepo extends BaseRepo
     public static function buildWorldMapData(array $visitsByCountry): array
     {
         $nameMap = self::worldMapNameMap();
+        $isoMap  = self::iso2Map();
         $bucket  = [];
         $total   = 0;
         foreach ($visitsByCountry as $country) {
             $rawName = $country['country_name'] ?? $country['country_code'] ?? '';
-            $mapName = $nameMap[$rawName] ?? $rawName;
-            $value   = (int) ($country['visits'] ?? 0);
+            $code    = strtoupper(trim((string) ($country['country_code'] ?? '')));
+            $mapName = ($code !== '' && isset($isoMap[$code])) ? $isoMap[$code] : ($nameMap[$rawName] ?? $rawName);
+            if ($mapName === '') {
+                continue;
+            }
+            $value = (int) ($country['visits'] ?? 0);
             $total += $value;
             if (isset($bucket[$mapName])) {
                 $bucket[$mapName]['value'] += $value;
@@ -718,88 +778,25 @@ class VisitRepo extends BaseRepo
     }
 
     /**
-     * Known bot brand patterns keyed by brand code. Used by getBotByType to
-     * classify raw user-agent strings. Keep this list aligned with
-     * Console\Commands\TagBots::$botPatterns so newly tagged bots remain
-     * classifiable in the analytics view.
+     * Known bot brand patterns keyed by brand code. Thin wrapper — the
+     * single source of truth lives in BotClassifier so live writes,
+     * historical backfill and this repo can never drift apart.
      *
      * @return array<string, string[]>
      */
     public static function botBrandPatterns(): array
     {
-        return [
-            'google'     => ['googlebot'],
-            'bing'       => ['bingbot'],
-            'baidu'      => ['baiduspider'],
-            'sogou'      => ['sogou'],
-            'shenma'     => ['yisouspider'],
-            'bytespider' => ['bytespider'],
-            'petalbot'   => ['petalbot'],
-            'duckduckgo' => ['duckduckbot'],
-            'yandex'     => ['yandexbot', 'yadirectfetcher'],
-            '360'        => ['360spider'],
-            'coccoc'     => ['coccocbot'],
-            // AI / LLM training & search
-            'openai'     => ['gptbot', 'chatgpt-user', 'oai-searchbot'],
-            'anthropic'  => ['claudebot', 'claude-user'],
-            'perplexity' => ['perplexitybot'],
-            'ccbot'      => ['ccbot'],
-            'meta'       => ['meta-externalagent', 'meta-webindexer', 'facebot', 'facebookexternalhit'],
-            'you'        => ['youbot'],
-            'amazon'     => ['amazonbot'],
-            'applebot'   => ['applebot'],
-            'ai_index'   => ['aiwebindex', 'haibara_ai'],
-            // SEO / marketing analytics
-            'ahrefs'      => ['ahrefsbot'],
-            'semrush'     => ['semrushbot'],
-            'mj12'        => ['mj12bot'],
-            'dotbot'      => ['dotbot'],
-            'exabot'      => ['exabot'],
-            'serpstat'    => ['serpstatbot'],
-            'seranking'   => ['serankingbacklinksbot'],
-            'dataforseo'  => ['dataforseobot'],
-            'brokenlinks' => ['brokenlinksbot'],
-            'velen'       => ['velenpublicwebcrawler'],
-            'webtrackr'   => ['webtrackrcrawler'],
-            'surdotly'    => ['surdotlybot'],
-            'serpminer'   => ['serpminerbot'],
-            'agentdata'   => ['agentdatabot'],
-            // Social / messaging
-            'twitter'  => ['twitterbot'],
-            'linkedin' => ['linkedinbot'],
-            'telegram' => ['telegrambot'],
-            'whatsapp' => ['whatsapp'],
-            'skype'    => ['skypeuripreview'],
-            // Archival / web intel
-            'archive'              => ['archive.org', 'heritrix'],
-            'slurp'                => ['slurp'],
-            'netcraft'             => ['netcraftsurveyagent'],
-            'bitsight'             => ['bitsightbot'],
-            'recorded_future'      => ['recordedfuture'],
-            'internet_measurement' => ['internetmeasurement'],
-            'pandalytics'          => ['pandalytics'],
-            // Uptime monitors
-            'pingdom'     => ['pingdom'],
-            'uptimerobot' => ['uptimerobot'],
-            'statuscake'  => ['statuscake'],
-            'site24x7'    => ['site24x7'],
-            'newrelic'    => ['newrelicpinger'],
-            // WordPress / CMS scanners
-            'wpbot'       => ['wpbot', 'wp-safe-scanner'],
-            'cms_checker' => ['cms-checker'],
-            // Generic frameworks / libraries
-            'scrapy'    => ['scrapy/'],
-            'python'    => ['python-requests', 'python-urllib', 'aiohttp'],
-            'curl'      => ['curl'],
-            'wget'      => ['wget'],
-            'java'      => ['java/', 'okhttp', 'dalvik'],
-            'go'        => ['go-http-client', 'req/v3'],
-            'nodejs'    => ['node-fetch', 'httpx', 'axios', 'got '],
-            'web_fetch' => ['webfetchtool'],
-            // Hostile scanners / CVE feeds
-            'scanner'    => ['masscan', 'nmap', 'nikto', 'sqlmap', 'wpscan', 'dirbuster', 'gobuster', 'zgrab', 'censys', 'shodan', 'shadow', 'l9scan', 'intelx', 'visionheight', 'palo alto networks', 'lrvl-livewire', 'root_evidence', 'ev-crawler'],
-            'httpclient' => ['httpclient', 'lwp-'],
-        ];
+        return BotClassifier::brandPatterns();
+    }
+
+    /**
+     * Brand => category map. Thin wrapper over BotClassifier.
+     *
+     * @return array<string, string>
+     */
+    public static function botBrandCategoryMap(): array
+    {
+        return BotClassifier::categoryMap();
     }
 
     /**
@@ -890,17 +887,18 @@ class VisitRepo extends BaseRepo
 
     /**
      * Ensure visit_daily is populated for the given date range.
-     * Auto-aggregates any missing dates on-the-fly.
+     * Missing dates are queued for aggregation, never aggregated synchronously:
+     * a scheduler-less environment (no cron / schedule:work) would otherwise
+     * block the panel dashboard for seconds on every first visit of the day.
      *
      * @param  Carbon  $startDate
      * @param  Carbon  $endDate
+     * @param  bool  $includeToday  when true, today is also queued so
+     *                              same-day views (bot analytics) get a row
      * @return void
      */
-    protected function ensureDailyAggregated(Carbon $startDate, Carbon $endDate): void
+    public function ensureDailyAggregated(Carbon $startDate, Carbon $endDate, bool $includeToday = false): void
     {
-        // Read path only backfills historical dates that are missing from visit_daily.
-        // Today's row is kept fresh by the scheduled `visits:aggregate --date=today` task
-        // (every 5 min) — never re-aggregate on read, it scans the full visit_events table.
         $existingDates = VisitDaily::query()
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->pluck('date')
@@ -909,10 +907,11 @@ class VisitRepo extends BaseRepo
 
         $datesToAggregate = [];
         $current          = $startDate->copy();
-        while ($current->lt(Carbon::today())) {
+        $lastDay          = $includeToday ? Carbon::today()->addDay() : Carbon::today();
+        while ($current->lt($lastDay)) {
             $dateStr = $current->toDateString();
             if (! isset($existingDates[$dateStr])) {
-                $datesToAggregate[] = $current->copy();
+                $datesToAggregate[] = $dateStr;
             }
             $current->addDay();
         }
@@ -925,13 +924,8 @@ class VisitRepo extends BaseRepo
             return;
         }
 
-        $service = new VisitStatisticsService;
-        foreach ($datesToAggregate as $date) {
-            try {
-                $service->aggregateDaily($date);
-            } catch (\Throwable $e) {
-                logger()->warning("Failed to aggregate visit stats for {$date->toDateString()}: ".$e->getMessage());
-            }
+        foreach ($datesToAggregate as $dateStr) {
+            AggregateVisitDailyJob::dispatch($dateStr);
         }
     }
 

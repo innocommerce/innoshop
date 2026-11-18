@@ -120,6 +120,9 @@ class CartService
      */
     public function addCart($data): array
     {
+        // 允许 pack 在加购前做自定义校验（如抛出异常拦截加购）。
+        fire_hook_action('service.cart.add.before', $data);
+
         if (! $this->stockService->checkStockBySkuId($data['sku_id'], $data['quantity'] ?? 1)) {
             throw new Exception(trans('front/common.stock_not_enough'));
         }
@@ -351,16 +354,40 @@ class CartService
 
         // 保存新的选项值
         foreach ($options as $optionId => $optionValueIds) {
+            $option = Option::query()->find($optionId);
+            if (! $option) {
+                continue;
+            }
+
+            // 自由文本类型：值是客户填写的字符串，无选项值、零加价
+            if ($option->isTextEntry()) {
+                $text = is_string($optionValueIds) ? trim($optionValueIds) : '';
+                if ($text === '') {
+                    continue;
+                }
+                $locale = locale_code();
+
+                \InnoShop\Common\Models\Cart\OptionValue::query()->create([
+                    'cart_item_id'      => $cartItem->id,
+                    'option_id'         => $optionId,
+                    'option_value_id'   => 0,
+                    'option_name'       => $option->name,
+                    'option_value_name' => array_fill_keys(array_unique([$locale, 'en']), $text),
+                    'price_adjustment'  => 0,
+                ]);
+
+                continue;
+            }
+
             if (! is_array($optionValueIds)) {
                 $optionValueIds = [$optionValueIds];
             }
 
             foreach ($optionValueIds as $optionValueId) {
-                // 获取选项和选项值信息
-                $option      = Option::query()->find($optionId);
+                // 获取选项值信息
                 $optionValue = OptionValue::query()->find($optionValueId);
 
-                if (! $option || ! $optionValue) {
+                if (! $optionValue) {
                     continue;
                 }
 

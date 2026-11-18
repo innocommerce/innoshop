@@ -25,6 +25,7 @@ return [
     'minimum_required'                => 'ចំនួនទិញអប្បបរមាគឺ :min',
     'news'                            => 'ព័ត៌មាន',
     'no_search_results'               => 'រកមិនឃើញលទ្ធផលពាក់ព័ន្ធទេ។',
+    'or_continue_with'                => 'ឬបន្តជាមួយ',
     'out_of_stock'                    => 'អស់ស្តុក',
     'page_not_found'                  => 'រកមិនឃើញទំព័រ',
     'page_not_found_description'      => 'សុំទោស ទំព័រដែលអ្នកបានចូលមើលមិនមាន ឬត្រូវបានលុបចោល។',

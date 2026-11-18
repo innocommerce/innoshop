@@ -125,6 +125,7 @@ return [
     'sku_image'                   => 'Das ist mein SKU',
     'sku_validation_error'        => 'Bitte füllen Sie mindestens die Informationen für die einzelne Variante oder die Informationen für Produkte mit mehreren Varianten vollständig aus',
     'specification_attribute'     => 'Variantenattribute',
+    'content_attributes'          => 'Inhaltsattribute',
     'spu_code'                    => 'SPU-Code',
     'status_settings'             => 'Du schlägst zu!',
     'stock_quantity'              => 'Inventarlisten.',

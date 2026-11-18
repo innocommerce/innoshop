@@ -162,7 +162,7 @@ $categories['other'] = ['label' => __('mcp::welcome.cat_other'), 'prefix' => []]
 </head>
 <body>
   <aside class="sidebar">
-    <a class="sidebar-brand" href="{{ url('/mcp') }}">
+    <a class="sidebar-brand" href="{{ url('/mcp/welcome') }}">
       <img src="{{ $shopLogo }}" alt="{{ $shopName }}" onerror="this.style.display='none'">
       <h2>{{ $shopName }}</h2>
     </a>

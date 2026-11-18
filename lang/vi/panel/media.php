@@ -65,4 +65,6 @@ return [
     'directory_not_empty'           => 'Thư mục không trống',
     'show_folders'                  => 'Hiện thư mục',
     'delete_failed'                 => 'Xóa thất bại',
+    'capture_load_failed'           => 'Tải video thất bại, không thể chọn ảnh bìa',
+    'capture_cross_origin'          => 'Video này được bảo vệ bởi chính sách cross-origin, không thể chụp khung hình trong trình duyệt. Vui lòng tải lên một hình ảnh làm ảnh bìa.',
 ];

@@ -1,21 +1,33 @@
 {{-- Category intro section (before product list) --}}
-@if($category->fallbackName('summary'))
+{{-- Show the section if EITHER a cover image OR a summary is present. --}}
+@if($category->image || $category->fallbackName('summary'))
   <div class="category-intro-section mb-4">
     <div class="card border-0 shadow-sm bg-gradient">
       <div class="card-body p-4">
         <div class="row align-items-center">
           <div class="col-md-3 text-center mb-3 mb-md-0">
             <div class="category-image-wrapper position-relative">
-              <img src="{{ image_resize($category->image ?? '', 200, 200) }}" 
-                   alt="{{ $category->fallbackName('name') }}" 
-                   class="img-fluid rounded-3 shadow category-hero-image">
+              @if($category->image)
+                @if($category->is_video)
+                  @php $categoryPoster = media_poster_url($category->image); @endphp
+                  <video src="{{ image_origin($category->image) }}"
+                         @if($categoryPoster) poster="{{ $categoryPoster }}" @endif
+                         autoplay muted loop playsinline
+                         alt="{{ $category->fallbackName('name') }}"
+                         class="img-fluid rounded-3 shadow category-hero-image"></video>
+                @else
+                  <img src="{{ image_resize($category->image, 200, 200) }}"
+                       alt="{{ $category->fallbackName('name') }}"
+                       class="img-fluid rounded-3 shadow category-hero-image">
+                @endif
+              @endif
               <div class="image-overlay"></div>
             </div>
           </div>
           <div class="col-md-9">
             <div class="category-content-wrapper">
               <h1 class="category-title display-6 fw-bold mb-3 text-primary">{{ $category->fallbackName('name') }}</h1>
-              
+
               {{-- Category summary --}}
               @if($category->fallbackName('summary'))
                 <div class="category-summary mb-4">

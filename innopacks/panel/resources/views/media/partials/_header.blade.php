@@ -34,7 +34,7 @@
 
       // Create axios instance
       const http = axios.create({
-        baseURL: '/api/panel/',
+        baseURL: '{{ $apiPrefix ?? '/api/panel/' }}',
         timeout: 30000,
         headers: {
           'Authorization': 'Bearer ' + window.getApiToken()

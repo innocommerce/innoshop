@@ -27,12 +27,12 @@ class ProductFactory extends Factory
 
         return [
             'type'         => Product::TYPE_NORMAL,
-            'brand_id'     => null,
+            'brand_id'     => 0,
             'images'       => [],
             'hover_image'  => null,
             'video'        => null,
             'price'        => fake()->randomFloat(2, 10, 1000),
-            'tax_class_id' => null,
+            'tax_class_id' => 0,
             'spu_code'     => 'SPU-'.strtoupper(Str::random(8)),
             'slug'         => Str::slug($name).'-'.Str::random(5),
             'is_virtual'   => false,

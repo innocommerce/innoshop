@@ -125,6 +125,7 @@ Route::middleware($middlewares)->group(function () {
 
     Route::get('/media/media/{id}', [MediaController::class, 'getMediaDetail'])->name('media.media_detail');
     Route::patch('/media/media/{id}', [MediaController::class, 'updateMedia'])->name('media.media_update');
+    Route::post('/media/set-poster', [MediaController::class, 'setVideoPoster'])->name('media.set_poster');
     Route::get('/media/stats', [MediaController::class, 'getMediaStats'])->name('media.stats');
 
     Route::get('/currencies', [PanelApiControllers\CurrencyController::class, 'index'])->name('currencies.index');

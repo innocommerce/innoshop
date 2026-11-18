@@ -61,7 +61,7 @@
                 </td>@endif
                 <td>{{ $product->id }}</td>
                 <td>
-                  <div class="d-flex align-items-center justify-content-center wh-50 border">
+                  <div class="d-flex align-items-center justify-content-center wh-50 border product-thumb">
                     <a href="{{ $product->url }}" target="_blank">
                       <img src="{{ $product->image_url }}" class="img-fluid"
                            alt="{{ $product->fallbackName() }}">

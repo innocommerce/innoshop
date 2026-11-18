@@ -12,6 +12,7 @@ namespace InnoShop\Common\Services;
 use Detection\MobileDetect;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Models\Visit\Visit;
 
@@ -32,12 +33,20 @@ class VisitTrackingService
     private MobileDetect $detect;
 
     /**
+     * Behavioural bot classifier
+     *
+     * @var BotBehaviorClassifier
+     */
+    private BotBehaviorClassifier $behaviorClassifier;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->geoLocationService = new GeoLocationService;
         $this->detect             = new MobileDetect;
+        $this->behaviorClassifier = new BotBehaviorClassifier;
     }
 
     /**
@@ -56,43 +65,42 @@ class VisitTrackingService
                 return null;
             }
 
+            // Classify first: bots never touch the visits/visit_events tables
+            // (they get one lightweight upsert into bot_daily instead) and
+            // skip the geo lookup entirely.
+            $classification = BotClassifier::classify($request->userAgent());
+
+            $ip = $this->getClientIp($request);
+
+            if ($classification['is_bot']) {
+                $this->recordBotHit($classification, $ip, $request->path(), $request->isMethod('GET'));
+
+                return null;
+            }
+
+            // Behavioural check: a crawler wearing a real browser UA passes
+            // the UA rules above and would be stored as a genuine visitor.
+            // The behavioural rules catch the cookie-less burst pattern.
+            // Evaluated before the geo lookup so a blocked bot costs no
+            // geolocation work.
+            $behavior = $this->behaviorClassifier->classify($request);
+            if ($behavior !== null) {
+                $this->recordBotHit($behavior, $ip, $request->path(), $request->isMethod('GET'));
+
+                return null;
+            }
+
             // Parse user agent
             $this->detect->setUserAgent($request->userAgent() ?? '');
 
             // Get location information
-            $ip       = $this->getClientIp($request);
             $location = $this->geoLocationService->getLocation($ip);
 
-            // Get or create visit record (single table design: one record per session)
-            $visit = Visit::query()->where('session_id', $sessionId)->first();
-
-            $isBot     = $this->isBotUserAgent($request->userAgent());
-            $deviceTyp = $isBot ? 'bot' : $this->getDeviceType();
-
-            if ($visit) {
-                // Update existing visit: update last visited time
-                $updateData = [
-                    'last_visited_at' => now(),
-                    'customer_id'     => $customerId ?: $visit->customer_id,
-                ];
-
-                // Backfill browser/os if empty
-                if (empty($visit->browser) || empty($visit->os)) {
-                    $updateData['browser'] = $this->getBrowser();
-                    $updateData['os']      = $this->getOperatingSystem();
-                }
-
-                // Set is_bot/device_type once (don't overwrite real visit data on bot traffic)
-                if (! $visit->is_bot && $isBot) {
-                    $updateData['is_bot']      = true;
-                    $updateData['device_type'] = 'bot';
-                }
-
-                $visit->update($updateData);
-            } else {
-                // Create new visit record (first visit of the session)
-                $visit = Visit::query()->create([
-                    'session_id'       => $sessionId,
+            // Get or create visit record (single table design: one record per session).
+            // firstOrCreate absorbs the concurrent-first-request race on session_id.
+            $visit = Visit::query()->firstOrCreate(
+                ['session_id' => $sessionId],
+                [
                     'customer_id'      => $customerId,
                     'ip_address'       => $ip,
                     'user_agent'       => $request->userAgent(),
@@ -100,15 +108,33 @@ class VisitTrackingService
                     'country_name'     => $location['country_name'],
                     'city'             => $location['city'],
                     'referrer'         => $request->header('referer'),
-                    'device_type'      => $deviceTyp,
-                    'is_bot'           => $isBot,
+                    'device_type'      => $this->getDeviceType(),
+                    'is_bot'           => false,
                     'browser'          => $this->getBrowser(),
                     'os'               => $this->getOperatingSystem(),
                     'locale'           => front_locale_code(),
                     'first_visited_at' => now(),
                     'last_visited_at'  => now(),
-                ]);
+                ]
+            );
+
+            if ($visit->wasRecentlyCreated) {
+                return $visit;
             }
+
+            // Update existing visit: update last visited time
+            $updateData = [
+                'last_visited_at' => now(),
+                'customer_id'     => $customerId ?: $visit->customer_id,
+            ];
+
+            // Backfill browser/os if empty
+            if (empty($visit->browser) || empty($visit->os)) {
+                $updateData['browser'] = $this->getBrowser();
+                $updateData['os']      = $this->getOperatingSystem();
+            }
+
+            $visit->update($updateData);
 
             return $visit;
         } catch (Exception $e) {
@@ -123,6 +149,52 @@ class VisitTrackingService
     }
 
     /**
+     * Count a bot request into the aggregated bot tables. Bots are never
+     * written to visits/visit_events — two lightweight statements replace
+     * the old INSERT + event INSERT, and the tables stay tiny forever
+     * (bot_daily grows by one row per brand per day at most).
+     *
+     * Written as insertOrIgnore + atomic row increment (not upsert/VALUES())
+     * so it runs identically on MySQL and sqlite.
+     *
+     * @param  array{is_bot: bool, brand: string, category: string}  $classification
+     */
+    protected function recordBotHit(array $classification, string $ip, string $path, bool $isGet): void
+    {
+        $date     = now()->toDateString();
+        $brand    = $classification['brand'] ?: 'unknown';
+        $category = $classification['category'] ?: 'suspicious';
+        $lastPath = mb_substr($path, 0, 255);
+
+        DB::table('bot_daily')->insertOrIgnore([
+            'date'       => $date,
+            'bot_brand'  => $brand,
+            'category'   => $category,
+            'visits'     => 0,
+            'page_views' => 0,
+            'last_ip'    => $ip,
+            'last_path'  => $lastPath,
+        ]);
+
+        DB::table('bot_daily')
+            ->where('date', $date)
+            ->where('bot_brand', $brand)
+            ->update([
+                'visits'     => DB::raw('visits + 1'),
+                'page_views' => DB::raw('page_views + '.($isGet ? '1' : '0')),
+                'last_ip'    => $ip,
+                'last_path'  => $lastPath,
+                'updated_at' => now(),
+            ]);
+
+        DB::table('bot_daily_ips')->insertOrIgnore([
+            'date'  => $date,
+            'ip'    => $ip,
+            'brand' => $brand,
+        ]);
+    }
+
+    /**
      * Check if should skip tracking
      *
      * @param  Request  $request
@@ -131,6 +203,12 @@ class VisitTrackingService
     private function shouldSkipTracking(Request $request): bool
     {
         $routeName = $request->route()?->getName();
+
+        // Skip loopback traffic (dev browser, server-side health checks) —
+        // no analytics value and it pollutes geo/IP stats.
+        if (in_array($request->ip(), ['127.0.0.1', '::1'], true)) {
+            return true;
+        }
 
         // Skip API routes and admin routes
         if (str_starts_with($request->path(), 'api/') || str_starts_with($request->path(), 'panel/')) {
@@ -181,48 +259,6 @@ class VisitTrackingService
         }
 
         return 'desktop';
-    }
-
-    /**
-     * Detect crawler/bot/spider/scanner User-Agent.
-     * Common bot UA keywords covering Googlebot, Bingbot, Baiduspider, AhrefsBot,
-     * semrush, GPTBot, python-requests, curl, wget, scanner families, etc.
-     *
-     * @param  string|null  $userAgent
-     * @return bool
-     */
-    private function isBotUserAgent(?string $userAgent): bool
-    {
-        if (empty($userAgent)) {
-            return true;
-        }
-
-        $ua = strtolower($userAgent);
-
-        $botPatterns = [
-            'bot', 'crawler', 'spider', 'scrap', 'scout', 'scan', 'check', 'fetch',
-            'archive', 'heritrix', 'archive.org',
-            'slurp', 'teoma', 'ia_archiver',
-            'googlebot', 'bingbot', 'baiduspider', 'sogou', 'yisouspider', 'bytespider',
-            'duckduckbot', 'yandexbot', 'exabot', 'konqueror', 'facebot', 'facebookexternalhit',
-            'twitterbot', 'linkedinbot', 'telegrambot', 'whatsapp', 'skypeuripreview',
-            'ahrefsbot', 'semrushbot', 'dotbot', 'mj12bot', 'petalbot', 'applebot',
-            'gptbot', 'chatgpt-user', 'claudebot', 'claude-user', 'ccbot', 'perplexitybot',
-            'uptimerobot', 'statuscake', 'pingdom', 'site24x7', 'newrelicpinger',
-            'python-requests', 'python-urllib', 'aiohttp', 'httpx', 'axios',
-            'curl', 'wget', 'httpclient', 'okhttp', 'java/', 'go-http-client',
-            'node-fetch', 'got ', 'lwp-',
-            'masscan', 'nmap', 'nikto', 'sqlmap', 'wpscan', 'dirbuster', 'gobuster',
-            'zgrab', 'censys', 'shodan', 'shadow',
-        ];
-
-        foreach ($botPatterns as $pattern) {
-            if (str_contains($ua, $pattern)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

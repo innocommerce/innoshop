@@ -16,6 +16,7 @@ use InnoShop\Plugin\Controllers\ThemeMarketController;
 Route::post('/plugins/enabled', [PluginController::class, 'updateStatus'])->name('plugins.update_status');
 Route::post('/plugins/seeders', [PluginController::class, 'runSeeders'])->name('plugins.run_seeders');
 Route::post('/plugins/reset', [PluginController::class, 'reset'])->name('plugins.reset');
+Route::post('/plugins/reorder', [PluginController::class, 'reorder'])->name('plugins.reorder');
 Route::resource('/plugins', PluginController::class);
 
 Route::get('/plugin-market', [PluginMarketController::class, 'index'])->name('plugin-market.index');

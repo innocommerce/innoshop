@@ -39,6 +39,7 @@
           <tr>
             <td>{{ __('common/base.id') }}</td>
             <td>{{ __('common/base.name') }}</td>
+            <td>{{ __('panel/attribute.type') }}</td>
             <td>{{ __('panel/menu.attribute_groups')}}</td>
             <td>{{ __('common/base.position')}}</td>
             <td>{{ __('common/base.created_at') }}</td>
@@ -50,6 +51,7 @@
           <tr>
             <td>{{ $item->id }}</td>
             <td>{{ $item->fallbackName() }}</td>
+            <td>{{ panel_trans('attribute.type_' . $item->type) }}</td>
             <td>{{ $item->group ? $item->group->fallbackName() : '' }}</td>
             <td>{{ $item->position }}</td>
             <td>{{ $item->created_at }}</td>

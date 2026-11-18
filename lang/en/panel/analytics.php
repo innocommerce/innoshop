@@ -51,4 +51,5 @@ return [
     'new_products'          => 'New Products',
     'reaggregate'           => 'Re-aggregate',
     'reaggregate_success'   => 'Re-aggregation completed successfully',
+    'reaggregate_queued'    => 'Aggregation jobs queued, data will be ready shortly',
 ];

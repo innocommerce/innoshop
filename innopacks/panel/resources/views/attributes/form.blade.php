@@ -53,6 +53,23 @@
                 </div>
               </div>
 
+              {{-- Value input type --}}
+              <div class="mb-3">
+                <label class="form-label">{{ __('panel/attribute.type') }}</label>
+                <select class="form-select" name="type" v-model="selectedType">
+                  <option v-for="t in attributeTypes" :key="t.value" :value="t.value">@{{ t.label }}</option>
+                </select>
+                <div class="form-text">{{ __('panel/attribute.type_hint') }}</div>
+              </div>
+
+              {{-- Storefront filterable (not applicable to long-text types) --}}
+              <div class="mb-3 form-check form-switch" v-show="!isLongTextType">
+                <input class="form-check-input" type="checkbox" id="is_filterable" name="is_filterable" value="1"
+                       v-model="isFilterable">
+                <label class="form-check-label" for="is_filterable">{{ __('panel/attribute.is_filterable') }}</label>
+                <div class="form-text">{{ __('panel/attribute.is_filterable_hint') }}</div>
+              </div>
+
               {{-- Position --}}
               <div class="mb-3">
                 <label class="form-label">{{ __('common/base.position') }}</label>
@@ -64,8 +81,8 @@
           </div>
         </div>
 
-        {{-- Right column: Attribute values --}}
-        <div class="col-12 col-md-6">
+        {{-- Right column: Attribute values (preset values only apply to select type) --}}
+        <div class="col-12 col-md-6" v-if="selectedType === 'select'">
           <div class="card h-min-600">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">{{ __('panel/attribute.attribute_value') }}</h5>
@@ -96,6 +113,16 @@
                 <i class="bi bi-tags fs-1 d-block mb-2"></i>
                 <span>{{ __('panel/attribute.no_values') }}</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {{-- Free-input types carry no preset values --}}
+        <div class="col-12 col-md-6" v-else>
+          <div class="card h-min-600">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center text-muted">
+              <i class="bi bi-input-cursor-text fs-1 d-block mb-2"></i>
+              <span>{{ __('panel/attribute.no_preset_values_hint') }}</span>
             </div>
           </div>
         </div>
@@ -232,6 +259,13 @@
       // Group dropdown
       const groups = ref(@json($attribute_groups));
       const selectedGroupId = ref('{{ old("attribute_group_id", $attribute->attribute_group_id ?? "") }}');
+
+      // Value input type & storefront filter flag
+      const attributeTypes = @json($attribute_type_options);
+      const selectedType = ref('{{ old("type", $attribute->type ?? \InnoShop\Common\Models\Attribute::TYPE_SELECT) }}');
+      const isFilterable = ref(@json((bool) old('is_filterable', $attribute->is_filterable ?? false)));
+      const longTextTypes = @json(\InnoShop\Common\Models\Attribute::longTextTypes());
+      const isLongTextType = computed(() => longTextTypes.includes(selectedType.value));
 
       // Local values array
       const localValues = ref(@json($attribute_values_json ?? []));
@@ -440,6 +474,10 @@
         isNewAttribute,
         groups,
         selectedGroupId,
+        attributeTypes,
+        selectedType,
+        isFilterable,
+        isLongTextType,
         localValues,
         locales,
         defaultLocale,

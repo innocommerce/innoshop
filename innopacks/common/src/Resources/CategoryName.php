@@ -32,6 +32,7 @@ class CategoryName extends JsonResource
             'image'        => $this->image,
             'image_small'  => image_resize($this->image, 100, 100),
             'image_origin' => image_origin($this->image),
+            'is_video'     => (bool) $this->is_video,
         ];
 
         return fire_hook_filter('resource.category.name', $data);

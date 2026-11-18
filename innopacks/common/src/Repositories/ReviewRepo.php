@@ -178,6 +178,7 @@ class ReviewRepo extends BaseRepo
         $builder = Review::query()->with([
             'customer',
             'product',
+            'product.translations',
             'orderItem',
         ]);
 
