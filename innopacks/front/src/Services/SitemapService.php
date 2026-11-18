@@ -305,7 +305,10 @@ class SitemapService extends BaseService
      */
     private function addMisc(Sitemap $sitemap, string $locale): void
     {
-        $names = ['home.index', 'products.index', 'brands.index', 'register.index', 'login.index'];
+        // Only the pages that carry indexable content: the login and the
+        // register pages are thin and duplicated across locales, so listing
+        // them in the sitemap only dilutes it.
+        $names = ['home.index', 'products.index', 'brands.index'];
 
         foreach ($names as $name) {
             $this->addUrl($sitemap, $this->frontRoute($locale, $name));
