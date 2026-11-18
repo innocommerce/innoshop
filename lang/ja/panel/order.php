@@ -88,6 +88,7 @@ return [
     'product'                    => '商品',
     'quantity'                   => '購入数量',
     'raw_data'                   => '生データです',
+    'refunded'                   => '返金済み',
     'save_changes'               => '変更を保存',
     'ship_list'                  => '発送リスト',
     'shipment_information'       => '出荷情報',

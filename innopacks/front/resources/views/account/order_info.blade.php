@@ -203,7 +203,7 @@
                   <td data-title="express_number">{{ $shipment->express_number }}</td>
                   <td data-title="created_at">{{ $shipment->created_at }}</td>
                   <td class="align-middle">
-                    <button data-id="{{ $shipment->id }}" type="button" class="btn btn-primary"
+                    <button data-id="{{ $shipment->id }}" data-number="{{ $order->number }}" type="button" class="btn btn-primary"
                             id="view-shipment-{{ $shipment->id }}">
                       {{ __('front/order.view') }}
                     </button>
@@ -306,7 +306,8 @@
           // View shipment details
           $(document).on('click', '[id^="view-shipment-"]', function () {
             const shipmentId = $(this).data('id')
-            axios.get(`${urls.front_api}/panel/shipments/${shipmentId}/traces`)
+            const orderNumber = $(this).data('number')
+            axios.get(`${urls.front_api}/orders/${orderNumber}/shipments/${shipmentId}/traces`)
               .then(response => {
                 const traces = response.data.traces
                 const tbody = $('#newShipmentModal .modal-body table tbody').last()

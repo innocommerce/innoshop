@@ -11,8 +11,10 @@ namespace InnoShop\Restapi\PanelApiControllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Services\ShippingTraceService;
+use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Restapi\Requests\ShipmentRequest;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Endpoint;
@@ -62,7 +64,21 @@ class ShipmentController extends BaseController
     public function store(Order $order, ShipmentRequest $request): mixed
     {
         try {
-            $shipment = $order->shipments()->create($request->all());
+            $shipment = DB::transaction(function () use ($order, $request) {
+                $shipment = $order->shipments()->create($request->all());
+
+                // Shipping a paid order must also advance its status, otherwise
+                // the order would stay "paid" forever. The shipment row is
+                // written above, so an empty shipment set is handed to the
+                // state machine to keep it from creating a duplicated shipment.
+                if ($order->status === StateMachineService::PAID) {
+                    StateMachineService::getInstance($order)
+                        ->setShipment([])
+                        ->changeStatus(StateMachineService::SHIPPED, '', true);
+                }
+
+                return $shipment;
+            });
 
             return create_json_success($shipment);
         } catch (Exception $e) {

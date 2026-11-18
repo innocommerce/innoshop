@@ -15,6 +15,7 @@ use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
 use InnoShop\Common\Resources\OrderDetail;
 use InnoShop\Common\Services\CartService;
+use InnoShop\Common\Services\ShippingTraceService;
 use InnoShop\Common\Services\StateMachineService;
 use InnoShop\Front\Services\PaymentService;
 use Knuckles\Scribe\Attributes\Authenticated;
@@ -65,15 +66,18 @@ class OrderController extends BaseController
     /**
      * Order detail
      *
-     * @param  int  $number
+     * @param  string  $number
      * @return mixed
      */
     #[Endpoint('Get order by number')]
-    #[UrlParam('number', type: 'integer', description: 'Order number')]
-    public function numberShow(int $number): mixed
+    #[UrlParam('number', type: 'string', description: 'Order number')]
+    public function numberShow(string $number): mixed
     {
         try {
-            $order = OrderRepo::getInstance()->getOrderByNumber($number, true);
+            $order = OrderRepo::getInstance()->getOrderByNumber($number);
+            if (! $order) {
+                return json_fail('Order not found', null, 404);
+            }
             if ($order->customer_id != token_customer_id()) {
                 return json_fail('Unauthorized', null, 403);
             }
@@ -88,15 +92,18 @@ class OrderController extends BaseController
     }
 
     /**
-     * @param  int  $number
+     * @param  string  $number
      * @return mixed
      */
     #[Endpoint('Pay order')]
-    #[UrlParam('number', type: 'integer', description: 'Order number')]
-    public function pay(int $number): mixed
+    #[UrlParam('number', type: 'string', description: 'Order number')]
+    public function pay(string $number): mixed
     {
         try {
             $order = OrderRepo::getInstance()->getOrderByNumber($number);
+            if (! $order) {
+                return json_fail('Order not found', null, 404);
+            }
             if ($order->customer_id != token_customer_id()) {
                 return json_fail('Unauthorized', null, 403);
             }
@@ -108,15 +115,18 @@ class OrderController extends BaseController
     }
 
     /**
-     * @param  int  $number
+     * @param  string  $number
      * @return mixed
      */
     #[Endpoint('Cancel order')]
-    #[UrlParam('number', type: 'integer', description: 'Order number')]
-    public function cancel(int $number): mixed
+    #[UrlParam('number', type: 'string', description: 'Order number')]
+    public function cancel(string $number): mixed
     {
         try {
             $order = OrderRepo::getInstance()->getOrderByNumber($number);
+            if (! $order) {
+                return json_fail('Order not found', null, 404);
+            }
             if ($order->customer_id != token_customer_id()) {
                 return json_fail('Unauthorized', null, 403);
             }
@@ -130,15 +140,18 @@ class OrderController extends BaseController
     }
 
     /**
-     * @param  int  $number
+     * @param  string  $number
      * @return mixed
      */
     #[Endpoint('Complete order')]
-    #[UrlParam('number', type: 'integer', description: 'Order number')]
-    public function complete(int $number): mixed
+    #[UrlParam('number', type: 'string', description: 'Order number')]
+    public function complete(string $number): mixed
     {
         try {
             $order = OrderRepo::getInstance()->getOrderByNumber($number);
+            if (! $order) {
+                return json_fail('Order not found', null, 404);
+            }
             if ($order->customer_id != token_customer_id()) {
                 return json_fail('Unauthorized', null, 403);
             }
@@ -152,17 +165,20 @@ class OrderController extends BaseController
     }
 
     /**
-     * @param  int  $number
+     * @param  string  $number
      * @return mixed
      * @throws Throwable
      */
     #[Endpoint('Reorder')]
-    #[UrlParam('number', type: 'integer', description: 'Order number')]
-    public function reorder(int $number): mixed
+    #[UrlParam('number', type: 'string', description: 'Order number')]
+    public function reorder(string $number): mixed
     {
         try {
             $customerID = token_customer_id();
             $order      = OrderRepo::getInstance()->getOrderByNumber($number);
+            if (! $order) {
+                return json_fail('Order not found', null, 404);
+            }
             if ($order->customer_id != $customerID) {
                 return json_fail('Unauthorized', null, 403);
             }
@@ -170,6 +186,38 @@ class OrderController extends BaseController
             CartService::getInstance($customerID)->reorder($order);
 
             return update_json_success();
+        } catch (Exception $e) {
+            return json_fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Shipping traces of a shipment that belongs to the customer's own order.
+     *
+     * @param  string  $number
+     * @param  Order\Shipment  $shipment
+     * @return mixed
+     */
+    #[Endpoint('Get shipment traces')]
+    #[UrlParam('number', type: 'string', description: 'Order number')]
+    #[UrlParam('shipment', type: 'integer', description: 'Shipment ID')]
+    public function shipmentTraces(string $number, Order\Shipment $shipment): mixed
+    {
+        try {
+            $order = OrderRepo::getInstance()->getOrderByNumber($number);
+            if (! $order) {
+                return json_fail('Order not found', null, 404);
+            }
+            if ($order->customer_id != token_customer_id()) {
+                return json_fail('Unauthorized', null, 403);
+            }
+            if ($shipment->order_id != $order->id) {
+                return json_fail('Shipment not found', null, 404);
+            }
+
+            $traces = ShippingTraceService::getInstance($shipment)->getTraces();
+
+            return read_json_success(['traces' => $traces]);
         } catch (Exception $e) {
             return json_fail($e->getMessage());
         }

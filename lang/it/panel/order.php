@@ -88,6 +88,7 @@ return [
     'product'                    => 'Prodotto',
     'quantity'                   => 'Quantità ordinata',
     'raw_data'                   => 'Dati grezzi',
+    'refunded'                   => 'Rimborsato',
     'save_changes'               => 'Salva modifiche',
     'ship_list'                  => 'Lista di spedizione',
     'shipment_information'       => 'Informazioni sulla spedizione',

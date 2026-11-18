@@ -85,6 +85,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/orders/{number}/cancel', [FrontApiControllers\OrderController::class, 'cancel'])->name('orders.cancel');
     Route::post('/orders/{number}/complete', [FrontApiControllers\OrderController::class, 'complete'])->name('orders.complete');
     Route::post('/orders/{number}/reorder', [FrontApiControllers\OrderController::class, 'reorder'])->name('orders.reorder');
+    Route::get('/orders/{number}/shipments/{shipment}/traces', [FrontApiControllers\OrderController::class, 'shipmentTraces'])->name('orders.shipment_traces');
 
     Route::get('/order_returns', [FrontApiControllers\OrderReturnController::class, 'index'])->name('order_returns.index');
     Route::get('/order_returns/order_info', [FrontApiControllers\OrderReturnController::class, 'orderInfo'])->name('order_returns.order_info');

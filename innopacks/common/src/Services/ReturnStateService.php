@@ -20,7 +20,11 @@ class ReturnStateService
 {
     private OrderReturn $orderReturn;
 
-    private int $orderReturnId;
+    /**
+     * The id is null while the order return has not been persisted yet,
+     * e.g. when the panel renders the "create order return" form.
+     */
+    private ?int $orderReturnId = null;
 
     private string $comment;
 
@@ -67,7 +71,7 @@ class ReturnStateService
             self::PENDING => ['updateStatus', 'addHistory', 'notifyNewOrder'],
         ],
         self::PENDING => [
-            self::REFUNDED  => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireRefundCompletedHook'],
+            self::REFUNDED  => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'updateOrderStatus', 'fireRefundCompletedHook'],
             self::CANCELLED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
         ],
         self::REFUNDED => [
@@ -300,6 +304,10 @@ class ReturnStateService
      */
     private function addHistory($oldCode, $newCode): void
     {
+        if (empty($this->orderReturnId)) {
+            throw new Exception('Order return must be saved before its status can be changed.');
+        }
+
         $history = new OrderReturn\History([
             'order_return_id' => $this->orderReturnId,
             'status'          => $newCode,
@@ -307,6 +315,39 @@ class ReturnStateService
             'comment'         => $this->comment,
         ]);
         $history->saveOrFail();
+    }
+
+    /**
+     * Move the related order to the refunded state once the refund is done.
+     *
+     * The after-sale flow and the order state machine are two separate
+     * machines; without this the order would stay "paid" forever after a
+     * successful refund.
+     *
+     * @param  $oldCode
+     * @param  $newCode
+     * @return void
+     */
+    private function updateOrderStatus($oldCode, $newCode): void
+    {
+        if ($newCode != self::REFUNDED) {
+            return;
+        }
+
+        $order = $this->orderReturn->order;
+        if (empty($order)) {
+            return;
+        }
+
+        $stateMachine = StateMachineService::getInstance($order);
+        $nextStatuses = array_column($stateMachine->nextBackendStatuses(), 'status');
+        if (! in_array(StateMachineService::REFUNDED, $nextStatuses)) {
+            // The order is not in a refundable state (unpaid, cancelled or
+            // already refunded), so it must not be touched.
+            return;
+        }
+
+        $stateMachine->changeStatus(StateMachineService::REFUNDED, (string) $this->comment, $this->notify);
     }
 
     /**

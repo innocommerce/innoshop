@@ -88,6 +88,7 @@ return [
     'product'                    => 'Product',
     'quantity'                   => 'Quantity',
     'raw_data'                   => 'Raw Data',
+    'refunded'                   => 'បានសងវារីម',
     'save_changes'               => 'Save Changes',
     'ship_list'                  => 'Ship List',
     'shipment_information'       => 'Shipment information',

@@ -28,6 +28,26 @@ if (! function_exists('plugin')) {
     }
 }
 
+if (! function_exists('plugin_setting_codes')) {
+    /**
+     * Candidate setting spaces of a plugin code, in lookup order.
+     *
+     * Plugin settings are saved under the raw plugin code (the space used by
+     * PluginController::update), so the original code comes first. The
+     * snake_case and studly variants are kept as fallbacks for plugins whose
+     * settings were stored under a converted code.
+     *
+     * @param  string  $code
+     * @return array<int, string>
+     */
+    function plugin_setting_codes(string $code): array
+    {
+        $codes = [$code, Str::snake($code), Str::studly($code)];
+
+        return array_values(array_unique(array_filter($codes, fn ($item) => $item !== '')));
+    }
+}
+
 if (! function_exists('plugin_setting')) {
     /**
      * @param  $code
@@ -37,12 +57,46 @@ if (! function_exists('plugin_setting')) {
      */
     function plugin_setting($code, string $key = '', $default = null): mixed
     {
-        $code = Str::snake($code);
-        if ($key) {
-            return setting("$code.$key", $default);
+        foreach (plugin_setting_codes($code) as $candidate) {
+            $settingKey = $key ? "$candidate.$key" : $candidate;
+            if (config()->has("inno.$settingKey")) {
+                return config("inno.$settingKey", $default);
+            }
         }
 
-        return setting("$code", $default);
+        return $default;
+    }
+}
+
+if (! function_exists('plugin_setting_array')) {
+    /**
+     * Get a plugin setting value as an array.
+     *
+     * Plugin settings are stored as plain strings unless the field was flagged
+     * as JSON, so an array shaped value may come back as a JSON string.
+     * Normalize it here to keep array functions from blowing up.
+     *
+     * @param  string  $code
+     * @param  string  $key
+     * @param  array  $default
+     * @return array
+     */
+    function plugin_setting_array(string $code, string $key = '', array $default = []): array
+    {
+        $value = plugin_setting($code, $key, $default);
+
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (is_string($value) && $value !== '') {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        return $default;
     }
 }
 

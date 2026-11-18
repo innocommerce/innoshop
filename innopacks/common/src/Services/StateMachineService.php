@@ -66,6 +66,11 @@ class StateMachineService
      */
     public const CANCELLED = 'cancelled';
 
+    /**
+     * Refunded, the money of the order has been given back to the customer.
+     */
+    public const REFUNDED = 'refunded';
+
     public const ORDER_STATUS = [
         self::CREATED,
         self::UNPAID,
@@ -73,6 +78,7 @@ class StateMachineService
         self::SHIPPED,
         self::COMPLETED,
         self::CANCELLED,
+        self::REFUNDED,
     ];
 
     /**
@@ -90,9 +96,14 @@ class StateMachineService
             self::CANCELLED => ['updateStatus', 'addHistory', 'revokeBalance', 'addStock', 'notifyUpdateOrder', 'fireCancelledHook'],
             self::SHIPPED   => ['updateStatus', 'addHistory', 'addShipment', 'notifyUpdateOrder'],
             self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireCompletedHook'],
+            self::REFUNDED  => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
         ],
         self::SHIPPED => [
             self::COMPLETED => ['updateStatus', 'addHistory', 'notifyUpdateOrder', 'fireCompletedHook'],
+            self::REFUNDED  => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
+        ],
+        self::COMPLETED => [
+            self::REFUNDED => ['updateStatus', 'addHistory', 'notifyUpdateOrder'],
         ],
     ];
 
@@ -179,11 +190,28 @@ class StateMachineService
         foreach ($statuses as $status) {
             $result[] = [
                 'status' => $status,
-                'name'   => panel_trans("order.$status"),
+                'name'   => self::statusName($status),
             ];
         }
 
         return fire_hook_filter('service.state_machine.all_statuses', $result);
+    }
+
+    /**
+     * The translated name of a status.
+     *
+     * A status whose translation is not available yet must not leak the raw
+     * translation key into the panel, so the status code is used instead.
+     *
+     * @param  string  $status
+     * @return string
+     */
+    private static function statusName(string $status): string
+    {
+        $key  = "panel/order.{$status}";
+        $name = (string) panel_trans("order.{$status}");
+
+        return $name === $key ? $status : $name;
     }
 
     /**
@@ -221,7 +249,7 @@ class StateMachineService
         foreach ($nextStatusCodes as $status) {
             $result[] = [
                 'status' => $status,
-                'name'   => trans("panel/order.{$status}"),
+                'name'   => self::statusName($status),
             ];
         }
 

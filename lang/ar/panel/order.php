@@ -88,6 +88,7 @@ return [
     'product'                    => 'المنتج',
     'quantity'                   => 'الكمية المشتراة',
     'raw_data'                   => 'البيانات الأولية',
+    'refunded'                   => 'تم الاسترداد',
     'save_changes'               => 'حفظ التغييرات',
     'ship_list'                  => 'قائمة الشحن',
     'shipment_information'       => 'معلومات الشحن',

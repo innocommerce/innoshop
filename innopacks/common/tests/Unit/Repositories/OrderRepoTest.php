@@ -92,10 +92,11 @@ class OrderRepoTest extends TestCase
             'shipped',
             'completed',
             'cancelled',
+            'refunded',
         ];
 
         $this->assertEquals($expectedStatuses, StateMachineService::ORDER_STATUS);
-        $this->assertCount(6, StateMachineService::ORDER_STATUS);
+        $this->assertCount(7, StateMachineService::ORDER_STATUS);
     }
 
     /**

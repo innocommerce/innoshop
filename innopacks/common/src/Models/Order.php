@@ -41,6 +41,8 @@ class Order extends BaseModel
 
     public const STATUS_CANCELLED = 'cancelled';
 
+    public const STATUS_REFUNDED = 'refunded';
+
     protected $table = 'orders';
 
     protected $fillable = [
@@ -216,6 +218,8 @@ class Order extends BaseModel
             return 'warning';
         } elseif (in_array($statusCode, [StateMachineService::CREATED, StateMachineService::CANCELLED])) {
             return 'danger';
+        } elseif ($statusCode == StateMachineService::REFUNDED) {
+            return 'info';
         } else {
             return 'success';
         }

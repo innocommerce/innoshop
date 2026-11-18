@@ -88,6 +88,7 @@ return [
     'product'                    => 'Товар',
     'quantity'                   => 'Количество',
     'raw_data'                   => 'Исходные данные',
+    'refunded'                   => 'Возвращено',
     'save_changes'               => 'Сохранить изменения',
     'ship_list'                  => 'Список отправления',
     'shipment_information'       => 'Информация о доставке',

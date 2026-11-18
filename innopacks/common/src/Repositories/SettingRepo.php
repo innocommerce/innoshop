@@ -179,6 +179,16 @@ class SettingRepo extends BaseRepo
         // Clear the 'inno' config key that stores all settings
         config(['inno' => null]);
 
+        // Rebuild the snapshot right away: without it every later setting()
+        // read in the same request falls back to the defaults, because
+        // load_settings() skips the reload while the key is set.
+        try {
+            config(['inno' => $this->groupedSettings()]);
+        } catch (Throwable $e) {
+            // A failed rebuild must not break the write path, the snapshot
+            // is repopulated by load_settings() on the next request.
+        }
+
         // Clear Laravel's config cache if it exists
         try {
             Artisan::call('config:clear');

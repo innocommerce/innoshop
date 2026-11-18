@@ -2,6 +2,12 @@
 
 @section('title', $plugin->getLocaleName())
 
+@section('page-title-after')
+  @if($plugin->getVersion())
+    <small class="text-muted">{{ $plugin->getVersion() }}</small>
+  @endif
+@endsection
+
 @if($plugin->checkInstalled())
 <x-panel::form.right-btns />
 @endif
@@ -16,12 +22,6 @@
         @endif
       </div>
       <div class="col ps-0">
-        <div class="fw-bold fs-4 mb-1">
-          {{ $plugin->getLocaleName() }}
-          @if($plugin->getVersion())
-            <small class="text-muted ms-2">{{ $plugin->getVersion() }}</small>
-          @endif
-        </div>
         @if($plugin->getLocaleDescription())
           <div class="mb-2 text-secondary plugin-header-desc">{{ $plugin->getLocaleDescription() }}</div>
         @endif

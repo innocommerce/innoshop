@@ -88,6 +88,7 @@ return [
     'product'                    => 'Product',
     'quantity'                   => 'Aantal gekocht',
     'raw_data'                   => 'Raad gegevens',
+    'refunded'                   => 'Terugbetaald',
     'save_changes'               => 'Wijzigingen opslaan',
     'ship_list'                  => 'Verzendlijst',
     'shipment_information'       => 'Verzendinformatie',

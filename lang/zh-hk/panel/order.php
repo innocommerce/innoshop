@@ -88,6 +88,7 @@ return [
     'product'                    => '商品',
     'quantity'                   => '購買數量',
     'raw_data'                   => '原始數據',
+    'refunded'                   => '已退款',
     'save_changes'               => '保存更改',
     'ship_list'                  => '發貨單',
     'shipment_information'       => '運單信息',

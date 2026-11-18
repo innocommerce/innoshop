@@ -18,6 +18,14 @@ use InnoShop\Common\Models\Visit\VisitEvent;
 class EventTrackingService
 {
     /**
+     * Maximum length of the page_url / referrer columns.
+     *
+     * The columns are varchar(1000); a longer value makes MySQL raise
+     * SQLSTATE 22001 (data too long), which would drop the whole event.
+     */
+    private const MAX_URL_LENGTH = 1000;
+
+    /**
      * Behavioural bot classifier instance
      *
      * @var BotBehaviorClassifier
@@ -99,8 +107,8 @@ class EventTrackingService
                 'event_data'  => $eventData,
                 'customer_id' => $customerId,
                 'ip_address'  => $ipAddress,
-                'page_url'    => $request ? $request->fullUrl() : null,
-                'referrer'    => $request ? $request->header('referer') : null,
+                'page_url'    => $request ? $this->truncateUrl($request->fullUrl()) : null,
+                'referrer'    => $request ? $this->truncateUrl($request->header('referer')) : null,
             ]);
 
             return $event;
@@ -113,6 +121,25 @@ class EventTrackingService
 
             return null;
         }
+    }
+
+    /**
+     * Cut a URL down to the column length.
+     *
+     * Truncating is preferred over dropping the event: the analytics
+     * funnel stays complete even when a crawler appends a huge query
+     * string to the URL.
+     *
+     * @param  string|null  $url
+     * @return string|null
+     */
+    private function truncateUrl(?string $url): ?string
+    {
+        if ($url === null) {
+            return null;
+        }
+
+        return mb_substr($url, 0, self::MAX_URL_LENGTH);
     }
 
     /**

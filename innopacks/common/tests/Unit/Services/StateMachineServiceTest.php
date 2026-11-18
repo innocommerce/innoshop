@@ -33,6 +33,7 @@ class StateMachineServiceTest extends TestCase
         $this->assertTrue($this->reflection->hasConstant('SHIPPED'));
         $this->assertTrue($this->reflection->hasConstant('COMPLETED'));
         $this->assertTrue($this->reflection->hasConstant('CANCELLED'));
+        $this->assertTrue($this->reflection->hasConstant('REFUNDED'));
 
         $this->assertEquals('created', StateMachineService::CREATED);
         $this->assertEquals('unpaid', StateMachineService::UNPAID);
@@ -40,6 +41,7 @@ class StateMachineServiceTest extends TestCase
         $this->assertEquals('shipped', StateMachineService::SHIPPED);
         $this->assertEquals('completed', StateMachineService::COMPLETED);
         $this->assertEquals('cancelled', StateMachineService::CANCELLED);
+        $this->assertEquals('refunded', StateMachineService::REFUNDED);
     }
 
     #[Test]
@@ -52,6 +54,7 @@ class StateMachineServiceTest extends TestCase
             StateMachineService::SHIPPED,
             StateMachineService::COMPLETED,
             StateMachineService::CANCELLED,
+            StateMachineService::REFUNDED,
         ];
 
         $this->assertEquals($expectedStatuses, StateMachineService::ORDER_STATUS);
@@ -71,15 +74,17 @@ class StateMachineServiceTest extends TestCase
         $this->assertArrayHasKey(StateMachineService::PAID, $machines[StateMachineService::UNPAID]);
         $this->assertArrayHasKey(StateMachineService::CANCELLED, $machines[StateMachineService::UNPAID]);
 
-        // PAID can go to SHIPPED, COMPLETED, or CANCELLED
+        // PAID can go to SHIPPED, COMPLETED, CANCELLED or REFUNDED
         $this->assertArrayHasKey(StateMachineService::PAID, $machines);
         $this->assertArrayHasKey(StateMachineService::SHIPPED, $machines[StateMachineService::PAID]);
         $this->assertArrayHasKey(StateMachineService::COMPLETED, $machines[StateMachineService::PAID]);
         $this->assertArrayHasKey(StateMachineService::CANCELLED, $machines[StateMachineService::PAID]);
+        $this->assertArrayHasKey(StateMachineService::REFUNDED, $machines[StateMachineService::PAID]);
 
-        // SHIPPED can only go to COMPLETED
+        // SHIPPED can go to COMPLETED or be refunded
         $this->assertArrayHasKey(StateMachineService::SHIPPED, $machines);
         $this->assertArrayHasKey(StateMachineService::COMPLETED, $machines[StateMachineService::SHIPPED]);
+        $this->assertArrayHasKey(StateMachineService::REFUNDED, $machines[StateMachineService::SHIPPED]);
     }
 
     #[Test]
@@ -199,11 +204,14 @@ class StateMachineServiceTest extends TestCase
     }
 
     #[Test]
-    public function test_completed_status_has_no_further_transitions(): void
+    public function test_completed_status_only_leads_to_a_refund(): void
     {
         $machines = StateMachineService::MACHINES;
 
-        $this->assertArrayNotHasKey(StateMachineService::COMPLETED, $machines);
+        $this->assertSame(
+            [StateMachineService::REFUNDED],
+            array_keys($machines[StateMachineService::COMPLETED])
+        );
     }
 
     #[Test]

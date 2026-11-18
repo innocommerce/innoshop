@@ -44,12 +44,16 @@ class OrderController extends Controller
     /**
      * Order detail
      *
-     * @param  int  $number
+     * @param  string  $number
      * @return mixed
      */
-    public function numberShow(int $number): mixed
+    public function numberShow(string $number): mixed
     {
         $order = OrderRepo::getInstance()->getOrderByNumber($number);
+
+        if (! $order) {
+            abort(404);
+        }
 
         if ($order->customer_id !== current_customer_id()) {
             abort(403, 'Unauthorized access to order details');

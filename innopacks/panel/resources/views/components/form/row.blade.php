@@ -1,6 +1,6 @@
 <div class="form-row mb-3">
   @if ($title ?? false)
-    <div class="row">
+    <div class="row g-0">
       <div class="col-6">
         <div class="col-form-label {{ isset($required) && $required ? 'required' : '' }}">{{ $title }}</div>
       </div>

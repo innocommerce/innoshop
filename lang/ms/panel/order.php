@@ -88,6 +88,7 @@ return [
     'product'                    => 'Produk',
     'quantity'                   => 'Kuantiti Pembelian',
     'raw_data'                   => 'data mentah',
+    'refunded'                   => 'Dipulangkan',
     'save_changes'               => 'Simpan perubahan',
     'ship_list'                  => 'Senarai penghantaran',
     'shipment_information'       => 'Maklumat penghantaran',

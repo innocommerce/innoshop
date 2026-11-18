@@ -227,9 +227,16 @@ class PluginController
         }
         SettingRepo::getInstance()->updateValues($fields, $code);
         Artisan::call('view:clear');
-        $currentUrl = panel_route('plugins.edit', [$code]);
 
-        return redirect($currentUrl)
+        // Redirect to the plugin list instead of the edit page: reloading the
+        // very same URL pushed a duplicate history entry, so the panel "Back"
+        // button (window.history.back()) did not leave the page.
+        $type    = $plugin->getType();
+        $listUrl = PluginTypeRepo::getInstance()->isValidType($type)
+            ? panel_route('plugins.index', ['type' => $type])
+            : panel_route('plugins.index');
+
+        return redirect($listUrl)
             ->with('instance', $plugin)
             ->with('success', common_trans('base.updated_success'));
     }
@@ -314,7 +321,7 @@ class PluginController
             ['path' => "$pluginBasePath/$pluginCode/Routes/panel.php", 'prefix' => panel_name(), 'name' => 'panel.', 'middleware' => ['panel', 'admin_auth:admin']],
             ['path' => "$pluginBasePath/$pluginCode/Routes/root.php", 'prefix' => '', 'name' => 'front.', 'middleware' => ['front']],
             ['path' => "$pluginBasePath/$pluginCode/Routes/front.php", 'prefix' => '', 'name' => 'front.', 'middleware' => ['front']],
-            ['path' => "$pluginBasePath/$pluginCode/Routes/front-api.php", 'prefix' => 'api', 'name' => 'api.', 'middleware' => ['api']],
+            ['path' => "$pluginBasePath/$pluginCode/Routes/front-api.php", 'prefix' => 'api', 'name' => 'api.', 'middleware' => ['front_api']],
             ['path' => "$pluginBasePath/$pluginCode/Routes/panel-api.php", 'prefix' => 'api/panel', 'name' => 'api.panel.', 'middleware' => ['panel_api']],
         ];
 

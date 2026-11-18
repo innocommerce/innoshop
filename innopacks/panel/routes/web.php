@@ -34,11 +34,11 @@ Route::middleware(['admin_auth:admin'])
         Route::post('/translations/translate-html', [Controllers\TranslationController::class, 'translateHtml'])->name('translations.trans_html');
 
         Route::get('/orders/export', [Controllers\OrderController::class, 'exportBatch'])->name('orders.export.batch');
-        Route::resource('/orders', Controllers\OrderController::class);
+        Route::resource('/orders', Controllers\OrderController::class)->except(['create', 'store', 'update']);
         Route::get('/orders/{order}/printing', [Controllers\OrderController::class, 'printing'])->name('orders.printing');
         Route::put('/orders/{order}/status', [Controllers\OrderController::class, 'changeStatus'])->name('orders.change_status');
 
-        Route::resource('/order_returns', Controllers\OrderReturnController::class);
+        Route::resource('/order_returns', Controllers\OrderReturnController::class)->except(['show']);
         Route::put('/order_returns/{order_return}/status', [Controllers\OrderReturnController::class, 'changeStatus'])->name('order_returns.change_status');
 
         Route::put('/products/{product}/active', [Controllers\ProductController::class, 'active'])->name('products.active');
@@ -47,7 +47,7 @@ Route::middleware(['admin_auth:admin'])
         Route::post('/products/bulk/ai_generate', [Controllers\ProductController::class, 'bulkAIGenerate'])->name('products.bulk.ai_generate');
         Route::delete('/products/bulk/destroy', [Controllers\ProductController::class, 'bulkDestroy'])->name('products.destroy.batch');
         Route::get('/products/selector', [Controllers\ProductSelectorController::class, 'selectorPage'])->name('products.selector');
-        Route::resource('/products', Controllers\ProductController::class);
+        Route::resource('/products', Controllers\ProductController::class)->except(['show']);
 
         Route::apiResource('/variant-templates', Controllers\VariantTemplateController::class)
             ->names([
@@ -60,48 +60,48 @@ Route::middleware(['admin_auth:admin'])
 
         Route::put('/payments/{payment}/active', [Controllers\PaymentController::class, 'active'])->name('payments.active');
 
-        Route::resource('/categories', Controllers\CategoryController::class);
+        Route::resource('/categories', Controllers\CategoryController::class)->except(['show']);
         Route::put('/categories/{category}/active', [Controllers\CategoryController::class, 'active'])->name('categories.active');
         Route::post('/categories/reorder', [Controllers\CategoryController::class, 'reorder'])->name('categories.reorder');
 
-        Route::resource('/attribute_groups', Controllers\AttributeGroupController::class);
+        Route::resource('/attribute_groups', Controllers\AttributeGroupController::class)->except(['create', 'edit']);
 
-        Route::resource('/attributes', Controllers\AttributeController::class);
+        Route::resource('/attributes', Controllers\AttributeController::class)->except(['show']);
 
-        Route::resource('/attribute_values', Controllers\AttributeValueController::class);
+        Route::resource('/attribute_values', Controllers\AttributeValueController::class)->only(['store', 'update', 'destroy']);
 
         Route::get('/options/available', [Controllers\OptionController::class, 'available'])->name('options.available');
         Route::get('/options/{optionId}/values', [Controllers\OptionController::class, 'valuesByOptionId'])->name('options.values');
         Route::resource('/options', Controllers\OptionController::class);
         Route::put('/options/{option}/active', [Controllers\OptionController::class, 'active'])->name('options.active');
 
-        Route::resource('/option_values', Controllers\OptionValueController::class);
+        Route::resource('/option_values', Controllers\OptionValueController::class)->except(['create', 'edit']);
         Route::post('/option_values/sort', [Controllers\OptionValueController::class, 'updateSort'])->name('option_values.sort');
         Route::put('/option_values/{option_value}/active', [Controllers\OptionValueController::class, 'active'])->name('option_values.active');
 
         Route::resource('/brands', Controllers\BrandController::class);
         Route::put('/brands/{currency}/active', [Controllers\BrandController::class, 'active'])->name('brands.active');
 
-        Route::resource('/reviews', Controllers\ReviewController::class);
+        Route::resource('/reviews', Controllers\ReviewController::class)->except(['show']);
         Route::put('/reviews/{review}/active', [Controllers\ReviewController::class, 'active'])->name('reviews.active');
 
-        Route::resource('/articles', Controllers\ArticleController::class);
+        Route::resource('/articles', Controllers\ArticleController::class)->except(['show']);
         Route::put('/articles/{currency}/active', [Controllers\ArticleController::class, 'active'])->name('articles.active');
 
-        Route::resource('/catalogs', Controllers\CatalogController::class);
+        Route::resource('/catalogs', Controllers\CatalogController::class)->except(['show']);
         Route::put('/catalogs/{catalog}/active', [Controllers\CatalogController::class, 'active'])->name('catalogs.active');
         Route::post('/catalogs/reorder', [Controllers\CatalogController::class, 'reorder'])->name('catalogs.reorder');
 
-        Route::resource('/tags', Controllers\TagController::class);
+        Route::resource('/tags', Controllers\TagController::class)->except(['show']);
         Route::put('/tags/{tag}/active', [Controllers\TagController::class, 'active'])->name('tags.active');
 
-        Route::resource('/announcements', Controllers\AnnouncementController::class);
+        Route::resource('/announcements', Controllers\AnnouncementController::class)->except(['show']);
         Route::put('/announcements/{announcement}/active', [Controllers\AnnouncementController::class, 'active'])->name('announcements.active');
 
-        Route::resource('/pages', Controllers\PageController::class);
+        Route::resource('/pages', Controllers\PageController::class)->except(['show']);
         Route::put('/pages/{page}/active', [Controllers\PageController::class, 'active'])->name('pages.active');
 
-        Route::resource('/customers', Controllers\CustomerController::class);
+        Route::resource('/customers', Controllers\CustomerController::class)->except(['show']);
         Route::get('/customers/{customer}/login', [Controllers\CustomerController::class, 'loginFrontend'])->name('customers.login');
         Route::put('/customers/{customer}/active', [Controllers\CustomerController::class, 'active'])->name('customers.active');
 
@@ -114,7 +114,7 @@ Route::middleware(['admin_auth:admin'])
         Route::get('/withdrawals/{withdrawal}', [Controllers\CustomerWithdrawalController::class, 'show'])->name('withdrawals.show');
         Route::put('/withdrawals/{withdrawal}/status', [Controllers\CustomerWithdrawalController::class, 'changeStatus'])->name('withdrawals.change_status');
 
-        Route::resource('/customer_groups', Controllers\CustomerGroupController::class);
+        Route::resource('/customer_groups', Controllers\CustomerGroupController::class)->except(['show']);
         Route::get('/social', [Controllers\SocialController::class, 'index'])->name('socials.index');
         Route::post('/social', [Controllers\SocialController::class, 'store'])->name('socials.store');
 
@@ -182,7 +182,7 @@ Route::middleware(['admin_auth:admin'])
         Route::resource('/tax_classes', Controllers\TaxClassController::class);
         Route::resource('/tax_rates', Controllers\TaxRateController::class);
 
-        Route::resource('/weight_classes', Controllers\WeightClassController::class);
+        Route::resource('/weight_classes', Controllers\WeightClassController::class)->except(['show']);
         Route::put('/weight_classes/{id}/active', [Controllers\WeightClassController::class, 'active'])->name('weight_classes.active');
 
         Route::get('/newsletter-subscribers', [Controllers\NewsletterSubscriberController::class, 'index'])->name('newsletter_subscribers.index');

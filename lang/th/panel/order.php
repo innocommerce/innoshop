@@ -88,6 +88,7 @@ return [
     'product'                    => 'สินค้า',
     'quantity'                   => 'จำนวน',
     'raw_data'                   => 'ข้อมูลดิบ',
+    'refunded'                   => 'คืนเงินแล้ว',
     'save_changes'               => 'บันทึกการเปลี่ยนแปลง',
     'ship_list'                  => 'รายการส่งของ',
     'shipment_information'       => 'ข้อมูลการจัดส่ง',

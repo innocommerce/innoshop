@@ -88,6 +88,7 @@ return [
     'product'                    => 'Produkt',
     'quantity'                   => 'Anzahl',
     'raw_data'                   => 'Die originaldaten.',
+    'refunded'                   => 'Erstattet',
     'save_changes'               => 'Änderungen speichern',
     'ship_list'                  => 'Lieferschein',
     'shipment_information'       => 'Sendungsinformationen',

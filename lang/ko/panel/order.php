@@ -88,6 +88,7 @@ return [
     'product'                    => '상품',
     'quantity'                   => '구매 수량',
     'raw_data'                   => '일차 데이터',
+    'refunded'                   => '환불됨',
     'save_changes'               => '변경 사항 저장',
     'ship_list'                  => '출하 목록',
     'shipment_information'       => '출하 정보',

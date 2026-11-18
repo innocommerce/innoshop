@@ -88,6 +88,7 @@ return [
     'product'                    => 'Ürün',
     'quantity'                   => 'Miktar',
     'raw_data'                   => 'Ham veri',
+    'refunded'                   => 'İade edildi',
     'save_changes'               => 'Değişikliklerinizi kaydedin',
     'ship_list'                  => 'Gönderim Listesi',
     'shipment_information'       => 'İrsaliye bilgileri',

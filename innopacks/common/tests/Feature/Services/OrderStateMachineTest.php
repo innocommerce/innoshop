@@ -38,6 +38,33 @@ class OrderStateMachineTest extends TestCase
         $this->assertSame(10, (int) $sku->fresh()->quantity, 'paid -> cancelled must restore stock');
     }
 
+    public function test_paid_order_can_be_refunded(): void
+    {
+        [$order] = $this->setupOrder(initialStock: 10, orderQty: 1);
+
+        StateMachineService::getInstance($order)->changeStatus(StateMachineService::PAID);
+        StateMachineService::getInstance($order->fresh())->changeStatus(StateMachineService::REFUNDED);
+
+        $this->assertSame('refunded', $order->fresh()->status);
+        $this->assertSame(
+            1,
+            Order\History::query()->where('order_id', $order->id)->where('status', StateMachineService::REFUNDED)->count(),
+            'the refund must be recorded in the order history'
+        );
+    }
+
+    public function test_refunded_status_has_a_readable_name(): void
+    {
+        $statuses = collect(StateMachineService::getAllStatuses())->keyBy('status');
+
+        $this->assertTrue($statuses->has(StateMachineService::REFUNDED));
+        $this->assertNotSame(
+            'panel/order.refunded',
+            $statuses->get(StateMachineService::REFUNDED)['name'],
+            'a missing translation must not leak the raw key into the panel'
+        );
+    }
+
     /**
      * @return array{0: Order, 1: Sku}
      */

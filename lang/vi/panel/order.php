@@ -88,6 +88,7 @@ return [
     'product'                    => 'sản phẩm',
     'quantity'                   => 'số lượng mua',
     'raw_data'                   => 'Dữ liệu thô',
+    'refunded'                   => 'Đã hoàn tiền',
     'save_changes'               => 'lưu thay đổi',
     'ship_list'                  => 'รายการส่งของ',
     'shipment_information'       => 'Thông tin vận đơn',

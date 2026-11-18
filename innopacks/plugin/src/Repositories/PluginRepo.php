@@ -306,7 +306,7 @@ class PluginRepo
                 $item->plugin = $plugin;
             }
 
-            $available = plugin_setting($item->code, 'available', []);
+            $available = plugin_setting_array($item->code, 'available');
             if (is_wechat_mini()) {
                 $flag = in_array('wechat_mini', $available);
             } elseif (is_wechat_official()) {

@@ -29,6 +29,11 @@ class GeoLite2Service
     private const MIN_FILE_BYTES = 1048576;
 
     /**
+     * Existing database found by the case-insensitive fallback scan.
+     */
+    private ?string $fallbackPath = null;
+
+    /**
      * Constructor — ensure the database directory exists.
      */
     public function __construct()
@@ -231,11 +236,55 @@ class GeoLite2Service
     /**
      * Resolve the active database path from config('innoshop.geo_lite_path').
      *
+     * The official download is named `GeoLite2-City.mmdb`, but installs that
+     * were set up before the default was corrected carry the lower-case
+     * `geolite2-city.mmdb`. On a case-sensitive filesystem the configured
+     * path alone would never find it, so fall back to a case-insensitive
+     * scan of the storage directory.
+     *
      * @return string
      */
     public function getDatabasePath(): string
     {
-        return (string) config('innoshop.geo_lite_path');
+        $configured = (string) config('innoshop.geo_lite_path');
+
+        if ($configured !== '' && File::exists($configured)) {
+            return $configured;
+        }
+
+        if ($this->fallbackPath !== null && File::exists($this->fallbackPath)) {
+            return $this->fallbackPath;
+        }
+
+        $this->fallbackPath = $this->findExistingDatabase($configured);
+
+        return $this->fallbackPath ?? $configured;
+    }
+
+    /**
+     * Look for an existing city database in the directory of the configured
+     * path, ignoring the file name case.
+     *
+     * @param  string  $configuredPath
+     * @return string|null
+     */
+    private function findExistingDatabase(string $configuredPath): ?string
+    {
+        $directory = dirname($configuredPath);
+
+        if (! File::isDirectory($directory)) {
+            return null;
+        }
+
+        foreach (File::files($directory) as $file) {
+            $name = strtolower($file->getFilename());
+
+            if (str_ends_with($name, '.mmdb') && str_contains($name, 'city')) {
+                return $file->getPathname();
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -77,6 +77,7 @@ return [
     'payment_certificate'        => 'Payment Certificate',
     'payment_details'            => 'Payment Details',
     'payment_time'               => 'Payment Time',
+    'refunded'                   => 'Refunded',
     'view_details'               => 'View Details',
     'click_to_enlarge'           => 'Click to enlarge',
     'download'                   => 'Download',

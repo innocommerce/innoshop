@@ -265,10 +265,11 @@ class PluginServiceProvider extends ServiceProvider
             if ($file->isFile() && $file->getExtension() === 'php') {
                 $filePath     = $file->getPathname();
                 $relativePath = str_replace($this->pluginBasePath, '', $filePath);
-                $relativePath = ltrim($relativePath, '/');
-
-                // Extract plugin code and subdirectory path
-                $parts = explode('/', $relativePath);
+                // Normalize separators before trimming and splitting: on
+                // Windows getPathname() yields backslashes, which otherwise
+                // never match the '/'-based trim and split.
+                $relativePath = ltrim(str_replace('\\', '/', $relativePath), '/');
+                $parts        = explode('/', $relativePath);
                 if (count($parts) >= 3 && $parts[1] === 'Commands') {
                     $pluginCode = $parts[0];
                     $subPath    = implode('/', array_slice($parts, 2, -1)); // Exclude filename
@@ -399,8 +400,11 @@ class PluginServiceProvider extends ServiceProvider
         $pluginBasePath    = $this->pluginBasePath;
         $frontApiRoutePath = "$pluginBasePath/$pluginCode/Routes/front-api.php";
         if (file_exists($frontApiRoutePath)) {
+            // front_api keeps the request stateful (Sanctum), so auth('customer')
+            // resolves the logged in customer. The stateless "api" group always
+            // returned null here.
             Route::prefix('api')
-                ->middleware('api')
+                ->middleware('front_api')
                 ->name('api.')
                 ->group(function () use ($frontApiRoutePath) {
                     $this->loadRoutesFrom($frontApiRoutePath);

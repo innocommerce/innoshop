@@ -9,12 +9,15 @@
 
 return [
     'edition' => 'community',
-    'version' => '1.0.0',
+    'version' => '0.9.2',
     'build'   => '20260809',
     'api_url' => env('INNOSHOP_API_URL', 'https://www.innoshop.cn'),
 
-    // Override GeoLite2-City.mmdb path via GEOLITE2_PATH; defaults to storage/app/geolite2/geolite2-city.mmdb.
-    'geo_lite_path' => env('GEOLITE2_PATH', storage_path('app/geolite2/geolite2-city.mmdb')),
+    // Override GeoLite2-City.mmdb path via GEOLITE2_PATH; defaults to storage/app/geolite2/GeoLite2-City.mmdb.
+    // The file name matches the official download (res.innoshop.net/GeoLite2-City.mmdb);
+    // installs carrying the old lower-case name are still picked up by a
+    // case-insensitive fallback scan in Services\GeoLite2Service.
+    'geo_lite_path' => env('GEOLITE2_PATH', storage_path('app/geolite2/GeoLite2-City.mmdb')),
 
     // Behavioural bot detection — see Services\BotBehaviorClassifier.
     //
