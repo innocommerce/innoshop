@@ -274,7 +274,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary"
-                    data-bs-dismiss="modal">{{ 'front/order.confirm' }}</button>
+                    data-bs-dismiss="modal">{{ __('front/order.confirm') }}</button>
           </div>
         </div>
       </div>
