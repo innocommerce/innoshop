@@ -41,7 +41,9 @@ class MinimaxImageDriver
             throw new RuntimeException('MiniMax image model is not configured (e.g. image-01-1.0).');
         }
 
-        if (in_array($model, ['MiniMax-H3-Image', 'MiniMax-H3-Image-Highspeed'], true)) {
+        // Route by prefix so future H3 variants (e.g. a preview tier) keep
+        // using the OpenAI-compatible endpoint instead of the legacy one.
+        if (str_starts_with($model, 'MiniMax-H3-Image')) {
             return $this->generateH3($baseUrl, $apiKey, $model, $prompt, $options);
         }
 
@@ -163,12 +165,22 @@ class MinimaxImageDriver
             $payload[str_contains($size, ':') ? 'aspect_ratio' : 'size'] = $size;
         }
 
+        // H3 generation can legitimately take minutes; operators must raise
+        // fastcgi_read_timeout / request_terminate_timeout above 600s or the
+        // reverse proxy cuts the request before MiniMax answers.
         $response = Http::withToken($apiKey)
             ->timeout(600)
             ->withoutRedirecting()
             ->post("{$baseUrl}/images/generations", $payload);
+
+        Log::info('MiniMax H3 image API response', [
+            'url'         => "{$baseUrl}/images/generations",
+            'status'      => $response->status(),
+            'body_prefix' => substr($response->body(), 0, 200),
+        ]);
+
         if (! $response->successful()) {
-            $message = $response->json('error.message') ?? $response->reason();
+            $message = $response->json('error.message') ?? $response->reason() ?? 'request failed';
             throw new RuntimeException("MiniMax H3 generation failed: {$message} (HTTP {$response->status()})");
         }
 

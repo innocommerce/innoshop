@@ -101,6 +101,25 @@ class MinimaxImageGenerationTest extends TestCase
         Http::assertSentCount(1);
     }
 
+    public function test_h3_rejects_reference_images_before_any_request(): void
+    {
+        config(['ai.providers.minimax.url' => 'https://api.minimax.io/v1']);
+        Storage::disk('media')->put('ref.png', 'fake reference');
+        $body = $this->generate('MiniMax-H3-Image', ['reference_image' => 'ref.png']);
+        $this->assertFalse($body['success']);
+        $this->assertStringContainsString('accepts text prompts only', $body['message']);
+        Http::assertNothingSent();
+    }
+
+    public function test_h3_requires_a_regional_base_url(): void
+    {
+        config(['ai.providers.minimax.url' => 'https://api.minimax.chat/v1']);
+        $body = $this->generate('MiniMax-H3-Image');
+        $this->assertFalse($body['success']);
+        $this->assertStringContainsString('https://api.minimax.io/v1', $body['message']);
+        Http::assertNothingSent();
+    }
+
     public function test_legacy_model_keeps_its_endpoint_and_image_url(): void
     {
         config(['ai.providers.minimax.url' => 'https://api.minimax.chat/v1']);
