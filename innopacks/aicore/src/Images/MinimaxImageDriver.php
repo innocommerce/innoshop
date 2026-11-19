@@ -18,13 +18,7 @@ use RuntimeException;
 /**
  * MiniMax image generation driver.
  *
- * MiniMax uses a vendor-specific API that is NOT OpenAI-compatible:
- *   POST /v1/image_generation
- *   request:  {"model": "...", "prompt": "...", "aspect_ratio": "1:1"}
- *   response: {"data": {"image_urls": [...]}, "base_resp": {...}}
- *
- * Registers on `ai.image_generate_driver` with priority higher than the
- * OpenAI-compatible default so it takes precedence when provider == minimax.
+ * Selects the generation endpoint and response format for the configured model.
  */
 class MinimaxImageDriver
 {
@@ -45,6 +39,10 @@ class MinimaxImageDriver
         }
         if (! $model) {
             throw new RuntimeException('MiniMax image model is not configured (e.g. image-01-1.0).');
+        }
+
+        if (in_array($model, ['MiniMax-H3-Image', 'MiniMax-H3-Image-Highspeed'], true)) {
+            return $this->generateH3($baseUrl, $apiKey, $model, $prompt, $options);
         }
 
         $payload = array_filter([
@@ -132,19 +130,7 @@ class MinimaxImageDriver
             throw new RuntimeException('Failed to download image from MiniMax.');
         }
 
-        $savePath = trim($options['save_path'] ?? '', '/');
-        $filename = 'ai_'.uniqid().'.png';
-        $fullPath = $savePath ? "{$savePath}/{$filename}" : $filename;
-        Storage::disk('media')->put($fullPath, $contents);
-
-        $storageKey = StorageService::storageKey($fullPath);
-
-        $result = [
-            'name'       => $filename,
-            'path'       => $storageKey,
-            'url'        => storage_url($storageKey),
-            'origin_url' => $imageUrls[0],
-        ];
+        $result = $this->storeImage($contents, $options['save_path'] ?? '', $imageUrls[0]);
 
         // MiniMax's `subject_reference` is character-consistency reference,
         // not image editing — the generated subject will not match the
@@ -154,6 +140,87 @@ class MinimaxImageDriver
         }
 
         return $result;
+    }
+
+    private function generateH3(string $baseUrl, string $apiKey, string $model, string $prompt, array $options): array
+    {
+        if (! empty($options['reference_image'])) {
+            throw new RuntimeException('MiniMax H3 generation accepts text prompts only.');
+        }
+        if ($baseUrl === '' || $baseUrl === 'https://api.minimax.chat/v1') {
+            throw new RuntimeException('Set the MiniMax base URL to https://api.minimax.io/v1 or https://api.minimax.cn/v1 for your API key.');
+        }
+
+        $payload = [
+            'model'           => $model,
+            'prompt'          => $prompt,
+            'n'               => $options['n'] ?? 1,
+            'response_format' => 'b64_json',
+            'output_format'   => 'jpeg',
+        ];
+        $size = $options['size'] ?? null;
+        if ($size) {
+            $payload[str_contains($size, ':') ? 'aspect_ratio' : 'size'] = $size;
+        }
+
+        $response = Http::withToken($apiKey)
+            ->timeout(600)
+            ->withoutRedirecting()
+            ->post("{$baseUrl}/images/generations", $payload);
+        if (! $response->successful()) {
+            $message = $response->json('error.message') ?? $response->reason();
+            throw new RuntimeException("MiniMax H3 generation failed: {$message} (HTTP {$response->status()})");
+        }
+
+        $images = [];
+        $errors = [];
+        foreach ($response->json('data', []) as $image) {
+            if (isset($image['error'])) {
+                $errors[] = $image['error']['message'] ?? 'MiniMax H3 image generation failed.';
+
+                continue;
+            }
+            $contents = base64_decode($image['b64_json'] ?? '', true);
+            if ($contents === false || $contents === '') {
+                $errors[] = 'MiniMax H3 returned no image data.';
+
+                continue;
+            }
+            $images[] = $this->storeImage($contents, $options['save_path'] ?? '', extension: 'jpg');
+        }
+        if (empty($images)) {
+            throw new RuntimeException($errors[0] ?? 'MiniMax H3 returned no image data.');
+        }
+
+        $result = $images[0];
+        if (count($images) > 1) {
+            array_unshift($errors, __('aicore::media.ai_more_images_notice'));
+        }
+        if ($errors) {
+            $result['notice'] = implode(' ', array_unique($errors));
+        }
+
+        return $result;
+    }
+
+    private function storeImage(string $contents, string $savePath, ?string $originUrl = null, string $extension = 'png'): array
+    {
+        $savePath = trim($savePath, '/');
+        $filename = 'ai_'.uniqid().'.'.$extension;
+        $fullPath = $savePath ? "{$savePath}/{$filename}" : $filename;
+        if (! Storage::disk('media')->put($fullPath, $contents)) {
+            throw new RuntimeException('Failed to store generated image.');
+        }
+
+        $storageKey = StorageService::storageKey($fullPath);
+        $url        = storage_url($storageKey);
+
+        return [
+            'name'       => $filename,
+            'path'       => $storageKey,
+            'url'        => $url,
+            'origin_url' => $originUrl ?? $url,
+        ];
     }
 
     private function normalizeAspectRatio(?string $size): ?string
