@@ -115,7 +115,6 @@ class MarketplaceController
         try {
             $baseUrl  = config('innoshop.api_url');
             $response = Http::baseUrl($baseUrl)
-                ->withOptions(['verify' => false])
                 ->get('/api/domains/token');
 
             if ($response->successful()) {
@@ -145,7 +144,6 @@ class MarketplaceController
         try {
             $baseUrl  = config('innoshop.api_url');
             $response = Http::baseUrl($baseUrl)
-                ->withOptions(['verify' => false])
                 ->get('/api/checkout/billing_methods');
 
             if ($response->successful()) {
@@ -172,7 +170,6 @@ class MarketplaceController
         try {
             $baseUrl  = config('innoshop.api_url');
             $response = Http::baseUrl($baseUrl)
-                ->withOptions(['verify' => false])
                 ->post('/api/login', $request->only('email', 'password'));
 
             return response()->json($response->json(), $response->status());
@@ -192,7 +189,6 @@ class MarketplaceController
         try {
             $baseUrl  = config('innoshop.api_url');
             $response = Http::baseUrl($baseUrl)
-                ->withOptions(['verify' => false])
                 ->post('/api/register', $request->only('email', 'password', 'password_confirmation'));
 
             return response()->json($response->json(), $response->status());
@@ -217,7 +213,6 @@ class MarketplaceController
                 $headers['Authorization'] = 'Bearer '.$authToken;
             }
             $response = Http::baseUrl($baseUrl)
-                ->withOptions(['verify' => false])
                 ->withHeaders($headers)
                 ->post('/api/marketplace/domains/bind', [
                     'domain' => $request->input('domain', $request->getHost()),
@@ -245,7 +240,6 @@ class MarketplaceController
                 $headers['Authorization'] = 'Bearer '.$authToken;
             }
             $response = Http::baseUrl($baseUrl)
-                ->withOptions(['verify' => false])
                 ->withHeaders($headers)
                 ->get('/api/account/me');
 

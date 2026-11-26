@@ -35,7 +35,6 @@ class MarketplaceService
         $locale = function_exists('panel_locale_code') ? panel_locale_code() : (function_exists('locale_code') ? locale_code() : 'en');
 
         $this->client = Http::baseUrl($this->baseUrl)
-            ->withOptions(['verify' => false])
             ->withHeaders([
                 'domain-token' => $domainToken,
                 'locale'       => $locale,
