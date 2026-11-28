@@ -28,7 +28,11 @@ class TranslationServiceTest extends TestCase
         $from = setting_locale_code();
         $this->seedSourceRows($from);
 
-        $startedAt = now()->format('Y-m-d H:i:s');
+        // The copy writes CURRENT_TIMESTAMP from the database, so the
+        // comparison has to use the database clock as well. Reading the PHP
+        // clock breaks whenever the app timezone and the database timezone
+        // differ (APP_TIMEZONE=PRC against a UTC MySQL, for instance).
+        $startedAt = DB::selectOne('SELECT CURRENT_TIMESTAMP as ts')->ts;
 
         $locale = TranslationService::getInstance()->createLocale([
             'name'     => 'Testish',

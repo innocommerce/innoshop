@@ -49,8 +49,13 @@ if (! function_exists('load_settings')) {
             return;
         }
 
-        $result = SettingRepo::getInstance()->groupedSettings();
-        config(['inno' => $result]);
+        try {
+            $result = SettingRepo::getInstance()->groupedSettings();
+            config(['inno' => $result]);
+        } catch (Exception $e) {
+            // The settings table is not there yet (installer, test bootstrap).
+            Log::error($e->getMessage());
+        }
     }
 }
 
@@ -352,7 +357,13 @@ if (! function_exists('installed')) {
         }
 
         try {
-            $cache = Schema::hasTable('settings') && has_install_lock();
+            // The test environment runs against a database that is migrated
+            // after the providers boot, so the settings table does not exist
+            // yet. Treating it as installed lets the packs register their
+            // routes and feature tests can hit real pages; load_settings()
+            // copes with the missing table.
+            $cache = app()->environment('testing')
+                || (Schema::hasTable('settings') && has_install_lock());
         } catch (Exception $e) {
             Log::error($e->getMessage());
             $cache = false;

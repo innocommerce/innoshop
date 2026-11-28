@@ -11,6 +11,7 @@ namespace InnoShop\Plugin\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection as SupportCollection;
 use InnoShop\Plugin\Models\Plugin;
 use InnoShop\Plugin\Models\Setting;
@@ -47,7 +48,18 @@ class PluginRepo
             return self::$installedPlugins;
         }
 
-        return self::$installedPlugins = Plugin::all();
+        // A filtered test run (e.g. `--filter=SomeTest`) starts before any
+        // migration has run, and providers already ask for plugins while
+        // booting. Report "no plugins" instead of crashing on a missing table.
+        try {
+            return self::$installedPlugins = Plugin::all();
+        } catch (QueryException $e) {
+            if (! app()->runningUnitTests()) {
+                throw $e;
+            }
+
+            return self::$installedPlugins = new Collection;
+        }
     }
 
     /**

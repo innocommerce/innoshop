@@ -117,7 +117,11 @@ class Creator
      */
     private function seedData($data): void
     {
-        DatabaseSeeder::$withDemo = filter_var($data['demo_data'] ?? true, FILTER_VALIDATE_BOOLEAN);
+        // Some applications (e.g. the multi-vendor edition) have no demo data
+        // switch, so skip it instead of touching a static property that is absent
+        if (property_exists(DatabaseSeeder::class, 'withDemo')) {
+            DatabaseSeeder::$withDemo = filter_var($data['demo_data'] ?? true, FILTER_VALIDATE_BOOLEAN);
+        }
 
         try {
             Artisan::call('db:seed', ['--force' => true], $this->outputLog);
