@@ -12,8 +12,12 @@ namespace InnoShop\Plugin\Resources\Checkout;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Plugin\Models\Plugin;
 use InnoShop\Plugin\Resources\PluginResource;
 
+/**
+ * @property Plugin $plugin
+ */
 class PaymentMethodItem extends JsonResource
 {
     /**

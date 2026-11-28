@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Resources\BrandSimple;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class FilterRepo
 {
     private ?Builder $builder;

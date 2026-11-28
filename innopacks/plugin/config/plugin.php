@@ -8,6 +8,7 @@
  */
 
 return [
-    'middleware' => 'admin_auth:admin',
-    'route'   => '',
+    'middleware'     => 'admin_auth:admin',
+    'route'          => '',
+    'hidden_plugins' => env('HIDDEN_PLUGINS', ''),
 ];

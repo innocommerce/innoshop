@@ -49,6 +49,7 @@ class RestapiServiceProvider extends ServiceProvider
         } catch (Exception $e) {
             // Scribe configuration might be incompatible, skip for now
         }
+        $this->mergeConfigFrom(__DIR__.'/../config/apifox.php', 'apifox');
     }
 
     /**

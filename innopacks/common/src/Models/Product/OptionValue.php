@@ -17,6 +17,7 @@ use InnoShop\Common\Models\Product;
 
 /**
  * 产品选项值配置模型（产品的每个选项值加多少钱）
+ * @property float|null $weight_adjustment
  */
 class OptionValue extends Model
 {

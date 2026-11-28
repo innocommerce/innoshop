@@ -11,6 +11,9 @@ namespace InnoShop\Common\Repositories;
 
 use Exception;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class SpecialPageRepo
 {
     public static function getInstance(): static

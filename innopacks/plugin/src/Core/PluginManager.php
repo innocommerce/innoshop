@@ -212,7 +212,7 @@ class PluginManager
      */
     protected function getHiddenPluginsFromEnv(): array
     {
-        $hiddenPlugins = env('HIDDEN_PLUGINS', '');
+        $hiddenPlugins = config('plugin.hidden_plugins', '');
         if (empty($hiddenPlugins)) {
             return [];
         }

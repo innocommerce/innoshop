@@ -30,8 +30,8 @@ class SetFrontLocale
 
         $currentLocale = $this->resolveLocale($request, $availableLocales);
 
-        if (env('APP_LOCALE_FORCE')) {
-            $currentLocale = env('APP_LOCALE_FORCE');
+        if (config('innoshop.locale_force')) {
+            $currentLocale = config('innoshop.locale_force');
         }
 
         app()->setLocale($currentLocale);

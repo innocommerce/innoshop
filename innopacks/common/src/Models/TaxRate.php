@@ -26,4 +26,12 @@ class TaxRate extends BaseModel
     {
         return $this->belongsTo(Region::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function taxClass(): BelongsTo
+    {
+        return $this->belongsTo(TaxClass::class, 'tax_class_id');
+    }
 }

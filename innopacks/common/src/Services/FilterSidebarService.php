@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 /**
  * Filter sidebar service class
  * Responsible for preparing display data for the frontend filter sidebar
+ * @phpstan-consistent-constructor
  */
 class FilterSidebarService
 {

@@ -17,6 +17,7 @@ use InnoShop\Common\Models\Cart\OptionValue;
  * @property int $id
  * @property int $quantity
  * @property string $sku_code
+ * @property bool $is_stock_enough Set at runtime by CartService, not a DB column
  */
 class CartItem extends BaseModel
 {

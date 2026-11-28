@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Models\Attribute;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use InnoShop\Common\Models\Attribute\Value\Translation;
 use InnoShop\Common\Models\BaseModel;
 
@@ -36,10 +37,10 @@ class Value extends BaseModel
     /**
      * Locale translation object
      *
-     * @return mixed
+     * @return HasOne
      * @throws \Exception
      */
-    public function translation(): mixed
+    public function translation(): HasOne
     {
         $class = Translation::class;
 

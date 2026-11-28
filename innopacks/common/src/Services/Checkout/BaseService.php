@@ -11,6 +11,9 @@ namespace InnoShop\Common\Services\Checkout;
 
 use InnoShop\Common\Services\CheckoutService;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BaseService
 {
     protected CheckoutService $checkoutService;

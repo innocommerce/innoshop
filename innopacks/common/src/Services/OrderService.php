@@ -15,6 +15,9 @@ use InnoShop\Common\Models\Order;
 use InnoShop\Common\Repositories\OrderRepo;
 use Throwable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class OrderService
 {
     private Order $order;

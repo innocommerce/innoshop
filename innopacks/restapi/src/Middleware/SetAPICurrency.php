@@ -34,8 +34,8 @@ class SetAPICurrency
             $currentCurrency = system_setting('currency', 'usd');
         }
 
-        if (env('APP_CURRENCY_FORCE')) {
-            $currentCurrency = env('APP_LOCALE_FORCE');
+        if (config('innoshop.currency_force')) {
+            $currentCurrency = config('innoshop.currency_force');
         }
 
         session(['currency' => $currentCurrency]);

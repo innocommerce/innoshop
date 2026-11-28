@@ -12,6 +12,9 @@ namespace InnoShop\Common\Services;
 use Exception;
 use InnoShop\Common\Models\Order\Shipment;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class ShippingTraceService
 {
     private Shipment $shipment;

@@ -16,6 +16,9 @@ use InnoShop\Common\Models\Product;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\ProductRepo;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class HomeRepo
 {
     /**

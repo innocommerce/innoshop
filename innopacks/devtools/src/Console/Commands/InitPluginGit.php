@@ -51,8 +51,8 @@ class InitPluginGit extends Command
 
         // If not provided via option, try to get from environment or storage
         if (empty($giteaToken)) {
-            // Try .env first
-            $giteaToken = env('GITEA_TOKEN');
+            // Try config first (works with cached config)
+            $giteaToken = config('devtools.gitea_token');
         }
 
         if (empty($giteaToken)) {
@@ -66,7 +66,7 @@ class InitPluginGit extends Command
 
         // Get URL from environment or storage
         if (empty($giteaUrl)) {
-            $giteaUrl = env('GITEA_URL', 'https://innoshop.work');
+            $giteaUrl = config('devtools.gitea_url', 'https://innoshop.work');
 
             // Try storage file for URL
             $storagePath = storage_path('app/.gitea_token');

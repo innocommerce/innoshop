@@ -15,6 +15,9 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Models\Role;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class RouteRepo
 {
     const IGNORE_LIST = [

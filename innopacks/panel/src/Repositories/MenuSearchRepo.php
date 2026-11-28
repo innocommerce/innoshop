@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Cache;
 use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\PluginTypeRepo;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class MenuSearchRepo
 {
     /**

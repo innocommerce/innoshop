@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use InnoShop\Common\Models\CartItem;
+use InnoShop\Common\Models\Option;
 
 /**
  * 购物车选项值记录模型
@@ -44,6 +45,22 @@ class OptionValue extends Model
     public function cartItem(): BelongsTo
     {
         return $this->belongsTo(CartItem::class);
+    }
+
+    /**
+     * Associated product option.
+     */
+    public function option(): BelongsTo
+    {
+        return $this->belongsTo(Option::class, 'option_id');
+    }
+
+    /**
+     * Associated product option value.
+     */
+    public function optionValue(): BelongsTo
+    {
+        return $this->belongsTo(\InnoShop\Common\Models\OptionValue::class, 'option_value_id');
     }
 
     /**

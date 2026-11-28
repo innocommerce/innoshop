@@ -11,7 +11,11 @@ namespace InnoShop\Common\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Common\Models\Customer\Group;
 
+/**
+ * @mixin Group
+ */
 class CustomerGroupSimple extends JsonResource
 {
     /**

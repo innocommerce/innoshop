@@ -17,6 +17,7 @@ use InnoShop\Common\Models\Product\OptionValue;
 
 /**
  * 产品选项服务类
+ * @phpstan-consistent-constructor
  */
 class ProductOptionService
 {

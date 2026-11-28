@@ -31,6 +31,9 @@ use InnoShop\Common\Services\Fee\Shipping;
 use InnoShop\Common\Services\Fee\Subtotal;
 use Throwable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class CheckoutService
 {
     private static mixed $checkoutService = null;

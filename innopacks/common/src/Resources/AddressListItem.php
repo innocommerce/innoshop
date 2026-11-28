@@ -11,9 +11,13 @@ namespace InnoShop\Common\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Common\Models\Address;
 use InnoShop\Common\Models\Country;
 use InnoShop\Common\Models\State;
 
+/**
+ * @mixin Address
+ */
 class AddressListItem extends JsonResource
 {
     /**

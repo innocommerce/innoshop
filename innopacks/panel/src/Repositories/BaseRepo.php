@@ -9,6 +9,9 @@
 
 namespace InnoShop\Panel\Repositories;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BaseRepo
 {
     /**

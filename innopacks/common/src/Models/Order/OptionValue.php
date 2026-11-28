@@ -12,9 +12,11 @@ namespace InnoShop\Common\Models\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use InnoShop\Common\Models\Option;
 
 /**
  * 订单选项值记录模型
+ * @property float|null $weight_adjustment
  */
 class OptionValue extends Model
 {
@@ -43,6 +45,22 @@ class OptionValue extends Model
     public function orderItem(): BelongsTo
     {
         return $this->belongsTo(Item::class, 'order_item_id');
+    }
+
+    /**
+     * Associated product option.
+     */
+    public function option(): BelongsTo
+    {
+        return $this->belongsTo(Option::class, 'option_id');
+    }
+
+    /**
+     * Associated product option value.
+     */
+    public function optionValue(): BelongsTo
+    {
+        return $this->belongsTo(\InnoShop\Common\Models\OptionValue::class, 'option_value_id');
     }
 
     /**

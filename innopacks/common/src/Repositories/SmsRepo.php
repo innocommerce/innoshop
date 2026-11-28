@@ -9,6 +9,9 @@
 
 namespace InnoShop\Common\Repositories;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class SmsRepo
 {
     /**

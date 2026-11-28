@@ -12,6 +12,9 @@ namespace InnoShop\Common\Repositories\Product;
 use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Product;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class VariantRepo
 {
     public static function getInstance(): static

@@ -9,6 +9,9 @@
 
 namespace InnoShop\Panel\Services;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BaseService
 {
     /**

@@ -1725,7 +1725,7 @@ if (! function_exists('seller_enabled')) {
         // pack answers with its own provider check instead of the seller one).
         return fire_hook_filter(
             'common.seller.enabled',
-            class_exists('\InnoShop\Seller\SellerServiceProvider') && env('SELLER_ENABLED', true),
+            class_exists('\InnoShop\Seller\SellerServiceProvider') && config('innoshop.seller_enabled', true),
         );
     }
 }

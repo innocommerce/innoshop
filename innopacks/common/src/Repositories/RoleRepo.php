@@ -13,6 +13,9 @@ use Exception;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class RoleRepo
 {
     /**

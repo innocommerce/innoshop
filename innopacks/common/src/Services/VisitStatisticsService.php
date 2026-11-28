@@ -167,7 +167,6 @@ class VisitStatisticsService
 
         $bounces = $bounceQuery->groupBy('session_id')
             ->having('event_count', '=', 1)
-            ->get()
             ->count();
 
         // Calculate average session duration — exclude bot sessions (crawlers

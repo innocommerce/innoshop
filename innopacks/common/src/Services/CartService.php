@@ -21,6 +21,9 @@ use InnoShop\Common\Repositories\CartItemRepo;
 use InnoShop\Common\Resources\CartListItem;
 use Throwable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class CartService
 {
     private int $customerID;

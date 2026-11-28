@@ -9,6 +9,9 @@
 
 namespace InnoShop\Common\Services;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BaseService
 {
     protected static $instance;

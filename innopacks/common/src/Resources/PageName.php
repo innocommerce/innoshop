@@ -12,7 +12,11 @@ namespace InnoShop\Common\Resources;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Common\Models\Page;
 
+/**
+ * @mixin Page
+ */
 class PageName extends JsonResource
 {
     /**

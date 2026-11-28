@@ -42,7 +42,7 @@ class AdminController extends BaseController
      */
     public function show(Admin $admin): Admin
     {
-        return $admin->load(['adminStates']);
+        return $admin;
     }
 
     /**

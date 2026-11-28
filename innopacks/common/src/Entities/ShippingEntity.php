@@ -12,6 +12,9 @@ namespace InnoShop\Common\Entities;
 use InnoShop\Common\Services\CheckoutService;
 use Throwable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class ShippingEntity
 {
     private array $products;
