@@ -412,7 +412,7 @@
         // 显示文本输入选项
         $('.option-text-input').each(function() {
           const $input = $(this);
-          const textValue = $.trim($input.val());
+          const textValue = String($input.val() ?? '').trim();
           if (textValue) {
             hasSelections = true;
             const optionName = $input.closest('.option-group').find('.option-label').text().trim().replace('*', '');
@@ -463,7 +463,7 @@
               const checkedBoxes = $group.find('input[type="checkbox"]:checked');
               hasSelection = checkedBoxes.length > 0;
             } else if (optionType === 'input' || optionType === 'textarea') {
-              hasSelection = $.trim($group.find('.option-text-input').val()) !== '';
+              hasSelection = String($group.find('.option-text-input').val() ?? '').trim() !== '';
             }
             
             if (!hasSelection) {

@@ -305,7 +305,7 @@
       // 收集自由文本选项（input/textarea，值为字符串）
       $('.option-text-input').each(function() {
         const optionId = $(this).data('option-id');
-        const textValue = $.trim($(this).val());
+        const textValue = String($(this).val() ?? '').trim();
         if (textValue) {
           productOptions[optionId] = textValue;
         }
