@@ -235,9 +235,11 @@ class StripeService extends PaymentService
         $total    = self::getChargeAmount($this->order);
 
         $defaultOptions = [
-            'payment_method_types' => self::PAYMENT_METHODS,
-            'mode'                 => 'payment',
-            'line_items'           => [[
+            // stripe-php v22 removed payment_method_types from Checkout Session
+            // creation; allowed_payment_method_types is the supported replacement.
+            'allowed_payment_method_types' => self::PAYMENT_METHODS,
+            'mode'                         => 'payment',
+            'line_items'                   => [[
                 'price_data' => [
                     'currency'     => $currency,
                     'product_data' => [
