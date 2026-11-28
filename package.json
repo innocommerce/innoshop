@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "axios": "^1.21.1",
-    "jquery": "^3.7.1",
+    "jquery": "^4.1.0",
     "laravel-vite-plugin": "^3.2",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.108.2",
