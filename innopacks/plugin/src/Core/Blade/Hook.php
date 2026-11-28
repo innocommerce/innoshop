@@ -48,6 +48,19 @@ class Hook
     }
 
     /**
+     * Forget the singleton instance.
+     *
+     * The instance lives for the whole process, so a test suite that boots
+     * the application once per case keeps every listener each boot
+     * registered. Tests call this between cases to start from a clean
+     * registry; production never does.
+     */
+    public static function resetSingleton(): void
+    {
+        self::$instance = null;
+    }
+
+    /**
      * Return the hook answer.
      *
      * @param  string  $hook  Hook name

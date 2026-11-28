@@ -326,7 +326,7 @@ class CategoryRepo extends BaseRepo
             'slug'      => $data['slug'] ?? null,
             'image'     => $data['image'] ?? null,
             'position'  => $data['position'] ?? 0,
-            'active'    => (bool) $data['active'] ?? true,
+            'active'    => (bool) ($data['active'] ?? true),
         ];
     }
 

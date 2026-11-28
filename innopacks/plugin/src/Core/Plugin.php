@@ -260,6 +260,15 @@ final class Plugin implements Arrayable, ArrayAccess
             return $this;
         }
 
+        // A plugin's fields.php usually reads its own settings from the
+        // database. During a filtered test run (`--filter=SomeTest`) the
+        // application boots before RefreshDatabase has migrated anything, so
+        // loading fields would abort the whole run. Fields are irrelevant
+        // while booting under test — skip them.
+        if (app()->runningUnitTests()) {
+            return $this;
+        }
+
         $fieldsData = require_once $fieldsPath;
         if (is_array($fieldsData) && $fieldsData) {
             $this->fields = $fieldsData;
