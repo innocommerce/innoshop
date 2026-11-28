@@ -44,6 +44,7 @@
         "w7corp/easywechat": "^6.7"
     },
     "require-dev": {
+        "baer-software/larabeacon": "^3.6",
         "barryvdh/laravel-debugbar": "^4.3",
         "fakerphp/faker": "^1.23",
         "kitloong/laravel-migrations-generator": "^7.0",
