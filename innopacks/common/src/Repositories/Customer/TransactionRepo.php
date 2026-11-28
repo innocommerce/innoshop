@@ -226,6 +226,12 @@ class TransactionRepo extends BaseRepo
         $customer->syncBalance();
         $balance = $customer->balance + $amount;
 
+        // Defense in depth: never persist a ledger entry that drives the
+        // wallet below zero (blocks forged checkout balance redemptions).
+        if ($balance < 0) {
+            throw new \Exception('Insufficient customer balance.');
+        }
+
         return [
             'customer_id' => $data['customer_id'],
             'amount'      => $amount,

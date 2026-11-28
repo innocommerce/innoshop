@@ -96,9 +96,9 @@ class WalletServiceTest extends TestCase
     #[Test]
     public function test_empty_balance_is_skipped(): void
     {
-        // Document that empty balance returns early
+        // Document that non-positive requested balance returns early
         $source = file_get_contents($this->reflection->getFileName());
-        $this->assertStringContainsString('empty($usedBalance)', $source);
+        $this->assertStringContainsString('$requested <= 0', $source);
         $this->assertStringContainsString('return;', $source);
     }
 

@@ -212,7 +212,7 @@ class AicoreServiceProvider extends ServiceProvider
         $adminName = panel_name();
 
         Route::prefix($adminName)
-            ->middleware('panel')
+            ->middleware(['panel', 'admin_auth:admin', 'throttle:30,1'])
             ->name('panel.')
             ->group(function () {
                 $path = $this->basePath.'routes/panel.php';
