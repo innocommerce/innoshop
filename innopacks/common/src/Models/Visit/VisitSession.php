@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use InnoShop\Common\Models\BaseModel;
 use InnoShop\Common\Models\Customer;
 
+/**
+ * @property string|null $conversion_event
+ */
 class VisitSession extends BaseModel
 {
     /**

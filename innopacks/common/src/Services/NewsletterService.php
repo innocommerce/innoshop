@@ -13,6 +13,9 @@ use InnoShop\Common\Models\NewsletterSubscriber;
 use InnoShop\Common\Repositories\NewsletterRepo;
 use Throwable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class NewsletterService
 {
     private NewsletterRepo $newsletterRepo;

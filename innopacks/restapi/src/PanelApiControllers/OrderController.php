@@ -46,7 +46,7 @@ class OrderController extends BaseController
     public function show(Order $order): mixed
     {
         try {
-            $order->load(['items', 'shipments', 'orderItems.options']);
+            $order->load(['items', 'shipments', 'items.options']);
 
             return read_json_success(new OrderSimple($order));
         } catch (Exception $e) {

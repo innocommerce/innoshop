@@ -11,7 +11,11 @@ namespace InnoShop\Common\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Common\Models\Currency;
 
+/**
+ * @mixin Currency
+ */
 class CurrencyItem extends JsonResource
 {
     /**

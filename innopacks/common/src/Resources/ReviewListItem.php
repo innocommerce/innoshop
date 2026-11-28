@@ -12,7 +12,11 @@ namespace InnoShop\Common\Resources;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Common\Models\Review;
 
+/**
+ * @mixin Review
+ */
 class ReviewListItem extends JsonResource
 {
     /**
@@ -34,7 +38,6 @@ class ReviewListItem extends JsonResource
             'customer_name'   => $customer->name ?? 'Unknown',
             'customer_avatar' => image_resize($customer->avatar ?? ''),
             'rating'          => $this->rating,
-            'title'           => $this->title,
             'content'         => $this->content,
             'like'            => $this->like,
             'dislike'         => $this->dislike,

@@ -182,7 +182,7 @@ class OptionValueRepo extends BaseRepo
      */
     public function getFormattedOptionValues(int $orderItemId): array
     {
-        $optionValues = $this->getOptionValuesByOrderItem($orderItemId);
+        $optionValues = $this->getByOrderItemId($orderItemId);
 
         $formatted = [];
         foreach ($optionValues as $optionValue) {

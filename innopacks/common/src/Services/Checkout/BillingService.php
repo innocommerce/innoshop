@@ -13,6 +13,9 @@ use Exception;
 use InnoShop\Plugin\Repositories\PluginRepo;
 use InnoShop\Plugin\Resources\Checkout\PaymentMethodItem;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BillingService
 {
     /**

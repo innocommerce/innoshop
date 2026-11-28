@@ -11,10 +11,12 @@ namespace InnoShop\Panel\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Common\Models\Article;
 
 /**
  * Article name resource class
  * Specifically handles name retrieval for article models
+ * @mixin Article
  */
 class ArticleNameResource extends JsonResource
 {

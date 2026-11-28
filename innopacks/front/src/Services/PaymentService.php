@@ -13,6 +13,9 @@ use Exception;
 use Illuminate\Support\Str;
 use InnoShop\Common\Models\Order;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class PaymentService
 {
     protected ?Order $order;

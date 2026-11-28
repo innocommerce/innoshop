@@ -17,6 +17,9 @@ use InnoShop\Plugin\Core\Plugin;
 use InnoShop\Plugin\Repositories\PluginRepo;
 use Throwable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class ShippingService
 {
     public static ?array $shippingMethods = null;

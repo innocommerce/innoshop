@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BaseRepo implements RepoInterface
 {
     protected string $model;

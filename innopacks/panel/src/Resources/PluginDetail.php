@@ -11,7 +11,11 @@ namespace InnoShop\Panel\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use InnoShop\Plugin\Core\Plugin;
 
+/**
+ * @mixin Plugin
+ */
 class PluginDetail extends JsonResource
 {
     /**

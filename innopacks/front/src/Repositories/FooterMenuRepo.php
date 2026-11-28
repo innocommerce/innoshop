@@ -17,6 +17,9 @@ use InnoShop\Common\Repositories\SpecialPageRepo;
 use InnoShop\Common\Resources\CatalogSimple;
 use InnoShop\Common\Resources\PageSimple;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class FooterMenuRepo
 {
     /**

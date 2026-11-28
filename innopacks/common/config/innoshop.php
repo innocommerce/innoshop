@@ -13,6 +13,12 @@ return [
     'build'   => '20261118',
     'api_url' => env('INNOSHOP_API_URL', 'https://www.innoshop.cn'),
 
+    // Runtime toggles read outside the config directory must go through
+    // config() so they keep working when the config is cached.
+    'seller_enabled' => env('SELLER_ENABLED', true),
+    'locale_force'   => env('APP_LOCALE_FORCE'),
+    'currency_force' => env('APP_CURRENCY_FORCE'),
+
     // Override GeoLite2-City.mmdb path via GEOLITE2_PATH; defaults to storage/app/geolite2/GeoLite2-City.mmdb.
     // The file name matches the official download (res.innoshop.net/GeoLite2-City.mmdb);
     // installs carrying the old lower-case name are still picked up by a

@@ -12,6 +12,9 @@ namespace InnoShop\Common\Repositories\Category;
 use Exception;
 use InnoShop\Common\Models\Category;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class TreeRepo
 {
     private static array $children = [];

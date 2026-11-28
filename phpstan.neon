@@ -1,0 +1,16 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 1
+    paths:
+        - innopacks
+        - plugins
+    databaseMigrationsPath:
+        - innopacks/common/database/migrations
+        - innopacks/plugin/database/migrations
+    configDirectories:
+        - innopacks/common/config
+        - innopacks/plugin/config
+        - innopacks/restapi/config
+        - innopacks/devtools/config

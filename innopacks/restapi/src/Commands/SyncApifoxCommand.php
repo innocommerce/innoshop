@@ -43,11 +43,11 @@ class SyncApifoxCommand extends Command
     public function handle(): int
     {
         $type           = $this->option('type') ?? 'all';
-        $token          = $this->option('token') ?? env('APIFOX_TOKEN');
-        $frontProjectId = $this->option('front-project') ?? env('APIFOX_FRONT_PROJECT_ID');
-        $panelProjectId = $this->option('panel-project') ?? env('APIFOX_PANEL_PROJECT_ID');
+        $token          = $this->option('token') ?? config('apifox.token');
+        $frontProjectId = $this->option('front-project') ?? config('apifox.front_project_id');
+        $panelProjectId = $this->option('panel-project') ?? config('apifox.panel_project_id');
         $keepUnmatched  = $this->option('keep-unmatched')
-            || filter_var(env('APIFOX_KEEP_UNMATCHED', false), FILTER_VALIDATE_BOOLEAN);
+            || filter_var(config('apifox.keep_unmatched', false), FILTER_VALIDATE_BOOLEAN);
 
         if (! $token) {
             $this->error('APIFOX_TOKEN is required. Set it in .env or pass --token option.');
@@ -166,7 +166,7 @@ class SyncApifoxCommand extends Command
             $options['deleteUnmatchedResources'] = true;
         }
 
-        $baseUrl = rtrim((string) (env('APIFOX_API_BASE_URL') ?: 'https://api.apifox.com'), '/');
+        $baseUrl = rtrim((string) (config('apifox.api_base_url') ?: 'https://api.apifox.com'), '/');
 
         $response = Http::withHeaders([
             'X-Apifox-Api-Version' => '2024-03-28',

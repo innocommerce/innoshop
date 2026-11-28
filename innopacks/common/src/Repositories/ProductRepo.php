@@ -1243,7 +1243,6 @@ class ProductRepo extends BaseRepo
             ->select('product_id', DB::raw('COUNT(*) AS sales_count'))
             ->groupBy('product_id')
             ->orderByDesc('sales_count')
-            ->get()
             ->pluck('sales_count', 'product_id');
 
         $ranked = collect();

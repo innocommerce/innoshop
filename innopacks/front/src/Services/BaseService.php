@@ -9,6 +9,9 @@
 
 namespace InnoShop\Front\Services;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BaseService
 {
     /**

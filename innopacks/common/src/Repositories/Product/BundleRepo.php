@@ -13,6 +13,9 @@ use Illuminate\Support\Collection;
 use InnoShop\Common\Models\Product;
 use Throwable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class BundleRepo
 {
     /**
