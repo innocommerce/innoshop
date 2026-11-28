@@ -12,12 +12,12 @@
     "jquery": "^3.7.1",
     "laravel-vite-plugin": "^3.2",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.105.2",
-    "sass-embedded": "^1.105.2",
-    "vite": "^8.3.4"
+    "sass": "^1.108.2",
+    "sass-embedded": "^1.108.2",
+    "vite": "^8.3.8"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.9",
     "bootstrap-icons": "^1.13.2",
     "codemirror": "^6.0.1"
   },
