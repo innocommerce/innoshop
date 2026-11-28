@@ -39,7 +39,7 @@
         "spatie/laravel-permission": "^8.3",
         "spatie/laravel-sitemap": "^7.3",
         "srmklive/paypal": "^3.0",
-        "stripe/stripe-php": "^21.0",
+        "stripe/stripe-php": "^23.1",
         "tormjens/eventy": "^0.9.5",
         "w7corp/easywechat": "^6.7"
     },

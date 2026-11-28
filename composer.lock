@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9452e93e3ee63d348dda903f381176eb",
+    "content-hash": "ab4e656b8828cf0000ff62040784c1d2",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6813,18 +6813,23 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v21.3.3",
+            "version": "v23.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stripe/stripe-php.git",
+                "reference": "6694b4d8826927896c9a1e57a26a8dbffb69f732"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.tencent.com/repository/composer/stripe/stripe-php/v21.3.3/stripe-stripe-php-v21.3.3.zip",
-                "reference": "3d52008ffeab02763b02462802393f3d4da2aa51",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/6694b4d8826927896c9a1e57a26a8dbffb69f732",
+                "reference": "6694b4d8826927896c9a1e57a26a8dbffb69f732",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": ">=7.2.0"
+                "php": ">=7.4.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "3.94.0",
@@ -6845,6 +6850,7 @@
                     "Stripe\\": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6863,9 +6869,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v21.3.3"
+                "source": "https://github.com/stripe/stripe-php/tree/v23.1.0"
             },
-            "time": "2026-10-27T19:47:35+00:00"
+            "time": "2026-11-19T03:46:04+00:00"
         },
         {
             "name": "symfony/cache",
