@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'コミッション',
-    'consumption' => '消費します',
-    'recharge'    => 'チャージします',
-    'refund'      => '返金します',
-    'withdraw'    => 'キャッシュバックです',
+    'commission'           => 'コミッション',
+    'consumption'          => '消費します',
+    'recharge'             => 'チャージします',
+    'refund'               => '返金します',
+    'withdraw'             => 'キャッシュバックです',
+    'insufficient_balance' => '顧客残高が不足しています。',
 ];

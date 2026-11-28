@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'комиссион',
-    'consumption' => 'потреблен',
-    'recharge'    => 'карт',
-    'refund'      => 'компенсац',
-    'withdraw'    => 'снят',
+    'commission'           => 'комиссион',
+    'consumption'          => 'потреблен',
+    'recharge'             => 'карт',
+    'refund'               => 'компенсац',
+    'withdraw'             => 'снят',
+    'insufficient_balance' => 'Недостаточный баланс клиента.',
 ];

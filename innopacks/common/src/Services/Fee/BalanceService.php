@@ -30,7 +30,8 @@ class BalanceService extends BaseService
         // balance and the current payable total (fees already accumulated).
         $available   = max(0, $this->checkoutService->getBalanceAmount());
         $payable     = max(0, $this->checkoutService->getAccumulatedFeeTotal());
-        $usedBalance = round(min($requested, $available, $payable), 2);
+        $decimal     = currency_decimal_place();
+        $usedBalance = round(min($requested, $available, $payable), $decimal);
         if ($usedBalance <= 0) {
             return;
         }
@@ -38,7 +39,7 @@ class BalanceService extends BaseService
         $subtotalFee = [
             'code'         => 'balance',
             'title'        => 'Balance',
-            'total'        => round(-$usedBalance, 2),
+            'total'        => round(-$usedBalance, $decimal),
             'total_format' => currency_format($usedBalance),
         ];
 

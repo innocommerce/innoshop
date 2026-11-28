@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'comissão',
-    'consumption' => 'consumo',
-    'recharge'    => 'Para recarregar',
-    'refund'      => 'restituição',
-    'withdraw'    => 'Vários locais',
+    'commission'           => 'comissão',
+    'consumption'          => 'consumo',
+    'recharge'             => 'Para recarregar',
+    'refund'               => 'restituição',
+    'withdraw'             => 'Vários locais',
+    'insufficient_balance' => 'Saldo do cliente insuficiente.',
 ];

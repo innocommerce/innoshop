@@ -9,20 +9,20 @@
 
 namespace InnoShop\Aicore\Tests\Feature;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use InnoShop\Aicore\AicoreServiceProvider;
+use InnoShop\Common\Models\Admin;
 use InnoShop\Panel\Repositories\RouteRepo;
-use ReflectionMethod;
+use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 
 class PanelAiRouteSecurityTest extends TestCase
 {
     public function test_panel_web_ai_routes_require_admin_auth_and_are_throttled(): void
     {
-        $provider = new AicoreServiceProvider($this->app);
-        $method   = new ReflectionMethod(AicoreServiceProvider::class, 'registerPanelRoutes');
-        $method->invoke($provider);
-
+        // Assert against the routes registered during normal app boot. Do
+        // NOT re-register them here: a provider regression must fail this
+        // test instead of being masked by a test-registered copy.
         foreach ([
             'panel.content_ai.chat',
             'panel.content_ai.generate',
@@ -61,5 +61,51 @@ class PanelAiRouteSecurityTest extends TestCase
         ] as $routeCode) {
             $this->assertContains($routeCode, RouteRepo::IGNORE_LIST);
         }
+    }
+
+    public function test_list_models_denies_admin_without_settings_permission(): void
+    {
+        // id 1 is the super-admin (Gate::before bypass); consume it so the
+        // second admin is a genuine low-privilege account.
+        $this->createAdmin('root@example.com');
+        $lowPriv = $this->createAdmin('lowpriv@example.com');
+
+        $this->actingAs($lowPriv, 'admin');
+
+        $response = $this->postJson(panel_route('content_ai.list_models'), [
+            'provider_code' => 'openai',
+            'api_key'       => 'sk-test',
+            'base_url'      => 'https://api.openai.com/v1',
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_list_models_allows_admin_with_settings_permission(): void
+    {
+        $this->createAdmin('root2@example.com');
+        $editor = $this->createAdmin('settings-editor@example.com');
+        Permission::findOrCreate('settings_update', 'admin');
+        $editor->givePermissionTo('settings_update');
+
+        $this->actingAs($editor, 'admin');
+
+        // Missing provider_code fails validation AFTER the permission gate,
+        // proving the gate let this admin through without any HTTP call.
+        $response = $this->postJson(panel_route('content_ai.list_models'), []);
+
+        $this->assertNotSame(403, $response->getStatusCode());
+        $response->assertJsonPath('message', 'Missing provider_code');
+    }
+
+    private function createAdmin(string $email): Admin
+    {
+        return Admin::query()->create([
+            'name'     => 'Test Admin',
+            'email'    => $email,
+            'password' => Hash::make('password'),
+            'locale'   => 'en',
+            'active'   => true,
+        ]);
     }
 }

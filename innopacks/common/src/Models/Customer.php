@@ -120,7 +120,9 @@ class Customer extends AuthUser
      */
     public function syncBalance(): void
     {
-        $this->balance = $this->transactions->sum('amount');
+        // Aggregate via the query builder, not the (possibly cached) relation,
+        // so a re-sync after inserting a ledger row sees the new row.
+        $this->balance = $this->transactions()->sum('amount');
         $this->saveOrFail();
     }
 

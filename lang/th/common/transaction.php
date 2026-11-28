@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'ค่านายหน้า',
-    'consumption' => 'การบริโภค',
-    'recharge'    => 'เติมเงิน',
-    'refund'      => 'คืนเงิน',
-    'withdraw'    => 'ถอนเงิน',
+    'commission'           => 'ค่านายหน้า',
+    'consumption'          => 'การบริโภค',
+    'recharge'             => 'เติมเงิน',
+    'refund'               => 'คืนเงิน',
+    'withdraw'             => 'ถอนเงิน',
+    'insufficient_balance' => 'ยอดคงเหลือของลูกค้าไม่เพียงพอ',
 ];

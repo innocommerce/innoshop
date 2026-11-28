@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'La comisión',
-    'consumption' => 'El consumo',
-    'recharge'    => 'en',
-    'refund'      => 'reembolsos',
-    'withdraw'    => 'DiXian',
+    'commission'           => 'La comisión',
+    'consumption'          => 'El consumo',
+    'recharge'             => 'en',
+    'refund'               => 'reembolsos',
+    'withdraw'             => 'DiXian',
+    'insufficient_balance' => 'Saldo del cliente insuficiente.',
 ];

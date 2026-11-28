@@ -492,7 +492,7 @@ class CheckoutService
         $balance = (float) ($this->customer->balance ?? 0);
         $frozen  = WithdrawalRepo::getInstance()->getFrozenAmount((int) $this->customer->id);
 
-        return max(0.0, round($balance - $frozen, 2));
+        return max(0.0, round($balance - $frozen, currency_decimal_place()));
     }
 
     /**

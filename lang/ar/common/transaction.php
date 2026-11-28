@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'عمولة',
-    'consumption' => 'الاستهلاك',
-    'recharge'    => 'لاعادة الشحن',
-    'refund'      => 'المبالغ المستردة',
-    'withdraw'    => 'التسهيلات',
+    'commission'           => 'عمولة',
+    'consumption'          => 'الاستهلاك',
+    'recharge'             => 'لاعادة الشحن',
+    'refund'               => 'المبالغ المستردة',
+    'withdraw'             => 'التسهيلات',
+    'insufficient_balance' => 'رصيد العميل غير كافٍ.',
 ];

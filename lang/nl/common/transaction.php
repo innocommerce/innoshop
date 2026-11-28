@@ -8,9 +8,10 @@
  */
 
 return [
-    'consumption' => 'Verbruik',
-    'recharge'    => 'Opwaarderen',
-    'refund'      => 'Terugbetaling',
-    'withdraw'    => 'Opnemen',
-    'commission'  => 'Commissie',
+    'consumption'          => 'Verbruik',
+    'recharge'             => 'Opwaarderen',
+    'refund'               => 'Terugbetaling',
+    'withdraw'             => 'Opnemen',
+    'commission'           => 'Commissie',
+    'insufficient_balance' => 'Onvoldoende klantensaldo.',
 ];

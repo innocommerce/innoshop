@@ -373,6 +373,19 @@ class AIServiceManager
             }
         }
 
+        // A caller-supplied base_url that differs from the configured one
+        // must never receive the stored provider key (credential exfil) and
+        // must not target internal services (SSRF). The settings form always
+        // sends the key it displays, so legitimate overrides still work.
+        $configuredBaseUrl = rtrim((string) ($provider['base_url'] ?? ''), '/');
+        $baseUrlOverride   = rtrim($baseUrl, '/');
+        if ($baseUrlOverride !== '' && $baseUrlOverride !== $configuredBaseUrl) {
+            $this->assertPublicBaseUrl($baseUrlOverride);
+            if ($apiKey === '') {
+                throw new \RuntimeException('An explicit api_key is required when overriding base_url.');
+            }
+        }
+
         // Use request values as overrides (user may have entered new key/URL in form without saving yet)
         $apiKey  = $apiKey ?: ($provider['api_key'] ?? '');
         $baseUrl = $baseUrl ?: ($provider['base_url'] ?? '');
@@ -410,5 +423,44 @@ class AIServiceManager
         }
 
         return $models;
+    }
+
+    /**
+     * Reject caller-supplied base URLs that target non-public addresses.
+     * Only applies to request overrides; admin-configured URLs (e.g. a local
+     * Ollama endpoint) stay trusted.
+     */
+    private function assertPublicBaseUrl(string $url): void
+    {
+        $parsed = parse_url($url);
+        if ($parsed === false || empty($parsed['scheme']) || empty($parsed['host'])) {
+            throw new \RuntimeException('Invalid base_url.');
+        }
+        if (! in_array(strtolower($parsed['scheme']), ['http', 'https'], true)) {
+            throw new \RuntimeException('base_url must use http or https.');
+        }
+        if (isset($parsed['user']) || isset($parsed['pass'])) {
+            throw new \RuntimeException('base_url must not embed credentials.');
+        }
+
+        $host = trim($parsed['host'], '[]');
+        $ips  = filter_var($host, FILTER_VALIDATE_IP) ? [$host] : (gethostbynamel($host) ?: []);
+        if ($ips === []) {
+            throw new \RuntimeException('base_url host cannot be resolved.');
+        }
+
+        foreach ($ips as $ip) {
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+                $lower = strtolower($ip);
+                if ($lower === '::1' || str_starts_with($lower, 'fc') || str_starts_with($lower, 'fd') || str_starts_with($lower, 'fe80')) {
+                    throw new \RuntimeException('base_url must resolve to a public address.');
+                }
+
+                continue;
+            }
+            if (! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                throw new \RuntimeException('base_url must resolve to a public address.');
+            }
+        }
     }
 }

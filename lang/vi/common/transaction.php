@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'Tiền hoa hồng',
-    'consumption' => 'Tiêu thụ',
-    'recharge'    => 'Bạn biết',
-    'refund'      => 'trả',
-    'withdraw'    => 'DiXian',
+    'commission'           => 'Tiền hoa hồng',
+    'consumption'          => 'Tiêu thụ',
+    'recharge'             => 'Bạn biết',
+    'refund'               => 'trả',
+    'withdraw'             => 'DiXian',
+    'insufficient_balance' => 'Số dư khách hàng không đủ.',
 ];
