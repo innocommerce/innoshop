@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Order;
 use InnoShop\Common\Models\Order\Item;
+use InnoShop\Common\Models\OrderReturn;
+use InnoShop\Common\Repositories\OrderReturnRepo;
 use Tests\TestCase;
 
 /**
@@ -114,6 +116,44 @@ class OrderReturnTest extends TestCase
             'order_item_id' => $victimItem->id,
             'customer_id'   => $attacker->id,
         ]);
+    }
+
+    public function test_order_return_list_is_scoped_to_logged_in_customer()
+    {
+        $victim   = $this->createCustomer('victim-list@example.com', 'Victim List');
+        $attacker = $this->createCustomer('attacker-list@example.com', 'Attacker List');
+
+        OrderReturn::query()->create([
+            'customer_id'   => $victim->id,
+            'order_id'      => 1,
+            'order_item_id' => 1,
+            'product_id'    => 1,
+            'number'        => 'RMA-VICTIM-SECRET',
+            'order_number'  => 'ORD-VICTIM-SECRET-777',
+            'product_name'  => 'Victim Secret Product',
+            'product_sku'   => 'VSKU-LIST',
+            'quantity'      => 1,
+            'opened'        => 0,
+            'comment'       => 'secret',
+            'status'        => 'pending',
+        ]);
+
+        $this->actingAs($attacker, 'customer');
+
+        $returns = OrderReturnRepo::getInstance()->list([
+            'customer_id' => $attacker->id,
+        ]);
+
+        foreach ($returns as $row) {
+            $this->assertNotSame('ORD-VICTIM-SECRET-777', $row->order_number);
+            $this->assertNotSame('Victim Secret Product', $row->product_name);
+            $this->assertSame($attacker->id, (int) $row->customer_id);
+        }
+
+        $response = $this->get($this->accountEndpoint('order_returns.index'));
+        $response->assertOk();
+        $response->assertDontSee('ORD-VICTIM-SECRET-777');
+        $response->assertDontSee('Victim Secret Product');
     }
 
     public function test_customer_cannot_create_return_for_other_customers_order_item_via_api()

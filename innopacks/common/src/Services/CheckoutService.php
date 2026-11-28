@@ -17,6 +17,7 @@ use InnoShop\Common\Models\Checkout;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Repositories\AddressRepo;
 use InnoShop\Common\Repositories\CheckoutRepo;
+use InnoShop\Common\Repositories\Customer\WithdrawalRepo;
 use InnoShop\Common\Repositories\Order\FeeRepo;
 use InnoShop\Common\Repositories\Order\HistoryRepo;
 use InnoShop\Common\Repositories\Order\ItemRepo;
@@ -280,6 +281,15 @@ class CheckoutService
     }
 
     /**
+     * Sum fees already accumulated during FeeService::calculate().
+     * Unlike getFeeList(), this never triggers recalculation (safe for BalanceService).
+     */
+    public function getAccumulatedFeeTotal(): float
+    {
+        return round(collect($this->feeList)->sum('total'), currency_decimal_place());
+    }
+
+    /**
      * @return float
      * @throws Exception
      */
@@ -475,7 +485,14 @@ class CheckoutService
      */
     public function getBalanceAmount(): float
     {
-        return (float) ($this->customer->balance ?? 0);
+        if (empty($this->customer)) {
+            return 0.0;
+        }
+
+        $balance = (float) ($this->customer->balance ?? 0);
+        $frozen  = WithdrawalRepo::getInstance()->getFrozenAmount((int) $this->customer->id);
+
+        return max(0.0, round($balance - $frozen, currency_decimal_place()));
     }
 
     /**

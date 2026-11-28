@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => '佣金',
-    'consumption' => '消費',
-    'recharge'    => '充值',
-    'refund'      => '退款',
-    'withdraw'    => '提現',
+    'commission'           => '佣金',
+    'consumption'          => '消費',
+    'recharge'             => '充值',
+    'refund'               => '退款',
+    'withdraw'             => '提現',
+    'insufficient_balance' => '客戶餘額不足。',
 ];

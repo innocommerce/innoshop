@@ -9,6 +9,7 @@
 
 namespace InnoShop\Aicore\Agents;
 
+use InnoShop\Aicore\Contracts\ToolInterface;
 use InnoShop\Aicore\Services\ToolRegistry;
 use InnoShop\Aicore\Tools\LaravelAiToolAdapter;
 use Laravel\Ai\Attributes\MaxSteps;
@@ -80,7 +81,7 @@ PROMPT;
 
         return array_map(
             fn ($tool) => new LaravelAiToolAdapter($tool),
-            array_values($registry->all())
+            array_values($this->permittedTools($registry))
         );
     }
 
@@ -89,10 +90,24 @@ PROMPT;
         $registry = app(ToolRegistry::class);
         $lines    = [];
 
-        foreach ($registry->all() as $tool) {
+        foreach ($this->permittedTools($registry) as $tool) {
             $lines[] = "- **{$tool->name()}**: {$tool->description()}";
         }
 
         return implode("\n", $lines);
+    }
+
+    /**
+     * Tools the current admin is allowed to invoke.
+     *
+     * @return array<string, ToolInterface>
+     */
+    private function permittedTools(ToolRegistry $registry): array
+    {
+        return $registry->permitted(function (string $permission): bool {
+            $admin = auth('admin')->user();
+
+            return $admin !== null && $admin->can($permission);
+        });
     }
 }

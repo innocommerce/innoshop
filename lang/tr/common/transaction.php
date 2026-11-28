@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'komisyon',
-    'consumption' => 'consumption',
-    'recharge'    => 'top-up',
-    'refund'      => 'refund',
-    'withdraw'    => 'withdraw',
+    'commission'           => 'komisyon',
+    'consumption'          => 'consumption',
+    'recharge'             => 'top-up',
+    'refund'               => 'refund',
+    'withdraw'             => 'withdraw',
+    'insufficient_balance' => 'Müşteri bakiyesi yetersiz.',
 ];

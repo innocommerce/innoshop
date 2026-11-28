@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => '커미션',
-    'consumption' => '소비',
-    'recharge'    => '충전',
-    'refund'      => '환불',
-    'withdraw'    => '현금 인출',
+    'commission'           => '커미션',
+    'consumption'          => '소비',
+    'recharge'             => '충전',
+    'refund'               => '환불',
+    'withdraw'             => '현금 인출',
+    'insufficient_balance' => '고객 잔액이 부족합니다.',
 ];

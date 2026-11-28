@@ -10,6 +10,7 @@
 namespace InnoShop\Common\Repositories\Customer;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use InnoShop\Common\Models\Customer;
 use InnoShop\Common\Models\Customer\Transaction;
 use InnoShop\Common\Repositories\BaseRepo;
@@ -101,15 +102,19 @@ class TransactionRepo extends BaseRepo
      */
     public function create($data): mixed
     {
-        $customerID = $data['customer_id'] ?? 0;
-        $customer   = Customer::query()->findOrFail($customerID);
+        // The customer row lock serializes concurrent ledger writes: the
+        // balance check, the insert and the re-sync must commit atomically,
+        // otherwise parallel redemptions can drive the wallet below zero.
+        return DB::transaction(function () use ($data) {
+            $customer = Customer::query()->whereKey($data['customer_id'] ?? 0)->lockForUpdate()->firstOrFail();
 
-        $data = $this->handleData($data);
-        $item = Transaction::query()->create($data);
+            $data = $this->handleData($data, $customer);
+            $item = Transaction::query()->create($data);
 
-        $customer->syncBalance();
+            $customer->syncBalance();
 
-        return $item;
+            return $item;
+        });
     }
 
     /**
@@ -120,15 +125,16 @@ class TransactionRepo extends BaseRepo
      */
     public function update($item, $data): mixed
     {
-        $customerID = $data['customer_id'] ?? 0;
-        $customer   = Customer::query()->findOrFail($customerID);
+        return DB::transaction(function () use ($item, $data) {
+            $customer = Customer::query()->whereKey($data['customer_id'] ?? 0)->lockForUpdate()->firstOrFail();
 
-        $data = $this->handleData($data);
-        $item->update($data);
+            $data = $this->handleData($data, $customer);
+            $item->update($data);
 
-        $customer->syncBalance();
+            $customer->syncBalance();
 
-        return $item;
+            return $item;
+        });
     }
 
     /**
@@ -137,9 +143,11 @@ class TransactionRepo extends BaseRepo
      */
     public function destroy($item): void
     {
-        $customer = $item->customer;
-        $item->delete();
-        $customer->syncBalance();
+        DB::transaction(function () use ($item) {
+            $customer = Customer::query()->whereKey($item->customer_id)->lockForUpdate()->firstOrFail();
+            $item->delete();
+            $customer->syncBalance();
+        });
     }
 
     /**
@@ -211,7 +219,7 @@ class TransactionRepo extends BaseRepo
      * @return array
      * @throws Throwable
      */
-    private function handleData($data): array
+    private function handleData($data, Customer $customer): array
     {
         $type = $data['type'];
         if (in_array($type, [Transaction::TYPE_RECHARGE, Transaction::TYPE_REFUND])) {
@@ -222,9 +230,16 @@ class TransactionRepo extends BaseRepo
             $amount = $data['amount'];
         }
 
-        $customer = Customer::query()->findOrFail($data['customer_id']);
+        // Caller holds a lockForUpdate() on this row; recompute from the
+        // ledger so the guard sees every committed transaction.
         $customer->syncBalance();
         $balance = $customer->balance + $amount;
+
+        // Defense in depth: never persist a ledger entry that drives the
+        // wallet below zero (blocks forged checkout balance redemptions).
+        if ($balance < 0) {
+            throw new \Exception(trans('common/transaction.insufficient_balance'));
+        }
 
         return [
             'customer_id' => $data['customer_id'],

@@ -102,7 +102,13 @@ class OrderReturnRepo extends BaseRepo
     public function builder($filters = []): Builder
     {
         $builder = OrderReturn::query();
-        $number  = $filters['number'] ?? 0;
+
+        $customerID = $filters['customer_id'] ?? 0;
+        if ($customerID) {
+            $builder->where('customer_id', $customerID);
+        }
+
+        $number = $filters['number'] ?? 0;
         if ($number) {
             $builder->where('number', 'like', "%$number%");
         }

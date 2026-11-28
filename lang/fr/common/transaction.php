@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'Proposition de la commission',
-    'consumption' => 'consommation',
-    'recharge'    => 'complément',
-    'refund'      => 'Les restitutions',
-    'withdraw'    => 'Retraits d\'espèces',
+    'commission'           => 'Proposition de la commission',
+    'consumption'          => 'consommation',
+    'recharge'             => 'complément',
+    'refund'               => 'Les restitutions',
+    'withdraw'             => 'Retraits d\'espèces',
+    'insufficient_balance' => 'Solde du client insuffisant.',
 ];

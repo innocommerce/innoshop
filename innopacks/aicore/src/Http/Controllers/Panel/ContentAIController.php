@@ -194,6 +194,14 @@ class ContentAIController extends BaseController
      */
     public function listModels(Request $request): mixed
     {
+        // Probing provider credentials/URLs is a settings-level operation.
+        // The route is ignore-listed for the generic panel ACL, so enforce
+        // the settings permission here: low-privilege admins must not be
+        // able to make the server call arbitrary URLs with stored keys.
+        if (! current_admin()->can('settings_update')) {
+            return json_fail('Forbidden', null, 403);
+        }
+
         try {
             $providerCode = (string) $request->get('provider_code', '');
             $apiKey       = (string) $request->get('api_key', '');

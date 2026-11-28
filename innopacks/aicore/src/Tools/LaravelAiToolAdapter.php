@@ -60,6 +60,17 @@ class LaravelAiToolAdapter implements Tool
 
     public function handle(Request $request): \Stringable|string
     {
+        $permission = $this->tool->requiredPermission();
+        if ($permission !== null) {
+            $admin = auth('admin')->user();
+            if (! $admin || ! $admin->can($permission)) {
+                return json_encode([
+                    'error'      => 'unauthorized',
+                    'permission' => $permission,
+                ], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
         $result = $this->tool->execute($request->all());
 
         if (is_array($result)) {

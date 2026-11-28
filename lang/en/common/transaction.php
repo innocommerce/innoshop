@@ -8,9 +8,10 @@
  */
 
 return [
-    'consumption' => 'Consumption',
-    'recharge'    => 'Recharge',
-    'refund'      => 'Refund',
-    'withdraw'    => 'Withdraw',
-    'commission'  => 'Commission',
+    'consumption'          => 'Consumption',
+    'recharge'             => 'Recharge',
+    'refund'               => 'Refund',
+    'withdraw'             => 'Withdraw',
+    'commission'           => 'Commission',
+    'insufficient_balance' => 'Insufficient customer balance.',
 ];

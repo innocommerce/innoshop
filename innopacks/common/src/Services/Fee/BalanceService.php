@@ -20,16 +20,26 @@ class BalanceService extends BaseService
     public function addFee(): void
     {
         $checkoutData = $this->checkoutService->getCheckoutData();
-        $reference    = $checkoutData['reference'];
-        $usedBalance  = $reference['balance'] ?? 0;
-        if (empty($usedBalance)) {
+        $reference    = $checkoutData['reference'] ?? [];
+        $requested    = (float) ($reference['balance'] ?? 0);
+        if ($requested <= 0) {
+            return;
+        }
+
+        // Never trust the client-supplied amount: clamp to available wallet
+        // balance and the current payable total (fees already accumulated).
+        $available   = max(0, $this->checkoutService->getBalanceAmount());
+        $payable     = max(0, $this->checkoutService->getAccumulatedFeeTotal());
+        $decimal     = currency_decimal_place();
+        $usedBalance = round(min($requested, $available, $payable), $decimal);
+        if ($usedBalance <= 0) {
             return;
         }
 
         $subtotalFee = [
             'code'         => 'balance',
             'title'        => 'Balance',
-            'total'        => round(-$usedBalance, 2),
+            'total'        => round(-$usedBalance, $decimal),
             'total_format' => currency_format($usedBalance),
         ];
 

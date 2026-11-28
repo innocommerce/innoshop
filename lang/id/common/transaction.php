@@ -8,9 +8,10 @@
  */
 
 return [
-    'commission'  => 'Komisi.',
-    'consumption' => 'Konsumen.',
-    'recharge'    => 'Daya penuh',
-    'refund'      => 'Pengembalian uang.',
-    'withdraw'    => 'Pengajuan aku.',
+    'commission'           => 'Komisi.',
+    'consumption'          => 'Konsumen.',
+    'recharge'             => 'Daya penuh',
+    'refund'               => 'Pengembalian uang.',
+    'withdraw'             => 'Pengajuan aku.',
+    'insufficient_balance' => 'Saldo pelanggan tidak mencukupi.',
 ];

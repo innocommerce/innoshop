@@ -19,6 +19,10 @@ class RouteRepo
 {
     const IGNORE_LIST = [
         'login.index', 'login.store', 'cli_login.index', 'cli_login.store', 'logout.index', 'dashboard.index', 'locale.switch', 'search.menus',
+        // AI helpers: any authenticated admin may call them; tool ACL is enforced in aicore.
+        // list_models additionally requires settings_update inside the controller
+        // because it probes provider credentials/URLs (settings-level operation).
+        'content_ai.generate', 'content_ai.generate_batch', 'content_ai.list_models', 'content_ai.chat',
     ];
 
     private Role $adminRole;
